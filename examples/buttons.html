@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Buttons - Puppertino Framework</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../dist/buttons.css">
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="doc.css">
+	<meta name="description" content="This is the documentation for Buttons on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+</head>
+<body>
+	<div class="route">
+		<a href="/" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
+		<p>/</p>
+		<a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive">Examples</a>
+		<p>/</p>
+		<a href="buttons.html" class="p-btn p-btn-scope">Buttons</a>
+	</div>
+	<h1>Buttons</h1>
+	<div class="master">
+		<p>Buttons are the main thing that move the interface. That's why it was the main thing that was developed for Puppertino. <br>Puppertino buttons support usage as links, buttons and submit elements.</p>
+
+		<div class="talk-about-it">
+			<h2>Push Buttons.</h2>
+			<p>Push buttons come in different ways. The <strong>Default button</strong> is plain, and should be use for cancel or optional clicks. For main clicks, the <strong>Primary button</strong> is the way to go. While similar to the Primary button, the <strong>Mobile Big</strong> button will change to a <code class="code">position:fixed</code> and take a significant part of the screen if it's mobile. This button is ideal for Buy buttons or similar. Last but not least, there's the <strong>Custom action</strong> button, which is really similar to the Default button, but it adds three dots at the end. This button is amazing for Advanced, Options or Other actions.</p>
+
+			<a href="#" class="p-btn">Default</a>
+
+			<a href="#" class="p-btn p-btn-disabled">Disabled</a>
+
+			<a href="#" class="p-btn p-prim-col">Primary</a>
+
+			<a href="#" class="p-btn p-prim-col">Mobile big</a>
+
+			<a href="#" class="p-btn p-btn-more">Custom action</a>
+
+			<p>Usage:</p>
+			<div class="code">
+			<pre>
+				<code>
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn</span>">Default<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-btn-disabled</span>">Disabled<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-prim-col</span>">Primary<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-prim-col p-btn-big-sm</span>">Mobile big<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-btn-more</span>">Custom action<span class="h">&#60;/a></span>
+				</code>
+			</pre>	
+			</div>
+		</div>
+		
+		<div class="talk-about-it">
+			<h2>Help button.</h2>
+			<p>The help button is supposed to be used to display a modal or help text that can guide the user through in actions that will be made on the website or app. It should be positioned near corners.</p>
+			<a href="#" class="p-btn-help">?</a>
+			<p>Usage:</p>
+			<div class="code">
+			<pre>
+				<code>
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn-help</span>">?<span class="h">&#60;/a></span>
+				</code>
+			</pre>	
+			</div>
+		
+		</div>
+		<div class="talk-about-it">
+			<h2>Scope buttons.</h2>
+			<p>Scope buttons are similar to Push buttons, but these are supposed to be used on routes, and should not replace normal buttons.<br>
+				The <strong>Default/Active button</strong> is meant to indicate the current route that the user is in. While the <strong>Unactive button</strong> is supposed to be used in the route before the current one. And the <strong>Action Button</strong> is supposed to indicate any action that the user can do in that route, like save, copy or others.</p>
+
+			<a href="#" class="p-btn p-btn-scope">Default/Active</a>
+
+			<a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive</a>
+
+			<a href="#" class="p-btn p-btn-scope p-btn-scope-disabled">Disabled</a>
+
+			<a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action</a>
+
+			<p>Usage:</p>
+			<div class="code">
+			<pre>
+				<code>
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-btn-scope</span>">Default/Active<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-btn-scope p-btn-scope-unactive</span>">Unactive<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-btn-scope p-btn-scope-disabled</span>">Disabled<span class="h">&#60;/a></span>
+
+					<span class="h">&#60;a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">p-btn p-btn-scope p-btn-scope-outline</span>">Action<span class="h">&#60;/a></span>
+				</code>
+			</pre>	
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+		html{
+			scroll-behavior: smooth;
+		}
+		body{
+			background: #f5f5f5;
+			padding: 2% 3%;
+		}
+		h1,h2,p,a,code{
+			font-family: 'Montserrat', sans-serif;
+		}
+		h1{
+			font-size: 50px;
+		}
+		.website-title{
+			margin-top: 0px;
+		}
+		.img-landing{
+			height: 400px;
+			display: block;
+			margin: auto;
+		}
+		.talk-about-it{
+			padding: 1% 5%;
+		}
+		.cta{
+			height: 50vh;
+		}
+		.code{
+			background: #262526;
+			color:#f3f3f3;
+			border-radius: 5px;
+		}
+		code.code{
+			padding: 1px 5px;
+		}
+		.route{
+			background: #e6e6e6;
+			border-radius: 5px;
+		}
+		.route>p{
+			display: inline-block;
+		}
+		.h{
+			color: #ff6e6e;
+		}
+		.a{
+			color: #70ff6e;
+		}
+		.av{
+			color: #6ea4ff;
+		}
+		pre{
+			    white-space: pre-line;
+			    padding-left: 15px;
+		}
