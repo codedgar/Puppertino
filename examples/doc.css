@@ -18,6 +18,7 @@
 			height: 400px;
 			display: block;
 			margin: auto;
+			max-width: 100%;
 		}
 		.talk-about-it{
 			padding: 1% 5%;
