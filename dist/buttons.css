@@ -3,14 +3,6 @@
   --primary-col-ac:#0f75f5;
   --font: 'Montserrat', sans-serif;;
 }
-a,input,button{
-  font-family: var(--font);
-}
-h1{
-  font-size:50px;
-  margin-top:40px;
-  margin-bottom:20px;
-}
 
 .p-btn{
   margin:10px;
@@ -23,6 +15,7 @@ h1{
   border:1px solid #cacaca;
   display:inline-block;
   font-size: 17px;
+    font-family: var(--font);
 }
 
 .p-btn-disabled{

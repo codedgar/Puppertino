@@ -11,6 +11,9 @@
 		h1{
 			font-size: 50px;
 		}
+		a{
+			color: var(--primary-col-ac);
+		}
 		.website-title{
 			margin-top: 0px;
 		}
@@ -53,4 +56,16 @@
 		pre{
 			    white-space: pre-line;
 			    padding-left: 15px;
+		}
+		.doc_card{
+			display: block;
+			margin: auto;
+		    padding: calc(32% - 40px);
+		    border-radius: 20px;
+		    font-size: 40px;
+		    border: 4px solid;
+		    color: #555;
+		    text-decoration: none;
+		    text-align: center;
+		    margin-top: 50px;
 		}
