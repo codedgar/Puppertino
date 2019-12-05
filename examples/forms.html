@@ -3,8 +3,7 @@
 <head>
 	<title>Forms - Puppertino Framework</title>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../dist/buttons.css">
-	<link rel="stylesheet" type="text/css" href="../dist/forms.css">
+	<link rel="stylesheet" type="text/css" href="../dist/full.css">
 	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   	<meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -38,14 +37,14 @@
 			<p>Usage:</p>
 			<div class="code">
 			<pre>
-				<code>
-					<span class="h">&#60;div</span> <span class="a">class</span>="<span class="av">p-form-select p-form-no-validate</span>">
-					&nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;select></span>	
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;option></span>Option 1<span class="h">&#60;/option></span>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;option></span>Option 2<span class="h">&#60;/option></span>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;option></span>Option 3<span class="h">&#60;/option></span>
-					&nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;/select></span>
-					<span class="h">&#60;/div></span>
+				<code class="html">
+&#60;div class="p-form-select p-form-no-validate">
+	&#60;select>
+		&#60;option>Option 1&#60;/option>
+		&#60;option>Option 2&#60;/option>
+		&#60;option>Option 3&#60;/option>
+	&#60;/select>
+&#60;/div>
 				</code>
 			</pre>	
 			</div>
@@ -70,15 +69,15 @@
 			<p>Usage:</p>
 			<div class="code">
 			<pre>
-				<code>
+				<code class="html">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">email</span>" <span class="a">class</span>="<span class="av">p-form-text</span>" <span class="a">placeholder</span>="<span class="av">email@example.com</span>">
+&#60;input type="email" class="p-form-text" placeholder="email@example.com">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">text</span>" <span class="a">class</span>="<span class="av">p-form-text p-form-no-validate</span>" <span class="a">placeholder</span>="<span class="av">free text</span>">
+&#60;input type="text" class="p-form-text p-form-no-validate" placeholder="free text">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">email</span>" <span class="a">class</span>="<span class="av">p-form-text p-form-truncated</span>" <span class="a">placeholder</span>="<span class="av">Truncated text...</span>">
+&#60;input type="email" class="p-form-text p-form-truncated" placeholder="Truncated text...">
 
-					<span class="h">&#60;label</span> <span class="a">class</span>="<span class="av">p-form-label</span>">Email:<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">email</span>" <span class="a">class</span>="<span class="av">p-form-text</span>" <span class="a">placeholder</span>="<span class="av">email@example.com</span>"<span class="h">>&#60;/label></span>
+&#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text" placeholder="email@example.com">&#60;/label>
 
 				</code>
 			</pre>	
@@ -104,19 +103,19 @@
 			<p>Usage:</p>
 			<div class="code">
 			<pre>
-				<code>
+				<code class="html">
 
-					<span class="h">&#60;label</span> <span class="a">class</span>="<span class="av">p-form-radio-cont</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">radio</span>" <span class="a">name</span>="<span class="av">example</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;span></span><span class="h">&#60;/span></span>
-					  &nbsp;&nbsp;&nbsp;&nbsp;Thing one
-					<span class="h">&#60;/label></span>
+&#60;label class="p-form-radio-cont">
+	&#60;input type="radio" name="example">
+	&#60;span> &#60;/span>
+	Thing one
+&#60;/label>
 
-					<span class="h">&#60;label</span> <span class="a">class</span>="<span class="av">p-form-radio-cont</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">radio</span>" <span class="a">name</span>="<span class="av">example</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;span></span><span class="h">&#60;/span></span>
-					  &nbsp;&nbsp;&nbsp;&nbsp;Thing two
-					<span class="h">&#60;/label></span>
+&#60;label class="p-form-radio-cont">
+	&#60;input type="radio" name="example">
+	&#60;span> &#60;/span>
+	Thing two
+&#60;/label>
 
 				</code>
 			</pre>	
@@ -144,19 +143,45 @@
 			<p>Usage:</p>
 			<div class="code">
 			<pre>
-				<code>
+				<code class="html">
 
-					<span class="h">&#60;label</span> <span class="a">class</span>="<span class="av">p-form-checkbox-cont</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">checkbox</span>" <span class="a">name</span>="<span class="av">example</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;span></span><span class="h">&#60;/span></span>
-					  &nbsp;&nbsp;&nbsp;&nbsp;Thing one
-					<span class="h">&#60;/label></span>
+&#60;label class="p-form-checkbox-cont">
+	&#60;input type="checkbox" name="example">
+	&#60;span> &#60;/span>
+	Thing one
+&#60;/label>
 
-					<span class="h">&#60;label</span> <span class="a">class</span>="<span class="av">p-form-checkbox-cont</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">checkbox</span>" <span class="a">name</span>="<span class="av">example</span>">
-					  &nbsp;&nbsp;&nbsp;&nbsp;<span class="h">&#60;span></span><span class="h">&#60;/span></span>
-					  &nbsp;&nbsp;&nbsp;&nbsp;Thing two
-					<span class="h">&#60;/label></span>
+&#60;label class="p-form-checkbox-cont">
+	&#60;input type="checkbox" name="example">
+	&#60;span>&#60;/span>
+	Thing two
+&#60;/label>
+
+				</code>
+			</pre>	
+			</div>
+		</div>
+
+		<div class="talk-about-it">
+			<h2>Switches.</h2>
+			<p>Switches are part of those elements that are popular from iOS devices. And I wasn't going to add them until version 2.0 (Since I wanted to create a custom element) But a friend gave me the starter code and I just cleaned it a bit and made it look like the aesthetic of Puppertino. So big shotout to <strong>Ivanot</strong> because he essentially created this element :)<br><br>
+				The Switch is essentially a checkbox, so you have to expect it to work as one. You can change the width and height of the switch changing the variable <code class="code">--width</code> inside the class <code class="code">p-form-switch</code>. Everything in the element will resize automatically so don't worry about breaking it on resize.</p>
+
+			<label class="p-form-switch showcaseme_bro">
+				<input type="checkbox">
+				<span></span>
+			</label>
+
+
+			<p>Usage:</p>
+			<div class="code">
+			<pre>
+				<code class="html">
+
+&#60;label class="p-form-switch">
+	&#60;input type="checkbox">
+	&#60;span>&#60;/span>
+&#60;/label>
 
 				</code>
 			</pre>	
@@ -176,11 +201,11 @@
 			<p>Usage:</p>
 			<div class="code">
 			<pre>
-				<code>
+				<code class="html">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">submit</span>" <span class="a">class</span>="<span class="av">p-form-button p-form-send</span>">
+&#60;input type="submit" class="p-form-button p-form-send">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">reset</span>" <span class="a">class</span>="<span class="av">p-form-button</span>">
+&#60;input type="reset" class="p-form-button">
 
 				</code>
 			</pre>	
@@ -199,11 +224,11 @@
 			<p>Usage:</p>
 			<div class="code">
 			<pre>
-				<code>
+				<code class="html">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">text</span>" <span class="a">class</span>="<span class="av">p-form-text p-form-invalid</span>">
+&#60;input type="text" class="p-form-text p-form-invalid">
 
-					<span class="h">&#60;input</span> <span class="a">type</span>="<span class="av">text</span>" <span class="a">class</span>="<span class="av">p-form-text p-form-valid</span>">
+&#60;input type="text" class="p-form-text p-form-valid">
 
 				</code>
 			</pre>	
@@ -211,4 +236,6 @@
 		</div>
 	</div>
 </body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </html>

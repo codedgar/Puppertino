@@ -98,6 +98,11 @@ textarea.p-form-text{
 .p-form-label,.p-form-radio-cont,.p-form-checkbox-cont{
   font-family: var(--font);
 }
+
+.p-form-label{
+      display: block;
+}
+
 .p-form-radio-cont,.p-form-checkbox-cont{
   margin:0px 10px;
   display:inline-flex;
@@ -213,3 +218,47 @@ textarea.p-form-text{
 .p-form-valid,.p-form-valid:placeholder-shown,.p-form-valid:valid,.p-form-valid:invalid{
   border-color: var(--valid-color);
 }
+
+.p-form-switch{
+  cursor:pointer;
+  --width:80px;
+}
+
+.p-form-switch>input:checked+span:after{
+  left:calc(100% - calc(
+    var(--width) / 2.1)
+  );
+}
+
+.p-form-switch>input:checked+span{
+  background:#60c35b;
+}
+
+.p-form-switch>span{
+  width:var(--width);
+  height:calc(var(--width) / 2);
+  background:#e0e0e0;
+  display:block;
+  position:relative;
+  border-radius:500px;
+  transition:all .2s;
+  border: 1px solid lightgrey;
+}
+
+.p-form-switch>span:after{
+  content:'';
+  width:45%;
+  height:90%;
+  border-radius:50%;
+  background:#f9f9f9;
+  position:absolute;
+  left:3%;
+  top:4.5%;
+  transition: all .2s;
+  box-shadow: 0px 0px 20px -10px #000, 0px 0px 20px -8px rgba(0,0,0,.1)
+}
+
+.p-form-switch>input{
+  display:none;
+}
+
