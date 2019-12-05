@@ -26,7 +26,6 @@
   left:calc(50% - 20vw);
   border-radius:20px;
   box-shadow:0px 10px 20px -15px;
-  backdrop-filter: blur(5px);
   font-family:var(--font);
   opacity:0;
   transform:scale(1.5);
@@ -34,14 +33,15 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 9;
-  transition: all .3s;
+  transition: opacity .3s, transform .3s;
+
 }
 
 .p-modal.active{
   transform:scale(1);
   opacity:1;
   pointer-events: auto;
-
+  backdrop-filter: blur(5px);
 }
 .p-modal-button-container{
   display:flex;
@@ -64,7 +64,7 @@
 }
 
 .p-modal p{
-    padding: 0% 2%;
+    padding: 0% 5%;
 }
 
 @supports not (backdrop-filter:blur(5px)) {
@@ -78,6 +78,7 @@
     width:70vw;
     left:15%;
     bottom:20%;
+    top: unset;
   }
   .p-modal p{
     font-size: 15px;

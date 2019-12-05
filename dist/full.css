@@ -388,11 +388,10 @@ textarea.p-form-text{
   width:40vw;
   background:rgba(255,255,255,.7);
   position:fixed;
-  bottom:calc(50% - 20vh);
+  top:calc(50% - 20vh);
   left:calc(50% - 20vw);
   border-radius:20px;
   box-shadow:0px 10px 20px -15px;
-  backdrop-filter: blur(5px);
   font-family:var(--font);
   opacity:0;
   transform:scale(1.5);
@@ -400,14 +399,14 @@ textarea.p-form-text{
   overflow: hidden;
   pointer-events: none;
   z-index: 9;
-  transition: all .3s;
+  transition: opacity .3s, transform .3s;
 }
 
 .p-modal.active{
   transform:scale(1);
   opacity:1;
   pointer-events: auto;
-
+  backdrop-filter: blur(5px);
 }
 .p-modal-button-container{
   display:flex;
@@ -444,6 +443,7 @@ textarea.p-form-text{
     width:70vw;
     left:15%;
     bottom:20%;
+    top: unset;
   }
   .p-modal p{
     font-size: 15px;
