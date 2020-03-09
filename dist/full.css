@@ -18,7 +18,7 @@
   background:#fff;
   color:#333230;
   text-decoration:none;
-  text-shadow:0 1px 2px rgba(0,0,0,.15);
+  text-shadow:0 1px 1px rgba(0,0,0,.25);
   border:1px solid #cacaca;
   display:inline-block;
   font-size: 17px;
@@ -33,7 +33,7 @@
 
 .p-prim-col{
   background: var(--primary-col);
-  border:1px solid #4fc5fa;
+  border:0px;
   color:#fff;
 }
 
@@ -227,6 +227,7 @@ textarea.p-form-text{
   pointer-events:none;
 }
 
+
 .p-form-radio-cont>input+span:after{
   content:'';
   width: 30%;
@@ -263,7 +264,7 @@ textarea.p-form-text{
 .p-form-checkbox-cont>input+span:before,.p-form-checkbox-cont>input+span:after{
   content:'';
   background:#fff;
-  height:7%;
+  height:8%;
   display:block;
   position:absolute;
   border-radius:20px;
@@ -277,11 +278,11 @@ textarea.p-form-text{
 }
 
 .p-form-checkbox-cont>input+span:after{
-  width:40%;
-  top:42%;
-  left:30%;
-  transform:rotate(65deg);
-  transform-origin:top left;
+    width: 40%;
+    top: 43%;
+    left: 30%;
+    transform: rotate(60deg);
+    transform-origin: top left;
 }
 
 .p-form-button{
@@ -291,7 +292,7 @@ textarea.p-form-text{
   background:#fff;
   color:#333230;
   text-decoration:none;
-  text-shadow:0 1px 2px rgba(0,0,0,.15);
+  text-shadow:0 1px 1px rgba(0,0,0,.25);
   border:1px solid #cacaca;
   display:inline-block;
   font-size: 17px;
@@ -324,6 +325,7 @@ textarea.p-form-text{
 .p-form-switch{
   cursor:pointer;
   --width:80px;
+  display: inline-block;
 }
 
 .p-form-switch>input:checked+span{
@@ -339,6 +341,7 @@ textarea.p-form-text{
   border-radius:500px;
   transition:all .2s;
   border: 1px solid lightgrey;
+  overflow: hidden;
 }
 
 .p-form-switch>span:after{
@@ -351,7 +354,7 @@ textarea.p-form-text{
   left:3%;
   top:4.5%;
   transition: all .2s;
-  box-shadow: 0px 0px 20px -10px #000, 0px 0px 20px -8px rgba(0,0,0,.1)
+  box-shadow: 0px 0px 20px -13px #000, 0px 20px 20px -8px rgba(0,0,0,.1);
 }
 
 .p-form-switch>input{
@@ -415,12 +418,12 @@ textarea.p-form-text{
 .p-modal-button-container>a{
   width:100%;
   padding:30px 0%;
-  border-top:1px solid #555;
+  border-top:1px solid rgba(0,0,0,.1);
   color:var(--primary-col-ac);
   text-decoration:none;
 }
 .p-modal-button-container>a:nth-child(2),.p-modal-button-container>a:nth-child(3){
-  border-left:1px solid #555;
+  border-left:1px solid rgba(0,0,0,.1);
 }
 
 .nowactive{

@@ -11,7 +11,7 @@
   background:#fff;
   color:#333230;
   text-decoration:none;
-  text-shadow:0 1px 2px rgba(0,0,0,.15);
+  text-shadow:0 1px 1px rgba(0,0,0,.25);
   border:1px solid #cacaca;
   display:inline-block;
   font-size: 17px;
@@ -26,7 +26,7 @@
 
 .p-prim-col{
   background: var(--primary-col);
-  border:1px solid #4fc5fa;
+  border:0px;
   color:#fff;
 }
 

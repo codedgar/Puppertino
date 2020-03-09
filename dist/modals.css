@@ -50,12 +50,12 @@
 .p-modal-button-container>a{
   width:100%;
   padding:30px 0%;
-  border-top:1px solid #555;
+  border-top:1px solid rgba(0,0,0,.1);
   color:var(--primary-col-ac);
   text-decoration:none;
 }
 .p-modal-button-container>a:nth-child(2),.p-modal-button-container>a:nth-child(3){
-  border-left:1px solid #555;
+  border-left:1px solid rgba(0,0,0,.1);
 }
 
 .nowactive{
