@@ -1,8 +1,16 @@
+![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
 # Welcome to Puppertino!
 
 Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **MacOS** and follow the **human guidelines**.  Puppertino is a Framework created to be lightweight, modular and cool looking!
 
 Be advised that Puppertino does not include any responsive system on it, so you have to use Bootstrap, Flexbox Grid, Skeleton or whatever responsive Framework you want for that.
+
+## In a nutshell
+
+- [Components](#current-components)
+- [Usage](#usage)
+- [Documentation](https://codedgar.github.io/Puppertino/examples/)
+- [About the creator](#about-the-creator)
 
 ## Lightweight
 
@@ -33,11 +41,13 @@ Yeah... That's all. But no worries! I'm working on adding new components every d
 
 # Usage
 
-You can use Puppertino in 2 ways for now!
+You can use Puppertino in 3 ways for now!
 
 1- You can download the all.css located in /dist/ . Download this if you are sure that you need at least half of the elements that are present in Puppertino
 
 2- Download every component CSS that you need on /dist/ Such as buttons or form elements one by one. While this can be maybe tedious to download them one by one, this can help you to save some KBs in your website, think of your users :)
+
+3- You can now download the SCSS version of Puppertino located also in /dist/ !
 
 # Docs
 
