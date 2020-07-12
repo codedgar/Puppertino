@@ -1,0 +1,94 @@
+:root{
+  --font:'Inter', sans-serif;
+  --bg-hover-color:#f9f9f9;
+  --primary-col-ac:#0f75f5;
+}
+.p-modal-opened{
+  overflow:hidden;
+}
+.p-modal-background{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,.3);
+  transition: all .3s;
+    opacity:0;
+  pointer-events:none;
+  z-index: 5;
+}
+.p-modal{
+  width:40vw;
+  background:rgba(255,255,255,.7);
+  position:fixed;
+  bottom:calc(50% - 20vh);
+  left:calc(50% - 20vw);
+  border-radius:20px;
+  box-shadow:0px 10px 20px -15px;
+  font-family:var(--font);
+  opacity:0;
+  transform:scale(1.5);
+  text-align:center;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 9;
+  transition: opacity .3s, transform .3s;
+
+}
+
+.p-modal.active{
+  transform:scale(1);
+  opacity:1;
+  pointer-events: auto;
+  backdrop-filter: blur(5px);
+}
+.p-modal-button-container{
+  display:flex;
+  border-radius:20px;
+}
+.p-modal-button-container>a{
+  width:100%;
+  padding:30px 0%;
+  border-top:1px solid rgba(0,0,0,.1);
+  color:var(--primary-col-ac);
+  text-decoration:none;
+}
+.p-modal-button-container>a:nth-child(2),.p-modal-button-container>a:nth-child(3){
+  border-left:1px solid rgba(0,0,0,.1);
+}
+
+.nowactive{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.p-modal p{
+    padding: 0% 5%;
+}
+
+@supports not (backdrop-filter:blur(5px)) {
+  .p-modal{
+    background:#fff;
+  }
+}
+
+@media (max-width:568px){
+  .p-modal{
+    width:70vw;
+    left:15%;
+    bottom:20%;
+    top: unset;
+  }
+  .p-modal p{
+    font-size: 15px;
+  }
+  .p-modal-button-container{
+    display:block;
+  }
+  .p-modal-button-container>a{
+    display:block;
+    padding: 2vh 0%;
+    border-left:0px!important;
+  }
+}
