@@ -22,8 +22,12 @@ This is the most important part of Puppertino! This also means that in the futur
 Puppertino currently includes:
 
  - Buttons
- - Form Elements
+ - Switches
+ - Form Elements (Inputs, select, form validation)
  - Modals
+ - Icons
+ - Font Layout
+ - Color Palette
 
 Yeah... That's all. But no worries! I'm working on adding new components every day!
 
