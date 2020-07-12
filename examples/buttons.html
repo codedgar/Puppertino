@@ -4,13 +4,15 @@
 	<title>Buttons - Puppertino Framework</title>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../dist/buttons.css">
+	<link rel="stylesheet" type="text/css" href="../dist/layout.css">
 	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<link rel="stylesheet" type="text/css" href="doc.css">
 	<meta name="description" content="This is the documentation for Buttons on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+	<link rel="icon" type="image/png" href="../landing-images/doggo.png">
 </head>
-<body>
+<body class="p-layout">
 	<div class="route">
 		<a href="https://codedgar.github.io/Puppertino/" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
 		<p>/</p>
@@ -20,11 +22,11 @@
 	</div>
 	<h1>Buttons</h1>
 	<div class="master">
-		<p>Buttons are the main thing that move the interface. That's why it was the main thing that was developed for Puppertino. <br>Puppertino buttons support usage as links, buttons and submit elements.You can use the Buttons using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/buttons.css" target="_blank">CSS of Buttons</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/full.css" target="_blank">dowloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
+		<p>Buttons are the main thing that move the interface. That's why it was the main thing that was developed for Puppertino. <br>Puppertino buttons support usage as links, buttons and submit elements. You can use the Buttons using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/buttons.css" target="_blank">CSS of Buttons</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/full.css" target="_blank">dowloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
 
 		<div class="talk-about-it">
 			<h2>Push Buttons.</h2>
-			<p>Push buttons come in different ways. The <strong>Default button</strong> is plain, and should be use for cancel or optional clicks. For main clicks, the <strong>Primary button</strong> is the way to go. While similar to the Primary button, the <strong>Mobile Big</strong> button will change to a <code class="code">position:fixed</code> and take a significant part of the screen if it's mobile. This button is ideal for Buy buttons or similar. Last but not least, there's the <strong>Custom action</strong> button, which is really similar to the Default button, but it adds three dots at the end. This button is amazing for Advanced, Options or Other actions.</p>
+			<p>Push buttons come in different ways. The <strong>Default button</strong> is plain, and should be use for cancel or optional clicks. For main clicks, the <strong>Primary button</strong> is the way to go. While similar to the Primary button, the <strong>Mobile Big</strong> button will change to a <code class="code">position:fixed</code> and take a significant part of the screen if it's mobile. This button is ideal for Buy buttons or similar. Last but not least, there's the <strong>Custom action</strong> button, which is really similar to the Default button, but it adds three dots at the end. This button is amazing for Advanced, Options or Other actions.<br><br> Buttons can be used either with and <code class="code">&#60;button></code> or <code class="code">&#60;a></code>. If you are going to use the disabled button, is highly recommended to use <strong>disabled</strong> as an attribute. Classes are also combinable!</p>
 
 			<a href="#" class="p-btn">Default</a>
 
@@ -32,9 +34,12 @@
 
 			<a href="#" class="p-btn p-prim-col">Primary</a>
 
-			<a href="#" class="p-btn p-prim-col">Mobile big</a>
+			<a href="#" class="p-btn p-btn-round">Rounded</a>
+
+			<a href="#" class="p-btn p-prim-col" id="mobile_big">Mobile big</a>
 
 			<a href="#" class="p-btn p-btn-more">Custom action</a>
+
 
 			<p>Usage:</p>
 			<div class="code">
@@ -100,4 +105,10 @@
 </body>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
 <script defer>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+	document.querySelector('#mobile_big').addEventListener('click', function(event){
+		event.preventDefault();
+		this.classList.toggle('p-btn-big-sm');
+	});
+</script>
 </html>

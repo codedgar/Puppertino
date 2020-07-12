@@ -15,10 +15,10 @@
   border:1px solid #cacaca;
   display:inline-block;
   font-size: 17px;
-    font-family: var(--font);
+  font-family: var(--font);
 }
 
-.p-btn-disabled{
+.p-btn-disabled, .p-btn[disabled]{
   background:lightgrey;
   color:#555;
   cursor:not-allowed;
@@ -36,6 +36,12 @@
 
 .p-btn-more:after{
   content:'...';
+}
+
+.p-btn-round{
+  border-radius: 50px;
+  border: 0px;
+  padding: 10px 30px;
 }
 
 .p-btn-help{
@@ -90,5 +96,6 @@
     border-radius:0%;
     text-align:center;
     border:0px;
+    padding: 10px 0px;
   }
 }
