@@ -4,7 +4,7 @@
   --bg-color:#fff;
   --bg-hover-color:#f9f9f9;
   --bg-front-col:#000;
-  --font:'Montserrat', sans-serif;
+  --font:'Inter', sans-serif;
   --invalid-color:#d6513c;
   --valid-color:#94d63c;
 }
@@ -39,6 +39,12 @@
 
 .p-btn.p-prim-col:active{
   background: var(--primary-col-ac);
+}
+
+.p-btn-round{
+  border-radius: 50px;
+  border: 0px;
+  padding: 10px 30px;
 }
 
 .p-btn-more:after{
@@ -368,7 +374,7 @@ textarea.p-form-text{
 /* START OF MODALS */
 
 :root{
-  --font:'Montserrat', sans-serif;
+  --font:'Inter', sans-serif;
   --bg-hover-color:#f9f9f9;
   --primary-col-ac:#0f75f5;
 }
