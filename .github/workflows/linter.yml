@@ -13,12 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      
+      # run prettier
+    - name: Prettier Action
+      uses: creyD/prettier_action@v3.0
 
       # run super linter
     - name: Super-Linter
       uses: docker://github/super-linter:latest
       
-      # run prettier
-    - name: Prettier Action
-      uses: creyD/prettier_action@v3.0
+      
 
