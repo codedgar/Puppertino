@@ -19,7 +19,7 @@ jobs:
       uses: creyD/prettier_action@v3.0
       with:
         # This part is also where you can pass other options, for example:
-        prettier_options: --write **/*.{js,css,html}
+        prettier_options: --write .
 
       # run super linter
     #- name: Super-Linter
