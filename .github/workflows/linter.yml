@@ -16,9 +16,9 @@ jobs:
 
       # run super linter
     - name: Super-Linter
-    - uses: github/super-linter@v3.3.1
+      uses: github/super-linter@v3.3.1
       
       # run prettier
     - name: Prettier Action
-    - uses: creyD/prettier_action@v3.0
+      uses: creyD/prettier_action@v3.0
 
