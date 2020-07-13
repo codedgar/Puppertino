@@ -19,8 +19,8 @@ jobs:
       uses: creyD/prettier_action@v3.0
 
       # run super linter
-    - name: Super-Linter
-      uses: docker://github/super-linter:latest
+    #- name: Super-Linter
+    #  uses: docker://github/super-linter:latest
       
       
 
