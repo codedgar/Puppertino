@@ -46,15 +46,18 @@
   border: 1px solid #cacaca;
 }
 
-.p-form-text:invalid, .p-form-select > select:invalid {
+.p-form-text:invalid,
+.p-form-select > select:invalid {
   border-color: var(--invalid-color);
 }
 
-.p-form-text:valid, .p-form-select > select:valid {
+.p-form-text:valid,
+.p-form-select > select:valid {
   border-color: var(--valid-color);
 }
 
-.p-form-text:placeholder-shown, .p-form-select > select:placeholder-shown {
+.p-form-text:placeholder-shown,
+.p-form-select > select:placeholder-shown {
   border-color: #cacaca;
 }
 
@@ -70,7 +73,10 @@
   resize: none;
 }
 
-.p-form-no-validate:valid, .p-form-no-validate:invalid, .p-form-no-validate > select:valid, .p-form-no-validate > select:invalid {
+.p-form-no-validate:valid,
+.p-form-no-validate:invalid,
+.p-form-no-validate > select:valid,
+.p-form-no-validate > select:invalid {
   border: 1px solid #cacaca;
 }
 
@@ -92,7 +98,9 @@ textarea.p-form-text {
   font-family: caption;
 }
 
-.p-form-label, .p-form-radio-cont, .p-form-checkbox-cont {
+.p-form-label,
+.p-form-radio-cont,
+.p-form-checkbox-cont {
   font-family: "Inter", sans-serif;
 }
 
@@ -100,13 +108,15 @@ textarea.p-form-text {
   display: block;
 }
 
-.p-form-radio-cont, .p-form-checkbox-cont {
+.p-form-radio-cont,
+.p-form-checkbox-cont {
   margin: 0px 10px;
   display: inline-flex;
   align-items: center;
 }
 
-.p-form-radio-cont > input + span, .p-form-checkbox-cont > input + span {
+.p-form-radio-cont > input + span,
+.p-form-checkbox-cont > input + span {
   width: 20px;
   height: 20px;
   background: #fff;
@@ -123,7 +133,8 @@ textarea.p-form-text {
   background: #f9f9f9;
 }
 
-.p-form-radio-cont > input, .p-form-checkbox-cont > input {
+.p-form-radio-cont > input,
+.p-form-checkbox-cont > input {
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -162,7 +173,8 @@ textarea.p-form-text {
   background: #0f75f5;
 }
 
-.p-form-checkbox-cont > input + span:before, .p-form-checkbox-cont > input + span:after {
+.p-form-checkbox-cont > input + span:before,
+.p-form-checkbox-cont > input + span:after {
   content: "";
   background: #fff;
   height: 8%;
@@ -210,22 +222,28 @@ textarea.p-form-text {
   background: #0f75f5;
 }
 
-.p-form-invalid, .p-form-invalid:placeholder-shown, .p-form-invalid:valid, .p-form-invalid:invalid {
+.p-form-invalid,
+.p-form-invalid:placeholder-shown,
+.p-form-invalid:valid,
+.p-form-invalid:invalid {
   border-color: var(--invalid-color);
 }
 
-.p-form-valid, .p-form-valid:placeholder-shown, .p-form-valid:valid, .p-form-valid:invalid {
+.p-form-valid,
+.p-form-valid:placeholder-shown,
+.p-form-valid:valid,
+.p-form-valid:invalid {
   border-color: var(--valid-color);
 }
 
 .p-form-switch {
   cursor: pointer;
-  --width:80px;
+  --width: 80px;
   display: inline-block;
 }
 
 .p-form-switch > input:checked + span:after {
-  left: calc(100% - calc( var(--width) / 2.1) );
+  left: calc(100% - calc(var(--width) / 2.1));
 }
 
 .p-form-switch > input:checked + span {
@@ -260,5 +278,3 @@ textarea.p-form-text {
 .p-form-switch > input {
   display: none;
 }
-
-/*# sourceMappingURL=forms.css.map */

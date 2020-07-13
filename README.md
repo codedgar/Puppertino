@@ -1,7 +1,8 @@
 ![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
+
 # Welcome to Puppertino!
 
-Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **MacOS** and follow the **human guidelines**.  Puppertino is a Framework created to be lightweight, modular and cool looking!
+Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **MacOS** and follow the **human guidelines**. Puppertino is a Framework created to be lightweight, modular and cool looking!
 
 Be advised that Puppertino does not include any responsive system on it, so you have to use Bootstrap, Flexbox Grid, Skeleton or whatever responsive Framework you want for that.
 
@@ -24,18 +25,17 @@ I'm developing Puppertino to be used with only the components you need or to be 
 
 This is the most important part of Puppertino! This also means that in the future I can go out of the main components of MacOS and human guidelines to add other things that I think may be necessary or great to have in the framework. In any case, coolness it's my main focus with Puppertino.
 
-
 # Current Components
 
 Puppertino currently includes:
 
- - Buttons
- - Switches
- - Form Elements (Inputs, select, form validation)
- - Modals
- - Icons
- - Font Layout
- - Color Palette
+- Buttons
+- Switches
+- Form Elements (Inputs, select, form validation)
+- Modals
+- Icons
+- Font Layout
+- Color Palette
 
 Yeah... That's all. But no worries! I'm working on adding new components every day!
 
@@ -54,7 +54,9 @@ You can use Puppertino in 3 ways for now!
 All the documentation, examples and list of how to use components can be found in [here](https://codedgar.github.io/Puppertino/).
 
 ## License
+
 Puppertino is free to use and abuse under the [open-source MIT license](https://github.com/codedgar/Puppertino/blob/master/LICENSE).
 
 ## About the creator
-I'm  [Edgar Pérez](https://twitter.com/codedgar_dev). And I make cool websites :)
+
+I'm [Edgar Pérez](https://twitter.com/codedgar_dev). And I make cool websites :)

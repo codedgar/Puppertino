@@ -1,7 +1,7 @@
 :root {
-  --font:"Inter", sans-serif;
-  --bg-hover-color:#f9f9f9;
-  --primary-col-ac:#0f75f5;
+  --font: "Inter", sans-serif;
+  --bg-hover-color: #f9f9f9;
+  --primary-col-ac: #0f75f5;
 }
 
 .p-modal-opened {
@@ -59,7 +59,8 @@
   text-decoration: none;
 }
 
-.p-modal-button-container > a:nth-child(2), .p-modal-button-container > a:nth-child(3) {
+.p-modal-button-container > a:nth-child(2),
+.p-modal-button-container > a:nth-child(3) {
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -99,5 +100,3 @@
     border-left: 0px !important;
   }
 }
-
-/*# sourceMappingURL=modals.css.map */

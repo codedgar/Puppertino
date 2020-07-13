@@ -2,25 +2,20 @@ name: Linter
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      
-      # run prettier
-    - name: Prettier Action
-      uses: creyD/prettier_action@v3.0
+      - uses: actions/checkout@v2
 
-      # run super linter
+      # run prettier
+      - name: Prettier Action
+        uses: creyD/prettier_action@v3.0
+        # run super linter
     #- name: Super-Linter
     #  uses: docker://github/super-linter:latest
-      
-      
-

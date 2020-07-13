@@ -12,17 +12,17 @@
   font-family: "Inter", sans-serif;
 }
 .p-btn[disabled] {
-  background: lightgrey;
+  background: #D3D3D3;
   color: #555;
   cursor: not-allowed;
 }
 .p-btn:disabled {
-  background: lightgrey;
+  background: #D3D3D3;
   color: #555;
   cursor: not-allowed;
 }
 .p-btn-disabled {
-  background: lightgrey;
+  background: #D3D3D3;
   color: #555;
   cursor: not-allowed;
 }
@@ -50,7 +50,7 @@
 .p-btn-help {
   margin: 0px;
   padding: 5px 10px;
-  background: white;
+  background: #ffffff;
   border-radius: 50%;
   color: #0f75f5;
   font-weight: 900;
@@ -98,5 +98,3 @@
     padding: 10px 0px;
   }
 }
-
-/*# sourceMappingURL=buttons.css.map */
