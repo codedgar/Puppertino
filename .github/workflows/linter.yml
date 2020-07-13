@@ -13,10 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: github/super-linter@v3.3.1
-    - uses: creyD/prettier_action@v3.0
+
+      # run super linter
     - name: Super-Linter
-    - name: Prettier Action
+    - uses: github/super-linter@v3.3.1
       
-      run: |
+      # run prettier
+    - name: Prettier Action
+    - uses: creyD/prettier_action@v3.0
 
