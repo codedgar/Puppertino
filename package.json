@@ -7,8 +7,15 @@
     "example": "examples"
   },
   "scripts": {
-    "sass": "sass ./dist",
-    "sass:watch": "sass ./dist --watch",
+    "start:dev": "run-p prettier:watch sass:watch",
+    "sass": "sass ./src:./dist --no-source-map",
+    "sass:watch": "sass ./src:./dist --watch --no-source-map",
+    "stylelinter:fix":"stylelint --fix ./src/**/*scss",
+    "stylelinter:check":"stylelint ./src/**/*scss",
+    "prettier:watch": "onchange ./src/**/*.scss -- prettier --write {{changed}}",
+    "prettier:fix": "prettier --write ./src",
+    "prettier:check": "prettier --check ./src",
+    "codestyle:check": "run-s prettier:check stylelinter:check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,9 +27,22 @@
   "bugs": {
     "url": "https://github.com/rilexus/Puppertino/issues"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run codestyle:check"
+    }
+  },
   "homepage": "https://github.com/rilexus/Puppertino#readme",
   "devDependencies": {
+    "husky": "^4.2.5",
     "node-sass": "^4.14.1",
-    "sass": "^1.26.10"
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.0.2",
+    "prettier": "^2.0.5",
+    "sass": "^1.26.10",
+    "stylelint": "^13.6.1",
+    "stylelint-config-sass-guidelines": "^7.0.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-order": "^4.1.0"
   }
 }
