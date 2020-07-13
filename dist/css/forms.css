@@ -1,49 +1,48 @@
 .p-form-select {
-  display: inline-block;
-  position: relative;
   border-radius: 5px;
-  margin: 10px;
+  display: inline-block;
   font-family: "Inter", sans-serif;
+  margin: 10px;
+  position: relative;
 }
 
-.p-form-select:before {
+.p-form-select::before {
+  border-color: #fff transparent transparent;
+  border-style: solid;
+  border-width: 5px;
   content: "";
+  pointer-events: none;
   position: absolute;
   right: 5px;
   top: calc(50% - 3px);
-  border-width: 5px 5px 5px 5px;
-  border-style: solid;
-  border-color: #fff transparent transparent transparent;
   z-index: 3;
-  pointer-events: none;
 }
 
-.p-form-select:after {
+.p-form-select::after {
+  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  bottom: 0;
   content: "";
   display: block;
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 20px;
-  right: 0px;
-  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
   height: 100%;
   pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
 }
 
 .p-form-select > select {
-  width: 100%;
   background: #fff;
-  border: none;
-  outline: none;
-  padding: 5px 10px;
-  margin: 0px;
-  position: relative;
+  border: 1px solid #cacaca;
   border-radius: 5px;
   font-size: 14px;
-  border: 1px solid #cacaca;
+  margin: 0;
+  outline: none;
+  padding: 5px 10px;
+  position: relative;
+  width: 100%;
 }
 
 .p-form-text:invalid,
@@ -62,15 +61,15 @@
 }
 
 .p-form-text {
-  padding: 5px;
-  border-radius: 5px;
-  margin: 10px;
-  border: 1px solid #cacaca;
   background: #fff;
-  outline: 0;
-  transition: border-color 200ms;
+  border: 1px solid #cacaca;
+  border-radius: 5px;
   font-family: "Inter", sans-serif;
+  margin: 10px;
+  outline: 0;
+  padding: 5px;
   resize: none;
+  transition: border-color 200ms;
 }
 
 .p-form-no-validate:valid,
@@ -89,9 +88,9 @@ textarea.p-form-text {
 }
 
 .p-form-truncated {
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
 }
 
 .p-form-text[type=password] {
@@ -110,23 +109,23 @@ textarea.p-form-text {
 
 .p-form-radio-cont,
 .p-form-checkbox-cont {
-  margin: 0px 10px;
-  display: inline-flex;
   align-items: center;
+  display: inline-flex;
+  margin: 0 10px;
 }
 
 .p-form-radio-cont > input + span,
 .p-form-checkbox-cont > input + span {
-  width: 20px;
-  height: 20px;
   background: #fff;
-  display: inline-block;
-  border-radius: 50%;
   border: 1px solid #cacaca;
-  position: relative;
+  border-radius: 50%;
   cursor: pointer;
-  transition: background 0.2s;
+  display: inline-block;
+  height: 20px;
   margin-right: 5px;
+  position: relative;
+  transition: background 0.2s;
+  width: 20px;
 }
 
 .p-form-radio-cont > input + span:hover {
@@ -135,32 +134,32 @@ textarea.p-form-text {
 
 .p-form-radio-cont > input,
 .p-form-checkbox-cont > input {
-  position: absolute;
   opacity: 0;
   pointer-events: none;
+  position: absolute;
 }
 
-.p-form-radio-cont > input + span:after {
-  content: "";
-  width: 30%;
-  height: 30%;
+.p-form-radio-cont > input + span::after {
   background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  content: "";
+  display: block;
+  height: 30%;
+  left: calc(50% - 15%);
+  opacity: 0;
   position: absolute;
   top: calc(50% - 15%);
-  left: calc(50% - 15%);
-  display: block;
-  border-radius: 50%;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
   transform: scale(2);
-  opacity: 0;
   transition: opacity 0.2s, transform 0.3s;
+  width: 30%;
 }
 
 .p-form-radio-cont > input:checked + span {
   background: #0f75f5;
 }
 
-.p-form-radio-cont > input:checked + span:after {
+.p-form-radio-cont > input:checked + span::after {
   opacity: 1;
   transform: scale(1);
 }
@@ -173,48 +172,48 @@ textarea.p-form-text {
   background: #0f75f5;
 }
 
-.p-form-checkbox-cont > input + span:before,
-.p-form-checkbox-cont > input + span:after {
-  content: "";
+.p-form-checkbox-cont > input + span::before,
+.p-form-checkbox-cont > input + span::after {
   background: #fff;
-  height: 8%;
-  display: block;
-  position: absolute;
   border-radius: 20px;
+  content: "";
+  display: block;
+  height: 8%;
+  position: absolute;
 }
 
-.p-form-checkbox-cont > input + span:before {
-  width: 70%;
-  top: 15%;
+.p-form-checkbox-cont > input + span::before {
   right: 30%;
+  top: 15%;
   transform: rotate(-65deg);
   transform-origin: top right;
+  width: 70%;
 }
 
-.p-form-checkbox-cont > input + span:after {
-  width: 40%;
-  top: 43%;
+.p-form-checkbox-cont > input + span::after {
   left: 30%;
+  top: 43%;
   transform: rotate(60deg);
   transform-origin: top left;
+  width: 40%;
 }
 
 .p-form-button {
-  margin: 10px;
-  padding: 5px 20px;
-  border-radius: 5px;
   background: #fff;
-  color: #333230;
-  text-decoration: none;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   border: 1px solid #cacaca;
+  border-radius: 5px;
+  color: #333230;
   display: inline-block;
   font-size: 17px;
+  margin: 10px;
+  padding: 5px 20px;
+  text-decoration: none;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .p-form-send {
   background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border: 0px;
+  border: 0;
   color: #fff;
 }
 
@@ -237,12 +236,12 @@ textarea.p-form-text {
 }
 
 .p-form-switch {
-  cursor: pointer;
   --width: 80px;
+  cursor: pointer;
   display: inline-block;
 }
 
-.p-form-switch > input:checked + span:after {
+.p-form-switch > input:checked + span::after {
   left: calc(100% - calc(var(--width) / 2.1));
 }
 
@@ -251,28 +250,28 @@ textarea.p-form-text {
 }
 
 .p-form-switch > span {
-  width: var(--width);
-  height: calc(var(--width) / 2);
   background: #e0e0e0;
-  display: block;
-  position: relative;
+  border: 1px solid #d3d3d3;
   border-radius: 500px;
-  transition: all 0.2s;
-  border: 1px solid lightgrey;
+  display: block;
+  height: calc(var(--width) / 2);
   overflow: hidden;
+  position: relative;
+  transition: all 0.2s;
+  width: var(--width);
 }
 
-.p-form-switch > span:after {
-  content: "";
-  width: 45%;
-  height: 90%;
-  border-radius: 50%;
+.p-form-switch > span::after {
   background: #f9f9f9;
-  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 20px -13px #000, 0 20px 20px -8px rgba(0, 0, 0, 0.1);
+  content: "";
+  height: 90%;
   left: 3%;
+  position: absolute;
   top: 4.5%;
   transition: all 0.2s;
-  box-shadow: 0px 0px 20px -13px #000, 0px 20px 20px -8px rgba(0, 0, 0, 0.1);
+  width: 45%;
 }
 
 .p-form-switch > input {

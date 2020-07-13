@@ -1,59 +1,60 @@
 .p-card {
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-  box-shadow: 0px 8px 10px -8px rgba(0, 0, 0, 0.1);
-  margin-top: 30px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  text-decoration: none;
-  color: black;
+  border-radius: 3px;
+  box-shadow: 0 8px 10px -8px rgba(0, 0, 0, 0.1);
+  color: #000;
   display: block;
+  margin-top: 30px;
+  text-decoration: none;
 }
 .p-card-image > img {
-  width: 100%;
+  border-bottom: 3px solid var(--accent-article);
   display: block;
   margin: auto;
-  border-bottom: 3px solid var(--accent-article);
+  width: 100%;
 }
 .p-card-tags {
-  width: 100%;
-  overflow: hidden;
   display: flex;
+  overflow: hidden;
   position: relative;
+  width: 100%;
 }
-.p-card-tags:before {
+.p-card-tags::before {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, white 100%);
   content: "";
-  width: 30%;
   height: 100%;
   position: absolute;
-  top: 0;
   right: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, white 100%);
+  top: 0;
+  width: 30%;
 }
-.p-card-tags span, .p-card-tags a {
+.p-card-tags span,
+.p-card-tags a {
   border: 1px solid #252525;
+  border-radius: 50px;
+  color: #252525;
   margin: 5px;
   padding: 5px 15px;
-  border-radius: 50px;
   text-decoration: none;
-  color: #252525;
   transition: all 0.2s;
 }
 .p-card-tags a:hover {
   background: #252525;
-  color: black;
+  color: #000;
 }
 .p-card-title {
-  margin-top: 10px;
-  margin-bottom: 15px;
   font-size: 2rem;
+  margin-bottom: 15px;
+  margin-top: 10px;
 }
 .p-card-content {
   padding: 15px;
   padding-top: 5px;
 }
 .p-card-text {
-  margin-top: 0px;
-  margin-bottom: 10px;
   font-size: 17px;
+  margin-bottom: 10px;
   margin-left: 10px;
+  margin-top: 0;
 }
