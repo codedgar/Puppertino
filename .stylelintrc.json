@@ -1,0 +1,15 @@
+{
+  "extends": "stylelint-config-sass-guidelines",
+  "plugins": [
+    "stylelint-order"
+  ],
+  "rules": {
+    "indentation": 2,
+    "string-quotes": "double",
+    "color-named": "never",
+    "max-nesting-depth": 3,
+    "selector-no-qualifying-type": null,
+    "function-parentheses-space-inside": "never-single-line",
+    "number-leading-zero": null
+  }
+}

@@ -1,106 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>Modals - Puppertino Framework</title>
-	<link href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;900&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../dist/full.css">
-	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<link rel="stylesheet" type="text/css" href="doc.css">
-	<meta name="description" content="This is the documentation for Modals on the Puppertino Framework, a framework that mimics Apple's design, woof!">
-	<link rel="icon" type="image/png" href="../landing-images/doggo.png">
-</head>
-<body class="p-layout">
+  <head>
+    <title>Modals - Puppertino Framework</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="../dist/css/full.css" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="This is the documentation for Modals on the Puppertino Framework, a framework that mimics Apple's design, woof!"
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+  </head>
+  <body class="p-layout">
+    <div class="p-modal-background">
+      <div class="p-modal" id="normal-modal" data-p-close-on-outside="true">
+        <h2>Sup!</h2>
+        <p>This modal has 3 buttons, please don't add more than 3 :)</p>
+        <div class="p-modal-button-container">
+          <a href="#"><strong>Confirm</strong></a>
+          <a href="#">Settings</a>
+          <a href="#" data-p-cancel>Cancel</a>
+        </div>
+      </div>
 
-<div class="p-modal-background">
-  <div class="p-modal" id="normal-modal" data-p-close-on-outside="true">
-    <h2>Sup!</h2>
-    <p>This modal has 3 buttons, please don't add more than 3 :)</p>
-    <div class="p-modal-button-container">
-      <a href="#"><strong>Confirm</strong></a>
-      <a href="#">Settings</a>
-      <a href="#" data-p-cancel>Cancel</a>
+      <div class="p-modal" id="two-button-modal" data-p-close-on-outside="true">
+        <h2>Alert!</h2>
+        <p>This modals has 2 buttons!</p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+          <a href="#" data-p-cancel>Cancel</a>
+        </div>
+      </div>
+
+      <div class="p-modal" id="one-button-modal">
+        <h2>Alert!</h2>
+        <p>
+          Hope you are having an amazing day :)<br />
+          Also this modal does not close when you click outside, you have to
+          click the OK button
+        </p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+        </div>
+      </div>
+
+      <div class="p-modal" id="example-modal">
+        <h2>Hey!</h2>
+        <p>
+          This is an example modal! It does not feature the attribute
+          data-p-close-on-outside, so it's not gonna close if you click outside
+          of it
+        </p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+        </div>
+      </div>
     </div>
-  </div>
-  
-  <div class="p-modal" id="two-button-modal" data-p-close-on-outside="true">
-    <h2>Alert!</h2>
-    <p>This modals has 2 buttons!</p>
-    <div class="p-modal-button-container">
-      <a href="#" data-p-cancel>OK</a>
-      <a href="#" data-p-cancel>Cancel</a>
+
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="modals.html" class="p-btn p-btn-scope">Modals</a>
     </div>
-  </div>
-  
-  <div class="p-modal" id="one-button-modal">
-    <h2>Alert!</h2>
-    <p>Hope you are having an amazing day :)<br> Also this modal does not close when you click outside, you have to click the OK button</p>
-    <div class="p-modal-button-container">
-      <a href="#" data-p-cancel>OK</a>
+    <h1>Modals</h1>
+    <div class="master">
+      <p>
+        Modals are one of the most emblematic items of iOS, so I added the
+        modals of iOS instead of adding dialog boxes like in MacOS. Following
+        the same principles of iOS, modals can have 1, 2 or 3 buttons max. To
+        use modals, you need 2 components:
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/modals.css"
+          target="_blank"
+          >Modals CSS</a
+        >
+        and
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/modals.js"
+          target="_blank"
+          >Modals JS</a
+        >
+        alternatively you can use the
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/full.css"
+          target="_blank"
+          >Full CSS</a
+        >
+        (Not recommended if you are just going to use this component). Please be
+        aware that you still need to download the JS of Modals, since at the
+        time, there's no full.js
+      </p>
+
+      <div class="talk-about-it">
+        <h2>Before jumping on it.</h2>
+        <p>
+          I wanted to make modals not only as easy to use as possible, but UX
+          optimized as I could. That's why I'm calling it now, adding form
+          elements in forms is not supported, and also opening several modals is
+          not supported either.<br />
+          Now onto modals and types:
+        </p>
+
+        <button data-p-open-modal="#normal-modal" class="p-btn">
+          Three button modal
+        </button>
+        <button data-p-open-modal="#two-button-modal" class="p-btn">
+          Two button modal
+        </button>
+        <button data-p-open-modal="#one-button-modal" class="p-btn">
+          One button modal
+        </button>
+      </div>
     </div>
-  </div>
-
-  <div class="p-modal" id="example-modal">
-    <h2>Hey!</h2>
-    <p>This is an example modal! It does not feature the attribute data-p-close-on-outside, so it's not gonna close if you click outside of it</p>
-    <div class="p-modal-button-container">
-      <a href="#" data-p-cancel>OK</a>
-    </div>
-  </div>
-</div>
-
-	<div class="route">
-		<a href="https://codedgar.github.io/Puppertino/" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
-		<p>/</p>
-		<a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive">Examples</a>
-		<p>/</p>
-		<a href="modals.html" class="p-btn p-btn-scope">Modals</a>
-	</div>
-	<h1>Modals</h1>
-	<div class="master">
-		<p>Modals are one of the most emblematic items of iOS, so I added the modals of iOS instead of adding dialog boxes like in MacOS. Following the same principles of iOS, modals can have 1, 2 or 3 buttons max. To use modals, you need 2 components: <a href="https://github.com/codedgar/Puppertino/blob/master/dist/modals.css" target="_blank">Modals CSS</a> and
-		<a href="https://github.com/codedgar/Puppertino/blob/master/dist/modals.js" target="_blank">Modals JS</a> alternatively you can use the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/full.css" target="_blank">Full CSS</a> (Not recommended if you are just going to use this component). Please be aware that you still need to download the JS of Modals, since at the time, there's no full.js</p>
-
-		<div class="talk-about-it">
-			<h2>Before jumping on it.</h2>
-			<p>I wanted to make modals not only as easy to use as possible, but UX optimized as I could. That's why I'm calling it now, adding form elements in forms is not supported, and also opening several modals is not supported either.<br> Now onto modals and types:</p>
-
-			<button data-p-open-modal="#normal-modal" class="p-btn">Three button modal</button>
-			<button data-p-open-modal="#two-button-modal" class="p-btn">Two button modal</button>
-			<button data-p-open-modal="#one-button-modal" class="p-btn">One button modal</button>
-
-		</div>
-		
-		
-		
-		</div>
-		<div class="talk-about-it">
-			<h2>First steps.</h2>
-			<p>To use modals, we need to have a master div where every modal will be located, as such:</p>
-			<div class="code">
-			<pre>
+    <div class="talk-about-it">
+      <h2>First steps.</h2>
+      <p>
+        To use modals, we need to have a master div where every modal will be
+        located, as such:
+      </p>
+      <div class="code">
+        <pre>
 				<code class="html">
 &#60;div class="p-modal-background">
 	&#60;!-- Your modals will be here -->
 &#60;/div>
 				</code>
-			</pre>	
-			</div>
-		</div>
+			</pre>
+      </div>
+    </div>
 
-		<div class="talk-about-it">
-			<h2>General usage.</h2>
-			<p>To use modals, we need 2 principal components: <strong>A trigger for the modal</strong> and <strong>the modal itself</strong>. For the button to work, you need to add the attribute <code class="code">data-p-open-modal</code> followed by the ID of the actual modal. The actual modal can have from 1 to 3 buttons, and if you add the attribute <code class="code">data-p-close-on-outside="true"</code> the modal will close if you click outside of it. Also, modals appear a little bit at the bottom in lower resolutions, just to make them easier to tap in mobile devices.<br> Also, if the <code class="code">data-p-cancel</code> attribute is present on a button of the modal, the modal will close when the user clicks the button.</p>
+    <div class="talk-about-it">
+      <h2>General usage.</h2>
+      <p>
+        To use modals, we need 2 principal components:
+        <strong>A trigger for the modal</strong> and
+        <strong>the modal itself</strong>. For the button to work, you need to
+        add the attribute <code class="code">data-p-open-modal</code> followed
+        by the ID of the actual modal. The actual modal can have from 1 to 3
+        buttons, and if you add the attribute
+        <code class="code">data-p-close-on-outside="true"</code> the modal will
+        close if you click outside of it. Also, modals appear a little bit at
+        the bottom in lower resolutions, just to make them easier to tap in
+        mobile devices.<br />
+        Also, if the <code class="code">data-p-cancel</code> attribute is
+        present on a button of the modal, the modal will close when the user
+        clicks the button.
+      </p>
 
-			
-			<button data-p-open-modal="#example-modal" class="p-btn">Toggle Modal</button>
+      <button data-p-open-modal="#example-modal" class="p-btn">
+        Toggle Modal
+      </button>
 
-
-
-			<p>Usage:</p>
-			<div class="code">
-			<pre>
+      <p>Usage:</p>
+      <div class="code">
+        <pre>
 				<code class="html">
 &#60;!-- The button that toggles the modal -->
 
@@ -122,22 +192,29 @@
 
 &#60;/div>
 				</code>
-			</pre>	
-			</div>
-		</div>
+			</pre>
+      </div>
+    </div>
 
-		<div class="talk-about-it">
-			<h2>Several Buttons in a modal.</h2>
-			<p>Modals support having several buttons on them without breaking, but due to composition, the max amount of buttons is 3. To add more buttons, the only thing you need is to add another <code class="code">&#60;a></code> element inside the Modal button container (<code class="code">&#60;div class="p-modal-button-container"></code>).</p>
+    <div class="talk-about-it">
+      <h2>Several Buttons in a modal.</h2>
+      <p>
+        Modals support having several buttons on them without breaking, but due
+        to composition, the max amount of buttons is 3. To add more buttons, the
+        only thing you need is to add another
+        <code class="code">&#60;a></code> element inside the Modal button
+        container (<code class="code"
+          >&#60;div class="p-modal-button-container"></code
+        >).
+      </p>
 
-			
-			<button data-p-open-modal="#two-button-modal" class="p-btn">Toggle Modal</button>
+      <button data-p-open-modal="#two-button-modal" class="p-btn">
+        Toggle Modal
+      </button>
 
-
-
-			<p>Usage:</p>
-			<div class="code">
-			<pre>
+      <p>Usage:</p>
+      <div class="code">
+        <pre>
 				<code class="html">
 
 &#60;div class="p-modal-button-container">
@@ -146,16 +223,26 @@
 &#60;/div>
 
 				</code>
-			</pre>	
-			</div>
-		</div>
+			</pre>
+      </div>
+    </div>
 
-	<div class="talk-about-it">
-			<h2>Support for blur on Firefox.</h2>
-			<p>Modals use a backdrop-filter, which is currently supported by Firefox but you need to manually activate it, but in Puppertino there's a fallback, and for users who don't have active the backdrop-filter in Firefox, the modal will appear completely white.</p>
-	</div>
-</body>
-<script type="text/javascript" src="../dist/modals.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+    <div class="talk-about-it">
+      <h2>Support for blur on Firefox.</h2>
+      <p>
+        Modals use a backdrop-filter, which is currently supported by Firefox
+        but you need to manually activate it, but in Puppertino there's a
+        fallback, and for users who don't have active the backdrop-filter in
+        Firefox, the modal will appear completely white.
+      </p>
+    </div>
+  </body>
+  <script type="text/javascript" src="../src/js/modals.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
 </html>
