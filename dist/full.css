@@ -173,7 +173,7 @@
   background: var(--bg-color);
   outline: 0;
   transition: border-color 200ms;
-  font-family: var(--font);
+  font-family: "Inter", sans-serif;
   resize: none;
 }
 

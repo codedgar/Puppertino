@@ -174,7 +174,7 @@
   background:var(--bg-color);
   outline:0;
   transition:border-color 200ms;
-  font-family: var(--font);
+  font-family: "Inter", sans-serif;
   resize:none;
 }
 .p-form-no-validate:valid, .p-form-no-validate:invalid,.p-form-no-validate>select:valid, .p-form-no-validate>select:invalid{
