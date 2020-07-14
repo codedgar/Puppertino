@@ -2,9 +2,13 @@
 
 # Welcome to Puppertino!
 
-Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **MacOS** and follow the **human guidelines**. Puppertino is a Framework created to be lightweight, modular and cool looking!
+Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look
+of **macOS** and follow the **human guidelines**. Puppertino is a Framework
+created to be lightweight, modular, and cool looking!
 
-Be advised that Puppertino does not include any responsive system on it, so you have to use Bootstrap, Flexbox Grid, Skeleton or whatever responsive Framework you want for that.
+> **NOTE**: Puppertino does not include any responsive system, you must use
+> Bootstrap, Flexbox Grid, Skeleton, or some other responsive Framework along
+> with it.
 
 ## In a nutshell
 
@@ -15,15 +19,24 @@ Be advised that Puppertino does not include any responsive system on it, so you 
 
 ## Lightweight
 
-I'm focused on making Puppertino as Lightweight as possible, I want it to become a big framework, but not at the cost of weight and performance. So to keep it small, I won't be adding AnimateCSS, or any other framework (No matter how cool it is) on top of Puppertino. And to make it more lightweight I have implemented my second point.
+I'm focused on making Puppertino as Lightweight as possible, I want it to become
+a big framework, but not at the cost of weight and performance. So to keep it
+small, I won't be adding AnimateCSS, or any other framework (No matter how cool
+it is) on top of Puppertino. And to make it more lightweight, I have implemented
+my second point.
 
 ## Modular
 
-I'm developing Puppertino to be used with only the components you need or to be used as a complete framework. Choosing the components that you need may help you throw some of the extra KB that you don't need in your website or app.
+I'm developing Puppertino to be used with only the components you need or to be
+used as a complete framework. Choosing the components that you need may help you
+throw some extra KB that you don't need in your website or app.
 
 ## Cool looking
 
-This is the most important part of Puppertino! This also means that in the future I can go out of the main components of MacOS and human guidelines to add other things that I think may be necessary or great to have in the framework. In any case, coolness it's my main focus with Puppertino.
+This is the most important part of Puppertino! This also means that I can go out
+of the main components of macOS and human guidelines in the future to add other
+things that I think maybe necessary or great to have in the framework. In any
+case, coolness, it's my main focus with Puppertino.
 
 # Current Components
 
@@ -41,17 +54,20 @@ Yeah... That's all. But no worries! I'm working on adding new components every d
 
 # Usage
 
-You can use Puppertino in 3 ways for now!
+You can use Puppertino in 3 ways (for now):
 
-1- You can download the all.css located in /dist/ . Download this if you are sure that you need at least half of the elements that are present in Puppertino
-
-2- Download every component CSS that you need on /dist/ Such as buttons or form elements one by one. While this can be maybe tedious to download them one by one, this can help you to save some KBs in your website, think of your users :)
-
-3- You can now download the SCSS version of Puppertino located also in /dist/ !
+1. You can download the `all.css` file located in the `/dist/` directory.
+   Download this if you are sure that you need at least half of the elements
+   that are present in Puppertino.
+2. Download every component CSS that you need from the `/dist/` folder. Such as
+   buttons or form elements or other components. While it maybe tedious to
+   download  them one by one, this can help you to save some KBs in your website, think of your users. :)
+3. You can now download the SCSS version of Puppertino, also located in `/dist/`.
 
 # Docs
 
-All the documentation, examples and list of how to use components can be found in [here](https://codedgar.github.io/Puppertino/).
+Find all the documentation, examples, and list of components and how to use them
+at https://codedgar.github.io/Puppertino/.
 
 ## License
 
