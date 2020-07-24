@@ -55,11 +55,13 @@ $valid-color: #94d63c;
 }
 
 .p-form-text:invalid,
+.p-form-text-alt:invalid,
 .p-form-select > select:invalid {
   border-color: var(--invalid-color);
 }
 
 .p-form-text:valid,
+.p-form-text-alt:valid,
 .p-form-select > select:valid {
   border-color: var(--valid-color);
 }
@@ -79,6 +81,15 @@ $valid-color: #94d63c;
   padding: 5px;
   resize: none;
   transition: border-color 200ms;
+}
+
+.p-form-text-alt {
+  border: 0px;
+  border-bottom: 2px solid #cacaca;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: 10px;
 }
 
 .p-form-no-validate:valid,

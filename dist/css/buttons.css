@@ -11,6 +11,7 @@
   text-decoration: none;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
+
 .p-btn[disabled] {
   background: #d3d3d3;
   color: #555;
@@ -33,6 +34,14 @@
   color: #fff;
 }
 
+.p-btn-hero {
+  padding: 20px 80px;
+  font-size: 2rem!important;
+  color: #fff;
+  background: #0f75f5;
+  text-align: center;
+}
+
 .p-btn.p-prim-col:active {
   background: #0f75f5;
 }
@@ -47,16 +56,26 @@
   padding: 10px 30px;
 }
 
-.p-btn-help {
-  background: #fff;
-  border: 2px solid #cacaca;
-  border-radius: 50%;
-  box-shadow: 0 3px 10px -8px #000;
-  color: #0f75f5;
-  font-weight: 900;
-  margin: 0;
-  padding: 5px 10px;
-  text-decoration: none;
+.p-btn-icon {
+    background: #fff;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    box-shadow: 0 3px 10px -8px #000;
+    color: #0f75f5;
+    font-weight: 900;
+    margin: 5px;
+    text-decoration: none;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.p-btn-icon svg{
+  width: 1.14rem;
+  height: 1.14rem;
 }
 
 .p-btn-scope {
@@ -83,6 +102,33 @@
   background: transparent;
   color: #212136;
 }
+
+.p-btn-outline {
+  background: none;
+  border-color: currentColor;
+}
+
+.p-btn-outline-dash {
+  background: none;
+  border-color: currentColor;
+  border-style: dashed;
+}
+
+.p-btn-direction {
+  text-decoration: none;
+  padding: 5px;
+  color: #212136;
+}
+
+.p-btn-direction.p-btn-d-back::before {
+  content: "❬";
+}
+
+.p-btn-direction.p-btn-d-next::after {
+  content: "❭";
+}
+
+
 
 @media (max-width: 576px) {
   .p-btn-big-sm {

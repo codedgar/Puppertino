@@ -3,7 +3,8 @@
 <head>
 	<title>Forms - Puppertino Framework</title>
 	<link href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;900&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../dist/css/full.css">
+  <link rel="stylesheet" type="text/css" href="../dist/css/full.css">
+	<link rel="stylesheet" type="text/css" href="../dist/css/forms.css">
 	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   	<meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -117,6 +118,54 @@
 
 				</code>
 			</pre>
+        </div>
+      </div>
+      <div class="talk-about-it">
+        <h2>Alternate inputs.</h2>
+        <p>
+          Alternate inputs are a bigger versions of the original inputs. The intended usage of this is login or registration forms.<br><br>
+          The alternate inputs work similar as the default input. The only thing that changes is the class, but validation and others work exactly as expected.
+        </p>
+        <input
+          type="email"
+          class="p-form-text-alt"
+          placeholder="Normal validated input (email)"
+        />
+        <input
+          type="name"
+          class="p-form-text-alt p-form-no-validate"
+          placeholder="Normal no-validated input"
+        />
+
+        <input
+          type="name"
+          class="p-form-text-alt p-form-no-validate p-form-truncated"
+          placeholder="Truncated Text"
+        />
+
+        <label class="p-form-label"
+          >Email:<input
+            type="email"
+            class="p-form-text-alt"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">
+
+&#60;input type="text" class="p-form-text-alt p-form-no-validate" placeholder="free text">
+
+&#60;input type="email" class="p-form-text-alt p-form-truncated" placeholder="Truncated text...">
+
+&#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">&#60;/label>
+
+        </code>
+      </pre>
         </div>
       </div>
       <div class="talk-about-it">
@@ -239,6 +288,26 @@
 
 				</code>
 			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Range.</h2>
+        <p>
+          The range slider has been made possible by <a href="https://github.com/danielstern/range.css" target="_blank">range.css</a>! Currently it's a rough implementation, but usage is really simple.
+        </p>
+
+        <input type="range" min="0" max="100" class="p-form-range">
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;input type="range" min="0" max="100" class="p-form-range">
+
+        </code>
+      </pre>
         </div>
       </div>
 
