@@ -652,7 +652,7 @@ textarea.p-form-text {
 .p-form-switch > span::after {
   background: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0 0 20px -13px #000, 0 20px 20px -8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.16), 0px 3px 8px rgba(0, 0, 0, 0.15);
   content: "";
   height: 90%;
   left: 3%;
