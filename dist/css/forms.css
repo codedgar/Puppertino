@@ -1,13 +1,3 @@
-:root {
-  --primary-col:linear-gradient(to bottom, #4fc5fa 0%,#0f75f5 100%);
-  --primary-col-ac:#0f75f5;
-  --bg-color:#fff;
-  --bg-hover-color:#f9f9f9;
-  --bg-front-col:#000;
-  --invalid-color:#d6513c;
-  --valid-color:#94d63c;
-}
-
 .p-form-select {
   border-radius: 5px;
   display: inline-block;
@@ -15,7 +5,6 @@
   margin: 10px;
   position: relative;
 }
-
 .p-form-select::before {
   border-color: #fff transparent transparent;
   border-style: solid;
@@ -27,7 +16,6 @@
   top: calc(50% - 3px);
   z-index: 3;
 }
-
 .p-form-select::after {
   background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
   border-bottom-right-radius: 5px;
@@ -42,8 +30,7 @@
   top: 0;
   width: 20px;
 }
-
-.p-form-select > select {
+.p-form-select select {
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
@@ -68,7 +55,6 @@
 }
 
 .p-form-text:placeholder-shown,
-.p-form-text-alt:placeholder-shown,
 .p-form-select > select:placeholder-shown {
   border-color: #cacaca;
 }
@@ -86,27 +72,19 @@
 }
 
 .p-form-text-alt {
-  border: 0px;
+  border: 0;
   border-bottom: 2px solid #cacaca;
-  padding: 10px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   margin: 10px;
-}
-
-.p-form-text-alt::placeholder {
-  color: #cacaca;
-}
-
-.p-form-text-alt:focus {
-  outline: 3px solid #bed8f9;
+  padding: 10px;
 }
 
 .p-form-no-validate:valid,
 .p-form-no-validate:invalid,
 .p-form-no-validate > select:valid,
 .p-form-no-validate > select:invalid {
-  border-color: #cacaca;
+  border: 1px solid #cacaca;
 }
 
 .p-form-text:focus {
@@ -294,7 +272,7 @@ textarea.p-form-text {
 .p-form-switch > span::after {
   background: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.16), 0px 3px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
   content: "";
   height: 90%;
   left: 3%;
@@ -306,92 +284,4 @@ textarea.p-form-text {
 
 .p-form-switch > input {
   display: none;
-}
-
-
-input[type=range].p-form-range {
-  width: 100%;
-  margin: 11.5px 0;
-  background-color: transparent;
-  -webkit-appearance: none;
-}
-input[type=range].p-form-range:focus {
-  outline: none;
-}
-input[type=range].p-form-range::-webkit-slider-runnable-track {
-  background: #cacaca;
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-webkit-slider-thumb {
-  margin-top: -11.5px;
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid #d3d3d3;
-  border-radius: 50px;
-  cursor: pointer;
-  -webkit-appearance: none;
-}
-input[type=range].p-form-range:focus::-webkit-slider-runnable-track {
-  background: #cacaca;
-}
-input[type=range].p-form-range::-moz-range-track {
-  background: #cacaca;
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid #d3d3d3;
-  border-radius: 50px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-ms-track {
-  background: transparent;
-  border-color: transparent;
-  border-width: 13.4px 0;
-  color: transparent;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-ms-fill-lower {
-  background: #cacaca;
-  border: 0;
-}
-input[type=range].p-form-range::-ms-fill-upper {
-  background: #cacaca;
-  border: 0;
-}
-input[type=range].p-form-range::-ms-thumb {
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid #d3d3d3;
-  border-radius: 50px;
-  cursor: pointer;
-  margin-top: 0px;
-  /*Needed to keep the Edge thumb centred*/
-}
-input[type=range].p-form-range:focus::-ms-fill-lower {
-  background: #cacaca;
-}
-input[type=range].p-form-range:focus::-ms-fill-upper {
-  background: #cacaca;
-}
-/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
-how to remove the virtical space around the range input in IE*/
-@supports (-ms-ime-align:auto) {
-  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
-  input[type=range].p-form-range {
-    margin: 0;
-    /*Edge starts the margin from the thumb, not the track as other browsers do*/
-  }
 }

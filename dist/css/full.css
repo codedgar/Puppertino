@@ -1,37 +1,36 @@
 :root {
-  --primary-col:linear-gradient(to bottom, #4fc5fa 0%,#0f75f5 100%);
-  --primary-col-ac:#0f75f5;
-  --bg-color:#fff;
-  --bg-hover-color:#f9f9f9;
-  --bg-front-col:#000;
-  --invalid-color:#d6513c;
-  --valid-color:#94d63c;
+  --primary-col-ac: #0f75f5;
+  --bg-color: #fff;
+  --bg-hover-color: #f9f9f9;
+  --bg-front-col: #000;
+  --invalid-color: #d6513c;
+  --valid-color: #94d63c;
 }
 
 /* START OF BUTTONS */
 .p-btn {
+  background: #fff;
+  border: 1px solid #cacaca;
+  border-radius: 5px;
+  color: #333230;
+  display: inline-block;
+  font-family: "Inter", sans-serif;
+  font-size: 17px;
   margin: 10px;
   padding: 5px 20px;
-  border-radius: 5px;
-  background: #fff;
-  color: #333230;
   text-decoration: none;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-  border: 1px solid #cacaca;
-  display: inline-block;
-  font-size: 17px;
-  font-family: "Inter", sans-serif;
 }
 
 .p-btn-disabled {
-  background: lightgrey;
+  background: #d3d3d3;
   color: #555;
   cursor: not-allowed;
 }
 
 .p-prim-col {
   background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border: 0px;
+  border: 0;
   color: #fff;
 }
 
@@ -40,38 +39,38 @@
 }
 
 .p-btn-round {
+  border: 0;
   border-radius: 50px;
-  border: 0px;
   padding: 10px 30px;
 }
 
-.p-btn-more:after {
+.p-btn-more::after {
   content: "...";
 }
 
 .p-btn-help {
-  margin: 0px;
-  padding: 5px 10px;
-  background: white;
+  background: #fff;
+  border: 2px solid #cacaca;
   border-radius: 50%;
+  box-shadow: 0 3px 10px -8px #000;
   color: #0f75f5;
   font-weight: 900;
+  margin: 0;
+  padding: 5px 10px;
   text-decoration: none;
-  border: 2px solid #cacaca;
-  box-shadow: 0px 3px 10px -8px black;
 }
 
 .p-btn-scope {
-  margin: 5px;
-  padding: 2px 20px;
   background: #8e8e8e;
   color: #fff;
+  margin: 5px;
+  padding: 2px 20px;
 }
 
 .p-btn-scope-unactive {
   background: transparent;
-  color: #212136;
   border-color: transparent;
+  color: #212136;
   transition: border-color 0.2s;
 }
 
@@ -92,288 +91,26 @@
 
 @media (max-width: 576px) {
   .p-btn-big-sm {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    font-size: 50px;
-    margin: 0px;
+    border: 0;
     border-radius: 0%;
+    bottom: 0;
+    font-size: 50px;
+    left: 0;
+    margin: 0;
+    position: fixed;
     text-align: center;
-    border: 0px;
+    width: 100%;
   }
 }
 /* END OF BUTTONS */
 /* START OF FORMS */
 .p-form-select {
-  display: inline-block;
-  position: relative;
-  border-radius: 5px;
-  margin: 10px;
-  font-family: "Inter", sans-serif;
-}
-
-.p-form-select:before {
-  content: "";
-  position: absolute;
-  right: 5px;
-  top: calc(50% - 3px);
-  border-width: 5px 5px 5px 5px;
-  border-style: solid;
-  border-color: #fff transparent transparent transparent;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.p-form-select:after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 20px;
-  right: 0px;
-  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: 100%;
-  pointer-events: none;
-}
-
-.p-form-select > select {
-  width: 100%;
-  background: var(--bg-color);
-  border: none;
-  outline: none;
-  padding: 5px 10px;
-  margin: 0px;
-  position: relative;
-  border-radius: 5px;
-  font-size: 14px;
-  border: 1px solid #cacaca;
-}
-
-.p-form-text:invalid, .p-form-select > select:invalid {
-  border-color: var(--invalid-color);
-}
-
-.p-form-text:valid, .p-form-select > select:valid {
-  border-color: var(--valid-color);
-}
-
-.p-form-text:placeholder-shown, .p-form-select > select:placeholder-shown {
-  border-color: #cacaca;
-}
-
-.p-form-text {
-  padding: 5px;
-  border-radius: 5px;
-  margin: 10px;
-  border: 1px solid #cacaca;
-  background: var(--bg-color);
-  outline: 0;
-  transition: border-color 200ms;
-  font-family: "Inter", sans-serif;
-  resize: none;
-}
-
-.p-form-no-validate:valid, .p-form-no-validate:invalid, .p-form-no-validate > select:valid, .p-form-no-validate > select:invalid {
-  border-color:#cacaca;
-}
-
-.p-form-text:focus {
-  border-color: #0f75f5;
-}
-
-textarea.p-form-text {
-  height: 100px;
-}
-
-.p-form-truncated {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.p-form-text[type=password] {
-  font-family: caption;
-}
-
-.p-form-label, .p-form-radio-cont, .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
-}
-
-.p-form-label {
-  display: block;
-}
-
-.p-form-radio-cont, .p-form-checkbox-cont {
-  margin: 0px 10px;
-  display: inline-flex;
-  align-items: center;
-}
-
-.p-form-radio-cont > input + span, .p-form-checkbox-cont > input + span {
-  width: 20px;
-  height: 20px;
-  background: var(--bg-color);
-  display: inline-block;
-  border-radius: 50%;
-  border: 1px solid #cacaca;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-right: 5px;
-}
-
-.p-form-radio-cont > input + span:hover {
-  background: var(--bg-hover-color);
-}
-
-.p-form-radio-cont > input, .p-form-checkbox-cont > input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.p-form-radio-cont > input + span:after {
-  content: "";
-  width: 30%;
-  height: 30%;
-  background: #fff;
-  position: absolute;
-  top: calc(50% - 15%);
-  left: calc(50% - 15%);
-  display: block;
-  border-radius: 50%;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
-  transform: scale(2);
-  opacity: 0;
-  transition: opacity 0.2s, transform 0.3s;
-}
-
-.p-form-radio-cont > input:checked + span {
-  background: #0f75f5;
-}
-
-.p-form-radio-cont > input:checked + span:after {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.p-form-checkbox-cont > input + span {
-  border-radius: 5px;
-}
-
-.p-form-checkbox-cont > input:checked + span {
-  background: #0f75f5;
-}
-
-.p-form-checkbox-cont > input + span:before, .p-form-checkbox-cont > input + span:after {
-  content: "";
-  background: #fff;
-  height: 8%;
-  display: block;
-  position: absolute;
-  border-radius: 20px;
-}
-
-.p-form-checkbox-cont > input + span:before {
-  width: 70%;
-  top: 15%;
-  right: 30%;
-  transform: rotate(-65deg);
-  transform-origin: top right;
-}
-
-.p-form-checkbox-cont > input + span:after {
-  width: 40%;
-  top: 43%;
-  left: 30%;
-  transform: rotate(60deg);
-  transform-origin: top left;
-}
-
-.p-form-button {
-  margin: 10px;
-  padding: 5px 20px;
-  border-radius: 5px;
-  background: #fff;
-  color: #333230;
-  text-decoration: none;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-  border: 1px solid #cacaca;
-  display: inline-block;
-  font-size: 17px;
-}
-
-.p-form-send {
-  background: var(--primary-col);
-  border: 1px solid #4fc5fa;
-  color: #fff;
-}
-
-.p-form-send:active {
-  background: #0f75f5;
-}
-
-.p-form-invalid, .p-form-invalid:placeholder-shown, .p-form-invalid:valid, .p-form-invalid:invalid {
-  border-color: var(--invalid-color);
-}
-
-.p-form-valid, .p-form-valid:placeholder-shown, .p-form-valid:valid, .p-form-valid:invalid {
-  border-color: var(--valid-color);
-}
-
-.p-form-switch > input:checked + span:after {
-  left: calc(100% - calc( var(--width) / 2.1) );
-}
-
-.p-form-switch {
-  cursor: pointer;
-  --width:80px;
-  display: inline-block;
-}
-
-.p-form-switch > input:checked + span {
-  background: #60c35b;
-}
-
-.p-form-switch > span {
-  width: var(--width);
-  height: calc(var(--width) / 2);
-  background: #e0e0e0;
-  display: block;
-  position: relative;
-  border-radius: 500px;
-  transition: all 0.2s;
-  border: 1px solid lightgrey;
-  overflow: hidden;
-}
-
-.p-form-switch > span:after {
-  content: "";
-  width: 45%;
-  height: 90%;
-  border-radius: 50%;
-  background: #f9f9f9;
-  position: absolute;
-  left: 3%;
-  top: 4.5%;
-  transition: all 0.2s;
-  box-shadow: 0px 0px 20px -13px #000, 0px 20px 20px -8px rgba(0, 0, 0, 0.1);
-}
-
-.p-form-switch > input {
-  display: none;
-}.p-form-select {
   border-radius: 5px;
   display: inline-block;
   font-family: "Inter", sans-serif;
   margin: 10px;
   position: relative;
 }
-
 .p-form-select::before {
   border-color: #fff transparent transparent;
   border-style: solid;
@@ -385,7 +122,6 @@ textarea.p-form-text {
   top: calc(50% - 3px);
   z-index: 3;
 }
-
 .p-form-select::after {
   background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
   border-bottom-right-radius: 5px;
@@ -400,9 +136,8 @@ textarea.p-form-text {
   top: 0;
   width: 20px;
 }
-
-.p-form-select > select {
-  background: #fff;
+.p-form-select select {
+  background: var(--bg-color);
   border: 1px solid #cacaca;
   border-radius: 5px;
   font-size: 14px;
@@ -414,61 +149,43 @@ textarea.p-form-text {
 }
 
 .p-form-text:invalid,
-.p-form-text-alt:invalid,
 .p-form-select > select:invalid {
   border-color: var(--invalid-color);
 }
 
 .p-form-text:valid,
-.p-form-text-alt:valid,
 .p-form-select > select:valid {
   border-color: var(--valid-color);
 }
 
 .p-form-text:placeholder-shown,
-.p-form-text-alt:placeholder-shown,
 .p-form-select > select:placeholder-shown {
   border-color: #cacaca;
 }
 
 .p-form-text {
-  background: #fff;
+  background: var(--bg-color);
   border: 1px solid #cacaca;
   border-radius: 5px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font);
   margin: 10px;
   outline: 0;
   padding: 5px;
   resize: none;
   transition: border-color 200ms;
 }
-
-.p-form-text-alt {
-  border: 0px;
-  border-bottom: 2px solid #cacaca;
-  padding: 10px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  margin: 10px;
+.p-form-text:focus {
+  border-color: #0f75f5;
 }
-
-.p-form-text-alt::placeholder {
-  color: #cacaca;
-}
-
-.p-form-text-alt:focus {
-  outline: 3px solid #bed8f9;
+.p-form-text[type=password] {
+  font-family: caption, sans-serif;
 }
 
 .p-form-no-validate:valid,
 .p-form-no-validate:invalid,
 .p-form-no-validate > select:valid,
 .p-form-no-validate > select:invalid {
-  border-color: #cacaca;
-}
-
-.p-form-text:focus {
-  border-color: #0f75f5;
+  border: 1px solid #cacaca;
 }
 
 textarea.p-form-text {
@@ -479,10 +196,6 @@ textarea.p-form-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.p-form-text[type=password] {
-  font-family: caption;
 }
 
 .p-form-label,
@@ -504,7 +217,7 @@ textarea.p-form-text {
 
 .p-form-radio-cont > input + span,
 .p-form-checkbox-cont > input + span {
-  background: #fff;
+  background: var(--bg-color);
   border: 1px solid #cacaca;
   border-radius: 50%;
   cursor: pointer;
@@ -517,7 +230,7 @@ textarea.p-form-text {
 }
 
 .p-form-radio-cont > input + span:hover {
-  background: #f9f9f9;
+  background: var(--bg-hover-color);
 }
 
 .p-form-radio-cont > input,
@@ -601,7 +314,7 @@ textarea.p-form-text {
 
 .p-form-send {
   background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border: 0;
+  border: 1px solid #4fc5fa;
   color: #fff;
 }
 
@@ -623,14 +336,14 @@ textarea.p-form-text {
   border-color: var(--valid-color);
 }
 
+.p-form-switch > input:checked + span::after {
+  left: calc(100% - calc(var(--width) / 2.1));
+}
+
 .p-form-switch {
   --width: 80px;
   cursor: pointer;
   display: inline-block;
-}
-
-.p-form-switch > input:checked + span::after {
-  left: calc(100% - calc(var(--width) / 2.1));
 }
 
 .p-form-switch > input:checked + span {
@@ -652,7 +365,7 @@ textarea.p-form-text {
 .p-form-switch > span::after {
   background: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.16), 0px 3px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
   content: "";
   height: 90%;
   left: 3%;
@@ -666,100 +379,11 @@ textarea.p-form-text {
   display: none;
 }
 
-
-input[type=range].p-form-range {
-  width: 100%;
-  margin: 11.5px 0;
-  background-color: transparent;
-  -webkit-appearance: none;
-}
-input[type=range].p-form-range:focus {
-  outline: none;
-}
-input[type=range].p-form-range::-webkit-slider-runnable-track {
-  background: #cacaca;
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-webkit-slider-thumb {
-  margin-top: -11.5px;
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid #d3d3d3;
-  border-radius: 50px;
-  cursor: pointer;
-  -webkit-appearance: none;
-}
-input[type=range].p-form-range:focus::-webkit-slider-runnable-track {
-  background: #cacaca;
-}
-input[type=range].p-form-range::-moz-range-track {
-  background: #cacaca;
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid #d3d3d3;
-  border-radius: 50px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-ms-track {
-  background: transparent;
-  border-color: transparent;
-  border-width: 13.4px 0;
-  color: transparent;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-ms-fill-lower {
-  background: #cacaca;
-  border: 0;
-}
-input[type=range].p-form-range::-ms-fill-upper {
-  background: #cacaca;
-  border: 0;
-}
-input[type=range].p-form-range::-ms-thumb {
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid #d3d3d3;
-  border-radius: 50px;
-  cursor: pointer;
-  margin-top: 0px;
-  /*Needed to keep the Edge thumb centred*/
-}
-input[type=range].p-form-range:focus::-ms-fill-lower {
-  background: #cacaca;
-}
-input[type=range].p-form-range:focus::-ms-fill-upper {
-  background: #cacaca;
-}
-/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
-how to remove the virtical space around the range input in IE*/
-@supports (-ms-ime-align:auto) {
-  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
-  input[type=range].p-form-range {
-    margin: 0;
-    /*Edge starts the margin from the thumb, not the track as other browsers do*/
-  }
-}
-
-
 /* END OF FORMS */
 /* START OF MODALS */
 :root {
-  --bg-hover-color:#f9f9f9;
-  --primary-col-ac:#0f75f5;
+  --bg-hover-color: #f9f9f9;
+  --primary-col-ac: #0f75f5;
 }
 
 .p-modal-opened {
@@ -767,57 +391,58 @@ how to remove the virtical space around the range input in IE*/
 }
 
 .p-modal-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
   background: rgba(0, 0, 0, 0.3);
-  transition: all 0.3s;
+  height: 100vh;
+  left: 0;
   opacity: 0;
   pointer-events: none;
+  position: fixed;
+  top: 0;
+  transition: all 0.3s;
+  width: 100vw;
   z-index: 5;
 }
 
 .p-modal {
-  width: 40vw;
   background: rgba(255, 255, 255, 0.7);
-  position: fixed;
-  top: calc(50% - 20vh);
-  left: calc(50% - 20vw);
   border-radius: 20px;
-  box-shadow: 0px 10px 20px -15px;
+  box-shadow: 0 10px 20px -15px;
   font-family: "Inter", sans-serif;
+  left: calc(50% - 20vw);
   opacity: 0;
-  transform: scale(1.5);
-  text-align: center;
   overflow: hidden;
   pointer-events: none;
-  z-index: 9;
+  position: fixed;
+  text-align: center;
+  top: calc(50% - 20vh);
+  transform: scale(1.5);
   transition: opacity 0.3s, transform 0.3s;
+  width: 40vw;
+  z-index: 9;
 }
 
 .p-modal.active {
-  transform: scale(1);
+  backdrop-filter: blur(5px);
   opacity: 1;
   pointer-events: auto;
-  backdrop-filter: blur(5px);
+  transform: scale(1);
 }
 
 .p-modal-button-container {
-  display: flex;
   border-radius: 20px;
+  display: flex;
 }
 
 .p-modal-button-container > a {
-  width: 100%;
-  padding: 30px 0%;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   color: #0f75f5;
+  padding: 30px 0%;
   text-decoration: none;
+  width: 100%;
 }
 
-.p-modal-button-container > a:nth-child(2), .p-modal-button-container > a:nth-child(3) {
+.p-modal-button-container > a:nth-child(2),
+.p-modal-button-container > a:nth-child(3) {
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -837,10 +462,10 @@ how to remove the virtical space around the range input in IE*/
 }
 @media (max-width: 568px) {
   .p-modal {
-    width: 70vw;
-    left: 15%;
     bottom: 20%;
+    left: 15%;
     top: unset;
+    width: 70vw;
   }
 
   .p-modal p {
@@ -852,9 +477,9 @@ how to remove the virtical space around the range input in IE*/
   }
 
   .p-modal-button-container > a {
+    border-left: 0 !important;
     display: block;
     padding: 2vh 0%;
-    border-left: 0px !important;
   }
 }
 /* END OF MODALS */
@@ -884,7 +509,8 @@ how to remove the virtical space around the range input in IE*/
   font-size: 1.15rem;
 }
 
-.p-layout a, .p-layout input {
+.p-layout a,
+.p-layout input {
   font-size: 1.14rem;
 }
 
@@ -1485,5 +1111,3 @@ how to remove the virtical space around the range input in IE*/
 }
 
 /* END OF PALETTE */
-
-/*# sourceMappingURL=full.css.map */

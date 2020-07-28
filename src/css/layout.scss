@@ -1,45 +1,47 @@
-.p-layout .p-large-title {
-  font-size: 2.75rem;
-}
+.p-layout {
+  .p-large-title {
+    font-size: 2.75rem;
+  }
 
-.p-layout h1 {
-  font-size: 2.25rem;
-}
+  h1 {
+    font-size: 2.25rem;
+  }
 
-.p-layout h2 {
-  font-size: 1.75rem;
-}
+  h2 {
+    font-size: 1.75rem;
+  }
 
-.p-layout h3 {
-  font-size: 1.58rem;
-}
+  h3 {
+    font-size: 1.58rem;
+  }
 
-.p-layout .p-headline {
-  font-size: 1.34rem;
-  font-weight: bold;
-}
+  p {
+    font-size: 1.15rem;
+  }
 
-.p-layout p {
-  font-size: 1.15rem;
-}
+  a,
+  input {
+    font-size: 1.14rem;
+  }
 
-.p-layout a,
-.p-layout input {
-  font-size: 1.14rem;
-}
+  .p-headline {
+    font-size: 1.34rem;
+    font-weight: bold;
+  }
 
-.p-layout .p-callout {
-  font-size: 1.14rem;
-}
+  .p-callout {
+    font-size: 1.14rem;
+  }
 
-.p-layout .p-subhead {
-  font-size: 1.167rem;
-}
+  .p-subhead {
+    font-size: 1.167rem;
+  }
 
-.p-layout .p-footnote {
-  font-size: 1.07rem;
-}
+  .p-footnote {
+    font-size: 1.07rem;
+  }
 
-.p-layout .p-caption {
-  font-size: 0.91rem;
+  .p-caption {
+    font-size: 0.91rem;
+  }
 }

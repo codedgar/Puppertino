@@ -10,14 +10,14 @@
   margin-top: 30px;
   text-decoration: none;
 
-  &-image > img {
+  &__image > img {
     border-bottom: 3px solid var(--accent-article);
     display: block;
     margin: auto;
     width: 100%;
   }
 
-  &-tags {
+  &__tags {
     display: flex;
     overflow: hidden;
     position: relative;
@@ -55,18 +55,18 @@
     }
   }
 
-  &-title {
+  &__title {
     font-size: 2rem;
     margin-bottom: 15px;
     margin-top: 10px;
   }
 
-  &-content {
+  &__content {
     padding: 15px;
     padding-top: 5px;
   }
 
-  &-text {
+  &__text {
     font-size: 17px;
     margin-bottom: 10px;
     margin-left: 10px;

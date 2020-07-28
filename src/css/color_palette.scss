@@ -1,13 +1,15 @@
+@import "var/color";
+
 .p-strawberry {
-  background: #c6262e;
+  background: $strawberry;
 }
 
 .p-strawberry-100 {
-  background: #ff8c82;
+  background: $strawberry-100;
 }
 
 .p-strawberry-300 {
-  background: #ed5353;
+  background: $strawberry-300;
 }
 
 .p-strawberry-500 {
@@ -15,11 +17,11 @@
 }
 
 .p-strawberry-700 {
-  background: #a10705;
+  background: $strawberry-700;
 }
 
 .p-strawberry-900 {
-  background: #7a0000;
+  background: $strawberry-900;
 }
 
 .p-orange {

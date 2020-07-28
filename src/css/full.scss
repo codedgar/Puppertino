@@ -2,7 +2,6 @@
 @import "var/font";
 
 :root {
-  --primary-col: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
   --primary-col-ac: #0f75f5;
   --bg-color: #fff;
   --bg-hover-color: #f9f9f9;
@@ -118,45 +117,45 @@
   font-family: $font;
   margin: 10px;
   position: relative;
-}
 
-.p-form-select::before {
-  border-color: #fff transparent transparent;
-  border-style: solid;
-  border-width: 5px;
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  right: 5px;
-  top: calc(50% - 3px);
-  z-index: 3;
-}
+  &::before {
+    border-color: #fff transparent transparent;
+    border-style: solid;
+    border-width: 5px;
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    right: 5px;
+    top: calc(50% - 3px);
+    z-index: 3;
+  }
 
-.p-form-select::after {
-  background: $primary-col;
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 100%;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 20px;
-}
+  &::after {
+    background: $primary-col;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 100%;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+  }
 
-.p-form-select > select {
-  background: var(--bg-color);
-  border: 1px solid #cacaca;
-  border-radius: 5px;
-  font-size: 14px;
-  margin: 0;
-  outline: none;
-  padding: 5px 10px;
-  position: relative;
-  width: 100%;
+  select {
+    background: var(--bg-color);
+    border: 1px solid #cacaca;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 0;
+    outline: none;
+    padding: 5px 10px;
+    position: relative;
+    width: 100%;
+  }
 }
 
 .p-form-text:invalid,
@@ -184,6 +183,14 @@
   padding: 5px;
   resize: none;
   transition: border-color 200ms;
+
+  &:focus {
+    border-color: $primary-col-ac;
+  }
+
+  &[type="password"] {
+    font-family: caption, sans-serif;
+  }
 }
 
 .p-form-no-validate:valid,
@@ -191,10 +198,6 @@
 .p-form-no-validate > select:valid,
 .p-form-no-validate > select:invalid {
   border: 1px solid #cacaca;
-}
-
-.p-form-text:focus {
-  border-color: $primary-col-ac;
 }
 
 textarea.p-form-text {
@@ -205,10 +208,6 @@ textarea.p-form-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.p-form-text[type="password"] {
-  font-family: caption, sans-serif;
 }
 
 .p-form-label,
@@ -326,7 +325,7 @@ textarea.p-form-text {
 }
 
 .p-form-send {
-  background: var(--primary-col);
+  background: $gradient-prime;
   border: 1px solid #4fc5fa;
   color: #fff;
 }
@@ -378,7 +377,8 @@ textarea.p-form-text {
 .p-form-switch > span::after {
   background: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.16), 0px 3px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16),
+    0 3px 8px rgba(0, 0, 0, 0.15);
   content: "";
   height: 90%;
   left: 3%;

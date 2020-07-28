@@ -26,10 +26,27 @@
     cursor: not-allowed;
   }
 
-  &-disabled {
+  &--disabled {
     background: #d3d3d3;
     color: #555;
     cursor: not-allowed;
+  }
+
+  &--round {
+    border: 0;
+    border-radius: 50px;
+    padding: 10px 30px;
+  }
+
+  &--outline {
+    background: none;
+    border-color: currentColor;
+  }
+
+  &--outline-dash {
+    background: none;
+    border-color: currentColor;
+    border-style: dashed;
   }
 }
 
@@ -47,27 +64,21 @@
   content: "...";
 }
 
-.p-btn-round {
-  border: 0;
-  border-radius: 50px;
-  padding: 10px 30px;
-}
-
 .p-btn-icon {
+  align-items: center;
   background: #fff;
   border: 2px solid currentColor;
   border-radius: 50%;
   box-shadow: 0 3px 10px -8px #000;
   color: #0f75f5;
+  display: inline-flex;
   font-weight: 900;
+  height: 36px;
+  justify-content: center;
   margin: 5px;
+  text-align: center;
   text-decoration: none;
   width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
 }
 
 .p-btn-scope {
@@ -76,7 +87,7 @@
   margin: 5px;
   padding: 2px 20px;
 
-  &-unactive {
+  &--unactive {
     background: transparent;
     border-color: transparent;
     color: #212136;
@@ -87,38 +98,22 @@
     }
   }
 
-  &-disabled {
+  &--disabled {
     background: transparent;
     color: #8e8e8e;
     cursor: not-allowed;
   }
 
-  &-outline {
+  &--outline {
     background: transparent;
     color: #212136;
   }
 }
 
-.p-btn-scope-outline {
-  background: transparent;
-  color: #212136;
-}
-
-.p-btn-outline {
-  background: none;
-  border-color: currentColor;
-}
-
-.p-btn-outline-dash {
-  background: none;
-  border-color: currentColor;
-  border-style: dashed;
-}
-
 .p-btn-direction {
-  text-decoration: none;
-  padding: 5px;
   color: #212136;
+  padding: 5px;
+  text-decoration: none;
 }
 
 .p-btn-direction.p-btn-d-back::before {
@@ -128,8 +123,6 @@
 .p-btn-direction.p-btn-d-next::after {
   content: "❭";
 }
-
-
 
 @media (max-width: 576px) {
   .p-btn-big-sm {
