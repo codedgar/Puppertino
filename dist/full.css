@@ -20,7 +20,7 @@
   border: 1px solid #cacaca;
   display: inline-block;
   font-size: 17px;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-btn-disabled {
@@ -110,7 +110,7 @@
   position: relative;
   border-radius: 5px;
   margin: 10px;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-select:before {
@@ -173,7 +173,7 @@
   background: var(--bg-color);
   outline: 0;
   transition: border-color 200ms;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   resize: none;
 }
 
@@ -200,7 +200,7 @@ textarea.p-form-text {
 }
 
 .p-form-label, .p-form-radio-cont, .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-label {
@@ -369,7 +369,7 @@ textarea.p-form-text {
 }.p-form-select {
   border-radius: 5px;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   position: relative;
 }
@@ -435,7 +435,7 @@ textarea.p-form-text {
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   outline: 0;
   padding: 5px;
@@ -488,7 +488,7 @@ textarea.p-form-text {
 .p-form-label,
 .p-form-radio-cont,
 .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-label {
@@ -787,7 +787,7 @@ how to remove the virtical space around the range input in IE*/
   left: calc(50% - 20vw);
   border-radius: 20px;
   box-shadow: 0px 10px 20px -15px;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   opacity: 0;
   transform: scale(1.5);
   text-align: center;
