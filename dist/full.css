@@ -166,6 +166,7 @@
 }
 
 .p-form-text {
+  -webkit-appearance: none;
   padding: 5px;
   border-radius: 5px;
   margin: 10px;
@@ -186,6 +187,7 @@
 }
 
 textarea.p-form-text {
+  -webkit-appearance: none;
   height: 100px;
 }
 
@@ -408,7 +410,7 @@ textarea.p-form-text {
   font-size: 14px;
   margin: 0;
   outline: none;
-  padding: 5px 10px;
+  padding: 5px 30px 5px 10px;
   position: relative;
   width: 100%;
 }
@@ -432,6 +434,7 @@ textarea.p-form-text {
 }
 
 .p-form-text {
+  -webkit-appearance: none;
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
@@ -444,6 +447,7 @@ textarea.p-form-text {
 }
 
 .p-form-text-alt {
+  -webkit-appearance: none;
   border: 0px;
   border-bottom: 2px solid #cacaca;
   padding: 10px;
@@ -472,6 +476,7 @@ textarea.p-form-text {
 }
 
 textarea.p-form-text {
+  -webkit-appearance: none;
   height: 100px;
 }
 

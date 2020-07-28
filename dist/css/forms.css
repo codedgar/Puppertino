@@ -51,7 +51,7 @@
   font-size: 14px;
   margin: 0;
   outline: none;
-  padding: 5px 10px;
+  padding: 5px 30px 5px 10px;
   position: relative;
   width: 100%;
 }
@@ -75,6 +75,7 @@
 }
 
 .p-form-text {
+  -webkit-appearance: none;
   box-shadow: none;
   background: #fff;
   border: 1px solid #cacaca;
@@ -88,6 +89,7 @@
 }
 
 .p-form-text-alt {
+  -webkit-appearance: none;
   box-shadow: none;
   background: #fff;
   border: 0px;
@@ -118,6 +120,7 @@
 }
 
 textarea.p-form-text {
+  -webkit-appearance: none;
   height: 100px;
 }
 

@@ -49,7 +49,7 @@ $valid-color: #94d63c;
   font-size: 14px;
   margin: 0;
   outline: none;
-  padding: 5px 10px;
+  padding: 5px 30px 5px 10px;
   position: relative;
   width: 100%;
 }
@@ -72,6 +72,7 @@ $valid-color: #94d63c;
 }
 
 .p-form-text {
+  -webkit-appearance: none;
   background: $bg-color;
   border: 1px solid #cacaca;
   border-radius: 5px;
@@ -84,6 +85,7 @@ $valid-color: #94d63c;
 }
 
 .p-form-text-alt {
+  -webkit-appearance: none;
   border: 0px;
   border-bottom: 2px solid #cacaca;
   padding: 10px;
@@ -104,6 +106,7 @@ $valid-color: #94d63c;
 }
 
 textarea.p-form-text {
+  -webkit-appearance: none;
   height: 100px;
 }
 
