@@ -1,0 +1,25 @@
+{
+  "name": "puppertino-website",
+  "version": "1.0.0",
+  "description": "Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **macOS** and follow the **human guidelines**.  Puppertino is a Framework created to be lightweight, modular and cool looking!",
+  "keywords": [
+    "puppertino-website"
+  ],
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codedgar/Puppertino.git",
+    "directory": "packages/puppertino-website"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codedgar/Puppertino/issues"
+  },
+  "homepage": "https://github.com/codedgar/Puppertino#readme",
+  "dependencies": {
+    "puppertino-css": "^1.0.0"
+  }
+}

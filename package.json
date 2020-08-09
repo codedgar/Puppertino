@@ -1,40 +1,30 @@
 {
-  "name": "puppertino",
-  "version": "1.0.0",
-  "description": "Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **macOS** and follow the **human guidelines**.  Puppertino is a Framework created to be lightweight, modular and cool looking!",
-  "main": "index.js",
-  "directories": {
-    "example": "examples"
-  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start:dev": "run-p prettier:watch sass:watch",
-    "sass": "sass ./src:./dist --no-source-map",
-    "sass:watch": "sass ./src:./dist --watch --no-source-map",
-    "stylelinter:fix":"stylelint --fix ./src/**/*scss",
-    "stylelinter:check":"stylelint ./src/**/*scss",
-    "prettier:watch": "onchange ./src/**/*.scss -- prettier --write {{changed}}",
-    "prettier:fix": "prettier --write ./src",
-    "prettier:check": "prettier --check ./src",
-    "codestyle:check": "run-s prettier:check stylelinter:check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "validate": "lerna run validate",
+    "build": "lerna run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rilexus/Puppertino.git"
+    "url": "git+https://github.com/codedgar/Puppertino.git"
   },
-  "author": "",
+  "author": "codedgar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rilexus/Puppertino/issues"
+    "url": "https://github.com/codedgar/Puppertino/issues"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run codestyle:check"
     }
   },
-  "homepage": "https://github.com/rilexus/Puppertino#readme",
+  "homepage": "https://github.com/codedgar/Puppertino#readme",
   "devDependencies": {
     "husky": "^4.2.5",
+    "lerna": "^3.22.1",
     "node-sass": "^4.14.1",
     "npm-run-all": "^4.1.5",
     "onchange": "^7.0.2",

@@ -1,0 +1,48 @@
+{
+  "name": "puppertino-css",
+  "version": "1.0.0",
+  "description": "Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look of **macOS** and follow the **human guidelines**.  Puppertino is a Framework created to be lightweight, modular and cool looking!",
+  "keywords": [
+    "puppertino-css",
+    "css",
+    "sass",
+    "apple",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ],
+  "style": "dist/css/puppertino.css",
+  "sass": "scss/puppertino.scss",
+  "main": "dist/js/bootstrap.js",
+  "files": [
+    "dist/**/*.(css|js)"
+  ],
+  "scripts": {
+    "sass": "sass ./src:./dist --no-source-map",
+    "build": "npm run sass -- --no-source-map",
+    "build:watch": "npm run sass -- --watch --no-source-map",
+    "stylelint": "stylelint \"**/*.(scss)\"",
+    "lint": "npm run stylelint",
+    "lint:fix": "npm run stylelint -- --fix",
+    "lint:check": "npm run lint",
+    "prettier": "prettier \"**/*.+(scss|css)\"",
+    "format": "npm run prettier -- --write",
+    "format:check": "npm run prettier -- --list-different",
+    "format:watch": "onchange \"**/*.+(scss)\" -- prettier --write {{changed}}",
+    "format:fix": "npm run prettier -- --write",
+    "validate": "run-s format:check lint:check",
+    "start:dev": "run-p format:watch build:watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codedgar/Puppertino.git",
+    "directory": "packages/puppertino-css"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codedgar/Puppertino/issues"
+  },
+  "homepage": "https://github.com/codedgar/Puppertino#readme"
+}
