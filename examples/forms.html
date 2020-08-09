@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Forms - Puppertino Framework</title>
+	<link href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../dist/css/puppertino.css">
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="doc.css">
+	<meta name="description" content="This is the documentation for Forms on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+	<link rel="icon" type="image/png" href="../landing-images/doggo.png">
+</head>
+<body class="p-layout">
+	<div class="route">
+		<a href="https://codedgar.github.io/Puppertino/" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
+		<p>/</p>
+		<a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive">Examples</a>
+		<p>/</p>
+		<a href="forms.html" class="p-btn p-btn-scope">Forms</a>
+	</div>
+	<h1>Forms</h1>
+	<div class="master">
+		<p>Forms, are one of the things that moves forward the interface, that's why in Puppertino, form elements come with ready to work, native validation. You can use the Forms using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/forms.css" target="_blank">CSS of Forms</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css" target="_blank">dowloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
+
+		<div class="talk-about-it">
+			<h2>Select.</h2>
+			<p>The select box, works exactly as expected, and you can change the width and height withoug affecting the overall composition of the element without problems. Select, by default, includes the class <code class="code">p-form-no-validate</code>, but you can delete it if your wish.</p>
+
+			<div class="p-form-select p-form-no-validate">
+			    <select>
+			        <option>Option 1</option>
+			        <option>Option 2</option>
+			        <option>Option 3</option>
+			    </select>
+			</div>
+
+			<p>Usage:</p>
+			<div class="code">
+			<pre>
+				<code class="html">
+&#60;div class="p-form-select p-form-no-validate">
+	&#60;select>
+		&#60;option>Option 1&#60;/option>
+		&#60;option>Option 2&#60;/option>
+		&#60;option>Option 3&#60;/option>
+	&#60;/select>
+&#60;/div>
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Text fields.</h2>
+        <p>
+          Text fields are everything that gets text into it, maybe passwords,
+          emails, messages, anything you want. They can have validation,
+          truncated text or be just plain without any of those things. The
+          <strong>validated input</strong> relays on native HTML validation, so
+          things like <code class="code">min-length</code> or
+          <code class="code">type</code> will work perfectly on it. The
+          validation will be visible once the user change the focus out of the
+          element, and I prefer it this way to avoid users getting confused
+          while they type. The no-validated input, retains it's style whenever
+          the input is invalid or valid. The truncated text, adds three dots
+          (...) at the end when of the input if the text overflows from it. The
+          appearence of the dots takes place after the user changes the focus
+          out of the element. Truncated text does not disable the validation.
+          <br />
+          It is also possible to add labels to every type of input without it
+          affecting in any way the functionality of the input.
+          <br />
+          About the validation: You should always include a placeholder if you
+          intent to use validation. If you don't intent to validate the input
+          text, you can add the class
+          <code class="code">p-form-no-validate</code>.<br />
+          Text fields can be textareas, or inputs.
+        </p>
+        <input
+          type="email"
+          class="p-form-text"
+          placeholder="Normal validated input (email)"
+        />
+        <input
+          type="name"
+          class="p-form-text p-form-no-validate"
+          placeholder="Normal no-validated input"
+        />
+
+        <input
+          type="name"
+          class="p-form-text p-form-no-validate p-form-truncated"
+          placeholder="Truncated Text"
+        />
+
+        <label class="p-form-label"
+          >Email:<input
+            type="email"
+            class="p-form-text"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;input type="email" class="p-form-text" placeholder="email@example.com">
+
+&#60;input type="text" class="p-form-text p-form-no-validate" placeholder="free text">
+
+&#60;input type="email" class="p-form-text p-form-truncated" placeholder="Truncated text...">
+
+&#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text" placeholder="email@example.com">&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+      <div class="talk-about-it">
+        <h2>Alternate inputs.</h2>
+        <p>
+          Alternate inputs are a bigger versions of the original inputs. The intended usage of this is login or registration forms.<br><br>
+          The alternate inputs work similar as the default input. The only thing that changes is the class, but validation and others work exactly as expected.
+        </p>
+        <input
+          type="email"
+          class="p-form-text-alt"
+          placeholder="Normal validated input (email)"
+        />
+        <input
+          type="name"
+          class="p-form-text-alt p-form-no-validate"
+          placeholder="Normal no-validated input"
+        />
+
+        <input
+          type="name"
+          class="p-form-text-alt p-form-no-validate p-form-truncated"
+          placeholder="Truncated Text"
+        />
+
+        <label class="p-form-label"
+          >Email:<input
+            type="email"
+            class="p-form-text-alt"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">
+
+&#60;input type="text" class="p-form-text-alt p-form-no-validate" placeholder="free text">
+
+&#60;input type="email" class="p-form-text-alt p-form-truncated" placeholder="Truncated text...">
+
+&#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">&#60;/label>
+
+        </code>
+      </pre>
+        </div>
+      </div>
+      <div class="talk-about-it">
+        <h2>Radio Buttons.</h2>
+        <p>
+          Radio buttons are similar to checkboxes, the main difference between
+          radio buttons and checkboxes, is that radio buttons can only one of
+          them in a group of radio buttons can be checked. Radio buttons does
+          not count with any type of validation And count with a nice, simple
+          animation. You can change the width and height of the radio buttons
+          without being worried of breaking the composition.
+        </p>
+
+        <label class="p-form-radio-cont">
+          <input type="radio" name="thingy" />
+          <span></span>
+          Thing one
+        </label>
+
+        <label class="p-form-radio-cont">
+          <input type="radio" name="thingy" />
+          <span></span>
+          Thing two
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;label class="p-form-radio-cont">
+	&#60;input type="radio" name="example">
+	&#60;span> &#60;/span>
+	Thing one
+&#60;/label>
+
+&#60;label class="p-form-radio-cont">
+	&#60;input type="radio" name="example">
+	&#60;span> &#60;/span>
+	Thing two
+&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Checkboxes.</h2>
+        <p>
+          Checkboxes, allows the users to select several predefined values.
+          Checkboxes in puppertino, just as Radio buttons, support changing the
+          width and height without damaging the composition of the checkbox.
+        </p>
+
+        <label class="p-form-checkbox-cont">
+          <input type="checkbox" name="thingy_second" />
+          <span></span>
+          Thing one
+        </label>
+
+        <label class="p-form-checkbox-cont">
+          <input type="checkbox" name="thingy_second" />
+          <span></span>
+          Thing two
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;label class="p-form-checkbox-cont">
+	&#60;input type="checkbox" name="example">
+	&#60;span> &#60;/span>
+	Thing one
+&#60;/label>
+
+&#60;label class="p-form-checkbox-cont">
+	&#60;input type="checkbox" name="example">
+	&#60;span>&#60;/span>
+	Thing two
+&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Switches.</h2>
+        <p>
+          Switches are part of those elements that are popular from iOS devices.
+          And I wasn't going to add them until version 2.0 (Since I wanted to
+          create a custom element) But a friend gave me the starter code and I
+          just cleaned it a bit and made it look like the aesthetic of
+          Puppertino. So big shotout to <strong>Ivanot</strong> because he
+          essentially created this element :)<br /><br />
+          The Switch is essentially a checkbox, so you have to expect it to work
+          as one. You can change the width and height of the switch changing the
+          variable <code class="code">--width</code> inside the class
+          <code class="code">p-form-switch</code>. Everything in the element
+          will resize automatically so don't worry about breaking it on resize.
+        </p>
+
+        <label class="p-form-switch showcaseme_bro">
+          <input type="checkbox" />
+          <span></span>
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;label class="p-form-switch">
+	&#60;input type="checkbox">
+	&#60;span>&#60;/span>
+&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Range.</h2>
+        <p>
+          The range slider has been made possible by <a href="https://github.com/danielstern/range.css" target="_blank">range.css</a>! Currently it's a rough implementation, but usage is really simple.
+        </p>
+
+        <input type="range" min="0" max="100" class="p-form-range">
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;input type="range" min="0" max="100" class="p-form-range">
+
+        </code>
+      </pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Buttons.</h2>
+        <p>
+          These buttons, are a really small version of the buttons component of
+          Puppertino, just to add send and cancel buttons.
+        </p>
+
+        <input type="submit" class="p-form-button p-form-send" value="Send" />
+
+        <input type="reset" class="p-form-button" value="Cancel" />
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;input type="submit" class="p-form-button p-form-send">
+
+&#60;input type="reset" class="p-form-button">
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>More about validation.</h2>
+        <p>
+          Let's say that you are working on a type of validation that can't be
+          done with native HTML validation, can you use the validation of
+          Puppertino? Of course you can.<br /><br />
+          To use validations in your code, you can use the classes
+          <code class="code">p-form-invalid</code> and
+          <code class="code">p-form-valid</code> respectively. You can add or
+          remove these classes as you may need. But don't add both at the same
+          time. Also, here in Puppertino we don't encourage validation in
+          real-time. Since we think is better for the user to see the validation
+          once he changes the focus of the input.<br />Please be aware that
+          using these classes will disable the default validation
+        </p>
+
+        <input
+          type="text"
+          class="p-form-text p-form-invalid"
+          placeholder="Invalid Input"
+        />
+
+        <input
+          type="text"
+          class="p-form-text p-form-valid"
+          placeholder="Valid Input"
+        />
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;input type="text" class="p-form-text p-form-invalid">
+
+&#60;input type="text" class="p-form-text p-form-valid">
+
+				</code>
+			</pre>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</html>

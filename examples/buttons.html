@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Buttons - Puppertino Framework</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/puppertino.css" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="This is the documentation for Buttons on the Puppertino Framework, a framework that mimics Apple's design, woof!"
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+  </head>
+  <body class="p-layout">
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="buttons.html" class="p-btn p-btn-scope">Buttons</a>
+    </div>
+    <h1>Buttons</h1>
+    <div class="master">
+      <p>
+        Buttons are the main thing that move the interface. That's why it was
+        the main thing that was developed for Puppertino. <br />Puppertino
+        buttons support usage as links, buttons and submit elements. You can use
+        the Buttons using the
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/buttons.css"
+          target="_blank"
+          >CSS of Buttons</a
+        >
+        or
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css"
+          target="_blank"
+          >dowloading the full CSS</a
+        >
+        (Not recommended if you are just going to use this component).
+      </p>
+
+      <div class="talk-about-it">
+        <h2>Push Buttons.</h2>
+        <p>
+          Push buttons come in different ways. The
+          <strong>Default button</strong> is plain, and should be use for cancel
+          or optional clicks. For main clicks, the
+          <strong>Primary button</strong> is the way to go. While similar to the
+          Primary button, the <strong>Mobile Big</strong> button will change to
+          a <code class="code">position:fixed</code> and take a significant part
+          of the screen if it's mobile. This button is ideal for Buy buttons or
+          similar. Last but not least, there's the
+          <strong>Custom action</strong> button, which is really similar to the
+          Default button, but it adds three dots at the end. This button is
+          amazing for Advanced, Options or Other actions.<br /><br />
+          Buttons can be used either with and
+          <code class="code">&#60;button></code> or
+          <code class="code">&#60;a></code>. If you are going to use the
+          disabled button, is highly recommended to use
+          <strong>disabled</strong> as an attribute. Classes are also
+          combinable!
+        </p>
+
+        <a href="#" class="p-btn">Default</a>
+
+        <a href="#" class="p-btn p-btn-disabled">Disabled</a>
+
+        <a href="#" class="p-btn p-prim-col">Primary</a>
+
+        <a href="#" class="p-btn p-btn-hero">Big Button</a>
+
+        <a href="#" class="p-btn p-btn-round">Rounded</a>
+
+        <a href="#" class="p-btn p-prim-col" id="mobile_big">Mobile big</a>
+        
+        <a href="#" class="p-btn p-btn-outline">Outline</a>
+
+        <a href="#" class="p-btn p-btn-outline-dash">Outline dashed</a>
+
+        <a href="#" class="p-btn p-btn-more">Custom action</a>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+&#60;a href="#" class="p-btn">Default&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-disabled">Disabled&#60;/a>
+
+&#60;a href="#" class="p-btn p-prim-col">Primary&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-hero">Big Button&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-round">Rounded&#60;/a>
+
+&#60;a href="#" class="p-btn p-prim-col p-btn-big-sm">Mobile big&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-more">Custom action&#60;/a>
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Direction buttons.</h2>
+        <p>
+          Direction buttons are used to navigate across your app, and usage is really simple, just use <code class="code">p-btn-direction</code> as a base and <code class="code">p-btn-d-back</code> for back navigation and  <code class="code">p-btn-d-next</code>  for forward navigation.
+        </p>
+        <a href="#" class="p-btn-direction p-btn-d-back">Prev</a>
+        <a href="#" class="p-btn-direction p-btn-d-next">Next</a>
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+&#60;a href="#" class="p-btn-direction p-btn-d-back">Prev&#60;/a>
+
+&#60;a href="#" class="p-btn-direction p-btn-d-next">Next&#60;/a>
+        </code>
+      </pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Icon button.</h2>
+        <p>
+          The icon button (Before help button), is round button with an icon inside, you can use a letter, an icon based in fonts (Such as Font Awesome) or an SVG. For icons see <a href="https://codedgar.github.io/Puppertino/examples/icons.html">icons section</a>. You can set the color of the borders and icon by just changing the <code class="code">color</code> property of the button.
+        </p>
+        <a href="#" class="p-btn-icon">?</a>
+
+        <a href="#" class="p-btn-icon p-lime-color">🐶</a>
+
+        <a href="#" class="p-btn-icon p-bubblegum-color">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </a>
+
+        <a href="#" class="p-btn-icon p-strawberry-color">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+        </a>
+
+        <a href="#" class="p-btn-icon p-orange p-silver-100-color">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+        </a>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+&#60;a href="#" class="p-btn-icon">?&#60;/a>
+
+&#60;a href="#" class="p-btn-icon">&#60;!-- SVG ICON HERE -->&#60;/a>
+				</code>
+			</pre>
+        </div>
+      </div>
+      <div class="talk-about-it">
+        <h2>Scope buttons.</h2>
+        <p>
+          Scope buttons are similar to Push buttons, but these are supposed to
+          be used on routes, and should not replace normal buttons.<br />
+          The <strong>Default/Active button</strong> is meant to indicate the
+          current route that the user is in. While the
+          <strong>Unactive button</strong> is supposed to be used in the route
+          before the current one. And the <strong>Action Button</strong> is
+          supposed to indicate any action that the user can do in that route,
+          like save, copy or others.
+        </p>
+
+        <a href="#" class="p-btn p-btn-scope">Default/Active</a>
+
+        <a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive</a>
+
+        <a href="#" class="p-btn p-btn-scope p-btn-scope-disabled">Disabled</a>
+
+        <a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action</a>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+&#60;a href="#" class="p-btn p-btn-scope">Default/Active&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-scope p-btn-scope-disabled">Disabled&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action&#60;/a>
+				</code>
+			</pre>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script defer>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <script type="text/javascript">
+    document
+      .querySelector("#mobile_big")
+      .addEventListener("click", function (event) {
+        event.preventDefault();
+        this.classList.toggle("p-btn-big-sm");
+      });
+  </script>
+</html>
