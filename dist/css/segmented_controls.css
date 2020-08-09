@@ -9,6 +9,7 @@
   border-radius: 5px;
   margin-top: 10px;
   background: #fff;
+  width: 100%;
 }
 .p-segmented-radius {
   border-radius: 30px;

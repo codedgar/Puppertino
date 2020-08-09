@@ -211,3 +211,17 @@ pre {
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
   border: 2px solid #e0e0e0;
 }
+
+.content_smol{
+  display: flex;
+  justify-content: center;
+}
+
+.mw-300{
+  width: 300px;
+}
+
+.demo_segmented{
+  --color-segmented:#68b723;
+  --color-lighter-segment: #d1ff82;
+}
