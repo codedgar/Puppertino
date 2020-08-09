@@ -7,16 +7,20 @@
     "example": "examples"
   },
   "scripts": {
-    "start:dev": "run-p prettier:watch sass:watch",
     "sass": "sass ./src:./dist --no-source-map",
-    "sass:watch": "sass ./src:./dist --watch --no-source-map",
-    "stylelinter:fix":"stylelint --fix ./src/**/*scss",
-    "stylelinter:check":"stylelint ./src/**/*scss",
-    "prettier:watch": "onchange ./src/**/*.scss -- prettier --write {{changed}}",
-    "prettier:fix": "prettier --write ./src",
-    "prettier:check": "prettier --check ./src",
-    "codestyle:check": "run-s prettier:check stylelinter:check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "stylelint":"stylelint ./src/**/*.scss",
+    "lint":"npm run stylelint",
+    "lint:fix":"npm run stylelint -- --fix",
+    "lint:watch":"onchange ./src/**/*.scss -- stylelint {{changed}}",
+    "prettier": "prettier ./src/**/*.scss",
+    "format": "npm run prettier",
+    "format:watch": "onchange ./src/**/*.scss -- prettier --write {{changed}}",
+    "format:fix": "npm run prettier -- --write",
+    "format:check": "npm run prettier -- --list-different",
+    "validate": "run-s format:check lint",
+    "start:dev": "run-p build:watch format:watch lint:watch",
+    "build": "run-s sass format:fix lint:fix",
+    "build:watch": "npm run sass -- --watch --no-source-map"
   },
   "repository": {
     "type": "git",
@@ -27,6 +31,10 @@
   "bugs": {
     "url": "https://github.com/rilexus/Puppertino/issues"
   },
+  "files": [
+    "dist/css/puppertino.css",
+    "dist/js/puppertino.js"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run codestyle:check"

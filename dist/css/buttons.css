@@ -1,17 +1,17 @@
+@charset "UTF-8";
 .p-btn {
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
   color: #333230;
   display: inline-block;
-  font-family: -apple-system, "Inter", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 17px;
   margin: 10px;
   padding: 5px 20px;
   text-decoration: none;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
-
 .p-btn[disabled] {
   background: #d3d3d3;
   color: #555;
@@ -34,14 +34,6 @@
   color: #fff;
 }
 
-.p-btn-hero {
-  padding: 20px 80px;
-  font-size: 2rem!important;
-  color: #fff;
-  background: #0f75f5;
-  text-align: center;
-}
-
 .p-btn.p-prim-col:active {
   background: #0f75f5;
 }
@@ -57,25 +49,20 @@
 }
 
 .p-btn-icon {
-    background: #fff;
-    border: 2px solid currentColor;
-    border-radius: 50%;
-    box-shadow: 0 3px 10px -8px #000;
-    color: #0f75f5;
-    font-weight: 900;
-    margin: 5px;
-    text-decoration: none;
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.p-btn-icon svg{
-  width: 1.14rem;
-  height: 1.14rem;
+  align-items: center;
+  background: #fff;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: 0 3px 10px -8px #000;
+  color: #0f75f5;
+  display: inline-flex;
+  font-weight: 900;
+  height: 36px;
+  justify-content: center;
+  margin: 5px;
+  text-align: center;
+  text-decoration: none;
+  width: 36px;
 }
 
 .p-btn-scope {
@@ -103,6 +90,11 @@
   color: #212136;
 }
 
+.p-btn-scope-outline {
+  background: transparent;
+  color: #212136;
+}
+
 .p-btn-outline {
   background: none;
   border-color: currentColor;
@@ -115,9 +107,9 @@
 }
 
 .p-btn-direction {
-  text-decoration: none;
-  padding: 5px;
   color: #212136;
+  padding: 5px;
+  text-decoration: none;
 }
 
 .p-btn-direction.p-btn-d-back::before {
@@ -127,8 +119,6 @@
 .p-btn-direction.p-btn-d-next::after {
   content: "❭";
 }
-
-
 
 @media (max-width: 576px) {
   .p-btn-big-sm {
