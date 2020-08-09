@@ -7,15 +7,18 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  style_check:
+    name: SCSS Code Style Check
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
-      # run prettier
-      - name: Prettier Action
-        uses: creyD/prettier_action@v3.0
-        # run super linter
-    #- name: Super-Linter
-    #  uses: docker://github/super-linter:latest
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn format:check
