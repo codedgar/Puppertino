@@ -1,5 +1,5 @@
 :root {
-  --font: "Inter", sans-serif;
+  --font: -apple-system, "Inter", sans-serif;
   --bg-hover-color: #f9f9f9;
   --primary-col-ac: #0f75f5;
 }
@@ -24,7 +24,8 @@
 .p-modal {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
-  bottom: calc(50% - 20vh);
+  top: calc(50% - 20vh);
+  bottom: unset;
   box-shadow: 0 10px 20px -15px;
   font-family: var(--font);
   left: calc(50% - 20vw);

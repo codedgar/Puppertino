@@ -5,7 +5,7 @@
   border-radius: 5px;
   color: #333230;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   font-size: 17px;
   margin: 10px;
   padding: 5px 20px;
@@ -776,7 +776,7 @@
 .p-form-select {
   border-radius: 5px;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   position: relative;
 }
@@ -842,7 +842,7 @@
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   outline: 0;
   padding: 5px;
@@ -864,7 +864,7 @@
 .p-form-no-validate:invalid,
 .p-form-no-validate > select:valid,
 .p-form-no-validate > select:invalid {
-  border: 1px solid #cacaca;
+  border-color: #cacaca;
 }
 
 .p-form-text:focus {
@@ -889,7 +889,7 @@ textarea.p-form-text {
 .p-form-label,
 .p-form-radio-cont,
 .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-label {
@@ -1084,7 +1084,7 @@ textarea.p-form-text {
   border-radius: 5px;
   color: #333230;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   font-size: 17px;
   margin: 10px;
   padding: 5px 20px;
@@ -1174,10 +1174,20 @@ textarea.p-form-text {
 }
 /* END OF BUTTONS */
 /* START OF FORMS */
+:root {
+  --primary-col:linear-gradient(to bottom, #4fc5fa 0%,#0f75f5 100%);
+  --primary-col-ac:#0f75f5;
+  --bg-color:#fff;
+  --bg-hover-color:#f9f9f9;
+  --bg-front-col:#000;
+  --invalid-color:#d6513c;
+  --valid-color:#94d63c;
+}
+
 .p-form-select {
   border-radius: 5px;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   position: relative;
 }
@@ -1210,7 +1220,8 @@ textarea.p-form-text {
 }
 
 .p-form-select > select {
-  background: var(--bg-color);
+  -webkit-appearance: none;
+  background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
   font-size: 14px;
@@ -1222,26 +1233,30 @@ textarea.p-form-text {
 }
 
 .p-form-text:invalid,
+.p-form-text-alt:invalid,
 .p-form-select > select:invalid {
   border-color: var(--invalid-color);
 }
 
 .p-form-text:valid,
+.p-form-text-alt:valid,
 .p-form-select > select:valid {
   border-color: var(--valid-color);
 }
 
 .p-form-text:placeholder-shown,
+.p-form-text-alt:placeholder-shown,
 .p-form-select > select:placeholder-shown {
   border-color: #cacaca;
 }
 
 .p-form-text {
-  appearance: none;
-  background: var(--bg-color);
+  -webkit-appearance: none;
+  box-shadow: none;
+  background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
-  font-family: var(--font);
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   outline: 0;
   padding: 5px;
@@ -1249,11 +1264,31 @@ textarea.p-form-text {
   transition: border-color 200ms;
 }
 
+.p-form-text-alt {
+  -webkit-appearance: none;
+  box-shadow: none;
+  background: #fff;
+  border: 0px;
+  border-bottom: 2px solid #cacaca;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: 10px;
+}
+
+.p-form-text-alt::placeholder {
+  color: #cacaca;
+}
+
+.p-form-text-alt:focus {
+  outline: 3px solid #bed8f9;
+}
+
 .p-form-no-validate:valid,
 .p-form-no-validate:invalid,
 .p-form-no-validate > select:valid,
 .p-form-no-validate > select:invalid {
-  border: 1px solid #cacaca;
+  border-color: #cacaca;
 }
 
 .p-form-text:focus {
@@ -1261,7 +1296,7 @@ textarea.p-form-text {
 }
 
 textarea.p-form-text {
-  appearance: none;
+  -webkit-appearance: none;
   height: 100px;
 }
 
@@ -1272,13 +1307,13 @@ textarea.p-form-text {
 }
 
 .p-form-text[type=password] {
-  font-family: caption, sans-serif;
+  font-family: caption;
 }
 
 .p-form-label,
 .p-form-radio-cont,
 .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-label {
@@ -1294,7 +1329,7 @@ textarea.p-form-text {
 
 .p-form-radio-cont > input + span,
 .p-form-checkbox-cont > input + span {
-  background: var(--bg-color);
+  background: #fff;
   border: 1px solid #cacaca;
   border-radius: 50%;
   cursor: pointer;
@@ -1307,7 +1342,7 @@ textarea.p-form-text {
 }
 
 .p-form-radio-cont > input + span:hover {
-  background: var(--bg-hover-color);
+  background: #f9f9f9;
 }
 
 .p-form-radio-cont > input,
@@ -1377,6 +1412,7 @@ textarea.p-form-text {
 }
 
 .p-form-button {
+  -webkit-appearance: none;
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
@@ -1390,8 +1426,8 @@ textarea.p-form-text {
 }
 
 .p-form-send {
-  background: var(--primary-col);
-  border: 1px solid #4fc5fa;
+  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
+  border: 0;
   color: #fff;
 }
 
@@ -1413,14 +1449,14 @@ textarea.p-form-text {
   border-color: var(--valid-color);
 }
 
-.p-form-switch > input:checked + span::after {
-  left: calc(100% - calc(var(--width) / 2.1));
-}
-
 .p-form-switch {
   --width: 80px;
   cursor: pointer;
   display: inline-block;
+}
+
+.p-form-switch > input:checked + span::after {
+  left: calc(100% - calc(var(--width) / 2.1));
 }
 
 .p-form-switch > input:checked + span {
@@ -1442,7 +1478,7 @@ textarea.p-form-text {
 .p-form-switch > span::after {
   background: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.16), 0px 3px 8px rgba(0, 0, 0, 0.15);
   content: "";
   height: 90%;
   left: 3%;
@@ -1456,10 +1492,101 @@ textarea.p-form-text {
   display: none;
 }
 
+input[type=range].p-form-range {
+  width: 100%;
+  margin: 11.5px 0;
+  background-color: transparent;
+  -webkit-appearance: none;
+}
+input[type=range].p-form-range:focus {
+  outline: none;
+}
+input[type=range].p-form-range::-webkit-slider-runnable-track {
+  background: #cacaca;
+  border: 0;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+input[type=range].p-form-range::-webkit-slider-thumb {
+  margin-top: -11.5px;
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(115, 115, 115, 0.6);
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  -webkit-appearance: none;
+}
+input[type=range].p-form-range:focus::-webkit-slider-runnable-track {
+  background: #d7d7d7;
+}
+input[type=range].p-form-range::-moz-range-track {
+  background: #cacaca;
+  border: 0;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+input[type=range].p-form-range::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(115, 115, 115, 0.6);
+  border-radius: 30px;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+input[type=range].p-form-range::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  border-width: 26.5px 0;
+  color: transparent;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+input[type=range].p-form-range::-ms-fill-lower {
+  background: #bdbdbd;
+  border: 0;
+}
+input[type=range].p-form-range::-ms-fill-upper {
+  background: #cacaca;
+  border: 0;
+}
+input[type=range].p-form-range::-ms-thumb {
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(115, 115, 115, 0.6);
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  margin-top: 0px;
+  /*Needed to keep the Edge thumb centred*/
+}
+input[type=range].p-form-range:focus::-ms-fill-lower {
+  background: #cacaca;
+}
+input[type=range].p-form-range:focus::-ms-fill-upper {
+  background: #d7d7d7;
+}
+/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
+how to remove the virtical space around the range input in IE*/
+@supports (-ms-ime-align:auto) {
+  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
+  input[type=range].p-form-range {
+    margin: 0;
+    /*Edge starts the margin from the thumb, not the track as other browsers do*/
+  }
+}
+
+
 /* END OF FORMS */
 /* START OF MODALS */
 :root {
-  --font: "Inter", sans-serif;
+  --font: -apple-system, "Inter", sans-serif;
   --bg-hover-color: #f9f9f9;
   --primary-col-ac: #0f75f5;
 }
@@ -1484,7 +1611,8 @@ textarea.p-form-text {
 .p-modal {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
-  bottom: calc(50% - 20vh);
+  top: calc(50% - 20vh);
+  bottom: unset;
   box-shadow: 0 10px 20px -15px;
   font-family: var(--font);
   left: calc(50% - 20vw);
@@ -2236,108 +2364,7 @@ textarea.p-form-text {
   font-size: 0.91rem;
 }
 
-:root {
-  --font: "Inter", sans-serif;
-  --bg-hover-color: #f9f9f9;
-  --primary-col-ac: #0f75f5;
-}
 
-.p-modal-opened {
-  overflow: hidden;
-}
-
-.p-modal-background {
-  background: rgba(0, 0, 0, 0.3);
-  height: 100vh;
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  transition: all 0.3s;
-  width: 100vw;
-  z-index: 5;
-}
-
-.p-modal {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
-  bottom: calc(50% - 20vh);
-  box-shadow: 0 10px 20px -15px;
-  font-family: var(--font);
-  left: calc(50% - 20vw);
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  position: fixed;
-  text-align: center;
-  transform: scale(1.5);
-  transition: opacity 0.3s, transform 0.3s;
-  width: 40vw;
-  z-index: 9;
-}
-
-.p-modal.active {
-  backdrop-filter: blur(5px);
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
-}
-
-.p-modal-button-container {
-  border-radius: 20px;
-  display: flex;
-}
-
-.p-modal-button-container > a {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  color: var(--primary-col-ac);
-  padding: 30px 0%;
-  text-decoration: none;
-  width: 100%;
-}
-
-.p-modal-button-container > a:nth-child(2),
-.p-modal-button-container > a:nth-child(3) {
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.nowactive {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.p-modal p {
-  padding: 0% 5%;
-}
-
-@supports not (backdrop-filter: blur(5px)) {
-  .p-modal {
-    background: #fff;
-  }
-}
-@media (max-width: 568px) {
-  .p-modal {
-    bottom: 20%;
-    left: 15%;
-    top: unset;
-    width: 70vw;
-  }
-
-  .p-modal p {
-    font-size: 15px;
-  }
-
-  .p-modal-button-container {
-    display: block;
-  }
-
-  .p-modal-button-container > a {
-    border-left: 0 !important;
-    display: block;
-    padding: 2vh 0%;
-  }
-}
 .p-segmented-controls {
   --color-segmented: #3689e6;
   --color-lighter-segment: #d2e3f9;

@@ -1,7 +1,7 @@
 .p-form-select {
   border-radius: 5px;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   position: relative;
 }
@@ -34,7 +34,7 @@
 }
 
 .p-form-select > select {
-  background: #fff;
+  background: var(--bg-color);
   border: 1px solid #cacaca;
   border-radius: 5px;
   font-size: 14px;
@@ -46,13 +46,11 @@
 }
 
 .p-form-text:invalid,
-.p-form-text-alt:invalid,
 .p-form-select > select:invalid {
   border-color: var(--invalid-color);
 }
 
 .p-form-text:valid,
-.p-form-text-alt:valid,
 .p-form-select > select:valid {
   border-color: var(--valid-color);
 }
@@ -64,25 +62,15 @@
 
 .p-form-text {
   appearance: none;
-  background: #fff;
+  background: var(--bg-color);
   border: 1px solid #cacaca;
   border-radius: 5px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font);
   margin: 10px;
   outline: 0;
   padding: 5px;
   resize: none;
   transition: border-color 200ms;
-}
-
-.p-form-text-alt {
-  appearance: none;
-  border: 0;
-  border-bottom: 2px solid #cacaca;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  margin: 10px;
-  padding: 10px;
 }
 
 .p-form-no-validate:valid,
@@ -108,13 +96,13 @@ textarea.p-form-text {
 }
 
 .p-form-text[type=password] {
-  font-family: caption;
+  font-family: caption, sans-serif;
 }
 
 .p-form-label,
 .p-form-radio-cont,
 .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-label {
@@ -130,7 +118,7 @@ textarea.p-form-text {
 
 .p-form-radio-cont > input + span,
 .p-form-checkbox-cont > input + span {
-  background: #fff;
+  background: var(--bg-color);
   border: 1px solid #cacaca;
   border-radius: 50%;
   cursor: pointer;
@@ -143,7 +131,7 @@ textarea.p-form-text {
 }
 
 .p-form-radio-cont > input + span:hover {
-  background: #f9f9f9;
+  background: var(--bg-hover-color);
 }
 
 .p-form-radio-cont > input,
@@ -226,8 +214,8 @@ textarea.p-form-text {
 }
 
 .p-form-send {
-  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border: 0;
+  background: var(--primary-col);
+  border: 1px solid #4fc5fa;
   color: #fff;
 }
 
@@ -249,14 +237,14 @@ textarea.p-form-text {
   border-color: var(--valid-color);
 }
 
+.p-form-switch > input:checked + span::after {
+  left: calc(100% - calc(var(--width) / 2.1));
+}
+
 .p-form-switch {
   --width: 80px;
   cursor: pointer;
   display: inline-block;
-}
-
-.p-form-switch > input:checked + span::after {
-  left: calc(100% - calc(var(--width) / 2.1));
 }
 
 .p-form-switch > input:checked + span {
@@ -290,4 +278,94 @@ textarea.p-form-text {
 
 .p-form-switch > input {
   display: none;
+}
+
+input[type=range].p-form-range {
+  width: 100%;
+  margin: 11.5px 0;
+  background-color: transparent;
+  -webkit-appearance: none;
+}
+input[type=range].p-form-range:focus {
+  outline: none;
+}
+input[type=range].p-form-range::-webkit-slider-runnable-track {
+  background: #cacaca;
+  border: 0;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+input[type=range].p-form-range::-webkit-slider-thumb {
+  margin-top: -11.5px;
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(115, 115, 115, 0.6);
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  -webkit-appearance: none;
+}
+input[type=range].p-form-range:focus::-webkit-slider-runnable-track {
+  background: #d7d7d7;
+}
+input[type=range].p-form-range::-moz-range-track {
+  background: #cacaca;
+  border: 0;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+input[type=range].p-form-range::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(115, 115, 115, 0.6);
+  border-radius: 30px;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+input[type=range].p-form-range::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  border-width: 26.5px 0;
+  color: transparent;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+input[type=range].p-form-range::-ms-fill-lower {
+  background: #bdbdbd;
+  border: 0;
+}
+input[type=range].p-form-range::-ms-fill-upper {
+  background: #cacaca;
+  border: 0;
+}
+input[type=range].p-form-range::-ms-thumb {
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid rgba(115, 115, 115, 0.6);
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  margin-top: 0px;
+  /*Needed to keep the Edge thumb centred*/
+}
+input[type=range].p-form-range:focus::-ms-fill-lower {
+  background: #cacaca;
+}
+input[type=range].p-form-range:focus::-ms-fill-upper {
+  background: #d7d7d7;
+}
+/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
+how to remove the virtical space around the range input in IE*/
+@supports (-ms-ime-align:auto) {
+  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
+  input[type=range].p-form-range {
+    margin: 0;
+    /*Edge starts the margin from the thumb, not the track as other browsers do*/
+  }
 }

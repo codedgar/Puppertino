@@ -15,7 +15,7 @@
   border-radius: 5px;
   color: #333230;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   font-size: 17px;
   margin: 10px;
   padding: 5px 20px;
@@ -108,7 +108,7 @@
 .p-form-select {
   border-radius: 5px;
   display: inline-block;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   position: relative;
 }
@@ -209,7 +209,7 @@ textarea.p-form-text {
 .p-form-label,
 .p-form-radio-cont,
 .p-form-checkbox-cont {
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
 }
 
 .p-form-label {
@@ -415,7 +415,7 @@ textarea.p-form-text {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
   box-shadow: 0 10px 20px -15px;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, "Inter", sans-serif;
   left: calc(50% - 20vw);
   opacity: 0;
   overflow: hidden;
