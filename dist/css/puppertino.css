@@ -1459,6 +1459,7 @@ textarea.p-form-text {
 /* END OF FORMS */
 /* START OF MODALS */
 :root {
+  --font: "Inter", sans-serif;
   --bg-hover-color: #f9f9f9;
   --primary-col-ac: #0f75f5;
 }
@@ -1483,15 +1484,15 @@ textarea.p-form-text {
 .p-modal {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
+  bottom: calc(50% - 20vh);
   box-shadow: 0 10px 20px -15px;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font);
   left: calc(50% - 20vw);
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
   position: fixed;
   text-align: center;
-  top: calc(50% - 20vh);
   transform: scale(1.5);
   transition: opacity 0.3s, transform 0.3s;
   width: 40vw;
@@ -1512,7 +1513,7 @@ textarea.p-form-text {
 
 .p-modal-button-container > a {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  color: #0f75f5;
+  color: var(--primary-col-ac);
   padding: 30px 0%;
   text-decoration: none;
   width: 100%;
@@ -1529,7 +1530,7 @@ textarea.p-form-text {
 }
 
 .p-modal p {
-  padding: 0% 2%;
+  padding: 0% 5%;
 }
 
 @supports not (backdrop-filter: blur(5px)) {
@@ -1559,6 +1560,7 @@ textarea.p-form-text {
     padding: 2vh 0%;
   }
 }
+
 /* END OF MODALS */
 /* START OF LAYOUT */
 .p-layout .p-large-title {
