@@ -16,3 +16,17 @@
     });
   });
 })(document);
+
+let mobile_tabs_pupper = document.querySelectorAll('.p-mobile-tabs a');
+
+for (var item of mobile_tabs_pupper) {
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      console.log(this.parentNode);
+      var remover_pupper = this.parentNode.parentNode;
+      remover_pupper.querySelector('.active').classList.remove('active');
+      this.classList.add('active');
+      remover_pupper.parentNode.querySelector('.p-mobile-tabs--content.active').classList.remove('active');
+      document.querySelector(this.getAttribute('data-p-mobile-toggle')).classList.add('active');
+    });
+}

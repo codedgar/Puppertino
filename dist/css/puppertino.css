@@ -2443,3 +2443,220 @@ how to remove the virtical space around the range input in IE*/
   --color-segmented: #555761;
   --color-lighter-segment: #d4d4d4;
 }
+
+
+.p-shadow-1 {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.p-shadow-2 {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.p-shadow-3 {
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3);
+}
+
+.p-shadow-4 {
+  box-shadow: 0 25px 30px rgba(0, 0, 0, 0.2);
+}
+
+.p-to-shadow-4,
+.p-to-shadow-3,
+.p-to-shadow-2,
+.p-to-shadow-1 {
+  transition-timing-function: ease;
+  transition: box-shadow 0.5s;
+}
+
+.p-to-shadow-1:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);>
+}
+
+.p-to-shadow-2:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.p-to-shadow-3:hover {
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3);
+}
+
+.p-to-shadow-4:hover {
+  box-shadow: 0 25px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* END OF SHADOWS */
+/* START OF TABS */
+
+.p-tabs-container {
+  background: #E3E3E3;
+  border:  1px solid #E0E0E0;
+  padding: 1em;
+}
+
+.p-tabs-container.p-light {
+  background: none;
+  border: none;
+}
+
+.p-tabs-container.p-light .p-panels{
+  margin-top: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+.p-tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.p-tabs > :nth-of-type(1) {
+  border-radius: 5px 0 0 5px;
+}
+
+.p-tabs > :last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.p-tab {
+  margin: 0;
+  padding: 5px 35px;
+  background: #fff;
+  color: #333230;
+  text-decoration: none;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid #cacaca;
+  display: inline-block;
+  font-size: 17px;
+  font-family: -apple-system, "Inter", sans-serif;
+  cursor: pointer;
+}
+
+.p-tab:focus {
+  outline: 0;
+}
+
+.p-is-active {
+  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
+  border: 0;
+  color: #fff;
+}
+
+.p-panels{
+  margin-top: 1em;
+  background: #fff;
+  border-radius: 3px;
+  position: relative;
+  padding: .8em;
+  overflow: hidden;
+}
+
+.p-panel.p-is-active {
+  opacity: 1;
+  pointer-events: all;
+  background: none;
+  color: inherit;
+  position: static;
+}
+
+.p-panel {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+
+  .p-tabs {
+    overflow: auto;
+  }
+  .p-tab {
+    font-size: .8em;
+    padding: 5px 28px;
+  }
+  .p-tabs-container {
+    padding: .8em;
+  }
+  
+  .p-panels {
+    padding: .8em;
+  }
+}
+
+@media screen and (max-width: 496px) {
+  .p-tab {
+    text-align: center;
+    padding: 5px 18px;
+  }
+  .p-tabs-container {
+    padding: .5em;
+  }
+  
+  .p-panels {
+    padding: .5em;
+    margin-top: .5em;
+    
+  }
+}
+
+@media screen and (max-width: 378px) {
+  .p-tab {
+    text-align: center;
+    padding: 5px 10px;
+  }
+  .p-tabs-container {
+    padding: .5em;
+  }
+  
+  .p-panels {
+    padding: .5em;
+    margin-top: .5;
+  }
+}
+
+.p-mobile-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 0px;
+  border-top: 1px solid #949494;
+  background: rgba(202, 202, 202, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  font-family: -apple-system, "Inter", sans-serif;
+}
+
+.p-mobile-tabs > div {
+  flex: auto;
+  text-align: center;
+}
+
+.p-mobile-tabs a {
+  text-decoration: none;
+  color: #555;
+  transition: color 0.5s;
+  display: inline-block;
+  font-size: 0.8rem;
+}
+
+.p-mobile-tabs a.active {
+  color: #0f75f5;
+  font-weight: 600;
+}
+
+.p-mobile-tabs svg {
+  display: block;
+  margin: auto;
+  margin-bottom: 0.2rem;
+}
+
+.p-mobile-tabs--content {
+  display: none;
+}
+
+.p-mobile-tabs--content.active {
+  display: block;
+}
+
+/* END OF TABS */

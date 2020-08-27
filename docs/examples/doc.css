@@ -219,9 +219,40 @@ pre {
 
 .mw-300{
   width: 300px;
+  position: relative;
+}
+
+.mw-450{
+  width: 450px;
+  position: relative;
+  background: #fff;
+}
+
+.p-mobile-tabs {
+  position: static;
+}
+
+.p-mobile-tabs--content{
+  padding: 10px;
 }
 
 .demo_segmented{
   --color-segmented:#68b723;
   --color-lighter-segment: #d1ff82;
 }
+
+.shadow_shower{
+  display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.shadow_shower div{
+  height: 200px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
