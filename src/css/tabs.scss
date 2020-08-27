@@ -1,17 +1,17 @@
 .p-tabs-container {
-  background: #E3E3E3;
-  border:  1px solid #E0E0E0;
+  background: #e3e3e3;
+  border: 1px solid #e0e0e0;
   padding: 1em;
 }
 
 .p-tabs-container.p-light {
   background: none;
-  border: none;
+  border: 0;
 }
 
-.p-tabs-container.p-light .p-panels{
-  margin-top: 0;
+.p-tabs-container.p-light .p-panels {
   border-radius: 0;
+  margin-top: 0;
   padding: 0;
 }
 
@@ -30,16 +30,16 @@
 
 .p-tab {
   margin: 0;
-  padding: 5px 35px;
   background: #fff;
+  padding: 5px 35px;
   color: #333230;
   text-decoration: none;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   border: 1px solid #cacaca;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   display: inline-block;
-  font-size: 17px;
-  font-family: -apple-system, "Inter", sans-serif;
   cursor: pointer;
+  font-family: -apple-system, "Inter", sans-serif;
+  font-size: 17px;
 }
 
 .p-tab:focus {
@@ -52,60 +52,58 @@
   color: #fff;
 }
 
-.p-panels{
-  margin-top: 1em;
+.p-panels {
   background: #fff;
+  margin-top: 1em;
   border-radius: 3px;
-  position: relative;
-  padding: .8em;
   overflow: hidden;
+  padding: 0.8em;
+  position: relative;
 }
 
 .p-panel.p-is-active {
   opacity: 1;
-  pointer-events: all;
   background: none;
+  pointer-events: all;
   color: inherit;
   position: static;
 }
 
 .p-panel {
-  position: absolute;
   opacity: 0;
+  position: absolute;
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
-
   .p-tabs {
     overflow: auto;
   }
   .p-tab {
-    font-size: .8em;
+    font-size: 0.8em;
     padding: 5px 28px;
   }
   .p-tabs-container {
-    padding: .8em;
+    padding: 0.8em;
   }
-  
+
   .p-panels {
-    padding: .8em;
+    padding: 0.8em;
   }
 }
 
 @media screen and (max-width: 496px) {
   .p-tab {
-    text-align: center;
     padding: 5px 18px;
+    text-align: center;
   }
   .p-tabs-container {
-    padding: .5em;
+    padding: 0.5em;
   }
-  
+
   .p-panels {
-    padding: .5em;
-    margin-top: .5em;
-    
+    margin-top: 0.5em;
+    padding: 0.5em;
   }
 }
 
@@ -115,26 +113,26 @@
     padding: 5px 10px;
   }
   .p-tabs-container {
-    padding: .5em;
+    padding: 0.5em;
   }
-  
+
   .p-panels {
-    padding: .5em;
-    margin-top: .5;
+    margin-top: 0.5;
+    padding: 0.5em;
   }
 }
 
 .p-mobile-tabs {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px 0px;
-  border-top: 1px solid #949494;
   background: rgba(202, 202, 202, 0.8);
+  border-top: 1px solid #949494;
   backdrop-filter: blur(10px);
+  bottom: 0;
   display: flex;
   font-family: -apple-system, "Inter", sans-serif;
+  left: 0;
+  padding: 15px 0px;
+  position: fixed;
+  width: 100%;
 }
 
 .p-mobile-tabs > div {
@@ -143,10 +141,10 @@
 }
 
 .p-mobile-tabs a {
-  text-decoration: none;
   color: #555;
-  transition: color 0.5s;
   display: inline-block;
+  text-decoration: none;
+  transition: color 0.5s;
   font-size: 0.8rem;
 }
 

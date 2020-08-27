@@ -1,6 +1,6 @@
 .p-tabs-container {
-  background: #E3E3E3;
-  border:  1px solid #E0E0E0;
+  background: #e3e3e3;
+  border: 1px solid #e0e0e0;
   padding: 1em;
 }
 
@@ -9,7 +9,7 @@
   border: none;
 }
 
-.p-tabs-container.p-light .p-panels{
+.p-tabs-container.p-light .p-panels {
   margin-top: 0;
   border-radius: 0;
   padding: 0;
@@ -52,12 +52,12 @@
   color: #fff;
 }
 
-.p-panels{
+.p-panels {
   margin-top: 1em;
   background: #fff;
   border-radius: 3px;
   position: relative;
-  padding: .8em;
+  padding: 0.8em;
   overflow: hidden;
 }
 
@@ -76,20 +76,19 @@
 }
 
 @media (max-width: 768px) {
-
   .p-tabs {
     overflow: auto;
   }
   .p-tab {
-    font-size: .8em;
+    font-size: 0.8em;
     padding: 5px 28px;
   }
   .p-tabs-container {
-    padding: .8em;
+    padding: 0.8em;
   }
-  
+
   .p-panels {
-    padding: .8em;
+    padding: 0.8em;
   }
 }
 
@@ -99,13 +98,12 @@
     padding: 5px 18px;
   }
   .p-tabs-container {
-    padding: .5em;
+    padding: 0.5em;
   }
-  
+
   .p-panels {
-    padding: .5em;
-    margin-top: .5em;
-    
+    padding: 0.5em;
+    margin-top: 0.5em;
   }
 }
 
@@ -115,12 +113,12 @@
     padding: 5px 10px;
   }
   .p-tabs-container {
-    padding: .5em;
+    padding: 0.5em;
   }
-  
+
   .p-panels {
-    padding: .5em;
-    margin-top: .5;
+    padding: 0.5em;
+    margin-top: 0.5;
   }
 }
 
