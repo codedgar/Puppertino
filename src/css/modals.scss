@@ -40,7 +40,7 @@
 }
 
 .p-modal.active {
-  backdrop-filter: blur(5px);
+  backdrop-filter: saturate(180%) blur(10px);
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
@@ -89,6 +89,7 @@
 
   .p-modal p {
     font-size: 15px;
+    padding: 0% 10%;
   }
 
   .p-modal-button-container {

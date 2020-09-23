@@ -1,3 +1,13 @@
+:root {
+  --primary-col:linear-gradient(to bottom, #4fc5fa 0%,#0f75f5 100%);
+  --primary-col-ac:#0f75f5;
+  --bg-color:#fff;
+  --bg-hover-color:#f9f9f9;
+  --bg-front-col:#000;
+  --invalid-color:#d6513c;
+  --valid-color:#94d63c;
+}
+
 .p-form-select {
   border-radius: 5px;
   display: inline-block;
@@ -34,7 +44,8 @@
 }
 
 .p-form-select > select {
-  background: var(--bg-color);
+  -webkit-appearance: none;
+  background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
   font-size: 14px;
@@ -46,26 +57,30 @@
 }
 
 .p-form-text:invalid,
+.p-form-text-alt:invalid,
 .p-form-select > select:invalid {
   border-color: var(--invalid-color);
 }
 
 .p-form-text:valid,
+.p-form-text-alt:valid,
 .p-form-select > select:valid {
   border-color: var(--valid-color);
 }
 
 .p-form-text:placeholder-shown,
+.p-form-text-alt:placeholder-shown,
 .p-form-select > select:placeholder-shown {
   border-color: #cacaca;
 }
 
 .p-form-text {
-  appearance: none;
-  background: var(--bg-color);
+  -webkit-appearance: none;
+  box-shadow: none;
+  background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
-  font-family: var(--font);
+  font-family: -apple-system, "Inter", sans-serif;
   margin: 10px;
   outline: 0;
   padding: 5px;
@@ -73,11 +88,31 @@
   transition: border-color 200ms;
 }
 
+.p-form-text-alt {
+  -webkit-appearance: none;
+  box-shadow: none;
+  background: #fff;
+  border: 0px;
+  border-bottom: 2px solid #cacaca;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: 10px;
+}
+
+.p-form-text-alt::placeholder {
+  color: #cacaca;
+}
+
+.p-form-text-alt:focus {
+  outline: 3px solid #bed8f9;
+}
+
 .p-form-no-validate:valid,
 .p-form-no-validate:invalid,
 .p-form-no-validate > select:valid,
 .p-form-no-validate > select:invalid {
-  border: 1px solid #cacaca;
+  border-color: #cacaca;
 }
 
 .p-form-text:focus {
@@ -85,7 +120,7 @@
 }
 
 textarea.p-form-text {
-  appearance: none;
+  -webkit-appearance: none;
   height: 100px;
 }
 
@@ -96,7 +131,7 @@ textarea.p-form-text {
 }
 
 .p-form-text[type=password] {
-  font-family: caption, sans-serif;
+  font-family: caption;
 }
 
 .p-form-label,
@@ -118,7 +153,7 @@ textarea.p-form-text {
 
 .p-form-radio-cont > input + span,
 .p-form-checkbox-cont > input + span {
-  background: var(--bg-color);
+  background: #fff;
   border: 1px solid #cacaca;
   border-radius: 50%;
   cursor: pointer;
@@ -131,7 +166,7 @@ textarea.p-form-text {
 }
 
 .p-form-radio-cont > input + span:hover {
-  background: var(--bg-hover-color);
+  background: #f9f9f9;
 }
 
 .p-form-radio-cont > input,
@@ -201,6 +236,7 @@ textarea.p-form-text {
 }
 
 .p-form-button {
+  -webkit-appearance: none;
   background: #fff;
   border: 1px solid #cacaca;
   border-radius: 5px;
@@ -214,8 +250,8 @@ textarea.p-form-text {
 }
 
 .p-form-send {
-  background: var(--primary-col);
-  border: 1px solid #4fc5fa;
+  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
+  border: 0;
   color: #fff;
 }
 
@@ -237,14 +273,14 @@ textarea.p-form-text {
   border-color: var(--valid-color);
 }
 
-.p-form-switch > input:checked + span::after {
-  left: calc(100% - calc(var(--width) / 2.1));
-}
-
 .p-form-switch {
   --width: 80px;
   cursor: pointer;
   display: inline-block;
+}
+
+.p-form-switch > input:checked + span::after {
+  left: calc(100% - calc(var(--width) / 2.1));
 }
 
 .p-form-switch > input:checked + span {
@@ -266,7 +302,7 @@ textarea.p-form-text {
 .p-form-switch > span::after {
   background: #f9f9f9;
   border-radius: 50%;
-  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.16), 0px 3px 8px rgba(0, 0, 0, 0.15);
   content: "";
   height: 90%;
   left: 3%;
@@ -369,3 +405,6 @@ how to remove the virtical space around the range input in IE*/
     /*Edge starts the margin from the thumb, not the track as other browsers do*/
   }
 }
+
+
+/* END OF FORMS */
