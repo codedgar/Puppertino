@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8" />
     <title>Icons - Puppertino Framework</title>
     <link
-      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900&display=swap"
+      href="https://rsms.me/inter/inter.css"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" />
-    <meta charset="utf-8" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -86,5 +87,21 @@
         </div>
       </div>
     </div>
-  </body>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
 </html>

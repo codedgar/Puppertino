@@ -10,7 +10,12 @@
   margin: 10px;
   padding: 5px 20px;
   text-decoration: none;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  /* text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25); */
+}
+.p-btn-mob{
+    padding: 10px 40px;
+    background: #0f75f5;
+    color: #fff;
 }
 .p-btn[disabled] {
   background: #d3d3d3;
@@ -1029,7 +1034,7 @@ textarea.p-form-text {
   margin: 10px;
   padding: 5px 20px;
   text-decoration: none;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  /* text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25); */
 }
 
 .p-form-send {
@@ -1264,7 +1269,7 @@ how to remove the virtical space around the range input in IE*/
 }
 
 .p-modal {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
   top: calc(50% - 20vh);
   bottom: unset;
@@ -1507,7 +1512,7 @@ how to remove the virtical space around the range input in IE*/
   background: #fff;
   color: #333230;
   text-decoration: none;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  /* text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25); */
   border: 1px solid #cacaca;
   display: inline-block;
   font-size: 17px;

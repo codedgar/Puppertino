@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Getting started - Puppertino Framework</title>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="Wondering how to use Puppertino? Wonder no more, click here to get a getting started guide."
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-176821843-1');
+    </script>
+  </head>
+  <body class="p-layout">
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="getting-started.html" class="p-btn p-btn-scope">Introduction</a>
+    </div>
+    <h1>Getting started</h1>
+    <div class="master">
+      <p>
+        Puppertino is a really straight forward framework to use as you would expect. You can use Puppertino in two ways:
+      </p>
+
+      <div class="talk-about-it">
+        <h2>Download the full CSS.</h2>
+        <p>
+          <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css">Downloading the full CSS </a> is recommended if you are going to use several components of Puppertino or you are planning on using them. However if you are going to use if some of them we recommend you to go to the next way of using Puppertino.
+        </p>
+
+        <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css" target="_blank" class="p-btn p-prim-col p-btn-md">Download Puppertino</a>
+      </div>
+
+
+      <div class="talk-about-it">
+        <h2>Using CSS based on components.</h2>
+        <p>
+          You can also browse the <a href="https://github.com/codedgar/Puppertino/tree/master/dist/css" target="_blank">Puppertino Repo</a> to find whatever components you want to use.
+        </p>
+        <a href="https://github.com/codedgar/Puppertino/tree/master/dist/css" target="_blank" class="p-btn p-prim-col p-btn-md">Browse repo</a>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>What about JS?</h2>
+        <p>
+          There's a section for that in our repo. Sadly there's no full.js, so you'll have to manually download and import every one of them you want do use.
+        </p>
+        <a href="https://github.com/codedgar/Puppertino/tree/master/src/js" target="_blank" class="p-btn p-prim-col p-btn-md">Check JS files</a>
+      </div>
+
+    </div>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script defer>
+    hljs.initHighlightingOnLoad();
+  </script>
+</html>

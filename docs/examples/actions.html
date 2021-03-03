@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Actions - Puppertino Framework</title>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="This is the documentation for Actions on the Puppertino Framework, a framework that mimics Apple's design, woof!"
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176821843-1');
+</script>
+  </head>
+  <body class="p-layout">
+
+<div class="p-action-background">
+    <div class="p-action-big-container" id="actions" data-p-close-on-outside="true">
+      <div class="p-action-container">
+        <div class="p-action-title">
+          <h3 class="p-action-title--intern">What do you want to do?</h3>
+          <p class="p-action-text">Select an option below...</p></div>
+        <a href="#" class="p-action--intern p-action-destructive p-action-icon"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Close this tab</a>
+        <a href="#" class="p-action--intern p-action-destructive p-action-icon-inline" ><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Close this tab</a>
+        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
+        <a href="#" class="p-action--intern">New tab</a>
+      </div>
+      <div class="p-action-container">
+        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
+      </div>
+    </div>
+
+    <div class="p-action-big-container" id="actions2" data-p-close-on-outside="true">
+      <div class="p-action-container">
+        <div class="p-action-title">
+          <h3 class="p-action-title--intern">What do you want to do?</h3>
+          <p class="p-action-text">Select an option below...</p>
+        </div>
+        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
+        <a href="#" class="p-action--intern">New tab</a>
+      </div>
+      <div class="p-action-container">
+        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
+      </div>
+    </div>
+
+    <div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true">
+      <div class="p-action-container">
+        <div class="p-action-title">
+          <h3 class="p-action-title--intern">Welcome to actions</h3>
+          <p class="p-action-text">Select an option below...</p>
+        </div>
+        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
+        <a href="#" class="p-action--intern">New tab</a>
+      </div>
+      <div class="p-action-container">
+        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
+      </div>
+    </div>
+</div>
+
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="actions.html" class="p-btn p-btn-scope">Actions</a>
+    </div>
+    <h1>Actions</h1>
+    <div class="master">
+      <p>
+        Actions are a big part of iOS, and we couldn't stop thinking of adding them. That's why we added it into Puppertino! To use actions, you can
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/actions.css"
+          target="_blank"
+          >Download the CSS</a
+        >
+        and
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/actions.js"
+          target="_blank"
+          >Download the JS</a
+        >
+        alternatively you can use the
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css"
+          target="_blank"
+          >Full CSS</a
+        >
+        (Not recommended if you are just going to use this component). Please be
+        aware that you still need to download the JS of Actions, since at the
+        time, there's no full.js
+      </p>
+
+      <div class="talk-about-it">
+        <h2>Let's talk about actions!</h2>
+        <p>
+          Actions in Puppertino are very similar to modals. They prompt the user to take an decision. The difference is that Actions can feature multiple decisions and are easier to acccess than modals.
+        </p>
+
+
+        <button data-p-open-actions="#actions2" class="p-btn">
+          Open actions
+        </button>
+      </div>
+    </div>
+
+    <div class="talk-about-it">
+      <h2>General usage.</h2>
+      <p>
+        The usage it's the practically the same as modals. You need a container for the Actions and the button that you want to toggle actions needs to have the attribute <code class="code">data-p-open-actions</code> with the #id of the actions you want to open. And the actions with the according ID.
+        <br><br>
+        There are also variants so you can arrange the elements differently, but <strong>please</strong> try to use just one variant at a time, one action with icon, then another one without action and so on can cause confusion on users and it also looks visually unpleasant, so handle with care.
+        <br><br>
+        Actions also support the attribute <code class="code">data-p-close-on-outside="true"</code> to close the action on click outside of the area.
+      </p>
+
+      <button class="p-btn" data-p-open-actions="#actions">
+        Open actions with variants
+      </button>
+
+      <button class="p-btn" data-p-open-actions="#actions_basic">
+        Basic Actions
+      </button>
+
+      <p>Usage:</p>
+      <div class="code">
+        <pre>
+				<code class="html">
+&#60;!-- The button that toggles the action -->
+
+&#60;button class="p-btn" data-p-open-actions="#actions_basic">Basic Actions&#60;/button>
+
+
+&#60;!-- Action container, all the actions you use should be inside of it. -->
+
+&#60;div class="p-action-background">
+
+	&#60;!-- Your actions will be here -->
+  &#60;div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true">
+    &#60;div class="p-action-container">
+      &#60;div class="p-action-title">
+        &#60;h3 class="p-action-title--intern">Welcome to actions&#60;/h3>
+        &#60;p class="p-action-text">Select an option below...&#60;/p>
+      &#60;/div>
+      &#60;a href="#" class="p-action--intern p-action-neutral">New private tab&#60;/a>
+      &#60;a href="#" class="p-action--intern">New tab&#60;/a>
+    &#60;/div>
+    &#60;div class="p-action-container">
+      &#60;a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel&#60;/a>
+    &#60;/div>
+  &#60;/div>
+
+&#60;/div>
+				</code>
+			</pre>
+      </div>
+
+      <p>Variations:</p>
+      <div class="code">
+        <pre>
+        <code class="html">
+  &#60;div class="p-action-big-container" id="actions" data-p-close-on-outside="true">
+        &#60;div class="p-action-container">
+          &#60;div class="p-action-title">
+            &#60;h3 class="p-action-title--intern">What do you want to do?&#60;/h3>
+            &#60;p class="p-action-text">Select an option below...&#60;/p>&#60;/div>
+          &#60;a href="#" class="p-action--intern p-action-destructive p-action-icon">&#60;!-- ICON --> Close this tab&#60;/a>
+          &#60;a href="#" class="p-action--intern p-action-destructive p-action-icon-inline" >&#60;!-- ICON --> Close this tab&#60;/a>
+          &#60;a href="#" class="p-action--intern p-action-neutral">New private tab&#60;/a>
+          &#60;a href="#" class="p-action--intern">New tab&#60;/a>
+        &#60;/div>
+        &#60;div class="p-action-container">
+      &#60;a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel&#60;/a>
+    &#60;/div>
+  &#60;/div>
+        </code>
+      </pre>
+      </div>
+    </div>
+
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <script type="text/javascript">
+    (function (document) {
+
+  var p_actions = document.querySelectorAll("[data-p-open-actions]");
+  var actions = document.querySelectorAll(".p-action-big-container");
+  var cancel_action = document.querySelectorAll("[data-p-cancel-action]");
+
+  for (var item of p_actions) {
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      var selector = this.getAttribute("data-p-open-actions");
+      if (selector.length == 0) {
+        console.warn(
+          "Error. The data-p-open-action attribute is empty, please add the ID of the action you want to open."
+        );
+        return false;
+      }
+      document.querySelector(".p-action-background").classList.add("nowactive");
+      document.body.classList.add("p-modal-opened");
+      document.querySelector(selector).classList.add("active");
+    });
+  }
+
+  for (var element of cancel_action) {
+    element.addEventListener("click", function (event) {
+      event.preventDefault();
+      document.querySelector(".p-action-big-container.active").classList.remove("active");
+      document.querySelector(".p-action-background").classList.remove("nowactive");
+      document.body.classList.remove("p-modal-opened");
+    });
+  }
+
+  document
+    .querySelector(".p-action-background")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      var opened_action = document.querySelector(".p-action-big-container.active");
+      if (opened_action.getAttribute("data-p-close-on-outside") == "true") {
+        event.stopPropagation();
+        opened_action.classList.remove("active");
+        document
+          .querySelector(".p-action-background")
+          .classList.remove("nowactive");
+        document.body.classList.remove("p-modal-opened");
+      }
+    });
+
+  for (var action of actions) {
+      action.addEventListener("click", function (event) {
+      event.stopPropagation();
+    });
+  }
+})(document)
+  </script>
+</html>

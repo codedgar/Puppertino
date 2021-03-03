@@ -1,0 +1,89 @@
+.p-dark-mode {
+
+  --p-btn-border: #454545;
+  --p-btn-def-bg: #262525;
+  --p-btn-def-col: #fcfcfc;
+  --p-btn-dir-col: #e0e0e0;
+  --p-btn-scope-unactive: #e4e4e4;
+  --p-btn-scope-action: #d0d0d0;
+  --p-color-card: #fff;
+  --p-bg-card: #1a1a1a;
+  --p-bd-card: #1d1d1d;
+
+	--p-suggested-bg: #0e0e0e;
+	--p-suggested-color: #e6e6e6;
+	--route-bg:#040404;
+
+
+	--p-modal-bg: rgb(45 45 45 / 85%);
+	--p-modal-bd-color:rgb(224 224 224 / 10%);
+  --p-color-basic-elements: #f5f5f7;
+
+
+	--primary-col-ac:#197fff;
+
+  --p-input-bg: #040404;
+  --p-input-color: #fff;
+  --p-input-color-plac:#414141;
+
+  --p-input-bd: #454545;
+  
+  --p-modal-fallback-color: rgba(0,0,0,.95);
+
+  --p-segmented-bg:#0e0e0e;
+
+  --p-actions-static-color: #dadada;
+
+
+  --p-modal-color: #f5f5f7;
+
+
+  --p-mobile-tabs-color: #f5f5f7;
+  --p-panel-bg:#212121;
+
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-btn-border: #454545;
+    --p-btn-def-bg: #262525;
+    --p-btn-def-col: #fcfcfc;
+    --p-btn-dir-col: #e0e0e0;
+    --p-btn-scope-unactive: #e4e4e4;
+    --p-btn-scope-action: #d0d0d0;
+    --p-color-card: #fff;
+    --p-bg-card: #1a1a1a;
+    --p-bd-card: #1d1d1d;
+
+    --p-suggested-bg: #0e0e0e;
+    --p-suggested-color: #e6e6e6;
+    --route-bg:#040404;
+
+
+    --p-modal-bg: rgb(45 45 45 / 85%);
+    --p-modal-bd-color:rgb(224 224 224 / 10%);
+    --p-color-basic-elements: #f5f5f7;
+
+
+    --primary-col-ac:#197fff;
+
+    --p-input-bg: #040404;
+    --p-input-color: #fff;
+    --p-input-color-plac:#414141;
+
+    --p-input-bd: #454545;
+    
+    --p-modal-fallback-color: rgba(0,0,0,.95);
+
+    --p-segmented-bg:#0e0e0e;
+
+    --p-actions-static-color: #dadada;
+
+
+    --p-modal-color: #f5f5f7;
+
+
+    --p-mobile-tabs-color: #f5f5f7;
+    --p-panel-bg:#212121;
+  }
+}

@@ -1,6 +1,6 @@
 ![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
 
-# Welcome to Puppertino!
+# Welcome to Puppertino V 1.0!
 
 Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look
 of **macOS** and follow the **human guidelines**. Puppertino is a Framework
@@ -44,10 +44,15 @@ Puppertino currently includes:
 
 - Buttons
 - Switches
+- Actions
 - Form Elements (Inputs, select, form validation)
 - Modals
 - Icons
 - Font Layout
+- Segmented Controls
+- Tabs
+- Shadows
+- NEW! Dark Mode
 - Color Palette
 
 Yeah... That's all. But no worries! I'm working on adding new components every day!

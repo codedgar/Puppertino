@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Color Palette - Puppertino Framework</title>
     <link
-      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900&display=swap"
+      href="https://rsms.me/inter/inter.css"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" />
-    <meta charset="utf-8" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -83,6 +84,9 @@
           use, i.e: <code class="code">p-strawberry-100</code> (Base colors
           don't use shade).<br><br>
           There are also <strong>text colors</strong>, just add <code class="code">-color</code> at the end, i.e <code class="code">p-strawberry-100-color</code>
+          <br><br>
+          <span class="bit_bit p-lime p-white-color">New!</span>
+          We've added colors as variables, so you use them wherever and however you like, just add <code class="code">--</code> before the color in <strong>your CSS</strong> code, i.e <code class="code">--p-strawberry-100</code>. This can be use to create amazing gradients and theming.
         </p>
 
         <div class="row pad_15_row center_row">
@@ -347,7 +351,23 @@
     <div class="copy_correct">
       <p class="p-caption">Color <span id="color_talk"></span> copied!</p>
     </div>
-  </body>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
   <script type="text/javascript">
     var color_base = document.querySelectorAll(".color_base");
     for (var item of color_base) {

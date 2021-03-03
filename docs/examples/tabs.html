@@ -3,10 +3,11 @@
   <head>
     <title>Tabs - Puppertino Framework</title>
     <link
-      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900&display=swap"
+      href="https://rsms.me/inter/inter.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -82,7 +83,7 @@
           <div class="p-panels">
             <div class="p-panel p-is-active">
               <h1>Service 1</h1>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?</p>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?</p>
             </div>
             <div class="p-panel">
               <h1>Service 2</h1>
@@ -234,7 +235,23 @@
       </div>
 
     </div>
-  </body>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
   <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"

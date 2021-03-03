@@ -1,4 +1,4 @@
-.p-layout .p-large-title {
+.p-large-title{
   font-size: 2.75rem;
 }
 
@@ -14,7 +14,7 @@
   font-size: 1.58rem;
 }
 
-.p-layout .p-headline {
+.p-headline {
   font-size: 1.34rem;
   font-weight: bold;
 }
@@ -23,23 +23,23 @@
   font-size: 1.15rem;
 }
 
-.p-layout a,
+.p-layout a:not(.p-btn),
 .p-layout input {
   font-size: 1.14rem;
 }
 
-.p-layout .p-callout {
+.p-callout {
   font-size: 1.14rem;
 }
 
-.p-layout .p-subhead {
+.p-subhead {
   font-size: 1.167rem;
 }
 
-.p-layout .p-footnote {
+.p-footnote {
   font-size: 1.07rem;
 }
 
-.p-layout .p-caption {
+.p-caption {
   font-size: 0.91rem;
 }

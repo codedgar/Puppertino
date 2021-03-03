@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
 	<title>Forms - Puppertino Framework</title>
-	<link href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css">
-	<meta charset="utf-8">
+	<link href="https://rsms.me/inter/inter.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+    
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<link rel="stylesheet" type="text/css" href="doc.css">
@@ -34,9 +36,9 @@
 
 		<div class="talk-about-it">
 			<h2>Select.</h2>
-			<p>The select box, works exactly as expected, and you can change the width and height withoug affecting the overall composition of the element without problems. Select, by default, includes the class <code class="code">p-form-no-validate</code>, but you can delete it if your wish.</p>
+			<p>The select box, works exactly as expected, and you can change the width and height withoug affecting the overall composition of the element without problems. The select does not have native validation, but you can still add the <code class="code">p-form-invalid</code> and <code class="code">p-form-valid</code> classes respectively.</p>
 
-			<div class="p-form-select p-form-no-validate">
+			<div class="p-form-select">
 			    <select>
 			        <option>Option 1</option>
 			        <option>Option 2</option>
@@ -48,7 +50,7 @@
 			<div class="code">
 			<pre>
 				<code class="html">
-&#60;div class="p-form-select p-form-no-validate">
+&#60;div class="p-form-select">
 	&#60;select>
 		&#60;option>Option 1&#60;/option>
 		&#60;option>Option 2&#60;/option>
@@ -138,6 +140,8 @@
           type="email"
           class="p-form-text-alt"
           placeholder="Normal validated input (email)"
+          value="edgar@codedgar.com"
+          disabled=""
         />
         <input
           type="name"
@@ -159,6 +163,14 @@
             placeholder="example@gmail.com"
         /></label>
 
+        <label class="p-form-label-inline"
+          >Email:<input
+            type="email"
+            class="p-form-text-alt"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
         <p>Usage:</p>
         <div class="code">
           <pre>
@@ -171,6 +183,8 @@
 &#60;input type="email" class="p-form-text-alt p-form-truncated" placeholder="Truncated text...">
 
 &#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">&#60;/label>
+
+&#60;label class="p-form-label-inline">Email: &#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">&#60;/label>
 
         </code>
       </pre>
@@ -260,6 +274,112 @@
 
 				</code>
 			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Chips.</h2>
+        <p>
+          Chips are essentially checkboxes, but cooler. This makes it easier and more interactive for user to select multiple items or filter information. They come in several flavors and also have support for icons.
+        </p>
+
+        <label class="p-chip">
+          <input type="checkbox" name="thingy_second" />
+          <span>Default</span>
+        </label>
+
+        <label class="p-chip p-chip-dark p-chip-radius-b">
+          <input type="checkbox" name="thingy_second" />
+          <span>Border</span>
+        </label>
+
+        <label class="p-chip p-chip-outline">
+          <input type="checkbox" name="thingy_third" />
+          <span>Outline</span>
+        </label>
+
+        <label class="p-chip p-chip-outline-to-bg">
+          <input type="checkbox" name="thingy_third" />
+          <span>Outline to bg</span>
+        </label>
+
+        <label class="p-chip p-chip-radius-b">
+          <input type="checkbox" name="thingy_fourth" />
+          <span>Combined</span>
+        </label>
+
+        <label class="p-chip">
+          <input type="checkbox" name="thingy_fourth" disabled />
+          <span>Disabled</span>
+        </label>
+
+        <label class="p-chip p-chip-big">
+          <input type="checkbox" name="thingy_fourth" />
+          <span>
+            <svg
+              viewBox="0 0 24 24"
+              width="50"
+              height="50"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <path
+                d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"
+              ></path>
+              <line x1="23" y1="13" x2="23" y2="11"></line>
+              <polyline points="11 6 7 12 13 12 9 18"></polyline>
+            </svg>
+            Icon</span
+          >
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;label class="p-chip">
+  &#60;input type="checkbox" />
+  &#60;span>Default&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-dark p-chip-radius-b">
+  &#60;input type="checkbox" />
+  &#60;span>Border&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-outline">
+  &#60;input type="checkbox" />
+  &#60;span>Outline&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-outline-to-bg">
+  &#60;input type="checkbox" />
+  &#60;span>Outline to bg&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-radius-b">
+  &#60;input type="checkbox" />
+  &#60;span>Combined&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip">
+  &#60;input type="checkbox" disabled />
+  &#60;span>Disabled&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-big">
+  &#60;input type="checkbox" />
+  &#60;span>
+&#60;!-- SVG -->
+    Icon&#60;/span>
+&#60;/label>
+        </code>
+      </pre>
         </div>
       </div>
 
@@ -386,7 +506,23 @@
         </div>
       </div>
     </div>
-  </body>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
   <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"

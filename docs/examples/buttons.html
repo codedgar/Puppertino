@@ -3,11 +3,11 @@
   <head>
     <title>Buttons - Puppertino Framework</title>
     <link
-      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900&display=swap"
+      href="https://rsms.me/inter/inter.css"
       rel="stylesheet"
     />
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -49,53 +49,25 @@
       <p>
         Buttons are the main thing that move the interface. That's why it was
         the main thing that was developed for Puppertino. <br />Puppertino
-        buttons support usage as links, buttons and submit elements. You can use
-        the Buttons using the
-        <a
-          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/buttons.css"
-          target="_blank"
-          >CSS of Buttons</a
-        >
-        or
-        <a
-          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css"
-          target="_blank"
-          >dowloading the full CSS</a
-        >
-        (Not recommended if you are just going to use this component).
+        buttons support usage as links, buttons and submit elements.
       </p>
 
       <div class="talk-about-it">
         <h2>Push Buttons.</h2>
         <p>
-          Push buttons come in different ways. The
-          <strong>Default button</strong> is plain, and should be use for cancel
-          or optional clicks. For main clicks, the
-          <strong>Primary button</strong> is the way to go. While similar to the
-          Primary button, the <strong>Mobile Big</strong> button will change to
-          a <code class="code">position:fixed</code> and take a significant part
-          of the screen if it's mobile. This button is ideal for Buy buttons or
-          similar. Last but not least, there's the
-          <strong>Custom action</strong> button, which is really similar to the
-          Default button, but it adds three dots at the end. This button is
-          amazing for Advanced, Options or Other actions.<br /><br />
-          Buttons can be used either with and
-          <code class="code">&#60;button></code> or
-          <code class="code">&#60;a></code>. If you are going to use the
-          disabled button, is highly recommended to use
-          <strong>disabled</strong> as an attribute. Classes are also
-          combinable!
+          Push buttons come in different variations according to your needings. It can be used as <code class="code">&#60;a></code> elements or <code class="code">&#60;button></code> elements. For buttons, is suggested that you use the attribute <code class="code">disabled</code> if you desire to disable them.
         </p>
 
-        <a href="#" class="p-btn">Default</a>
+        <button class="p-btn">Default</button>
 
-        <a href="#" class="p-btn p-btn-disabled">Disabled</a>
+        <button class="p-btn" disabled="">Disabled</button>
 
         <a href="#" class="p-btn p-prim-col">Primary</a>
 
-        <a href="#" class="p-btn p-btn-round">Rounded</a>
+        <a href="#" class="p-btn p-btn-mob">Btn mob</a>
 
-        <a href="#" class="p-btn p-prim-col" id="mobile_big">Mobile big</a>
+        <a href="#" class="p-btn p-btn-round p-orange p-white-color p-white-color">Rounded</a>
+
         
         <a href="#" class="p-btn p-btn-outline">Outline</a>
 
@@ -113,14 +85,68 @@
 
 &#60;a href="#" class="p-btn p-prim-col">Primary&#60;/a>
 
-&#60;a href="#" class="p-btn p-btn-round">Rounded&#60;/a>
+&#60;a href="#" class="p-btn p-btn-mob">Btn mob&#60;/a>
 
-&#60;a href="#" class="p-btn p-prim-col p-btn-big-sm">Mobile big&#60;/a>
+&#60;a href="#" class="p-btn p-btn-round">Rounded&#60;/a>
 
 &#60;a href="#" class="p-btn p-btn-more">Custom action&#60;/a>
 				</code>
 			</pre>
         </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Button colors</h2>
+        <p>
+          Color customization in buttons is pretty simple. You will need to have the class <code class="code">p-btn-mob</code> to disable the shadow and border of the button.
+          <br><br>
+          You can use the colors available in <a href="/docs/examples/color_palette.html">Color palette</a> or custom colors defined in your own CSS.
+        </p>
+
+        <button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success</button>
+        <button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger</button>
+        <button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error</button>
+
+                <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+&#60;button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success&#60;/button>
+
+&#60;button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger&#60;/button>
+
+&#60;button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error&#60;/button>
+        </code>
+      </pre>
+        </div>
+
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Button sizing</h2>
+        <p>
+          Button sizing was a very requested feature during the alpha version of Puppertino. So now, I'm bringin 4 sizes for button sizes:
+        </p>
+        <a href="#" class="p-btn p-btn-mob p-btn-sm">Small size</a>
+        <a href="#" class="p-btn p-btn-mob p-btn-md">Medium size</a>
+        <a href="#" class="p-btn p-btn-mob p-btn-lg">Large size</a>
+        <a href="#" class="p-btn p-btn-mob p-btn-lg p-btn-block">Block size</a>
+
+                <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+&#60;a href="#" class="p-btn p-btn-sm">Small size&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-md">Medium size&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-lg">Large size&#60;/a>
+
+&#60;a href="#" class="p-btn p-btn-lg p-btn-block">Block size&#60;/a>
+        </code>
+      </pre>
+        </div>
+
       </div>
 
       <div class="talk-about-it">
@@ -145,7 +171,9 @@
       <div class="talk-about-it">
         <h2>Icon button.</h2>
         <p>
-          The icon button (Before help button), is round button with an icon inside, you can use a letter, an icon based in fonts (Such as Font Awesome) or an SVG. For icons see <a href="https://codedgar.github.io/Puppertino/examples/icons.html">icons section</a>. You can set the color of the borders and icon by just changing the <code class="code">color</code> property of the button.
+          The icon button (Before help button), is round button with an icon inside, you can use a letter, an icon based in fonts (Such as Font Awesome) or an SVG. For icons see <a href="https://codedgar.github.io/Puppertino/examples/icons.html">icons section</a>.
+          <br><br>
+          You can set the color of the borders and icon by just changing the <code class="code">color</code> property of the button or by adding the classes present in <a href="/docs/examples/color_palette.html">Color palette</a>. You can also disable borders by adding <code class="code">p-btn-icon-no-border</code>
         </p>
         <a href="#" class="p-btn-icon">?</a>
 
@@ -159,8 +187,12 @@
           <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
         </a>
 
-        <a href="#" class="p-btn-icon p-orange p-silver-100-color">
+        <a href="#" class="p-btn-icon p-orange p-silver-100-color p-btn-icon-no-border">
           <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+        </a>
+
+        <a href="#" class="p-btn-icon p-mint p-silver-100-color">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
         </a>
 
         <p>Usage:</p>
@@ -170,6 +202,8 @@
 &#60;a href="#" class="p-btn-icon">?&#60;/a>
 
 &#60;a href="#" class="p-btn-icon">&#60;!-- SVG ICON HERE -->&#60;/a>
+
+&#60;a href="#" class="p-btn-icon p-mint p-silver-100-color">Custom Color&#60;/a>
 				</code>
 			</pre>
         </div>
@@ -191,9 +225,11 @@
 
         <a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive</a>
 
-        <a href="#" class="p-btn p-btn-scope p-btn-scope-disabled">Disabled</a>
+        <a href="#" class="p-btn p-btn-scope p-btn-disabled">Disabled</a>
 
         <a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action</a>
+
+        <a href="#" class="p-btn p-btn-scope p-btn-scope-outline p-btn-outline-dash">Action</a>
 
         <p>Usage:</p>
         <div class="code">
@@ -203,7 +239,7 @@
 
 &#60;a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive&#60;/a>
 
-&#60;a href="#" class="p-btn p-btn-scope p-btn-scope-disabled">Disabled&#60;/a>
+&#60;a href="#" class="p-btn p-btn-scope p-btn-disabled">Disabled&#60;/a>
 
 &#60;a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action&#60;/a>
 				</code>
@@ -211,20 +247,28 @@
         </div>
       </div>
     </div>
-  </body>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
   <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
   ></script>
   <script defer>
     hljs.initHighlightingOnLoad();
-  </script>
-  <script type="text/javascript">
-    document
-      .querySelector("#mobile_big")
-      .addEventListener("click", function (event) {
-        event.preventDefault();
-        this.classList.toggle("p-btn-big-sm");
-      });
   </script>
 </html>

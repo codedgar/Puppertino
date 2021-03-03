@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Modals - Puppertino Framework</title>
     <link
-      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900&display=swap"
+      href="https://rsms.me/inter/inter.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" />
-    <meta charset="utf-8" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -92,8 +93,7 @@
     <div class="master">
       <p>
         Modals are one of the most emblematic items of iOS, so I added the
-        modals of iOS instead of adding dialog boxes like in macOS. Following
-        the same principles of iOS, modals can have 1, 2 or 3 buttons max. To
+        modals of iOS instead of adding dialog boxes like in macOS. To
         use modals, you need 2 components:
         <a
           href="https://github.com/codedgar/Puppertino/blob/master/dist/css/modals.css"
@@ -122,7 +122,7 @@
         <p>
           I wanted to make modals not only as easy to use as possible, but UX
           optimized as I could. That's why I'm calling it now, adding form
-          elements in forms is not supported, and also opening several modals is
+          elements in modals <span class="lmao_codedgar_b_dumb">is not supported</span> <sttrong>will be added in the next release</sttrong>, and also opening several modals is
           not supported either.<br />
           Now onto modals and types:
         </p>
@@ -209,7 +209,7 @@
       <h2>Several Buttons in a modal.</h2>
       <p>
         Modals support having several buttons on them without breaking, but due
-        to composition, the max amount of buttons is 3. To add more buttons, the
+        to composition, you should not add more than 3 buttons, but if you need them, you are free to put them. To add more buttons, the
         only thing you need is to add another
         <code class="code">&#60;a></code> element inside the Modal button
         container (<code class="code"
@@ -245,7 +245,23 @@
         Firefox, the modal will appear completely white.
       </p>
     </div>
-  </body>
+ 
+</body>
+
+  <script defer>
+    function retrieve_theme(){
+      let theme = localStorage.getItem('puppertino_theme');
+      if(theme != null){
+        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
+      }
+    }
+
+    window.addEventListener("storage",function(){
+      retrieve_theme();
+    },false);
+
+    retrieve_theme();
+   </script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino/src/js/modals.js"></script>
   <script
     type="text/javascript"
