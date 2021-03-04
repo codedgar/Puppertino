@@ -229,6 +229,9 @@ pre {
   justify-content: center;
 }
 
+.center_xs{
+  align-items: center;
+}
 
 .lmao_codedgar_b_dumb{
   text-decoration: line-through;
@@ -245,4 +248,8 @@ pre {
   height: 60px;
   line-height: 20px;
   font-size: 20px!important;
+}
+
+.sponsored{
+  max-width: 200px;
 }
