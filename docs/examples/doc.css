@@ -253,3 +253,9 @@ pre {
 .sponsored{
   max-width: 200px;
 }
+
+@media (max-width: 768px){
+  .sponsored{
+    max-width: 100%;
+  }
+}
