@@ -23,7 +23,7 @@
   font-size: 1.15rem;
 }
 
-.p-layout a:not(.p-btn),
+.p-layout .link,
 .p-layout input {
   font-size: 1.14rem;
 }
