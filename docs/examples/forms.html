@@ -32,11 +32,11 @@
 	</div>
 	<h1>Forms</h1>
 	<div class="master">
-		<p>Forms, are one of the things that moves forward the interface, that's why in Puppertino, form elements come with ready to work, native validation. You can use the Forms using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/forms.css" target="_blank">CSS of Forms</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/full.css" target="_blank">dowloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
+		<p>Forms are one of the things that move forward the interface, that's why in Puppertino, form elements come with ready-to-work, native validation. You can use the Forms using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/forms.css" target="_blank">CSS of Forms</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css" target="_blank">downloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
 
 		<div class="talk-about-it">
 			<h2>Select.</h2>
-			<p>The select box, works exactly as expected, and you can change the width and height withoug affecting the overall composition of the element without problems. The select does not have native validation, but you can still add the <code class="code">p-form-invalid</code> and <code class="code">p-form-valid</code> classes respectively.</p>
+			<p>The select box works exactly as expected, and you can change the width and height without affecting the overall composition of the element without problems. The select does not have native validation, but you can still add the <code class="code">p-form-invalid</code> and <code class="code">p-form-valid</code> classes respectively.</p>
 
 			<div class="p-form-select">
 			    <select>
@@ -67,26 +67,26 @@
         <p>
           Text fields are everything that gets text into it, maybe passwords,
           emails, messages, anything you want. They can have validation,
-          truncated text or be just plain without any of those things. The
-          <strong>validated input</strong> relays on native HTML validation, so
+          truncated text, or be just plain without any of those things. The
+          <strong>validated input</strong> relies on native HTML validation, so
           things like <code class="code">min-length</code> or
           <code class="code">type</code> will work perfectly on it. The
-          validation will be visible once the user change the focus out of the
+          validation will be visible once the user changes the focus out of the
           element, and I prefer it this way to avoid users getting confused
-          while they type. The no-validated input, retains it's style whenever
+          while they type. The no-validated input retains its style whenever
           the input is invalid or valid. The truncated text, adds three dots
           (...) at the end when of the input if the text overflows from it. The
-          appearence of the dots takes place after the user changes the focus
-          out of the element. Truncated text does not disable the validation.
+          appearance of the dots takes place after the user changes the focus
+          out of the element. The truncated text does not disable the validation.
           <br />
           It is also possible to add labels to every type of input without it
           affecting in any way the functionality of the input.
           <br />
-          About the validation: You should always include a placeholder if you
-          intent to use validation. If you don't intent to validate the input
+          About the validation: You should always include a placeholder if you were intending
+          to use validation. If you don't intend to validate the input
           text, you can add the class
           <code class="code">p-form-no-validate</code>.<br />
-          Text fields can be textareas, or inputs.
+          Text fields can be textareas or inputs.
         </p>
         <input
           type="email"
@@ -133,8 +133,8 @@
       <div class="talk-about-it">
         <h2>Alternate inputs.</h2>
         <p>
-          Alternate inputs are a bigger versions of the original inputs. The intended usage of this is login or registration forms.<br><br>
-          The alternate inputs work similar as the default input. The only thing that changes is the class, but validation and others work exactly as expected.
+          Alternate inputs are bigger versions of the original inputs. The intended usage of this is login or registration forms.<br><br>
+          The alternate inputs work similarly to the default input. The only thing that changes is the class, but validation and others work exactly as expected.
         </p>
         <input
           type="email"
@@ -195,10 +195,10 @@
         <p>
           Radio buttons are similar to checkboxes, the main difference between
           radio buttons and checkboxes, is that radio buttons can only one of
-          them in a group of radio buttons can be checked. Radio buttons does
-          not count with any type of validation And count with a nice, simple
+          them in a group of radio buttons can be checked. Radio buttons do
+          not provide any type of validation. And come with a nice, simple
           animation. You can change the width and height of the radio buttons
-          without being worried of breaking the composition.
+          without being worried about breaking the composition.
         </p>
 
         <label class="p-form-radio-cont">
@@ -238,7 +238,7 @@
       <div class="talk-about-it">
         <h2>Checkboxes.</h2>
         <p>
-          Checkboxes, allows the users to select several predefined values.
+          Checkboxes, allow the users to select several predefined values.
           Checkboxes in puppertino, just as Radio buttons, support changing the
           width and height without damaging the composition of the checkbox.
         </p>
@@ -280,7 +280,7 @@
       <div class="talk-about-it">
         <h2>Chips.</h2>
         <p>
-          Chips are essentially checkboxes, but cooler. This makes it easier and more interactive for user to select multiple items or filter information. They come in several flavors and also have support for icons.
+          Chips are essentially checkboxes, but cooler. This makes it easier and more interactive for the user to select multiple items or filter information. They come in several flavors and also have support for icons.
         </p>
 
         <label class="p-chip">
@@ -386,7 +386,7 @@
       <div class="talk-about-it">
         <h2>Switches.</h2>
         <p>
-          Switches are part of those elements that are popular from iOS devices.
+          Switches are part of those elements that are popular in iOS devices.
           And I wasn't going to add them until version 2.0 (Since I wanted to
           create a custom element) But a friend gave me the starter code and I
           just cleaned it a bit and made it look like the aesthetic of
@@ -442,7 +442,7 @@
       <div class="talk-about-it">
         <h2>Buttons.</h2>
         <p>
-          These buttons, are a really small version of the buttons component of
+          These buttons are a really small version of the buttons component of
           Puppertino, just to add send and cancel buttons.
         </p>
 
@@ -469,7 +469,7 @@
         <p>
           Let's say that you are working on a type of validation that can't be
           done with native HTML validation, can you use the validation of
-          Puppertino? Of course you can.<br /><br />
+          Puppertino? Of course, you can.<br /><br />
           To use validations in your code, you can use the classes
           <code class="code">p-form-invalid</code> and
           <code class="code">p-form-valid</code> respectively. You can add or
@@ -477,7 +477,7 @@
           time. Also, here in Puppertino we don't encourage validation in
           real-time. Since we think is better for the user to see the validation
           once he changes the focus of the input.<br />Please be aware that
-          using these classes will disable the default validation
+          using these classes will disable the default validation.
         </p>
 
         <input
