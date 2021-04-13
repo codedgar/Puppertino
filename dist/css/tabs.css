@@ -132,7 +132,8 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 15px 0px;
+  padding: 8px 0px;
+  padding-bottom: 2px;
   border-top: 1px solid var(--p-modal-bd-color);
   background: var(--p-modal-bg);
   backdrop-filter: blur(10px);
@@ -156,8 +157,9 @@
   text-decoration: none;
   color: var(--p-mobile-tabs-color);
   transition: color 0.5s;
-  display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.5rem; 
+  padding: 0 20px;
+  display: block;
 }
 
 .p-mobile-tabs a.active {
