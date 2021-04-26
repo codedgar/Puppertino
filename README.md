@@ -1,3 +1,5 @@
+![Puppertino Stars](https://img.shields.io/github/stars/codedgar/puppertino?style=for-the-badge) ![Puppertino's contributors](https://img.shields.io/github/contributors/codedgar/puppertino?style=for-the-badge) ![Follow Puppertino_css](https://img.shields.io/twitter/follow/Puppertino_css?style=social) ![Follow Codedgar_dev](https://img.shields.io/twitter/follow/codedgar_dev?style=social)
+
 ![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
 
 # Welcome to Puppertino V 1.0!
