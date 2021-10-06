@@ -25,6 +25,17 @@ body {
   margin: 0px;
   color: var(--color-docs);
 }
+body::before{
+  content: 'Attention! You are viewing the documentation of an upcoming version. Looks might differ from version V1.0. For V1.0 documentation, download the V1.0 Release';
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  background: var(--p-orange);
+  color: #fff;
+  font-family: -apple-system, "Inter", sans-serif;
+}
 h1,
 h2,
 h3,

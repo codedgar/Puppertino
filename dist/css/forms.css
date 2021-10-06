@@ -28,30 +28,20 @@
   outline: 2px solid #64baff;
 }
 
-.p-form-select::before {
-  border-color: #fff transparent transparent;
-  border-style: solid;
-  border-width: 5px;
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  right: 5px;
-  top: calc(50% - 3px);
-  z-index: 3;
-}
-
 .p-form-select::after {
-  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  background: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 12'%3E%3Cpath d='M.288 4.117 3.16 1.18c.168-.168.336-.246.54-.246a.731.731 0 0 1 .538.246L7.108 4.12c.125.121.184.27.184.45 0 .359-.293.656-.648.656a.655.655 0 0 1-.48-.211L3.701 2.465l-2.469 2.55a.664.664 0 0 1-.48.212.656.656 0 0 1-.465-1.11Zm3.41 7.324a.73.73 0 0 0 .54-.246l2.87-2.941a.601.601 0 0 0 .184-.45.656.656 0 0 0-.648-.656.677.677 0 0 0-.48.211L3.701 9.91 1.233 7.36a.68.68 0 0 0-.48-.212.656.656 0 0 0-.465 1.11l2.871 2.937c.172.168.336.246.54.246Z' fill='white' style='mix-blend-mode:luminosity'/%3E%3C/svg%3E"), #017AFF;
+  background-size: 100% 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 5px;
   bottom: 0;
   content: "";
   display: block;
-  height: 100%;
+  height: 80%;
   pointer-events: none;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 3%;
+  top: 10%;
   width: 20px;
 }
 
@@ -63,7 +53,7 @@
   font-size: 14px;
   margin: 0;
   outline: none;
-  padding: 5px 30px 5px 10px;
+  padding: 5px 35px 5px 10px;
   position: relative;
   width: 100%;
   color: var(--p-input-color);
