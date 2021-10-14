@@ -100,6 +100,8 @@
 --p-apple-mint-dark: rgb(102,212,207);
 --p-apple-teal: rgb(89, 173, 196);
 --p-apple-teal-dark: rgb(106, 196, 220);
+--p-apple-cyan: rgb(85,190,240);
+--p-apple-cyan-dark: rgb(90,200,245);
 --p-apple-blue: rgb(0, 122, 255);
 --p-apple-blue-dark: rgb(10, 132, 255);
 --p-apple-indigo: rgb(88, 86, 214);
@@ -109,7 +111,7 @@
 --p-apple-pink: rgb(255, 45, 85);
 --p-apple-pink-dark: rgb(255, 55, 95);
 --p-apple-brown: rgb(162, 132, 94);
---p-apple-brown: rgb(172, 142, 104);
+--p-apple-brown-dark: rgb(172, 142, 104);
 --p-apple-gray: rgb(142, 142, 147);
 --p-apple-gray-dark: rgb(152, 152, 157);
 
@@ -168,6 +170,14 @@ APPLE COLORS
   background: rgb(106, 196, 220);
 }
 
+.p-apple-cyan{
+  background: rgb(85,190,240);
+}
+
+.p-apple-cyan-dark{
+  background: rgb(90,200,245);
+}
+
 .p-apple-blue{
   background: rgb(0, 122, 255);
 }
@@ -204,7 +214,7 @@ APPLE COLORS
   background: rgb(162, 132, 94);
 }
 
-.p-apple-brown{
+.p-apple-brown-dark{
   background: rgb(172, 142, 104);
 }
 
@@ -264,6 +274,14 @@ APPLE COLORS
   color: rgb(106, 196, 220);
 }
 
+.p-apple-cyan-color{
+  color: rgb(85,190,240);
+}
+
+.p-apple-cyan-dark-color{
+  color: rgb(90,200,245);
+}
+
 .p-apple-blue-color{
   color: rgb(0, 122, 255);
 }
@@ -300,7 +318,7 @@ APPLE COLORS
   color: rgb(162, 132, 94);
 }
 
-.p-apple-brown-color{
+.p-apple-brown-dark-color{
   color: rgb(172, 142, 104);
 }
 
