@@ -264,6 +264,38 @@ pre {
   max-width: 200px;
 }
 
+.card_blur{
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.blur_elm{
+  height: 70%;
+  width: 70%;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 1%;
+  left: 1%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blur_img{
+  height: 70%;
+  width: 70%;
+  border-radius: 10px;
+  background: blue;
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  background: url('../landing-images/blur_example.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 @media (max-width: 768px){
   .sponsored{
     max-width: 100%;
