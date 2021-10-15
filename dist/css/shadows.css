@@ -1,17 +1,17 @@
 .p-shadow-1 {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.5px 1px 0.5px rgba(0, 0, 0, 0.1);
 }
 
 .p-shadow-2 {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .p-shadow-3 {
-  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .p-shadow-4 {
-  box-shadow: 0 25px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 }
 
 .p-to-shadow-4,
@@ -23,17 +23,17 @@
 }
 
 .p-to-shadow-1:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.5px 1px 0.5px rgba(0, 0, 0, 0.1);
 }
 
 .p-to-shadow-2:hover {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .p-to-shadow-3:hover {
-  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .p-to-shadow-4:hover {
-  box-shadow: 0 25px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 }
