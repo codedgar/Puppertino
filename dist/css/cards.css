@@ -19,7 +19,7 @@
 }
 .p-card:hover{
   color: var(--p-blueberry-500);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1);
 }
 .p-card.p-blueberry:hover{
   background: var(--p-bg-card);
