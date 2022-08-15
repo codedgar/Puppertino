@@ -25,7 +25,7 @@
         --text_color: #252525;
         --bg_page_color: #f5f5f5;
       }
-      .p-dark-mode{
+      .p-dark-mode, [data-p-theme=darkmode]{
         --bg_page_color: #0e0e0e;
         --text_color: #f5f5f5;
       }
@@ -68,7 +68,7 @@
 
       .main-cta h2{
         font-weight: 400;
-        margin-bottom: 20px;
+        margin-bottom: 20px;darkmode
         font-size: 30px;
       }
 
@@ -148,7 +148,7 @@
         opacity: 1;
       }
 
-      .p-dark-mode .p-white-darkmode{
+      .p-dark-mode .p-white-darkmode, [data-p-theme=darkmode] .p-white-darkmode{
         color: #fff;
       }
 
@@ -163,7 +163,7 @@
       }
 
       .puppertino-footer{
-        background: var(--p-blueberry-700);
+        background: var(--p-slate-700);
         color: #fff;
       }
 
@@ -353,7 +353,7 @@
       </div>
     </div>
 </body>
-  <script src="../src/js/Puppertino.js"></script>
+  <script src="../src/js/dakmode_manager.js"></script>
   <script defer>
     document.querySelector('.toggles_dark_mode input').addEventListener('change',function(){
       let theme = localStorage.getItem('puppertino_theme');

@@ -3,6 +3,8 @@
   --color-docs: #1d1d1f;
   --route-bg:#e6e6e6;
   --white-or-black:#fff;
+  --p-talk-bg: var(--p-silver-100);
+  --p-talk-bd: var(--p-silver-300);
 }
 .dark_theme{
   --bg-docs: #0e0e0e;
@@ -10,11 +12,13 @@
   --route-bg:#040404;
   --white-or-black:#212121;
 }
-.p-dark-mode {
+.p-dark-mode,[data-p-theme=darkmode] {
   --bg-docs: #0e0e0e;
   --color-docs: #e6e6e6;
   --route-bg:#040404;
   --white-or-black:#212121;
+  --p-talk-bg: var(--route-bg);
+  --p-talk-bd: #242424;
 }
 html {
   scroll-behavior: smooth;
@@ -47,6 +51,8 @@ code {
 }
 h1 {
   font-size: 50px;
+  font-weight: 600;
+  opacity: .9;
 }
 a {
   color: var(--primary-col-ac);
@@ -61,7 +67,19 @@ a {
   max-width: 100%;
 }
 .talk-about-it {
-  padding: 1% 5%;
+  padding: 1% 2%;
+  border: 1px solid var(--p-talk-bd);
+  border-radius: 25px;
+  background-color: var(--p-talk-bg);
+  max-width: 1450px;
+  display: block;
+  margin: auto;
+  margin-top: 100px;
+}
+.talk-about-it h2{
+  font-weight: 400;
+  font-size: 2.11rem;
+  line-height: 115%;
 }
 .cta {
   height: 50vh;
@@ -296,8 +314,14 @@ pre {
   background-repeat: no-repeat;
 }
 
+
 @media (max-width: 768px){
   .sponsored{
     max-width: 100%;
+  }
+  .talk-about-it {
+    background-color: transparent;
+    border-color: transparent;
+    margin-top: 30px;
   }
 }

@@ -1,4 +1,4 @@
-.p-dark-mode {
+.p-dark-mode, [data-p-theme=darkmode] {
 
   --p-btn-border: #454545;
   --p-btn-def-bg: #262525;

@@ -17,13 +17,6 @@
   transition: .3s ease;
   box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1);
 }
-.p-card:hover{
-  color: var(--p-blueberry-500);
-  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1);
-}
-.p-card.p-blueberry:hover{
-  background: var(--p-bg-card);
-}
 .p-card-image > img {
   border-bottom: 3px solid var(--accent-article);
   display: block;

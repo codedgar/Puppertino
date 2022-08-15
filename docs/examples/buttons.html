@@ -49,9 +49,7 @@
     <h1>Buttons</h1>
     <div class="master">
       <p>
-        Buttons are the main thing that move the interface. That's why it was
-        the main thing that was developed for Puppertino. <br />Puppertino
-        buttons support usage as links, buttons and submit elements.
+        Puppertino Buttons are available to be used as <code class="code">&#60;a></code> and <code class="code">&#60;button></code> tags, with multiple <br> extra classes to allow changing the style of the button.
       </p>
 
       <div class="talk-about-it">
@@ -111,22 +109,25 @@
           <br><br>
           You can use the colors available in <a href="/docs/examples/color_palette.html">Color palette</a> or custom colors defined in your own CSS.
         </p>
-
-        <button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success</button>
-        <button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger</button>
-        <button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error</button>
-
-                <p>Usage:</p>
-        <div class="code">
-          <pre>
-        <code class="html">
+        <div class="row">
+          <div class="col-md-6 mt-lg-5">
+            <button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success</button>
+            <button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger</button>
+            <button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error</button>
+          </div>
+          <div class="col-md-6">
+            <p>Usage:</p>
+            <div class="code">
+              <pre><code class="html">
 &#60;button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success&#60;/button>
-
+    
 &#60;button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger&#60;/button>
-
+    
 &#60;button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error&#60;/button>
-        </code>
-      </pre>
+            </code>
+          </pre>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -136,24 +137,31 @@
         <p>
           Button sizing was a very requested feature during the alpha version of Puppertino. So now, I'm bringin 4 sizes for button sizes:
         </p>
-        <a href="#" class="p-btn p-btn-mob p-btn-sm">Small size</a>
-        <a href="#" class="p-btn p-btn-mob p-btn-md">Medium size</a>
-        <a href="#" class="p-btn p-btn-mob p-btn-lg">Large size</a>
-        <a href="#" class="p-btn p-btn-mob p-btn-block">Block size</a>
+        <div class="row">
+          <div class="col-md-6 mt-lg-5">
+            <a href="#" class="p-btn p-btn-mob p-btn-sm">Small size</a>
+            <a href="#" class="p-btn p-btn-mob p-btn-md">Medium size</a>
+            <a href="#" class="p-btn p-btn-mob p-btn-lg">Large size</a>
+            <a href="#" class="p-btn p-btn-mob p-btn-block">Block size</a>
+          </div>
+        <div class="col-md-6">
+          <p>Usage:</p>
+          <div class="code">
+            <pre>
+          <code class="html">
+  &#60;a href="#" class="p-btn p-btn-sm">Small size&#60;/a>
+  
+  &#60;a href="#" class="p-btn p-btn-md">Medium size&#60;/a>
+  
+  &#60;a href="#" class="p-btn p-btn-lg">Large size&#60;/a>
+  
+  &#60;a href="#" class="p-btn p-btn-block">Block size&#60;/a>
+          </code>
+        </pre>
+        </div>
+      </div>
 
-                <p>Usage:</p>
-        <div class="code">
-          <pre>
-        <code class="html">
-&#60;a href="#" class="p-btn p-btn-sm">Small size&#60;/a>
 
-&#60;a href="#" class="p-btn p-btn-md">Medium size&#60;/a>
-
-&#60;a href="#" class="p-btn p-btn-lg">Large size&#60;/a>
-
-&#60;a href="#" class="p-btn p-btn-block">Block size&#60;/a>
-        </code>
-      </pre>
         </div>
 
       </div>
