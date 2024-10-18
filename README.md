@@ -24,7 +24,7 @@ Welcome to **Puppertino**! This framework brings the macOS look and feel to your
 To integrate Puppertino into your project, simply include the full.css file in your HTML head tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/full.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css">
 ```
 ### Customize your setup
 If you only need specific components, you can import them individually to reduce file size. Here’s how you can include only the buttons:
@@ -57,12 +57,17 @@ If you can't find a component that you want, you can always [create an issue](ht
 
 ## Examples and templates
 
-Find all the documentation, examples, and list of components and how to use them
-at https://codedgar.github.io/Puppertino/.
+Find detailed examples and templates to help you get started quickly with Puppertino.
+
+Explore the examples at [Puppertino Examples](https://codedgar.github.io/Puppertino/examples/).
 
 ## License
 
 Puppertino is open-source and available under the [open-source MIT license](https://github.com/codedgar/Puppertino/blob/master/LICENSE), allowing you to freely use and modify the framework for your projects.
+
+## Contributing
+
+We welcome contributions! If you’d like to contribute to Puppertino, check out the [Contribution Guidelines](https://github.com/codedgar/Puppertino/blob/master/CONTRIBUTING.md) to learn how to get involved.
 
 ## About the creator
 

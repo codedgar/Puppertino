@@ -8,7 +8,7 @@
       rel="stylesheet"
     />
     
-    <link rel="stylesheet" type="text/css" href="../../dist/css/newfull.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -91,20 +91,7 @@
  
 </body>
 
-  <script defer>
-    function retrieve_theme(){
-      let theme = localStorage.getItem('puppertino_theme');
-      if(theme != null){
-        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
-      }
-    }
-
-    window.addEventListener("storage",function(){
-      retrieve_theme();
-    },false);
-
-    retrieve_theme();
-   </script>
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
   <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
