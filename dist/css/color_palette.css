@@ -86,6 +86,248 @@
 --p-dark-500: #333;
 --p-dark-700: #1a1a1a;
 --p-dark-900: #000;
+
+
+--p-apple-red: rgb(255, 59 , 48);
+--p-apple-red-dark: rgb(255, 69 , 58);
+--p-apple-orange: rgb(255,149,0);
+--p-apple-orange-dark: rgb(255,159,10);
+--p-apple-yellow: rgb(255,204,0);
+--p-apple-yellow-dark: rgb(255,214,10);
+--p-apple-green: rgb(40,205,65);
+--p-apple-green-dark: rgb(40,215,75);
+--p-apple-mint: rgb(0,199,190);
+--p-apple-mint-dark: rgb(102,212,207);
+--p-apple-teal: rgb(89, 173, 196);
+--p-apple-teal-dark: rgb(106, 196, 220);
+--p-apple-cyan: rgb(85,190,240);
+--p-apple-cyan-dark: rgb(90,200,245);
+--p-apple-blue: rgb(0, 122, 255);
+--p-apple-blue-dark: rgb(10, 132, 255);
+--p-apple-indigo: rgb(88, 86, 214);
+--p-apple-indigo-dark: rgb(94, 92, 230);
+--p-apple-purple: rgb(175, 82, 222);
+--p-apple-purple-dark: rgb(191, 90, 242);
+--p-apple-pink: rgb(255, 45, 85);
+--p-apple-pink-dark: rgb(255, 55, 95);
+--p-apple-brown: rgb(162, 132, 94);
+--p-apple-brown-dark: rgb(172, 142, 104);
+--p-apple-gray: rgb(142, 142, 147);
+--p-apple-gray-dark: rgb(152, 152, 157);
+
+}
+
+
+/*
+APPLE COLORS
+*/
+
+.p-apple-red{
+  background: rgb(255, 59 , 48);
+}
+
+.p-apple-red-dark{
+  background: rgb(255, 69 , 58);
+}
+
+.p-apple-orange{
+  background: rgb(255,149,0);
+}
+
+.p-apple-orange-dark{
+  background: rgb(255,159,10);
+}
+
+.p-apple-yellow{
+  background: rgb(255,204,0);
+}
+
+.p-apple-yellow-dark{
+  background: rgb(255,214,10);
+}
+
+.p-apple-green{
+  background: rgb(40,205,65);
+}
+
+.p-apple-green-dark{
+  background: rgb(40,215,75);
+}
+
+.p-apple-mint{
+  background: rgb(0,199,190);
+}
+
+.p-apple-mint-dark{
+  background: rgb(102,212,207);
+}
+
+.p-apple-teal{
+  background: rgb(89, 173, 196);
+}
+
+.p-apple-teal-dark{
+  background: rgb(106, 196, 220);
+}
+
+.p-apple-cyan{
+  background: rgb(85,190,240);
+}
+
+.p-apple-cyan-dark{
+  background: rgb(90,200,245);
+}
+
+.p-apple-blue{
+  background: rgb(0, 122, 255);
+}
+
+.p-apple-blue-dark{
+  background: rgb(10, 132, 255);
+}
+
+.p-apple-indigo{
+  background: rgb(88, 86, 214);
+}
+
+.p-apple-indigo-dark{
+  background: rgb(94, 92, 230);
+}
+
+.p-apple-purple{
+  background: rgb(175, 82, 222);
+}
+
+.p-apple-purple-dark{
+  background: rgb(191, 90, 242);
+}
+
+.p-apple-pink{
+  background: rgb(255, 45, 85);
+}
+
+.p-apple-pink-dark{
+  background: rgb(255, 55, 95);
+}
+
+.p-apple-brown{
+  background: rgb(162, 132, 94);
+}
+
+.p-apple-brown-dark{
+  background: rgb(172, 142, 104);
+}
+
+.p-apple-gray{
+  background: rgb(142, 142, 147);
+}
+
+.p-apple-gray-dark{
+  background: rgb(152, 152, 157);
+}
+
+.p-apple-red-color{
+  color: rgb(255, 59 , 48);
+}
+
+.p-apple-red-dark-color{
+  color: rgb(255, 69 , 58);
+}
+
+.p-apple-orange-color{
+  color: rgb(255,149,0);
+}
+
+.p-apple-orange-dark-color{
+  color: rgb(255,159,10);
+}
+
+.p-apple-yellow-color{
+  color: rgb(255,204,0);
+}
+
+.p-apple-yellow-dark-color{
+  color: rgb(255,214,10);
+}
+
+.p-apple-green-color{
+  color: rgb(40,205,65);
+}
+
+.p-apple-green-dark-color{
+  color: rgb(40,215,75);
+}
+
+.p-apple-mint-color{
+  color: rgb(0,199,190);
+}
+
+.p-apple-mint-dark-color{
+  color: rgb(102,212,207);
+}
+
+.p-apple-teal-color{
+  color: rgb(89, 173, 196);
+}
+
+.p-apple-teal-dark-color{
+  color: rgb(106, 196, 220);
+}
+
+.p-apple-cyan-color{
+  color: rgb(85,190,240);
+}
+
+.p-apple-cyan-dark-color{
+  color: rgb(90,200,245);
+}
+
+.p-apple-blue-color{
+  color: rgb(0, 122, 255);
+}
+
+.p-apple-blue-dark-color{
+  color: rgb(10, 132, 255);
+}
+
+.p-apple-indigo-color{
+  color: rgb(88, 86, 214);
+}
+
+.p-apple-indigo-dark-color{
+  color: rgb(94, 92, 230);
+}
+
+.p-apple-purple-color{
+  color: rgb(175, 82, 222);
+}
+
+.p-apple-purple-dark-color{
+  color: rgb(191, 90, 242);
+}
+
+.p-apple-pink-color{
+  color: rgb(255, 45, 85);
+}
+
+.p-apple-pink-dark-color{
+  color: rgb(255, 55, 95);
+}
+
+.p-apple-brown-color{
+  color: rgb(162, 132, 94);
+}
+
+.p-apple-brown-dark-color{
+  color: rgb(172, 142, 104);
+}
+
+.p-apple-gray-color{
+  color: rgb(142, 142, 147);
+}
+
+.p-apple-gray-dark-color{
+  color: rgb(152, 152, 157);
 }
 
 .p-strawberry {

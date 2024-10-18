@@ -1,84 +1,69 @@
+
 ![Puppertino Stars](https://img.shields.io/github/stars/codedgar/puppertino?style=for-the-badge) ![Puppertino's contributors](https://img.shields.io/github/contributors/codedgar/puppertino?style=for-the-badge)   [![Follow Puppertino_css](https://img.shields.io/twitter/follow/Puppertino_css?style=for-the-badge)](https://twitter.com/Puppertino_css) [![Follow Codedgar_dev](https://img.shields.io/twitter/follow/codedgar_dev?style=for-the-badge)](https://twitter.com/codedgar_dev)
 ![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
 
-# Welcome to Puppertino V 1.0!
+# Welcome to Puppertino Siberian by Codedgar
 
-Hi! Welcome to **Puppertino!** Puppertino is a framework meant to mimic the look
-of **macOS** and follow the **human guidelines**. Puppertino is a Framework
-created to be lightweight, modular, and cool looking!
 
-> **NOTE**: Puppertino does not include any responsive system, you must use
-> Bootstrap, Flexbox Grid, Skeleton, or some other responsive Framework along
-> with it.
+Welcome to **Puppertino**! This framework brings the macOS look and feel to your web applications, adhering closely to Apple’s Human Interface Guidelines. Designed to be lightweight and modular, Puppertino provides a seamless user experience with a focus on performance and style.
 
-## In a nutshell
+## Key Framework Features
+- **Lightweight**: Puppertino is built with performance in mind. By avoiding unnecessary additions or dependencies, Puppertino ensures your website or app remains fast and responsive. You get the macOS-inspired design without compromising on speed and efficiency.
+- **Modular**: Flexibility is at the heart of Puppertino. Whether you need the entire framework or just specific components, you can pick and choose what fits your project. This modular approach allows you to minimize the size of your website, ensuring that you only include what’s necessary.
+- **Design-Focused**: Puppertino is not just about functionality—it’s about looking cool too! Inspired by macOS, the framework prioritizes a sleek and modern design, with room for creative enhancements beyond macOS guidelines when needed.
 
-- [Components](#current-components)
-- [Usage](#usage)
-- [Documentation](https://codedgar.github.io/Puppertino/examples/)
+## Table of contents
+
+- [Get Started](#get-started)
+- [Current Components](#current-components)
+- [Examples and templates](https://codedgar.github.io/Puppertino/examples/)
 - [About the creator](#about-the-creator)
 
-## Lightweight
+## Get Started
 
-I'm focused on making Puppertino as Lightweight as possible, I want it to become
-a big framework, but not at the cost of weight and performance. So to keep it
-small, I won't be adding AnimateCSS, or any other framework (No matter how cool
-it is) on top of Puppertino. And to make it more lightweight, I have implemented
-my second point.
+To integrate Puppertino into your project, simply include the full.css file in your HTML head tag:
 
-## Modular
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/full.css">
+```
+### Customize your setup
+If you only need specific components, you can import them individually to reduce file size. Here’s how you can include only the buttons:
 
-I'm developing Puppertino to be used with only the components you need or to be
-used as a complete framework. Choosing the components that you need may help you
-throw some extra KB that you don't need in your website or app.
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/buttons.css">
+```
 
-## Cool looking
+You can also find the full list of individual components and their CDN links on the [Components page](https://codedgar.github.io/Puppertino/examples/).
 
-This is the most important part of Puppertino! This also means that I can go out
-of the main components of macOS and human guidelines in the future to add other
-things that I think maybe necessary or great to have in the framework. In any
-case, coolness, it's my main focus with Puppertino.
 
-# Current Components
+## Current Components
 
-Puppertino currently includes:
+Puppertino currently includes the following components:
 
-- Buttons
-- Switches
-- Actions
-- Form Elements (Inputs, select, form validation)
+- Buttons (Push, Icon, Action)
 - Modals
-- Icons
-- Font Layout
+- Forms and Inputs
+- Layout
+- Official Apple Colors
 - Segmented Controls
+- Shadows & Blur
 - Tabs
-- Shadows
-- NEW! Dark Mode
-- Color Palette
+- Navigation Bars
+- Dark Mode Manager
 
-Yeah... That's all. But no worries! I'm working on adding new components every day!
+For a full list and detailed usage instructions, check out the [Components page](https://codedgar.github.io/Puppertino/examples/).
 
-# Usage
+If you can't find a component that you want, you can always [create an issue](https://github.com/codedgar/Puppertino/issues/new/choose) to vote for the new components.
 
-You can use Puppertino in 3 ways (for now):
-
-1. You can download the `newfull.css` file located in the `/dist/` directory.
-   Download this if you are sure that you need at least half of the elements
-   that are present in Puppertino.
-2. Download every component CSS that you need from the `/dist/` folder. Such as
-   buttons or form elements or other components. While it maybe tedious to
-   download  them one by one, this can help you to save some KBs in your website. :)
-3. ~~You can now download the SCSS version of Puppertino, also located in `/dist/`.~~ **(Deprecated)**
-
-# Docs
+## Examples and templates
 
 Find all the documentation, examples, and list of components and how to use them
 at https://codedgar.github.io/Puppertino/.
 
 ## License
 
-Puppertino is free to use and abuse under the [open-source MIT license](https://github.com/codedgar/Puppertino/blob/master/LICENSE).
+Puppertino is open-source and available under the [open-source MIT license](https://github.com/codedgar/Puppertino/blob/master/LICENSE), allowing you to freely use and modify the framework for your projects.
 
 ## About the creator
 
-I'm [Edgar Pérez](https://twitter.com/codedgar_dev). And I make cool websites :)
+Puppertino was developed by [Edgar Pérez](https://codedgar.com/), a web developer passionate about creating clean, elegant web experiences. As the framework continues to evolve, more features and components will be added—so stay tuned for regular updates!

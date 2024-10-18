@@ -12,7 +12,7 @@
 .p-btn {
   background: var(--p-btn-def-bg);
   border: 1px solid var(--p-btn-border);
-  border-radius: 10px; /* Match the secondary button's roundness */
+  border-radius: 10px;
   color: var(--p-btn-def-col);
   display: inline-block;
   font-family: -apple-system, "Inter", sans-serif;
@@ -63,7 +63,7 @@
 }
 
 .p-prim-col {
-  position: relative; /* To enable ::before element positioning */
+  position: relative; 
   background: #007AFF;
   border: none;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.41), 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
@@ -155,4 +155,4 @@
   border-color: currentColor;
   border-style: dashed;
   box-shadow: none;
-}
+} 

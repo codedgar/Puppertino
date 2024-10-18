@@ -8,7 +8,7 @@
       rel="stylesheet"
     />
     
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/newfull.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -137,10 +137,67 @@
       <div class="talk-about-it" id="modifier">
         <h2>How to use manual.</h2>
         <p>
-          Manual will require you to create your own JS to toggle the class according to your needs (Examples will be added in 1.02). For the moment, if you do not wish to do any JS, we recommend you to do the automatic one. Is simple to use and it only requires one class.
-        </p>
+          <h3>Getting Started</h3>
+          <p><strong>1. Initializing PuppertinoThemeMan</strong></p>
+          <p>To get started, initialize <code class="code">PuppertinoThemeMan</code> by calling the <code class="code">init()</code> function. This setup allows you to customize theme behavior, including auto-detection based on system preferences.</p>
+          <div class="code">
+          <pre>
+<code class="js">
+  puppertinoThemeMan.init({
+    autoDetect: true, // Automatically detect system theme
+    darkThemeClass: 'p-dark-mode' // Your custom dark theme class (optional)
+  });  
+</code>
+        </pre>
       </div>
+      <h3>Options:</h3>
+      <ul>
+        <li>
+          <strong>autoDetect:</strong> Enable automatic detection of the system's preferred color scheme. If set to true, <code class="code">PuppertinoThemeMan</code> will adjust based on the system's light or dark mode.
+        </li>
+        <li>
+          <strong>darkThemeClass:</strong> Define the class name for the dark mode (defaults to <strong>p-dark-mode</strong>). Customize this if you’re using a different class for your dark theme styles.
+        </li>
+      </ul>
+      <h3>
+        2. Toggling Themes
+      </h3>
+      <p>Easily switch between light and dark themes using the <code class="code">toggle()</code> function. This function will apply the correct theme class and store the user’s selection for future visits.</p>
+      <div class="code">
+        <pre>
+<code>
+  puppertinoThemeMan.toggle();
+</code>
+      </pre>
+    </div>
+    <p>When this function is called, PuppertinoThemeMan will:</p>
+    <ul>
+      <li>Add or remove the dark theme class from the document’s body.</li>
+      <li>Save the user’s selection in <code class="code">localStorage</code> to remember the preference across sessions.</li>
+    </ul>
 
+    <h3>3. System Theme Auto-Detection</h3>
+    <p>If enabled in the <code class="code">init()</code> options, PuppertinoThemeMan can automatically switch to light or dark mode based on the user’s system preferences. This ensures a seamless experience aligned with the user’s device settings.</p>
+    <ul>
+      <li>The detection is powered by the prefers-color-scheme media query.</li>
+      <li>PuppertinoThemeMan will listen for changes to this setting and adjust the theme accordingly.</li>
+    </ul>
+    <h3>4. Consistency Across Tabs</h3>
+    <p>PuppertinoThemeMan synchronizes theme changes across multiple tabs. If a user changes their theme in one tab, the new theme will automatically apply to all open tabs in the same browser.
+      <br><br>
+      No extra configuration is needed—this behavior is built into PuppertinoThemeMan, ensuring a unified user experience.
+      </p>
+    <h3>5. Checking the Current Theme</h3>
+    <p>You can check whether the dark theme is active by using the isDarkThemeActive() function. This function returns true if the dark theme is currently applied.</p>
+    <div class="code">
+      <pre>
+<code>
+  const isDarkMode = puppertinoThemeMan.isDarkThemeActive();
+</code>
+    </pre>
+  </div>
+  <p>This allows you to tailor additional features based on the active theme.</p>
+    </div>
       <div class="talk-about-it" id="modifier">
         <h2>Under the hood.</h2>
         <p>

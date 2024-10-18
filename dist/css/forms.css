@@ -3,6 +3,11 @@
   --primary-col-ac:#0f75f5;
   --bg-color-input:#fff;
 
+  --p-checkbox-gradient: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+  --p-checkbox-border: rgba(0, 0, 0, 0.2);
+  --p-checkbox-border-active: rgba(0, 0, 0, 0.12);
+  --p-checkbox-bg: transparent;
+  --p-checkbox-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.15), inset 0px 0px 2px rgba(0, 0, 0, 0.05);
 
   --p-input-bg:#fff;
   --p-input-color:#000;
@@ -14,6 +19,15 @@
   --bg-front-col:#000;
   --invalid-color:#d6513c;
   --valid-color:#94d63c;
+}
+
+.p-dark-mode{
+  --p-checkbox-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.13) 100%);
+  --p-checkbox-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25), inset 0px 0.5px 0px rgba(255, 255, 255, 0.15);
+  --p-checkbox-border: rgba(0, 0, 0, 0);
+
+  --p-checkbox-gradient:  linear-gradient(180deg, #3168DD 0%, #2C5FC8 100%);
+  --p-checkbox-border-active: rgba(0, 0, 0, 0);
 }
 
 .p-form-select {
@@ -28,30 +42,20 @@
   outline: 2px solid #64baff;
 }
 
-.p-form-select::before {
-  border-color: #fff transparent transparent;
-  border-style: solid;
-  border-width: 5px;
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  right: 5px;
-  top: calc(50% - 3px);
-  z-index: 3;
-}
-
 .p-form-select::after {
-  background: linear-gradient(to bottom, #4fc5fa 0%, #0f75f5 100%);
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  background: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 12'%3E%3Cpath d='M.288 4.117 3.16 1.18c.168-.168.336-.246.54-.246a.731.731 0 0 1 .538.246L7.108 4.12c.125.121.184.27.184.45 0 .359-.293.656-.648.656a.655.655 0 0 1-.48-.211L3.701 2.465l-2.469 2.55a.664.664 0 0 1-.48.212.656.656 0 0 1-.465-1.11Zm3.41 7.324a.73.73 0 0 0 .54-.246l2.87-2.941a.601.601 0 0 0 .184-.45.656.656 0 0 0-.648-.656.677.677 0 0 0-.48.211L3.701 9.91 1.233 7.36a.68.68 0 0 0-.48-.212.656.656 0 0 0-.465 1.11l2.871 2.937c.172.168.336.246.54.246Z' fill='white' style='mix-blend-mode:luminosity'/%3E%3C/svg%3E"), #017AFF;
+  background-size: 100% 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 5px;
   bottom: 0;
   content: "";
   display: block;
-  height: 100%;
+  height: 80%;
   pointer-events: none;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 3%;
+  top: 10%;
   width: 20px;
 }
 
@@ -63,7 +67,7 @@
   font-size: 14px;
   margin: 0;
   outline: none;
-  padding: 5px 30px 5px 10px;
+  padding: 5px 35px 5px 10px;
   position: relative;
   width: 100%;
   color: var(--p-input-color);
@@ -218,12 +222,11 @@ textarea.p-form-text {
   height: 20px;
   margin-right: 5px;
   position: relative;
-  transition: background 0.2s;
+  transition: 0.2s;
   width: 20px;
 }
 
-.p-form-radio-cont:hover > input + span,
-.p-form-checkbox-cont:hover > input + span {
+.p-form-radio-cont:hover > input + span{
   background: #f9f9f9;
 }
 
@@ -260,44 +263,37 @@ textarea.p-form-text {
 
 .p-form-checkbox-cont > input + span {
   border-radius: 5px;
+  box-shadow: var(--p-checkbox-shadow);
+  border: 0.5px solid var(--p-checkbox-border);
+  background: var(--p-checkbox-bg)
 }
 
 .p-form-checkbox-cont > input:checked + span {
-  background: #0f75f5;
+  background: var(--p-checkbox-gradient);
+  border: 0.5px solid var(--p-checkbox-border-active);
+  box-shadow: none;
 }
 
-.p-form-checkbox-cont > input + span::before,
-.p-form-checkbox-cont > input + span::after {
-  background: #fff;
-  border-radius: 20px;
+.p-form-checkbox-cont > input + span::before{
   content: "";
   display: block;
-  height: 8%;
+  height: 100%;
+  width: 100%;
   position: absolute;
+  left: 0%;
+  top: 0%;
   opacity: 0;
   transition: opacity 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg filter='url(%23a)'%3E%3Cpath d='m2 5 2.25 2.5L8.5 1' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3Cdefs%3E%3Cfilter id='a' x='.75' y='.25' width='9' height='9' filterUnits='userSpaceOnUse' color-interpolation-filters='sRGB'%3E%3CfeFlood flood-opacity='0' result='BackgroundImageFix'/%3E%3CfeColorMatrix in='SourceAlpha' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0' result='hardAlpha'/%3E%3CfeOffset dy='.5'/%3E%3CfeGaussianBlur stdDeviation='.25'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0'/%3E%3CfeBlend in2='BackgroundImageFix' result='effect1_dropShadow_201_11690'/%3E%3CfeBlend in='SourceGraphic' in2='effect1_dropShadow_201_11690' result='shape'/%3E%3C/filter%3E%3C/defs%3E%3C/svg%3E");
+  background-size: 70%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.p-form-checkbox-cont > input:checked + span::before,
-.p-form-checkbox-cont > input:checked + span::after {
+.p-form-checkbox-cont > input:checked + span::before{
   opacity: 1;
 }
 
-.p-form-checkbox-cont > input + span::before {
-  right: 30%;
-  top: 15%;
-  transform: rotate(-65deg);
-  transform-origin: top right;
-  width: 70%;
-}
-
-.p-form-checkbox-cont > input + span::after {
-  left: 30%;
-  top: 43%;
-  transform: rotate(59deg);
-  transform-origin: top left;
-  width: 40%;
-}
 
 .p-form-checkbox-cont > input[disabled] + span,
 .p-form-radio-cont > input[disabled] ~ span
@@ -465,92 +461,3 @@ textarea.p-form-text {
   filter: grayscale(1) opacity(.3);
   pointer-events: none;
 }
-
-
-
-/* LEGACY (WILL BE REMOVED ON FUTURE UPDATES) */
-input[type=range].p-form-range {
-  width: 100%;
-  margin: 11.5px 0;
-  background-color: transparent;
-  -webkit-appearance: none;
-}
-input[type=range].p-form-range:focus {
-  outline: none;
-}
-input[type=range].p-form-range::-webkit-slider-runnable-track {
-  background: var(--p-input-color);
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-webkit-slider-thumb {
-  margin-top: -11.5px;
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid rgba(115, 115, 115, 0.6);
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
-  -webkit-appearance: none;
-}
-input[type=range].p-form-range:focus::-webkit-slider-runnable-track {
-  background: #d7d7d7;
-}
-input[type=range].p-form-range::-moz-range-track {
-  background: var(--p-input-color);
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid rgba(115, 115, 115, 0.6);
-  border-radius: 30px;
-  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-}
-input[type=range].p-form-range::-ms-track {
-  background: transparent;
-  border-color: transparent;
-  border-width: 26.5px 0;
-  color: transparent;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-}
-input[type=range].p-form-range::-ms-fill-lower {
-  background: #bdbdbd;
-  border: 0;
-}
-input[type=range].p-form-range::-ms-fill-upper {
-  background: var(--p-input-color);
-  border: 0;
-}
-input[type=range].p-form-range::-ms-thumb {
-  width: 25px;
-  height: 25px;
-  background: #ffffff;
-  border: 1px solid rgba(115, 115, 115, 0.6);
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 8px rgba(0, 0, 0, 0.15);
-  margin-top: 0px;
-}
-input[type=range].p-form-range:focus::-ms-fill-lower {
-  background: var(--p-input-color);
-}
-input[type=range].p-form-range:focus::-ms-fill-upper {
-  background: #d7d7d7;
-}
-@supports (-ms-ime-align:auto) {
-  input[type=range].p-form-range {
-    margin: 0;
-  }
-}
-
