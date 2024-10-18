@@ -2,55 +2,40 @@
 <html lang="en">
   <head>
     <title>Home - Puppertino Framework</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Inter:wght@100;400;500;900:500,800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+    
+    <link rel="stylesheet" type="text/css" href="../dist/css/newfull.css" />
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
-    />
+    <link rel="stylesheet" href="./index-assets/bootstrap-utilities.css">
+    <link rel="stylesheet" href="./index-assets/bootstrap-grid.min.css">
     <meta
       name="description"
       content="Have you ever thought: Man, I would love a macOS based Framework? Fear not, Puppertino is here!"
     />
     <link rel="icon" type="image/png" href="landing-images/doggo.png" />
     <style type="text/css">
+      @import url('https://rsms.me/inter/inter.css');
+      html { font-family: 'Inter', sans-serif; }
+      @supports (font-variation-settings: normal) {
+        html { font-family: 'Inter var', sans-serif; }
+      }
+
       :root {
         --text_color: #252525;
         --bg_page_color: #f5f5f5;
       }
-      .p-dark-mode{
-        --bg_page_color: #252525;
+      .p-dark-mode, [data-p-theme=darkmode]{
+        --bg_page_color: #0e0e0e;
         --text_color: #f5f5f5;
       }
       body {
         margin: 0px;
         --font:  -apple-system, "Inter", sans-serif;
         background: var(--bg_page_color);
+        transition: .5s ease;
       }
-      img {
-        display: block;
-        margin: auto;
-        max-width: 100%;
-      }
-      .text_black {
-        color: var(--text_color);
-      }
-      .cta_pupper {
-        min-height: 100vh;
-        background: url("landing-images/pupper_cta.jpg"), #000;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: 50% -30%;
-      }
+
       h1,
       h2,
       h3,
@@ -58,68 +43,198 @@
       a,
       p {
         font-family: -apple-system, "Inter", sans-serif;
+        color: var(--text_color);
+        transition: .5s ease;
       }
-      h1 {
-        padding-top: 20vh;
-        padding-left: 5vw;
-        padding-right: 3vw;
-        margin-top: 0;
-        margin-bottom: 10px;
-        display: block;
-        color: white;
-        font-size: 4rem;
+
+      h1{
+        font-size: 70px;
+        font-weight: 700;
+        margin:0;
       }
-      h2 {
-        font-size: 50px;
+
+      .main-cta{
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 80vh;
+          background: url('./landing-images/Puppertino_Main_Image.jpg'), rgba(0,0,0,0.3);
+          background-blend-mode: overlay;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: bottom center;
       }
-      p {
+
+      .main-cta h2{
+        font-weight: 400;
+        margin-bottom: 20px;
+        font-size: 30px;
+        color: #fff;
+      }
+
+      .main-cta img{
+          margin-top: 100px;
+      }
+      
+      .main-cta h1{
+        color: #fff;
+      }
+
+      .p-link{
+          text-decoration: none;
+          
+      }
+
+      .mt-20px{
+          margin-top: 10px;
+          display: inline-block;
+      }
+
+      .mt-100{
+        margin-top: 100px;
+      }
+
+      .mb-100{
+        margin-bottom: 100px;
+      }
+
+      .b-25{
+        border-radius: 25px;
+      }
+
+      .p-btn{
         font-size: 20px;
       }
-      .cta_pupper p {
-        color: white;
-        padding: 0px 10vw;
+
+      .learn-more-link{
+          margin:0;
       }
-      .cta_pupper {
-        text-align: center;
+
+      sup{
+        font-size: 1.5rem;
       }
-      .p-link {
-        color: #f5f5f5;
-        font-size: 15px;
-        text-decoration: none;
+
+      .dark-mode-show{
+        width:100%;
+        height: 473px;
+        position: relative;
+        overflow: hidden;
       }
-      .p-link:hover {
-        text-decoration: underline;
-      }
-      .title {
-        text-align: center;
-        display: block;
-        width: 100%;
-      }
-      .speed_boye {
-        min-height: 30vh;
-        background: url("landing-images/speed.jpg");
+
+      .dark-mode-show::before{
+        content: '';
+        background: url('https://images.unsplash.com/photo-1518155317743-a8ff43ea6a5f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
-        padding: 15vh 3vw;
+        position: absolute;
+        top:0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
       }
-      .container-no-pad .row {
-        margin: 0px;
+
+      .dark-mode-show::after{
+        content: '';
+        background: url('https://images.unsplash.com/photo-1609699068536-72103600c53e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        top:0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: .5s ease;
       }
-      .speed_h2,
-      .speed_p {
-        color: #f5f5f5;
-        text-shadow: 0 3px 2px rgba(0, 0, 0, 0.5);
+
+      .p-dark-mode .dark-mode-show::after{
+        opacity: 1;
       }
-      .speed_h2 {
-        margin-bottom: 10px;
+
+      .p-dark-mode .p-white-darkmode, [data-p-theme=darkmode] .p-white-darkmode{
+        color: #fff;
       }
-      .speed_p {
-        margin: 0;
+
+      #puppertino_speed{
+        background: url('./landing-images/Fast Loading Puppertino.jpg'),  rgba(0,0,0,0.3);
+        background-blend-mode: overlay;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center ;
+        padding: 0px;
+        padding: 100px 0px;
       }
-      .pad_5 {
-        padding: 10vh 0vw 20vh;
+
+      .puppertino-footer{
+        background: var(--p-slate-700);
+        color: #fff;
       }
+
+      .puppertino-footer p,
+      .puppertino-footer a{
+        color: #fff;
+      }
+
+      p sup{
+        font-size: 10px;
+      }
+
+      .p-form-switch span{
+        border: 1px solid var(--p-bd-card);
+      }
+
+      .puppertino-footer .footer-links a{
+        width: fit-content;
+        margin-top: 5px;
+      }
+
+      @media (max-width: 768px){
+        h1{
+          font-size: 34px;
+        }
+
+        .container{
+          padding: 0;
+        }
+        .row{
+          margin-left:0;
+          margin-right:0;
+        }
+
+        .dark-mode-show{
+          height: 273px;
+        }
+
+        .main-cta{
+          padding: 20px;
+          height: 70vh;
+          background-position: bottom right;
+        }
+
+        .mt-100{
+          margin-top: 50px;
+        }
+        .main-cta h2{
+          font-size: 20px;
+        }
+
+        .main-cta h1{
+          font-size: 47px;
+        }
+      }
+
+      @media (min-width: 1919px){
+        .container{
+          max-width: 1600px;
+        }
+      }
+
+      .mw-780{
+        max-width: 780px;
+      }
+
     </style>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
@@ -131,93 +246,155 @@
       gtag('config', 'UA-176821843-1');
     </script>
   </head>
-  <body>
-    <div class="cta_pupper">
-      <h1>Your websites. Better.</h1>
-      <p>
-        Separate yourself from the rest. Create something unique with
-        <span>Puppertino</span>
-      </p>
-      <a
-        href="https://github.com/codedgar/Puppertino"
-        class="p-btn p-prim-col p-btn-round"
-        >Learn more</a
-      >
-      <a href="examples" class="p-link">Read the docs</a>
+<body>
+  <div class="main-cta">
+    <div class="container">
+      <div class="row">
+          <div class="col-md-10">
+            <div class="mw-780">
+              <h1>Puppertino Siberian: <br> Frosted Precision</h1>
+              <h2>A new era of web design, blending speed and style with Apple's human guidelines.</h2>
+              <div class="d-block d-md-flex align-items-center text-center">
+                <a href="https://github.com/codedgar/Puppertino" class="d-block d-md-inline-block p-btn p-prim-col">Download</a>
+                <a href="examples" class="d-block d-md-inline-block p-link p-silver-100-color p-white-darkmode p-footnote learn-more-link">Read the docs</a>
+              </div>
+          </div>
+          </div>
+      </div>
     </div>
-    <div class="container-no-pad pad_5" id="what">
-      <div class="row around-xs middle-xs">
-        <h2 class="title text_black">More than a framework</h2>
-        <div class="col-xs-11 col-md-3" data-aos="fade-in">
-          <img src="landing-images/apple.png" />
-        </div>
-        <div class="col-xs-11 col-md-5">
-          <p class="text_black">
-            Puppertino is a framework designed based on the
-            <strong>Human guidelines</strong> and
-            <strong>iOS and macOS</strong> from Apple, while adding our
-            flavor to the mix.<br /><br />
-            That doesn't mean that it's a direct rip-off of everything you would
-            find in the Human Guidelines. We work hard to feature components
-            that will be necessary   to build apps or websites.<br /><br />Puppertino
-            is built to work with any framework available, so if you use
-            <strong
-              >Bootstrap, Bulma, Flexbox Grid, Skeleton, or any
-              framework</strong
-            >, you should still be able to use Puppertino without problems.<br /><br />Last
-            but not least, Puppertino is <strong>modular</strong>, so if you
-            only want buttons or form elements, you can just use them.
+  </div>
+
+
+    <div class="container mt-100">
+      <div class="row align-items-center justify-content-around">
+        <div class="col-md-5">
+          <h1>All about Style<sup>(css)</sup> </h1>
+          <p>Welcome to <strong>Puppertino Siberian</strong>, a CSS framework designed to bridge the gap between the web and native macOS apps, delivering stunning interfaces that blend seamlessly into Apple's design language.
+            <br><br>
+            With Puppertino, developers and designers can effortlessly craft pixel-perfect websites and apps that look and feel like native experiences on macOS. Its curated design system simplifies your workflow, allowing you to focus on functionality while giving you the freedom to personalize every element to fit your brand.
           </p>
+        </div>
+        <div class="col-md-5 mt-4 mt-md-0">
+          <img class="w-100 b-25" src="https://images.unsplash.com/photo-1606818855637-f637cdb124b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80" alt="">
         </div>
       </div>
     </div>
-    <div class="speed_boye container-no-pad">
-      <div class="row">
-        <div class="col-xs-11 col-md-offset-1 col-md-5">
-          <h2 class="speed_h2">Focused on speed.</h2>
-          <p class="speed_p">
-            Puppertino weighs less than 50KB, making your website shine even in
-            the worst connections.
+
+    <div class="container mt-100">
+      <div class="row align-items-center justify-content-around">
+        <div class="col-md-5">
+          <img class="w-100 b-25" src="https://images.unsplash.com/photo-1494947665470-20322015e3a8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="">
+        </div>
+        <div class="col-md-5 mt-4 mt-md-0">
+          <h1>It's Modular</h1>
+          <p>
+            With Puppertino Siberian, you’re in complete control. It’s designed to be fully modular, allowing you to import only the components you need. Don’t need the Layout CSS? Simply leave it out! Customize your app’s design with precision and efficiency, integrating only the styles that matter to your project.
+            <br><br>
+            By using only what’s essential, your app will load faster, perform better, and—most importantly—look incredible throughout the process. 
           </p>
         </div>
       </div>
     </div>
 
-    <div class="container-no-pad pad_5">
-      <h2 class="title text_black">Enhance your apps.</h2>
-      <div class="row around-xs">
-        <div class="col-xs-11 col-md-5">
-          <p class="text_black">
-            If you are creating WebApps, you can use Puppertino to make your
-            apps look more like a native app without having to style a lot of
-            things.<br /><br />
-            And if you are creating a website for a macOS / iOS app, Puppertino
-            can help you make it look nice without having to import a big
-            framework.<br /><br />Don't know where to start? Check these:
+    <div class="container mt-100">
+      <div class="row align-items-center justify-content-around"  id="darkmode-enter">
+        <div class="col-md-5">
+          <label class="p-form-switch toggles_dark_mode">
+            <input type="checkbox">
+            <span></span>
+          </label>
+          <h1>Dark Mode?<br> Of course.</h1>
+          <p>Puppertino comes ready with theming options, offering both dark and light versions using pure CSS. This allows you to seamlessly reuse colors and elements across both themes.
+            <br><br>
+            Easily integrate dark mode into your websites and apps with Puppertino's built-in Dark Mode Manager. It includes features like tab synchronization, user preference detection, and more, making it effortless to enhance the user experience across different environments.
           </p>
-          <a href="examples" class="p-btn p-prim-col">Examples</a>
-          <a href="examples" class="p-btn">Documentation</a>
         </div>
-        <div class="col-xs-11 col-md-5">
-          <img src="landing-images/devices.png" />
+        <div class="col-md-5 mt-4 mt-md-0">
+          <div class="dark-mode-show b-25"></div>
         </div>
       </div>
     </div>
- 
+
+    <div class="container-fluid mt-100 p-0">
+      <div class="row m-0" id="puppertino_speed">
+        <div class="col-md-5 offset-md-1">
+          <h1 class="p-white-color">Your users won't see it coming</h1>
+          <p class="p-white-color mt-4">Puppertino is built for speed. Like, really fast. Every line of CSS is carefully crafted to ensure maximum efficiency, so your website or app runs as smoothly as a Siberian Husky sprinting through the snow. Puppertino keeps your project fast and sleek, delivering stunning visuals without compromising performance.          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-100 mb-100">
+      <div class="row align-items-center justify-content-center text-center">
+        <div class="col-md-7">
+          <h1>What are you waiting for? Let's get to it!</h1>
+          <p class="mt-5">Husky references aside, Puppertino is the CSS framework that simplifies bringing that Apple-inspired style to your project. Updated monthly, it’s packed with everything you need to make your website or app look stunning from the get-go.</p>
+          <div class="d-block d-md-flex align-items-center justify-content-center">
+            <a href="https://github.com/codedgar/Puppertino" class="d-block d-md-inline-block p-btn p-prim-col">Download</a>
+            <a href="examples" class="d-block d-md-inline-block p-link p-slate-700-color p-white-darkmode p-footnote learn-more-link">Read the docs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid p-0 m-0">
+      <div class="row m-0">
+        <div class="puppertino-footer pt-5">
+          <div class="container">
+            <div class="row footer-links justify-content-around">
+              <div class="col-md-3">
+                <p><strong>The basics</strong></p>
+                <a href="examples/getting-started.html" class="d-block">Getting Started</a>
+                <a href="examples/buttons.html" class="d-block">Buttons</a>
+                <a href="examples/forms.html" class="d-block">Forms</a>
+              </div>
+              <div class="col-md-3">
+                <p><strong>Interactive Elements</strong></p>
+                <a href="examples/modals.html" class="d-block">Modals</a>
+                <a href="examples/tabs.html" class="d-block">Tabs</a>
+                <a href="examples/actions.html" class="d-block">Actions</a>
+                <a href="examples/segmented_controls.html" class="d-block">Segmented Controls</a>
+              </div>
+              <div class="col-md-3">
+                <p><strong>Decorative Elements</strong></p>
+                <a href="examples/layout.html" class="d-block">Layout</a>
+                <a href="examples/icons.html" class="d-block">Icons</a>
+                <a href="examples/shadows.html" class="d-block">Shadows & Blur</a>
+                <a href="examples" class="d-block">View All</a>
+              </div>
+              <div class="col-md-3">
+                <p><strong>Theming</strong></p>
+                <a href="examples/colors.html" class="d-block">Colors</a>
+                <a href="examples/dark_mode.html" class="d-block">Dark Mode</a>
+                <a href="examples/theming.html" class="d-block">Theming</a>
+                <a href="#" class="d-block">Advanced Theming</a>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <p>Puppertino is not associated in any way with Apple Inc. <sup>(But could be, hmu Apple)</sup></p>
+            <p>Made by <a href="//twitter.com/codedgar_dev" class="p-blueberry-100-color">Codedgar</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
+  <script src="../src/js/dakmode_manager.js"></script>
   <script defer>
 
-    function retrieve_theme(){
-      let theme = localStorage.getItem('puppertino_theme');
-      if(theme != null){
-        document.body.classList.remove('default', 'p-dark-mode'); document.body.classList.add(theme);
-      }
+    document.querySelector('.toggles_dark_mode input').addEventListener('change',function(){
+      puppertinoThemeMan.toggle();
+    });
+
+    puppertinoThemeMan.init({autoDetect: true});
+    
+    const isDarkActive = puppertinoThemeMan.isDarkThemeActive();
+    console.log(isDarkActive);
+    if(isDarkActive){
+      document.querySelector('.toggles_dark_mode input').checked = true 
     }
 
-    window.addEventListener("storage",function(){
-      retrieve_theme();
-    },false);
 
-    retrieve_theme();
+
    </script>
 </html>

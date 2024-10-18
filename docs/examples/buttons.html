@@ -2,12 +2,14 @@
 <html lang="en">
   <head>
     <title>Buttons - Puppertino Framework</title>
+    <link rel="stylesheet" href="../index-assets/bootstrap-utilities.css">
+    <link rel="stylesheet" href="../index-assets/bootstrap-grid.min.css">
     <link
       href="https://rsms.me/inter/inter.css"
       rel="stylesheet"
     />
     
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/newfull.css" />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -44,80 +46,109 @@
       <p>/</p>
       <a href="buttons.html" class="p-btn p-btn-scope">Buttons</a>
     </div>
+    <div class="p-docs-alert">
+      <div>
+        <svg viewBox="0 0 24 24" width="50" height="50" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      </div>
+      <div>
+        <h3>Alert</h3>
+        <p>
+          Some of the components/functionalities provided in this version of the framework will be changing moving forward. <br>
+          To keep yourself updated, and understand how to migrate to newer versions, follow <a href="https://twitter.com/codedgar_dev" target="_blank">@codedgar_dev</a></p>
+      </div>
+    </div>
     <h1>Buttons</h1>
     <div class="master">
       <p>
-        Buttons are the main thing that move the interface. That's why it was
-        the main thing that was developed for Puppertino. <br />Puppertino
-        buttons support usage as links, buttons and submit elements.
+        Buttons are a key component of any interface, serving as interactive elements that guide user actions. In Puppertino, buttons have been designed with flexibility and accessibility in mind, supporting a variety of use cases across links, buttons, and form submissions.
       </p>
 
       <div class="talk-about-it">
         <h2>Push Buttons.</h2>
         <p>
-          Push buttons come in different variations according to your needings. It can be used as <code class="code">&#60;a></code> elements or <code class="code">&#60;button></code> elements. For buttons, is suggested that you use the attribute <code class="code">disabled</code> if you desire to disable them.
+          Push buttons come in several variations to suit different scenarios. They can be implemented as <code class="code">&#60;a></code> or <code class="code">&#60;button></code>elements, depending on the context. For cases where buttons need to be disabled, the disabled attribute can be applied to prevent user interaction. This ensures that the buttons are visually and functionally consistent with your design while maintaining clear communication with users about available actions.
         </p>
+        <div class="row">
+          <div class="col-md-6 mt-lg-5">
+            <div class="d-flex align-baseline mt-5">
+              <button class="p-btn">Default</button>
 
-        <button class="p-btn">Default</button>
+              <button class="p-btn p-btn-destructive">Destructive</button>
 
-        <button class="p-btn" disabled="">Disabled</button>
+              <button class="p-btn" disabled="">Disabled</button>
 
-        <a href="#" class="p-btn p-prim-col">Primary</a>
+              <a href="#" class="p-btn p-prim-col">Primary</a>
+      
+              <a href="#" class="p-btn p-btn-mob">Btn mob</a>
+      
+              <a href="#" class="p-btn p-btn-round p-orange p-white-color p-white-color">Rounded</a>
+      
+              
+              <a href="#" class="p-btn p-btn-outline">Outline</a>
+      
+              <a href="#" class="p-btn p-btn-outline-dash">Outline dashed</a>
+      
+              <a href="#" class="p-btn p-btn-more">Custom action</a>
+            </div>
+            </div>
 
-        <a href="#" class="p-btn p-btn-mob">Btn mob</a>
 
-        <a href="#" class="p-btn p-btn-round p-orange p-white-color p-white-color">Rounded</a>
-
-        
-        <a href="#" class="p-btn p-btn-outline">Outline</a>
-
-        <a href="#" class="p-btn p-btn-outline-dash">Outline dashed</a>
-
-        <a href="#" class="p-btn p-btn-more">Custom action</a>
-
+            <div class="col-md-6 mt-lg-5">
         <p>Usage:</p>
         <div class="code">
           <pre>
 				<code class="html">
 &#60;a href="#" class="p-btn">Default&#60;/a>
 
+&#60;button class="p-btn p-btn-destructive">Destructive&#60;/button>
+
 &#60;a href="#" class="p-btn p-btn-disabled">Disabled&#60;/a>
-
+    
 &#60;a href="#" class="p-btn p-prim-col">Primary&#60;/a>
-
+    
 &#60;a href="#" class="p-btn p-btn-mob">Btn mob&#60;/a>
-
+    
 &#60;a href="#" class="p-btn p-btn-round">Rounded&#60;/a>
-
+    
 &#60;a href="#" class="p-btn p-btn-more">Custom action&#60;/a>
-				</code>
-			</pre>
+            </code>
+          </pre>
+            </div>
+          </div>
         </div>
+
+
+
       </div>
 
       <div class="talk-about-it">
         <h2>Button colors</h2>
         <p>
-          Color customization in buttons is pretty simple. You will need to have the class <code class="code">p-btn-mob</code> to disable the shadow and border of the button.
+          Customizing button colors in Puppertino is now easier and more flexible. In earlier versions, applying the <code class="code">p-btn-mob</code> class was required for color changes. In the latest release, any button's color can be modified without additional classes.
           <br><br>
-          You can use the colors available in <a href="/docs/examples/color_palette.html">Color palette</a> or custom colors defined in your own CSS.
+          You can select from the predefined colors in <a href="/docs/examples/color_palette.html">Puppertino's color palette</a> or apply custom colors directly via your own CSS, giving you full control over button styling to match your design needs.
         </p>
 
-        <button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success</button>
-        <button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger</button>
-        <button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error</button>
+        <button class="p-btn p-prim-col p-grape p-white-color p-white-color">Primary Purple</button>
+        <button class="p-btn p-lime p-white-color p-white-color">Success</button>
+        <button class="p-btn p-prim-col p-orange p-white-color p-white-color">Danger</button>
+        <button class="p-btn p-prim-col p-strawberry p-white-color p-white-color">Error</button>
 
                 <p>Usage:</p>
         <div class="code">
           <pre>
         <code class="html">
+&#60;button class="p-btn p-prim-col p-grape p-white-color p-white-color">Primary Purple&#60;/button>
+
 &#60;button class="p-btn p-btn-mob p-lime p-white-color p-white-color">Success&#60;/button>
-
+    
 &#60;button class="p-btn p-btn-mob p-orange p-white-color p-white-color">Danger&#60;/button>
-
+    
 &#60;button class="p-btn p-btn-mob p-strawberry p-white-color p-white-color">Error&#60;/button>
-        </code>
-      </pre>
+            </code>
+          </pre>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -125,74 +156,62 @@
       <div class="talk-about-it">
         <h2>Button sizing</h2>
         <p>
-          Button sizing was a very requested feature during the alpha version of Puppertino. So now, I'm bringin 4 sizes for button sizes:
+          Button sizing was one of the most requested features during Puppertino's alpha phase. In response to that feedback, Puppertino now offers four distinct button sizes, providing flexibility to fit various design contexts:
         </p>
-        <a href="#" class="p-btn p-btn-mob p-btn-sm">Small size</a>
-        <a href="#" class="p-btn p-btn-mob p-btn-md">Medium size</a>
-        <a href="#" class="p-btn p-btn-mob p-btn-lg">Large size</a>
-        <a href="#" class="p-btn p-btn-mob p-btn-lg p-btn-block">Block size</a>
-
-                <p>Usage:</p>
-        <div class="code">
-          <pre>
-        <code class="html">
-&#60;a href="#" class="p-btn p-btn-sm">Small size&#60;/a>
-
-&#60;a href="#" class="p-btn p-btn-md">Medium size&#60;/a>
-
-&#60;a href="#" class="p-btn p-btn-lg">Large size&#60;/a>
-
-&#60;a href="#" class="p-btn p-btn-lg p-btn-block">Block size&#60;/a>
-        </code>
-      </pre>
+        <div class="row">
+          <div class="col-md-6 mt-lg-5">
+            <a href="#" class="p-btn p-btn-mob p-btn-sm">Small size</a>
+            <a href="#" class="p-btn p-btn-mob p-btn-md">Medium size</a>
+            <a href="#" class="p-btn p-btn-mob p-btn-lg">Large size</a>
+            <a href="#" class="p-btn p-btn-mob p-btn-block">Block size</a>
+          </div>
+        <div class="col-md-6">
+          <p>Usage:</p>
+          <div class="code">
+            <pre>
+          <code class="html">
+  &#60;a href="#" class="p-btn p-btn-sm">Small size&#60;/a>
+  
+  &#60;a href="#" class="p-btn p-btn-md">Medium size&#60;/a>
+  
+  &#60;a href="#" class="p-btn p-btn-lg">Large size&#60;/a>
+  
+  &#60;a href="#" class="p-btn p-btn-block">Block size&#60;/a>
+          </code>
+        </pre>
         </div>
-
       </div>
 
-      <div class="talk-about-it">
-        <h2>Direction buttons.</h2>
-        <p>
-          Direction buttons are used to navigate across your app, and usage is really simple, just use <code class="code">p-btn-direction</code> as a base and <code class="code">p-btn-d-back</code> for back navigation and  <code class="code">p-btn-d-next</code>  for forward navigation.
-        </p>
-        <a href="#" class="p-btn-direction p-btn-d-back">Prev</a>
-        <a href="#" class="p-btn-direction p-btn-d-next">Next</a>
-        <p>Usage:</p>
-        <div class="code">
-          <pre>
-        <code class="html">
-&#60;a href="#" class="p-btn-direction p-btn-d-back">Prev&#60;/a>
 
-&#60;a href="#" class="p-btn-direction p-btn-d-next">Next&#60;/a>
-        </code>
-      </pre>
         </div>
+
       </div>
 
       <div class="talk-about-it">
         <h2>Icon button.</h2>
         <p>
-          The icon button (Before help button), is round button with an icon inside, you can use a letter, an icon based in fonts (Such as Font Awesome) or an SVG. For icons see <a href="https://codedgar.github.io/Puppertino/examples/icons.html">icons section</a>.
+          The Icon Button, previously known as the "Help Button", is a circular button that contains an icon. You can use a letter, font-based icons (such as Font Awesome), or an SVG. For more details on available icons, refer to the <a href="https://codedgar.github.io/Puppertino/examples/icons.html">icons section</a>.
           <br><br>
-          You can set the color of the borders and icon by just changing the <code class="code">color</code> property of the button or by adding the classes present in <a href="/docs/examples/color_palette.html">Color palette</a>. You can also disable borders by adding <code class="code">p-btn-icon-no-border</code>
+          Customization is straightforward: you can modify the border and icon colors using the <code class="code">color</code> property or by applying classes from the <a href="/docs/examples/color_palette.html">Color palette</a>. If you'd like to remove the button's borders, simply add the <code class="code">p-btn-icon-no-border</code> class.
         </p>
         <a href="#" class="p-btn-icon">?</a>
 
         <a href="#" class="p-btn-icon p-lime-color">🐶</a>
 
         <a href="#" class="p-btn-icon p-bubblegum-color">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </a>
 
         <a href="#" class="p-btn-icon p-strawberry-color">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+          <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
         </a>
 
         <a href="#" class="p-btn-icon p-orange p-silver-100-color p-btn-icon-no-border">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+          <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
         </a>
 
         <a href="#" class="p-btn-icon p-mint p-silver-100-color">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
+          <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
         </a>
 
         <p>Usage:</p>
@@ -211,15 +230,13 @@
       <div class="talk-about-it">
         <h2>Scope buttons.</h2>
         <p>
-          Scope buttons are similar to Push buttons, but these are supposed to
-          be used on routes, and should not replace normal buttons.<br />
-          The <strong>Default/Active button</strong> is meant to indicate the
-          current route that the user is in. While the
-          <strong>Unactive button</strong> is supposed to be used in the route
-          before the current one. And the <strong>Action Button</strong> is
-          supposed to indicate any action that the user can do in that route,
-          like save, copy or others.
+          Scope Buttons function similarly to Push Buttons but are designed specifically for use in navigation routes. They should not replace standard buttons but complement them in route-based contexts.
         </p>
+        <ul>
+          <li><strong>Default/Active Button</strong>: This button highlights the current route, indicating where the user is within the interface.</li>
+          <li><strong>Inactive Button</strong>: Used to represent the route the user has just navigated from, providing a clear visual distinction.</li>
+          <li><strong>Action Button</strong>: This button is designed to prompt user actions, such as saving, copying, or other route-specific tasks.</li>
+        </ul>
 
         <a href="#" class="p-btn p-btn-scope">Default/Active</a>
 
