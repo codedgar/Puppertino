@@ -31,7 +31,8 @@ h3,
 input,
 p,
 a,
-code {
+code,
+li {
   font-family: -apple-system, "Inter", sans-serif;
 }
 h1 {
@@ -258,4 +259,33 @@ pre {
   .sponsored{
     max-width: 100%;
   }
+}
+
+.p-docs-alert{
+  display: flex;
+    align-items: center;
+    padding: 20px;
+    background: #ffca8063;
+    border-radius: 30px;
+    margin-top: 20px;
+}
+
+.p-docs-alert>div:first-child{
+  width: 10%;
+  display: grid;
+  place-items: center;
+}
+
+.p-docs-alert h3,
+.p-docs-alert p{
+  margin: 5px;
+}
+
+.d-flex{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.align-baseline{
+  align-items: baseline;
 }
