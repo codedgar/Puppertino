@@ -1,5 +1,5 @@
 
-![Puppertino Stars](https://img.shields.io/github/stars/codedgar/puppertino?style=for-the-badge) ![Puppertino's contributors](https://img.shields.io/github/contributors/codedgar/puppertino?style=for-the-badge)   [![Follow Puppertino_css](https://img.shields.io/twitter/follow/Puppertino_css?style=for-the-badge)](https://twitter.com/Puppertino_css) [![Follow Codedgar_dev](https://img.shields.io/twitter/follow/codedgar_dev?style=for-the-badge)](https://twitter.com/codedgar_dev)
+![Puppertino Stars](https://img.shields.io/github/stars/codedgar/puppertino?style=for-the-badge) ![Puppertino's contributors](https://img.shields.io/github/contributors/codedgar/puppertino?style=for-the-badge)   [![Follow Puppertino_css](https://img.shields.io/twitter/follow/Puppertino_css?style=for-the-badge)](https://twitter.com/Puppertino_css) [![Follow Codedgar_dev](https://img.shields.io/twitter/follow/codedgar_dev?style=for-the-badge)](https://twitter.com/codedgar_dev) [![Visit the creator's Website](https://img.shields.io/badge/Visit%20the%20Creator's%20Website-blue?style=for-the-badge&logo=undertale&logoColor=white)](https://codedgar.com/)
 ![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
 
 # Welcome to Puppertino Siberian by Codedgar
@@ -71,4 +71,4 @@ We welcome contributions! If you’d like to contribute to Puppertino, check out
 
 ## About the creator
 
-Puppertino was developed by [Edgar Pérez](https://codedgar.com/), a web developer passionate about creating clean, elegant web experiences. As the framework continues to evolve, more features and components will be added—so stay tuned for regular updates!
+Puppertino was developed by [Codedgar](https://codedgar.com/), a web developer passionate about creating clean, elegant web experiences. As the framework continues to evolve, more features and components will be added—so stay tuned for regular updates!
