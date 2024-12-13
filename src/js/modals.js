@@ -1,13 +1,13 @@
 (function (document) {
-  var p_selector_modal = document.querySelectorAll("[data-p-open-modal]");
-  var modals = document.querySelectorAll(".p-modal");
-  var cancel_button = document.querySelectorAll("[data-p-cancel]");
+  let p_selector_modal = document.querySelectorAll("[data-p-open-modal]");
+  let modals = document.querySelectorAll(".p-modal");
+  let cancel_button = document.querySelectorAll("[data-p-cancel]");
 
-  for (var item of p_selector_modal) {
+  for (const item of p_selector_modal) {
     item.addEventListener("click", function (event) {
       event.preventDefault();
-      var selector = this.getAttribute("data-p-open-modal");
-      if (selector.length == 0) {
+      let selector = this.getAttribute("data-p-open-modal");
+      if (selector.length === 0) {
         console.warn(
           "Error. The data-p-open-modal attribute is empty, please add the ID of the modal you want to open."
         );
@@ -19,7 +19,7 @@
     });
   }
 
-  for (var element of cancel_button) {
+  for (const element of cancel_button) {
     element.addEventListener("click", function (event) {
       event.preventDefault();
       document.querySelector(".p-modal.active").classList.remove("active");
@@ -32,8 +32,8 @@
     .querySelector(".p-modal-background")
     .addEventListener("click", function (event) {
       event.preventDefault();
-      var opened_modal = document.querySelector(".p-modal.active");
-      if (opened_modal.getAttribute("data-p-close-on-outside") == "true") {
+      let opened_modal = document.querySelector(".p-modal.active");
+      if (opened_modal.getAttribute("data-p-close-on-outside") === "true") {
         event.stopPropagation();
         opened_modal.classList.remove("active");
         document
@@ -43,7 +43,7 @@
       }
     });
 
-  for (var modal of modals) {
+  for (let modal of modals) {
     modal.addEventListener("click", function (event) {
       event.stopPropagation();
     });
