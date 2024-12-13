@@ -1,0 +1,82 @@
+:root{
+--p-segmented-bg: #fff;
+}
+.p-segmented-controls {
+  --color-segmented: #3689e6;
+  --color-lighter-segment: #d2e3f9;
+  background: var(--p-segmented-bg);
+  border: 1px solid var(--color-segmented);
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: -apple-system, "Inter", sans-serif;
+  margin-top: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+.p-segmented-controls a {
+  color: var(--color-segmented);
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  transition: 0.5s color, 0.5s background, 0.5s border-color;
+  -webkit-tap-highlight-color: transparent;
+}
+.p-segmented-controls a.active {
+  background: var(--color-segmented);
+  color: var(--p-segmented-bg);
+}
+.p-segmented-controls a:not(:first-child) {
+  border-left: 1px solid currentColor;
+}
+
+.p-segmented-radius {
+  border-radius: 30px;
+}
+
+.p-segmented-internal-radius a,
+.p-segmented-internal-radius a:not(:first-child) {
+  border: 0;
+  border-radius: 30px;
+}
+
+.p-segmented-controls-alt a:not(:first-child) {
+  border: 0;
+}
+.p-segmented-controls-alt a.active {
+  background: var(--color-lighter-segment);
+  color: var(--color-segmented);
+  font-weight: bold;
+}
+
+.p-segmented-outline {
+  border: 2px solid var(--color-segmented);
+}
+.p-segmented-outline a:not(:first-child) {
+  border-left: 2px solid var(--color-segmented);
+}
+
+.p-segmented-controls-outline-alt a:not(:first-child) {
+  border: 2px solid transparent;
+}
+
+.p-segmented-controls-outline-alt {
+  border-radius: 30px;
+}
+.p-segmented-controls-outline-alt a {
+  border: 2px solid transparent;
+  border-radius: 30px;
+}
+.p-segmented-controls-outline-alt a.active {
+  background: var(--p-segmented-bg);
+  border-color: var(--color-segmented);
+  border-radius: 30px;
+  color: var(--color-segmented);
+  font-weight: bold;
+}
+
+.p-segmented-grey {
+  --color-segmented: #555761;
+  --color-lighter-segment: #d4d4d4;
+}

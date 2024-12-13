@@ -1,0 +1,115 @@
+:root {
+  --font: -apple-system, "Inter", sans-serif;
+  --primary-col-ac: #0f75f5;
+  --p-modal-bg: rgba(255, 255, 255, 0.8);
+  --p-modal-bd-color: rgba(0,0,0,.1);
+  --p-modal-fallback-color: rgba(255,255,255,.95);
+  --p-modal-color: #1d1d1f;
+}
+
+.p-modal-opened {
+  overflow: hidden;
+}
+
+.p-modal-background {
+  background: rgba(0, 0, 0, 0.7);
+  height: 100vh;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transition: opacity 0.3s;
+  width: 100vw;
+  z-index: 5;
+}
+
+.p-modal { 
+  background: var(--p-modal-bg);
+  color: var(--p-modal-color);
+  border-radius: 20px;
+  top: calc(50% - 20vh);
+  bottom: unset;
+  box-shadow: 0 10px 20px -15px black;
+  font-family: var(--font);
+  left: calc(50% - 20vw);
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: fixed;
+  text-align: center;
+  transform: scale(1.5);
+  transition: opacity 0.3s, transform 0.3s;
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  width: 40vw;
+  z-index: 9;
+}
+
+.p-modal.active {
+  backdrop-filter: saturate(180%) blur(10px);
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.p-modal-button-container {
+  border-radius: 20px;
+  display: flex;
+}
+
+.p-modal-button-container > a {
+  border-top: 1px solid var(--p-modal-bd-color);
+  color: var(--primary-col-ac);
+  padding: 30px 0%;
+  text-decoration: none;
+  width: 100%;
+}
+
+.p-modal-button-container > a:not(:first-child){
+  border-left: 1px solid var(--p-modal-bd-color);
+}
+
+.nowactive {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.p-modal p {
+  padding: 0% 5%;
+}
+
+@supports not (backdrop-filter: blur(5px)) {
+  .p-modal {
+    background: var(--p-modal-fallback-color);
+  }
+}
+@media (max-width: 568px) {
+  .p-modal {
+    left: 15%;
+    width: 70vw;
+  }
+
+  .p-modal p {
+    font-size: 15px;
+    padding: 0% 10%;
+  }
+
+  .p-modal-button-container {
+    display: block;
+  }
+
+  .p-modal-button-container > a {
+    border-left: 0;
+    display: block;
+    padding: 2vh 0%;
+  }
+  .p-modal-button-container > a:not(:first-child){
+    border-left: 0px;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-modal-background,.p-modal  {
+    transition: none;
+  }
+}
