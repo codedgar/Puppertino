@@ -1,0 +1,29 @@
+{
+  "name": "puppertino",
+  "version": "1.0.0",
+  "description": "A CSS framework based on Human Guidelines from Apple",
+  "main": "none",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codedgar/Puppertino.git"
+  },
+  "keywords": [
+    "css",
+    "framework",
+    "ui",
+    "uikit",
+    "apple"
+  ],
+  "author": "Codedgar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codedgar/Puppertino/issues"
+  },
+  "homepage": "https://github.com/codedgar/Puppertino#readme"
+}
