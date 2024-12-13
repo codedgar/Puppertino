@@ -35,6 +35,34 @@ If you only need specific components, you can import them individually to reduce
 
 You can also find the full list of individual components and their CDN links on the [Components page](https://codedgar.github.io/Puppertino/examples/).
 
+### NPM
+
+You can install this repository through NPM + GIT:
+```bash
+# Via SSH
+npm i --save git@github.com:codedgar/Puppertino.git#{{BRANCH_NAME}}
+
+# Eg.
+npm i --save git@github.com:codedgar/Puppertino.git#master
+
+# Or Via HTTPS
+npm i --save https://github.com/codedgar/Puppertino.git#BRANCH_NAME
+
+# Eg.
+npm i --save https://github.com/codedgar/Puppertino.git#master
+```
+
+You can change master with the branch of your choosing to install a specific branch. After NPM installation,
+you can simply import the library from `node_modules`
+
+#### In your CSS
+```css
+@import("path/to/node_modules/puppertino/dist/full.css")
+```
+#### In your Javascript
+```js
+require("path/to/node_modules/puppertino/src/{{file you need, eg tabs.js}}")
+```
 
 ## Current Components
 
