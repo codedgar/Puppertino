@@ -61,7 +61,7 @@ you can simply import the library from `node_modules`
 ```
 #### In your Javascript
 ```js
-require("path/to/node_modules/puppertino/src/{{file you need, eg tabs.js}}")
+require("path/to/node_modules/puppertino/src/js/{{file you need, eg tabs.js}}")
 ```
 
 ## Current Components
