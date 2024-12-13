@@ -1,0 +1,26 @@
+{
+  "name": "codedgar/puppertino",
+  "description": "A CSS framework based on Human Guidelines from Apple.",
+  "keywords": [
+    "css",
+    "js",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ],
+  "homepage": "https://github.com/codedgar/Puppertino",
+  "authors": [
+    {
+      "name": "Codedgar",
+      "email": "codedgar@example.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/codedgar/Puppertino/issues"
+  },
+  "license": "MIT",
+  "replace": {
+    "codedgar/puppertino": "self.version"
+  }
+}

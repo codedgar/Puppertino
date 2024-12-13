@@ -38,22 +38,24 @@
   box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
 }
 
-.p-blur-1{
+.p-blur-1 {
   backdrop-filter: saturate(180%) blur(20px);
-  background: rgba(0,0,0,.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 
-.p-blur-2{
+.p-blur-2 {
   backdrop-filter: saturate(200%) blur(30px);
-  background: rgba(0,0,0,.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 
-.p-blur-3{
+.p-blur-3 {
   backdrop-filter: saturate(200%) blur(45px);
-  background: rgba(0,0,0,.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 
-.p-blur-4{
+.p-blur-4 {
   backdrop-filter: saturate(200%) blur(81px);
-  background: rgba(0,0,0,.1);
+  background: rgba(0, 0, 0, 0.1);
 }
+
+/*# sourceMappingURL=shadows.css.map */

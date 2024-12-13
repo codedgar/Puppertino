@@ -1,5 +1,4 @@
-@charset "UTF-8";
-:root{
+:root {
   --p-btn-border: #cacaca;
   --p-btn-def-bg: #FFFFFF;
   --p-btn-def-col: #000000;
@@ -17,53 +16,61 @@
   display: inline-block;
   font-family: -apple-system, "Inter", sans-serif;
   font-size: 1.1rem;
-  margin: .7rem;
-  padding: .4rem 1.2rem;
+  margin: 0.7rem;
+  padding: 0.4rem 1.2rem;
   text-decoration: none;
   text-align: center;
   box-shadow: 0 1px 0.375px rgba(0, 0, 0, 0.05), 0 0.25px 0.375px rgba(0, 0, 0, 0.15);
   user-select: none;
   cursor: pointer;
 }
-.p-btn:focus{
+
+.p-btn:focus {
   outline: 2px solid #64baff;
 }
-.p-btn.p-btn-block{
+
+.p-btn.p-btn-block {
   display: block;
 }
+
 .p-btn.p-btn-sm {
-  padding: .3rem 1.1rem;
+  padding: 0.3rem 1.1rem;
   font-size: 1rem;
 }
+
 .p-btn.p-btn-md {
-  padding: .8rem 2.4rem;
+  padding: 0.8rem 2.4rem;
   font-size: 1.6rem;
 }
+
 .p-btn.p-btn-lg {
   padding: 1.2rem 2.8rem;
   font-size: 1.8rem;
 }
-.p-btn-destructive{
+
+.p-btn-destructive {
   color: #FF3B30;
 }
-.p-btn-mob{
+
+.p-btn-mob {
   padding: 10px 40px;
   background: #227bec;
   color: #fff;
   border: 0;
-  box-shadow: inset 0 1px 1px rgb(255 255 255 / 41%), 0px 2px 3px -2px rgba(0,0,0,.3);
+  box-shadow: inset 0 1px 1px rgb(255 255 255/41%), 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
 }
+
 .p-btn[disabled],
 .p-btn:disabled,
-.p-btn-disabled{
-  filter:contrast(0.5) grayscale(.5) opacity(.8);
+.p-btn-disabled {
+  filter: contrast(0.5) grayscale(0.5) opacity(0.8);
   cursor: not-allowed;
   box-shadow: none;
   pointer-events: none;
 }
 
 .p-prim-col {
-  position: relative; 
+  position: relative;
   background: #007AFF;
   border: none;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.41), 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
@@ -72,7 +79,7 @@
 }
 
 .p-prim-col:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -94,7 +101,7 @@
 .p-btn-round {
   border: 0;
   border-radius: 50px;
-  box-shadow: inset 0 1px 1px rgb(255 255 255 / 41%);
+  box-shadow: inset 0 1px 1px rgb(255 255 255/41%);
   padding: 10px 30px;
 }
 
@@ -117,7 +124,7 @@
   vertical-align: bottom;
 }
 
-.p-btn-icon.p-btn-icon-no-border{
+.p-btn-icon.p-btn-icon-no-border {
   border: 0px;
 }
 
@@ -128,12 +135,14 @@
   padding: 2px 20px;
   box-shadow: none;
 }
+
 .p-btn-scope-unactive {
   background: transparent;
   border-color: transparent;
   color: var(--p-btn-scope-unactive);
   transition: border-color 0.2s;
 }
+
 .p-btn-scope-unactive:hover {
   border-color: var(--p-btn-border);
 }
@@ -155,4 +164,6 @@
   border-color: currentColor;
   border-style: dashed;
   box-shadow: none;
-} 
+}
+
+/*# sourceMappingURL=buttons.css.map */

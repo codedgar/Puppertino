@@ -24,7 +24,7 @@
   z-index: 5;
 }
 
-.p-modal { 
+.p-modal {
   background: var(--p-modal-bg);
   color: var(--p-modal-color);
   border-radius: 20px;
@@ -65,7 +65,7 @@
   width: 100%;
 }
 
-.p-modal-button-container > a:not(:first-child){
+.p-modal-button-container > a:not(:first-child) {
   border-left: 1px solid var(--p-modal-bd-color);
 }
 
@@ -88,28 +88,26 @@
     left: 15%;
     width: 70vw;
   }
-
   .p-modal p {
     font-size: 15px;
     padding: 0% 10%;
   }
-
   .p-modal-button-container {
     display: block;
   }
-
   .p-modal-button-container > a {
     border-left: 0;
     display: block;
     padding: 2vh 0%;
   }
-  .p-modal-button-container > a:not(:first-child){
+  .p-modal-button-container > a:not(:first-child) {
     border-left: 0px;
   }
 }
-
 @media (prefers-reduced-motion) {
-  .p-modal-background,.p-modal  {
+  .p-modal-background, .p-modal {
     transition: none;
   }
 }
+
+/*# sourceMappingURL=modals.css.map */

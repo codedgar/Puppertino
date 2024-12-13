@@ -1,10 +1,11 @@
-:root{
+:root {
   --p-modal-bg: rgba(255, 255, 255, 0.8);
   --p-modal-bd-color: rgba(0,0,0,.1);
   --p-modal-fallback-color: rgba(255,255,255,.95);
   --p-mobile-tabs-color: #555;
   --p-panel-bg:#fff;
 }
+
 .p-tabs-container {
   background: #e3e3e3;
   border: 1px solid #e0e0e0;
@@ -91,12 +92,10 @@
   .p-tabs-container {
     padding: 0.8em;
   }
-
   .p-panels {
     padding: 0.8em;
   }
 }
-
 @media screen and (max-width: 496px) {
   .p-tab {
     text-align: center;
@@ -105,13 +104,11 @@
   .p-tabs-container {
     padding: 0.5em;
   }
-
   .p-panels {
     padding: 0.5em;
     margin-top: 0.5em;
   }
 }
-
 @media screen and (max-width: 378px) {
   .p-tab {
     text-align: center;
@@ -120,13 +117,11 @@
   .p-tabs-container {
     padding: 0.5em;
   }
-
   .p-panels {
     padding: 0.5em;
     margin-top: 0.5;
   }
 }
-
 .p-mobile-tabs {
   position: fixed;
   bottom: 0;
@@ -147,7 +142,6 @@
     background: var(--p-modal-fallback-color);
   }
 }
-
 .p-mobile-tabs > div {
   flex: 1;
   text-align: center;
@@ -157,7 +151,7 @@
   text-decoration: none;
   color: var(--p-mobile-tabs-color);
   transition: color 0.5s;
-  font-size: 0.5rem; 
+  font-size: 0.5rem;
   padding: 0 20px;
   display: block;
 }
@@ -173,8 +167,8 @@
   margin-bottom: 0.2rem;
 }
 
-.p-mobile-tabs a.active svg{
-  stroke-width:2.5;
+.p-mobile-tabs a.active svg {
+  stroke-width: 2.5;
 }
 
 .p-mobile-tabs--content {
@@ -184,3 +178,5 @@
 .p-mobile-tabs--content.active {
   display: block;
 }
+
+/*# sourceMappingURL=tabs.css.map */

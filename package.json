@@ -7,7 +7,13 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx rimraf ./dist && npm-run-all --aggregate-output --parallel css-build js-build",
+    "css-build": "npm-run-all css-compile css-minify-main",
+    "css-compile": "sass --style expanded --source-map --embed-sources --no-error-css src/css/:dist/css/",
+    "css-minify-main": "cleancss -O1 --format breakWith=lf --with-rebase --source-map --source-map-inline-sources --output dist/css/ --batch --batch-suffix \".min\" \"dist/css/*.css\" \"!dist/css/*.min.css\" \"!dist/css/*rtl*.css\"",
+    "js-build": "npm-run-all js-compile js-minify-standalone",
+    "js-compile": "rollup --environment BUNDLE:false --config build/rollup.config.mjs --sourcemap",
+    "js-minify-standalone": "terser --compress passes=2 --mangle --comments \"/^!/\" --source-map \"content=dist/js/puppertino.js.map,includeSources,url=puppertino.min.js.map\" --output dist/js/puppertino.min.js dist/js/puppertino.js"
   },
   "repository": {
     "type": "git",
@@ -25,5 +31,38 @@
   "bugs": {
     "url": "https://github.com/codedgar/Puppertino/issues"
   },
-  "homepage": "https://github.com/codedgar/Puppertino#readme"
+  "homepage": "https://github.com/codedgar/Puppertino#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+   "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-replace": "^6.0.1",
+    "clean-css-cli": "^5.6.3",
+    "eslint": "^8.57.1",
+    "eslint-config-xo": "^0.45.0",
+    "eslint-plugin-html": "^8.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-markdown": "^5.1.0",
+    "eslint-plugin-unicorn": "^55.0.0",
+    "npm-run-all2": "^7.0.1",
+    "postcss": "^8.4.49",
+    "postcss-cli": "^11.0.0",
+    "rollup": "^4.28.1",
+    "rollup-plugin-istanbul": "^5.0.0",
+    "rtlcss": "^4.3.0",
+    "sass": "1.78.0",
+    "sass-true": "^8.1.0",
+    "shelljs": "^0.8.5",
+    "stylelint": "^16.11.0",
+  },
+  "files": [
+    "dist/{css,js}/*.{css,js,map}",
+    "js/{src,dist}/**/*.{js,map}",
+    "js/index.{esm,umd}.js",
+    "scss/**/*.scss",
+    "!scss/tests/**"
+  ]
 }
