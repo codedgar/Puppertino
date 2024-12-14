@@ -1,14 +1,14 @@
     (function (document) {
 
-        var p_actions = document.querySelectorAll("[data-p-open-actions]");
-        var actions = document.querySelectorAll(".p-action-big-container");
-        var cancel_action = document.querySelectorAll("[data-p-cancel-action]");
+        let p_actions = document.querySelectorAll("[data-p-open-actions]");
+        let actions = document.querySelectorAll(".p-action-big-container");
+        let cancel_action = document.querySelectorAll("[data-p-cancel-action]");
 
-        for (var item of p_actions) {
+        for (const item of p_actions) {
             item.addEventListener("click", function (event) {
                 event.preventDefault();
-                var selector = this.getAttribute("data-p-open-actions");
-                if (selector.length == 0) {
+                let selector = this.getAttribute("data-p-open-actions");
+                if (selector.length === 0) {
                     console.warn(
                         "Error. The data-p-open-action attribute is empty, please add the ID of the action you want to open."
                     );
@@ -20,7 +20,7 @@
             });
         }
 
-        for (var element of cancel_action) {
+        for (const element of cancel_action) {
             element.addEventListener("click", function (event) {
                 event.preventDefault();
                 document.querySelector(".p-action-big-container.active").classList.remove("active");
@@ -33,8 +33,8 @@
             .querySelector(".p-action-background")
             .addEventListener("click", function (event) {
                 event.preventDefault();
-                var opened_action = document.querySelector(".p-action-big-container.active");
-                if (opened_action.getAttribute("data-p-close-on-outside") == "true") {
+                let opened_action = document.querySelector(".p-action-big-container.active");
+                if (opened_action.getAttribute("data-p-close-on-outside") === "true") {
                     event.stopPropagation();
                     opened_action.classList.remove("active");
                     document
@@ -44,7 +44,7 @@
                 }
             });
 
-        for (var action of actions) {
+        for (let action of actions) {
             action.addEventListener("click", function (event) {
                 event.stopPropagation();
             });

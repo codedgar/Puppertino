@@ -19,7 +19,7 @@
 
 let mobile_tabs_pupper = document.querySelectorAll('.p-mobile-tabs a');
 
-for (var item of mobile_tabs_pupper) {
+for (const item of mobile_tabs_pupper) {
     item.addEventListener("click", function (event) {
       event.preventDefault();
       var remover_pupper = this.parentNode.parentNode;

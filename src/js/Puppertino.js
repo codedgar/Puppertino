@@ -2,7 +2,7 @@ function Puppertino(options, selector){
     return {
         options: options,
         selector: selector,
-        modal: function(selector){
+        modal: function(selector) {
             console.log('AAAAAAAA');
 
             this.init = function(){
@@ -12,7 +12,6 @@ function Puppertino(options, selector){
                 console.log(document.querySelector(selector));
             }
             this.hide = function(selector){
-
                 console.log(document.querySelector(selector));
             }
             this.toggle = function(selector){
