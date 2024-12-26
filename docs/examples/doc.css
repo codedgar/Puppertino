@@ -208,6 +208,10 @@ pre {
   flex-wrap: wrap;
 }
 
+.w-100{
+  width: 100%;
+}
+
 .mw-300{
   width: 300px;
   position: relative;
@@ -343,5 +347,23 @@ pre {
 .talk-about-it {
   background-color: transparent;
   border-color: transparent;
+  margin-top: 30px;
+}
+
+.deprecated-code{
+  border: 2px solid currentColor;
+  color: var(--p-banana-700);
+  background: transparent;
+}
+
+.flex-1{
+  flex: 1;
+}
+
+.align-bottom{
+  align-items: end;
+}
+
+.mt-4{
   margin-top: 30px;
 }

@@ -9,6 +9,7 @@
     />
     
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -33,12 +34,12 @@
   <body class="p-layout">
     <div class="p-modal-background">
       <div class="p-modal" id="normal-modal" data-p-close-on-outside="true">
-        <h2>Sup!</h2>
+        <h2>Hello!</h2>
         <p>This modal has 3 buttons, please don't add more than 3 :)</p>
         <div class="p-modal-button-container">
           <a href="#"><strong>Confirm</strong></a>
           <a href="#">Settings</a>
-          <a href="#" data-p-cancel>Cancel</a>
+          <button data-p-cancel>Cancel</button>
         </div>
       </div>
 
@@ -92,9 +93,8 @@
     <h1>Modals</h1>
     <div class="master">
       <p>
-        Modals are one of the most emblematic items of iOS, so I added the
-        modals of iOS instead of adding dialog boxes like in macOS. To
-        use modals, you need 2 components:
+        Modals are iconic in iOS design, making them a natural addition to Puppertino. Unlike macOS-style dialog boxes (planned for future versions), these modals are currently categorized under mobile components.
+        <br><br>To implement modals, you’ll need:
         <a
           href="https://github.com/codedgar/Puppertino/blob/master/dist/css/modals.css"
           target="_blank"
@@ -118,14 +118,19 @@
       </p>
 
       <div class="talk-about-it">
-        <h2>Before jumping on it.</h2>
+        <h3>Note on Previous Versions</h3>
+        <p>In earlier versions of Puppertino, modal actions were exclusively links. In the latest version, you now have the option to use either <strong>Buttons</strong> or <strong>Links</strong>, offering greater flexibility for appropriate actions while maintaining proper semantics and accessibility.</p>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Modals: Limitations</h2>
         <p>
-          I wanted to make modals not only as easy to use as possible, but UX
-          optimized as I could. That's why I'm calling it now, adding form
-          elements in modals <span class="lmao_codedgar_b_dumb">is not supported</span> <sttrong>will be added in the next release</sttrong>, and also opening several modals is
-          not supported either.<br />
-          Now onto modals and types:
+          Puppertino modals are designed for simplicity and optimized user experience. However, there are current limitations to be aware of:
         </p>
+        <ul>
+          <li>Adding form elements within modals is <strong>not supported</strong> (planned for the next release).</li>
+          <li>Opening multiple modals simultaneously is not supported to maintain usability.</li>
+        </ul>
 
         <button data-p-open-modal="#normal-modal" class="p-btn">
           Three button modal
@@ -195,7 +200,7 @@
 		&#60;h2>Hey!&#60;/h2>
 		&#60;p>This is an example modal!&#60;/p>
 		&#60;div class="p-modal-button-container">
-			&#60;a href="#" data-p-cancel>OK&#60;/a>
+			&#60;button data-p-cancel>OK&#60;/button>
 		&#60;/div>
 	&#60;/div>
 
@@ -237,6 +242,109 @@
     </div>
 
     <div class="talk-about-it">
+      <section id="api-methods">
+        <h2>JS API Methods</h2>
+        <p>In newer versions, the old JavaScript has been replaced with the PuppertinoModalMan class—a lightweight utility for managing modals within the Puppertino framework.
+          <br><br>
+          While the way you use modals remains unchanged thanks to automatic initialization, this class introduces programmatic methods for Opening or Closing modals, and handling user interactions. <br><br> Here's what currently possible using Puppertino's Modal Manager</p>
+        <article id="open-modal" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>openModal(selector)</h3>
+            <p>Opens the modal specified by the CSS selector.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the modal to open.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+
+          <div class="code" >
+<pre>
+  <code>  
+PuppertinoModalManager.openModal("#exampleModal");
+</code>
+</pre>
+</div>
+</div>
+
+        </article>
+      
+        <article id="close-active-modal" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>closeActiveModal()</h3>
+            <p>Closes the currently active (open) modal.</p>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+  <code>
+PuppertinoModalManager.closeActiveModal();
+</code>
+</pre>
+            </div>
+          </div>
+          
+        </article>
+      
+        <article id="close-modal" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>closeModal(selector)</h3>
+            <p>Closes a specific modal specified by the CSS selector.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the modal to close.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+
+<pre>
+  <code>
+PuppertinoModalManager.closeModal("#exampleModal");
+  </code>
+</pre>
+
+</div>
+
+          </div>
+
+        </article>
+      
+        <article id="is-modal-open" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>isModalOpen(selector)</h3>
+            <p>Checks if a specific modal is currently open.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the modal to check.</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+              <li><code class="code">true</code> if the modal is open, <code>false</code> otherwise.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+  <code>
+if (PuppertinoModalManager.isModalOpen("#exampleModal")) {
+  console.log("The modal is open.");
+}
+</code>
+</pre>
+            </div>
+            
+          </div>
+          
+        </article>
+      </section>
+    </div>
+
+    <div class="talk-about-it">
       <h2>Support for blur on Firefox.</h2>
       <p>
         Modals use a backdrop-filter, which is currently supported by Firefox
@@ -249,7 +357,7 @@
 </body>
 
   <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino/src/js/modals.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/modals.js"></script>
   <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"

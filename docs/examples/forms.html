@@ -6,6 +6,7 @@
 	<link href="https://rsms.me/inter/inter.css" rel="stylesheet">
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css"> -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
     
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   	<meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -32,11 +33,26 @@
 	</div>
 	<h1>Forms</h1>
 	<div class="master">
-		<p>Forms are one of the things that move forward the interface, that's why in Puppertino, form elements come with ready-to-work, native validation. You can use the Forms using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/forms.css" target="_blank">CSS of Forms</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css" target="_blank">downloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
+		<p>Forms are an essential part of any user interface. In Puppertino, form elements are designed to be both functional and intuitive, featuring built-in native validation for seamless user experiences.
+      <br><br>
+      You can use the Forms using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/forms.css" target="_blank">CSS of Forms</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css" target="_blank">downloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
 
 		<div class="talk-about-it">
 			<h2>Select.</h2>
-			<p>The select box works exactly as expected, and you can change the width and height without affecting the overall composition of the element without problems. The select does not have native validation, but you can still add the <code class="code">p-form-invalid</code> and <code class="code">p-form-valid</code> classes respectively.</p>
+			<p>
+        The select box in Puppertino is designed to behave as expected while offering flexibility in customization. You can adjust the width and height without compromising the overall composition or functionality of the element.
+        
+        <br><br>
+        <strong>Note</strong>: The select box does not include native validation. However, you can manually apply validation states by adding the following classes:
+      </p>
+      <ul>
+        <li>
+          <code class="code">p-form-invalid</code>: Indicates an invalid input.
+        </li>
+        <li>
+          <code class="code">p-form-valid</code>: Indicates a valid input.
+        </li>
+      </ul>
 
 			<div class="p-form-select">
 			    <select>
@@ -65,29 +81,25 @@
       <div class="talk-about-it">
         <h2>Text fields.</h2>
         <p>
-          Text fields are everything that gets text into it, maybe passwords,
-          emails, messages, anything you want. They can have validation,
-          truncated text, or be just plain without any of those things. The
-          <strong>validated input</strong> relies on native HTML validation, so
-          things like <code class="code">min-length</code> or
-          <code class="code">type</code> will work perfectly on it. The
-          validation will be visible once the user changes the focus out of the
-          element, and I prefer it this way to avoid users getting confused
-          while they type. The no-validated input retains its style whenever
-          the input is invalid or valid. The truncated text, adds three dots
-          (...) at the end when of the input if the text overflows from it. The
-          appearance of the dots takes place after the user changes the focus
-          out of the element. The truncated text does not disable the validation.
-          <br />
-          It is also possible to add labels to every type of input without it
-          affecting in any way the functionality of the input.
-          <br />
-          About the validation: You should always include a placeholder if you were intending
-          to use validation. If you don't intend to validate the input
-          text, you can add the class
-          <code class="code">p-form-no-validate</code>.<br />
-          Text fields can be textareas or inputs.
+          Text fields are versatile elements for capturing user input such as passwords, emails, messages, or any type of text data. Puppertino provides flexible options for text fields, supporting validation, truncation, and plain (non-validated) inputs.
         </p>
+
+        <p><strong>Features of Text Fields</strong></p>
+        <ul>
+          <li>
+            <strong>Validation</strong>: Supports native HTML validation (e.g., min-length, type). Feedback is shown after focus leaves the field. Use p-form-no-validate to disable validation styling.
+          </li>
+          <li>
+            <strong>Truncated Text</strong>: Adds an ellipsis (...) when text overflows, visible after focus shifts. Compatible with validation.
+          </li>
+          <li>
+            <strong>Plain Inputs</strong>: Keeps consistent styling regardless of validity, ideal for non-validated fields.
+          </li>
+          <li>
+            <strong>Labels</strong>: Fully compatible with all input types for enhanced accessibility.
+          </li>
+          
+        </ul>
         <input
           type="email"
           class="p-form-text"
@@ -133,8 +145,9 @@
       <div class="talk-about-it">
         <h2>Alternate inputs.</h2>
         <p>
-          Alternate inputs are bigger versions of the original inputs. The intended usage of this is login or registration forms.<br><br>
-          The alternate inputs work similarly to the default input. The only thing that changes is the class, but validation and others work exactly as expected.
+          Alternate inputs are larger versions of the standard text fields, ideal for use in login or registration forms.
+          <br><br>
+          They function identically to default inputs, with the same validation and styling options. The only difference is the class applied to the element.
         </p>
         <input
           type="email"
@@ -193,12 +206,7 @@
       <div class="talk-about-it">
         <h2>Radio Buttons.</h2>
         <p>
-          Radio buttons are similar to checkboxes, the main difference between
-          radio buttons and checkboxes, is that radio buttons can only one of
-          them in a group of radio buttons can be checked. Radio buttons do
-          not provide any type of validation. And come with a nice, simple
-          animation. You can change the width and height of the radio buttons
-          without being worried about breaking the composition.
+          Radio buttons resemble checkboxes but allow only one selection per group. They lack validation but feature a smooth animation. Width and height can be adjusted without compromising their layout.
         </p>
 
         <label class="p-form-radio-cont">
@@ -238,9 +246,7 @@
       <div class="talk-about-it">
         <h2>Checkboxes.</h2>
         <p>
-          Checkboxes, allow the users to select several predefined values.
-          Checkboxes in puppertino, just as Radio buttons, support changing the
-          width and height without damaging the composition of the checkbox.
+          Checkboxes let users select multiple predefined options. Like radio buttons, Puppertino checkboxes support adjustable width and height without affecting their layout.
         </p>
 
         <label class="p-form-checkbox-cont">
@@ -280,7 +286,7 @@
       <div class="talk-about-it">
         <h2>Chips.</h2>
         <p>
-          Chips are essentially checkboxes, but cooler. This makes it easier and more interactive for the user to select multiple items or filter information. They come in several flavors and also have support for icons.
+          Chips are an enhanced, interactive alternative to checkboxes, offering a more engaging way for users to select multiple items or filter information. They come in various styles and support the inclusion of icons for added functionality.
         </p>
 
         <label class="p-chip">
@@ -386,17 +392,9 @@
       <div class="talk-about-it">
         <h2>Switches.</h2>
         <p>
-          Switches are part of those elements that are popular in iOS devices.
-          And I wasn't going to add them until version 2.0 (Since I wanted to
-          create a custom element) But a friend gave me the starter code and I
-          just cleaned it a bit and made it look like the aesthetic of
-          Puppertino. So big shotout to <strong>Ivanot</strong> because he
-          essentially created this element :)<br /><br />
-          The Switch is essentially a checkbox, so you have to expect it to work
-          as one. You can change the width and height of the switch changing the
-          variable <code class="code">--width</code> inside the class
-          <code class="code">p-form-switch</code>. Everything in the element
-          will resize automatically so don't worry about breaking it on resize.
+          Switches are inspired by popular iOS design elements and were introduced to Puppertino with help from a friend and contributor, <a href="https://github.com/ivanotOrozco" target="_blank" rel="nofollow">Ivanot</a>. A special thanks to him for providing the foundation for this component!<br /><br />
+          
+          Switches function like checkboxes and are styled to fit the Puppertino aesthetic. You can adjust their size by modifying the <code class="code">--width</code> variable within the <code class="code">p-form-switch</code> class. The element resizes automatically, ensuring consistent appearance and functionality.
         </p>
 
         <label class="p-form-switch showcaseme_bro">
@@ -420,10 +418,9 @@
       </div>
 
       <div class="talk-about-it">
-        <h2>Buttons.</h2>
+        <h2>Buttons. <code class="code deprecated-code">Deprecated</code></h2>
         <p>
-          These buttons are a really small version of the buttons component of
-          Puppertino, just to add send and cancel buttons.
+          These are smaller versions of the Puppertino button component, designed for simple actions like "Send" or "Cancel." However, this component will be removed in future versions. We recommend transitioning to the <a href="https://codedgar.github.io/Puppertino/examples/buttons.html">full button component</a> for better support and functionality.
         </p>
 
         <input type="submit" class="p-form-button p-form-send" value="Send" />
@@ -445,19 +442,27 @@
       </div>
 
       <div class="talk-about-it">
-        <h2>More about validation.</h2>
+        <h2>Custom Validation.</h2>
         <p>
-          Let's say that you are working on a type of validation that can't be
-          done with native HTML validation, can you use the validation of
-          Puppertino? Of course, you can.<br /><br />
-          To use validations in your code, you can use the classes
-          <code class="code">p-form-invalid</code> and
-          <code class="code">p-form-valid</code> respectively. You can add or
-          remove these classes as you may need. But don't add both at the same
-          time. Also, here in Puppertino we don't encourage validation in
-          real-time. Since we think is better for the user to see the validation
-          once he changes the focus of the input.<br />Please be aware that
-          using these classes will disable the default validation.
+          Need to handle a type of validation that HTML doesn’t natively support? Puppertino has you covered.<br /><br />
+
+          <strong>How to Use Puppertino Validation</strong>
+        </p>
+
+        <ul>
+          <li>
+            Use the <code class="code">p-form-invalid</code> and <code class="code">p-form-valid</code> classes to indicate validation states.
+          </li>
+          <li>
+            Add or remove these classes as needed, but never apply both simultaneously.
+          </li>
+          <li>
+            Validation feedback appears after the user moves focus out of the input field, ensuring a smoother experience.
+          </li>
+        </ul>
+
+        <p>
+          <strong>Important</strong>: Applying these classes disables default HTML validation, so use them when custom validation logic is required.
         </p>
 
         <input

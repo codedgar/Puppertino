@@ -52,14 +52,18 @@
 }
 
 .p-action--intern{
+  width: 100%;
   display:block;
   margin:auto;
+  font-size: 1rem;
+  font-weight: 600;
   text-align:center;
   padding: 15px 0;
+  border: 0;
   border-bottom: 1px solid #bfbfbf;
-  font-weight: 500;
   color: #0f75f5;
   text-decoration:none;
+  background-color: transparent;
 }
 
 .p-action-destructive{
@@ -138,4 +142,8 @@
 
 .p-action-big-container.active .p-action-container {
   backdrop-filter: saturate(180%) blur(10px);
+}
+
+.p-action-big-container[aria-hidden="true"] .p-action--intern {
+  display: none;
 }

@@ -153,16 +153,20 @@
   text-align: center;
 }
 
-.p-mobile-tabs a {
+.p-mobile-tabs a, .p-mobile-tabs button {
+  background: transparent;
+  border: 0;
   text-decoration: none;
   color: var(--p-mobile-tabs-color);
   transition: color 0.5s;
   font-size: 0.5rem; 
   padding: 0 20px;
   display: block;
+  width: -webkit-fill-available;
+  cursor: pointer;
 }
 
-.p-mobile-tabs a.active {
+.p-mobile-tabs a.active, .p-mobile-tabs button.active {
   color: var(--primary-col-ac);
   font-weight: 600;
 }
@@ -173,7 +177,7 @@
   margin-bottom: 0.2rem;
 }
 
-.p-mobile-tabs a.active svg{
+.p-mobile-tabs a.active svg, .p-mobile-tabs button.active svg{
   stroke-width:2.5;
 }
 

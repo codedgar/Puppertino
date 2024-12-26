@@ -57,15 +57,19 @@
   display: flex;
 }
 
-.p-modal-button-container > a {
+.p-modal-button-container > a, .p-modal-button-container > button {
+  cursor: pointer;
+  background: transparent;
+  border: 0;
   border-top: 1px solid var(--p-modal-bd-color);
   color: var(--primary-col-ac);
   padding: 30px 0%;
   text-decoration: none;
   width: 100%;
+  font-size: 1rem;
 }
 
-.p-modal-button-container > a:not(:first-child){
+.p-modal-button-container > *:not(:first-child){
   border-left: 1px solid var(--p-modal-bd-color);
 }
 
@@ -98,12 +102,12 @@
     display: block;
   }
 
-  .p-modal-button-container > a {
+  .p-modal-button-container > a, .p-modal-button-container > button {
     border-left: 0;
     display: block;
     padding: 2vh 0%;
   }
-  .p-modal-button-container > a:not(:first-child){
+  .p-modal-button-container > *:not(:first-child){
     border-left: 0px;
   }
 }

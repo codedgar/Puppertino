@@ -39,21 +39,25 @@
 }
 
 .p-blur-1{
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   background: rgba(0,0,0,.1);
 }
 
 .p-blur-2{
+  -webkit-backdrop-filter: saturate(200%) blur(30px);
   backdrop-filter: saturate(200%) blur(30px);
   background: rgba(0,0,0,.1);
 }
 
 .p-blur-3{
+  -webkit-backdrop-filter: saturate(200%) blur(45px);
   backdrop-filter: saturate(200%) blur(45px);
   background: rgba(0,0,0,.1);
 }
 
 .p-blur-4{
+  -webkit-backdrop-filter: saturate(200%) blur(81px);
   backdrop-filter: saturate(200%) blur(81px);
   background: rgba(0,0,0,.1);
 }

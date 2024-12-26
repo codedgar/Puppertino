@@ -8,6 +8,7 @@
     />
     
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -33,7 +34,7 @@
   <body class="p-layout">
 
 <div class="p-action-background">
-    <div class="p-action-big-container" id="actions" data-p-close-on-outside="true">
+    <div class="p-action-big-container" id="actions" data-p-close-on-outside="true" aria-hidden="true">
       <div class="p-action-container">
         <div class="p-action-title">
           <h3 class="p-action-title--intern">What do you want to do?</h3>
@@ -48,7 +49,7 @@
       </div>
     </div>
 
-    <div class="p-action-big-container" id="actions2" data-p-close-on-outside="true">
+    <div class="p-action-big-container" id="actions2" data-p-close-on-outside="true" aria-hidden="true">
       <div class="p-action-container">
         <div class="p-action-title">
           <h3 class="p-action-title--intern">What do you want to do?</h3>
@@ -62,7 +63,7 @@
       </div>
     </div>
 
-    <div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true">
+    <div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true" aria-hidden="true">
       <div class="p-action-container">
         <div class="p-action-title">
           <h3 class="p-action-title--intern">Welcome to actions</h3>
@@ -93,7 +94,7 @@
     <h1>Actions</h1>
     <div class="master">
       <p>
-        Actions are a big part of iOS, and we couldn't stop thinking of adding them. That's why we added it into Puppertino! To use actions, you can
+        Actions are a fundamental part of iOS design, so we couldn’t resist bringing them to Puppertino. Now, you can enjoy their intuitive functionality within your projects! To use actions, you can
         <a
           href="https://github.com/codedgar/Puppertino/blob/master/dist/css/actions.css"
           target="_blank"
@@ -111,18 +112,18 @@
           target="_blank"
           >Full CSS</a
         >
-        and
-        <a
-          href="https://github.com/codedgar/Puppertino/blob/master/dist/js/full.js"
-          target="_blank"
-          >Full JS</a
-        >
+        and currently, there's not full JS.
       </p>
+
+      <div class="talk-about-it">
+        <h3>Note on Previous Versions</h3>
+        <p>In earlier versions of Puppertino, actions were exclusively links. In the latest version, you now have the option to use either <strong>Buttons</strong> or <strong>Links</strong>, offering greater flexibility for appropriate actions while maintaining proper semantics and accessibility.</p>
+      </div>
 
       <div class="talk-about-it">
         <h2>Let's talk about actions!</h2>
         <p>
-          Actions in Puppertino are very similar to modals. They prompt the user to take an decision. The difference is that Actions can feature multiple decisions and are easier to acccess than modals.
+          Actions in Puppertino function similarly to modals, prompting users to make a decision. The difference is that Actions can feature multiple decisions and are easier to acccess than modals.
         </p>
 
 
@@ -135,11 +136,11 @@
     <div class="talk-about-it">
       <h2>General usage.</h2>
       <p>
-        The usage it's the practically the same as modals. You need a container for the Actions and the button that you want to toggle actions needs to have the attribute <code class="code">data-p-open-actions</code> with the #id of the actions you want to open. And the actions with the according ID.
+        Using Actions in Puppertino is nearly identical to Modals. To set up an Action, you need a container for the elements and a button to toggle it. The button should include the attribute <code class="code">data-p-open-actions</code> with the <code class="code">#id</code> of the Action you want to open, while the Action itself should have a matching ID.
         <br><br>
-        There are also variants so you can arrange the elements differently, but <strong>please</strong> try to use just one variant at a time, one action with icon, then another one without action and so on can cause confusion on users and it also looks visually unpleasant, so handle with care.
+        Actions come with several layout variants, allowing you to arrange elements differently. However, it’s important to stick with one style per Action. Mixing variants, like combining options with icons and without, can confuse users and disrupt the visual flow, so it’s best to maintain consistency.
         <br><br>
-        Actions also support the attribute <code class="code">data-p-close-on-outside="true"</code> to close the action on click outside of the area.
+        For added functionality, Actions also support the <code class="code">data-p-close-on-outside="true"</code> attribute, which automatically closes the Action when the user clicks outside its area.
       </p>
 
       <button class="p-btn" data-p-open-actions="#actions">
@@ -174,7 +175,7 @@
       &#60;a href="#" class="p-action--intern">New tab&#60;/a>
     &#60;/div>
     &#60;div class="p-action-container">
-      &#60;a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel&#60;/a>
+      &#60;button class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel&#60;/button>
     &#60;/div>
   &#60;/div>
 
@@ -206,6 +207,101 @@
       </div>
     </div>
 
+    <div class="talk-about-it">
+      <section id="api-methods">
+        <h2>JS API Methods</h2>
+        <p>In newer versions, the old JavaScript has been replaced with the PuppertinoActionsMan class—a lightweight utility for managing action cards within the Puppertino framework.
+          <br><br>
+          While the way you use action cards remains unchanged thanks to automatic initialization, this class introduces programmatic methods for Opening or Closing action cards, and handling user interactions. <br><br> Here's what currently possible using Puppertino's Actions Manager.</p>
+        <article id="open-action" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>openAction(selector)</h3>
+            <p>Opens the action card specified by the CSS selector.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the action card to open.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>  
+    PuppertinoActionsManager.openAction("#exampleAction");
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+    
+        <article id="close-active-action" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>closeActiveAction()</h3>
+            <p>Closes the currently active (open) action card.</p>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>
+    PuppertinoActionsManager.closeActiveAction();
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+    
+        <article id="close-action" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>closeAction(selector)</h3>
+            <p>Closes a specific action card specified by the CSS selector.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the action card to close.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>
+    PuppertinoActionsManager.closeAction("#exampleAction");
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+    
+        <article id="is-action-open" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>isActionOpen(selector)</h3>
+            <p>Checks if a specific action card is currently open.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the action card to check.</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+              <li><code class="code">true</code> if the action card is open, <code>false</code> otherwise.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>
+    if (PuppertinoActionsManager.isActionOpen("#exampleAction")) {
+      console.log("The action card is open.");
+    }
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+    
+
  
 </body>
 
@@ -217,58 +313,5 @@
   <script>
     hljs.initHighlightingOnLoad();
   </script>
-  <script type="text/javascript">
-    (function (document) {
-
-  var p_actions = document.querySelectorAll("[data-p-open-actions]");
-  var actions = document.querySelectorAll(".p-action-big-container");
-  var cancel_action = document.querySelectorAll("[data-p-cancel-action]");
-
-  for (var item of p_actions) {
-    item.addEventListener("click", function (event) {
-      event.preventDefault();
-      var selector = this.getAttribute("data-p-open-actions");
-      if (selector.length == 0) {
-        console.warn(
-          "Error. The data-p-open-action attribute is empty, please add the ID of the action you want to open."
-        );
-        return false;
-      }
-      document.querySelector(".p-action-background").classList.add("nowactive");
-      document.body.classList.add("p-modal-opened");
-      document.querySelector(selector).classList.add("active");
-    });
-  }
-
-  for (var element of cancel_action) {
-    element.addEventListener("click", function (event) {
-      event.preventDefault();
-      document.querySelector(".p-action-big-container.active").classList.remove("active");
-      document.querySelector(".p-action-background").classList.remove("nowactive");
-      document.body.classList.remove("p-modal-opened");
-    });
-  }
-
-  document
-    .querySelector(".p-action-background")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
-      var opened_action = document.querySelector(".p-action-big-container.active");
-      if (opened_action.getAttribute("data-p-close-on-outside") == "true") {
-        event.stopPropagation();
-        opened_action.classList.remove("active");
-        document
-          .querySelector(".p-action-background")
-          .classList.remove("nowactive");
-        document.body.classList.remove("p-modal-opened");
-      }
-    });
-
-  for (var action of actions) {
-      action.addEventListener("click", function (event) {
-      event.stopPropagation();
-    });
-  }
-})(document)
-  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/actions.js"></script>
 </html>

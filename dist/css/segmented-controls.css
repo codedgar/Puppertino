@@ -14,7 +14,11 @@
   overflow: hidden;
   width: 100%;
 }
-.p-segmented-controls a {
+.p-segmented-controls a, .p-segmented-controls button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 1rem;
   color: var(--color-segmented);
   flex: 1;
   padding: 10px;
@@ -23,11 +27,11 @@
   transition: 0.5s color, 0.5s background, 0.5s border-color;
   -webkit-tap-highlight-color: transparent;
 }
-.p-segmented-controls a.active {
+.p-segmented-controls a.active, .p-segmented-controls button.active  {
   background: var(--color-segmented);
   color: var(--p-segmented-bg);
 }
-.p-segmented-controls a:not(:first-child) {
+.p-segmented-controls>*:not(:first-child) {
   border-left: 1px solid currentColor;
 }
 
@@ -41,10 +45,10 @@
   border-radius: 30px;
 }
 
-.p-segmented-controls-alt a:not(:first-child) {
+.p-segmented-controls-alt>*:not(:first-child) {
   border: 0;
 }
-.p-segmented-controls-alt a.active {
+.p-segmented-controls-alt>*.active {
   background: var(--color-lighter-segment);
   color: var(--color-segmented);
   font-weight: bold;
@@ -64,11 +68,11 @@
 .p-segmented-controls-outline-alt {
   border-radius: 30px;
 }
-.p-segmented-controls-outline-alt a {
+.p-segmented-controls-outline-alt a, .p-segmented-controls-outline-alt button {
   border: 2px solid transparent;
   border-radius: 30px;
 }
-.p-segmented-controls-outline-alt a.active {
+.p-segmented-controls-outline-alt a.active, .p-segmented-controls-outline-alt button.active {
   background: var(--p-segmented-bg);
   border-color: var(--color-segmented);
   border-radius: 30px;

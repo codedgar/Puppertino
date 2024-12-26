@@ -10,6 +10,7 @@
     />
     
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -66,7 +67,9 @@
       <div class="talk-about-it">
         <h2>Push Buttons.</h2>
         <p>
-          Push buttons come in several variations to suit different scenarios. They can be implemented as <code class="code">&#60;a></code> or <code class="code">&#60;button></code>elements, depending on the context. For cases where buttons need to be disabled, the disabled attribute can be applied to prevent user interaction. This ensures that the buttons are visually and functionally consistent with your design while maintaining clear communication with users about available actions.
+          Push buttons come in several variations to suit different scenarios. They can be implemented as <code class="code">&#60;a></code> or <code class="code">&#60;button></code> elements, depending on the context.
+          <br><br>
+          For cases where buttons need to be disabled, the <strong>disabled</strong> and the <strong>tabindex="-1"</strong> attributes can be applied to prevent user interaction. This ensures that the buttons are visually and functionally consistent with your design while maintaining clear communication with users about available actions.
         </p>
         <div class="row">
           <div class="col-md-6 mt-lg-5">
@@ -102,7 +105,7 @@
 
 &#60;button class="p-btn p-btn-destructive">Destructive&#60;/button>
 
-&#60;a href="#" class="p-btn p-btn-disabled">Disabled&#60;/a>
+&#60;a href="#" class="p-btn p-btn-disabled" disabled>Disabled&#60;/a>
     
 &#60;a href="#" class="p-btn p-prim-col">Primary&#60;/a>
     
@@ -192,25 +195,27 @@
         <p>
           The Icon Button, previously known as the "Help Button", is a circular button that contains an icon. You can use a letter, font-based icons (such as Font Awesome), or an SVG. For more details on available icons, refer to the <a href="https://codedgar.github.io/Puppertino/examples/icons.html">icons section</a>.
           <br><br>
+          For accessibility, always make sure to add descriptive text to the icon button using the <strong>aria-label</strong> attribute.
+          <br><br>
           Customization is straightforward: you can modify the border and icon colors using the <code class="code">color</code> property or by applying classes from the <a href="/docs/examples/color_palette.html">Color palette</a>. If you'd like to remove the button's borders, simply add the <code class="code">p-btn-icon-no-border</code> class.
         </p>
-        <a href="#" class="p-btn-icon">?</a>
+        <a href="#" class="p-btn-icon" aria-label="Help Button">?</a>
 
-        <a href="#" class="p-btn-icon p-lime-color">🐶</a>
+        <a href="#" class="p-btn-icon p-lime-color" aria-label="Dog Button">🐶</a>
 
-        <a href="#" class="p-btn-icon p-bubblegum-color">
+        <a href="#" class="p-btn-icon p-bubblegum-color" aria-label="Like button">
           <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </a>
 
-        <a href="#" class="p-btn-icon p-strawberry-color">
+        <a href="#" class="p-btn-icon p-strawberry-color" aria-label="Delete button">
           <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
         </a>
 
-        <a href="#" class="p-btn-icon p-orange p-silver-100-color p-btn-icon-no-border">
+        <a href="#" class="p-btn-icon p-orange p-silver-100-color p-btn-icon-no-border" aria-label="Delete User Button">
           <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
         </a>
 
-        <a href="#" class="p-btn-icon p-mint p-silver-100-color">
+        <a href="#" class="p-btn-icon p-mint p-silver-100-color" aria-label="Bold Text Button">
           <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
         </a>
 
@@ -218,11 +223,11 @@
         <div class="code">
           <pre>
 				<code class="html">
-&#60;a href="#" class="p-btn-icon">?&#60;/a>
+&#60;a href="#" class="p-btn-icon" aria-label="Help Button">?&#60;/a>
 
-&#60;a href="#" class="p-btn-icon">&#60;!-- SVG ICON HERE -->&#60;/a>
+&#60;a href="#" class="p-btn-icon" aria-label="Custom Button">&#60;!-- SVG ICON HERE -->&#60;/a>
 
-&#60;a href="#" class="p-btn-icon p-mint p-silver-100-color">Custom Color&#60;/a>
+&#60;a href="#" class="p-btn-icon p-mint p-silver-100-color" aria-label="Custom Color Button">Custom Color&#60;/a>
 				</code>
 			</pre>
         </div>
@@ -242,7 +247,7 @@
 
         <a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive</a>
 
-        <a href="#" class="p-btn p-btn-scope p-btn-disabled">Disabled</a>
+        <a href="#" class="p-btn p-btn-scope p-btn-disabled" disabled="true" tabindex="-1">Disabled</a>
 
         <a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action</a>
 
@@ -256,7 +261,7 @@
 
 &#60;a href="#" class="p-btn p-btn-scope p-btn-scope-unactive">Unactive&#60;/a>
 
-&#60;a href="#" class="p-btn p-btn-scope p-btn-disabled">Disabled&#60;/a>
+&#60;a href="#" class="p-btn p-btn-scope p-btn-disabled" disabled="true" tabindex="-1">Disabled&#60;/a>
 
 &#60;a href="#" class="p-btn p-btn-scope p-btn-scope-outline">Action&#60;/a>
 				</code>

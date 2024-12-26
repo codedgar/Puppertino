@@ -9,6 +9,7 @@
     />
     
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -69,6 +70,11 @@
       </p>
 
       <div class="talk-about-it">
+        <h3>Note on Previous Versions</h3>
+        <p>In earlier versions of Puppertino, segmented controls were exclusively links. In the latest version, you now have the option to use either <strong>Buttons</strong> or <strong>Links</strong>, offering greater flexibility for appropriate actions while maintaining proper semantics and accessibility.</p>
+      </div>
+
+      <div class="talk-about-it">
         <h2>General Usage of the segmented controls.</h2>
         <p>
           Segmented controls are made of 2 main elements, the container and the links inside of them which can include SVGs or plain text. The container features the main class, <code class="code">p-segmented-controls</code> and the links inside of it don't need to feature any class in particular, just <code class="code">active</code> for the active control. There also <a href="#modifier">Modifier classes</a> to change the default look of the segmented controls.<br><br>
@@ -79,7 +85,7 @@
           <div class="mw-300">
             <div class="p-segmented-controls">
               <a href="#" class="active">Roadmap</a>
-              <a href="#">Satelite</a>
+              <button>Satelite</button>
             </div>
           </div>
         </div>
@@ -266,5 +272,5 @@
   <script defer>
     hljs.initHighlightingOnLoad();
   </script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino/src/js/segmented_controls.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/segmented_controls.js"></script>
 </html>

@@ -8,6 +8,7 @@
     />
     
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -67,6 +68,11 @@
         >
         (Not recommended if you are just going to use this component).
       </p>
+
+      <div class="talk-about-it">
+        <h3>Note on Previous Versions</h3>
+        <p>In earlier versions of Puppertino, tabs were exclusively links. In the latest version, you now have the option to use either <strong>Buttons</strong> or <strong>Links</strong>, offering greater flexibility for appropriate actions while maintaining proper semantics and accessibility.</p>
+      </div>
 
       <div class="talk-about-it">
         <h2>Desktop tabs.</h2>
@@ -153,10 +159,10 @@
                 
                 <div class="p-mobile-tabs">
                 <div>
-                  <a href="#" class="active" data-p-mobile-toggle="#demo1">
+                  <button class="active" data-p-mobile-toggle="#demo1">
                     <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     Home
-                  </a>
+                  </button>
                 </div>
                 <div>
                   <a href="#" data-p-mobile-toggle="#demo2">
@@ -203,10 +209,10 @@
   
   &#60;div class="p-mobile-tabs">
   &#60;div>
-    &#60;a href="#" class="active" data-p-mobile-toggle="#demo1">
+    &#60;button class="active" data-p-mobile-toggle="#demo1">
       &#60;!-- SVG ICON -->
       Home
-    &#60;/a>
+    &#60;/button>
   &#60;/div>
   &#60;div>
     &#60;a href="#" data-p-mobile-toggle="#demo2">
@@ -246,5 +252,5 @@
   <script defer>
     hljs.initHighlightingOnLoad();
   </script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino/src/js/tabs.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/tabs.js"></script>
 </html>
