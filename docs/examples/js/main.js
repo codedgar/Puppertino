@@ -7,8 +7,28 @@ async function loadPartial(elementId, partialPath) {
     if (!response.ok) throw new Error(`Failed to load ${partialPath}`);
     const html = await response.text();
     const element = document.getElementById(elementId);
+    
     if (element) {
       element.innerHTML = html;
+      
+      // Execute scripts manually since innerHTML doesn't run them
+      const scripts = element.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        
+        // Copy all attributes (src, type, async, defer, etc.)
+        Array.from(oldScript.attributes).forEach(attr => {
+          newScript.setAttribute(attr.name, attr.value);
+        });
+        
+        // Copy inline script content
+        if (oldScript.textContent) {
+          newScript.textContent = oldScript.textContent;
+        }
+        
+        // Replace old script with new executable one
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
     }
   } catch (error) {
     console.error('Error loading partial:', error);
