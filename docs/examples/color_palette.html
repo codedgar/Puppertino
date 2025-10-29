@@ -1,55 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
     <title>Color Palette - Puppertino Framework</title>
-    <link
-      href="https://rsms.me/inter/inter.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
-    />
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
-
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <link rel="stylesheet" type="text/css" href="doc.css" />
-    <meta
-      name="description"
-      content="This is the documentation for Icons on the Puppertino Framework, a framework that mimics Apple's design, woof!"
-    />
-    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-176821843-1');
-    </script>
+    <meta name="description" content="This is the documentation for Icons on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+    <div id="head-content"></div>
   </head>
   <body class="p-layout">
-    <div class="route">
-      <a
-        href="https://codedgar.github.io/Puppertino/"
-        class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Puppertino</a
-      >
-      <p>/</p>
-      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Examples</a
-      >
-      <p>/</p>
-      <a href="color_palette.html" class="p-btn p-btn-scope">Color Palette</a>
-    </div>
-    <h1>Color Palette</h1>
+    <div class="route" id="route-breadcrumb"></div>
+
+    <div class="page-container">
+      <div id="sidebar-container"></div>
+
+      <div class="main-content">
+<h1>Color Palette</h1>
     <div class="master">
       <p>
         Colors are amazing, but if you don't know what colors to use or need a
@@ -474,34 +437,12 @@
 
     <div class="copy_correct">
       <p class="p-caption">Color <span id="color_talk"></span> copied!</p>
+      </div>
     </div>
- 
+  </div>
+
+  <div id="footer-content"></div>
+  <script src="js/pages-config.js"></script>
+  <script src="js/main.js"></script>
 </body>
-
-  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
-  <script type="text/javascript">
-    var color_base = document.querySelectorAll(".color_base");
-    for (var item of color_base) {
-      item.addEventListener("click", function (event) {
-        event.preventDefault();
-        var color_actual = this.classList[this.classList.length - 1];
-        console.log(color_actual);
-        document.getElementById("textarea_color").value = "";
-        document.getElementById("textarea_color").value = color_actual;
-        document.querySelector("#textarea_color").select();
-        document.execCommand("copy");
-        document.querySelector("#color_talk").classList.add(color_actual);
-        document.querySelector("#color_talk").textContent = color_actual;
-        document.querySelector(".copy_correct").classList.add("active");
-        setTimeout(function () {
-          document.querySelector(".copy_correct").classList.remove("active");
-          setTimeout(function () {
-            document.querySelector("#color_talk").className = "";
-          }, 200);
-        }, 700);
-      });
-    }
-  </script>
-
-  
 </html>

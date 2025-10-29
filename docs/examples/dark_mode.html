@@ -1,51 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
     <title>Dark Mode - Puppertino Framework</title>
-    <link
-      href="https://rsms.me/inter/inter.css"
-      rel="stylesheet"
-    />
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
-
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <link rel="stylesheet" type="text/css" href="doc.css" />
-    <meta
-      name="description"
-      content="This is the documentation for Dark Mode on the Puppertino Framework, a framework that mimics Apple's design, woof!"
-    />
-    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-176821843-1');
-    </script>
+    <meta name="description" content="This is the documentation for Dark Mode on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+    <div id="head-content"></div>
   </head>
   <body class="p-layout">
-    <div class="route">
-      <a
-        href="https://codedgar.github.io/Puppertino/"
-        class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Puppertino</a
-      >
-      <p>/</p>
-      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Examples</a
-      >
-      <p>/</p>
-      <a href="dark_mode.html" class="p-btn p-btn-scope">Dark Mode</a>
-    </div>
-    <h1>Dark Mode</h1>
+    <div class="route" id="route-breadcrumb"></div>
+
+    <div class="page-container">
+      <div id="sidebar-container"></div>
+
+      <div class="main-content">
+<h1>Dark Mode</h1>
     <div class="master">
       <p>
         Dark Mode it's not new to Apple's design system, and it has been something we've been wanting to add since the first version of Puppertino. And this is now a strong part of Puppertino, to use Dark Mode, you will need to get the  
@@ -205,22 +172,11 @@
           How does this all work? Simple, Puppertino is based on CSS variables, and when you toggle this class you are basically overriding all the colors in CSS variables for the dark themed ones, making it really easy to change all the colors, and also create your own themes if you need to do so. Keep in mind that some variables have been reused to cut down sizes.
         </p>
       </div>
-
     </div>
- 
+  </div>
+
+  <div id="footer-content"></div>
+  <script src="js/pages-config.js"></script>
+  <script src="js/main.js"></script>
 </body>
-  <script
-    type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
-  ></script>
-  <script defer>
-    hljs.initHighlightingOnLoad();
-  </script>
-  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
-  <script defer>
-    document.querySelector('#the_button').addEventListener('click',function(e){
-      e.preventDefault();
-      puppertinoThemeMan.toggle();
-    });
-  </script>
 </html>

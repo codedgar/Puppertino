@@ -1,50 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
     <title>Examples & Documentation - Puppertino Framework</title>
-    <link
-      href="https://rsms.me/inter/inter.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
-    />
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
-
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <link rel="stylesheet" type="text/css" href="doc.css" />
-    <meta
-      name="description"
-      content="This is the documentation on the Puppertino Framework, a framework that mimics Apple's design, woof!"
-    />
-    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-176821843-1');
-</script>
+    <meta name="description" content="This is the documentation on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css" />
+    <div id="head-content"></div>
   </head>
   <body class="p-layout">
-    <div class="route">
-      <a
-        href="https://codedgar.github.io/Puppertino/"
-        class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Puppertino</a
-      >
-      <p>/</p>
-      <a href="index.html" class="p-btn p-btn-scope">Examples</a>
-    </div>
+    <div class="route" id="route-breadcrumb"></div>
+
+    <div class="page-container">
+      <div id="sidebar-container"></div>
+
+      <div class="main-content">
     <div class="row between-xs center_xs">
       <div class="col-xs-11 col-md-6">
         <h1>Documentation and Examples</h1>
@@ -165,9 +133,12 @@
         </a>
       </div>
 
+      </div>
     </div>
- 
-</body>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
+  <div id="footer-content"></div>
+  <script src="js/pages-config.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>

@@ -2,96 +2,17 @@
 <html lang="en">
   <head>
     <title>Actions - Puppertino Framework</title>
-    <link
-      href="https://rsms.me/inter/inter.css"
-      rel="stylesheet"
-    />
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
-
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <link rel="stylesheet" type="text/css" href="doc.css" />
-    <meta
-      name="description"
-      content="This is the documentation for Actions on the Puppertino Framework, a framework that mimics Apple's design, woof!"
-    />
-    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-176821843-1');
-</script>
+    <meta name="description" content="This is the documentation for Actions on the Puppertino Framework, a framework that mimics Apple's design, woof!">
+    <div id="head-content"></div>
   </head>
   <body class="p-layout">
+    <div class="route" id="route-breadcrumb"></div>
 
-<div class="p-action-background">
-    <div class="p-action-big-container" id="actions" data-p-close-on-outside="true" aria-hidden="true">
-      <div class="p-action-container">
-        <div class="p-action-title">
-          <h3 class="p-action-title--intern">What do you want to do?</h3>
-          <p class="p-action-text">Select an option below...</p></div>
-        <a href="#" class="p-action--intern p-action-destructive p-action-icon"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Close this tab</a>
-        <a href="#" class="p-action--intern p-action-destructive p-action-icon-inline" ><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Close this tab</a>
-        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
-        <a href="#" class="p-action--intern">New tab</a>
-      </div>
-      <div class="p-action-container">
-        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
-      </div>
-    </div>
+    <div class="page-container">
+      <div id="sidebar-container"></div>
 
-    <div class="p-action-big-container" id="actions2" data-p-close-on-outside="true" aria-hidden="true">
-      <div class="p-action-container">
-        <div class="p-action-title">
-          <h3 class="p-action-title--intern">What do you want to do?</h3>
-          <p class="p-action-text">Select an option below...</p>
-        </div>
-        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
-        <a href="#" class="p-action--intern">New tab</a>
-      </div>
-      <div class="p-action-container">
-        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
-      </div>
-    </div>
-
-    <div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true" aria-hidden="true">
-      <div class="p-action-container">
-        <div class="p-action-title">
-          <h3 class="p-action-title--intern">Welcome to actions</h3>
-          <p class="p-action-text">Select an option below...</p>
-        </div>
-        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
-        <a href="#" class="p-action--intern">New tab</a>
-      </div>
-      <div class="p-action-container">
-        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
-      </div>
-    </div>
-</div>
-
-    <div class="route">
-      <a
-        href="https://codedgar.github.io/Puppertino/"
-        class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Puppertino</a
-      >
-      <p>/</p>
-      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
-        >Examples</a
-      >
-      <p>/</p>
-      <a href="actions.html" class="p-btn p-btn-scope">Actions</a>
-    </div>
-    <h1>Actions</h1>
+      <div class="main-content">
+<h1>Actions</h1>
     <div class="master">
       <p>
         Actions are a fundamental part of iOS design, so we couldn’t resist bringing them to Puppertino. Now, you can enjoy their intuitive functionality within your projects! To use actions, you can
@@ -299,19 +220,12 @@
           </div>
         </article>
       </section>
+      </div>
     </div>
-    
+  </div>
 
- 
+  <div id="footer-content"></div>
+  <script src="js/pages-config.js"></script>
+  <script src="js/main.js"></script>
 </body>
-
-  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
-  <script
-    type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
-  ></script>
-  <script>
-    hljs.initHighlightingOnLoad();
-  </script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/actions.js"></script>
 </html>

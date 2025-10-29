@@ -1,0 +1,103 @@
+// Configuration for all documentation pages
+const pagesConfig = [
+  {
+    title: 'Getting Started',
+    filename: 'getting-started.html',
+    description: 'Learn how to install and use Puppertino',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M10.146 10.146l-.353.354.707.707.354-.353-.708-.708zM13.5 7.5l.354.354.353-.354-.353-.354-.354.354zm-2.646-3.354l-.354-.353-.707.707.353.354.708-.708zm-6.708 6.708l.354.353.707-.707-.353-.354-.708.708zM1.5 7.5l-.354-.354-.353.354.353.354L1.5 7.5zm3.354-2.646l.353-.354-.707-.707-.354.353.708.708zm6 6l3-3-.708-.708-3 3 .708.708zm3-3.708l-3-3-.708.708 3 3 .708-.708zm-9 3l-3-3-.708.708 3 3 .708-.708zm-3-2.292l3-3-.708-.708-3 3 .708.708zm6.153-6.436l-2 12 .986.164 2-12-.986-.164z" fill="currentColor"></path></svg>',
+    category: 'getting-started'
+  },
+  {
+    title: 'Buttons',
+    filename: 'buttons.html',
+    description: 'Button components and variations',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M5.5 10V8.5m0 0v-5a1 1 0 012 0v4h3.353c.91 0 1.647.737 1.647 1.647V10A4.5 4.5 0 018 14.5h-.5a4 4 0 01-4-4 2 2 0 012-2zm3.5-3h2a2.5 2.5 0 000-5H4a2.5 2.5 0 000 5" stroke="currentColor"></path></svg>',
+    category: 'components'
+  },
+  {
+    title: 'Forms',
+    filename: 'forms.html',
+    description: 'Form inputs and controls',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path clip-rule="evenodd" d="M5.5 11.493l2 2.998 2-2.998h4a1 1 0 001-1V1.5a.999.999 0 00-1-.999h-12a1 1 0 00-1 1v8.993a1 1 0 001 1h4z" stroke="currentColor" stroke-linecap="square" stroke-linejoin="round"></path></svg>',
+    category: 'components'
+  },
+  {
+    title: 'Modals',
+    filename: 'modals.html',
+    description: 'Modal dialogs and popups',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M2 12.5v.5h1v-.5H2zm5 0v.5h1v-.5H7zm-4 0V12H2v.5h1zm4-.5v.5h1V12H7zm-2-2a2 2 0 012 2h1a3 3 0 00-3-3v1zm-2 2a2 2 0 012-2V9a3 3 0 00-3 3h1zm2-8a2 2 0 00-2 2h1a1 1 0 011-1V4zm2 2a2 2 0 00-2-2v1a1 1 0 011 1h1zM5 8a2 2 0 002-2H6a1 1 0 01-1 1v1zm0-1a1 1 0 01-1-1H3a2 2 0 002 2V7zM1.5 3h12V2h-12v1zm12.5.5v8h1v-8h-1zm-.5 8.5h-12v1h12v-1zM1 11.5v-8H0v8h1zm.5.5a.5.5 0 01-.5-.5H0A1.5 1.5 0 001.5 13v-1zm12.5-.5a.5.5 0 01-.5.5v1a1.5 1.5 0 001.5-1.5h-1zM13.5 3a.5.5 0 01.5.5h1A1.5 1.5 0 0013.5 2v1zm-12-1A1.5 1.5 0 000 3.5h1a.5.5 0 01.5-.5V2zM9 6h3V5H9v1zm0 3h3V8H9v1zm-9 6h15v-1H0v1zM3 0v2.5h1V0H3zm8 0v2.5h1V0h-1z" fill="currentColor"></path></svg>',
+    category: 'components'
+  },
+  {
+    title: 'Actions',
+    filename: 'actions.html',
+    description: 'Action sheets and menus',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M15 14.5H0m15-14H0m13.5 9h-12v-4h12v4z" stroke="currentColor"></path></svg>',
+    category: 'components'
+  },
+  {
+    title: 'Icons',
+    filename: 'icons.html',
+    description: 'Icon sets and usage',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M6.5 5.5l1 1 1-1a1.414 1.414 0 012 2l-3 3-3-3a1.414 1.414 0 012-2z" stroke="currentColor"></path><path d="M.5 7.5a7 7 0 1014 0 7 7 0 00-14 0z" stroke="currentColor"></path></svg>',
+    category: 'design'
+  },
+  {
+    title: 'Layout',
+    filename: 'layout.html',
+    description: 'Layout utilities and grid',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M7.5 14V1.5M1.5 5V1.5h12V5m-10 8.5H11" stroke="currentColor"></path></svg>',
+    category: 'design'
+  },
+  {
+    title: 'Colors',
+    filename: 'color_palette.html',
+    description: 'Color palette and utilities',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M6.086 2.914l-.354-.353.354.353zM1.914 7.086l-.353-.354.353.354zm0 2.828l.354-.353-.354.353zm3.172 3.172l.353-.354-.353.354zm2.828 0l.354.353-.354-.353zm4.172-4.172l-.354-.353.354.353zm0-2.828l.353-.354-.353.354zM8.914 2.914l-.353.354.353-.354zm3.767 7.586l.353-.354-.353-.353-.354.353.354.354zm1.18 1.18l-.353.354.354-.353zM11.639 14l.312-.39-.312.39zm2.086 0l-.312-.39.312.39zM5.732 2.56L1.561 6.733l.707.707 4.171-4.171-.707-.707zm-4.171 7.708l3.171 3.171.707-.707-3.171-3.171-.707.707zm6.707 3.171l4.171-4.171-.707-.707-4.171 4.171.707.707zm4.171-7.707L9.268 2.561l-.707.707 3.171 3.171.707-.707zm0 3.536a2.5 2.5 0 000-3.536l-.707.707a1.5 1.5 0 010 2.122l.707.707zm-7.707 4.171a2.5 2.5 0 003.536 0l-.707-.707a1.5 1.5 0 01-2.122 0l-.707.707zM1.561 6.732a2.5 2.5 0 000 3.536l.707-.707a1.5 1.5 0 010-2.122l-.707-.707zm4.878-3.464a1.5 1.5 0 012.122 0l.707-.707a2.5 2.5 0 00-3.536 0l.707.707zM7 7V2.5H6V7h1zM2 2.5v4h1v-4H2zM4.5 0A2.5 2.5 0 002 2.5h1A1.5 1.5 0 014.5 1V0zM7 2.5A2.5 2.5 0 004.5 0v1A1.5 1.5 0 016 2.5h1zM1.5 10h10V9h-10v1zm10.827.854l1.181 1.18.707-.707-1.18-1.18-.708.707zm-.473 1.18l1.18-1.18-.707-.708-1.18 1.181.707.707zm.096 1.576c-.29-.232-.422-.51-.438-.77-.015-.257.081-.545.342-.806l-.707-.707c-.444.444-.667 1.004-.633 1.575.035.569.324 1.099.811 1.488l.625-.78zm1.462 0a1.17 1.17 0 01-1.462 0l-.625.78a2.17 2.17 0 002.711 0l-.624-.78zm.096-1.576c.26.26.357.549.341.807-.016.259-.147.537-.437.769l.624.78c.487-.39.777-.919.811-1.489.035-.57-.188-1.13-.632-1.574l-.707.707z" fill="currentColor"></path></svg>',
+    category: 'design'
+  },
+  {
+    title: 'Segmented Controls',
+    filename: 'segmented_controls.html',
+    description: 'Segmented control components',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M7.5 1.5v12m-6-6h12m-12-6h12v12h-12v-12z" stroke="currentColor"></path></svg>',
+    category: 'components'
+  },
+  {
+    title: 'Shadows & Blur',
+    filename: 'shadows.html',
+    description: 'Shadow and blur effects',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M1.5 8.5l-.395-.307a.5.5 0 00.041.66L1.5 8.5zm5-7l-.354.354L6.5 1.5zm2 2l.354.354.353-.354-.353-.354L8.5 3.5zm-2 2l-.354.354.354.353.354-.353L6.5 5.5zm-2-2l-.354.354L4.5 3.5zm3.136.864l.354.353-.354-.353zm-.272.272l-.354-.353.354.353zm.272 5.728l-.353-.354.353.354zm5.728-5.728l-.354-.353.354.353zm0-.272l-.354.353.354-.353zm-6 6l.353-.354-.353.354zM2 15h11v-1H2v1zm5.854-.854l-6-6-.708.708 6 6 .708-.707zm-5.96-5.339l3.5-4.5-.789-.614-3.5 4.5.79.614zm4.252-6.953l2 2 .708-.708-2-2-.708.708zm2 1.292l-2 2 .708.708 2-2-.708-.708zm-1.292 2l-2-2-.708.708 2 2 .708-.708zm-2-3.292a.914.914 0 011.292 0l.708-.708a1.914 1.914 0 00-2.708 0l.708.708zm-.708-.708a1.914 1.914 0 000 2.708l.708-.708a.914.914 0 010-1.292l-.708-.708zM7.283 4.01l-.273.273.707.707.273-.273-.707-.707zm.707 6.707l5.727-5.727-.707-.707-5.727 5.727.707.707zm5.727-5.727c.27-.27.27-.71 0-.98l-.707.707a.307.307 0 010-.434l.707.707zM7.01 10.717c.27.27.71.27.98 0l-.707-.707c.12-.12.314-.12.434 0l-.707.707zm0-6.434a4.55 4.55 0 000 6.434l.707-.707a3.55 3.55 0 010-5.02l-.707-.707zm.98.434a3.55 3.55 0 015.02 0l.707-.707a4.55 4.55 0 00-6.434 0l.707.707z" fill="currentColor"></path></svg>',
+    category: 'design'
+  },
+  {
+    title: 'Tabs',
+    filename: 'tabs.html',
+    description: 'Tab navigation components',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M7.5 1.5l.197-.46a.5.5 0 00-.394 0l.197.46zm-7 3l-.197-.46a.5.5 0 000 .92L.5 4.5zm7 3l-.197.46a.5.5 0 00.394 0L7.5 7.5zm7-3l.197.46a.5.5 0 000-.92l-.197.46zm-7 6l-.197.46.197.084.197-.084-.197-.46zm0 3l-.197.46.197.084.197-.084-.197-.46zM7.303 1.04l-7 3 .394.92 7-3-.394-.92zm-7 3.92l7 3 .394-.92-7-3-.394.92zm7.394 3l7-3-.394-.92-7 3 .394.92zm7-3.92l-7-3-.394.92 7 3 .394-.92zM.303 7.96l7 3 .394-.92-7-3-.394.92zm7.394 3l7-3-.394-.92-7 3 .394.92zm-7.394 0l7 3 .394-.92-7-3-.394.92zm7.394 3l7-3-.394-.92-7 3 .394.92z" fill="currentColor"></path></svg>',
+    category: 'components'
+  },
+  {
+    title: 'Dark Mode',
+    filename: 'dark_mode.html',
+    description: 'Dark mode implementation',
+    icon: '<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M1.66 11.362A6.5 6.5 0 007.693.502a7 7 0 11-6.031 10.86z" stroke="currentColor" stroke-linejoin="round"></path></svg>',
+    category: 'design'
+  }
+];
+
+// Helper function to get page config by filename
+function getPageConfig(filename) {
+  return pagesConfig.find(page => page.filename === filename);
+}
+
+// Helper function to get current page filename
+function getCurrentPageFilename() {
+  const path = window.location.pathname;
+  return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+}
+
+// Helper function to get current page config
+function getCurrentPageConfig() {
+  return getPageConfig(getCurrentPageFilename());
+}
