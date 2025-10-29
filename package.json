@@ -1,8 +1,39 @@
 {
-  "name": "puppertino",
+  "name": "@codedgar/puppertino",
   "version": "1.0.0",
   "description": "A CSS framework based on Human Guidelines from Apple",
-  "main": "none",
+  "main": "./dist/css/newfull.css",
+  "style": "./dist/css/newfull.css",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "style": "./dist/css/newfull.css",
+      "default": "./dist/css/newfull.css"
+    },
+    "./css/*": "./dist/css/*",
+    "./js/*": "./src/js/*",
+    "./buttons": "./dist/css/buttons.css",
+    "./modals": "./dist/css/modals.css",
+    "./forms": "./dist/css/forms.css",
+    "./tabs": "./dist/css/tabs.css",
+    "./actions": "./dist/css/actions.css",
+    "./cards": "./dist/css/cards.css",
+    "./layout": "./dist/css/layout.css",
+    "./colors": "./dist/css/color_palette.css",
+    "./dark-mode": "./dist/css/dark_mode.css",
+    "./segmented-controls": "./dist/css/segmented-controls.css",
+    "./shadows": "./dist/css/shadows.css",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css",
+    "src/js/*.js"
+  ],
   "directories": {
     "doc": "docs"
   },
@@ -18,7 +49,10 @@
     "framework",
     "ui",
     "uikit",
-    "apple"
+    "apple",
+    "macos",
+    "design-system",
+    "components"
   ],
   "author": "Codedgar",
   "license": "MIT",

@@ -37,31 +37,64 @@ You can also find the full list of individual components and their CDN links on 
 
 ### NPM
 
-You can install this repository through NPM + GIT:
+You can install Puppertino through NPM directly from the GitHub repository:
+
 ```bash
+# Via NPM (recommended)
+npm install @codedgar/puppertino@github:codedgar/Puppertino
+
+# Or install from a specific branch
+npm install @codedgar/puppertino@github:codedgar/Puppertino#master
+
 # Via SSH
-npm i --save git@github.com:codedgar/Puppertino.git#{{BRANCH_NAME}}
+npm install git+ssh://git@github.com/codedgar/Puppertino.git
 
-# Eg.
-npm i --save git@github.com:codedgar/Puppertino.git#master
-
-# Or Via HTTPS
-npm i --save https://github.com/codedgar/Puppertino.git#BRANCH_NAME
-
-# Eg.
-npm i --save https://github.com/codedgar/Puppertino.git#master
+# Via HTTPS
+npm install https://github.com/codedgar/Puppertino.git
 ```
 
-You can change master with the branch of your choosing to install a specific branch. After NPM installation,
-you can simply import the library from `node_modules`
+#### Usage after installation
 
-#### In your CSS
+Once installed, you can import Puppertino in several ways depending on your build setup:
+
+**Import the full framework:**
+```javascript
+// In JavaScript/TypeScript
+import '@codedgar/puppertino'
+
+// In CSS
+@import '@codedgar/puppertino';
+```
+
+**Import individual components (modular approach):**
+```javascript
+// Import only what you need
+import '@codedgar/puppertino/buttons'
+import '@codedgar/puppertino/modals'
+import '@codedgar/puppertino/forms'
+import '@codedgar/puppertino/tabs'
+```
+
+**Import JavaScript modules:**
+```javascript
+// ES6 imports
+import '@codedgar/puppertino/js/modals.js'
+import '@codedgar/puppertino/js/dakmode_manager.js'
+import '@codedgar/puppertino/js/tabs.js'
+
+// CommonJS require
+const modals = require('@codedgar/puppertino/src/js/modals.js')
+```
+
+**Direct CSS imports:**
 ```css
-@import("path/to/node_modules/puppertino/dist/full.css")
-```
-#### In your Javascript
-```js
-require("path/to/node_modules/puppertino/src/js/{{file you need, eg tabs.js}}")
+/* Import full framework */
+@import '@codedgar/puppertino';
+
+/* Or import individual components */
+@import '@codedgar/puppertino/buttons';
+@import '@codedgar/puppertino/modals';
+@import '@codedgar/puppertino/dark-mode';
 ```
 
 ## Current Components
