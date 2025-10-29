@@ -2,17 +2,53 @@
 <html lang="en">
   <head>
     <title>Layout - Puppertino Framework</title>
-    <meta name="description" content="This is the documentation for layout on the Puppertino Framework, a framework that mimics Apple's design, woof!">
-    <div id="head-content"></div>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
+    />
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="This is the documentation for layout on the Puppertino Framework, a framework that mimics Apple's design, woof!"
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176821843-1');
+</script>
   </head>
   <body class="p-layout">
-    <div class="route" id="route-breadcrumb"></div>
-
-    <div class="page-container">
-      <div id="sidebar-container"></div>
-
-      <div class="main-content">
-<h1>Layout</h1>
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="layout.html" class="p-btn p-btn-scope">Layout</a>
+    </div>
+    <h1>Layout</h1>
     <div class="master">
       <p>
         Text is the motor of websites and apps. Without them there would be no
@@ -81,10 +117,8 @@
         <p class="p-caption">Caption (p-caption)</p>
       </div>
     </div>
-  </div>
-
-  <div id="footer-content"></div>
-  <script src="js/pages-config.js"></script>
-  <script src="js/main.js"></script>
+ 
 </body>
+
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
 </html>

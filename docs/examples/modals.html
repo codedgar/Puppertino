@@ -1,18 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Modals - Puppertino Framework</title>
-    <meta name="description" content="This is the documentation for Modals on the Puppertino Framework, a framework that mimics Apple's design, woof!">
-    <div id="head-content"></div>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="This is the documentation for Modals on the Puppertino Framework, a framework that mimics Apple's design, woof!"
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176821843-1');
+</script>
   </head>
   <body class="p-layout">
-    <div class="route" id="route-breadcrumb"></div>
+    <div class="p-modal-background">
+      <div class="p-modal" id="normal-modal" data-p-close-on-outside="true">
+        <h2>Hello!</h2>
+        <p>This modal has 3 buttons, please don't add more than 3 :)</p>
+        <div class="p-modal-button-container">
+          <a href="#"><strong>Confirm</strong></a>
+          <a href="#">Settings</a>
+          <button data-p-cancel>Cancel</button>
+        </div>
+      </div>
 
-    <div class="page-container">
-      <div id="sidebar-container"></div>
+      <div class="p-modal" id="two-button-modal" data-p-close-on-outside="true">
+        <h2>Alert!</h2>
+        <p>This modals has 2 buttons!</p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+          <a href="#" data-p-cancel>Cancel</a>
+        </div>
+      </div>
 
-      <div class="main-content">
-<h1>Modals</h1>
+      <div class="p-modal" id="one-button-modal">
+        <h2>Alert!</h2>
+        <p>
+          Hope you are having an amazing day :)<br />
+          Also this modal does not close when you click outside, you have to
+          click the OK button
+        </p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+        </div>
+      </div>
+
+      <div class="p-modal" id="example-modal">
+        <h2>Hey!</h2>
+        <p>
+          This is an example modal! It does not feature the attribute
+          data-p-close-on-outside, so it's not gonna close if you click outside
+          of it
+        </p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="modals.html" class="p-btn p-btn-scope">Modals</a>
+    </div>
+    <h1>Modals</h1>
     <div class="master">
       <p>
         Modals are iconic in iOS design, making them a natural addition to Puppertino. Unlike macOS-style dialog boxes (planned for future versions), these modals are currently categorized under mobile components.
@@ -274,12 +352,17 @@ if (PuppertinoModalManager.isModalOpen("#exampleModal")) {
         fallback, and for users who don't have active the backdrop-filter in
         Firefox, the modal will appear completely white.
       </p>
-      </div>
     </div>
-  </div>
-
-  <div id="footer-content"></div>
-  <script src="js/pages-config.js"></script>
-  <script src="js/main.js"></script>
+ 
 </body>
+
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/modals.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
 </html>
