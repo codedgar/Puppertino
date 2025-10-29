@@ -28,7 +28,6 @@ body {
   padding: 2% 3%;
   margin: 0px;
   color: var(--color-docs);
-  opacity: 1;
 }
 h1,
 h2,
@@ -377,10 +376,6 @@ pre {
   margin: 0 auto;
 }
 
-#sidebar-container{
-  margin-top: 20px;
-}
-
 .docs-sidebar {
   position: sticky;
   top: 2%;
@@ -482,7 +477,7 @@ pre {
 
   .docs-sidebar {
     position: static;
-    width: -webkit-fill-available;
+    width: 100%;
     max-height: none;
     margin-bottom: 2rem;
   }
