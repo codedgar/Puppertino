@@ -1,8 +1,19 @@
 <aside class="docs-sidebar">
   <nav class="docs-nav">
     <h3>Documentation</h3>
+    <!-- Search trigger button -->
+    <button id="search-trigger" class="search-trigger" title="Search documentation (Cmd+K)">
+      <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <path d="M10 6.5a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0zm-.691 3.516a4.5 4.5 0 11.707-.707l2.838 2.837-.707.708-2.838-2.838z" fill="currentColor"/>
+      </svg>
+      <span>Search...</span>
+      <kbd>⌘K</kbd>
+    </button>
     <ul id="sidebar-navigation">
       <!-- Navigation items will be injected here by JavaScript -->
     </ul>
   </nav>
 </aside>
+
+<!-- Ninja Keys search component -->
+<ninja-keys id="ninja-keys"></ninja-keys>

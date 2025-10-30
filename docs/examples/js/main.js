@@ -13,6 +13,11 @@ async function loadPartial(elementId, partialPath) {
       // Execute script tags (innerHTML doesn't execute them automatically)
       const scripts = element.querySelectorAll('script');
       scripts.forEach(oldScript => {
+        // Skip importmap scripts as they need to be in the document before any module loads
+        if (oldScript.type === 'importmap') {
+          return;
+        }
+
         const newScript = document.createElement('script');
 
         // Copy attributes
@@ -130,6 +135,74 @@ function updatePageTitle() {
   }
 }
 
+// Function to initialize ninja-keys search
+async function initializeSearch() {
+  try {
+    // Wait for the ninja-keys custom element to be defined
+    await customElements.whenDefined('ninja-keys');
+
+    // Add a small delay to ensure the element is fully ready
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const ninja = document.querySelector('ninja-keys');
+    if (!ninja) {
+      return;
+    }
+
+    // Convert pagesConfig to ninja-keys data format
+    const searchData = [
+      {
+        id: 'overview',
+        title: 'Overview',
+        section: 'Pages',
+        handler: () => {
+          window.location.href = 'index.html';
+        }
+      },
+      ...pagesConfig.map(page => ({
+        id: page.filename,
+        title: page.title,
+        description: page.description,
+        section: page.category === 'getting-started' ? 'Getting Started' :
+                 page.category === 'components' ? 'Components' : 'Design',
+        icon: page.icon,
+        handler: () => {
+          window.location.href = page.filename;
+        }
+      }))
+    ];
+
+    ninja.data = searchData;
+
+    // Set up the search trigger button
+    const searchTrigger = document.getElementById('search-trigger');
+    if (searchTrigger) {
+      searchTrigger.addEventListener('click', () => {
+        if (ninja && typeof ninja.open === 'function') {
+          ninja.open();
+        } else {
+          console.error('ninja.open is not a function. Available methods:', Object.keys(ninja));
+        }
+      });
+    }
+
+    // Add keyboard shortcut (Cmd+K or Ctrl+K)
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (ninja && typeof ninja.open === 'function') {
+          ninja.open();
+        } else {
+          console.error('ninja.open is not a function');
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error initializing search:', error);
+  }
+}
+
 // Initialize the page
 async function initializePage() {
   // Load partials
@@ -143,6 +216,11 @@ async function initializePage() {
   generateRoute();
   generateSidebar();
   updatePageTitle();
+
+  // Initialize search - this will wait for the custom element to be defined
+  initializeSearch().catch(err => {
+    console.error('Failed to initialize search:', err);
+  });
 
   // Wait for HighlightJS to load and initialize it
   const waitForHljs = setInterval(() => {

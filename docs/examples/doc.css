@@ -75,7 +75,7 @@ a {
 .cta {
   height: 50vh;
 }
-.code{
+.code, .kbd{
   color: #cad3f5;
   background: #24273a;
   border-radius: 5px;
@@ -476,4 +476,149 @@ pre {
 .docs-sidebar::-webkit-scrollbar-thumb:hover {
   background: var(--color-docs);
   opacity: 0.5;
+}
+
+/* Search trigger button */
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 1rem;
+  background: var(--p-talk-bg);
+  border: 1px solid var(--p-talk-bd);
+  border-radius: 8px;
+  color: var(--color-docs);
+  font-family: -apple-system, "Inter", sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.search-trigger:hover {
+  opacity: 1;
+  background: var(--route-bg);
+  border-color: var(--primary-col-ac);
+}
+
+.search-trigger svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.search-trigger span {
+  flex: 1;
+  text-align: left;
+  opacity: 0.7;
+}
+
+.search-trigger kbd {
+  padding: 2px 6px;
+  background: var(--white-or-black);
+  border: 1px solid var(--p-talk-bd);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  opacity: 0.7;
+}
+
+/* Ninja Keys custom styling for Puppertino */
+ninja-keys {
+  --ninja-width: 640px;
+  --ninja-backdrop-filter: blur(10px);
+  --ninja-text-color: var(--color-docs);
+  --ninja-overflow-background:color-mix(in srgb, var(--white-or-black) 10%, transparent) ;
+  --ninja-font-family: -apple-system, "Inter", sans-serif;
+
+  /* Modal styling */
+  --ninja-modal-background: var(--white-or-black);
+  --ninja-modal-border-color: var(--p-talk-bd);
+  --ninja-modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+  --ninja-secondary-background-color:var(--white-or-black);
+
+  /* Search input */
+  --ninja-search-background: var(--bg-docs);
+  --ninja-search-border-color: var(--p-talk-bd);
+  --ninja-search-highlight-color: var(--primary-col-ac);
+
+  /* Items */
+  --ninja-item-background: transparent;
+  --ninja-item-text-color: var(--color-docs);
+  --ninja-item-hover-background: var(--p-talk-bg);
+  --ninja-selected-background: var(--primary-col-ac);
+  --ninja-selected-text-color: #fff;
+
+  /* Footer */
+  --ninja-footer-background: var(--bg-docs);
+  --ninja-footer-border-color: var(--p-talk-bd);
+
+  /* Icons */
+  --ninja-icon-size: 20px;
+  --ninja-icon-color: var(--color-docs);
+
+  /* Sections */
+  --ninja-group-text-color: var(--color-docs);
+  --ninja-secondary-text-color: var(--color-docs);
+}
+
+/* Additional custom styling for ninja-keys internals */
+ninja-keys::part(modal) {
+  border-radius: 15px;
+  border: 1px solid var(--p-talk-bd);
+  backdrop-filter: blur(20px);
+}
+
+ninja-keys::part(input) {
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 12px;
+}
+
+ninja-keys::part(actions-list) {
+  padding: 8px;
+}
+
+ninja-keys::part(ninja-action) {
+  gap: 10px
+}
+
+ninja-keys::part(item) {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 2px 0;
+  transition: all 0.2s ease;
+}
+
+ninja-keys::part(item-title) {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+ninja-keys::part(item-description) {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+ninja-keys::part(group-header) {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+  padding: 8px 12px 4px;
+  margin-top: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  ninja-keys {
+    --ninja-width: 95vw;
+  }
+
+  .search-trigger kbd {
+    display: none;
+  }
 }
