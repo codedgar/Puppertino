@@ -9,6 +9,27 @@ async function loadPartial(elementId, partialPath) {
     const element = document.getElementById(elementId);
     if (element) {
       element.innerHTML = html;
+
+      // Execute script tags (innerHTML doesn't execute them automatically)
+      const scripts = element.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+
+        // Copy attributes
+        Array.from(oldScript.attributes).forEach(attr => {
+          newScript.setAttribute(attr.name, attr.value);
+        });
+
+        // Copy inline script content or set src
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+
+        // Replace old script with new one to trigger execution
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
     }
   } catch (error) {
     console.error('Error loading partial:', error);
@@ -122,6 +143,19 @@ async function initializePage() {
   generateRoute();
   generateSidebar();
   updatePageTitle();
+
+  // Wait for HighlightJS to load and initialize it
+  const waitForHljs = setInterval(() => {
+    if (typeof hljs !== 'undefined') {
+      clearInterval(waitForHljs);
+      document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+      });
+    }
+  }, 100);
+
+  // Make body visible after everything is loaded
+  document.body.style.opacity = '1';
 }
 
 // Run initialization when DOM is ready

@@ -75,10 +75,9 @@ a {
 .cta {
   height: 50vh;
 }
-.code,
-.hljs {
-  background: #262526;
-  color: #f3f3f3;
+.code{
+  color: #cad3f5;
+  background: #24273a;
   border-radius: 5px;
 }
 code.code {
@@ -92,34 +91,6 @@ code.code {
   display: inline-block;
 }
 
-.a,
-.hljs-class,
-.hljs-variable,
-.hljs-template-variable .hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion,
-.hljs-attr {
-  color: #70ff6e;
-}
-.av,
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-  color: #6ea4ff;
-}
-.h,
-.hljs-variable,
-.hljs-template-variable,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-  color: #ff6e6e;
-}
 pre {
   padding-left: 15px;
   overflow: auto;

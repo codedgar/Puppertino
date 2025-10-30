@@ -445,5 +445,28 @@
   <div id="footer-content"></div>
   <script src="js/pages-config.js"></script>
   <script src="js/main.js"></script>
+  <script type="text/javascript">
+    var color_base = document.querySelectorAll(".color_base");
+    for (var item of color_base) {
+      item.addEventListener("click", function (event) {
+        event.preventDefault();
+        var color_actual = this.classList[this.classList.length - 1];
+        console.log(color_actual);
+        document.getElementById("textarea_color").value = "";
+        document.getElementById("textarea_color").value = color_actual;
+        document.querySelector("#textarea_color").select();
+        document.execCommand("copy");
+        document.querySelector("#color_talk").classList.add(color_actual);
+        document.querySelector("#color_talk").textContent = color_actual;
+        document.querySelector(".copy_correct").classList.add("active");
+        setTimeout(function () {
+          document.querySelector(".copy_correct").classList.remove("active");
+          setTimeout(function () {
+            document.querySelector("#color_talk").className = "";
+          }, 200);
+        }, 700);
+      });
+    }
+  </script>
 </body>
 </html>

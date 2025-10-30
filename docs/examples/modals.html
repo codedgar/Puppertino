@@ -7,6 +7,51 @@
 <div id="head-content"></div>
   </head>
   <body class="p-layout">
+    <div class="p-modal-background">
+      <div class="p-modal" id="normal-modal" data-p-close-on-outside="true">
+        <h2>Hello!</h2>
+        <p>This modal has 3 buttons, please don't add more than 3 :)</p>
+        <div class="p-modal-button-container">
+          <a href="#"><strong>Confirm</strong></a>
+          <a href="#">Settings</a>
+          <button data-p-cancel>Cancel</button>
+        </div>
+      </div>
+
+      <div class="p-modal" id="two-button-modal" data-p-close-on-outside="true">
+        <h2>Alert!</h2>
+        <p>This modals has 2 buttons!</p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+          <a href="#" data-p-cancel>Cancel</a>
+        </div>
+      </div>
+
+      <div class="p-modal" id="one-button-modal">
+        <h2>Alert!</h2>
+        <p>
+          Hope you are having an amazing day :)<br />
+          Also this modal does not close when you click outside, you have to
+          click the OK button
+        </p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+        </div>
+      </div>
+
+      <div class="p-modal" id="example-modal">
+        <h2>Hey!</h2>
+        <p>
+          This is an example modal! It does not feature the attribute
+          data-p-close-on-outside, so it's not gonna close if you click outside
+          of it
+        </p>
+        <div class="p-modal-button-container">
+          <a href="#" data-p-cancel>OK</a>
+        </div>
+      </div>
+    </div>
+
     <div class="route" id="route-breadcrumb"></div>
 
     <div class="page-container">
