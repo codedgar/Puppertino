@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Tabs - Puppertino Framework</title>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="Implement tabs for iOS and macOS with Puppertino. Features desktop tabs with panels and mobile bottom navigation tabs with icon and text support."
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176821843-1');
+</script>
+  </head>
+  <body class="p-layout">
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="tabs.html" class="p-btn p-btn-scope">Tabs</a>
+    </div>
+    <h1></h1>
+    <div class="master">
+      <p>
+        Tabs are greatly used on iOS and macOS apps, and this is a component that was a long time in the making. Desktop tabs where created by <a href="https://github.com/jesusrobot" target="_blank">jesusrobot</a> so props to him for helping out! To use the Tabs components, you can use the tab component by using the 
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/tabs.css"
+          target="_blank"
+          >CSS of Tabs</a
+        >
+        or
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css"
+          target="_blank"
+          >downloading the full CSS</a
+        >
+        and
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/src/js/tabs.js"
+          target="_blank"
+          >downloading the JS for tabs</a
+        >
+        (Not recommended if you are just going to use this component).
+      </p>
+
+      <div class="talk-about-it">
+        <h3>Note on Previous Versions</h3>
+        <p>In earlier versions of Puppertino, tabs were exclusively links. In the latest version, you now have the option to use either <strong>Buttons</strong> or <strong>Links</strong>, offering greater flexibility for appropriate actions while maintaining proper semantics and accessibility.</p>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Desktop tabs.</h2>
+        <p>
+          The desktop tabs are composed of two main parts. First the tabs and then the panels with the content. You can add more tabs by just adding buttons inside the <code class="code">p-tabs</code> and more panels inside the <code class="code">p-panels</code> with their respective classes. The toggling of the tabs is managed by the JavaScript of the component.
+        </p>
+
+        <div class="p-tabs-container" id="tabs1">
+          <div class="p-tabs">
+            <button class="p-tab p-is-active">Service 1</button>
+            <button class="p-tab">Service 2</button>
+            <button class="p-tab">Service 3</button>
+          </div>
+          <div class="p-panels">
+            <div class="p-panel p-is-active">
+              <h1>Service 1</h1>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?</p>
+            </div>
+            <div class="p-panel">
+              <h1>Service 2</h1>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?</p>
+            </div>
+            <div class="p-panel">
+              <h1>Service 3</h1>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem architecto et unde ut eligendi repudiandae nostrum id rerum perferendis. Architecto vel, in accusantium tempore dolore enim accusamus molestiae ex nisi?</p>
+            </div>
+          </div>
+        </div>
+        
+
+        <p>Usage:</p>
+        <div class="code">
+          <!--  -->
+          <pre>
+				<code class="html">
+&#60;div class="p-tabs-container" id="tab_example">
+    &#60;div class="p-tabs">
+      &#60;button class="p-tab p-is-active">Service 1&#60;/button>
+      &#60;button class="p-tab">Service 2&#60;/button>
+      &#60;button class="p-tab">Service 3&#60;/button>
+    &#60;/div>
+    &#60;div class="p-panels">
+      &#60;div class="p-panel p-is-active">
+        &#60;!-- CONTENT HERE -->
+      &#60;/div>
+      &#60;div class="p-panel">
+        &#60;!-- CONTENT HERE -->
+      &#60;/div>
+      &#60;div class="p-panel">
+        &#60;!-- CONTENT HERE -->
+      &#60;/div>
+    &#60;/div>
+&#60;/div>
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it" id="modifier">
+        <h2>Mobile tabs.</h2>
+        <p>
+          Mobile tabs are very different both in functionality and markup to the desktop tabs. To use it you need to have a unique id for every tab and use the attribute <code class="code">data-p-mobile-toggle</code> to change the tab. Every other event is managed by the JavaScript. You can use text, icons or both inside of the mobile controls and it will adapt accordingly.
+        </p>
+
+        <div class="content_smol">
+          <div class="mw-450">
+              <div class="p-mobile-tabs-content">
+                <div class="p-mobile-tabs--content active" id="demo1">
+                  <h1>Hello</h1>
+                  <p> This is the first tab </p>
+                  </div>
+                <div class="p-mobile-tabs--content" id="demo2">
+                  <h1>Hello2</h1>
+                  <p> This is the second tab </p>
+                </div>
+                <div class="p-mobile-tabs--content" id="demo3">
+                  <h1>Hello3</h1>
+                  <p> This is the third tab </p>
+                </div>
+                <div class="p-mobile-tabs--content" id="demo4">
+                  <h1>Hello4</h1>
+                  <p> This is the fourth tab </p>
+                </div>
+                
+                <div class="p-mobile-tabs">
+                <div>
+                  <button class="active" data-p-mobile-toggle="#demo1">
+                    <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    Home
+                  </button>
+                </div>
+                <div>
+                  <a href="#" data-p-mobile-toggle="#demo2">
+                    <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    News
+                  </a>
+                </div>
+                <div>
+                  <a href="#" data-p-mobile-toggle="#demo3">
+                    <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Options
+                  </a>
+                </div>
+                <div>
+                  <a href="#" data-p-mobile-toggle="#demo4">
+                    <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Account
+                  </a>
+                </div>
+              </div>
+              </div>
+
+          </div>
+        </div>
+
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+&#60;div class="p-mobile-tabs-content">
+  &#60;div class="p-mobile-tabs--content active" id="demo1">
+    &#60;!-- CONTENT HERE -->
+    &#60;/div>
+  &#60;div class="p-mobile-tabs--content" id="demo2">
+    &#60;!-- CONTENT HERE -->
+  &#60;/div>
+  &#60;div class="p-mobile-tabs--content" id="demo3">
+    &#60;!-- CONTENT HERE -->
+  &#60;/div>
+  &#60;div class="p-mobile-tabs--content" id="demo4">
+    &#60;!-- CONTENT HERE -->
+  &#60;/div>
+  
+  &#60;div class="p-mobile-tabs">
+  &#60;div>
+    &#60;button class="active" data-p-mobile-toggle="#demo1">
+      &#60;!-- SVG ICON -->
+      Home
+    &#60;/button>
+  &#60;/div>
+  &#60;div>
+    &#60;a href="#" data-p-mobile-toggle="#demo2">
+      &#60;!-- SVG ICON -->
+      News
+    &#60;/a>
+  &#60;/div>
+  &#60;div>
+    &#60;a href="#" data-p-mobile-toggle="#demo3">
+      &#60;!-- SVG ICON -->
+      Options
+    &#60;/a>
+  &#60;/div>
+  &#60;div>
+    &#60;a href="#" data-p-mobile-toggle="#demo4">
+      &#60;!-- SVG ICON -->
+      Account
+    &#60;/a>
+  &#60;/div>
+&#60;/div>
+&#60;/div>
+
+        </code>
+      </pre>
+        </div>
+      </div>
+
+    </div>
+ 
+</body>
+
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script defer>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/tabs.js"></script>
+</html>

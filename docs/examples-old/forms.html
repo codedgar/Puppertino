@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+	<title>Forms - Puppertino Framework</title>
+	<link href="https://rsms.me/inter/inter.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
+    
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="doc.css">
+	<meta name="description" content="Build beautiful forms with Puppertino's macOS-inspired form components. Includes text fields, selects, checkboxes, radio buttons, switches, and chips with validation.">
+	<link rel="icon" type="image/png" href="../landing-images/doggo.png">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-176821843-1');
+    </script>
+</head>
+<body class="p-layout">
+	<div class="route">
+		<a href="https://codedgar.github.io/Puppertino/" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
+		<p>/</p>
+		<a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive">Examples</a>
+		<p>/</p>
+		<a href="forms.html" class="p-btn p-btn-scope">Forms</a>
+	</div>
+	<h1>Forms</h1>
+	<div class="master">
+		<p>Forms are an essential part of any user interface. In Puppertino, form elements are designed to be both functional and intuitive, featuring built-in native validation for seamless user experiences.
+      <br><br>
+      You can use the Forms using the <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/forms.css" target="_blank">CSS of Forms</a> or <a href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css" target="_blank">downloading the full CSS</a> (Not recommended if you are just going to use this component).</p>
+
+		<div class="talk-about-it">
+			<h2>Select.</h2>
+			<p>
+        The select box in Puppertino is designed to behave as expected while offering flexibility in customization. You can adjust the width and height without compromising the overall composition or functionality of the element.
+        
+        <br><br>
+        <strong>Note</strong>: The select box does not include native validation. However, you can manually apply validation states by adding the following classes:
+      </p>
+      <ul>
+        <li>
+          <code class="code">p-form-invalid</code>: Indicates an invalid input.
+        </li>
+        <li>
+          <code class="code">p-form-valid</code>: Indicates a valid input.
+        </li>
+      </ul>
+
+			<div class="p-form-select">
+			    <select>
+			        <option>Option 1</option>
+			        <option>Option 2</option>
+			        <option>Option 3</option>
+			    </select>
+			</div>
+
+			<p>Usage:</p>
+			<div class="code">
+			<pre>
+				<code class="html">
+&#60;div class="p-form-select">
+	&#60;select>
+		&#60;option>Option 1&#60;/option>
+		&#60;option>Option 2&#60;/option>
+		&#60;option>Option 3&#60;/option>
+	&#60;/select>
+&#60;/div>
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Text fields.</h2>
+        <p>
+          Text fields are versatile elements for capturing user input such as passwords, emails, messages, or any type of text data. Puppertino provides flexible options for text fields, supporting validation, truncation, and plain (non-validated) inputs.
+        </p>
+
+        <p><strong>Features of Text Fields</strong></p>
+        <ul>
+          <li>
+            <strong>Validation</strong>: Supports native HTML validation (e.g., min-length, type). Feedback is shown after focus leaves the field. Use p-form-no-validate to disable validation styling.
+          </li>
+          <li>
+            <strong>Truncated Text</strong>: Adds an ellipsis (...) when text overflows, visible after focus shifts. Compatible with validation.
+          </li>
+          <li>
+            <strong>Plain Inputs</strong>: Keeps consistent styling regardless of validity, ideal for non-validated fields.
+          </li>
+          <li>
+            <strong>Labels</strong>: Fully compatible with all input types for enhanced accessibility.
+          </li>
+          
+        </ul>
+        <input
+          type="email"
+          class="p-form-text"
+          placeholder="Normal validated input (email)"
+        />
+        <input
+          type="name"
+          class="p-form-text p-form-no-validate"
+          placeholder="Normal no-validated input"
+        />
+
+        <input
+          type="name"
+          class="p-form-text p-form-no-validate p-form-truncated"
+          placeholder="Truncated Text"
+        />
+
+        <label class="p-form-label"
+          >Email:<input
+            type="email"
+            class="p-form-text"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;input type="email" class="p-form-text" placeholder="email@example.com">
+
+&#60;input type="text" class="p-form-text p-form-no-validate" placeholder="free text">
+
+&#60;input type="email" class="p-form-text p-form-truncated" placeholder="Truncated text...">
+
+&#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text" placeholder="email@example.com">&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+      <div class="talk-about-it">
+        <h2>Alternate inputs.</h2>
+        <p>
+          Alternate inputs are larger versions of the standard text fields, ideal for use in login or registration forms.
+          <br><br>
+          They function identically to default inputs, with the same validation and styling options. The only difference is the class applied to the element.
+        </p>
+        <input
+          type="email"
+          class="p-form-text-alt"
+          placeholder="Normal validated input (email)"
+          value="edgar@codedgar.com"
+          disabled=""
+        />
+        <input
+          type="name"
+          class="p-form-text-alt p-form-no-validate"
+          placeholder="Normal no-validated input"
+        />
+
+        <input
+          type="name"
+          class="p-form-text-alt p-form-no-validate p-form-truncated"
+          placeholder="Truncated Text"
+        />
+
+        <label class="p-form-label"
+          >Email:<input
+            type="email"
+            class="p-form-text-alt"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
+        <label class="p-form-label-inline"
+          >Email:<input
+            type="email"
+            class="p-form-text-alt"
+            name="Name"
+            placeholder="example@gmail.com"
+        /></label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">
+
+&#60;input type="text" class="p-form-text-alt p-form-no-validate" placeholder="free text">
+
+&#60;input type="email" class="p-form-text-alt p-form-truncated" placeholder="Truncated text...">
+
+&#60;label class="p-form-label">Email: &#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">&#60;/label>
+
+&#60;label class="p-form-label-inline">Email: &#60;input type="email" class="p-form-text-alt" placeholder="email@example.com">&#60;/label>
+
+        </code>
+      </pre>
+        </div>
+      </div>
+      <div class="talk-about-it">
+        <h2>Radio Buttons.</h2>
+        <p>
+          Radio buttons resemble checkboxes but allow only one selection per group. They lack validation but feature a smooth animation. Width and height can be adjusted without compromising their layout.
+        </p>
+
+        <label class="p-form-radio-cont">
+          <input type="radio" name="thingy" />
+          <span></span>
+          Thing one
+        </label>
+
+        <label class="p-form-radio-cont">
+          <input type="radio" name="thingy" />
+          <span></span>
+          Thing two
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;label class="p-form-radio-cont">
+	&#60;input type="radio" name="example">
+	&#60;span> &#60;/span>
+	Thing one
+&#60;/label>
+
+&#60;label class="p-form-radio-cont">
+	&#60;input type="radio" name="example">
+	&#60;span> &#60;/span>
+	Thing two
+&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Checkboxes.</h2>
+        <p>
+          Checkboxes let users select multiple predefined options. Like radio buttons, Puppertino checkboxes support adjustable width and height without affecting their layout.
+        </p>
+
+        <label class="p-form-checkbox-cont">
+          <input type="checkbox" name="thingy_second" />
+          <span></span>
+          Thing one
+        </label>
+
+        <label class="p-form-checkbox-cont">
+          <input type="checkbox" name="thingy_second" />
+          <span></span>
+          Thing two
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;label class="p-form-checkbox-cont">
+	&#60;input type="checkbox" name="example">
+	&#60;span> &#60;/span>
+	Thing one
+&#60;/label>
+
+&#60;label class="p-form-checkbox-cont">
+	&#60;input type="checkbox" name="example">
+	&#60;span>&#60;/span>
+	Thing two
+&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Chips.</h2>
+        <p>
+          Chips are an enhanced, interactive alternative to checkboxes, offering a more engaging way for users to select multiple items or filter information. They come in various styles and support the inclusion of icons for added functionality.
+        </p>
+
+        <label class="p-chip">
+          <input type="checkbox" name="thingy_second" />
+          <span>Default</span>
+        </label>
+
+        <label class="p-chip p-chip-dark p-chip-radius-b">
+          <input type="checkbox" name="thingy_second" />
+          <span>Border</span>
+        </label>
+
+        <label class="p-chip p-chip-outline">
+          <input type="checkbox" name="thingy_third" />
+          <span>Outline</span>
+        </label>
+
+        <label class="p-chip p-chip-outline-to-bg">
+          <input type="checkbox" name="thingy_third" />
+          <span>Outline to bg</span>
+        </label>
+
+        <label class="p-chip p-chip-radius-b">
+          <input type="checkbox" name="thingy_fourth" />
+          <span>Combined</span>
+        </label>
+
+        <label class="p-chip">
+          <input type="checkbox" name="thingy_fourth" disabled />
+          <span>Disabled</span>
+        </label>
+
+        <label class="p-chip p-chip-big">
+          <input type="checkbox" name="thingy_fourth" />
+          <span>
+            <svg
+              viewBox="0 0 24 24"
+              width="50"
+              height="50"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <path
+                d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"
+              ></path>
+              <line x1="23" y1="13" x2="23" y2="11"></line>
+              <polyline points="11 6 7 12 13 12 9 18"></polyline>
+            </svg>
+            Icon</span
+          >
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+
+&#60;label class="p-chip">
+  &#60;input type="checkbox" />
+  &#60;span>Default&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-dark p-chip-radius-b">
+  &#60;input type="checkbox" />
+  &#60;span>Border&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-outline">
+  &#60;input type="checkbox" />
+  &#60;span>Outline&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-outline-to-bg">
+  &#60;input type="checkbox" />
+  &#60;span>Outline to bg&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-radius-b">
+  &#60;input type="checkbox" />
+  &#60;span>Combined&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip">
+  &#60;input type="checkbox" disabled />
+  &#60;span>Disabled&#60;/span>
+&#60;/label>
+
+&#60;label class="p-chip p-chip-big">
+  &#60;input type="checkbox" />
+  &#60;span>
+&#60;!-- SVG -->
+    Icon&#60;/span>
+&#60;/label>
+        </code>
+      </pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Switches.</h2>
+        <p>
+          Switches are inspired by popular iOS design elements and were introduced to Puppertino with help from a friend and contributor, <a href="https://github.com/ivanotOrozco" target="_blank" rel="nofollow">Ivanot</a>. A special thanks to him for providing the foundation for this component!<br /><br />
+          
+          Switches function like checkboxes and are styled to fit the Puppertino aesthetic. You can adjust their size by modifying the <code class="code">--width</code> variable within the <code class="code">p-form-switch</code> class. The element resizes automatically, ensuring consistent appearance and functionality.
+        </p>
+
+        <label class="p-form-switch showcaseme_bro">
+          <input type="checkbox" />
+          <span></span>
+        </label>
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;label class="p-form-switch">
+	&#60;input type="checkbox">
+	&#60;span>&#60;/span>
+&#60;/label>
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Buttons. <code class="code deprecated-code">Deprecated</code></h2>
+        <p>
+          These are smaller versions of the Puppertino button component, designed for simple actions like "Send" or "Cancel." However, this component will be removed in future versions. We recommend transitioning to the <a href="https://codedgar.github.io/Puppertino/examples/buttons.html">full button component</a> for better support and functionality.
+        </p>
+
+        <input type="submit" class="p-form-button p-form-send" value="Send" />
+
+        <input type="reset" class="p-form-button" value="Cancel" />
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;input type="submit" class="p-form-button p-form-send">
+
+&#60;input type="reset" class="p-form-button">
+
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Custom Validation.</h2>
+        <p>
+          Need to handle a type of validation that HTML doesn’t natively support? Puppertino has you covered.<br /><br />
+
+          <strong>How to Use Puppertino Validation</strong>
+        </p>
+
+        <ul>
+          <li>
+            Use the <code class="code">p-form-invalid</code> and <code class="code">p-form-valid</code> classes to indicate validation states.
+          </li>
+          <li>
+            Add or remove these classes as needed, but never apply both simultaneously.
+          </li>
+          <li>
+            Validation feedback appears after the user moves focus out of the input field, ensuring a smoother experience.
+          </li>
+        </ul>
+
+        <p>
+          <strong>Important</strong>: Applying these classes disables default HTML validation, so use them when custom validation logic is required.
+        </p>
+
+        <input
+          type="text"
+          class="p-form-text p-form-invalid"
+          placeholder="Invalid Input"
+        />
+
+        <input
+          type="text"
+          class="p-form-text p-form-valid"
+          placeholder="Valid Input"
+        />
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+
+&#60;input type="text" class="p-form-text p-form-invalid">
+
+&#60;input type="text" class="p-form-text p-form-valid">
+
+				</code>
+			</pre>
+        </div>
+      </div>
+    </div>
+ 
+</body>
+
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</html>

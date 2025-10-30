@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Actions - Puppertino Framework</title>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="Create iOS-style action sheets with Puppertino. Interactive decision prompts with multiple options, icons, and programmatic JavaScript API."
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176821843-1');
+</script>
+  </head>
+  <body class="p-layout">
+
+<div class="p-action-background">
+    <div class="p-action-big-container" id="actions" data-p-close-on-outside="true" aria-hidden="true">
+      <div class="p-action-container">
+        <div class="p-action-title">
+          <h3 class="p-action-title--intern">What do you want to do?</h3>
+          <p class="p-action-text">Select an option below...</p></div>
+        <a href="#" class="p-action--intern p-action-destructive p-action-icon"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Close this tab</a>
+        <a href="#" class="p-action--intern p-action-destructive p-action-icon-inline" ><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Close this tab</a>
+        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
+        <a href="#" class="p-action--intern">New tab</a>
+      </div>
+      <div class="p-action-container">
+        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
+      </div>
+    </div>
+
+    <div class="p-action-big-container" id="actions2" data-p-close-on-outside="true" aria-hidden="true">
+      <div class="p-action-container">
+        <div class="p-action-title">
+          <h3 class="p-action-title--intern">What do you want to do?</h3>
+          <p class="p-action-text">Select an option below...</p>
+        </div>
+        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
+        <a href="#" class="p-action--intern">New tab</a>
+      </div>
+      <div class="p-action-container">
+        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
+      </div>
+    </div>
+
+    <div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true" aria-hidden="true">
+      <div class="p-action-container">
+        <div class="p-action-title">
+          <h3 class="p-action-title--intern">Welcome to actions</h3>
+          <p class="p-action-text">Select an option below...</p>
+        </div>
+        <a href="#" class="p-action--intern p-action-neutral">New private tab</a>
+        <a href="#" class="p-action--intern">New tab</a>
+      </div>
+      <div class="p-action-container">
+        <a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel</a>
+      </div>
+    </div>
+</div>
+
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="actions.html" class="p-btn p-btn-scope">Actions</a>
+    </div>
+    <h1>Actions</h1>
+    <div class="master">
+      <p>
+        Actions are a fundamental part of iOS design, so we couldn’t resist bringing them to Puppertino. Now, you can enjoy their intuitive functionality within your projects! To use actions, you can
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/actions.css"
+          target="_blank"
+          >Download the CSS</a
+        >
+        and
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/src/js/full.js"
+          target="_blank"
+          >Download the JS.</a
+        >
+        Alternatively, you can use the
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css"
+          target="_blank"
+          >Full CSS</a
+        >
+        and currently, there's not full JS.
+      </p>
+
+      <div class="talk-about-it">
+        <h3>Note on Previous Versions</h3>
+        <p>In earlier versions of Puppertino, actions were exclusively links. In the latest version, you now have the option to use either <strong>Buttons</strong> or <strong>Links</strong>, offering greater flexibility for appropriate actions while maintaining proper semantics and accessibility.</p>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Let's talk about actions!</h2>
+        <p>
+          Actions in Puppertino function similarly to modals, prompting users to make a decision. The difference is that Actions can feature multiple decisions and are easier to acccess than modals.
+        </p>
+
+
+        <button data-p-open-actions="#actions2" class="p-btn">
+          Open actions
+        </button>
+      </div>
+    </div>
+
+    <div class="talk-about-it">
+      <h2>General usage.</h2>
+      <p>
+        Using Actions in Puppertino is nearly identical to Modals. To set up an Action, you need a container for the elements and a button to toggle it. The button should include the attribute <code class="code">data-p-open-actions</code> with the <code class="code">#id</code> of the Action you want to open, while the Action itself should have a matching ID.
+        <br><br>
+        Actions come with several layout variants, allowing you to arrange elements differently. However, it’s important to stick with one style per Action. Mixing variants, like combining options with icons and without, can confuse users and disrupt the visual flow, so it’s best to maintain consistency.
+        <br><br>
+        For added functionality, Actions also support the <code class="code">data-p-close-on-outside="true"</code> attribute, which automatically closes the Action when the user clicks outside its area.
+      </p>
+
+      <button class="p-btn" data-p-open-actions="#actions">
+        Open actions with variants
+      </button>
+
+      <button class="p-btn" data-p-open-actions="#actions_basic">
+        Basic Actions
+      </button>
+
+      <p>Usage:</p>
+      <div class="code">
+        <pre>
+				<code class="html">
+&#60;!-- The button that toggles the action -->
+
+&#60;button class="p-btn" data-p-open-actions="#actions_basic">Basic Actions&#60;/button>
+
+
+&#60;!-- Action container, all the actions you use should be inside of it. -->
+
+&#60;div class="p-action-background">
+
+	&#60;!-- Your actions will be here -->
+  &#60;div class="p-action-big-container" id="actions_basic" data-p-close-on-outside="true">
+    &#60;div class="p-action-container">
+      &#60;div class="p-action-title">
+        &#60;h3 class="p-action-title--intern">Welcome to actions&#60;/h3>
+        &#60;p class="p-action-text">Select an option below...&#60;/p>
+      &#60;/div>
+      &#60;a href="#" class="p-action--intern p-action-neutral">New private tab&#60;/a>
+      &#60;a href="#" class="p-action--intern">New tab&#60;/a>
+    &#60;/div>
+    &#60;div class="p-action-container">
+      &#60;button class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel&#60;/button>
+    &#60;/div>
+  &#60;/div>
+
+&#60;/div>
+				</code>
+			</pre>
+      </div>
+
+      <p>Variations:</p>
+      <div class="code">
+        <pre>
+        <code class="html">
+  &#60;div class="p-action-big-container" id="actions" data-p-close-on-outside="true">
+        &#60;div class="p-action-container">
+          &#60;div class="p-action-title">
+            &#60;h3 class="p-action-title--intern">What do you want to do?&#60;/h3>
+            &#60;p class="p-action-text">Select an option below...&#60;/p>&#60;/div>
+          &#60;a href="#" class="p-action--intern p-action-destructive p-action-icon">&#60;!-- ICON --> Close this tab&#60;/a>
+          &#60;a href="#" class="p-action--intern p-action-destructive p-action-icon-inline" >&#60;!-- ICON --> Close this tab&#60;/a>
+          &#60;a href="#" class="p-action--intern p-action-neutral">New private tab&#60;/a>
+          &#60;a href="#" class="p-action--intern">New tab&#60;/a>
+        &#60;/div>
+        &#60;div class="p-action-container">
+      &#60;a href="#" class="p-action--intern p-action-cancel" data-p-cancel-action="true">Cancel&#60;/a>
+    &#60;/div>
+  &#60;/div>
+        </code>
+      </pre>
+      </div>
+    </div>
+
+    <div class="talk-about-it">
+      <section id="api-methods">
+        <h2>JS API Methods</h2>
+        <p>In newer versions, the old JavaScript has been replaced with the PuppertinoActionsMan class—a lightweight utility for managing action cards within the Puppertino framework.
+          <br><br>
+          While the way you use action cards remains unchanged thanks to automatic initialization, this class introduces programmatic methods for Opening or Closing action cards, and handling user interactions. <br><br> Here's what currently possible using Puppertino's Actions Manager.</p>
+        <article id="open-action" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>openAction(selector)</h3>
+            <p>Opens the action card specified by the CSS selector.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the action card to open.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>  
+    PuppertinoActionsManager.openAction("#exampleAction");
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+    
+        <article id="close-active-action" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>closeActiveAction()</h3>
+            <p>Closes the currently active (open) action card.</p>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>
+    PuppertinoActionsManager.closeActiveAction();
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+    
+        <article id="close-action" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>closeAction(selector)</h3>
+            <p>Closes a specific action card specified by the CSS selector.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the action card to close.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>
+    PuppertinoActionsManager.closeAction("#exampleAction");
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+    
+        <article id="is-action-open" class="d-flex align-bottom mt-4">
+          <div class="flex-1 w-100">
+            <h3>isActionOpen(selector)</h3>
+            <p>Checks if a specific action card is currently open.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+              <li><code class="code">selector</code> (string): CSS selector for the action card to check.</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+              <li><code class="code">true</code> if the action card is open, <code>false</code> otherwise.</li>
+            </ul>
+          </div>
+          <div class="flex-1 w-100">
+            <p><strong>Usage:</strong></p>
+            <div class="code">
+<pre>
+<code>
+    if (PuppertinoActionsManager.isActionOpen("#exampleAction")) {
+      console.log("The action card is open.");
+    }
+</code>
+</pre>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+    
+
+ 
+</body>
+
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/actions.js"></script>
+</html>

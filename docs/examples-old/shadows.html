@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Shadows & Blur - Puppertino Framework</title>
+    <link
+      href="https://rsms.me/inter/inter.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css"
+    />
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="doc.css" />
+    <meta
+      name="description"
+      content="Add depth to your designs with Puppertino's shadow and blur utilities. Includes 4 shadow levels, hover transitions, and backdrop blur effects for macOS-style interfaces."
+    />
+    <link rel="icon" type="image/png" href="../landing-images/doggo.png" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176821843-1');
+</script>
+  </head>
+  <body class="p-layout">
+    <div class="route">
+      <a
+        href="https://codedgar.github.io/Puppertino/"
+        class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Puppertino</a
+      >
+      <p>/</p>
+      <a href="index.html" class="p-btn p-btn-scope p-btn-scope-unactive"
+        >Examples</a
+      >
+      <p>/</p>
+      <a href="shadows.html" class="p-btn p-btn-scope">Shadows</a>
+    </div>
+    <h1>Shadows & Blur</h1>
+    <div class="master">
+      <p>
+        Shadows are not so common on iOS or MacOS. But having a curated collection of shadows can help your interface, which is why I added it! You can use Shadows by downloading the  
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/shadows.css"
+          target="_blank"
+          >CSS of Shadows & Blur</a
+        >
+        or
+        <a
+          href="https://github.com/codedgar/Puppertino/blob/master/dist/css/newfull.css"
+          target="_blank"
+          >downloading the full CSS</a
+        >
+        (Not recommended if you are just going to use this component).
+      </p>
+
+      <div class="talk-about-it">
+        <h2>General Usage of the Shadows.</h2>
+        <p>
+          Shadows are very simple, just a simple class will do. There are 4 shadow types currently, which are:
+        </p>
+
+        <div class="shadow_shower">
+          <div class="p-shadow-1">
+            <code class="code">p-shadow-1</code>
+          </div>
+          <div class="p-shadow-2">
+            <code class="code">p-shadow-2</code>
+          </div>
+          <div class="p-shadow-3">
+            <code class="code">p-shadow-3</code>
+          </div>
+          <div class="p-shadow-4">
+            <code class="code">p-shadow-4</code>
+          </div>
+        </div>
+        
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+				<code class="html">
+&#60;div class="p-shadow-1">&#60;/div>
+
+&#60;div class="p-shadow-2">&#60;/div>
+
+&#60;div class="p-shadow-3">&#60;/div>
+
+&#60;div class="p-shadow-4">&#60;/div>
+				</code>
+			</pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it" id="modifier">
+        <h2>Shadow transition.</h2>
+        <p>
+          Sometimes you want to add that effect of depth when the user hovers over your elements and we get that. And how do we achieve that? Hover classes! Usage is similar to the default shadows, just add <code class="code">to</code> after the <code class="code">p-</code>, like so <code class="code">p-to-shadow-1</code>. Or just copy the classes below:
+        </p>
+
+
+        <div class="shadow_shower">
+          <div class="p-to-shadow-1">
+            <code class="code">Hover over me!<br>p-to-shadow-1</code>
+          </div>
+          <div class="p-to-shadow-2">
+            <code class="code">Hover over me!<br>p-to-shadow-2</code>
+          </div>
+          <div class="p-to-shadow-3">
+            <code class="code">Hover over me!<br>p-to-shadow-3</code>
+          </div>
+          <div class="p-to-shadow-4">
+            <code class="code">Hover over me!<br>p-to-shadow-4</code>
+          </div>
+        </div>
+
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+&#60;div class="p-to-shadow-1">&#60;/div>
+
+&#60;div class="p-to-shadow-2">&#60;/div>
+
+&#60;div class="p-to-shadow-3">&#60;/div>
+
+&#60;div class="p-to-shadow-4">&#60;/div>
+        </code>
+      </pre>
+        </div>
+      </div>
+
+      <div class="talk-about-it">
+        <h2>Blur</h2>
+        <p>Blur is used pretty commonly along macOS and iOS apps, we have created a collection of curated blur levels for your usage in your apps. Keep in mind that blur levels also include a background, that you can override if you desire.</p>
+
+        <div class="row pad_15_row center_row">
+          <div class="col-xs-10 col-sm-3">
+            <div class="card_blur">
+              <div class="blur_elm p-blur-1">
+                <p class="col-w">p-blur-1</p>
+              </div>
+              <div class="blur_img">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-10 col-sm-3">
+            <div class="card_blur">
+              <div class="blur_elm p-blur-2">
+                <p>p-blur-2</p>
+              </div>
+              <div class="blur_img">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-10 col-sm-3">
+            <div class="card_blur">
+              <div class="blur_elm p-blur-3">
+                <p>p-blur-3</p>
+              </div>
+              <div class="blur_img">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-10 col-sm-3">
+            <div class="card_blur">
+              <div class="blur_elm p-blur-4">
+                <p>p-blur-4</p>
+              </div>
+              <div class="blur_img">
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <p>Usage:</p>
+        <div class="code">
+          <pre>
+        <code class="html">
+&#60;div class="p-blur-1">&#60;/div>
+
+&#60;div class="p-blur-2">&#60;/div>
+
+&#60;div class="p-blur-3">&#60;/div>
+
+&#60;div class="p-blur-4">&#60;/div>
+        </code>
+      </pre>
+        </div>
+      </div>
+
+    </div>
+ 
+</body>
+
+  <script src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/src/js/dakmode_manager.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"
+  ></script>
+  <script defer>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/codedgar/Puppertino/src/js/segmented_controls.js"></script>
+</html>

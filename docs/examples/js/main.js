@@ -25,7 +25,7 @@ function generateRoute() {
   const isIndexPage = currentFilename === 'index.html';
 
   let routeHTML = `
-    <a href="https://codedgar.github.io/Puppertino/" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
+    <a href="../" class="p-btn p-btn-scope p-btn-scope-unactive">Puppertino</a>
     <p>/</p>
     <a href="index.html" class="p-btn p-btn-scope ${isIndexPage ? '' : 'p-btn-scope-unactive'}">Examples</a>
   `;
