@@ -1,0 +1,107 @@
+---
+---
+
+<div id="copy-toast" class="copy-toast" role="status" aria-live="polite">
+  <span class="copy-toast-icon">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </span>
+  <span class="copy-toast-text">Copied <code id="copy-toast-value"></code></span>
+</div>
+
+<script>
+  const toast = document.getElementById('copy-toast');
+  const toastValue = document.getElementById('copy-toast-value');
+  let toastTimer: number | undefined;
+
+  function showToast(value: string) {
+    if (!toast || !toastValue) return;
+    toastValue.textContent = value;
+    toast.classList.add('is-visible');
+    if (toastTimer) window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      toast.classList.remove('is-visible');
+    }, 1800);
+  }
+
+  document.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement;
+    const copyEl = target.closest<HTMLElement>('[data-copy]');
+    if (!copyEl) return;
+
+    const value = copyEl.dataset.copy;
+    if (!value) return;
+
+    try {
+      await navigator.clipboard.writeText(value);
+      showToast(value);
+    } catch (err) {
+      const textarea = document.createElement('textarea');
+      textarea.value = value;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showToast(value);
+    }
+  });
+</script>
+
+<style>
+  .copy-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(30, 30, 32, 0.92);
+    color: #ffffff;
+    border-radius: 980px;
+    font-size: 13px;
+    line-height: 1;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+  }
+
+  .copy-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .copy-toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: #34c759;
+    border-radius: 50%;
+    color: #ffffff;
+  }
+
+  .copy-toast-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .copy-toast-text code {
+    font-family: "SF Mono", SFMono-Regular, ui-monospace, monospace;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ffffff;
+  }
+</style>

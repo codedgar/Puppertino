@@ -1,0 +1,81 @@
+---
+const tiers = [
+  { name: 'Primary', cssVar: '--p-bg-primary', light: '#FFFFFF', dark: '#000000' },
+  { name: 'Secondary', cssVar: '--p-bg-secondary', light: '#F2F2F7', dark: '#1C1C1E' },
+  { name: 'Tertiary', cssVar: '--p-bg-tertiary', light: '#FFFFFF', dark: '#2C2C2E' },
+];
+---
+
+<div class="bg-grid">
+  {tiers.map((tier) => (
+    <button class="bg-tile" type="button" data-copy={tier.cssVar} aria-label={`Copy ${tier.cssVar}`}>
+      <div class="bg-tile-pair">
+        <div class="bg-tile-half" style={`background: ${tier.light};`}>
+          <span style="color: rgba(0,0,0,0.5); font-size: 10px;">Light</span>
+        </div>
+        <div class="bg-tile-half" style={`background: ${tier.dark};`}>
+          <span style="color: rgba(255,255,255,0.5); font-size: 10px;">Dark</span>
+        </div>
+      </div>
+      <span class="bg-tile-name">{tier.name}</span>
+      <code class="bg-tile-var">{tier.cssVar}</code>
+    </button>
+  ))}
+</div>
+
+<style>
+  .bg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 24px 0 32px;
+  }
+
+  .bg-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .bg-tile:hover {
+    transform: translateY(-2px);
+  }
+
+  .bg-tile-pair {
+    display: flex;
+    aspect-ratio: 5 / 3;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .bg-tile-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg-tile-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.004em;
+  }
+
+  .bg-tile-var {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    background: none;
+    padding: 0;
+  }
+</style>

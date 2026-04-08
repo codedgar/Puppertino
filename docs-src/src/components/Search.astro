@@ -1,0 +1,194 @@
+---
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+const base = import.meta.env.BASE_URL;
+
+// Resolve Phosphor's bold SVG assets at build time and inline them.
+// Ninja Keys uses Shadow DOM, so global icon-font CSS does not reach inside.
+// Inlining the raw SVG sidesteps that completely.
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const phosphorDir = resolve(__dirname, '../../node_modules/@phosphor-icons/core/assets/bold');
+
+const ph = (name: string) => {
+  try {
+    const raw = readFileSync(`${phosphorDir}/${name}-bold.svg`, 'utf-8');
+    // Inject explicit width/height and right margin so the SVG sits cleanly next to the text
+    return raw.replace('<svg ', '<svg width="18" height="18" style="margin-right: 12px; flex-shrink: 0;" ');
+  } catch (err) {
+    console.error(`Phosphor icon not found: ${name}`);
+    return '';
+  }
+};
+
+const data = [
+  // Foundations
+  { id: 'getting-started', title: 'Getting Started', section: 'Foundations', href: `${base}docs/getting-started/`, icon: ph('rocket-launch') },
+  { id: 'materials', title: 'Materials', section: 'Foundations', href: `${base}docs/materials/`, icon: ph('drop') },
+  { id: 'colors', title: 'Colors', section: 'Foundations', href: `${base}docs/colors/`, icon: ph('palette') },
+  { id: 'typography', title: 'Typography', section: 'Foundations', href: `${base}docs/typography/`, icon: ph('text-aa') },
+  { id: 'dark-mode', title: 'Dark Mode', section: 'Foundations', href: `${base}docs/dark-mode/`, icon: ph('moon') },
+  { id: 'icons', title: 'Icons', section: 'Foundations', href: `${base}docs/icons/`, icon: ph('smiley') },
+
+  // Mobile components
+  { id: 'mobile-buttons', title: 'Buttons', section: 'Mobile Components', href: `${base}docs/mobile/buttons/`, icon: ph('hand-tap') },
+  { id: 'mobile-forms', title: 'Forms', section: 'Mobile Components', href: `${base}docs/mobile/forms/`, icon: ph('textbox') },
+  { id: 'mobile-modals', title: 'Modals', section: 'Mobile Components', href: `${base}docs/mobile/modals/`, icon: ph('browser') },
+  { id: 'mobile-actions', title: 'Actions', section: 'Mobile Components', href: `${base}docs/mobile/actions/`, icon: ph('list') },
+  { id: 'mobile-tabs', title: 'Tabs', section: 'Mobile Components', href: `${base}docs/mobile/tabs/`, icon: ph('tabs') },
+
+  // Desktop components
+  { id: 'desktop-buttons', title: 'Buttons', section: 'Desktop Components', href: `${base}docs/desktop/buttons/`, icon: ph('cursor-click') },
+  { id: 'desktop-forms', title: 'Forms', section: 'Desktop Components', href: `${base}docs/desktop/forms/`, icon: ph('text-indent') },
+  { id: 'desktop-modals', title: 'Modals', section: 'Desktop Components', href: `${base}docs/desktop/modals/`, icon: ph('app-window') },
+  { id: 'desktop-segmented', title: 'Segmented Controls', section: 'Desktop Components', href: `${base}docs/desktop/segmented-controls/`, icon: ph('squares-four') },
+  { id: 'desktop-cards', title: 'Cards', section: 'Desktop Components', href: `${base}docs/desktop/cards/`, icon: ph('rectangle') },
+
+  // External
+  { id: 'github', title: 'GitHub Repository', section: 'Resources', href: 'https://github.com/codedgar/Puppertino', icon: ph('github-logo') },
+];
+---
+
+<button class="search-trigger" type="button" id="search-trigger" aria-label="Open search">
+  <i class="ph-bold ph-magnifying-glass"></i>
+  <span class="search-trigger-label">Search</span>
+  <span class="search-trigger-kbd">
+    <kbd>⌘</kbd><kbd>K</kbd>
+  </span>
+</button>
+
+<ninja-keys
+  id="ninja-keys"
+  placeholder="Search the docs..."
+  hideBreadcrumbs
+></ninja-keys>
+
+<script>
+  import 'ninja-keys';
+</script>
+
+<script is:inline define:vars={{ data }}>
+  function setup() {
+    const ninja = document.querySelector('ninja-keys');
+    const trigger = document.getElementById('search-trigger');
+    if (!ninja) return;
+
+    ninja.data = data.map((item) => ({
+      id: item.id,
+      title: item.title,
+      section: item.section,
+      icon: item.icon,
+      href: item.href,
+      handler: () => {
+        if (item.href.startsWith('http')) {
+          window.open(item.href, '_blank');
+        } else {
+          window.location.href = item.href;
+        }
+      },
+    }));
+
+    if (trigger) {
+      trigger.addEventListener('click', () => ninja.open());
+    }
+
+    // Slash key as quick-open
+    document.addEventListener('keydown', (event) => {
+      if (
+        event.key === '/' &&
+        !(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)
+      ) {
+        event.preventDefault();
+        ninja.open();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+</script>
+
+<style>
+  .search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: calc(100% - 16px);
+    margin: 8px;
+    padding: 8px 12px;
+    background: var(--bg-page);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+
+  .search-trigger:hover {
+    border-color: var(--text-tertiary);
+  }
+
+  .search-trigger i {
+    font-size: 14px;
+    color: var(--text-tertiary);
+  }
+
+  .search-trigger-label {
+    flex: 1;
+  }
+
+  .search-trigger-kbd {
+    display: flex;
+    gap: 2px;
+  }
+
+  .search-trigger-kbd kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    line-height: 1;
+  }
+
+  /* Style ninja-keys with Puppertino tokens */
+  :global(ninja-keys) {
+    --ninja-width: 640px;
+    --ninja-backdrop-filter: blur(20px) saturate(180%);
+    --ninja-overflow-background: rgba(0, 0, 0, 0.5);
+    --ninja-text-color: var(--text-primary);
+    --ninja-font: var(--font);
+    --ninja-font-size: 15px;
+    --ninja-top: 20%;
+    --ninja-key-border-radius: 4px;
+    --ninja-accent-color: var(--accent);
+    --ninja-secondary-background-color: var(--bg-sidebar);
+    --ninja-secondary-text-color: var(--text-secondary);
+    --ninja-selected-background: var(--bg-sidebar);
+    --ninja-selected-text-color: var(--text-primary);
+    --ninja-icon-size: 18px;
+    --ninja-icon-color: var(--text-secondary);
+    --ninja-separate-border: 1px solid var(--border-subtle);
+    --ninja-modal-background: var(--bg-page);
+    --ninja-modal-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+    --ninja-actions-height: 380px;
+    --ninja-group-text-color: var(--text-tertiary);
+    --ninja-footer-background: var(--bg-sidebar);
+    --ninja-placeholder-color: var(--text-tertiary);
+  }
+</style>

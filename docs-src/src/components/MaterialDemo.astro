@@ -1,0 +1,41 @@
+---
+interface Props {
+  className: string;
+  label: string;
+  opacity: string;
+}
+
+const { className, label, opacity } = Astro.props;
+---
+
+<div class={`material-tile ${className}`}>
+  <span class="material-tile-label">{label}</span>
+  <span class="material-tile-opacity">{opacity}</span>
+</div>
+
+<style>
+  .material-tile {
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px;
+    text-align: center;
+    color: #000000;
+  }
+
+  .material-tile-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.004em;
+  }
+
+  .material-tile-opacity {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.7);
+  }
+</style>

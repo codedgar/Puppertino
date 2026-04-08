@@ -1,0 +1,130 @@
+---
+layout: ../../layouts/Doc.astro
+title: Dark Mode
+description: Dark mode in Puppertino. Automatic detection, manual toggling, cross-tab sync, and how the color tokens flip.
+---
+
+Dark mode is built into every Puppertino component. Colors flip automatically through CSS custom properties, surfaces lighten as they elevate, and shadows quiet down. There are two ways to opt in: automatic detection from the operating system, or manual toggling controlled by your code.
+
+## Automatic Mode
+
+The simplest setup. Add `p-auto-dark-mode` to the body and Puppertino flips colors when the user's system preference is dark.
+
+```html
+<body class="p-auto-dark-mode">
+  <h1>Hello</h1>
+</body>
+```
+
+This uses the `prefers-color-scheme: dark` media query under the hood. No JavaScript required. The page reflows instantly when the user changes their system preference, even while the tab is open.
+
+Use this when you do not want a manual toggle and you trust the system preference.
+
+## Manual Mode
+
+Add the `p-dark-mode` class to the body when the user opts in. Remove it when they opt out. The class can be added by your code, by a button click, or by reading from local storage on page load.
+
+```html
+<body class="p-dark-mode">
+  <h1>Hello in dark mode</h1>
+</body>
+```
+
+Use this when you want to give users a manual toggle that overrides their system preference.
+
+## The Dark Mode Manager
+
+Puppertino ships a small JavaScript helper that handles the manual toggle workflow: persistence, system detection, cross-tab sync, and the toggle action itself. Include it once and call `init()`.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/src/js/dakmode_manager.js"></script>
+<script>
+  puppertinoThemeMan.init({
+    autoDetect: true,
+    darkThemeClass: 'p-dark-mode'
+  });
+</script>
+```
+
+### Options
+
+| Option | Default | What it does |
+|---|---|---|
+| `autoDetect` | `true` | Falls back to the system preference when the user has no saved choice |
+| `darkThemeClass` | `'p-dark-mode'` | The class name applied to `<body>` when dark mode is active |
+
+### Toggling
+
+Call `puppertinoThemeMan.toggle()` from a button click. The manager adds or removes the dark mode class and saves the choice in `localStorage`.
+
+```html
+<button id="theme-toggle">Toggle theme</button>
+
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    puppertinoThemeMan.toggle();
+  });
+</script>
+```
+
+### Reading the current theme
+
+Use `isDarkThemeActive()` to check whether dark mode is currently applied. Useful when you need to render different content based on the theme.
+
+```javascript
+if (puppertinoThemeMan.isDarkThemeActive()) {
+  showDarkLogo();
+} else {
+  showLightLogo();
+}
+```
+
+### Cross-tab sync
+
+When the user toggles dark mode in one tab, every other open tab in the same browser updates immediately. The manager listens to the `storage` event from `localStorage` and applies the new theme without a reload. No configuration needed.
+
+## How It Works Under the Hood
+
+Puppertino's color system is built on CSS custom properties. The dark mode class flips a single set of variables, and every component that uses those variables updates in one paint.
+
+```css
+:root {
+  --p-text-primary: rgba(0, 0, 0, 0.85);
+  --p-bg-primary: #FFFFFF;
+}
+
+.p-dark-mode {
+  --p-text-primary: rgba(255, 255, 255, 0.85);
+  --p-bg-primary: #000000;
+}
+```
+
+This is why dark mode is instant. There is no per-component override, no JavaScript repaint loop, no flicker. The browser swaps the variables and recalculates styles in one frame.
+
+You can use the same approach for your own colors. Define them as variables on `:root`, then override them under `.p-dark-mode` for the dark variant. Puppertino's existing components will pick up your custom variables for free if you use the same naming convention.
+
+## What Flips in Dark Mode
+
+Every token from the [Colors](../colors/) page flips. Specifically:
+
+- All thirteen system accents shift to slightly more saturated variants
+- Text hierarchy uses white opacities instead of black
+- Fill levels invert from black-base to white-base
+- Background tiers darken, with elevated tiers becoming *lighter* than the base (the depth-reversal pattern from Apple's HIG)
+- Material thicknesses adapt to use black-base translucency instead of white
+
+The [Materials](../materials/) page demonstrates the material flip side by side over the same image.
+
+## Best Practices
+
+Consider supporting both auto and manual modes. Auto handles the common case. Manual lets users override.
+
+Avoid hard-coding colors. Use the Puppertino tokens or define your own custom properties. Anything hard-coded will not flip with the theme.
+
+Avoid relying on shadow alone for elevation in dark mode. Shadows are less visible against dark backgrounds. Apple compensates by raising the surface color. Puppertino's material system handles this automatically.
+
+Test your designs in both modes. A layout that works in light may have legibility issues in dark, and vice versa. The most common pitfall is text contrast over translucent surfaces.
+
+## Backwards Compatibility
+
+The `.p-dark-mode` class and the dark mode manager have been part of Puppertino since v1. Existing projects continue to work without changes. The new v2 color tokens (text hierarchy, fills, materials) flip automatically when you upgrade.

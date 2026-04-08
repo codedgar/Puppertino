@@ -1,0 +1,78 @@
+---
+interface Props {
+  name: string;
+  cssVar: string;
+  lightHex: string;
+  darkHex: string;
+}
+
+const { name, cssVar, lightHex, darkHex } = Astro.props;
+---
+
+<button class="swatch" type="button" data-copy={cssVar} aria-label={`Copy ${cssVar}`}>
+  <div class="swatch-pair">
+    <div class="swatch-half swatch-light" style={`background: ${lightHex};`}></div>
+    <div class="swatch-half swatch-dark" style={`background: ${darkHex};`}></div>
+  </div>
+  <div class="swatch-meta">
+    <span class="swatch-name">{name}</span>
+    <code class="swatch-var">{cssVar}</code>
+  </div>
+</button>
+
+<style>
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .swatch:hover {
+    transform: translateY(-2px);
+  }
+
+  .swatch:active {
+    transform: translateY(0);
+  }
+
+  .swatch-pair {
+    display: flex;
+    aspect-ratio: 5 / 3;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .swatch-half {
+    flex: 1;
+  }
+
+  .swatch-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .swatch-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.008em;
+  }
+
+  .swatch-var {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    background: none;
+    padding: 0;
+  }
+</style>

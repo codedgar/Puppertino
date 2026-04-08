@@ -1,0 +1,250 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Puppertino Typography
+   Apple's Human Interface Guidelines type system for the web.
+   Includes legacy `.p-layout` classes for backwards compatibility,
+   plus the full macOS 26 / iOS type scale.
+   ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  --p-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+            "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --p-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                    "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --p-font-mono: "SF Mono", SFMono-Regular, ui-monospace, "Menlo", monospace;
+}
+
+/* ─── Legacy classes (do not remove) ───────────────────────────────── */
+
+.p-large-title {
+  font-size: 2.75rem;
+}
+
+.p-layout h1 {
+  font-size: 2.25rem;
+}
+
+.p-layout h2 {
+  font-size: 1.75rem;
+}
+
+.p-layout h3 {
+  font-size: 1.58rem;
+}
+
+.p-headline {
+  font-size: 1.34rem;
+  font-weight: bold;
+}
+
+.p-layout p {
+  font-size: 1.15rem;
+}
+
+.p-layout .link,
+.p-layout input {
+  font-size: 0.813rem;
+}
+
+.p-callout {
+  font-size: 1.14rem;
+}
+
+.p-subhead {
+  font-size: 1.167rem;
+}
+
+.p-footnote {
+  font-size: 1.07rem;
+}
+
+.p-caption {
+  font-size: 0.91rem;
+}
+
+/* ─── macOS 26 / iOS type scale ────────────────────────────────────── */
+
+/* Apply this class to a section or the body to opt into the new scale.
+   It does not override `.p-layout`, so existing pages keep working. */
+
+.p-type {
+  font-family: var(--p-font);
+  font-size: 17px;
+  line-height: 1.47;
+  color: var(--p-text-primary, #1d1d1f);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Standalone text style classes. Use directly on any element. */
+
+.p-large-title-2 {
+  font-family: var(--p-font-display);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: -0.022em;
+}
+
+.p-title-1 {
+  font-family: var(--p-font-display);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  letter-spacing: -0.018em;
+}
+
+.p-title-2 {
+  font-family: var(--p-font-display);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: -0.012em;
+}
+
+.p-title-3 {
+  font-family: var(--p-font-display);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: -0.008em;
+}
+
+.p-headline-2 {
+  font-family: var(--p-font);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: -0.004em;
+}
+
+.p-body {
+  font-family: var(--p-font);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.004em;
+}
+
+.p-callout-2 {
+  font-family: var(--p-font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: -0.003em;
+}
+
+.p-subhead-2 {
+  font-family: var(--p-font);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.002em;
+}
+
+.p-footnote-2 {
+  font-family: var(--p-font);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.p-caption-1 {
+  font-family: var(--p-font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.p-caption-2 {
+  font-family: var(--p-font);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 13px;
+}
+
+/* ─── Native heading styles inside .p-type ─────────────────────────── */
+
+.p-type h1 {
+  font-family: var(--p-font-display);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: -0.022em;
+  margin: 0 0 16px;
+}
+
+.p-type h2 {
+  font-family: var(--p-font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 34px;
+  letter-spacing: -0.018em;
+  margin: 32px 0 12px;
+}
+
+.p-type h3 {
+  font-family: var(--p-font-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.012em;
+  margin: 24px 0 8px;
+}
+
+.p-type h4 {
+  font-family: var(--p-font-display);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.008em;
+  margin: 20px 0 8px;
+}
+
+.p-type h5 {
+  font-family: var(--p-font);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+  margin: 16px 0 4px;
+}
+
+.p-type h6 {
+  font-family: var(--p-font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 16px 0 4px;
+}
+
+.p-type p {
+  font-family: var(--p-font);
+  font-size: 17px;
+  line-height: 22px;
+  margin: 0 0 16px;
+}
+
+.p-type code,
+.p-type pre {
+  font-family: var(--p-font-mono);
+  font-size: 14px;
+}
+
+/* ─── Weight modifiers ─────────────────────────────────────────────── */
+
+.p-weight-ultralight { font-weight: 100; }
+.p-weight-thin { font-weight: 200; }
+.p-weight-light { font-weight: 300; }
+.p-weight-regular { font-weight: 400; }
+.p-weight-medium { font-weight: 500; }
+.p-weight-semibold { font-weight: 600; }
+.p-weight-bold { font-weight: 700; }
+.p-weight-heavy { font-weight: 800; }
+.p-weight-black { font-weight: 900; }
+
+/* ─── Tracking utilities (matches Apple's optical sizing) ──────────── */
+
+.p-tracking-tight { letter-spacing: -0.022em; }
+.p-tracking-snug { letter-spacing: -0.012em; }
+.p-tracking-normal { letter-spacing: 0; }
+.p-tracking-wide { letter-spacing: 0.01em; }
+.p-tracking-wider { letter-spacing: 0.03em; }

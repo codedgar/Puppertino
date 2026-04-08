@@ -1,0 +1,118 @@
+---
+layout: ../../layouts/Doc.astro
+title: Typography
+description: Puppertino's type system. Apple's text styles for iOS and macOS, ported faithfully to the web.
+---
+
+import TypeSpecimen from '../../components/TypeSpecimen.astro';
+
+Type is the heart of any interface. Puppertino uses Apple's text style system from the Human Interface Guidelines, with sizes, weights, line heights, and letter spacing that match the native scale.
+
+The system font (San Francisco) loads automatically on Apple devices through `-apple-system`. On other platforms, the stack falls back through Helvetica Neue and Inter so the rhythm stays close.
+
+## Type Scale
+
+The full Apple text style ladder. Each style has a specific size, weight, line height, and letter spacing tuned for legibility at that size. Larger sizes use tighter tracking, smaller sizes use looser tracking. This is called optical sizing and it is what makes Apple's typography feel right.
+
+Apply any class directly to an element.
+
+<div class="p-type">
+
+<TypeSpecimen className="p-large-title-2" label="Large Title" size="34px" weight="700" lineHeight="41px" tracking="-0.022em" sample="Large Title" />
+
+<TypeSpecimen className="p-title-1" label="Title 1" size="28px" weight="400" lineHeight="34px" tracking="-0.018em" sample="Title 1" />
+
+<TypeSpecimen className="p-title-2" label="Title 2" size="22px" weight="400" lineHeight="28px" tracking="-0.012em" sample="Title 2" />
+
+<TypeSpecimen className="p-title-3" label="Title 3" size="20px" weight="400" lineHeight="25px" tracking="-0.008em" sample="Title 3" />
+
+<TypeSpecimen className="p-headline-2" label="Headline" size="17px" weight="600" lineHeight="22px" tracking="-0.004em" sample="Headline" />
+
+<TypeSpecimen className="p-body" label="Body" size="17px" weight="400" lineHeight="22px" tracking="-0.004em" sample="Body text sets the tone of every interface. It carries the most weight on the page." />
+
+<TypeSpecimen className="p-callout-2" label="Callout" size="16px" weight="400" lineHeight="21px" tracking="-0.003em" sample="Callout text gives a piece of content slight emphasis." />
+
+<TypeSpecimen className="p-subhead-2" label="Subheadline" size="15px" weight="400" lineHeight="20px" tracking="-0.002em" sample="Subheadline supports a heading without competing with it." />
+
+<TypeSpecimen className="p-footnote-2" label="Footnote" size="13px" weight="400" lineHeight="18px" sample="Footnote text fits comfortably below body content." />
+
+<TypeSpecimen className="p-caption-1" label="Caption 1" size="12px" weight="400" lineHeight="16px" sample="Caption 1 labels images and form fields." />
+
+<TypeSpecimen className="p-caption-2" label="Caption 2" size="11px" weight="400" lineHeight="13px" sample="Caption 2 is for the smallest legal text and timestamps." />
+
+</div>
+
+## Using the Scale
+
+Apply a class directly to any element.
+
+```html
+<h1 class="p-large-title-2">Welcome to Puppertino</h1>
+<p class="p-body">A CSS framework for Apple-style interfaces.</p>
+<span class="p-caption-1">Updated 2 minutes ago</span>
+```
+
+Or wrap a section in `.p-type` to get sensible defaults for headings and paragraphs without needing individual classes.
+
+```html
+<article class="p-type">
+  <h1>Page title</h1>
+  <p>Body text inside this section automatically uses the Puppertino type scale.</p>
+  <h2>A subsection</h2>
+  <p>Headings, paragraphs, and code follow the system.</p>
+</article>
+```
+
+## Font Weights
+
+San Francisco supports nine weights. Puppertino exposes all of them as utility classes.
+
+| Class | Weight | Common Use |
+|---|---|---|
+| `.p-weight-ultralight` | 100 | Display only, never body |
+| `.p-weight-thin` | 200 | Display only |
+| `.p-weight-light` | 300 | Large display headings |
+| `.p-weight-regular` | 400 | Body text, default |
+| `.p-weight-medium` | 500 | Emphasized labels |
+| `.p-weight-semibold` | 600 | Headings, navigation |
+| `.p-weight-bold` | 700 | Strong emphasis |
+| `.p-weight-heavy` | 800 | Display only |
+| `.p-weight-black` | 900 | Display only |
+
+Avoid weights below 300 and above 700 in body text. They are for display use only.
+
+## Letter Spacing
+
+Apple tightens letter spacing as size increases. The type styles already include the right tracking, but utility classes are available when you need to override or apply tracking to plain text.
+
+```html
+<span class="p-tracking-tight">Tight tracking for headlines</span>
+<span class="p-tracking-snug">Snug tracking for subheadings</span>
+<span class="p-tracking-normal">Normal tracking for body</span>
+<span class="p-tracking-wide">Wide tracking for small caps</span>
+<span class="p-tracking-wider">Wider tracking for labels</span>
+```
+
+## Font Stack
+
+The default font is the system font on Apple devices, with a graceful fallback chain.
+
+```css
+font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+             "SF Pro Display", "Inter", "Helvetica Neue",
+             Helvetica, Arial, sans-serif;
+```
+
+Use `--p-font` for body text, `--p-font-display` for headings, and `--p-font-mono` for code.
+
+## Backwards Compatibility
+
+The legacy `.p-layout`, `.p-large-title`, `.p-headline`, `.p-callout`, `.p-subhead`, `.p-footnote`, and `.p-caption` classes from earlier versions of Puppertino continue to work. Pages that use them do not need to change.
+
+The new classes use a `-2` suffix where they would conflict (`.p-large-title-2`, `.p-headline-2`, etc.) so both systems coexist.
+
+## Accessibility
+
+Apple's text styles are designed to support Dynamic Type on iOS, where users can scale text to meet their needs. On the web, use relative units (rem, em) where possible and avoid hard-capping line lengths so text reflows comfortably at larger sizes.
+
+Always check contrast against your background. Apple's primary text uses 85% opacity, which gives just over 4.5:1 contrast on white at 17px. Below 17px, prefer the higher-opacity text colors.

@@ -1,0 +1,136 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Home" description="Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web. Now in version 2.0.">
+  <div class="landing">
+
+    <!-- ─── Hero ───────────────────────────────────────── -->
+    <section class="landing-hero">
+      <span class="landing-eyebrow">Version 2.0</span>
+      <h1>Puppertino</h1>
+      <p class="landing-subtitle">
+        A CSS framework that brings macOS and iOS aesthetics to the web. Rebuilt around Apple's macOS 26 specification.
+      </p>
+      <div class="landing-cta">
+        <a href={`${base}docs/getting-started/`} class="landing-btn-primary">Get started</a>
+        <a href="https://github.com/codedgar/Puppertino" class="landing-btn-secondary">View on GitHub</a>
+      </div>
+    </section>
+
+    <!-- ─── What it is ─────────────────────────────────── -->
+    <section class="landing-section">
+      <h2>A full rebuild</h2>
+      <p>
+        Puppertino 2.0 is a ground-up rebuild. The colors, the typography, and the materials all follow Apple's macOS 26 specification. Components are documented properly. The CSS is structured for clarity, not for accident.
+      </p>
+      <p>
+        Everything that worked in version 1 still works. Existing classes remain in place. Projects upgrading from v1 do not need to rewrite anything.
+      </p>
+    </section>
+
+    <!-- ─── The three foundations ──────────────────────── -->
+    <section class="landing-section">
+      <h2>Three rebuilt foundations</h2>
+      <p>
+        The new system rests on three pieces. Each one is documented in full and ships with light and dark mode support.
+      </p>
+      <ul class="landing-list">
+        <li>
+          <strong>Colors.</strong> Thirteen system accents, six text hierarchy levels, five fill tiers, and semantic background tokens.
+        </li>
+        <li>
+          <strong>Typography.</strong> The full Apple text style scale with nine font weights and optical letter spacing.
+        </li>
+        <li>
+          <strong>Materials.</strong> Five thickness levels for blur and translucency. Built with reduced-transparency and reduced-motion support.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ─── Backwards compatibility ────────────────────── -->
+    <section class="landing-section">
+      <h2>Nothing breaks</h2>
+      <p>
+        The legacy color palettes, layout classes, and shadow utilities from version 1 are still part of the package. They will be sunset gradually across the 2.x release line, with clear migration paths for each step.
+      </p>
+      <p>
+        If your project is on Puppertino 1, upgrading to 2.0 is a single dependency bump.
+      </p>
+    </section>
+
+    <!-- ─── What's coming ──────────────────────────────── -->
+    <section class="landing-section">
+      <h2>What's coming next</h2>
+      <p>
+        Version 2.0 ships the foundations and the existing components. The releases that follow will focus on three areas.
+      </p>
+      <ul class="landing-list">
+        <li>
+          <strong>More components.</strong> Sidebars, toolbars, popovers, search fields, and the rest of the macOS 26 component set.
+        </li>
+        <li>
+          <strong>Cleaner internals.</strong> Every legacy class will be reviewed, documented, and either kept or replaced. The CSS will be auditable end to end.
+        </li>
+        <li>
+          <strong>Enterprise readiness.</strong> Stable APIs, clear deprecation policy, accessibility-first defaults, and documentation that holds up under scrutiny.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ─── Final CTA ──────────────────────────────────── -->
+    <section class="landing-section">
+      <h2>Start building</h2>
+      <p>
+        Read the docs, install via npm or CDN, and ship something that feels like it belongs on a Mac.
+      </p>
+      <div class="landing-cta">
+        <a href={`${base}docs/getting-started/`} class="landing-btn-primary">Get started</a>
+        <a href={`${base}docs/`} class="landing-btn-secondary">Browse the docs</a>
+      </div>
+    </section>
+
+    <!-- ─── Footer ─────────────────────────────────────── -->
+    <footer class="landing-footer">
+      <p>Puppertino is not associated with Apple Inc.</p>
+      <p>Created by <a href="https://codedgar.com">Codedgar</a>. Open source under the MIT license.</p>
+    </footer>
+
+  </div>
+</Base>
+
+<style>
+  .landing-eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .landing-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+  }
+
+  .landing-list li {
+    font-size: 17px;
+    line-height: 1.52;
+    color: var(--text-secondary);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .landing-list li:last-child {
+    border-bottom: none;
+  }
+
+  .landing-list strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>

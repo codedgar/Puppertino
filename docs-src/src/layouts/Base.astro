@@ -1,0 +1,45 @@
+---
+import '../styles/docs.css';
+import '../styles/puppertino-colors.css';
+import '../styles/puppertino-typography.css';
+import '../styles/puppertino-materials.css';
+import '@phosphor-icons/web/regular';
+import '@phosphor-icons/web/bold';
+import CopyToast from '../components/CopyToast.astro';
+import Search from '../components/Search.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A CSS framework for building web interfaces with Apple\'s macOS design language.' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const hasSidebar = Astro.slots.has('sidebar');
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href={`${base}doggo.png`} />
+    <title>{title} - Puppertino</title>
+  </head>
+  <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
+    {hasSidebar && (
+      <aside class="sidebar">
+        <a href={`${base}docs/`} class="sidebar-logo">Puppertino</a>
+        <Search />
+        <nav>
+          <slot name="sidebar" />
+        </nav>
+      </aside>
+    )}
+    <main>
+      <slot />
+    </main>
+    <CopyToast />
+  </body>
+</html>

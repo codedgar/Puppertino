@@ -1,0 +1,90 @@
+---
+const levels = [
+  { name: 'Primary', cssVar: '--p-text-primary', class: 'p-text-primary', light: 'rgba(0,0,0,0.85)', dark: 'rgba(255,255,255,0.85)' },
+  { name: 'Secondary', cssVar: '--p-text-secondary', class: 'p-text-secondary', light: 'rgba(0,0,0,0.50)', dark: 'rgba(255,255,255,0.55)' },
+  { name: 'Tertiary', cssVar: '--p-text-tertiary', class: 'p-text-tertiary', light: 'rgba(0,0,0,0.25)', dark: 'rgba(255,255,255,0.25)' },
+  { name: 'Quaternary', cssVar: '--p-text-quaternary', class: 'p-text-quaternary', light: 'rgba(0,0,0,0.10)', dark: 'rgba(255,255,255,0.10)' },
+  { name: 'Quinary', cssVar: '--p-text-quinary', class: 'p-text-quinary', light: 'rgba(0,0,0,0.05)', dark: 'rgba(255,255,255,0.05)' },
+  { name: 'Seximal', cssVar: '--p-text-seximal', class: 'p-text-seximal', light: 'rgba(0,0,0,0.03)', dark: 'rgba(255,255,255,0.03)' },
+];
+---
+
+<div class="text-hierarchy">
+  {levels.map((level) => (
+    <button class="text-hierarchy-row" type="button" data-copy={level.cssVar} aria-label={`Copy ${level.cssVar}`}>
+      <span class={`text-hierarchy-sample ${level.class}`}>The quick brown fox jumps over the lazy dog</span>
+      <span class="text-hierarchy-meta">
+        <span class="text-hierarchy-name">{level.name}</span>
+        <code class="text-hierarchy-var">{level.cssVar}</code>
+      </span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .text-hierarchy {
+    display: flex;
+    flex-direction: column;
+    margin: 24px 0 32px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .text-hierarchy-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: background 0.12s ease;
+  }
+
+  .text-hierarchy-row:last-child {
+    border-bottom: none;
+  }
+
+  .text-hierarchy-row:hover {
+    background: var(--bg-sidebar);
+  }
+
+  .text-hierarchy-sample {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.004em;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .text-hierarchy-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .text-hierarchy-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .text-hierarchy-var {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    background: none;
+    padding: 0;
+  }
+</style>

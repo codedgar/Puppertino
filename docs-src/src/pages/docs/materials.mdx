@@ -1,0 +1,113 @@
+---
+layout: ../../layouts/Doc.astro
+title: Materials
+description: Materials are surfaces that blur the content behind them. Five thickness levels, full dark mode support, and accessibility built in.
+---
+
+import MaterialGrid from '../../components/MaterialGrid.astro';
+import MaterialDemo from '../../components/MaterialDemo.astro';
+import ShadowGrid from '../../components/ShadowGrid.astro';
+import ShadowDemo from '../../components/ShadowDemo.astro';
+
+A material is a surface that blurs and tints the content behind it. Apple uses materials for navigation bars, sheets, popovers, and any element that should feel like it sits on top of the rest of the interface without hiding it completely.
+
+Puppertino ships five thickness levels that match Apple's macOS 26 specification. Each level adapts to light and dark mode, respects reduced transparency, and falls back gracefully when the browser does not support `backdrop-filter`.
+
+## Thickness Levels
+
+Five materials, ordered from most see-through to most opaque. Pick the one that matches the importance of the surface. Thinner materials work for light decorative chrome; thicker materials work for surfaces that hold critical content.
+
+<MaterialGrid>
+  <MaterialDemo className="p-material-ultrathin" label="Ultra Thin" opacity="0.36 / 0.10" />
+  <MaterialDemo className="p-material-thin" label="Thin" opacity="0.48 / 0.20" />
+  <MaterialDemo className="p-material-medium" label="Medium" opacity="0.60 / 0.29" />
+  <MaterialDemo className="p-material-thick" label="Thick" opacity="0.72 / 0.40" />
+  <MaterialDemo className="p-material-ultrathick" label="Ultra Thick" opacity="0.84 / 0.50" />
+</MaterialGrid>
+
+The two opacity values are light mode and dark mode respectively. Note that dark mode materials are more transparent than light mode materials. This is consistent with the Liquid Glass direction in macOS 26: materials should let more of the background through.
+
+## Choosing a Thickness
+
+Match the material to the size of the surface and the content it carries.
+
+| Material | Use it for |
+|---|---|
+| Ultra Thin | Floating decorative chrome that should barely separate from the background |
+| Thin | Tab bars and toolbars that need slight separation |
+| Medium | Cards, popovers, and tooltips |
+| Thick | Sheets, modals, and dialogs |
+| Ultra Thick | Surfaces that hold critical content over a busy background |
+
+## How to Use Materials
+
+Apply a material class to any element. The class handles the blur, the saturation, and the background fill in one step.
+
+```html
+<nav class="p-material-thin">Tab bar content</nav>
+<aside class="p-material-medium">Sidebar content</aside>
+<div class="p-material-thick">Sheet content</div>
+```
+
+The `p-material` class on its own applies the blur and saturation without setting a background color. Combine it with a custom background when you need full control.
+
+```html
+<div class="p-material" style="background: rgba(0, 100, 255, 0.4);">
+  Custom tinted material
+</div>
+```
+
+## Glass Components
+
+Three preset glass surfaces sized for common UI elements. The opacity scales with the size: small surfaces are more transparent, large surfaces are more opaque.
+
+```html
+<button class="p-glass-sm">Pill button</button>
+<div class="p-glass-md">Card</div>
+<div class="p-glass-lg">Window or sheet</div>
+```
+
+Each preset includes a sensible border radius (24px for small, 14px for medium, 10px for large) so the surface looks finished without extra styling.
+
+## Shadows
+
+Five elevation levels for depth that does not rely on translucency. Use these when you need a defined edge or when materials are not appropriate.
+
+<ShadowGrid>
+  <ShadowDemo className="p-elevation-1" label="Elevation 1" />
+  <ShadowDemo className="p-elevation-2" label="Elevation 2" />
+  <ShadowDemo className="p-elevation-3" label="Elevation 3" />
+  <ShadowDemo className="p-elevation-4" label="Elevation 4" />
+  <ShadowDemo className="p-elevation-window" label="Window" />
+</ShadowGrid>
+
+| Class | Shadow value | Use for |
+|---|---|---|
+| `.p-elevation-1` | `0 1px 3px rgba(0,0,0,0.12)` | Cards, raised buttons |
+| `.p-elevation-2` | `0 4px 12px rgba(0,0,0,0.15)` | Popovers, tooltips |
+| `.p-elevation-3` | `0 8px 30px rgba(0,0,0,0.20)` | Modals, sheets |
+| `.p-elevation-4` | `0 16px 48px rgba(0,0,0,0.25)` | Context menus |
+| `.p-elevation-window` | Multi-layer | Floating windows |
+
+```html
+<div class="p-elevation-1">Subtle lift</div>
+<div class="p-elevation-3">Modal-level depth</div>
+```
+
+In dark mode, shadows become less effective because the background is already dark. Apple compensates by raising the surface color instead of relying on the shadow. Materials handle this automatically.
+
+## Accessibility
+
+Materials are beautiful, but they trade contrast for translucency. Three accessibility paths are built in.
+
+**Reduced transparency.** When the user has `prefers-reduced-transparency` enabled, all materials switch to opaque backgrounds. Text legibility wins over the visual effect.
+
+**Browsers without backdrop-filter.** Older browsers fall back to a near-opaque background so the surface stays visible.
+
+**Contrast checks.** Always verify that text on top of a material meets at least 4.5:1 against the underlying content. If you cannot guarantee the background, use a thicker material or fall back to a solid color.
+
+## Backwards Compatibility
+
+The legacy `.p-shadow-1` through `.p-shadow-4`, `.p-to-shadow-1` through `.p-to-shadow-4`, and `.p-blur-1` through `.p-blur-4` classes from earlier Puppertino versions remain available. Pages that use them do not need to change.
+
+For new work, prefer the `.p-material-*` and `.p-elevation-*` classes. They follow the macOS 26 specification and adapt automatically to dark mode and accessibility preferences.

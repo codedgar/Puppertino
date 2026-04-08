@@ -1,0 +1,24 @@
+---
+---
+
+<div class="shadow-grid">
+  <slot />
+</div>
+
+<style>
+  .shadow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin: 24px 0 32px;
+    padding: 24px;
+    background: #f5f5f7;
+    border-radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .shadow-grid {
+      background: #2c2c2e;
+    }
+  }
+</style>

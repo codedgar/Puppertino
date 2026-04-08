@@ -1,0 +1,141 @@
+---
+layout: ../../layouts/Doc.astro
+title: Icons
+description: Puppertino does not ship icons. We recommend Phosphor for the closest match to Apple's SF Symbols, with notes on alignment, sizing, and color.
+---
+
+import IconShowcase from '../../components/IconShowcase.astro';
+
+Puppertino does not ship its own icon set. Apple's SF Symbols is the icon system that pairs with the Human Interface Guidelines, but Apple does not license SF Symbols for web use. Designing a faithful 9,000-symbol replacement is a separate project, and any compromise would feel out of place next to the rest of the framework.
+
+Instead, we recommend pairing Puppertino with **Phosphor Icons**. Phosphor is the closest open-source match to SF Symbols in spirit and execution.
+
+## Why Phosphor
+
+Apple's SF Symbols has three properties that make it work so well in iOS and macOS:
+
+- **Multiple weights** that match the text weight they sit next to
+- **Optical alignment** with the system font at every size
+- **Consistent stroke design** across thousands of symbols
+
+Phosphor matches all three.
+
+| Feature | SF Symbols | Phosphor |
+|---|---|---|
+| Total icons | 6,900+ | 9,000+ |
+| Weights | 9 (Ultralight to Black) | 6 (Thin, Light, Regular, Bold, Fill, Duotone) |
+| Stroke style | Geometric, rounded caps | Geometric, rounded caps |
+| License | Apple proprietary | MIT |
+| Web support | Not licensed | Yes |
+| Cost | Free for native apps | Free everywhere |
+
+The six weights map cleanly to the most useful SF Symbols weights. Use **Regular** for body content, **Bold** for headings and prominent UI, and **Fill** for selected states.
+
+## Install
+
+Pick the integration that fits your stack.
+
+### Via CDN
+
+The fastest setup. Drop a single `<link>` in your `<head>`. Pick the weight you need.
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/bold/style.css">
+```
+
+Then use the icon classes anywhere in your markup.
+
+```html
+<i class="ph ph-house"></i>
+<i class="ph-bold ph-gear"></i>
+```
+
+### Via npm
+
+If you have a build step, install the package and import the weights you use.
+
+```bash
+npm install @phosphor-icons/web
+```
+
+```javascript
+import '@phosphor-icons/web/regular'
+import '@phosphor-icons/web/bold'
+```
+
+The full list of available icons lives at [phosphoricons.com](https://phosphoricons.com).
+
+## A Sample Set
+
+Here is a small selection of Phosphor's bold weight rendered next to Puppertino's typography. They sit comfortably alongside the type system without competing with it.
+
+<IconShowcase />
+
+## Sizing and Alignment
+
+Phosphor icons inherit `font-size` from their parent, so they scale with the surrounding text. To match Apple's icon-with-text alignment, set the icon to roughly 1.2x the text size and align it to the baseline.
+
+```html
+<p style="font-size: 17px;">
+  <i class="ph-bold ph-house" style="font-size: 20px; vertical-align: -0.15em;"></i>
+  Home
+</p>
+```
+
+For standalone icons inside buttons, size them to match the line-height of the button text.
+
+```html
+<button class="p-btn p-prim-col">
+  <i class="ph-bold ph-arrow-right" style="font-size: 17px;"></i>
+  Continue
+</button>
+```
+
+## Color
+
+Phosphor icons inherit `color` from their parent through `currentColor`, so any text color you set on the parent applies to the icon.
+
+```html
+<p class="p-sys-blue-color">
+  <i class="ph-bold ph-info"></i>
+  Information
+</p>
+```
+
+To use a system color directly:
+
+```html
+<i class="ph-bold ph-warning" style="color: var(--p-sys-orange);"></i>
+<i class="ph-bold ph-x-circle" style="color: var(--p-sys-red);"></i>
+<i class="ph-bold ph-check-circle" style="color: var(--p-sys-green);"></i>
+```
+
+## Weights for State
+
+Apple uses different SF Symbols weights for selected and unselected states. Phosphor lets you do the same.
+
+```html
+<!-- Unselected -->
+<i class="ph ph-heart"></i>
+
+<!-- Selected -->
+<i class="ph-fill ph-heart" style="color: var(--p-sys-red);"></i>
+```
+
+This pattern works well for tab bars, toolbar buttons, and any interactive element with an active state.
+
+## Other Options
+
+If Phosphor is not the right fit, two other open-source libraries pair well with Puppertino.
+
+- **[Lucide](https://lucide.dev)** is a fork of Feather Icons. 1,500+ icons, 24px grid, 2px stroke, MIT license. The aesthetic is closer to SF Symbols' outline weight specifically.
+- **[Heroicons](https://heroicons.com)** by the Tailwind team. 300+ icons in three styles (outline, solid, mini). Smaller set, very high quality.
+
+Both render as inline SVGs rather than icon fonts, which gives you more control but requires more setup per icon.
+
+## Why Not an Icon Font of Our Own
+
+A custom Puppertino icon set would need to cover every component category at multiple weights. That is thousands of icons, each one drawn by hand, each one tested for optical balance. Any partial set would feel incomplete next to the framework's other foundations.
+
+Phosphor already does this work, openly licensed, well-maintained, and aligned with Puppertino's aesthetic. Building a parallel set would be wasted effort.

@@ -1,0 +1,44 @@
+---
+interface Props {
+  className: string;
+  label: string;
+}
+
+const { className, label } = Astro.props;
+---
+
+<div class="shadow-demo">
+  <div class={`shadow-demo-card ${className}`}>
+    <span>{label}</span>
+  </div>
+</div>
+
+<style>
+  .shadow-demo {
+    padding: 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shadow-demo-card {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #ffffff;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6e6e73;
+    letter-spacing: -0.004em;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .shadow-demo-card {
+      background: #1c1c1e;
+      color: #a1a1a6;
+    }
+  }
+</style>

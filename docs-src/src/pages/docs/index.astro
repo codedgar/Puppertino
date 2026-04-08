@@ -1,0 +1,79 @@
+---
+import Doc from '../../layouts/Doc.astro';
+const base = import.meta.env.BASE_URL;
+
+const foundations = [
+  { label: 'Materials', icon: 'ph-drop', href: `${base}docs/materials/` },
+  { label: 'Colors', icon: 'ph-palette', href: `${base}docs/colors/` },
+  { label: 'Typography', icon: 'ph-text-aa', href: `${base}docs/typography/` },
+  { label: 'Dark Mode', icon: 'ph-moon', href: `${base}docs/dark-mode/` },
+  { label: 'Icons', icon: 'ph-smiley', href: `${base}docs/icons/` },
+];
+
+const mobile = [
+  { label: 'Buttons', icon: 'ph-hand-tap', href: `${base}docs/mobile/buttons/` },
+  { label: 'Forms', icon: 'ph-textbox', href: `${base}docs/mobile/forms/` },
+  { label: 'Modals', icon: 'ph-browser', href: `${base}docs/mobile/modals/` },
+  { label: 'Actions', icon: 'ph-list', href: `${base}docs/mobile/actions/` },
+  { label: 'Tabs', icon: 'ph-tabs', href: `${base}docs/mobile/tabs/` },
+];
+
+const desktop = [
+  { label: 'Buttons', icon: 'ph-cursor-click', href: `${base}docs/desktop/buttons/` },
+  { label: 'Forms', icon: 'ph-text-indent', href: `${base}docs/desktop/forms/` },
+  { label: 'Modals', icon: 'ph-app-window', href: `${base}docs/desktop/modals/` },
+  { label: 'Segmented Controls', icon: 'ph-squares-four', href: `${base}docs/desktop/segmented-controls/` },
+  { label: 'Cards', icon: 'ph-rectangle', href: `${base}docs/desktop/cards/` },
+];
+---
+
+<Doc title="Documentation" description="Puppertino component documentation. A CSS framework that brings macOS and iOS aesthetics to the web.">
+  <p>
+    Puppertino provides modular CSS components that follow Apple's Human Interface Guidelines. Each component supports light and dark mode, respects accessibility preferences, and works without JavaScript dependencies.
+  </p>
+
+  <section class="doc-grid">
+    <h2>Foundations</h2>
+    <p>The building blocks that define how Puppertino looks and feels. Colors, typography, materials, and spacing form the visual language every component builds on.</p>
+    <div class="tile-grid">
+      {foundations.map((item) => (
+        <a href={item.href} class="tile tile-foundations">
+          <div class="tile-art">
+            <i class={`ph-bold ${item.icon}`}></i>
+          </div>
+          <span class="tile-label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="doc-grid">
+    <h2>Mobile Components</h2>
+    <p>Components designed for touch interfaces. Sized for 44px minimum tap targets, optimized for single-column layouts, and following iOS interaction patterns.</p>
+    <div class="tile-grid">
+      {mobile.map((item) => (
+        <a href={item.href} class="tile tile-mobile">
+          <div class="tile-art">
+            <i class={`ph-bold ${item.icon}`}></i>
+          </div>
+          <span class="tile-label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="doc-grid">
+    <h2>Desktop Components</h2>
+    <p>Components designed for pointer-driven interfaces. Hover states, compact sizing, and interaction patterns following macOS conventions.</p>
+    <div class="tile-grid">
+      {desktop.map((item) => (
+        <a href={item.href} class="tile tile-desktop">
+          <div class="tile-art">
+            <i class={`ph-bold ${item.icon}`}></i>
+          </div>
+          <span class="tile-label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Doc>

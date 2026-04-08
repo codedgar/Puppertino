@@ -1,0 +1,153 @@
+---
+layout: ../../layouts/Doc.astro
+title: Getting Started
+description: Install Puppertino and bring Apple's design language to the web in a few minutes.
+---
+
+Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web. It follows Apple's Human Interface Guidelines, ships zero JavaScript dependencies, and works without a build step.
+
+This is **version 2.0** of Puppertino. The release introduces the macOS 26 color system, the materials specification, and a complete typography scale. Existing v1 classes remain available so projects can upgrade without rewrites.
+
+## Install via CDN
+
+The fastest way to use Puppertino is through jsDelivr. Add the full CSS to the `<head>` of your HTML.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/newfull.css">
+```
+
+Need only specific components? Import them individually to keep the bundle small.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/buttons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/colors.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/materials.css">
+```
+
+## Install via npm
+
+Install Puppertino as a dependency in your project.
+
+```bash
+npm install @codedgar/puppertino@2.0.0
+```
+
+Then import the full framework or individual components.
+
+```javascript
+// Full framework
+import '@codedgar/puppertino'
+
+// Individual components
+import '@codedgar/puppertino/buttons'
+import '@codedgar/puppertino/colors'
+import '@codedgar/puppertino/typography'
+import '@codedgar/puppertino/materials'
+import '@codedgar/puppertino/dark-mode'
+```
+
+You can also use plain CSS imports if your stack supports them.
+
+```css
+@import '@codedgar/puppertino';
+
+/* Or pick what you need */
+@import '@codedgar/puppertino/colors';
+@import '@codedgar/puppertino/materials';
+```
+
+## JavaScript Modules
+
+A few components ship with optional vanilla JavaScript: modals, tabs, actions, segmented controls, and the dark mode manager. Import only the ones you use.
+
+```javascript
+import '@codedgar/puppertino/js/modals.js'
+import '@codedgar/puppertino/js/tabs.js'
+import '@codedgar/puppertino/js/dakmode_manager.js'
+```
+
+## Your First Page
+
+Here is the smallest possible Puppertino setup. It pulls in the full framework, applies the typography scale to the body, and enables automatic dark mode.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Puppertino app</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/newfull.css">
+  </head>
+  <body class="p-type p-auto-dark-mode">
+    <h1>Hello from Puppertino</h1>
+    <p>A CSS framework for Apple-style interfaces.</p>
+    <button class="p-btn p-prim-col">Get started</button>
+  </body>
+</html>
+```
+
+The `p-type` class opts the page into the macOS 26 typography scale. The `p-auto-dark-mode` class flips colors to dark mode when the user's system preference is dark.
+
+## Dark Mode
+
+Puppertino supports dark mode in two ways. **Automatic** uses the system preference. **Manual** lets you toggle it from a button.
+
+```html
+<!-- Automatic: follows the OS preference -->
+<body class="p-auto-dark-mode">
+
+<!-- Manual: add the class when the user opts in -->
+<body class="p-dark-mode">
+```
+
+For the manual approach, the dark mode manager script handles the toggle, persistence, and tab synchronization.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/src/js/dakmode_manager.js"></script>
+<script>
+  puppertinoThemeMan.init({ autoDetect: true });
+</script>
+```
+
+## What's New in Version 2.0
+
+Three foundations were rebuilt around Apple's macOS 26 specification.
+
+- **Colors.** Thirteen system accents, six text hierarchy levels, five fill tiers, and semantic background tokens. All with light and dark mode variants.
+- **Typography.** The full Apple text style scale, from Large Title to Caption 2. Nine font weights and optical letter spacing baked in.
+- **Materials.** Five thickness levels for blur and translucency, plus elevation tokens for shadows. Built with `prefers-reduced-transparency` and `@supports` fallbacks.
+
+The legacy `color_palette.css`, `layout.css`, and `shadows.css` files are still included for backwards compatibility. Projects upgrading from v1 do not need to change anything to keep working.
+
+## Migrating from Version 1
+
+If you are upgrading an existing Puppertino v1 project, your code will continue to work. The new tokens live alongside the old ones.
+
+When you are ready to adopt the new system, update your imports to point at the new files.
+
+```javascript
+// v1
+import '@codedgar/puppertino/colors'    // color_palette.css
+import '@codedgar/puppertino/layout'    // layout.css
+import '@codedgar/puppertino/shadows'   // shadows.css
+
+// v2 (the new files include everything from v1)
+import '@codedgar/puppertino/colors'      // colors.css (new + legacy)
+import '@codedgar/puppertino/typography'  // typography.css (new + legacy)
+import '@codedgar/puppertino/materials'   // materials.css (new + legacy)
+```
+
+Note that `@codedgar/puppertino/colors` now points at the new `colors.css` which includes both the macOS 26 system tokens *and* the legacy classes. Same for materials. You get the new stuff without breaking the old stuff.
+
+## Browser Support
+
+Puppertino targets modern evergreen browsers: Safari, Chrome, Firefox, and Edge. Materials use `backdrop-filter` with a `@supports` fallback for older browsers. Color tokens use CSS custom properties.
+
+## Where to Go Next
+
+- **Foundations** explain how the design system works. Start with [Colors](../colors/), [Typography](../typography/), and [Materials](../materials/).
+- **Mobile Components** cover touch-optimized elements like buttons, forms, modals, and tabs.
+- **Desktop Components** cover pointer-driven elements with hover states and macOS interaction patterns.
+
+If you find a bug or want to request a component, open an issue on [the GitHub repo](https://github.com/codedgar/Puppertino/issues).

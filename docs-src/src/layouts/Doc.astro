@@ -1,0 +1,98 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  frontmatter?: { title?: string; description?: string };
+}
+
+const props = Astro.props;
+const title = props.title ?? props.frontmatter?.title ?? '';
+const description = props.description ?? props.frontmatter?.description;
+const base = import.meta.env.BASE_URL;
+
+const nav = [
+  {
+    heading: 'Foundations',
+    items: [
+      { label: 'Getting Started', href: `${base}docs/getting-started/` },
+      { label: 'Materials', href: `${base}docs/materials/` },
+      { label: 'Colors', href: `${base}docs/colors/` },
+      { label: 'Typography', href: `${base}docs/typography/` },
+      { label: 'Dark Mode', href: `${base}docs/dark-mode/` },
+      { label: 'Icons', href: `${base}docs/icons/` },
+    ],
+  },
+  {
+    heading: 'Mobile Components',
+    items: [
+      { label: 'Buttons', href: `${base}docs/mobile/buttons/` },
+      { label: 'Forms', href: `${base}docs/mobile/forms/` },
+      { label: 'Modals', href: `${base}docs/mobile/modals/` },
+      { label: 'Actions', href: `${base}docs/mobile/actions/` },
+      { label: 'Tabs', href: `${base}docs/mobile/tabs/` },
+    ],
+  },
+  {
+    heading: 'Desktop Components',
+    items: [
+      { label: 'Buttons', href: `${base}docs/desktop/buttons/` },
+      { label: 'Forms', href: `${base}docs/desktop/forms/` },
+      { label: 'Modals', href: `${base}docs/desktop/modals/` },
+      { label: 'Segmented Controls', href: `${base}docs/desktop/segmented-controls/` },
+      { label: 'Cards', href: `${base}docs/desktop/cards/` },
+    ],
+  },
+];
+
+// Build a flat list with section labels for prev/next navigation
+const flat = nav.flatMap((section) =>
+  section.items.map((item) => ({ ...item, section: section.heading }))
+);
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') + '/';
+const currentIndex = flat.findIndex((item) => item.href === currentPath);
+const prev = currentIndex > 0 ? flat[currentIndex - 1] : null;
+const next = currentIndex >= 0 && currentIndex < flat.length - 1 ? flat[currentIndex + 1] : null;
+const currentSection = currentIndex >= 0 ? flat[currentIndex].section : null;
+---
+
+<Base title={title} description={description}>
+  <Fragment slot="sidebar">
+    {nav.map(({ heading, items }) => (
+      <div class="nav-section">
+        <span class="nav-heading">{heading}</span>
+        <ul>
+          {items.map(({ label, href }) => (
+            <li>
+              <a href={href} class={href === currentPath ? 'active' : ''}>{label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </Fragment>
+  <article>
+    {currentSection && <span class="article-eyebrow">{currentSection}</span>}
+    <h1>{title}</h1>
+    <slot />
+
+    {(prev || next) && (
+      <nav class="page-nav" aria-label="Page navigation">
+        {prev ? (
+          <a href={prev.href} class="page-nav-link page-nav-prev">
+            <span class="page-nav-direction">Previous</span>
+            <span class="page-nav-label">{prev.label}</span>
+          </a>
+        ) : <span class="page-nav-spacer"></span>}
+        {next ? (
+          <a href={next.href} class="page-nav-link page-nav-next">
+            <span class="page-nav-direction">Next</span>
+            <span class="page-nav-label">{next.label}</span>
+          </a>
+        ) : <span class="page-nav-spacer"></span>}
+      </nav>
+    )}
+  </article>
+</Base>

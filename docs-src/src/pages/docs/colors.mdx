@@ -1,0 +1,105 @@
+---
+layout: ../../layouts/Doc.astro
+title: Colors
+description: Puppertino's color system follows Apple's macOS 26 specification. System accents, fill levels, text hierarchy, and semantic backgrounds.
+---
+
+import ColorSwatch from '../../components/ColorSwatch.astro';
+import SwatchGrid from '../../components/SwatchGrid.astro';
+import TextHierarchyDemo from '../../components/TextHierarchyDemo.astro';
+import FillDemo from '../../components/FillDemo.astro';
+import BackgroundDemo from '../../components/BackgroundDemo.astro';
+
+Puppertino ships with the full macOS 26 color system. Every color has a light and dark mode variant, every fill level adapts to its surface, and the text hierarchy gives six tiers of emphasis instead of four.
+
+The colors live in `colors.css`. The legacy palettes from earlier versions of Puppertino remain available for backwards compatibility.
+
+## System Accents
+
+Thirteen accent colors form the base palette. Each color has a light mode and dark mode variant, and the dark variant is slightly more saturated to maintain visual impact against dark backgrounds.
+
+<SwatchGrid>
+  <ColorSwatch name="Red" cssVar="--p-sys-red" lightHex="#FF383C" darkHex="#FF4245" />
+  <ColorSwatch name="Orange" cssVar="--p-sys-orange" lightHex="#FF8D28" darkHex="#FF9230" />
+  <ColorSwatch name="Yellow" cssVar="--p-sys-yellow" lightHex="#FFCC00" darkHex="#FFD600" />
+  <ColorSwatch name="Green" cssVar="--p-sys-green" lightHex="#34C759" darkHex="#30D158" />
+  <ColorSwatch name="Mint" cssVar="--p-sys-mint" lightHex="#00C8B3" darkHex="#00DAC3" />
+  <ColorSwatch name="Teal" cssVar="--p-sys-teal" lightHex="#00C3D0" darkHex="#00D2E0" />
+  <ColorSwatch name="Cyan" cssVar="--p-sys-cyan" lightHex="#00C0E8" darkHex="#3CD3FE" />
+  <ColorSwatch name="Blue" cssVar="--p-sys-blue" lightHex="#0088FF" darkHex="#0091FF" />
+  <ColorSwatch name="Indigo" cssVar="--p-sys-indigo" lightHex="#6155F5" darkHex="#6D7CFF" />
+  <ColorSwatch name="Purple" cssVar="--p-sys-purple" lightHex="#CB30E0" darkHex="#DB34F2" />
+  <ColorSwatch name="Pink" cssVar="--p-sys-pink" lightHex="#FF2D55" darkHex="#FF375F" />
+  <ColorSwatch name="Brown" cssVar="--p-sys-brown" lightHex="#AC7F5E" darkHex="#B78A66" />
+  <ColorSwatch name="Gray" cssVar="--p-sys-gray" lightHex="#8E8E93" darkHex="#98989F" />
+</SwatchGrid>
+
+### How to use them
+
+Apply system colors with the utility classes or the CSS variables directly.
+
+```html
+<div class="p-sys-blue">Background blue</div>
+<p class="p-sys-red-color">Red text</p>
+```
+
+```css
+.my-button {
+  background: var(--p-sys-blue);
+  color: white;
+}
+```
+
+## Text Hierarchy
+
+Six levels of text emphasis. Primary is for body content, secondary for supporting copy, and the lower tiers are for placeholders and decorative text. Apple expanded this from four levels to six in macOS 26 to give designers more room for ultra-subtle text.
+
+Notice that primary text is not pure black. Apple uses 85% opacity so the surface behind shows through subtly. This is part of the Liquid Glass aesthetic.
+
+<TextHierarchyDemo />
+
+```html
+<p class="p-text-primary">Body content sits here.</p>
+<p class="p-text-secondary">Supporting text uses the secondary level.</p>
+<p class="p-text-tertiary">Placeholder text and timestamps use tertiary.</p>
+```
+
+## Fills
+
+Five fill tiers for subtle background tints. Use them for buttons, segmented control backgrounds, search bars, or any element that needs a quiet container without competing with the surface.
+
+The macOS 26 fills use pure black (light mode) or pure white (dark mode) at low opacity. This is simpler than the previous tinted-gray system and works better over translucent surfaces.
+
+<FillDemo />
+
+## Backgrounds
+
+Three background tiers for layered surfaces, plus three more for grouped table-style content. Apple's pattern: when you elevate a surface in dark mode, it gets *lighter*, not darker. The depth comes from the contrast against the layer below.
+
+<BackgroundDemo />
+
+Use the grouped variants (`--p-bg-grouped-primary`, `--p-bg-grouped-secondary`, `--p-bg-grouped-tertiary`) when building list-style content like settings screens.
+
+## Dark Mode
+
+All color tokens flip automatically when the page enters dark mode. Two ways to opt in:
+
+```html
+<!-- Manual: add the class -->
+<body class="p-dark-mode">
+
+<!-- Automatic: follow the system preference -->
+<body class="p-auto-dark-mode">
+```
+
+The auto variant uses `prefers-color-scheme` and switches without any JavaScript.
+
+## Backwards Compatibility
+
+The legacy `.p-strawberry-*`, `.p-banana-*`, `.p-apple-red-*`, and other classes from earlier Puppertino versions remain available. Your existing code will not break. We recommend the new `.p-sys-*` tokens for new projects.
+
+## Accessibility
+
+Apple's system colors are tested for color blindness and meet WCAG AA contrast at the 4.5:1 ratio for body text. When using system accents over fills or materials, verify the contrast in both light and dark mode.
+
+For users with `prefers-contrast: more`, consider adding stronger borders to elements that rely on fill colors alone for separation.

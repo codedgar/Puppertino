@@ -1,0 +1,14 @@
+---
+---
+<div class="swatch-grid">
+  <slot />
+</div>
+
+<style>
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 24px 0 32px;
+  }
+</style>

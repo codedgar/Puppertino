@@ -1,0 +1,55 @@
+---
+const icons = [
+  'house', 'gear', 'magnifying-glass', 'heart', 'bell', 'chat-circle',
+  'envelope', 'calendar', 'image', 'music-notes', 'video', 'map-pin',
+  'shopping-cart', 'user', 'lock', 'globe', 'cloud', 'lightning',
+];
+---
+
+<div class="icon-showcase">
+  {icons.map((name) => (
+    <div class="icon-cell">
+      <i class={`ph-bold ph-${name}`}></i>
+      <span>{name}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .icon-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+    margin: 24px 0 32px;
+    padding: 24px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+  }
+
+  .icon-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 8px;
+    border-radius: 10px;
+    transition: background 0.12s ease;
+  }
+
+  .icon-cell:hover {
+    background: var(--bg-page);
+  }
+
+  .icon-cell i {
+    font-size: 28px;
+    color: var(--text-primary);
+  }
+
+  .icon-cell span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+</style>
