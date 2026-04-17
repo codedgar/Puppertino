@@ -6,6 +6,7 @@ description: Puppertino's color system follows Apple's macOS 26 specification. S
 
 import ColorSwatch from '../../components/ColorSwatch.astro';
 import SwatchGrid from '../../components/SwatchGrid.astro';
+import ShadeRow from '../../components/ShadeRow.astro';
 import TextHierarchyDemo from '../../components/TextHierarchyDemo.astro';
 import FillDemo from '../../components/FillDemo.astro';
 import BackgroundDemo from '../../components/BackgroundDemo.astro';
@@ -94,9 +95,121 @@ All color tokens flip automatically when the page enters dark mode. Two ways to 
 
 The auto variant uses `prefers-color-scheme` and switches without any JavaScript.
 
-## Backwards Compatibility
+## Unofficial Colors
 
-The legacy `.p-strawberry-*`, `.p-banana-*`, `.p-apple-red-*`, and other classes from earlier Puppertino versions remain available. Your existing code will not break. We recommend the new `.p-sys-*` tokens for new projects.
+A second palette ships alongside the system colors. These are not part of Apple's HIG, they don't flip in dark mode, and they don't carry semantic meaning. They're here because they look great, they have a full set of shades, and they make it easy to brand a Puppertino interface without leaving the framework.
+
+Each color comes in five shades: 100 (lightest), 300, 500 (the base), 700, and 900 (darkest). Click any tile to copy its CSS variable.
+
+<ShadeRow name="Strawberry" shades={[
+  { step: '100', hex: '#ff8c82', cssVar: '--p-strawberry-100' },
+  { step: '300', hex: '#ed5353', cssVar: '--p-strawberry-300' },
+  { step: '500', hex: '#c6262e', cssVar: '--p-strawberry-500' },
+  { step: '700', hex: '#a10705', cssVar: '--p-strawberry-700' },
+  { step: '900', hex: '#7a0000', cssVar: '--p-strawberry-900' },
+]} />
+
+<ShadeRow name="Orange" shades={[
+  { step: '100', hex: '#ffc27d', cssVar: '--p-orange-100' },
+  { step: '300', hex: '#ffa154', cssVar: '--p-orange-300' },
+  { step: '500', hex: '#f37329', cssVar: '--p-orange-500' },
+  { step: '700', hex: '#cc3b02', cssVar: '--p-orange-700' },
+  { step: '900', hex: '#a62100', cssVar: '--p-orange-900' },
+]} />
+
+<ShadeRow name="Banana" shades={[
+  { step: '100', hex: '#fff394', cssVar: '--p-banana-100' },
+  { step: '300', hex: '#ffe16b', cssVar: '--p-banana-300' },
+  { step: '500', hex: '#f9c440', cssVar: '--p-banana-500' },
+  { step: '700', hex: '#d48e15', cssVar: '--p-banana-700' },
+  { step: '900', hex: '#ad5f00', cssVar: '--p-banana-900' },
+]} />
+
+<ShadeRow name="Lime" shades={[
+  { step: '100', hex: '#d1ff82', cssVar: '--p-lime-100' },
+  { step: '300', hex: '#9bdb4d', cssVar: '--p-lime-300' },
+  { step: '500', hex: '#68b723', cssVar: '--p-lime-500' },
+  { step: '700', hex: '#3a9104', cssVar: '--p-lime-700' },
+  { step: '900', hex: '#206b00', cssVar: '--p-lime-900' },
+]} />
+
+<ShadeRow name="Mint" shades={[
+  { step: '100', hex: '#89ffdd', cssVar: '--p-mint-100' },
+  { step: '300', hex: '#43d6b5', cssVar: '--p-mint-300' },
+  { step: '500', hex: '#28bca3', cssVar: '--p-mint-500' },
+  { step: '700', hex: '#0e9a83', cssVar: '--p-mint-700' },
+  { step: '900', hex: '#007367', cssVar: '--p-mint-900' },
+]} />
+
+<ShadeRow name="Blueberry" shades={[
+  { step: '100', hex: '#8cd5ff', cssVar: '--p-blueberry-100' },
+  { step: '300', hex: '#64baff', cssVar: '--p-blueberry-300' },
+  { step: '500', hex: '#3689e6', cssVar: '--p-blueberry-500' },
+  { step: '700', hex: '#0d52bf', cssVar: '--p-blueberry-700' },
+  { step: '900', hex: '#002e99', cssVar: '--p-blueberry-900' },
+]} />
+
+<ShadeRow name="Grape" shades={[
+  { step: '100', hex: '#e4c6fa', cssVar: '--p-grape-100' },
+  { step: '300', hex: '#cd9ef7', cssVar: '--p-grape-300' },
+  { step: '500', hex: '#a56de2', cssVar: '--p-grape-500' },
+  { step: '700', hex: '#7239b3', cssVar: '--p-grape-700' },
+  { step: '900', hex: '#452981', cssVar: '--p-grape-900' },
+]} />
+
+<ShadeRow name="Bubblegum" shades={[
+  { step: '100', hex: '#fe9ab8', cssVar: '--p-bubblegum-100' },
+  { step: '300', hex: '#f4679d', cssVar: '--p-bubblegum-300' },
+  { step: '500', hex: '#de3e80', cssVar: '--p-bubblegum-500' },
+  { step: '700', hex: '#bc245d', cssVar: '--p-bubblegum-700' },
+  { step: '900', hex: '#910e38', cssVar: '--p-bubblegum-900' },
+]} />
+
+<ShadeRow name="Cocoa" shades={[
+  { step: '100', hex: '#a3907c', cssVar: '--p-cocoa-100' },
+  { step: '300', hex: '#8a715e', cssVar: '--p-cocoa-300' },
+  { step: '500', hex: '#715344', cssVar: '--p-cocoa-500' },
+  { step: '700', hex: '#57392d', cssVar: '--p-cocoa-700' },
+  { step: '900', hex: '#3d211b', cssVar: '--p-cocoa-900' },
+]} />
+
+<ShadeRow name="Silver" shades={[
+  { step: '100', hex: '#fafafa', cssVar: '--p-silver-100' },
+  { step: '300', hex: '#d4d4d4', cssVar: '--p-silver-300' },
+  { step: '500', hex: '#abacae', cssVar: '--p-silver-500' },
+  { step: '700', hex: '#7e8087', cssVar: '--p-silver-700' },
+  { step: '900', hex: '#555761', cssVar: '--p-silver-900' },
+]} />
+
+<ShadeRow name="Slate" shades={[
+  { step: '100', hex: '#95a3ab', cssVar: '--p-slate-100' },
+  { step: '300', hex: '#667885', cssVar: '--p-slate-300' },
+  { step: '500', hex: '#485a6c', cssVar: '--p-slate-500' },
+  { step: '700', hex: '#273445', cssVar: '--p-slate-700' },
+  { step: '900', hex: '#0e141f', cssVar: '--p-slate-900' },
+]} />
+
+<ShadeRow name="Dark" shades={[
+  { step: '100', hex: '#666666', cssVar: '--p-dark-100' },
+  { step: '300', hex: '#4d4d4d', cssVar: '--p-dark-300' },
+  { step: '500', hex: '#333333', cssVar: '--p-dark-500' },
+  { step: '700', hex: '#1a1a1a', cssVar: '--p-dark-700' },
+  { step: '900', hex: '#000000', cssVar: '--p-dark-900' },
+]} />
+
+Use them the same way as the system colors. The base name applies the 500 shade, or pick a specific step.
+
+```html
+<div class="p-grape">Grape background</div>
+<div class="p-grape-100">Lighter grape</div>
+<p class="p-strawberry-700-color">Dark strawberry text</p>
+```
+
+Drop one of these classes on a button to retint it. The button picks up the new tint through the same `--p-color-current` mechanism the system colors use.
+
+```html
+<button class="p-button p-button-colored p-grape">Save</button>
+```
 
 ## Accessibility
 

@@ -1,11 +1,18 @@
+/* Foundations first — colors must load before any component that
+   reads from --p-color-current (e.g. .p-button-colored). */
+@import url('color_palette.css');
+@import url('colors.css');
+@import url('typography.css');
+@import url('materials.css');
+@import url('shadows.css');
+@import url('layout.css');
+
+/* Components */
 @import url('actions.css');
 @import url('buttons.css');
-@import url('layout.css');
 @import url('cards.css');
-@import url('color_palette.css');
 @import url('forms.css');
 @import url('modals.css');
 @import url('segmented-controls.css');
-@import url('shadows.css');
 @import url('tabs.css');
 @import url('dark_mode.css');

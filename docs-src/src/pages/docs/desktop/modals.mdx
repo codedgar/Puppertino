@@ -1,0 +1,220 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Modals
+description: Desktop alert modals for macOS-style interfaces. Glass surfaces, stacked or side-by-side actions, and a small JS API for opening and closing.
+---
+
+import '@puppertino/modals.css';
+import modalsScript from '../../../../../src/js/modals.js?url';
+
+<script type="module" src={modalsScript}></script>
+
+<div class="p-modal-background">
+  <div
+    class="p-modal p-desktop-modal p-desktop-modal--stacked"
+    id="desktop-modal-stacked"
+    data-p-close-on-outside="true"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="desktop-modal-stacked-title"
+  >
+    <div class="p-desktop-modal__surface">
+      <div class="p-desktop-modal__body">
+        <h2 class="p-desktop-modal__title" id="desktop-modal-stacked-title">Save this message as a draft?</h2>
+        <p class="p-desktop-modal__description">{'This message has not been sent and'}<br />{'contains unsaved changes. You can save'}<br />{'it as a draft to work on later.'}</p>
+      </div>
+      <div class="p-desktop-modal__actions">
+        <button class="p-desktop-modal__action p-desktop-modal__action--primary">Save</button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--destructive">Don’t Save</button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" data-p-cancel>Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="p-modal p-desktop-modal p-desktop-modal--split"
+    id="desktop-modal-split"
+    data-p-close-on-outside="true"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="desktop-modal-split-title"
+  >
+    <div class="p-desktop-modal__surface">
+      <div class="p-desktop-modal__body">
+        <h2 class="p-desktop-modal__title" id="desktop-modal-split-title">Save this message as a draft?</h2>
+        <p class="p-desktop-modal__description">{'This message has not been sent and'}<br />{'contains unsaved changes. You can save'}<br />{'it as a draft to work on later.'}</p>
+      </div>
+      <div class="p-desktop-modal__actions">
+        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" data-p-cancel>Cancel</button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+Desktop modals in Puppertino are compact alert dialogs for pointer-driven interfaces. This version follows the provided SVG: a frosted glass body, 260px width, 26px radius, and pill actions arranged either as a vertical stack or a horizontal pair.
+
+Use them for short confirmation moments, destructive warnings, and small decision points. Do not use them for large forms, long reading flows, or anything that needs a lot of scrolling.
+
+## Preview
+
+Desktop modals use two layouts. Stacked handles three actions. Split handles two.
+
+<div
+  style="margin: 16px 0 20px; padding: 20px; background: #f5f5f5; border-radius: 5px; display: flex; flex-wrap: wrap; gap: 30px;"
+>
+  <div
+    class="p-desktop-modal p-desktop-modal--stacked"
+    style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 260px;"
+    aria-hidden="true"
+  >
+    <div class="p-desktop-modal__surface">
+      <div class="p-desktop-modal__body">
+        <h2 class="p-desktop-modal__title">Save this message as a draft?</h2>
+        <p class="p-desktop-modal__description">{'This message has not been sent and'}<br />{'contains unsaved changes. You can save'}<br />{'it as a draft to work on later.'}</p>
+      </div>
+      <div class="p-desktop-modal__actions">
+        <button class="p-desktop-modal__action p-desktop-modal__action--primary" type="button">Save</button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--destructive" type="button">Don’t Save</button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="p-desktop-modal p-desktop-modal--split"
+    style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 260px;"
+    aria-hidden="true"
+  >
+    <div class="p-desktop-modal__surface">
+      <div class="p-desktop-modal__body">
+        <h2 class="p-desktop-modal__title">Save this message as a draft?</h2>
+        <p class="p-desktop-modal__description">{'This message has not been sent and'}<br />{'contains unsaved changes. You can save'}<br />{'it as a draft to work on later.'}</p>
+      </div>
+      <div class="p-desktop-modal__actions">
+        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" type="button">Cancel</button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--primary" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+## Variants
+
+The new modal styles cover the two alert patterns from the design:
+
+- `.p-desktop-modal--stacked` for three actions.
+- `.p-desktop-modal--split` for two actions placed side by side.
+
+<div
+  style="display: flex; flex-wrap: wrap; gap: 12px; padding: 24px; margin: 16px 0; background: var(--p-bg-secondary); border-radius: 10px;"
+>
+  <button class="p-button p-button-primary" data-p-open-modal="#desktop-modal-stacked">Open stacked alert</button>
+  <button class="p-button p-button-secondary" data-p-open-modal="#desktop-modal-split">Open side-by-side alert</button>
+</div>
+
+## Anatomy
+
+| Class | Role |
+|---|---|
+| `.p-modal-background` | Shared backdrop layer for all modals on the page. |
+| `.p-modal` | Base modal hook used by the JS manager. |
+| `.p-desktop-modal` | Desktop alert shell. Centers the modal and handles the open transition. |
+| `.p-desktop-modal__surface` | Glass card surface, radius, stroke, and shadow. |
+| `.p-desktop-modal__body` | Title and description group. |
+| `.p-desktop-modal__actions` | Action row or stack. |
+| `.p-desktop-modal__action` | Shared pill button styling for alert actions. |
+| `.p-desktop-modal__action--primary` | Filled affirmative action. |
+| `.p-desktop-modal__action--secondary` | Neutral cancel action. |
+| `.p-desktop-modal__action--destructive` | Destructive action with red tint. |
+
+## Usage
+
+The trigger uses `data-p-open-modal` with the selector of the modal you want to open. Add `data-p-close-on-outside="true"` if clicking the backdrop should dismiss it, and add `data-p-cancel` to any action that should close the active modal automatically.
+
+```html
+<button class="p-button p-button-primary" data-p-open-modal="#example-modal">
+  Open Alert
+</button>
+
+<div class="p-modal-background">
+  <div
+    class="p-modal p-desktop-modal p-desktop-modal--split"
+    id="example-modal"
+    data-p-close-on-outside="true"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="example-modal-title"
+  >
+    <div class="p-desktop-modal__surface">
+      <div class="p-desktop-modal__body">
+        <h2 class="p-desktop-modal__title" id="example-modal-title">
+          Save this message as a draft?
+        </h2>
+        <p class="p-desktop-modal__description">
+          This message has not been sent and<br />
+          contains unsaved changes. You can save<br />
+          it as a draft to work on later.
+        </p>
+      </div>
+      <div class="p-desktop-modal__actions">
+        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" data-p-cancel>
+          Cancel
+        </button>
+        <button class="p-desktop-modal__action p-desktop-modal__action--primary">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+## Action Layout
+
+Use the stacked variant when you need three clear outcomes. The SVG order is primary first, destructive second, and cancel last.
+
+```html
+<div class="p-desktop-modal__actions">
+  <button class="p-desktop-modal__action p-desktop-modal__action--primary">Save</button>
+  <button class="p-desktop-modal__action p-desktop-modal__action--destructive">Don’t Save</button>
+  <button class="p-desktop-modal__action p-desktop-modal__action--secondary" data-p-cancel>Cancel</button>
+</div>
+```
+
+Use the split variant when the choice is binary.
+
+```html
+<div class="p-desktop-modal__actions">
+  <button class="p-desktop-modal__action p-desktop-modal__action--secondary" data-p-cancel>Cancel</button>
+  <button class="p-desktop-modal__action p-desktop-modal__action--primary">Save</button>
+</div>
+```
+
+## JavaScript API
+
+The modal manager initializes automatically when `src/js/modals.js` is loaded.
+
+```js
+PuppertinoModalManager.openModal("#example-modal");
+PuppertinoModalManager.closeActiveModal();
+PuppertinoModalManager.closeModal("#example-modal");
+PuppertinoModalManager.isModalOpen("#example-modal");
+```
+
+## Accessibility
+
+- Add `role="dialog"` and `aria-modal="true"` to every modal.
+- Point `aria-labelledby` at the modal title.
+- The manager moves focus into the modal when it opens and restores focus to the trigger when it closes.
+- `Escape` closes the active modal.
+- `data-p-cancel` keeps cancel actions semantic while still closing the dialog.
+
+## Notes
+
+- Legacy mobile modal markup still works. The desktop alert variant is additive.
+- The backdrop is intentionally restrained. The SVG does not define a heavy blurred backdrop, so the live modal uses a light dim layer while the card itself carries the visual treatment.
+- The split layout collapses to a vertical stack on narrow screens.

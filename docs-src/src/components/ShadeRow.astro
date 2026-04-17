@@ -1,0 +1,107 @@
+---
+interface Shade {
+  step: string;
+  hex: string;
+  cssVar: string;
+}
+
+interface Props {
+  name: string;
+  shades: Shade[];
+}
+
+const { name, shades } = Astro.props;
+---
+
+<div class="shade-row">
+  <div class="shade-label">{name}</div>
+  <div class="shade-tiles">
+    {shades.map(({ step, hex, cssVar }) => {
+      const isDark = step === '700' || step === '900';
+      return (
+        <button
+          class={`shade-tile ${isDark ? 'shade-tile-dark' : ''}`}
+          type="button"
+          data-copy={cssVar}
+          aria-label={`Copy ${cssVar}`}
+          style={`background: ${hex};`}
+        >
+          <span class="shade-step">{step}</span>
+          <span class="shade-hex">{hex}</span>
+        </button>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .shade-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .shade-label {
+    font-size: 14px;
+    font-weight: 510;
+    color: var(--text-primary);
+    letter-spacing: -0.008em;
+  }
+
+  .shade-tiles {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .shade-tile {
+    aspect-ratio: 5 / 3;
+    border: 0;
+    cursor: pointer;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    font: inherit;
+    color: rgba(0, 0, 0, 0.85);
+    transition: filter 0.15s ease;
+  }
+
+  .shade-tile-dark {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .shade-tile:hover {
+    filter: brightness(1.05);
+  }
+
+  .shade-tile:active {
+    filter: brightness(0.95);
+  }
+
+  .shade-step {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  .shade-hex {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 720px) {
+    .shade-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+</style>

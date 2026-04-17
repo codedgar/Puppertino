@@ -1,10 +1,61 @@
 :root {
-  --font: -apple-system, "Inter", sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
   --primary-col-ac: #0f75f5;
   --p-modal-bg: rgba(255, 255, 255, 0.8);
-  --p-modal-bd-color: rgba(0,0,0,.1);
-  --p-modal-fallback-color: rgba(255,255,255,.95);
+  --p-modal-bd-color: rgba(0, 0, 0, 0.1);
+  --p-modal-fallback-color: rgba(255, 255, 255, 0.95);
   --p-modal-color: #1d1d1f;
+  --p-desktop-modal-width: 260px;
+  --p-desktop-modal-radius: 26px;
+  --p-desktop-modal-shadow:
+    0 17px 45px rgba(0, 0, 0, 0.5),
+    0 0 1px rgba(0, 0, 0, 0.2);
+  --p-desktop-modal-surface: #f5f5f5;
+  --p-desktop-modal-underlay: #262626;
+  --p-desktop-modal-highlight: rgba(255, 255, 255, 0.16);
+  --p-desktop-modal-title: rgba(0, 0, 0, 0.85);
+  --p-desktop-modal-copy: rgba(0, 0, 0, 0.85);
+  --p-desktop-modal-primary: #0088ff;
+  --p-desktop-modal-primary-pressed: #0076dd;
+  --p-desktop-modal-secondary: #e6e6e6;
+  --p-desktop-modal-secondary-pressed: #d8d8d8;
+  --p-desktop-modal-destructive-bg: rgba(255, 56, 60, 0.23);
+  --p-desktop-modal-destructive-bg-pressed: rgba(255, 56, 60, 0.31);
+  --p-desktop-modal-destructive-text: #ff383c;
+  --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.18);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-modal-bg: rgba(28, 28, 30, 0.8);
+  --p-modal-bd-color: rgba(255, 255, 255, 0.14);
+  --p-modal-fallback-color: rgba(32, 32, 34, 0.95);
+  --p-modal-color: rgba(255, 255, 255, 0.92);
+  --p-desktop-modal-surface: rgba(58, 58, 62, 0.82);
+  --p-desktop-modal-underlay: #0f0f11;
+  --p-desktop-modal-highlight: rgba(255, 255, 255, 0.08);
+  --p-desktop-modal-title: rgba(255, 255, 255, 0.92);
+  --p-desktop-modal-copy: rgba(255, 255, 255, 0.76);
+  --p-desktop-modal-secondary: rgba(255, 255, 255, 0.13);
+  --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.2);
+  --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.24);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-modal-bg: rgba(28, 28, 30, 0.8);
+    --p-modal-bd-color: rgba(255, 255, 255, 0.14);
+    --p-modal-fallback-color: rgba(32, 32, 34, 0.95);
+    --p-modal-color: rgba(255, 255, 255, 0.92);
+    --p-desktop-modal-surface: rgba(58, 58, 62, 0.82);
+    --p-desktop-modal-underlay: #0f0f11;
+    --p-desktop-modal-highlight: rgba(255, 255, 255, 0.08);
+    --p-desktop-modal-title: rgba(255, 255, 255, 0.92);
+    --p-desktop-modal-copy: rgba(255, 255, 255, 0.76);
+    --p-desktop-modal-secondary: rgba(255, 255, 255, 0.13);
+    --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.2);
+    --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.24);
+  }
 }
 
 .p-modal-opened {
@@ -12,25 +63,34 @@
 }
 
 .p-modal-background {
-  background: rgba(0, 0, 0, 0.7);
-  height: 100vh;
-  left: 0;
+  inset: 0;
+  isolation: isolate;
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  top: 0;
-  transition: opacity 0.3s;
-  width: 100vw;
-  z-index: 5;
+  transition: opacity 0.28s ease;
+  z-index: 80;
 }
 
-.p-modal { 
+.p-modal-background::before {
+  background: var(--p-desktop-modal-backdrop);
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.nowactive {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Legacy iOS modal kept intact for backwards compatibility. */
+.p-modal:not(.p-desktop-modal) {
   background: var(--p-modal-bg);
-  color: var(--p-modal-color);
   border-radius: 20px;
-  top: calc(50% - 20vh);
   bottom: unset;
   box-shadow: 0 10px 20px -15px black;
+  color: var(--p-modal-color);
   font-family: var(--font);
   left: calc(50% - 20vw);
   opacity: 0;
@@ -38,14 +98,16 @@
   pointer-events: none;
   position: fixed;
   text-align: center;
+  top: calc(50% - 20vh);
   transform: scale(1.5);
   transition: opacity 0.3s, transform 0.3s;
   transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
   width: 40vw;
-  z-index: 9;
+  z-index: 90;
 }
 
-.p-modal.active {
+.p-modal:not(.p-desktop-modal).active {
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
   backdrop-filter: saturate(180%) blur(10px);
   opacity: 1;
   pointer-events: auto;
@@ -57,38 +119,246 @@
   display: flex;
 }
 
-.p-modal-button-container > a, .p-modal-button-container > button {
-  cursor: pointer;
+.p-modal-button-container > a,
+.p-modal-button-container > button {
   background: transparent;
   border: 0;
   border-top: 1px solid var(--p-modal-bd-color);
   color: var(--primary-col-ac);
+  cursor: pointer;
+  font-size: 1rem;
   padding: 30px 0%;
   text-decoration: none;
   width: 100%;
-  font-size: 1rem;
 }
 
-.p-modal-button-container > *:not(:first-child){
+.p-modal-button-container > *:not(:first-child) {
   border-left: 1px solid var(--p-modal-bd-color);
 }
 
-.nowactive {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.p-modal p {
+.p-modal:not(.p-desktop-modal) p {
   padding: 0% 5%;
 }
 
-@supports not (backdrop-filter: blur(5px)) {
-  .p-modal {
+/* Desktop alert variant based on the provided SVG. */
+.p-desktop-modal {
+  color: var(--p-desktop-modal-copy);
+  font-family: var(--font);
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -46%) scale(0.96);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  width: min(var(--p-desktop-modal-width), calc(100vw - 32px));
+  z-index: 90;
+}
+
+.p-desktop-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.p-desktop-modal__surface {
+  background: var(--p-desktop-modal-surface);
+  border-radius: var(--p-desktop-modal-radius);
+  box-shadow:
+    var(--p-desktop-modal-shadow),
+    0 8px 40px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 0.5px var(--p-desktop-modal-highlight);
+  overflow: hidden;
+  padding: 20px 16px 16px;
+  position: relative;
+}
+
+.p-desktop-modal__surface::before {
+  background: var(--p-desktop-modal-underlay);
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  position: absolute;
+}
+
+.p-desktop-modal__surface::after {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  position: absolute;
+}
+
+.p-desktop-modal__surface .p-desktop-modal__body,
+.p-desktop-modal__surface .p-desktop-modal__actions {
+  z-index: 2;
+}
+
+.p-desktop-modal--stacked .p-desktop-modal__surface {
+  min-height: 218px;
+}
+
+.p-desktop-modal--split .p-desktop-modal__surface {
+  min-height: 154px;
+}
+
+.p-desktop-modal__body,
+.p-desktop-modal__actions {
+  position: relative;
+  z-index: 1;
+}
+
+.p-desktop-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 6px 2px;
+}
+
+.p-desktop-modal__title {
+  color: var(--p-desktop-modal-title);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 16px;
+  margin: 0;
+  max-width: 216px;
+}
+
+.p-desktop-modal__description {
+  color: var(--p-desktop-modal-copy);
+  font-size: 11px;
+  letter-spacing: 0;
+  line-height: 14px;
+  margin: 0;
+  max-width: 216px;
+  padding: 0;
+}
+
+.p-desktop-modal__actions {
+  display: flex;
+  margin-top: 16px;
+}
+
+.p-desktop-modal--stacked .p-desktop-modal__actions {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.p-desktop-modal--split .p-desktop-modal__actions {
+  gap: 8px;
+}
+
+.p-desktop-modal__action {
+  align-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 510;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 16px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 8px;
+  position: relative;
+  text-decoration: none;
+  transition:
+    background-color 0.14s ease,
+    transform 0.14s ease,
+    filter 0.14s ease;
+  user-select: none;
+  width: 100%;
+}
+
+.p-desktop-modal--split .p-desktop-modal__action {
+  flex: 1 1 0;
+  height: 32px;
+  min-height: 32px;
+}
+
+.p-desktop-modal__action:hover {
+  filter: brightness(0.98);
+}
+
+.p-desktop-modal__action:active {
+  transform: translateY(0.5px) scale(0.995);
+}
+
+.p-desktop-modal__action:focus-visible {
+  outline: 2px solid rgba(100, 186, 255, 0.95);
+  outline-offset: 2px;
+}
+
+.p-desktop-modal__action--primary {
+  background: var(--p-desktop-modal-primary);
+  color: #fff;
+}
+
+.p-desktop-modal__action--primary:hover,
+.p-desktop-modal__action--primary:active {
+  background: var(--p-desktop-modal-primary-pressed);
+}
+
+.p-desktop-modal__action--secondary {
+  background: var(--p-desktop-modal-secondary);
+  color: var(--p-desktop-modal-title);
+}
+
+.p-desktop-modal__action--secondary:hover,
+.p-desktop-modal__action--secondary:active {
+  background: var(--p-desktop-modal-secondary-pressed);
+}
+
+.p-desktop-modal__action--destructive {
+  background: var(--p-desktop-modal-destructive-bg);
+  color: var(--p-desktop-modal-destructive-text);
+}
+
+.p-desktop-modal__action--destructive:hover,
+.p-desktop-modal__action--destructive:active {
+  background: var(--p-desktop-modal-destructive-bg-pressed);
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-modal-background::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .p-modal:not(.p-desktop-modal) {
     background: var(--p-modal-fallback-color);
   }
+
+  .p-desktop-modal__surface {
+    background: rgba(245, 245, 245, 0.98);
+    box-shadow:
+      0 17px 45px rgba(0, 0, 0, 0.32),
+      0 0 1px rgba(0, 0, 0, 0.2);
+  }
+
+  .p-dark-mode .p-desktop-modal__surface,
+  [data-p-theme="darkmode"] .p-desktop-modal__surface {
+    background: rgba(44, 44, 48, 0.98);
+    box-shadow:
+      0 17px 45px rgba(0, 0, 0, 0.42),
+      0 0 1px rgba(0, 0, 0, 0.2);
+  }
 }
+
 @media (max-width: 568px) {
-  .p-modal {
+  .p-modal:not(.p-desktop-modal) {
     left: 15%;
     width: 70vw;
   }
@@ -102,18 +372,27 @@
     display: block;
   }
 
-  .p-modal-button-container > a, .p-modal-button-container > button {
+  .p-modal-button-container > a,
+  .p-modal-button-container > button {
     border-left: 0;
     display: block;
     padding: 2vh 0%;
   }
-  .p-modal-button-container > *:not(:first-child){
-    border-left: 0px;
+
+  .p-modal-button-container > *:not(:first-child) {
+    border-left: 0;
+  }
+
+  .p-desktop-modal--split .p-desktop-modal__actions {
+    flex-direction: column;
+    gap: 6px;
   }
 }
 
 @media (prefers-reduced-motion) {
-  .p-modal-background,.p-modal  {
+  .p-modal-background,
+  .p-modal:not(.p-desktop-modal),
+  .p-desktop-modal {
     transition: none;
   }
 }

@@ -1,3 +1,9 @@
 .idea
 node_modules
 .DS_Store
+
+CLAUDE.md
+specs/
+docs-src/node_modules/
+docs-src/dist/
+docs-src/.astro/

@@ -1,6 +1,6 @@
 {
   "name": "@codedgar/puppertino",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A CSS framework based on Human Guidelines from Apple",
   "main": "./dist/css/newfull.css",
   "style": "./dist/css/newfull.css",
@@ -24,10 +24,13 @@
     "./actions": "./dist/css/actions.css",
     "./cards": "./dist/css/cards.css",
     "./layout": "./dist/css/layout.css",
-    "./colors": "./dist/css/color_palette.css",
+    "./typography": "./dist/css/typography.css",
+    "./colors": "./dist/css/colors.css",
+    "./color-palette": "./dist/css/color_palette.css",
     "./dark-mode": "./dist/css/dark_mode.css",
     "./segmented-controls": "./dist/css/segmented-controls.css",
     "./shadows": "./dist/css/shadows.css",
+    "./materials": "./dist/css/materials.css",
     "./package.json": "./package.json"
   },
   "sideEffects": [

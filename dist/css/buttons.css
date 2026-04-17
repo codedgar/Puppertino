@@ -1,4 +1,14 @@
 @charset "UTF-8";
+
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY BUTTONS (Puppertino v1)
+   .p-btn and friends remain for backwards compatibility. The v2
+   system below (.p-button) replaces them. New work should use
+   .p-button — these classes will be removed in a future major.
+
+   See the v2 block further down for the new spec.
+   ───────────────────────────────────────────────────────────────────── */
+
 :root{
   --p-btn-border: #cacaca;
   --p-btn-def-bg: #FFFFFF;
@@ -155,4 +165,264 @@
   border-color: currentColor;
   border-style: dashed;
   box-shadow: none;
-} 
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-button
+   macOS push button system. Six styles, four sizes, full state
+   coverage. Retint by dropping any color utility class directly on
+   the element (.p-button + .p-button-colored + .p-grape, etc.).
+   The retint mechanism reads --p-color-current published by every
+   color class in colors.css. Default tint is the macOS system blue.
+
+   Out of scope here: arrow buttons (separate component), iOS sizes,
+   the macOS pulse animation on the default action.
+   ═════════════════════════════════════════════════════════════════════ */
+
+.p-button {
+  /* Reset — works on <button>, <a>, <input type="submit"> */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  /* Layout */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  /* Component-scoped tokens — size modifiers override these.
+     Values from the macOS 26 Figma component:
+       - 24px height, 16px horizontal padding, 6px squircle radius
+       - SF Pro 13px / weight 510 / letter-spacing 0
+       - Default tint #0D6FFF (the Figma button blue) */
+  --p-button-radius: 6px;
+  --p-button-height: 24px;
+  --p-button-padding-x: 16px;
+  --p-button-font-size: 13px;
+  --p-button-font-weight: 510;
+  --p-button-icon-size: 13px;
+  --p-button-default-tint: #0D6FFF;
+
+  /* Sizing */
+  height: var(--p-button-height);
+  padding: 0 var(--p-button-padding-x);
+  border-radius: var(--p-button-radius);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-button-font-size);
+  font-weight: var(--p-button-font-weight);
+  letter-spacing: 0;
+  line-height: 1;
+
+  /* Default appearance before any style modifier */
+  color: var(--p-text-primary);
+  background: var(--p-fill-tertiary);
+
+  transition: color 0.12s ease-out;
+}
+
+/* Plus-darker overlay layer.
+   The Figma file uses mix-blend-mode: plus-darker at 13% opacity for
+   pressed/hover states on filled buttons. We reproduce it with a
+   ::before that scales opacity in and out on interaction. */
+.p-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: black;
+  mix-blend-mode: plus-darker;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease-out;
+}
+
+/* Icons live in the markup, not in modifier classes.
+   Place an <svg> or an <i> (icon font) as the first or last child
+   for leading/trailing. Reading order matches DOM order. */
+.p-button > svg,
+.p-button > i {
+  flex-shrink: 0;
+  position: relative; /* keeps icons above the ::before overlay */
+}
+.p-button > svg {
+  width: var(--p-button-icon-size);
+  height: var(--p-button-icon-size);
+  fill: currentColor;
+}
+.p-button > i {
+  font-size: var(--p-button-icon-size);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-button > span {
+  position: relative; /* same — labels render above the overlay */
+}
+
+/* ─── Style modifiers ──────────────────────────────────────────────── */
+
+.p-button-default {
+  background: var(--p-fill-tertiary);
+  color: var(--p-text-primary);
+}
+
+/* Colored and Primary share visual treatment.
+   Primary is semantically the default action (Return key); the visual
+   distinction (pulse animation) ships in a follow-up. */
+.p-button-colored,
+.p-button-primary {
+  background: var(--p-color-current, var(--p-button-default-tint));
+  color: #ffffff;
+}
+
+.p-button-secondary {
+  background: color-mix(in oklch, var(--p-color-current, var(--p-button-default-tint)) 10%, transparent);
+  color: var(--p-color-current, var(--p-button-default-tint));
+}
+
+/* Destructive ignores --p-color-current and is always sys-red, per HIG. */
+.p-button-destructive {
+  background: color-mix(in oklch, var(--p-sys-red) 25%, transparent);
+  color: var(--p-sys-red);
+}
+
+.p-button-borderless {
+  background: transparent;
+  color: var(--p-color-current, var(--p-button-default-tint));
+}
+
+/* ─── Sizes (macOS-derived) ────────────────────────────────────────── */
+/* NOTE: macOS sizes intentionally violate iOS's 44px minimum tap target.
+   They target pointer input. For touch contexts use the regular
+   default or .p-button-large. Do not "fix" the smaller sizes. */
+
+.p-button-mini {
+  --p-button-height: 16px;
+  --p-button-padding-x: 7px;
+  --p-button-font-size: 10px;
+  --p-button-icon-size: 10px;
+  --p-button-radius: 4px;
+}
+.p-button-small {
+  --p-button-height: 19px;
+  --p-button-padding-x: 9px;
+  --p-button-font-size: 11px;
+  --p-button-icon-size: 12px;
+  --p-button-radius: 5px;
+}
+/* Regular = the default on .p-button */
+.p-button-large {
+  --p-button-height: 32px;
+  --p-button-padding-x: 16px;
+  --p-button-font-size: 13px;
+  --p-button-font-weight: 590;
+  --p-button-icon-size: 16px;
+  --p-button-radius: 8px;
+}
+
+/* ─── States ───────────────────────────────────────────────────────── */
+/* The plus-darker ::before overlay handles hover and pressed for every
+   variant that has a fill. Borderless gets a tinted background instead
+   because there is nothing for the overlay to darken. */
+
+.p-button:hover::before {
+  opacity: 0.13;
+}
+.p-button:active::before {
+  opacity: 0.20;
+}
+
+.p-button-borderless:hover {
+  background: color-mix(in oklch, var(--p-color-current, var(--p-button-default-tint)) 13%, transparent);
+}
+.p-button-borderless:active {
+  background: color-mix(in oklch, var(--p-color-current, var(--p-button-default-tint)) 20%, transparent);
+}
+
+.p-button:focus-visible {
+  outline: 4px solid color-mix(in oklch, var(--p-color-current, var(--p-button-default-tint)) 50%, transparent);
+  outline-offset: 2px;
+}
+
+.p-button[disabled],
+.p-button:disabled {
+  --p-color-current: var(--p-fill-tertiary);
+  color: var(--p-text-tertiary);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.p-button[disabled]::before,
+.p-button:disabled::before {
+  opacity: 0;
+}
+
+/* ─── Inactive window ──────────────────────────────────────────────── */
+/* macOS desaturates accent-tinted UI when the window loses focus.
+   Wrap an app shell in .p-window-inactive (or set
+   data-window-state="inactive") to swap --p-color-current to graphite.
+   Every variant retints automatically because they all read from the
+   same variable. No body:not(:focus-within) magic — it has too many
+   false positives on the web. */
+
+.p-window-inactive .p-button-colored,
+.p-window-inactive .p-button-primary,
+.p-window-inactive .p-button-secondary,
+.p-window-inactive .p-button-borderless,
+[data-window-state="inactive"] .p-button-colored,
+[data-window-state="inactive"] .p-button-primary,
+[data-window-state="inactive"] .p-button-secondary,
+[data-window-state="inactive"] .p-button-borderless {
+  --p-color-current: var(--p-sys-gray);
+}
+
+/* ─── Accessibility ────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .p-button,
+  .p-button::before { transition: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-button-secondary,
+  .p-button-borderless,
+  .p-button-destructive {
+    background: var(--p-fill-secondary);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-button {
+    border: 2px solid currentColor;
+  }
+  .p-button-colored,
+  .p-button-primary {
+    border-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-button {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonBorder;
+    forced-color-adjust: none;
+  }
+  .p-button::before { display: none; }
+  .p-button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .p-button[disabled],
+  .p-button:disabled {
+    color: GrayText;
+  }
+}
