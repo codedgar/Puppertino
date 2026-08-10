@@ -1,3 +1,13 @@
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY FORMS (Puppertino v1)
+   .p-form-* and friends remain for backwards compatibility. The v2
+   system at the bottom of this file (.p-field, .p-checkbox, .p-radio,
+   .p-switch, .p-select) replaces them. New work should use the v2
+   classes — these will be removed in a future major.
+
+   See specs/forms.md for the v2 reference values.
+   ───────────────────────────────────────────────────────────────────── */
+
 :root {
   --primary-col:linear-gradient(to bottom, #4fc5fa 0%,#0f75f5 100%);
   --primary-col-ac:#0f75f5;
@@ -501,4 +511,976 @@ textarea.p-form-text {
 .p-form-radio-cont[disabled]{
   filter: grayscale(1) opacity(.3);
   pointer-events: none;
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Forms
+   macOS 26 form controls. Values extracted from the macOS 26 Figma
+   component sheet — see specs/forms.md for the full derivation.
+
+   Classes: .p-field, .p-select, .p-checkbox, .p-radio, .p-switch,
+   .p-label, .p-sublabel.
+
+   Controls retint the same way v2 buttons do: they read
+   --p-color-current (published by the color classes in colors.css) and
+   fall back to the system blue #0D6FFF.
+
+   Borders follow the sheet's border-as-shadow recipe: 1px spread rings,
+   never strokes. Out of scope for now: the custom stepper (needs JS),
+   list rows (separate component).
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* The switch's gel-morph progress. Registered so it can transition;
+   browsers without @property simply skip it and the switch falls back
+   to the plain slide. */
+@property --p-gel {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+:root {
+  /* Field (text input / select) */
+  --p-field-bg: #ffffff;
+  --p-field-bg-disabled: rgba(255, 255, 255, 0.5);
+  --p-field-text: #1A1A1A;
+  --p-field-placeholder: #BFBFBF;
+  --p-field-ring: rgba(0, 0, 0, 0.08);
+  --p-field-ring-disabled: rgba(0, 0, 0, 0.04);
+  --p-field-ring-focus: rgba(0, 122, 255, 0.15);
+  --p-field-ring-focus-outer: rgba(0, 122, 255, 0.25);
+
+  /* Search field */
+  --p-search-ring-empty: rgba(0, 0, 0, 0.04);
+  --p-search-placeholder: #727272;
+
+  /* Combo box */
+  --p-combo-plate-bg: #ffffff;
+
+  /* Pop-up / pull-down pressed body (sheet composite: black @ 0.15) */
+  --p-popup-bg-active: rgba(0, 0, 0, 0.15);
+
+  /* Toggles, checkboxes, radios.
+     NOTE: --p-control-accent is deliberately NOT defined here. A var()
+     inside a custom property resolves where the property is defined, so
+     a :root definition would freeze the accent to blue before any
+     .p-sys-* class on the control could publish --p-color-current. Each
+     control declares it on itself instead. */
+  --p-control-fill: rgba(0, 0, 0, 0.12);
+  --p-control-knob: #ffffff;
+
+  /* Bevel treatment shared by checked checkboxes/radios and icon tiles */
+  --p-control-bevel:
+    0 0.5px 1.5px rgba(0, 0, 0, 0.2),
+    inset 0 0.5px 0.25px rgba(255, 255, 255, 0.8),
+    inset 0 -0.5px 0.25px rgba(26, 26, 26, 0.15);
+}
+
+.p-dark-mode {
+  --p-field-bg: rgba(255, 255, 255, 0.07);
+  --p-field-bg-disabled: rgba(255, 255, 255, 0.03);
+  --p-field-text: rgba(255, 255, 255, 0.85);
+  --p-field-placeholder: rgba(255, 255, 255, 0.25);
+  --p-field-ring: rgba(255, 255, 255, 0.08);
+  --p-field-ring-disabled: rgba(255, 255, 255, 0.04);
+  --p-control-fill: rgba(255, 255, 255, 0.10);
+  --p-search-ring-empty: rgba(255, 255, 255, 0.04);
+  --p-search-placeholder: rgba(255, 255, 255, 0.55);
+  --p-combo-plate-bg: rgba(255, 255, 255, 0.15);
+  --p-popup-bg-active: rgba(255, 255, 255, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-field-bg: rgba(255, 255, 255, 0.07);
+    --p-field-bg-disabled: rgba(255, 255, 255, 0.03);
+    --p-field-text: rgba(255, 255, 255, 0.85);
+    --p-field-placeholder: rgba(255, 255, 255, 0.25);
+    --p-field-ring: rgba(255, 255, 255, 0.08);
+    --p-field-ring-disabled: rgba(255, 255, 255, 0.04);
+    --p-control-fill: rgba(255, 255, 255, 0.10);
+    --p-search-ring-empty: rgba(255, 255, 255, 0.04);
+    --p-search-placeholder: rgba(255, 255, 255, 0.55);
+    --p-combo-plate-bg: rgba(255, 255, 255, 0.15);
+    --p-popup-bg-active: rgba(255, 255, 255, 0.18);
+  }
+}
+
+/* ─── Labels ───────────────────────────────────────────────────────── */
+
+.p-label,
+.p-sublabel {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  letter-spacing: 0;
+}
+
+.p-label {
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-size: 13px;
+  font-weight: 510;
+  line-height: 16px;
+}
+
+.p-sublabel {
+  color: var(--p-text-secondary, rgba(0, 0, 0, 0.5));
+  font-size: 11px;
+  font-weight: 510;
+  line-height: 14px;
+}
+
+/* ─── Text field ───────────────────────────────────────────────────── */
+/* 24px tall, radius 6, white, border drawn as a 1px spread ring.
+   Works on input[type=text|email|password|number|search|url] and
+   textarea (which unlocks its height). */
+
+.p-field {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 6px;
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+  caret-color: var(--p-sys-blue, #0088FF);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+
+  transition: box-shadow 0.12s ease-out;
+}
+
+.p-field::placeholder {
+  color: var(--p-field-placeholder);
+  font-weight: 510;
+}
+
+.p-field:focus,
+.p-field:focus-visible {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus),
+    0 0 0 3.5px var(--p-field-ring-focus-outer);
+}
+
+.p-field[disabled],
+.p-field:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  cursor: not-allowed;
+}
+
+textarea.p-field {
+  height: auto;
+  min-height: 72px;
+  padding: 6px 8px;
+  resize: vertical;
+}
+
+/* ─── Select (popup button) ────────────────────────────────────────── */
+/* Same box as the text field. macOS 26 popup buttons are plain — the
+   chevrons render in text color at the right edge, no accent capsule.
+   Markup: <div class="p-select"><select>…</select></div> */
+
+.p-select {
+  display: inline-block;
+  position: relative;
+}
+
+.p-select > select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: 24px;
+  padding: 0 24px 0 8px;
+  border-radius: 6px;
+  width: 100%;
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+
+  cursor: pointer;
+  transition: box-shadow 0.12s ease-out;
+}
+
+/* Up/down chevrons, masked so they follow the text color token. */
+.p-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  width: 10px;
+  height: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-field-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-select > select:focus,
+.p-select > select:focus-visible {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus),
+    0 0 0 3.5px var(--p-field-ring-focus-outer);
+}
+
+.p-select > select[disabled],
+.p-select > select:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  color: var(--p-field-placeholder);
+  cursor: not-allowed;
+}
+
+/* ─── Search field ─────────────────────────────────────────────────── */
+/* Capsule search input in five sizes. From the macOS 26 search fields
+   sheet: an empty field wears a quieter ring (0.04) than a filled one
+   (0.08), the placeholder is darker than a text field's because it
+   doubles as the label, and the clear button only exists while there
+   is something to clear. Markup:
+   <div class="p-search"><input type="search" placeholder="Search"></div> */
+
+.p-search {
+  --p-search-height: 24px;
+  --p-search-font: 13px;
+  --p-search-icon: 13px;
+  --p-search-pad: 8px;
+
+  position: relative;
+  display: inline-block;
+}
+
+.p-search > input {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  width: 120px;
+  height: var(--p-search-height);
+  border-radius: calc(var(--p-search-height) / 2);
+  padding: 0 var(--p-search-pad) 0 calc(var(--p-search-pad) + var(--p-search-icon) + 4px);
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-search-ring-empty);
+  caret-color: var(--p-sys-blue, #0088FF);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-search-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  transition: box-shadow 0.12s ease-out;
+}
+
+.p-search > input::placeholder {
+  color: var(--p-search-placeholder);
+  font-weight: 500;
+}
+
+/* Content present: step the ring up to the text-field weight. */
+.p-search > input:not(:placeholder-shown) {
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+}
+
+.p-search > input:focus,
+.p-search > input:focus-visible {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus),
+    0 0 0 3.5px var(--p-field-ring-focus-outer);
+}
+
+/* Magnifier, masked so it follows the text color token. */
+.p-search::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: var(--p-search-pad);
+  width: var(--p-search-icon);
+  height: var(--p-search-icon);
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-field-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13' fill='none'%3E%3Ccircle cx='5.5' cy='5.5' r='4' stroke='black' stroke-width='1.5'/%3E%3Cpath d='M8.7 8.7 12 12' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13' fill='none'%3E%3Ccircle cx='5.5' cy='5.5' r='4' stroke='black' stroke-width='1.5'/%3E%3Cpath d='M8.7 8.7 12 12' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Clear button: restyled WebKit cancel button (xmark.circle.fill).
+   Engines without it simply show no clear affordance. */
+.p-search > input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  width: var(--p-search-icon);
+  height: var(--p-search-icon);
+  margin: 0;
+  cursor: pointer;
+
+  background: var(--p-search-placeholder);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cmask id='m'%3E%3Crect width='16' height='16' fill='white'/%3E%3Cpath d='M5.6 5.6 10.4 10.4M10.4 5.6 5.6 10.4' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/mask%3E%3Ccircle cx='8' cy='8' r='7' fill='white' mask='url(%23m)'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-search > input[disabled],
+.p-search > input:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  cursor: not-allowed;
+}
+
+/* Sizes from the sheet: 16 / 20 / 24 (default) / 28 / 36. */
+.p-search-mini {
+  --p-search-height: 16px;
+  --p-search-font: 10px;
+  --p-search-icon: 10px;
+  --p-search-pad: 6px;
+}
+
+.p-search-small {
+  --p-search-height: 20px;
+  --p-search-font: 11px;
+  --p-search-icon: 11px;
+  --p-search-pad: 7px;
+}
+
+.p-search-large {
+  --p-search-height: 28px;
+  --p-search-pad: 9px;
+}
+
+.p-search-xlarge {
+  --p-search-height: 36px;
+  --p-search-pad: 12px;
+}
+
+/* ─── Pop-up and pull-down buttons ─────────────────────────────────── */
+/* Gray button variants of the select, from the macOS 26 pop-up sheet.
+   A pop-up chooses a value (up-down chevron); a pull-down runs an
+   action from a menu (down chevron). Both wrap the same markup as
+   .p-select — see specs/popup-pulldown.md. Markup:
+   <div class="p-popup"><select>…</select></div> */
+
+.p-popup,
+.p-pulldown {
+  --p-popup-height: 24px;
+  --p-popup-font: 13px;
+  --p-popup-radius: 6px;
+  --p-popup-chevron: 11px;
+
+  position: relative;
+  display: inline-block;
+}
+
+.p-popup > select,
+.p-pulldown > select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: var(--p-popup-height);
+  border-radius: var(--p-popup-radius);
+  padding: 0 calc(var(--p-popup-chevron) + 16px) 0 10px;
+
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-popup-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  cursor: pointer;
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+/* Chevrons follow the text color. Pop-up: up-down. Pull-down: down. */
+.p-popup::after,
+.p-pulldown::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: var(--p-popup-chevron);
+  height: var(--p-popup-chevron);
+  transform: translateY(-50%);
+  pointer-events: none;
+  background: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-popup::after {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-pulldown::after {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-popup > select:active,
+.p-pulldown > select:active {
+  background: var(--p-popup-bg-active);
+}
+
+.p-popup > select:focus-visible,
+.p-pulldown > select:focus-visible {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus),
+    0 0 0 3.5px var(--p-field-ring-focus-outer);
+}
+
+.p-popup > select:disabled,
+.p-pulldown > select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.p-popup:has(> select:disabled)::after,
+.p-pulldown:has(> select:disabled)::after {
+  opacity: 0.3;
+}
+
+/* Sizes: radius grows with the control; the 36px size is a capsule. */
+.p-popup-mini,
+.p-pulldown-mini {
+  --p-popup-height: 16px;
+  --p-popup-font: 10px;
+  --p-popup-radius: 4px;
+  --p-popup-chevron: 9px;
+}
+
+.p-popup-small,
+.p-pulldown-small {
+  --p-popup-height: 20px;
+  --p-popup-font: 11px;
+  --p-popup-radius: 5px;
+  --p-popup-chevron: 10px;
+}
+
+.p-popup-large,
+.p-pulldown-large {
+  --p-popup-height: 28px;
+  --p-popup-radius: 8px;
+  --p-popup-chevron: 12px;
+}
+
+.p-popup-xlarge,
+.p-pulldown-xlarge {
+  --p-popup-height: 36px;
+  --p-popup-radius: 18px;
+  --p-popup-chevron: 13px;
+}
+
+/* ─── Combo box ────────────────────────────────────────────────────── */
+/* A text field with a pull-down button in a single control. The input
+   carries the whole box (so focus rings wrap everything); the chevron
+   plate and glyph are pseudo-elements. Pair with <datalist> for native
+   editable-text-plus-suggestions, no JavaScript. Markup:
+
+   <div class="p-combo">
+     <input type="text" list="breeds" placeholder="Value" />
+   </div>
+   <datalist id="breeds">…</datalist> */
+
+.p-combo {
+  --p-combo-height: 24px;
+  --p-combo-font: 13px;
+  --p-combo-plate-w: 24px;
+  --p-combo-plate-h: 20px;
+  --p-combo-inset: 2px;
+  --p-combo-chevron: 11px;
+
+  position: relative;
+  display: inline-block;
+}
+
+.p-combo > input {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  width: 120px;
+  height: var(--p-combo-height);
+  border-radius: 6px;
+  padding: 0 calc(var(--p-combo-plate-w) + var(--p-combo-inset) + 6px) 0 8px;
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+  caret-color: var(--p-sys-blue, #0088FF);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-combo-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  transition: box-shadow 0.12s ease-out;
+}
+
+.p-combo > input::placeholder {
+  color: var(--p-field-placeholder);
+  font-weight: 510;
+}
+
+/* Hide the native datalist arrow where engines draw one. */
+.p-combo > input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+.p-combo > input:focus,
+.p-combo > input:focus-visible {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus),
+    0 0 0 3.5px var(--p-field-ring-focus-outer);
+}
+
+.p-combo > input[disabled],
+.p-combo > input:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  cursor: not-allowed;
+}
+
+/* The pull-down plate: raised white square inset at the right. */
+.p-combo::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: var(--p-combo-inset);
+  width: var(--p-combo-plate-w);
+  height: var(--p-combo-plate-h);
+  transform: translateY(-50%);
+  border-radius: 4px;
+  pointer-events: none;
+
+  background: var(--p-combo-plate-bg);
+  box-shadow:
+    0 0.5px 1.5px rgba(0, 0, 0, 0.12),
+    0 0 0 0.5px var(--p-field-ring);
+  transition: background 0.12s ease-out;
+}
+
+/* The chevron, above the plate, masked to follow the text color. */
+.p-combo::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: calc(var(--p-combo-inset) + (var(--p-combo-plate-w) - var(--p-combo-chevron)) / 2);
+  width: var(--p-combo-chevron);
+  height: var(--p-combo-chevron);
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-field-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Pressed anywhere on the control: the plate takes the quiet fill. */
+.p-combo:active::after {
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+}
+
+/* Disabled: flatten the plate, fade the chevron. */
+.p-combo:has(> input:disabled)::after {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 0.5px var(--p-field-ring-disabled);
+}
+
+.p-combo:has(> input:disabled)::before {
+  background: var(--p-field-placeholder);
+}
+
+/* Sizes from the sheet: plate = height − 4 (xlarge − 6). */
+.p-combo-mini {
+  --p-combo-height: 16px;
+  --p-combo-font: 10px;
+  --p-combo-plate-w: 16px;
+  --p-combo-plate-h: 12px;
+  --p-combo-chevron: 9px;
+}
+
+.p-combo-small {
+  --p-combo-height: 20px;
+  --p-combo-font: 11px;
+  --p-combo-plate-w: 20px;
+  --p-combo-plate-h: 16px;
+  --p-combo-chevron: 10px;
+}
+
+.p-combo-large {
+  --p-combo-height: 28px;
+  --p-combo-plate-w: 24px;
+  --p-combo-plate-h: 24px;
+  --p-combo-chevron: 12.5px;
+}
+
+.p-combo-xlarge {
+  --p-combo-height: 36px;
+  --p-combo-plate-w: 30px;
+  --p-combo-plate-h: 30px;
+  --p-combo-inset: 3px;
+  --p-combo-chevron: 13px;
+}
+
+/* ─── Checkbox ─────────────────────────────────────────────────────── */
+/* 16px squircle, radius 5. Checked state = accent fill + white SF
+   checkmark + top-light gradient + bevel, exactly like the sheet's
+   tint tiles. Markup:
+   <label class="p-checkbox"><input type="checkbox"><span></span> Text</label> */
+
+.p-checkbox,
+.p-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+  line-height: 16px;
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+
+  /* Color utility classes (.p-sys-*) paint a swatch background. On a
+     control wrapper we only want the published --p-color-current, so
+     cancel the paint. Works because forms.css loads after colors.css. */
+  background: transparent;
+
+  /* Resolved here, where .p-sys-* classes land, so tints actually work. */
+  --p-control-accent: var(--p-color-current, #0D6FFF);
+}
+
+.p-checkbox > input,
+.p-radio > input,
+.p-switch > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.p-checkbox > input + span {
+  --p-checkbox-size: 16px;
+  --p-checkbox-glyph: 60%;
+
+  position: relative;
+  flex-shrink: 0;
+  width: var(--p-checkbox-size);
+  height: var(--p-checkbox-size);
+  border-radius: 5px;
+
+  background: var(--p-control-fill);
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+/* Checkmark + top-light gradient live on the ::before layer */
+.p-checkbox > input + span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.10791 7.81299C3.83545 7.81299 3.6084 7.70459 3.42676 7.48779L1.15918 4.74121C1.08008 4.65039 1.02441 4.5625 0.992188 4.47754C0.959961 4.39258 0.943848 4.30469 0.943848 4.21387C0.943848 4.00586 1.0127 3.83447 1.15039 3.69971C1.29102 3.56201 1.4668 3.49316 1.67773 3.49316C1.91211 3.49316 2.10693 3.58838 2.26221 3.77881L4.10791 6.04297L7.68066 0.368652C7.77148 0.230957 7.86523 0.134277 7.96191 0.0786133C8.06152 0.0200195 8.18311 -0.00927734 8.32666 -0.00927734C8.5376 -0.00927734 8.71191 0.0581055 8.84961 0.192871C8.9873 0.327637 9.05615 0.497559 9.05615 0.702637C9.05615 0.778809 9.04297 0.85791 9.0166 0.939941C8.99023 1.02197 8.94922 1.10693 8.89355 1.19482L4.80225 7.45703C4.64111 7.69434 4.40967 7.81299 4.10791 7.81299Z' fill='white'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+  background-size: var(--p-checkbox-glyph), 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.p-checkbox > input:checked + span {
+  background: var(--p-control-accent);
+  box-shadow: var(--p-control-bevel);
+}
+
+.p-checkbox > input:checked + span::before {
+  opacity: 1;
+}
+
+/* Tint-sheet sizes: 20px (11px glyph) and 26px (14px glyph) */
+.p-checkbox-large > input + span {
+  --p-checkbox-size: 20px;
+  --p-checkbox-glyph: 55%;
+}
+
+.p-checkbox-xlarge > input + span {
+  --p-checkbox-size: 26px;
+  --p-checkbox-glyph: 54%;
+}
+
+/* ─── Radio ────────────────────────────────────────────────────────── */
+/* 16px circle, selected = accent fill + 4.8px white dot (30% of box). */
+
+.p-radio > input + span {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  background: var(--p-control-fill);
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+.p-radio > input + span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+  transition: opacity 0.12s ease-out;
+}
+
+.p-radio > input + span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: var(--p-control-knob);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.6);
+  transition: opacity 0.12s ease-out, transform 0.18s ease-out;
+}
+
+.p-radio > input:checked + span {
+  background: var(--p-control-accent);
+  box-shadow: var(--p-control-bevel);
+}
+
+.p-radio > input:checked + span::before {
+  opacity: 1;
+}
+
+.p-radio > input:checked + span::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ─── Switch (toggle) ──────────────────────────────────────────────── */
+/* Track 36×16 capsule; knob is the macOS 26 wide lozenge, 21×13,
+   inset 1.5px all around (top/bottom anchored so it can never drift
+   off-center). Markup:
+   <label class="p-switch"><input type="checkbox"><span></span></label>
+
+   Liquid Glass does not exist on the web, so the press state fakes it:
+   while pressed the knob inflates into a translucent lens that is
+   taller than the track and overhangs the side it sits on, blurring
+   the track through backdrop-filter. On release it deflates and slides
+   with a slight spring. Geometry from the macOS 26 transition frames
+   (68×30 sheet scaled to 36×16): lens 30×22, 2px outward overhang. */
+
+.p-switch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  background: transparent; /* same reason as .p-checkbox above */
+  --p-control-accent: var(--p-color-current, #0D6FFF);
+}
+
+.p-switch > input + span {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 16px;
+  border-radius: 8px;
+
+  background: var(--p-control-fill);
+  transition: background 0.25s ease-out;
+}
+
+.p-switch > input + span::after {
+  content: "";
+  position: absolute;
+  /* Whole-pixel insets: the sheet's 1.5px cannot center on a 1× pixel
+     grid and reads as the knob sitting low. 2px insets and a 12px knob
+     stay crisp at every density. Shadow is symmetric ambient only — a
+     downward offset also reads as vertical misalignment at this size. */
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: 21px;
+  border-radius: 999px;
+
+  background: var(--p-control-knob);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.06);
+  transition:
+    left 0.35s cubic-bezier(0.3, 1.25, 0.5, 1),
+    top 0.15s ease-out,
+    bottom 0.15s ease-out,
+    width 0.15s ease-out,
+    background 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+.p-switch > input:checked + span {
+  background: var(--p-control-accent);
+}
+
+.p-switch > input:checked + span::after {
+  left: 13px;
+}
+
+/* Held (press and hold): the glass lens at full strength. From the
+   reference render: the interior goes near-transparent so the track
+   color shows through, wrapped in a thick white refraction rim, a thin
+   accent edge line, and a soft accent glow. */
+.p-switch:active > input:not(:disabled) + span::after {
+  top: -4px;
+  bottom: -4px;
+  width: 34px;
+
+  background: rgb(255 255 255 / 0.5);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.12),
+    0 0 0 0.5px color-mix(in srgb, var(--p-control-accent) 45%, transparent),
+    inset 0 1px 1px rgb(255 255 255 / 0.95),
+    inset 0 0 0 2px rgb(255 255 255 / 0.6),
+    inset 0 -7px 10px -7px color-mix(in srgb, var(--p-control-accent) 60%, transparent);
+}
+
+/* The lens overhangs the side the knob is on: 4px past the track edge. */
+.p-switch:active > input:not(:disabled):not(:checked) + span::after {
+  left: -4.5px;
+}
+
+.p-switch:active > input:not(:disabled):checked + span::after {
+  left: 6.5px; /* right edge lands at 40.5px, past the track */
+}
+
+/* ─── The lens morph on click ──────────────────────────────────────── */
+/* The animation contract: grow, travel while grown, shrink into place —
+   on a plain click, no holding required. One registered custom property
+   --p-gel transitions 0↔1 on toggle. Position is linear in it; the lens
+   amount is a plateau, max(0, min(1, gel×5, (1−gel)×3)): fully grown by
+   20% of the timeline, held grown through the travel, shrunk over the
+   last third. Releasing a held switch joins the same curve, so a hold
+   keeps the lens up, travels, then sets it down. Transitions never run
+   at initial style, so pre-checked switches do not flash on page load.
+   Browsers without modern CSS math keep the plain slide above. */
+
+@supports (width: calc(21px + sin(90deg) * 9px)) {
+  .p-switch > input + span {
+    --p-gel: 0;
+    transition:
+      background 0.2s ease-out,
+      --p-gel 0.42s cubic-bezier(0.32, 1.2, 0.36, 1);
+  }
+
+  .p-switch > input:checked + span {
+    --p-gel: 1;
+  }
+
+  .p-switch > input + span::after,
+  .p-switch > input:checked + span::after {
+    --p-grow: calc(max(0, min(1, var(--p-gel) * 5, (1 - var(--p-gel)) * 3)));
+
+    /* Travel 2px->13px; grown the lens reaches 34x24, engulfing most of
+       the 36x16 track the way the WWDC footage shows at the flip peak. */
+    left: calc(2px + 11px * var(--p-gel) - 6.5px * var(--p-grow));
+    width: calc(21px + 13px * var(--p-grow));
+    top: calc(2px - 6px * var(--p-grow));
+    bottom: calc(2px - 6px * var(--p-grow));
+
+    /* Frosted, not clear: the interior goes milky (50% white) so the
+       track color reads through diffused; the refraction concentrates
+       the accent into a dark rim at the bottom edge, a specular line
+       runs along the top, and the glass casts a real drop shadow. */
+    background: rgb(255 255 255 / calc(1 - 0.5 * var(--p-grow)));
+    box-shadow:
+      0 2px 8px rgb(0 0 0 / calc(0.12 * var(--p-grow))),
+      0 0 0 0.5px color-mix(in srgb, var(--p-control-accent) calc(45% * var(--p-grow)), transparent),
+      0 0 1px rgba(0, 0, 0, 0.06),
+      inset 0 1px 1px rgb(255 255 255 / calc(0.95 * var(--p-grow))),
+      inset 0 0 0 calc(2px * var(--p-grow)) rgb(255 255 255 / 0.6),
+      inset 0 -7px 10px -7px color-mix(in srgb, var(--p-control-accent) calc(60% * var(--p-grow)), transparent);
+
+    /* These only fire on :active enter/exit — the gel-driven values
+       change through the animating variable, which does not trigger
+       property transitions of its own. */
+    transition:
+      top 0.18s ease-out,
+      bottom 0.18s ease-out,
+      left 0.18s ease-out,
+      width 0.18s ease-out,
+      background 0.18s ease-out,
+      box-shadow 0.18s ease-out;
+  }
+}
+
+/* ─── Shared states ────────────────────────────────────────────────── */
+
+.p-checkbox > input:focus-visible + span,
+.p-radio > input:focus-visible + span,
+.p-switch > input:focus-visible + span {
+  box-shadow: 0 0 0 3.5px var(--p-field-ring-focus-outer);
+  outline: 2px solid transparent; /* keeps a ring in forced-colors mode */
+  outline-offset: 2px;
+}
+
+.p-checkbox > input:disabled ~ *,
+.p-radio > input:disabled ~ *,
+.p-switch > input:disabled ~ * {
+  opacity: 0.5;
+}
+
+.p-checkbox:has(> input:disabled),
+.p-radio:has(> input:disabled),
+.p-switch:has(> input:disabled) {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-field,
+  .p-select > select,
+  .p-search > input,
+  .p-combo > input,
+  .p-combo::after,
+  .p-popup > select,
+  .p-pulldown > select,
+  .p-checkbox > input + span,
+  .p-checkbox > input + span::before,
+  .p-radio > input + span,
+  .p-radio > input + span::before,
+  .p-radio > input + span::after,
+  .p-switch > input + span,
+  .p-switch > input:checked + span,
+  .p-switch > input + span::after,
+  .p-switch > input:checked + span::after {
+    transition: none;
+  }
 }

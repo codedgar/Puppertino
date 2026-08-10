@@ -1,0 +1,305 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Forms
+description: macOS form controls. Text fields, selects, checkboxes, radios, and switches with exact macOS 26 metrics, tintable through the color system.
+---
+
+import '@puppertino/forms.css';
+
+A form control collects a decision from a person. A field takes text, a checkbox takes a yes or no, a radio takes one choice from a set, a switch flips a state.
+
+Puppertino ships a full set of v2 form controls with exact macOS metrics. Every size, radius, and shadow below is a specific, deliberate value, not an approximation.
+
+## When to Use Each Control
+
+Use a **text field** for free-form input. Names, search terms, amounts.
+
+Use a **select** when people pick one option from four or more. The menu hides the options until needed.
+
+Use **radios** when people pick one option from two to four. All options stay visible, so the choice is easier to compare.
+
+Use a **checkbox** for an independent yes or no that takes effect on submit. "Send me a receipt."
+
+Use a **switch** for a state that applies immediately. "Wi-Fi on." If the change needs a Save button, use a checkbox instead.
+
+## Anatomy
+
+| Token | Default value | Notes |
+|---|---|---|
+| `--p-field-bg` | `#ffffff` | Field and select background. Dark mode: `rgba(255,255,255,0.07)`. |
+| `--p-field-text` | `#1A1A1A` | Value text, 13px at weight 510. Dark mode: `rgba(255,255,255,0.85)`. |
+| `--p-field-placeholder` | `#BFBFBF` | Placeholder text. Dark mode: `rgba(255,255,255,0.25)`. |
+| `--p-field-ring` | `rgba(0,0,0,0.08)` | The border, drawn as a 1px spread shadow, never a stroke. |
+| `--p-control-fill` | `rgba(0,0,0,0.12)` | Unchecked checkbox, unselected radio, switch track off. |
+| `--p-control-accent` | `#0D6FFF` | Checked fill. Reads `--p-color-current`, so color classes retint it. |
+
+Fields and selects are 24px tall with a 6px radius and 8px horizontal text inset. Checkboxes and radios are 16px with a 6px gap to their label. The switch track is 36 by 16px with a 21 by 13px knob.
+
+## Text Field
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <input class="p-field" type="text" value="Rex" aria-label="Name" />
+  <input class="p-field" type="text" placeholder="Search breeds" aria-label="Search" />
+  <input class="p-field" type="text" value="Read only" disabled aria-label="Disabled field" />
+  <textarea class="p-field" placeholder="Notes about the visit" aria-label="Notes"></textarea>
+</div>
+
+```html
+<input class="p-field" type="text" placeholder="Search breeds" />
+<textarea class="p-field" placeholder="Notes about the visit"></textarea>
+```
+
+The class works on any text-like input and on `textarea`, which unlocks its height and gains vertical resize. Text renders at 13px weight 510, the caret is system blue, and the placeholder sits at `#BFBFBF`.
+
+Focus replaces the outline with the macOS ring: a 1px border at `rgba(0,122,255,0.15)` plus a 3.5px halo at `rgba(0,122,255,0.25)`. Disabled fields drop to a 50% background and a `rgba(0,0,0,0.04)` ring, and the cursor changes to not-allowed.
+
+## Select
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <div class="p-select">
+    <select aria-label="Breed">
+      <option>Dachshund</option>
+      <option>Corgi</option>
+      <option>Shiba Inu</option>
+    </select>
+  </div>
+  <div class="p-select">
+    <select disabled aria-label="Disabled select">
+      <option>Unavailable</option>
+    </select>
+  </div>
+</div>
+
+```html
+<div class="p-select">
+  <select>
+    <option>Dachshund</option>
+    <option>Corgi</option>
+  </select>
+</div>
+```
+
+The select shares the field's box: 24px tall, 6px radius, same ring and focus treatment. The up and down chevrons render in the text color at the right edge. macOS 26 popup buttons are plain, so the v1 blue chevron capsule is gone from v2.
+
+## Search Field
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <div class="p-search p-search-mini"><input type="search" placeholder="Search" aria-label="Search, mini" /></div>
+  <div class="p-search p-search-small"><input type="search" placeholder="Search" aria-label="Search, small" /></div>
+  <div class="p-search"><input type="search" placeholder="Search" aria-label="Search" /></div>
+  <div class="p-search p-search-large"><input type="search" placeholder="Search" aria-label="Search, large" /></div>
+  <div class="p-search p-search-xlarge"><input type="search" value="Corgi" aria-label="Search, extra large" /></div>
+</div>
+
+```html
+<div class="p-search">
+  <input type="search" placeholder="Search" />
+</div>
+```
+
+A search field is a capsule, radius half its height, 120px wide by default. Five sizes: 16, 20, 24, 28, and 36px tall via `.p-search-mini`, `.p-search-small`, the default, `.p-search-large`, and `.p-search-xlarge`.
+
+The ring tells the state. Empty fields wear a quiet `rgba(0,0,0,0.04)` ring, typing steps it up to the text field's `0.08`, and focus brings the blue double ring. The placeholder sits at `#727272`, darker than a text field's, because "Search" doubles as the field's label. Type something and a clear button appears at the right edge (WebKit engines; others simply omit it).
+
+## Pop-Up and Pull-Down Buttons
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <div class="p-popup p-popup-mini"><select aria-label="Mini pop-up"><option>Label</option><option>Other</option></select></div>
+  <div class="p-popup p-popup-small"><select aria-label="Small pop-up"><option>Label</option><option>Other</option></select></div>
+  <div class="p-popup"><select aria-label="Pop-up"><option>Label</option><option>Other</option></select></div>
+  <div class="p-popup p-popup-large"><select aria-label="Large pop-up"><option>Label</option><option>Other</option></select></div>
+  <div class="p-popup p-popup-xlarge"><select aria-label="Extra large pop-up"><option>Label</option><option>Other</option></select></div>
+  <div class="p-pulldown"><select aria-label="Pull-down"><option>Actions</option><option>Duplicate</option><option>Rename</option></select></div>
+  <div class="p-popup"><select disabled aria-label="Disabled pop-up"><option>Label</option></select></div>
+</div>
+
+```html
+<!-- Pop-up: choose one value -->
+<div class="p-popup">
+  <select>
+    <option>Day</option>
+    <option>Week</option>
+  </select>
+</div>
+
+<!-- Pull-down: run an action -->
+<div class="p-pulldown">
+  <select>
+    <option>Actions</option>
+    <option>Duplicate</option>
+    <option>Rename</option>
+  </select>
+</div>
+```
+
+A pop-up button displays a menu of mutually exclusive options and shows the current choice. A pull-down button displays a menu of actions and keeps its label. Both are gray buttons, not fields: `--p-fill-tertiary` body, no border ring, `--p-text-primary` label at 13px weight 510.
+
+The chevron tells them apart. Pop-ups wear the up-down glyph, pull-downs a single down chevron. Pressing composites the body to 15% black, focus wraps the blue double ring, and disabled fades everything to half.
+
+Five sizes via `-mini` through `-xlarge`; the radius grows with the control (4, 5, 6, 8) and the 36px size becomes a capsule. Use `.p-select` instead when the control sits inside a form as a white field.
+
+## Combo Box
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <div class="p-combo p-combo-mini"><input type="text" list="docs-breeds" placeholder="Value" aria-label="Combo, mini" /></div>
+  <div class="p-combo p-combo-small"><input type="text" list="docs-breeds" placeholder="Value" aria-label="Combo, small" /></div>
+  <div class="p-combo"><input type="text" list="docs-breeds" placeholder="Value" aria-label="Combo" /></div>
+  <div class="p-combo p-combo-large"><input type="text" list="docs-breeds" placeholder="Value" aria-label="Combo, large" /></div>
+  <div class="p-combo p-combo-xlarge"><input type="text" list="docs-breeds" value="Dachshund" aria-label="Combo, extra large" /></div>
+  <div class="p-combo"><input type="text" value="Read only" disabled aria-label="Combo, disabled" /></div>
+  <datalist id="docs-breeds">
+    <option value="Dachshund"></option>
+    <option value="Corgi"></option>
+    <option value="Shiba Inu"></option>
+    <option value="Samoyed"></option>
+  </datalist>
+</div>
+
+```html
+<div class="p-combo">
+  <input type="text" list="breeds" placeholder="Value" />
+</div>
+<datalist id="breeds">
+  <option value="Dachshund"></option>
+  <option value="Corgi"></option>
+</datalist>
+```
+
+A combo box combines a text field with a pull-down button in a single control. People can type a value or pick one from the list. Pair the input with a `datalist` and the suggestions dropdown comes from the browser, no JavaScript.
+
+The field matches the text field recipe, and the pull-down button is a raised plate inset 2px at the right edge with a bold chevron. Pressing the control fills the plate with `--p-fill-tertiary`, focus wraps the whole control in the blue double ring, and disabling flattens the plate and fades the chevron. Five sizes via `.p-combo-mini` through `.p-combo-xlarge`, same height ladder as search fields.
+
+## Checkbox
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <label class="p-checkbox"><input type="checkbox" checked /><span></span> Send receipt</label>
+  <label class="p-checkbox"><input type="checkbox" /><span></span> Subscribe</label>
+  <label class="p-checkbox"><input type="checkbox" checked disabled /><span></span> Locked on</label>
+  <label class="p-checkbox p-checkbox-large"><input type="checkbox" checked /><span></span> Large</label>
+  <label class="p-checkbox p-checkbox-xlarge"><input type="checkbox" checked /><span></span> Extra large</label>
+</div>
+
+```html
+<label class="p-checkbox">
+  <input type="checkbox" checked />
+  <span></span>
+  Send receipt
+</label>
+```
+
+The box is a 16px squircle with a 5px radius. Unchecked it fills with `rgba(0,0,0,0.12)`. Checked it fills with the accent, draws a white SF checkmark, and picks up the macOS tile treatment: a white top-light gradient at 20% and a subtle bevel. This makes the control read as lit from above.
+
+`.p-checkbox-large` (20px) and `.p-checkbox-xlarge` (26px) are the two larger macOS sizes. Consider the larger sizes for touch-heavy layouts, since 16px alone is a pointer-scale target.
+
+## Radio
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <label class="p-radio"><input type="radio" name="docs-size" checked /><span></span> Small breed</label>
+  <label class="p-radio"><input type="radio" name="docs-size" /><span></span> Medium breed</label>
+  <label class="p-radio"><input type="radio" name="docs-size" /><span></span> Large breed</label>
+</div>
+
+```html
+<label class="p-radio">
+  <input type="radio" name="size" checked />
+  <span></span>
+  Small breed
+</label>
+```
+
+A 16px circle. Selected, it fills with the accent and shows a white center dot at 30% of the box, 4.8px on screen. Stack options vertically with an 8px gap so the group scans as one question.
+
+## Switch
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <label class="p-switch" aria-label="Notifications on"><input type="checkbox" checked /><span></span></label>
+  <label class="p-switch" aria-label="Notifications off"><input type="checkbox" /><span></span></label>
+  <label class="p-switch p-sys-green" aria-label="Green switch"><input type="checkbox" checked /><span></span></label>
+  <label class="p-switch" aria-label="Disabled switch"><input type="checkbox" checked disabled /><span></span></label>
+</div>
+
+```html
+<label class="p-switch">
+  <input type="checkbox" checked />
+  <span></span>
+</label>
+```
+
+The macOS 26 switch is a 36 by 16px capsule with a wide lozenge knob, 21 by 12px, not a circle. Give every switch an accessible name, either visible text next to it or an `aria-label`.
+
+Click one and watch the knob. It lifts into a frosted glass lens that engulfs most of the track, travels, then condenses into place, the way the real iOS 26 toggle does in Apple's Liquid Glass introduction. The lens interior is milky, with the track color diffusing through it; the refraction concentrates the color into a dark rim at the glass edge, a specular line runs along the top, and the glass casts a soft shadow. Holding keeps the lens up, and releasing joins the same travel. One transitioned custom property drives it all, nothing animates on page load, and browsers without modern CSS math get a plain sprung slide.
+
+## Changing the Color
+
+Form controls read `--p-color-current`, the same variable the v2 buttons use. Add a `.p-sys-*` class to the control to retint its checked state.
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <label class="p-checkbox p-sys-red"><input type="checkbox" checked /><span></span> Red</label>
+  <label class="p-checkbox p-sys-green"><input type="checkbox" checked /><span></span> Green</label>
+  <label class="p-checkbox p-sys-purple"><input type="checkbox" checked /><span></span> Purple</label>
+  <label class="p-radio p-sys-orange"><input type="radio" checked /><span></span> Orange</label>
+  <label class="p-switch p-sys-pink" aria-label="Pink switch"><input type="checkbox" checked /><span></span></label>
+</div>
+
+```html
+<label class="p-checkbox p-sys-purple">
+  <input type="checkbox" checked />
+  <span></span>
+  Purple
+</label>
+```
+
+The color classes paint a background when used as swatches, but form controls cancel that automatically. Only the published tint reaches the control. The 13 `.p-sys-*` accents are the macOS system colors.
+
+## Dark Mode
+
+Controls flip with the page. Field backgrounds move to `rgba(255,255,255,0.07)` and rings become light rims at `rgba(255,255,255,0.08)`, because dark mode borders read as lit edges, not shadows. Unchecked fills move to `rgba(255,255,255,0.10)`. The accents swap to their dark variants from `colors.css` automatically.
+
+## Accessibility
+
+- **Focus** is always visible. Fields show the blue double ring, and checkboxes, radios, and switches show a 3.5px halo around the control. Mouse clicks do not trigger it.
+- **Labels** come free with the markup pattern. The control lives inside its `<label>`, so clicking the text toggles the input and screen readers announce it.
+- **Reduced motion** removes every transition, including the switch slide.
+- **Contrast**: the 13px weight 510 label at `rgba(0,0,0,0.85)` passes AAA. The placeholder `#BFBFBF` is decorative and never the only label.
+- **Target size**: the bare controls are pointer-scale. For touch layouts use `.p-checkbox-xlarge` or give the label row extra padding to reach 44px.
+
+## Code
+
+```html
+<!-- Labeled field -->
+<label class="p-label" for="dog-name">Name</label>
+<input class="p-field" id="dog-name" type="text" placeholder="Rex" />
+<span class="p-sublabel">Shown on the collar tag</span>
+
+<!-- Select -->
+<div class="p-select">
+  <select aria-label="Breed">
+    <option>Dachshund</option>
+    <option>Corgi</option>
+  </select>
+</div>
+
+<!-- Checkbox, radio, switch -->
+<label class="p-checkbox"><input type="checkbox" checked /><span></span> Send receipt</label>
+<label class="p-radio"><input type="radio" name="size" /><span></span> Small</label>
+<label class="p-switch" aria-label="Notifications"><input type="checkbox" /><span></span></label>
+```
+
+`.p-label` is the 13px weight 510 primary label. `.p-sublabel` is the 11px secondary line under it. They are the macOS title and subtitle styles.
+
+## Migration from v1
+
+The v1 classes remain available and unchanged. They will be removed in a future major version. Move new work to the v2 classes.
+
+| v1 | v2 |
+|---|---|
+| `.p-form-text` | `.p-field` |
+| `.p-form-text-alt` | `.p-field` (single style in v2) |
+| `.p-form-select` | `.p-select` |
+| `.p-form-checkbox-cont` | `.p-checkbox` |
+| `.p-form-radio-cont` | `.p-radio` |
+| `.p-form-switch` | `.p-switch` |
+| `.p-form-label` | `.p-label` |
+| `.p-chip` | unchanged, v2 chips ship later |
+
+The markup pattern stays the same: a label wrapping a hidden input plus a `<span>`. Only the class names change, so migration is a rename.

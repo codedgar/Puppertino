@@ -135,6 +135,18 @@ a:hover {
   font-weight: 500;
 }
 
+/* Anchor sub-links: components documented as sections of a parent page. */
+.nav-section li.nav-sub a {
+  padding-left: 38px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+.nav-section li.nav-sub a:hover {
+  opacity: 1;
+}
+
 /* ─────────────────────────────────────────
    Main content
    ───────────────────────────────────────── */

@@ -1,3 +1,13 @@
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY SEGMENTED CONTROLS (Puppertino v1)
+   .p-segmented-controls and friends remain for backwards compatibility.
+   The v2 system at the bottom of this file (.p-segmented / .p-segment)
+   replaces them. New work should use the v2 classes — these will be
+   removed in a future major.
+
+   See specs/segmented-controls.md for the v2 reference values.
+   ───────────────────────────────────────────────────────────────────── */
+
 :root{
 --p-segmented-bg: #fff;
 }
@@ -83,4 +93,242 @@
 .p-segmented-grey {
   --color-segmented: #555761;
   --color-lighter-segment: #d4d4d4;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Segmented Controls
+   macOS 26 segmented control. Values extracted from the reference
+   sheet — see specs/segmented-controls.md.
+
+   Radio-group markup, no JavaScript:
+
+   <div class="p-segmented" role="group" aria-label="View">
+     <label class="p-segment">
+       <input type="radio" name="view" checked><span>Day</span>
+     </label>
+     <label class="p-segment">
+       <input type="radio" name="view"><span>Week</span>
+     </label>
+   </div>
+
+   The selected pill reads --p-color-current like every v2 control, so
+   color classes retint it. .p-segmented-gray swaps the accent pill for
+   the neutral fill style.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-segment-separator: #D9D9D9;
+}
+
+.p-dark-mode {
+  --p-segment-separator: rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-segment-separator: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.p-segmented {
+  /* Accent resolved here (not :root) so .p-sys-* tint classes work —
+     var() in a custom property resolves where the property is defined. */
+  --p-control-accent: var(--p-color-current, #0D6FFF);
+
+  /* Grid, not flex: 1fr columns make every segment exactly equal width,
+     which is what the sheet shows and what the sliding pill's
+     percentage math depends on. */
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--p-fill-secondary, rgba(0, 0, 0, 0.08));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-segment {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.p-segment > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.p-segment > span {
+  position: relative;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  padding: 0 10px;
+  border-radius: 6px;
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+
+  transition: background 0.15s ease-out, color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* Separators: on every segment after the first, hidden next to the
+   selection. 1px wide, 5px vertical inset (14px tall on the 24px track). */
+.p-segment:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  left: -0.5px;
+  top: 5px;
+  bottom: 5px;
+  width: 1px;
+  background: var(--p-segment-separator);
+  transition: opacity 0.15s ease-out;
+}
+
+.p-segment:has(> input:checked)::before,
+.p-segment:has(> input:checked) + .p-segment::before {
+  opacity: 0;
+}
+
+/* Selected pill: flat accent, white label. Full height, no inset — the
+   sheet has no gradients, bevels, or shadows anywhere. Flat is correct. */
+.p-segment > input:checked + span {
+  background: var(--p-control-accent, var(--p-color-current, #0D6FFF));
+  color: #ffffff;
+}
+
+/* Pressed: plus-darker on the selected pill, quiet fill on unselected. */
+.p-segment:active > input:checked:not(:disabled) + span {
+  background:
+    linear-gradient(rgb(0 0 0 / 0.13), rgb(0 0 0 / 0.13)),
+    var(--p-control-accent, var(--p-color-current, #0D6FFF));
+}
+
+.p-segment:active > input:not(:checked):not(:disabled) + span {
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+}
+
+/* Gray style: neutral fill pill, text keeps its color. */
+.p-segmented-gray .p-segment > input:checked + span {
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-segmented-gray .p-segment:active > input:checked:not(:disabled) + span {
+  background: var(--p-fill-primary, rgba(0, 0, 0, 0.10));
+}
+
+/* Focus: the forms blue double ring. */
+.p-segment > input:focus-visible + span {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
+    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25));
+  outline: 2px solid transparent; /* keeps a ring in forced-colors mode */
+  outline-offset: 2px;
+}
+
+/* Disabled: fade the control; selected label drops to 50% white. */
+.p-segmented:has(input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.p-segmented:has(input:disabled) .p-segment {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.p-segmented input:disabled:not(:checked) + span {
+  color: #BFBFBF;
+}
+
+.p-segmented input:disabled:checked + span {
+  color: rgb(255 255 255 / 0.5);
+}
+
+/* ─── Sliding pill (progressive enhancement) ───────────────────────── */
+/* macOS slides the selection between segments. With :has() the track
+   itself can know which segment is checked (--p-seg-index) and how many
+   segments it holds (--p-seg-count), so a single ::before pill slides to
+   left: index/count of the track width. Segments are equal 1fr columns,
+   so the math is exact. Browsers without :has() keep the per-segment
+   pill above and simply crossfade. */
+
+@supports selector(:has(*)) {
+  .p-segmented {
+    --p-seg-count: 2;
+    --p-seg-index: 0;
+  }
+
+  .p-segmented:has(> .p-segment:nth-child(3)) { --p-seg-count: 3; }
+  .p-segmented:has(> .p-segment:nth-child(4)) { --p-seg-count: 4; }
+  .p-segmented:has(> .p-segment:nth-child(5)) { --p-seg-count: 5; }
+  .p-segmented:has(> .p-segment:nth-child(6)) { --p-seg-count: 6; }
+  .p-segmented:has(> .p-segment:nth-child(7)) { --p-seg-count: 7; }
+  .p-segmented:has(> .p-segment:nth-child(8)) { --p-seg-count: 8; }
+
+  .p-segmented:has(> .p-segment:nth-child(2) > input:checked) { --p-seg-index: 1; }
+  .p-segmented:has(> .p-segment:nth-child(3) > input:checked) { --p-seg-index: 2; }
+  .p-segmented:has(> .p-segment:nth-child(4) > input:checked) { --p-seg-index: 3; }
+  .p-segmented:has(> .p-segment:nth-child(5) > input:checked) { --p-seg-index: 4; }
+  .p-segmented:has(> .p-segment:nth-child(6) > input:checked) { --p-seg-index: 5; }
+  .p-segmented:has(> .p-segment:nth-child(7) > input:checked) { --p-seg-index: 6; }
+  .p-segmented:has(> .p-segment:nth-child(8) > input:checked) { --p-seg-index: 7; }
+
+  /* The segment-local pill hands off to the sliding one. */
+  .p-segmented:has(input:checked) .p-segment > input:checked + span,
+  .p-segmented:has(input:checked) .p-segment:active > input:checked:not(:disabled) + span {
+    background: none;
+  }
+
+  .p-segmented::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--p-seg-index) * 100% / var(--p-seg-count));
+    width: calc(100% / var(--p-seg-count));
+    border-radius: 6px;
+
+    background: var(--p-control-accent, var(--p-color-current, #0D6FFF));
+    transition: left 0.25s cubic-bezier(0.3, 1.1, 0.4, 1), background 0.15s ease-out;
+  }
+
+  /* No selection, no pill. */
+  .p-segmented:not(:has(input:checked))::before {
+    content: none;
+  }
+
+  .p-segmented:has(.p-segment:active > input:checked:not(:disabled))::before {
+    background:
+      linear-gradient(rgb(0 0 0 / 0.13), rgb(0 0 0 / 0.13)),
+      var(--p-control-accent, var(--p-color-current, #0D6FFF));
+  }
+
+  .p-segmented-gray::before {
+    background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  }
+
+  .p-segmented-gray:has(.p-segment:active > input:checked:not(:disabled))::before {
+    background: var(--p-fill-primary, rgba(0, 0, 0, 0.10));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-segment > span,
+  .p-segment:not(:first-child)::before,
+  .p-segmented::before {
+    transition: none;
+  }
 }

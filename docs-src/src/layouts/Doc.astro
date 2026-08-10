@@ -39,16 +39,21 @@ const nav = [
     items: [
       { label: 'Buttons', href: `${base}docs/desktop/buttons/` },
       { label: 'Forms', href: `${base}docs/desktop/forms/` },
+      { label: 'Text Fields', href: `${base}docs/desktop/forms/#text-field`, sub: true },
+      { label: 'Search Fields', href: `${base}docs/desktop/forms/#search-field`, sub: true },
+      { label: 'Combo Boxes', href: `${base}docs/desktop/forms/#combo-box`, sub: true },
+      { label: 'Pop-up & Pull-down', href: `${base}docs/desktop/forms/#pop-up-and-pull-down-buttons`, sub: true },
+      { label: 'Toggles', href: `${base}docs/desktop/forms/#switch`, sub: true },
       { label: 'Modals', href: `${base}docs/desktop/modals/` },
       { label: 'Segmented Controls', href: `${base}docs/desktop/segmented-controls/` },
-      { label: 'Cards', href: `${base}docs/desktop/cards/` },
     ],
   },
 ];
 
-// Build a flat list with section labels for prev/next navigation
+// Build a flat list with section labels for prev/next navigation.
+// Anchor sub-links are navigation shortcuts, not pages — keep them out.
 const flat = nav.flatMap((section) =>
-  section.items.map((item) => ({ ...item, section: section.heading }))
+  section.items.filter((item) => !item.sub).map((item) => ({ ...item, section: section.heading }))
 );
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '') + '/';
@@ -64,8 +69,8 @@ const currentSection = currentIndex >= 0 ? flat[currentIndex].section : null;
       <div class="nav-section">
         <span class="nav-heading">{heading}</span>
         <ul>
-          {items.map(({ label, href }) => (
-            <li>
+          {items.map(({ label, href, sub }) => (
+            <li class={sub ? 'nav-sub' : ''}>
               <a href={href} class={href === currentPath ? 'active' : ''}>{label}</a>
             </li>
           ))}
