@@ -13,7 +13,11 @@
 @property --p-color-current {
   syntax: "<color>";
   inherits: false;
-  initial-value: #0088FF;
+  /* The control tint blue. Registered properties always resolve, so this
+     initial IS the default accent for every v2 control — the var()
+     fallbacks downstream never fire. #0088FF is the text/link/selection
+     blue; #0D6FFF is the control fill blue the components document. */
+  initial-value: #0D6FFF;
 }
 
 :root{

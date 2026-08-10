@@ -635,14 +635,18 @@ textarea.p-form-text {
    textarea (which unlocks its height). */
 
 .p-field {
+  --p-field-height: 24px;
+  --p-field-font: 13px;
+  --p-field-pad: 8px;
+
   appearance: none;
   -webkit-appearance: none;
   border: 0;
   outline: 0;
   margin: 0;
 
-  height: 24px;
-  padding: 0 8px;
+  height: var(--p-field-height);
+  padding: 0 var(--p-field-pad);
   border-radius: 6px;
 
   background: var(--p-field-bg);
@@ -651,11 +655,34 @@ textarea.p-form-text {
 
   color: var(--p-field-text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
-  font-size: 13px;
+  font-size: var(--p-field-font);
   font-weight: 510;
   letter-spacing: 0;
 
   transition: box-shadow 0.12s ease-out;
+}
+
+/* Sizes: the shared five-height ladder. Radius stays 6 at every size. */
+.p-field-mini {
+  --p-field-height: 16px;
+  --p-field-font: 10px;
+  --p-field-pad: 6px;
+}
+
+.p-field-small {
+  --p-field-height: 20px;
+  --p-field-font: 11px;
+  --p-field-pad: 7px;
+}
+
+.p-field-large {
+  --p-field-height: 28px;
+  --p-field-pad: 9px;
+}
+
+.p-field-xlarge {
+  --p-field-height: 36px;
+  --p-field-pad: 12px;
 }
 
 .p-field::placeholder {
@@ -748,6 +775,128 @@ textarea.p-field {
   box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
   color: var(--p-field-placeholder);
   cursor: not-allowed;
+}
+
+/* ─── Stepper ──────────────────────────────────────────────────────── */
+/* Two-segment increment/decrement control. Pair it with a number field
+   and src/js/steppers.js (stepUp/stepDown + press-and-hold repeat).
+   Markup:
+
+   <div class="p-stepper-field">
+     <input class="p-field" type="number" value="3" min="0" max="10" />
+     <span class="p-stepper">
+       <button type="button" data-p-step="up" aria-label="Increment"></button>
+       <button type="button" data-p-step="down" aria-label="Decrement"></button>
+     </span>
+   </div> */
+
+.p-stepper-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* The paired number field: no native spinners, stepper does that job. */
+.p-stepper-field > input::-webkit-inner-spin-button,
+.p-stepper-field > input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.p-stepper-field > input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.p-stepper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  width: 20px;
+  height: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+}
+
+.p-stepper > button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  position: relative;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Chevrons, masked to the text color. */
+.p-stepper > button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 10px;
+  height: 8px;
+  background: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-stepper > [data-p-step="up"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 6.5 6 3l3.5 3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 6.5 6 3l3.5 3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-stepper > [data-p-step="down"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 3.5 6 7l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 3.5 6 7l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Divider: 14×1 centered, 12% black; fades when disabled. */
+.p-stepper::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  right: 3px;
+  height: 1px;
+  margin-top: -0.5px;
+  border-radius: 0.5px;
+  background: rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+
+.p-stepper > button:active:not(:disabled) {
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+}
+
+.p-stepper:has(> button:focus-visible) {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus),
+    0 0 0 3.5px var(--p-field-ring-focus-outer);
+}
+
+.p-stepper > button:focus-visible {
+  outline: 2px solid transparent; /* forced-colors ring */
+}
+
+.p-stepper:has(> button:disabled) {
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  background: var(--p-field-bg-disabled);
+}
+
+.p-stepper:has(> button:disabled)::after {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.p-stepper > button:disabled {
+  cursor: not-allowed;
+}
+
+.p-stepper > button:disabled::before {
+  background: var(--p-text-tertiary, rgba(0, 0, 0, 0.25));
 }
 
 /* ─── Search field ─────────────────────────────────────────────────── */

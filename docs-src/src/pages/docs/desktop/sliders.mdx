@@ -1,0 +1,84 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Sliders
+description: A horizontal track with a thumb that people adjust between a minimum and maximum value. Native range inputs with macOS metrics.
+---
+
+import '@puppertino/forms.css';
+import '@puppertino/sliders.css';
+import slidersScript from '../../../../../src/js/sliders.js?url';
+
+<script type="module" src={slidersScript}></script>
+
+A slider is a horizontal track with a control, called a thumb, that people can adjust between a minimum and maximum value.
+
+Puppertino's slider is a native `input[type="range"]` wearing macOS metrics. Keyboard, touch, form submission, and screen reader semantics come from the browser.
+
+## When to Use It
+
+Use a slider for a value on a continuous range where the rough position matters more than the exact number. Volume, brightness, playback position.
+
+Use a stepper or a plain number field when people need a precise value. Consider pairing a slider with a field when both matter.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Track | 4px tall capsule, `--p-control-fill` when unfilled |
+| Fill | `--p-slider-accent`, the tintable system blue, left of the thumb |
+| Thumb | 20 by 16px white lozenge, radius 8, soft triple shadow |
+| Ticks | 2px marks at interval boundaries, 25% black |
+| Focus | The blue double ring, on the thumb |
+
+## Basic Use
+
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0; max-width: 360px;">
+  <input type="range" class="p-slider" min="0" max="100" value="65" aria-label="Volume" />
+  <input type="range" class="p-slider p-sys-green" min="0" max="100" value="40" aria-label="Green slider" />
+  <input type="range" class="p-slider" min="0" max="100" value="30" disabled aria-label="Disabled slider" />
+</div>
+
+```html
+<input type="range" class="p-slider" min="0" max="100" value="65" />
+```
+
+Include the helper once per page and the accent fill follows the thumb:
+
+```html
+<script src="src/js/sliders.js"></script>
+```
+
+The helper is about twenty lines: it publishes the value as `--p-slider-fill` so the track can paint the accent portion. Firefox draws the fill natively without it. Without the helper on other browsers the track renders all gray and the slider still works, so the enhancement degrades cleanly.
+
+## Ticks
+
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0; max-width: 360px;">
+  <input type="range" class="p-slider p-slider-ticks" min="0" max="100" step="20" value="60" aria-label="Tick slider" />
+  <input type="range" class="p-slider p-slider-ticks" style="--p-slider-ticks: 10;" min="0" max="100" step="10" value="30" aria-label="Fine tick slider" />
+</div>
+
+```html
+<input type="range" class="p-slider p-slider-ticks"
+       style="--p-slider-ticks: 5;" min="0" max="100" step="20" />
+```
+
+`.p-slider-ticks` draws marks across the track. Set `--p-slider-ticks` to the number of intervals and match it to your `step` so the thumb lands on the marks. Five intervals is the default.
+
+## Changing the Color
+
+Add a `.p-sys-*` class to the input, the same tint mechanism as every other control. The fill picks up the color; the thumb and track stay neutral.
+
+## Dark Mode
+
+The unfilled track and thumb flip through the control tokens, and the accent swaps to its dark variant. No extra setup.
+
+## Accessibility
+
+- **Keyboard**: arrows adjust by `step`, Page Up and Down jump larger amounts, Home and End hit the extremes. All native.
+- **Focus** shows the blue double ring on the thumb. Mouse clicks do not trigger it.
+- **Labeling**: a slider has no visible label of its own. Pair it with a `.p-label` and `for`/`id`, or set `aria-label`.
+- The 20px input height keeps the touch target comfortable around the 4px track.
+
+## Dials
+
+The macOS dial (a rotary knob) needs pointer math that CSS cannot provide. It ships later as a JS component; the slider covers linear values meanwhile.

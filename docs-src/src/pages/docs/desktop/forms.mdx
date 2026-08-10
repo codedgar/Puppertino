@@ -5,6 +5,9 @@ description: macOS form controls. Text fields, selects, checkboxes, radios, and 
 ---
 
 import '@puppertino/forms.css';
+import steppersScript from '../../../../../src/js/steppers.js?url';
+
+<script type="module" src={steppersScript}></script>
 
 A form control collects a decision from a person. A field takes text, a checkbox takes a yes or no, a radio takes one choice from a set, a switch flips a state.
 
@@ -49,6 +52,8 @@ Fields and selects are 24px tall with a 6px radius and 8px horizontal text inset
 <textarea class="p-field" placeholder="Notes about the visit"></textarea>
 ```
 
+Five sizes: 16, 20, 24, 28, and 36px tall via `.p-field-mini`, `.p-field-small`, the default, `.p-field-large`, and `.p-field-xlarge`, the same height ladder as every field in the family.
+
 The class works on any text-like input and on `textarea`, which unlocks its height and gains vertical resize. Text renders at 13px weight 510, the caret is system blue, and the placeholder sits at `#BFBFBF`.
 
 Focus replaces the outline with the macOS ring: a 1px border at `rgba(0,122,255,0.15)` plus a 3.5px halo at `rgba(0,122,255,0.25)`. Disabled fields drop to a 50% background and a `rgba(0,0,0,0.04)` ring, and the cursor changes to not-allowed.
@@ -80,6 +85,37 @@ Focus replaces the outline with the macOS ring: a 1px border at `rgba(0,122,255,
 ```
 
 The select shares the field's box: 24px tall, 6px radius, same ring and focus treatment. The up and down chevrons render in the text color at the right edge. macOS 26 popup buttons are plain, so the v1 blue chevron capsule is gone from v2.
+
+## Stepper
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <div class="p-stepper-field">
+    <input class="p-field" type="number" value="3" min="0" max="10" style="width: 64px;" aria-label="Quantity" />
+    <span class="p-stepper">
+      <button type="button" data-p-step="up" aria-label="Increment"></button>
+      <button type="button" data-p-step="down" aria-label="Decrement"></button>
+    </span>
+  </div>
+  <span class="p-stepper">
+    <button type="button" data-p-step="up" aria-label="Increment" disabled></button>
+    <button type="button" data-p-step="down" aria-label="Decrement" disabled></button>
+  </span>
+</div>
+
+```html
+<div class="p-stepper-field">
+  <input class="p-field" type="number" value="3" min="0" max="10" />
+  <span class="p-stepper">
+    <button type="button" data-p-step="up" aria-label="Increment"></button>
+    <button type="button" data-p-step="down" aria-label="Decrement"></button>
+  </span>
+</div>
+<script src="src/js/steppers.js"></script>
+```
+
+A stepper is a two-segment control that increases or decreases an incremental value. The control is 20 by 24px, radius 6, with a centered divider between the halves; pressing a half fills it with the quiet gray, and holding repeats after 400ms.
+
+The buttons drive the paired number input through the native `stepUp` and `stepDown`, so `min`, `max`, and `step` are respected and every change fires `input` and `change` events. The field hides its native spinners; the stepper is the spinner. Use it when precise small adjustments matter. Consider a slider when the rough position is enough.
 
 ## Search Field
 

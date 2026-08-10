@@ -1,0 +1,135 @@
+@charset "UTF-8";
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Disclosure Controls
+   macOS 26 round chevron button. See specs/disclosure-controls.md.
+
+   On a button (script toggles aria-expanded):
+     <button class="p-disclosure" aria-expanded="false"
+             aria-label="Show details"></button>
+
+   Zero-JS with native details/summary — the browser reveals, hides,
+   and announces; the chevron rotates on [open]:
+     <details class="p-disclosure-group">
+       <summary>More options <span class="p-disclosure"></span></summary>
+       …content…
+     </details>
+   ═════════════════════════════════════════════════════════════════════ */
+
+.p-disclosure {
+  --p-disclosure-size: 24px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  position: relative;
+  display: inline-flex;
+  width: var(--p-disclosure-size);
+  height: var(--p-disclosure-size);
+  border-radius: 50%;
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  cursor: pointer;
+  transition: background 0.12s ease-out;
+}
+
+/* The chevron: down at rest (collapsed), masked to the text color. */
+.p-disclosure::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: calc(var(--p-disclosure-size) * 0.45);
+  height: calc(var(--p-disclosure-size) * 0.38);
+
+  background: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 3.5 6 7l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 3.5 6 7l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+
+  transition: transform 0.2s ease-out;
+}
+
+.p-disclosure:hover:not(:disabled) {
+  background: var(--p-fill-secondary, rgba(0, 0, 0, 0.08));
+}
+
+.p-disclosure:active:not(:disabled) {
+  background: var(--p-popup-bg-active, rgba(0, 0, 0, 0.15));
+}
+
+/* Expanded: chevron points up. Driven by aria-expanded on the button
+   itself, or by the open state of a wrapping details element. */
+.p-disclosure[aria-expanded="true"]::before,
+details[open] > summary .p-disclosure::before {
+  transform: rotate(180deg);
+}
+
+.p-disclosure:focus-visible {
+  outline: 2px solid transparent; /* forced-colors ring */
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
+    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25));
+}
+
+.p-disclosure:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.p-disclosure:disabled::before {
+  background: var(--p-text-tertiary, rgba(0, 0, 0, 0.25));
+}
+
+/* Sizes: the shared ladder. Chevron scales with the plate. */
+.p-disclosure-mini { --p-disclosure-size: 16px; }
+.p-disclosure-small { --p-disclosure-size: 20px; }
+.p-disclosure-large { --p-disclosure-size: 28px; }
+.p-disclosure-xlarge { --p-disclosure-size: 36px; }
+
+/* ─── details/summary integration ──────────────────────────────────── */
+
+.p-disclosure-group > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+}
+
+.p-disclosure-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Inside a summary the control is decorative; the summary is the button. */
+.p-disclosure-group > summary .p-disclosure {
+  pointer-events: none;
+}
+
+.p-disclosure-group > summary:focus-visible {
+  outline: 2px solid transparent;
+}
+
+.p-disclosure-group > summary:focus-visible .p-disclosure {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
+    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-disclosure,
+  .p-disclosure::before {
+    transition: none;
+  }
+}

@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Progress Indicators
+   macOS 26 progress bars. See specs/progress-indicators.md.
+
+   Determinate (native element, free semantics):
+     <progress class="p-progress" max="100" value="60"></progress>
+
+   Indeterminate (the native one paints engine animations that cannot
+   be restyled, so this is a div):
+     <div class="p-progress-indeterminate" role="progressbar"
+          aria-label="Loading"></div>
+
+   Tint with a .p-sys-* class on the element, like every v2 control.
+   Sizes: default 6px, .p-progress-large / .p-progress-indeterminate-large
+   for the 10px bar.
+   ═════════════════════════════════════════════════════════════════════ */
+
+.p-progress {
+  /* Resolved here, not :root, so tint classes can override. */
+  --p-progress-accent: var(--p-color-current, #0D6FFF);
+  --p-progress-height: 6px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  display: inline-block;
+  width: 160px;
+  height: var(--p-progress-height);
+  border-radius: calc(var(--p-progress-height) / 2);
+  overflow: hidden;
+
+  /* Firefox paints the track from the element background. */
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+}
+
+.p-progress::-webkit-progress-bar {
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  border-radius: calc(var(--p-progress-height) / 2);
+}
+
+.p-progress::-webkit-progress-value {
+  background: var(--p-progress-accent);
+  border-radius: calc(var(--p-progress-height) / 2);
+}
+
+.p-progress::-moz-progress-bar {
+  background: var(--p-progress-accent);
+  border-radius: calc(var(--p-progress-height) / 2);
+}
+
+.p-progress-large {
+  --p-progress-height: 10px;
+}
+
+/* ─── Indeterminate ────────────────────────────────────────────────── */
+/* A 48%-wide capsule segment fading on its trailing side, bouncing
+   right and back — motion straight from the reference frames. */
+
+.p-progress-indeterminate {
+  --p-progress-accent: var(--p-color-current, #0D6FFF);
+  --p-progress-height: 6px;
+
+  position: relative;
+  display: inline-block;
+  width: 160px;
+  height: var(--p-progress-height);
+  border-radius: calc(var(--p-progress-height) / 2);
+  overflow: hidden;
+
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+}
+
+.p-progress-indeterminate::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 48%;
+  border-radius: calc(var(--p-progress-height) / 2);
+
+  background: linear-gradient(
+    to right,
+    var(--p-progress-accent) 55%,
+    transparent
+  );
+  animation: p-progress-bounce 1.6s ease-in-out infinite;
+}
+
+.p-progress-indeterminate-large {
+  --p-progress-height: 10px;
+}
+
+@keyframes p-progress-bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(108.33%); } /* 52/48 of own width = far end */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-progress-indeterminate::before {
+    animation: p-progress-pulse 2s ease-in-out infinite;
+    left: 26%; /* parked centered */
+    background: var(--p-progress-accent);
+  }
+
+  @keyframes p-progress-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+}

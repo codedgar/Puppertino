@@ -1,0 +1,148 @@
+@charset "UTF-8";
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Sliders
+   macOS 26 slider on a native range input. See specs/sliders.md.
+
+   <input type="range" class="p-slider" min="0" max="100" value="50" />
+
+   The filled portion left of the thumb needs the value as a CSS
+   variable; src/js/sliders.js sets --p-slider-fill on input (about
+   twenty lines, optional). Firefox paints the fill natively through
+   ::-moz-range-progress. Without JS on WebKit the track is all gray
+   and everything still works.
+
+   Tint like every v2 control: a .p-sys-* class on the input (or an
+   ancestor) retints the fill through --p-color-current.
+   ═════════════════════════════════════════════════════════════════════ */
+
+.p-slider {
+  /* Resolved here, not :root, so tint classes can override. */
+  --p-slider-accent: var(--p-color-current, #0D6FFF);
+  --p-slider-fill: 0%;
+
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  width: 160px;
+  height: 20px; /* comfortable hit area around the 4px track */
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ─── WebKit ───────────────────────────────────────────────────────── */
+
+.p-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--p-slider-accent) 0 var(--p-slider-fill),
+    var(--p-control-fill, rgba(0, 0, 0, 0.12)) var(--p-slider-fill)
+  );
+}
+
+.p-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 16px;
+  margin-top: -6px; /* centers the 16px thumb on the 4px track */
+  border-radius: 8px;
+  border: 0;
+
+  background: var(--p-control-knob, #ffffff);
+  box-shadow:
+    0 0 1px rgba(0, 0, 0, 0.05),
+    0 0 4px rgba(0, 0, 0, 0.05),
+    0 0 44px rgba(0, 0, 0, 0.10);
+}
+
+.p-slider:focus-visible {
+  outline: none;
+}
+
+.p-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
+    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25)),
+    0 0 1px rgba(0, 0, 0, 0.05),
+    0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Firefox ──────────────────────────────────────────────────────── */
+
+.p-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--p-control-fill, rgba(0, 0, 0, 0.12));
+}
+
+.p-slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--p-slider-accent);
+}
+
+.p-slider::-moz-range-thumb {
+  width: 20px;
+  height: 16px;
+  border-radius: 8px;
+  border: 0;
+
+  background: var(--p-control-knob, #ffffff);
+  box-shadow:
+    0 0 1px rgba(0, 0, 0, 0.05),
+    0 0 4px rgba(0, 0, 0, 0.05),
+    0 0 44px rgba(0, 0, 0, 0.10);
+}
+
+.p-slider:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
+    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25)),
+    0 0 1px rgba(0, 0, 0, 0.05),
+    0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Ticks ────────────────────────────────────────────────────────── */
+/* .p-slider-ticks draws 2px marks across the track. Set the number of
+   intervals with --p-slider-ticks (marks land on interval boundaries;
+   the two edge marks sit half-clipped in the capsule ends). */
+
+.p-slider-ticks {
+  --p-slider-ticks: 5;
+}
+
+.p-slider-ticks::-webkit-slider-runnable-track {
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.25) 0 2px,
+      transparent 2px calc(100% / var(--p-slider-ticks))
+    ),
+    linear-gradient(
+      to right,
+      var(--p-slider-accent) 0 var(--p-slider-fill),
+      var(--p-control-fill, rgba(0, 0, 0, 0.12)) var(--p-slider-fill)
+    );
+}
+
+.p-slider-ticks::-moz-range-track {
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.25) 0 2px,
+      transparent 2px calc(100% / var(--p-slider-ticks))
+    ),
+    var(--p-control-fill, rgba(0, 0, 0, 0.12));
+}
+
+/* ─── Disabled ─────────────────────────────────────────────────────── */
+/* Sheet: fill turns #BFBFBF, thumb ghosts. */
+
+.p-slider:disabled {
+  --p-slider-accent: #BFBFBF;
+  opacity: 0.5;
+  cursor: not-allowed;
+}

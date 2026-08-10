@@ -1,0 +1,67 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Disclosure Controls
+description: Round chevron buttons that reveal and hide related content. Five sizes, works with native details and summary, no JavaScript.
+---
+
+import '@puppertino/forms.css';
+import '@puppertino/disclosure.css';
+
+Disclosure controls reveal and hide information and functionality related to specific content.
+
+Use one when secondary detail would crowd the view but should stay one click away. Advanced options, item details, long explanations.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Plate | Circle, `--p-fill-tertiary`. Five sizes: 16, 20, 24, 28, 36px |
+| Chevron | ~45% of the plate, `--p-text-primary`, bold |
+| Direction | Down when collapsed, rotates 180° to up when expanded, 0.2s |
+| Hover | `--p-fill-secondary` |
+| Pressed | 15% black, the shared pressed tone |
+
+## Zero-JS Use
+
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <details class="p-disclosure-group">
+    <summary>Advanced options <span class="p-disclosure"></span></summary>
+    <p style="font-size: 13px; color: var(--p-text-secondary); margin: 8px 0 0;">Anything can live in here. The browser reveals and hides it, and announces the state.</p>
+  </details>
+</div>
+
+```html
+<details class="p-disclosure-group">
+  <summary>Advanced options <span class="p-disclosure"></span></summary>
+  <p>Anything can live in here.</p>
+</details>
+```
+
+The `details` element does the revealing, hiding, keyboard handling, and screen reader announcements. The chevron rotates when the group opens. No JavaScript.
+
+## As a Button
+
+<div style="display: flex; gap: 16px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
+  <button class="p-disclosure p-disclosure-mini" aria-expanded="false" aria-label="Show details, mini"></button>
+  <button class="p-disclosure p-disclosure-small" aria-expanded="false" aria-label="Show details, small"></button>
+  <button class="p-disclosure" aria-expanded="false" aria-label="Show details" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') !== 'true')"></button>
+  <button class="p-disclosure p-disclosure-large" aria-expanded="true" aria-label="Hide details, large"></button>
+  <button class="p-disclosure p-disclosure-xlarge" aria-expanded="true" aria-label="Hide details, extra large"></button>
+  <button class="p-disclosure" disabled aria-expanded="false" aria-label="Show details, disabled"></button>
+</div>
+
+```html
+<button class="p-disclosure" aria-expanded="false" aria-label="Show details"></button>
+```
+
+When your own script controls the reveal, use a `button` and flip `aria-expanded`; the chevron follows the attribute. Always give an icon-only button an `aria-label`, and update it with the state. The middle button above is wired so you can try the rotation.
+
+Five sizes via `.p-disclosure-mini` through `.p-disclosure-xlarge`, the shared control ladder.
+
+## Dark Mode
+
+Plate and chevron flip through the fill and text tokens. No extra setup.
+
+## Reduced Motion
+
+The rotation is removed; the chevron flips instantly between directions.
