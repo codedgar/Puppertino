@@ -54,10 +54,10 @@
   color: var(--p-picker-label);
   display: inline-block;
   font-family: var(--p-picker-font);
-  padding: 5px 6px 6px;
+  padding: 5px 4.5px 1.25px;
   -webkit-user-select: none;
   user-select: none;
-  width: 139px;
+  width: 138.5px;
 }
 
 .p-calendar * {
@@ -65,16 +65,21 @@
 }
 
 .p-calendar-header {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
-  padding: 2px 2px 4px;
+  height: 20px;
+  margin-left: -2px;
+  padding: 0 1px 0 0;
 }
 
 .p-calendar-title {
   color: var(--p-picker-label);
   flex: 1;
-  font-size: 13px;
+  /* Native: digit cap 10.0 logical (≈14.2px) but painted width matches
+     15px SF bold; 15 wins the overlay. */
+  font-size: 15px;
   font-weight: 700;
+  line-height: 13px;
 }
 
 .p-calendar-nav {
@@ -84,7 +89,8 @@
   cursor: pointer;
   font-family: inherit;
   font-size: 10px;
-  padding: 2px 4px;
+  line-height: 12px;
+  padding: 0 4px;
 }
 
 .p-calendar-nav:hover {
@@ -101,22 +107,26 @@
   border-bottom: 1px solid var(--p-picker-border);
   color: var(--p-picker-secondary);
   display: grid;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 590;
   grid-template-columns: repeat(7, 1fr);
-  padding-bottom: 3px;
+  line-height: 9px;
+  padding-bottom: 2.75px;
   text-align: center;
 }
 
 .p-calendar-grid {
   display: grid;
+  grid-auto-rows: 18px;
   grid-template-columns: repeat(7, 1fr);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
-/* Day cell: 18.4 × 17.7 native pitch → 18px slots. */
+/* Day cell: 18px row pitch, 16px pill (overlay-matched to the native
+   2× capture: 11px numbers, pill inset 1px vertically). */
 .p-calendar-day {
   align-items: center;
+  align-self: center;
   background: none;
   border: 0;
   border-radius: 5px;
@@ -124,8 +134,8 @@
   cursor: pointer;
   display: flex;
   font-family: inherit;
-  font-size: 13px;
-  height: 18px;
+  font-size: 11px;
+  height: 16px;
   justify-content: center;
   padding: 0;
 }
@@ -143,7 +153,7 @@
 .p-calendar-day.p-today {
   background: var(--p-picker-today-bg);
   color: var(--p-picker-accent);
-  font-weight: 510;
+  font-weight: 590;
 }
 
 /* Selected: accent fill, white number. */
@@ -158,9 +168,12 @@
   outline-offset: -1px;
 }
 
-/* --------------------------------------------------------------- Clock */
+/* -------------------------------------------- Clock (EXPERIMENTAL) */
 
-/* 122×122 analog clock. Hands are rotated by --p-clock-h/m/s (turns);
+/* 122×122 analog clock. EXPERIMENTAL: rendering doesn't yet hold up
+   against the native control across browsers (number placement relies
+   on CSS trig; bezel/hand polish pending). Not previewed in docs;
+   geometry may change. Hands rotate via --p-clock-h/m/s (turns);
    datepickers.js sets them (or set them inline for a static time). */
 .p-clock {
   background:
