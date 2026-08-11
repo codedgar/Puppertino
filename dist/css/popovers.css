@@ -1,0 +1,156 @@
+/* Puppertino v2.0 — Popovers (macOS 26)
+   A popover is a transient view that appears above other content when
+   people click or tap a control or interactive area. Free-form glass
+   container with an edge arrow; positioning via src/js/popovers.js. */
+
+:root {
+  --p-popover-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-popover-radius: 20px;
+  --p-popover-bg: rgba(255, 255, 255, 0.72);
+  --p-popover-bg-opaque: #fcfcfc;
+  --p-popover-arrow-bg: rgba(252, 252, 252, 0.95);
+  --p-popover-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    0 0 2.5px rgba(0, 0, 0, 0.5);
+  --p-popover-text: #1a1a1a;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-popover-bg: rgba(58, 58, 62, 0.82);
+  --p-popover-bg-opaque: #3a3a3e;
+  --p-popover-arrow-bg: rgba(58, 58, 62, 0.95);
+  --p-popover-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 2.5px rgba(0, 0, 0, 0.7);
+  --p-popover-text: rgba(255, 255, 255, 0.92);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-popover-bg: rgba(58, 58, 62, 0.82);
+    --p-popover-bg-opaque: #3a3a3e;
+    --p-popover-arrow-bg: rgba(58, 58, 62, 0.95);
+    --p-popover-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.3),
+      0 0 2.5px rgba(0, 0, 0, 0.7);
+    --p-popover-text: rgba(255, 255, 255, 0.92);
+  }
+}
+
+.p-popover {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-popover-bg);
+  border-radius: var(--p-popover-radius);
+  box-shadow: var(--p-popover-shadow);
+  box-sizing: border-box;
+  color: var(--p-popover-text);
+  display: inline-block;
+  font-family: var(--p-popover-font);
+  padding: 16px;
+  position: relative;
+}
+
+.p-popover * {
+  box-sizing: border-box;
+}
+
+.p-popover:focus {
+  outline: none;
+}
+
+/* Arrow: exact sheet silhouette (35.44 × 10.5, 45° slopes, rounded tip).
+   No backdrop-filter here: Chromium ignores it on clipped/masked
+   elements, so the arrow uses a near-opaque fill that reads as the
+   blurred glass. The opacity also keeps the body's hairline rim shadow
+   from showing through at the junction as a gap. */
+.p-popover::before {
+  background: var(--p-popover-arrow-bg);
+  clip-path: path("M0 10.5C2.5 10.5 3.62 10.44 4.75 10C5.87 9.56 6.89 8.58 7.83 7.65L10.48 5L13.79 1.69C15.12 0.3 16.37 0 17.72 0C19.07 0 20.32 0.31 21.65 1.69L24.96 5L27.61 7.65C28.55 8.58 29.56 9.56 30.69 10C31.82 10.44 32.94 10.5 35.44 10.5Z");
+  content: "";
+  height: 10.5px;
+  left: var(--p-popover-arrow-x, 50%);
+  margin-left: -17.72px;
+  position: absolute;
+  top: -10.5px;
+  width: 35.44px;
+}
+
+/* Placement = which side of the trigger the popover sits on; the arrow
+   goes on the opposite edge. Default is bottom (popover under trigger,
+   arrow on its top edge). */
+.p-popover[data-p-popover-place="top"]::before {
+  margin-top: 0;
+  top: 100%;
+  transform: rotate(180deg);
+}
+
+.p-popover[data-p-popover-place="left"]::before {
+  left: 100%;
+  margin-left: -12.47px;
+  margin-top: -5.25px;
+  top: var(--p-popover-arrow-y, 50%);
+  transform: rotate(90deg);
+}
+
+.p-popover[data-p-popover-place="right"]::before {
+  left: -22.97px;
+  margin-left: 0;
+  margin-top: -5.25px;
+  top: var(--p-popover-arrow-y, 50%);
+  transform: rotate(-90deg);
+}
+
+.p-popover--no-arrow::before {
+  display: none;
+}
+
+/* Floating state: popovers.js toggles .active on popovers marked
+   data-p-popover-float. Inline (docs previews) skip the attribute. */
+.p-popover[data-p-popover-float] {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transform: scale(0.98);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: 100;
+}
+
+.p-popover[data-p-popover-float].active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-popover,
+  .p-popover::before {
+    background: var(--p-popover-bg-opaque);
+  }
+}
+
+/* No path() support → no way to draw the arrow cleanly; drop it. */
+@supports not (clip-path: path("M0 0H1V1Z")) {
+  .p-popover::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-popover,
+  .p-popover::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-popover-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-popover[data-p-popover-float] {
+    transform: none;
+    transition: opacity 0.18s ease;
+  }
+}

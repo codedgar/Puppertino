@@ -1,0 +1,71 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Notifications
+description: The macOS notification banner. App icon, bold title, two body lines, and a timestamp on the menu material, 344 pixels wide.
+---
+
+import '@puppertino/notifications.css';
+
+A notification gives people timely, high-value information they can understand at a glance. Use it for events that happen while attention is elsewhere, like a finished export or a new message. Avoid using it for errors in the current task. Those belong in a [dialog](/docs/desktop/dialogs/) or inline.
+
+<style>{`.demo-app-icon i { color: #fff; font-size: 18px; }`}</style>
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+  <div class="p-notification" role="status">
+    <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #34C759, #248A3D);"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i></span>
+    <p class="p-notification__title">Elit Dapibus Ligula Sit</p>
+    <span class="p-notification__time">now</span>
+    <p class="p-notification__body">Maecenas faucibus mollis interdum. Morbi leo risus.</p>
+  </div>
+  <div class="p-notification" role="status">
+    <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #0A84FF, #0055CC);"><i class="ph-bold ph-download-simple" aria-hidden="true"></i></span>
+    <p class="p-notification__title">Export finished</p>
+    <span class="p-notification__time">2m ago</span>
+    <p class="p-notification__body">Report Q3.pdf is ready in your Downloads folder.</p>
+  </div>
+</div>
+
+## Anatomy
+
+The banner is 344px wide with a minimum height of 72px and a 16px radius. The surface is the menu material, `rgba(245, 245, 245, 0.67)` over a 20px blur with 180% saturation. The shadow is `0 8px 40px` at 12%.
+
+Padding is 13px left, 12px vertical, 10px right. The icon slot is 32px with a 13px gap to the text. The title is 13px bold at `rgba(0, 0, 0, 0.85)` with a 16px line height. Body copy is 13px regular at the same color, clamped to two lines. The timestamp is 11px in `#BFBFBF`, aligned with the title.
+
+| Class | Role |
+|---|---|
+| `.p-notification` | The banner. Grid of icon, text column, and timestamp. |
+| `.p-notification__icon` | 32px icon slot. Put an `img` or any 32px tile inside. |
+| `.p-notification__title` | 13px bold, single line, truncates with an ellipsis. |
+| `.p-notification__body` | 13px regular, clamped to two lines. |
+| `.p-notification__time` | 11px timestamp, top right. |
+| `.p-notification-center` | Optional fixed top-right stack (16px inset, 10px gap) for showing live banners. |
+
+## Code
+
+```html
+<div class="p-notification" role="status">
+  <span class="p-notification__icon">
+    <img src="app-icon.png" alt="" />
+  </span>
+  <p class="p-notification__title">Export finished</p>
+  <span class="p-notification__time">now</span>
+  <p class="p-notification__body">
+    Report Q3.pdf is ready in your Downloads folder.
+  </p>
+</div>
+```
+
+Showing and dismissing banners is left to your app. For a floating stack, wrap banners in `.p-notification-center` and add or remove them from it. Give transient banners `role="status"` so screen readers announce them without interrupting.
+
+## Dark mode
+
+The surface switches to `rgba(58, 58, 62, 0.82)`. The title becomes `rgba(255, 255, 255, 0.92)`, body copy `rgba(255, 255, 255, 0.76)`, and the timestamp `rgba(255, 255, 255, 0.25)`. The shadow deepens to 30%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Accessibility
+
+- With `prefers-reduced-transparency` the surface becomes opaque `#F0F0F0` (dark: `#3A3A3E`) and the blur is removed.
+- Browsers without `backdrop-filter` get the same opaque fallback.
+- Title contrast is 12.6:1 in light mode and 14.9:1 in dark mode. The timestamp is decorative and stays low contrast, so repeat critical timing in the body if it matters.
+- Body copy clamps at two lines. Put the essential fact in the first line.

@@ -1,0 +1,49 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Tooltips
+description: The macOS tooltip as one HTML attribute. Pure CSS, shows on hover and keyboard focus after a short delay, with light and dark glass.
+---
+
+import '@puppertino/tooltips.css';
+
+A tooltip shows the name or purpose of a control when people hover over it. Use it for icon-only buttons and truncated labels. Avoid putting information in a tooltip that people need to complete a task. Touch devices never see it.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
+  <button class="p-button" type="button" data-p-tooltip="This is a tooltip.">Hover me</button>
+  <button class="p-button" type="button" data-p-tooltip="Shown above the control" data-p-tooltip-pos="top">Tooltip on top</button>
+  <button class="p-button" type="button" data-p-tooltip="Also shows on keyboard focus">Tab to me</button>
+</div>
+
+## Usage
+
+Add the attribute to any element. No extra markup, no JavaScript:
+
+```html
+<button class="p-button" type="button"
+  data-p-tooltip="Duplicate this file">
+  <i class="ph-bold ph-copy" aria-hidden="true"></i>
+</button>
+```
+
+The tooltip renders centered under the element with a 4px gap. `data-p-tooltip-pos="top"` places it above. The host element is given `position: relative` by the stylesheet, so avoid the attribute on elements that rely on a different position value.
+
+The tooltip appears 0.5 seconds after hover begins, like the native delay, and hides immediately on leave. It also appears on `:focus-visible`, so keyboard people get the same information.
+
+## Anatomy
+
+The box is 18px tall with a 1px radius, the smallest radius in the framework, straight from the sheet. The fill is `rgba(246, 246, 246, 0.72)` over a 10px blur. Text is 11px at weight 510 in `#4D4D4D` with 6px side padding. The shadow is `0 1px 3px` at 20%.
+
+The tooltip ignores pointer events, so it never blocks the control underneath it.
+
+## Dark mode
+
+The fill switches to `rgba(58, 58, 62, 0.80)` and the text to `rgba(255, 255, 255, 0.80)`. The shadow deepens to 40%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Accessibility
+
+- The attribute is presentation only. Screen readers do not read it. Pair it with `aria-label` (or visible text) on the control itself.
+- With `prefers-reduced-transparency` the fill becomes opaque `#F0F0F0` (dark: `#3A3A3E`).
+- With `prefers-reduced-motion` the fade is removed. The tooltip still waits 0.5 seconds, then appears instantly.
+- Keep tooltip text short. One clause, no punctuation-heavy sentences. The box does not wrap.

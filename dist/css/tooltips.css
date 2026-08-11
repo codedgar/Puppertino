@@ -1,0 +1,103 @@
+/* Puppertino v2.0 — Tooltips (macOS 26)
+   Pure CSS, attribute-driven: data-p-tooltip="text" on any element.
+   Appears centered under the element after a short delay, like the
+   native tooltip. data-p-tooltip-pos="top" flips it above. */
+
+:root {
+  --p-tooltip-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", sans-serif;
+  --p-tooltip-bg: rgba(246, 246, 246, 0.72);
+  --p-tooltip-bg-opaque: #f0f0f0;
+  --p-tooltip-text: #4d4d4d;
+  --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-tooltip-bg: rgba(58, 58, 62, 0.8);
+  --p-tooltip-bg-opaque: #3a3a3e;
+  --p-tooltip-text: rgba(255, 255, 255, 0.8);
+  --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-tooltip-bg: rgba(58, 58, 62, 0.8);
+    --p-tooltip-bg-opaque: #3a3a3e;
+    --p-tooltip-text: rgba(255, 255, 255, 0.8);
+    --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* The host anchors the tooltip; documented requirement. The tooltip
+   renders outside the host's box, so hosts that clip (e.g. .p-button's
+   overflow: hidden) must let it escape. */
+[data-p-tooltip] {
+  overflow: visible;
+  position: relative;
+}
+
+[data-p-tooltip]::after {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: var(--p-tooltip-bg);
+  border-radius: 1px;
+  bottom: auto;
+  box-shadow: var(--p-tooltip-shadow);
+  box-sizing: border-box;
+  color: var(--p-tooltip-text);
+  content: attr(data-p-tooltip);
+  font-family: var(--p-tooltip-font);
+  font-size: 11px;
+  font-weight: 510;
+  height: 18px;
+  left: 50%;
+  letter-spacing: 0;
+  line-height: 18px;
+  opacity: 0;
+  padding: 0 6px;
+  pointer-events: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  transition: opacity 0.12s ease 0s;
+  white-space: nowrap;
+  z-index: 110;
+}
+
+/* Native tooltips wait before showing; the delay only applies on the way
+   in — leaving hides immediately. */
+[data-p-tooltip]:hover::after,
+[data-p-tooltip]:focus-visible::after {
+  opacity: 1;
+  transition-delay: 0.5s;
+}
+
+[data-p-tooltip-pos="top"]::after {
+  bottom: calc(100% + 4px);
+  top: auto;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  [data-p-tooltip]::after {
+    background: var(--p-tooltip-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-p-tooltip]::after {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-tooltip-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-motion) {
+  [data-p-tooltip]::after {
+    transition: opacity 0s linear 0s;
+  }
+
+  [data-p-tooltip]:hover::after,
+  [data-p-tooltip]:focus-visible::after {
+    transition-delay: 0.5s;
+  }
+}

@@ -15,8 +15,11 @@
 @import url('forms.css');
 @import url('menus.css');
 @import url('modals.css');
+@import url('notifications.css');
+@import url('popovers.css');
 @import url('progress.css');
 @import url('segmented-controls.css');
 @import url('sliders.css');
 @import url('tabs.css');
+@import url('tooltips.css');
 @import url('dark_mode.css');

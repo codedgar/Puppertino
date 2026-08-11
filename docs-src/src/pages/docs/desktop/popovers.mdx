@@ -1,0 +1,82 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Popovers
+description: A transient glass surface anchored to a control, with an edge arrow. Free-form content, four placements, and a small JS helper for floating popovers.
+---
+
+import '@puppertino/popovers.css';
+import popoversScript from '../../../../../src/js/popovers.js?url';
+
+<script type="module" src={popoversScript}></script>
+
+A popover is a transient view that appears above other content when people click or tap a control or interactive area. Use it for lightweight tools and details that relate to one control. For commands, use a [menu](/docs/desktop/menus/). For decisions that block the flow, use a [dialog](/docs/desktop/dialogs/).
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: center;">
+  <div class="p-popover" role="dialog" aria-label="Example popover" style="width: 200px; height: 120px;">
+    <strong style="font-size: 13px;">Arrow on top</strong>
+    <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">The default placement sits under its control.</p>
+  </div>
+  <div class="p-popover" data-p-popover-place="top" role="dialog" aria-label="Example popover" style="width: 200px; height: 120px;">
+    <strong style="font-size: 13px;">Arrow on bottom</strong>
+    <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">Placement top puts the popover above its control.</p>
+  </div>
+</div>
+
+<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px;">
+  <button class="p-button" type="button" data-p-popover="#demo-popover" aria-expanded="false" aria-haspopup="dialog">Show popover</button>
+  <div class="p-popover" id="demo-popover" data-p-popover-float role="dialog" aria-label="Demo popover" style="width: 220px;">
+    <strong style="font-size: 13px;">Floating popover</strong>
+    <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">Positioned by popovers.js. Click outside or press Escape to close.</p>
+  </div>
+</div>
+
+## Anatomy
+
+The surface is white glass, brighter than the menu material. The background is `rgba(255, 255, 255, 0.72)` over a 20px blur with 180% saturation. The radius is 20px. The shadow pairs a soft drop (`0 4px 20px` at 15%) with a hairline rim (`0 0 2.5px` at 50%). Content padding is 16px.
+
+The arrow protrudes 10.5px beyond the body edge. Its base spans 35.44px with 45 degree slopes and a rounded tip. It uses a near-opaque fill (`rgba(252, 252, 252, 0.95)`) that matches the blurred body, so it reads as one surface.
+
+| Class | Role |
+|---|---|
+| `.p-popover` | The surface. Glass, radius 20, 16px padding, shadow, arrow. |
+| `data-p-popover-place` | Placement relative to the trigger: `bottom` (default), `top`, `left`, `right`. The arrow sits on the opposite edge. |
+| `.p-popover--no-arrow` | Removes the arrow for edge-to-edge or detached uses. |
+| `data-p-popover-float` | Marks a floating popover. Hidden and fixed until opened by the script. |
+
+## Behavior
+
+Include `popovers.js` and point a trigger at its popover:
+
+```html
+<button class="p-button" type="button"
+  data-p-popover="#account-popover"
+  aria-expanded="false" aria-haspopup="dialog">
+  Account
+</button>
+
+<div class="p-popover" id="account-popover" data-p-popover-float
+  data-p-popover-place="bottom" role="dialog" aria-label="Account">
+  <!-- any content -->
+</div>
+```
+
+Clicking the trigger toggles the popover. The script positions it on the placement side, flips it when it would leave the viewport, and keeps an 8px viewport inset. The arrow tracks the center of the trigger. Clicking outside, pressing Escape, scrolling, or resizing closes it. One popover is open at a time.
+
+Opening moves focus to the surface, not into the content. Escape restores focus to the trigger. Give the popover `role="dialog"` and a label, and keep `aria-expanded` on the trigger so the state is announced.
+
+## States
+
+The popover has two states. Closed: `opacity: 0`, `scale(0.98)`, no pointer events. Open (`.active`): full opacity and scale. The transition is 0.18s with the default ease. With `prefers-reduced-motion` the scale is removed and only the fade remains.
+
+## Dark mode
+
+The surface switches to `rgba(58, 58, 62, 0.82)`, the same dark family as menus. The rim darkens to 70% and the drop shadow doubles to 30%. Text switches to `rgba(255, 255, 255, 0.92)`. Both the class-based (`.p-dark-mode`) and automatic (`.p-auto-dark-mode`) modes are supported.
+
+## Accessibility
+
+- With `prefers-reduced-transparency` the glass becomes opaque `#FCFCFC` (dark: `#3A3A3E`) and the blur is removed.
+- Browsers without `backdrop-filter` get the same opaque fallback.
+- Browsers without `clip-path: path()` drop the arrow and keep the surface.
+- Content inside the popover keeps its own focus order. Interactive content should be reachable with Tab after the surface receives focus.

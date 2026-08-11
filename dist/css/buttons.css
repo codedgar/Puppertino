@@ -236,6 +236,7 @@
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit; /* stays rounded when overflow is unclipped (tooltips) */
   background: black;
   mix-blend-mode: plus-darker;
   opacity: 0;
