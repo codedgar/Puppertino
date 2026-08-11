@@ -1,0 +1,235 @@
+/* Puppertino v2.0 — Dock (macOS 26)
+   Glass platter with app icons. Sheet: platter 62px tall, radius 15,
+   36px icons at 9px gaps. Magnification + bounce live in src/js/dock.js
+   (opt-in via data-p-dock-magnify). */
+
+:root {
+  --p-dock-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-dock-bg: rgba(246, 246, 246, 0.36);
+  --p-dock-bg-opaque: #e8e8e8;
+  --p-dock-rim: rgba(255, 255, 255, 0.05);
+  --p-dock-separator: rgba(60, 60, 67, 0.29);
+  --p-dock-indicator: rgba(0, 0, 0, 0.45);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-dock-bg: rgba(74, 74, 74, 0.39);
+  --p-dock-bg-opaque: #4a4a4a;
+  --p-dock-rim: rgba(255, 255, 255, 0.1);
+  --p-dock-separator: #404042;
+  --p-dock-indicator: rgba(255, 255, 255, 0.65);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-dock-bg: rgba(74, 74, 74, 0.39);
+    --p-dock-bg-opaque: #4a4a4a;
+    --p-dock-rim: rgba(255, 255, 255, 0.1);
+    --p-dock-separator: #404042;
+    --p-dock-indicator: rgba(255, 255, 255, 0.65);
+  }
+}
+
+/* ------------------------------------------------------------- Platter */
+
+.p-dock {
+  align-items: flex-end;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-dock-bg);
+  border-radius: 15px;
+  box-shadow: inset 0 0 0 1px var(--p-dock-rim);
+  box-sizing: border-box;
+  display: inline-flex;
+  font-family: var(--p-dock-font);
+  gap: 9px;
+  height: 62px;
+  padding: 13px 8px;
+  position: relative;
+}
+
+.p-dock * {
+  box-sizing: border-box;
+}
+
+/* Pin to the bottom of a positioned host (or the viewport). */
+.p-dock-fixed {
+  bottom: 8px;
+  left: 50%;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 90;
+}
+
+/* --------------------------------------------------------------- Items */
+
+/* Magnification writes --p-dock-icon per item (dock.js): real box
+   growth, so content repaints crisp at the new size — transform scale
+   was tried and rejected (Chromium stretches the cached rest-size
+   raster and icons pixelate). Icons grow upward from the platter
+   baseline because the flex container aligns to flex-end. Give icon
+   images sources of at least 144px so 2× magnification stays sharp. */
+.p-dock-item {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  flex: none;
+  height: var(--p-dock-icon, 36px);
+  padding: 0;
+  position: relative;
+  width: var(--p-dock-icon, 36px);
+}
+
+.p-dock-item img,
+.p-dock-item svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.p-dock-item:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 2px;
+}
+
+/* Running indicator: 4px dot, 3px below the icon slot. */
+.p-dock-item.p-running::after {
+  background: var(--p-dock-indicator);
+  border-radius: 50%;
+  bottom: -8px;
+  content: "";
+  height: 4px;
+  left: 50%;
+  margin-left: -2px;
+  position: absolute;
+  width: 4px;
+}
+
+.p-dock-separator {
+  align-self: center;
+  background: var(--p-dock-separator);
+  flex: none;
+  height: 41px;
+  width: 1px;
+}
+
+/* --------------------------------------------------------------- Label */
+
+/* App-name label, shown by dock.js from the item's aria-label (native
+   capture, Tahoe): 24px capsule, radius 12, dark in BOTH appearance
+   modes (rgba(58,58,62) family — the dark tooltip material), 13px/510
+   white text, 16px side padding, 17.5×6px rounded tail centered under
+   the pill. Anchored above the item box, so it rides magnification. */
+.p-dock-label {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(58, 58, 62, 0.84);
+  border-radius: 12px;
+  /* Measured on the live OS: the tail tip floats 19px above the FULLY
+     MAGNIFIED icon's top (38 device px @2x, stable across frames). Our
+     72px magnified icon pokes 23px above the platter, so 23 + 19 = 42. */
+  bottom: calc(100% + 42px);
+  box-sizing: border-box;
+  color: #fff;
+  font-family: var(--p-dock-font);
+  font-size: 13px;
+  font-weight: 510;
+  height: 24px;
+  line-height: 24px;
+  opacity: 0;
+  padding: 0 16px;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%);
+  transition: opacity 0.12s ease;
+  white-space: nowrap;
+  z-index: 95;
+}
+
+.p-dock-label.active {
+  opacity: 1;
+}
+
+/* Tail: rounded taper. No backdrop-filter here — Chromium ignores it on
+   clipped elements (same lesson as the popover arrow) — so the fill is
+   near-opaque to read as the blurred pill. */
+.p-dock-label::after {
+  background: rgba(58, 58, 62, 0.95);
+  clip-path: path("M0 0H17.5C13.4 0 11.2 6 8.75 6C6.3 6 4.1 0 0 0Z");
+  content: "";
+  height: 6px;
+  left: 50%;
+  margin-left: -8.75px;
+  position: absolute;
+  top: 100%;
+  width: 17.5px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-dock-label {
+    background: #4a4a4e;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-dock-label {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: #4a4a4e;
+  }
+}
+
+/* -------------------------------------------------------------- Bounce */
+
+/* Launching bounce: two decaying hops, toggled by dock.js on click.
+   Animates the icon's child so it composes with the magnification
+   transform on the item itself. */
+.p-dock-item.p-bouncing > * {
+  animation: p-dock-bounce 0.9s;
+}
+
+@keyframes p-dock-bounce {
+  0% { transform: translateY(0); }
+  22% { transform: translateY(-22px); }
+  44% { transform: translateY(0); }
+  62% { transform: translateY(-10px); }
+  80% { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------- Fallbacks */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-dock {
+    background: var(--p-dock-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-dock {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-dock-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-dock-item,
+  .p-dock-item > * {
+    /* dock.js also bails on reduced motion; belt and braces. */
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Squircle corners where corner-shape ships (Chromium 139+): platter 15
+   with the system's confirmed 60% smoothing → span 24 (same curve the
+   utility window uses). */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-dock {
+    border-radius: 24px;
+    corner-shape: superellipse(1.465);
+  }
+}

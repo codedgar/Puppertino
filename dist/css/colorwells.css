@@ -1,0 +1,99 @@
+/* Puppertino v2.0 — Color Wells (macOS 26)
+   A color well lets people adjust the color of text, shapes, guides,
+   and other onscreen elements. Wraps a native <input type="color">, so
+   activating it opens the platform picker. The two looks in the sheet
+   are STATES: a well starts as the spectrum disc (nothing chosen yet)
+   and becomes the rainbow-ring + color-dot swatch once a color is
+   picked (.p-colorwell-set — colorwells.js adds it on selection). */
+
+:root {
+  --p-colorwell-rainbow: conic-gradient(
+    from 90deg,
+    #f00 0deg,
+    #fb00ff 72deg,
+    #00a1ff 144deg,
+    #44ff00 216deg,
+    #fff700 288deg,
+    #f00 360deg
+  );
+}
+
+/* 28×28 circular well; the native input is hidden but stays focusable
+   and clickable across the whole circle. */
+.p-colorwell {
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 28px;
+  position: relative;
+  width: 28px;
+}
+
+.p-colorwell input[type="color"] {
+  appearance: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+/* Rest state: full spectrum disc… */
+.p-colorwell::before {
+  background: var(--p-colorwell-rainbow);
+  border-radius: 50%;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* …under the sheet's white radial highlight (100% center → 0 at 96%). */
+.p-colorwell::after {
+  background: radial-gradient(
+    circle,
+    #fff 4%,
+    rgba(255, 255, 255, 0.66) 41.3%,
+    rgba(255, 255, 255, 0.33) 73.6%,
+    rgba(255, 255, 255, 0) 96%
+  );
+  border-radius: 50%;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Selected state: the disc collapses to a 3px rainbow ring (outer r14 →
+   inner r11) and the chosen color fills an 18px dot, 2px inside it. */
+.p-colorwell-set::before {
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+}
+
+.p-colorwell-set::after {
+  background: var(--p-colorwell-color, #f00);
+  height: 18px;
+  inset: auto;
+  left: 5px;
+  top: 5px;
+  width: 18px;
+}
+
+/* States */
+.p-colorwell:focus-within {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 1px;
+}
+
+.p-colorwell.p-dimmed,
+.p-colorwell:has(input:disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+}

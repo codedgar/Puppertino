@@ -1,0 +1,77 @@
+/* Puppertino v2.0 — Image Wells (macOS 26)
+   An image well is an editable version of an image view. 28×28 inset
+   well: 24×24 image at a 2px inset, framed by a white ring between two
+   soft dark hairlines. Wrap a hidden <input type="file"> to make it
+   editable; swapping the image is app logic. */
+
+:root {
+  --p-imagewell-bg: rgba(0, 0, 0, 0.02);
+  --p-imagewell-ring: #fff;
+  --p-imagewell-edge: rgba(0, 0, 0, 0.05);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-imagewell-bg: rgba(255, 255, 255, 0.04);
+  --p-imagewell-ring: rgba(255, 255, 255, 0.15);
+  --p-imagewell-edge: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-imagewell-bg: rgba(255, 255, 255, 0.04);
+    --p-imagewell-ring: rgba(255, 255, 255, 0.15);
+    --p-imagewell-edge: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Frame, inside → out: 0.5px dark inner edge, 1px white ring, 1.5px
+   soft dark outer edge (all from the sheet's stroke stack). The 2px
+   padding is the visible well margin around the image. */
+.p-imagewell {
+  background: var(--p-imagewell-bg);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 0.5px var(--p-imagewell-edge),
+    0 0 0 1px var(--p-imagewell-ring),
+    0 0 0 1.5px var(--p-imagewell-edge);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  height: 28px;
+  padding: 2px;
+  position: relative;
+  vertical-align: middle;
+  width: 28px;
+}
+
+.p-imagewell img,
+.p-imagewell svg {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Editable pattern: label + hidden file input. */
+.p-imagewell input[type="file"] {
+  cursor: pointer;
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.p-imagewell:focus-within,
+.p-imagewell.p-dragover {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 2px;
+}
+
+.p-imagewell.p-dimmed,
+.p-imagewell:has(input:disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+}

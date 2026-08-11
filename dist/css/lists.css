@@ -1,0 +1,245 @@
+/* Puppertino v2.0 — Lists and Tables (macOS 26)
+   Lists and tables present data in one or more columns of rows.
+   List: a row stack with capsule selection. Table: styles a real
+   <table> with sortable headers and hairline separators. */
+
+:root {
+  --p-list-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-list-selection: #2962d9;
+  --p-list-selection-text: #fff;
+  --p-list-selection-quiet: rgba(0, 0, 0, 0.14);
+  --p-list-hover: rgba(0, 0, 0, 0.03);
+  --p-list-text: rgba(0, 0, 0, 0.85);
+  --p-list-text-dim: rgba(0, 0, 0, 0.5);
+  --p-list-chevron: rgba(0, 0, 0, 0.5);
+  --p-table-separator: rgba(0, 0, 0, 0.05);
+  --p-table-divider: rgba(0, 0, 0, 0.1);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-list-selection: #3672e8;
+  --p-list-selection-quiet: rgba(255, 255, 255, 0.14);
+  --p-list-hover: rgba(255, 255, 255, 0.04);
+  --p-list-text: rgba(255, 255, 255, 0.92);
+  --p-list-text-dim: rgba(255, 255, 255, 0.5);
+  --p-list-chevron: rgba(255, 255, 255, 0.5);
+  --p-table-separator: rgba(255, 255, 255, 0.07);
+  --p-table-divider: rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-list-selection: #3672e8;
+    --p-list-selection-quiet: rgba(255, 255, 255, 0.14);
+    --p-list-hover: rgba(255, 255, 255, 0.04);
+    --p-list-text: rgba(255, 255, 255, 0.92);
+    --p-list-text-dim: rgba(255, 255, 255, 0.5);
+    --p-list-chevron: rgba(255, 255, 255, 0.5);
+    --p-table-separator: rgba(255, 255, 255, 0.07);
+    --p-table-divider: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* ---------------------------------------------------------------- List */
+
+.p-list {
+  box-sizing: border-box;
+  font-family: var(--p-list-font);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.p-list * {
+  box-sizing: border-box;
+}
+
+/* Row: 20px capsule on a 30px pitch (5px block margin each side). */
+.p-list-row {
+  align-items: center;
+  border-radius: 10px;
+  color: var(--p-list-text);
+  display: flex;
+  font-size: 13px;
+  font-weight: 510;
+  gap: 4px;
+  margin: 5px 0;
+  min-height: 20px;
+  padding: 0 8px 0 5px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.p-list-row:hover {
+  background: var(--p-list-hover);
+}
+
+/* Selected, window focused: sheet blue #2962D9 (deliberately darker than
+   the control accent), white content in every slot. */
+/* Retint by overriding --p-list-selection on the list or row.
+   (--p-color-current can't serve here: it's registered with
+   inherits:false + an initial value, so fallbacks never fire and
+   container tints never reach the rows.) */
+.p-list-row.p-selected {
+  background: var(--p-list-selection);
+  color: var(--p-list-selection-text);
+}
+
+.p-list-row.p-selected .p-list-chevron,
+.p-list-row.p-selected .p-list-detail {
+  color: inherit;
+}
+
+/* Selected, window inactive. */
+.p-list-row.p-selected-quiet {
+  background: var(--p-list-selection-quiet);
+  color: var(--p-list-text);
+}
+
+.p-list-row.p-dimmed,
+.p-list-row[aria-disabled="true"] {
+  color: var(--p-list-text-dim);
+  pointer-events: none;
+}
+
+/* Slots */
+.p-list-chevron {
+  color: var(--p-list-chevron);
+  flex: none;
+  font-size: 9px;
+  font-weight: 700;
+  width: 10px;
+}
+
+.p-list-icon {
+  flex: none;
+  height: 18px;
+  width: 18px;
+}
+
+.p-list-icon img,
+.p-list-icon svg {
+  border-radius: 3px;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.p-list-detail {
+  color: var(--p-list-text-dim);
+  margin-left: auto;
+}
+
+/* Indentation: 15px per level. */
+.p-list-row[data-p-level="1"] { padding-left: 20px; }
+.p-list-row[data-p-level="2"] { padding-left: 35px; }
+.p-list-row[data-p-level="3"] { padding-left: 50px; }
+.p-list-row[data-p-level="4"] { padding-left: 65px; }
+.p-list-row[data-p-level="5"] { padding-left: 80px; }
+
+/* Group title: 11px/590 @ 50%, 16px above its first row. */
+.p-list-group-title {
+  color: var(--p-list-text-dim);
+  font-family: var(--p-list-font);
+  font-size: 11px;
+  font-weight: 590;
+  margin: 16px 0 4px;
+  padding: 0 8px;
+}
+
+/* --------------------------------------------------------------- Table */
+
+.p-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: var(--p-list-text);
+  font-family: var(--p-list-font);
+  width: 100%;
+}
+
+.p-table th,
+.p-table td {
+  border-bottom: 1px solid var(--p-table-separator);
+  box-sizing: border-box;
+  padding: 0 8px;
+  position: relative;
+  text-align: left;
+}
+
+.p-table th {
+  color: var(--p-list-text);
+  font-size: 11px;
+  font-weight: 700;
+  height: 28px;
+}
+
+.p-table td {
+  font-size: 13px;
+  font-weight: 400;
+  height: 28px;
+}
+
+/* Column divider: 1px, vertically inset 4.5px, between columns only. */
+.p-table th:not(:last-child)::after,
+.p-table td:not(:last-child)::after {
+  background: var(--p-table-divider);
+  bottom: 4.5px;
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 4.5px;
+  width: 1px;
+}
+
+/* Sort indicator via aria-sort on the th. */
+.p-table th[aria-sort] {
+  cursor: pointer;
+}
+
+.p-table th[aria-sort]::before {
+  color: var(--p-list-text-dim);
+  content: "\2303"; /* ⌃ */
+  float: right;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 28px;
+  margin-left: 8px;
+}
+
+.p-table th[aria-sort="descending"]::before {
+  content: "\2304"; /* ⌄ */
+}
+
+.p-table th[aria-sort="none"]::before {
+  content: "";
+}
+
+/* Selected row: spans all columns, rounded only at the outer edges. */
+.p-table tr.p-selected td {
+  background: var(--p-list-selection);
+  border-bottom-color: transparent;
+  color: var(--p-list-selection-text);
+}
+
+.p-table tr.p-selected td::after {
+  display: none;
+}
+
+.p-table tr.p-selected td:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.p-table tr.p-selected td:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+.p-table tr.p-dimmed td {
+  color: var(--p-list-text-dim);
+}
+
+@media (prefers-contrast: more) {
+  .p-list-row.p-selected-quiet {
+    outline: 1px solid var(--p-list-text);
+  }
+}

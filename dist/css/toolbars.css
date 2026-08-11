@@ -1,0 +1,173 @@
+/* Puppertino v2.0 — Toolbars (macOS 26)
+   Floating glass item clusters for toolbars: a near-white glass capsule
+   holding icon buttons, optionally divider-separated, in two sizes and
+   both orientations. The flat/attached toolbar style lives in
+   windows.css (.p-window-toolbar); toolbar search is the standard
+   .p-search. */
+
+:root {
+  --p-toolbar-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-toolbar-bg: rgba(247, 247, 247, 0.72);
+  --p-toolbar-bg-opaque: #f7f7f7;
+  --p-toolbar-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-toolbar-ink: #1a1a1a;
+  --p-toolbar-ink-dim: #bfbfbf;
+  --p-toolbar-hover: #e6e6e6;
+  --p-toolbar-divider: #d9d9d9;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-toolbar-bg: rgba(58, 58, 62, 0.72);
+  --p-toolbar-bg-opaque: #3a3a3e;
+  --p-toolbar-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  --p-toolbar-ink: rgba(255, 255, 255, 0.92);
+  --p-toolbar-ink-dim: rgba(255, 255, 255, 0.3);
+  --p-toolbar-hover: rgba(255, 255, 255, 0.1);
+  --p-toolbar-divider: rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-toolbar-bg: rgba(58, 58, 62, 0.72);
+    --p-toolbar-bg-opaque: #3a3a3e;
+    --p-toolbar-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    --p-toolbar-ink: rgba(255, 255, 255, 0.92);
+    --p-toolbar-ink-dim: rgba(255, 255, 255, 0.3);
+    --p-toolbar-hover: rgba(255, 255, 255, 0.1);
+    --p-toolbar-divider: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* --------------------------------------------------------------- Group */
+
+/* Regular: 36px capsule. True capsule (radius = h/2), so no
+   corner-shape needed. */
+.p-toolbar-group {
+  align-items: center;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-toolbar-bg);
+  border-radius: 18px;
+  box-shadow: var(--p-toolbar-shadow);
+  box-sizing: border-box;
+  color: var(--p-toolbar-ink);
+  display: inline-flex;
+  font-family: var(--p-toolbar-font);
+  height: 36px;
+  padding: 0 3px;
+}
+
+.p-toolbar-group * {
+  box-sizing: border-box;
+}
+
+.p-toolbar-group-small {
+  border-radius: 12px;
+  height: 24px;
+}
+
+.p-toolbar-group-vertical {
+  flex-direction: column;
+  height: auto;
+  padding: 3px 0;
+  width: 36px;
+}
+
+.p-toolbar-group-small.p-toolbar-group-vertical {
+  width: 24px;
+}
+
+/* --------------------------------------------------------------- Items */
+
+/* Icon button. The hover/pressed pill is the sheet's #E6E6E6 rounded
+   capsule, inset 4 from the group height (36 → 28-tall pill r14;
+   24 → 20-tall pill r10). */
+.p-toolbar-btn {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 14px;
+  color: var(--p-toolbar-ink);
+  cursor: pointer;
+  display: flex;
+  flex: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 510;
+  height: 28px;
+  justify-content: center;
+  min-width: 30px;
+  padding: 0 8px;
+}
+
+.p-toolbar-group-small .p-toolbar-btn {
+  border-radius: 10px;
+  font-size: 10px;
+  height: 20px;
+  min-width: 24px;
+  padding: 0 6px;
+}
+
+.p-toolbar-btn:hover,
+.p-toolbar-btn.p-active,
+.p-toolbar-btn[aria-pressed="true"] {
+  background: var(--p-toolbar-hover);
+}
+
+.p-toolbar-btn:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+.p-toolbar-btn:disabled,
+.p-toolbar-btn.p-dimmed {
+  color: var(--p-toolbar-ink-dim);
+  pointer-events: none;
+}
+
+/* Label + up-down chevrons variant. */
+.p-toolbar-text-btn {
+  gap: 2px;
+  min-width: 0;
+  padding: 0 10px;
+}
+
+/* ------------------------------------------------------------ Dividers */
+
+.p-toolbar-divider {
+  align-self: center;
+  background: var(--p-toolbar-divider);
+  flex: none;
+  height: 20px;
+  width: 1px;
+}
+
+.p-toolbar-group-small .p-toolbar-divider {
+  height: 16px;
+}
+
+.p-toolbar-group-vertical .p-toolbar-divider {
+  height: 1px;
+  width: 20px;
+}
+
+.p-toolbar-group-small.p-toolbar-group-vertical .p-toolbar-divider {
+  width: 16px;
+}
+
+/* ----------------------------------------------------------- Fallbacks */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-toolbar-group {
+    background: var(--p-toolbar-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-toolbar-group {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-toolbar-bg-opaque);
+  }
+}

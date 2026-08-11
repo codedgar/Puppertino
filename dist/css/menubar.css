@@ -1,0 +1,144 @@
+/* Puppertino v2.0 — Menu Bar (macOS 26)
+   The menu bar displays the top-level menus. Transparent by default —
+   text sits directly on whatever is behind it; add .p-menubar-material
+   for a translucent backing when there's no wallpaper to sit on.
+   Menus open through .p-menu + src/js/menus.js (+ menubar.js session). */
+
+:root {
+  --p-menubar-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-menubar-text: rgba(0, 0, 0, 0.85);
+  --p-menubar-text-status: rgba(0, 0, 0, 0.72);
+  --p-menubar-highlight: rgba(0, 0, 0, 0.08);
+  --p-menubar-material: rgba(246, 246, 246, 0.72);
+  --p-menubar-material-opaque: #f6f6f6;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-menubar-text: #fff;
+  --p-menubar-text-status: rgba(255, 255, 255, 0.85);
+  --p-menubar-highlight: rgba(255, 255, 255, 0.08);
+  --p-menubar-material: rgba(40, 40, 44, 0.72);
+  --p-menubar-material-opaque: #28282c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-menubar-text: #fff;
+    --p-menubar-text-status: rgba(255, 255, 255, 0.85);
+    --p-menubar-highlight: rgba(255, 255, 255, 0.08);
+    --p-menubar-material: rgba(40, 40, 44, 0.72);
+    --p-menubar-material-opaque: #28282c;
+  }
+}
+
+/* On-image variants regardless of theme (bar over a photo/wallpaper). */
+.p-menubar-on-dark {
+  --p-menubar-text: #fff;
+  --p-menubar-text-status: rgba(255, 255, 255, 0.85);
+  --p-menubar-highlight: rgba(255, 255, 255, 0.08);
+}
+
+.p-menubar-on-light {
+  --p-menubar-text: rgba(0, 0, 0, 0.85);
+  --p-menubar-text-status: rgba(0, 0, 0, 0.72);
+  --p-menubar-highlight: rgba(0, 0, 0, 0.08);
+}
+
+/* ----------------------------------------------------------------- Bar */
+
+.p-menubar {
+  align-items: center;
+  box-sizing: border-box;
+  color: var(--p-menubar-text);
+  display: flex;
+  font-family: var(--p-menubar-font);
+  height: 37px;
+  padding: 0 12px 0 7px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.p-menubar * {
+  box-sizing: border-box;
+}
+
+.p-menubar-material {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-menubar-material);
+}
+
+/* --------------------------------------------------------------- Items */
+
+/* 25px capsule slot, radius 12.5; highlight only while its menu is open. */
+.p-menubar-item {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 12.5px;
+  color: inherit;
+  cursor: default;
+  display: flex;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 590;
+  height: 25px;
+  padding: 0 12px;
+}
+
+.p-menubar-app {
+  font-weight: 700;
+}
+
+.p-menubar-apple {
+  font-size: 16.3px;
+  font-weight: 400;
+  padding: 0 12px;
+}
+
+.p-menubar-item.p-open,
+.p-menubar-item[aria-expanded="true"] {
+  background: var(--p-menubar-highlight);
+}
+
+.p-menubar-item:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+/* -------------------------------------------------------- Status area */
+
+.p-menubar-status {
+  align-items: center;
+  display: flex;
+  margin-left: auto;
+}
+
+.p-menubar-status .p-menubar-item {
+  color: var(--p-menubar-text-status);
+  justify-content: center;
+  min-width: 38px;
+  padding: 0 8px;
+}
+
+.p-menubar-clock {
+  color: var(--p-menubar-text);
+  white-space: pre;
+}
+
+/* ----------------------------------------------------------- Fallbacks */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-menubar-material {
+    background: var(--p-menubar-material-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-menubar-material {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-menubar-material-opaque);
+  }
+}

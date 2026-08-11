@@ -1,0 +1,111 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Windows
+description: A presentational window shell with traffic lights, a titlebar, a toolbar row, and document or compact styling.
+---
+
+import '@puppertino/windows.css';
+
+A window presents UI views and components in your app or game. On the web this is a presentational shell for demos, screenshots, and app-like layouts. It does not drag or resize.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 48px; flex-wrap: wrap;">
+  <div class="p-window" style="width: 300px; height: 220px;">
+    <div class="p-window-titlebar">
+      <div class="p-window-titlebar-row">
+        <div class="p-traffic-lights">
+          <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+          <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+          <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+        </div>
+        <span class="p-window-title-icon"><i class="ph-bold ph-file"></i></span>
+        <span class="p-window-title">Documents</span>
+      </div>
+    </div>
+    <div class="p-window-content" style="font-size: 13px;">Document window, radius 26, active.</div>
+  </div>
+  <div class="p-window p-window-inactive" style="width: 300px; height: 220px;">
+    <div class="p-window-titlebar">
+      <div class="p-window-titlebar-row">
+        <div class="p-traffic-lights">
+          <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+          <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+          <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+        </div>
+        <span class="p-window-title-icon"><i class="ph-bold ph-file"></i></span>
+        <span class="p-window-title">Documents</span>
+      </div>
+    </div>
+    <div class="p-window-content" style="font-size: 13px;">The same window, unfocused. Only state changes, never geometry.</div>
+  </div>
+  <div class="p-window p-window-compact" style="width: 260px; height: 200px;">
+    <div class="p-window-titlebar">
+      <div class="p-window-titlebar-row">
+        <div class="p-traffic-lights">
+          <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+          <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+          <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+        </div>
+        <span class="p-window-title-icon"><i class="ph-bold ph-folder"></i></span>
+        <span class="p-window-title">Title</span>
+      </div>
+      <div class="p-window-toolbar">
+        <button class="p-window-toolbar-btn p-active" aria-label="Icon view"><i class="ph-bold ph-squares-four"></i></button>
+        <button class="p-window-toolbar-btn" aria-label="List view"><i class="ph-bold ph-list"></i></button>
+        <button class="p-window-toolbar-btn" aria-label="Share"><i class="ph-bold ph-share"></i></button>
+      </div>
+    </div>
+    <div class="p-window-content" style="font-size: 13px;">Utility panel, radius 15, with the optional toolbar row.</div>
+  </div>
+</div>
+
+## Anatomy
+
+Two window styles share one structure, and both are geometry variants, not states. The document window uses a 26px radius, the same curve family as dialogs, with a deep shadow: `0 16px 48px` at 35% plus a 1px ring at 23% that keeps the edge defined on any background. Real macOS corners are continuous curves, not circular arcs; in browsers with `corner-shape` support (Chromium 139 and later) the window draws the true squircle, `superellipse(1.465)` over the full 41.6px smoothing span, and the corner keeps a 26px core curvature. Other browsers fall back to the plain 26px arc. The utility panel (`.p-window-compact`, for inspectors and panels) uses a 15px radius and a lighter `0 5px 20px` shadow at 30%. Focus is a separate axis: `.p-window-inactive` applies to either style and changes colors only, never geometry.
+
+The titlebar defaults to a single row, closed by a 1px separator at `rgba(0, 0, 0, 0.1)`. It centers the title, 13px bold, with an optional proxy icon at 50% opacity.
+
+The toolbar is an optional second row; most apps never use it, so add it only when the window really carries commands. Its slots are 44×29px, radius 6px, with 13px glyphs in `#4D4D4D`. Hover fills a slot with `rgba(0, 0, 0, 0.03)`. With the toolbar present the band totals 57px; without it, just the title row.
+
+| Class | Role |
+|---|---|
+| `.p-window` | Document shell. Radius 26px, deep shadow, flex column. |
+| `.p-window-compact` | Utility panel. Radius 15px, small shadow. |
+| `.p-window-titlebar` | The band. Bottom hairline, 8px padding. |
+| `.p-window-titlebar-row` | Title row. Traffic lights anchor left, title centers. |
+| `.p-window-toolbar` / `.p-window-toolbar-btn` | Optional toolbar row and its 44×29 slots. Skip it unless the window carries commands. |
+| `.p-window-content` | Scrollable content area, 16px padding. |
+| `.p-window-inactive` | Unfocused state for the whole window. |
+
+## Traffic lights
+
+Three 10px dots with 7px gaps: close `#FF736A`, minimize `#FEBC2E`, zoom `#19C332`. Each carries a 0.5px inner ring at 10% black so the dots hold their shape on white. They are real buttons; label them (`aria-label="Close"`) even in demos so screen readers get a name.
+
+When the window is inactive (`.p-window-inactive`), all three dots turn `rgba(0, 0, 0, 0.15)` and the title drops to 50% opacity. This mirrors how focus leaves a real window.
+
+## Dark mode
+
+The surface becomes `#282828`, an elevated dark rather than black. The ring flips to `rgba(255, 255, 255, 0.12)` so the edge stays visible, the separator to 10% white, and toolbar glyphs to `#B8B8B8`. Traffic light colors do not change. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Code
+
+```html
+<div class="p-window" style="width: 480px; height: 320px;">
+  <div class="p-window-titlebar">
+    <div class="p-window-titlebar-row">
+      <div class="p-traffic-lights">
+        <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+        <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+        <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+      </div>
+      <span class="p-window-title">Project</span>
+    </div>
+  </div>
+  <div class="p-window-content">
+    <!-- app content -->
+  </div>
+</div>
+```
+
+The single-row titlebar above is the default; the toolbar row slots in only when needed. Toolbar buttons show the standard focus ring, `3px rgb(0 122 255 / 50%)` with a 1px offset.

@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Lists & Tables
+description: Rows with capsule selection for lists, and real table styling with sortable headers, hairline separators, and full-row selection.
+---
+
+import '@puppertino/lists.css';
+
+Lists and tables present data in one or more columns of rows. Use a list for navigation and single-column content. Use a table when people compare values across columns.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 40px; flex-wrap: wrap;">
+  <ul class="p-list" style="width: 220px;">
+    <li class="p-list-group-title" style="margin-top: 0;">Favorites</li>
+    <li class="p-list-row"><span class="p-list-chevron">›</span> Documents</li>
+    <li class="p-list-row p-selected"><span class="p-list-chevron">›</span> Downloads</li>
+    <li class="p-list-row"><span class="p-list-chevron">›</span> Desktop</li>
+    <li class="p-list-row" data-p-level="1"><span class="p-list-chevron">›</span> Screenshots</li>
+    <li class="p-list-row p-selected-quiet">Applications</li>
+    <li class="p-list-row p-dimmed">Network</li>
+  </ul>
+  <table class="p-table" style="max-width: 360px; align-self: flex-start;">
+    <thead>
+      <tr>
+        <th aria-sort="ascending">Name</th>
+        <th>Kind</th>
+        <th>Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Report.pages</td><td>Document</td><td>1.2 MB</td></tr>
+      <tr class="p-selected"><td>Mockups.fig</td><td>Figma file</td><td>48 MB</td></tr>
+      <tr><td>Notes.txt</td><td>Plain text</td><td>4 KB</td></tr>
+    </tbody>
+  </table>
+</div>
+
+## Anatomy: list
+
+A row is a 20px capsule on a 30px rhythm (5px block margin above and below). The capsule radius is 10px, half the height. The label is 13px at weight 510. The disclosure chevron is 9px bold in a 10px slot. Icons are 18px with a 3px radius and a 4px gap to the label. Each indent level adds 15px of leading padding.
+
+| Class | Role |
+|---|---|
+| `.p-list` | The row stack. Resets list styling. |
+| `.p-list-row` | One row. Flex container, capsule radius 10px. |
+| `.p-list-chevron` | Disclosure slot, 9px bold at 50% opacity. |
+| `.p-list-icon` | 18px icon slot. |
+| `.p-list-detail` | Right-aligned secondary text. |
+| `.p-list-group-title` | Group heading, 11px at weight 590, 50% opacity. |
+| `data-p-level="1..5"` | Indentation, 15px per level. |
+
+## States: list
+
+Selection uses a dedicated blue, `#2962D9`, darker than the control accent so white text holds contrast (7.2:1). All content in a selected row turns white, including the chevron and detail text.
+
+| State | Class | Values |
+|---|---|---|
+| Rest | | Text `rgba(0, 0, 0, 0.85)`, no fill |
+| Hover | | Fill `rgba(0, 0, 0, 0.03)` |
+| Selected, focused | `.p-selected` | Fill `#2962D9`, white text |
+| Selected, inactive | `.p-selected-quiet` | Fill `rgba(0, 0, 0, 0.14)`, text unchanged. Use when the containing view loses focus. |
+| Dimmed | `.p-dimmed` or `aria-disabled="true"` | Text at 50%, no pointer events |
+
+To retint the selection, override the token on the list: `style="--p-list-selection: #AF52DE"`. Keep white text above 4.5:1 when you do.
+
+## Anatomy: table
+
+Apply `.p-table` to a real `<table>`. Headers are 28px tall with 11px bold text. Body cells are 28px with 13px text and 8px horizontal padding. Every row ends in a 1px separator at `rgba(0, 0, 0, 0.05)`. Columns divide with a 1px line at `rgba(0, 0, 0, 0.1)`, inset 4.5px from the top and bottom of each row so the lines never touch.
+
+Sorting is declared, not styled by hand: set `aria-sort="ascending"` or `descending` on the sorted `<th>` and the chevron renders and flips. Screen readers announce the same attribute, so the visual and the announcement never drift apart.
+
+A selected row (`.p-selected` on the `<tr>`) fills every cell and rounds only the outer corners, 10px on the first and last cell. The row reads as one capsule spanning all columns.
+
+## Dark mode
+
+Selection lifts to `#3672E8` to keep its saturation against dark backgrounds. Fills flip to white equivalents: hover `rgba(255, 255, 255, 0.04)`, inactive selection `rgba(255, 255, 255, 0.14)`. Text moves to `rgba(255, 255, 255, 0.92)`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Code
+
+```html
+<ul class="p-list">
+  <li class="p-list-group-title">Favorites</li>
+  <li class="p-list-row p-selected" aria-selected="true">
+    <span class="p-list-chevron">›</span>
+    <span class="p-list-icon"><img src="folder.png" alt="" /></span>
+    Downloads
+    <span class="p-list-detail">128</span>
+  </li>
+  <li class="p-list-row" data-p-level="1">Screenshots</li>
+</ul>
+
+<table class="p-table">
+  <thead>
+    <tr><th aria-sort="ascending">Name</th><th>Size</th></tr>
+  </thead>
+  <tbody>
+    <tr class="p-selected"><td>Mockups.fig</td><td>48 MB</td></tr>
+  </tbody>
+</table>
+```
+
+For interactive lists give rows `tabindex="0"` and manage `aria-selected`. With `prefers-contrast: more`, the inactive selection gains a 1px outline so state never relies on the 14% fill alone.

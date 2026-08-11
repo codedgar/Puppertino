@@ -1,0 +1,259 @@
+/* Puppertino v2.0 — Date Pickers (macOS 26)
+   Graphical calendar + analog clock, measured from the live OS
+   (NSDatePicker control-lab capture; values in specs/date-pickers.md).
+   The grid and clock hands are driven by src/js/datepickers.js.
+   Field-style date input = compose .p-field + .p-stepper. */
+
+:root {
+  --p-picker-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-picker-bg: #fff;
+  --p-picker-border: rgba(0, 0, 0, 0.098);
+  --p-picker-label: rgba(0, 0, 0, 0.847);
+  --p-picker-secondary: rgba(0, 0, 0, 0.498);
+  --p-picker-tertiary: rgba(0, 0, 0, 0.259);
+  --p-picker-today-bg: #dcdcdc;
+  --p-picker-selection: rgb(0, 100, 225);
+  --p-picker-accent: #007aff;
+  --p-clock-face: #fff;
+  --p-clock-hand: #1a1a1a;
+  --p-clock-second: #ff3b30;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-picker-bg: #1e1e1e;
+  --p-picker-border: rgba(255, 255, 255, 0.098);
+  --p-picker-label: rgba(255, 255, 255, 0.847);
+  --p-picker-secondary: rgba(255, 255, 255, 0.549);
+  --p-picker-tertiary: rgba(255, 255, 255, 0.247);
+  --p-picker-today-bg: rgba(255, 255, 255, 0.14);
+  --p-picker-selection: rgb(0, 89, 209);
+  --p-clock-face: #ececec;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-picker-bg: #1e1e1e;
+    --p-picker-border: rgba(255, 255, 255, 0.098);
+    --p-picker-label: rgba(255, 255, 255, 0.847);
+    --p-picker-secondary: rgba(255, 255, 255, 0.549);
+    --p-picker-tertiary: rgba(255, 255, 255, 0.247);
+    --p-picker-today-bg: rgba(255, 255, 255, 0.14);
+    --p-picker-selection: rgb(0, 89, 209);
+    --p-clock-face: #ececec;
+  }
+}
+
+/* ------------------------------------------------------------ Calendar */
+
+.p-calendar {
+  background: var(--p-picker-bg);
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px var(--p-picker-border);
+  box-sizing: border-box;
+  color: var(--p-picker-label);
+  display: inline-block;
+  font-family: var(--p-picker-font);
+  padding: 5px 6px 6px;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 139px;
+}
+
+.p-calendar * {
+  box-sizing: border-box;
+}
+
+.p-calendar-header {
+  align-items: center;
+  display: flex;
+  padding: 2px 2px 4px;
+}
+
+.p-calendar-title {
+  color: var(--p-picker-label);
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.p-calendar-nav {
+  background: none;
+  border: 0;
+  color: var(--p-picker-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+.p-calendar-nav:hover {
+  color: var(--p-picker-label);
+}
+
+.p-calendar-nav:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+.p-calendar-weekdays {
+  border-bottom: 1px solid var(--p-picker-border);
+  color: var(--p-picker-secondary);
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  grid-template-columns: repeat(7, 1fr);
+  padding-bottom: 3px;
+  text-align: center;
+}
+
+.p-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 2px;
+}
+
+/* Day cell: 18.4 × 17.7 native pitch → 18px slots. */
+.p-calendar-day {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 5px;
+  color: var(--p-picker-label);
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 13px;
+  height: 18px;
+  justify-content: center;
+  padding: 0;
+}
+
+.p-calendar-day.p-outside {
+  color: var(--p-picker-tertiary);
+}
+
+.p-calendar-day:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Today, unselected: neutral cell, accent number (unfocused-control
+   look from the capture). */
+.p-calendar-day.p-today {
+  background: var(--p-picker-today-bg);
+  color: var(--p-picker-accent);
+  font-weight: 510;
+}
+
+/* Selected: accent fill, white number. */
+.p-calendar-day.p-selected {
+  background: var(--p-picker-selection);
+  color: #fff;
+  font-weight: 510;
+}
+
+.p-calendar-day:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+/* --------------------------------------------------------------- Clock */
+
+/* 122×122 analog clock. Hands are rotated by --p-clock-h/m/s (turns);
+   datepickers.js sets them (or set them inline for a static time). */
+.p-clock {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(0, 0, 0, 0.04), transparent 62%),
+    var(--p-clock-face);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    0 0 0 5px #c8c8cc,
+    0 0 0 5.5px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+  color: var(--p-picker-label);
+  font-family: var(--p-picker-font);
+  height: 112px;
+  margin: 5px;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 112px;
+}
+
+/* Metallic bezel: vertical silver gradient over the flat ring. */
+.p-clock::before {
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px transparent;
+  content: "";
+  inset: -5px;
+  background: linear-gradient(180deg, #e8e9eb, #86878b);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 4.5px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 4.5px));
+  position: absolute;
+}
+
+.p-clock-num {
+  font-size: 13px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) translate(calc(sin(var(--p-clock-n) * 30deg) * 44px), calc(cos(var(--p-clock-n) * 30deg) * -44px));
+}
+
+.p-clock-meridiem {
+  color: var(--p-picker-secondary);
+  font-size: 12px;
+  left: 50%;
+  position: absolute;
+  top: 66%;
+  transform: translateX(-50%);
+}
+
+.p-clock-hand {
+  background: var(--p-clock-hand);
+  border-radius: 2px;
+  bottom: 50%;
+  left: calc(50% - 1.75px);
+  position: absolute;
+  transform-origin: 50% 100%;
+  width: 3.5px;
+}
+
+.p-clock-hand.p-hour {
+  height: 28px;
+  transform: rotate(calc(var(--p-clock-h, 0) * 1turn));
+}
+
+.p-clock-hand.p-minute {
+  height: 40px;
+  transform: rotate(calc(var(--p-clock-m, 0) * 1turn));
+}
+
+.p-clock-hand.p-second {
+  background: var(--p-clock-second);
+  border-radius: 1px;
+  height: 48px;
+  left: calc(50% - 0.5px);
+  transform: rotate(calc(var(--p-clock-s, 0) * 1turn));
+  transform-origin: 50% calc(100% - 8px);
+  width: 1px;
+}
+
+.p-clock::after {
+  background: var(--p-clock-second);
+  border-radius: 50%;
+  content: "";
+  height: 5px;
+  left: calc(50% - 2.5px);
+  position: absolute;
+  top: calc(50% - 2.5px);
+  width: 5px;
+}
+
+@media (prefers-reduced-motion) {
+  .p-clock-hand {
+    transition: none !important;
+  }
+}

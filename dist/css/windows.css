@@ -1,0 +1,204 @@
+/* Puppertino v2.0 — Windows (macOS 26)
+   A presentational window shell: titlebar with traffic lights and a
+   toolbar row over a content area. No dragging/resizing behavior. */
+
+:root {
+  --p-window-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-window-bg: #fff;
+  --p-window-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.23);
+  --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.3);
+  --p-window-separator: rgba(0, 0, 0, 0.1);
+  --p-window-title: rgba(0, 0, 0, 0.85);
+  --p-window-title-icon: rgba(0, 0, 0, 0.5);
+  --p-window-toolbar-icon: #4d4d4d;
+  --p-window-toolbar-hover: rgba(0, 0, 0, 0.03);
+  --p-traffic-close: #ff736a;
+  --p-traffic-min: #febc2e;
+  --p-traffic-zoom: #19c332;
+  --p-traffic-inactive: rgba(0, 0, 0, 0.15);
+  --p-traffic-ring: rgba(0, 0, 0, 0.1);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-window-bg: #282828;
+  --p-window-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+  --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.45);
+  --p-window-separator: rgba(255, 255, 255, 0.1);
+  --p-window-title: rgba(255, 255, 255, 0.92);
+  --p-window-title-icon: rgba(255, 255, 255, 0.5);
+  --p-window-toolbar-icon: #b8b8b8;
+  --p-window-toolbar-hover: rgba(255, 255, 255, 0.06);
+  --p-traffic-inactive: rgba(255, 255, 255, 0.15);
+  --p-traffic-ring: rgba(255, 255, 255, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-window-bg: #282828;
+    --p-window-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+    --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.45);
+    --p-window-separator: rgba(255, 255, 255, 0.1);
+    --p-window-title: rgba(255, 255, 255, 0.92);
+    --p-window-title-icon: rgba(255, 255, 255, 0.5);
+    --p-window-toolbar-icon: #b8b8b8;
+    --p-window-toolbar-hover: rgba(255, 255, 255, 0.06);
+    --p-traffic-inactive: rgba(255, 255, 255, 0.15);
+    --p-traffic-ring: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* --------------------------------------------------------------- Shell */
+
+/* Document window: radius 26 (dialog-family curve) + deep shadow. */
+.p-window {
+  background: var(--p-window-bg);
+  border-radius: 26px;
+  box-shadow: var(--p-window-shadow);
+  box-sizing: border-box;
+  color: var(--p-window-title);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--p-window-font);
+  overflow: hidden;
+}
+
+.p-window * {
+  box-sizing: border-box;
+}
+
+/* Compact/utility window: radius 15 + small shadow. */
+.p-window-compact {
+  border-radius: 15px;
+  box-shadow: var(--p-window-shadow-compact);
+}
+
+/* Native corners are smoothed squircles, not circular arcs. Where
+   corner-shape ships (Chromium 139+), draw the real curve: the radius
+   becomes the full smoothing span (r × 1.6 for Apple's 60% smoothing)
+   and superellipse(1.465) reproduces the circular core — solved so the
+   45° radius of curvature equals the design radius (26 / 15). */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-window {
+    border-radius: 41.6px;
+    corner-shape: superellipse(1.465);
+  }
+
+  .p-window-compact {
+    border-radius: 24px;
+  }
+}
+
+/* ------------------------------------------------------------ Titlebar */
+
+/* Two-row band (title row + toolbar row), 57px total, bottom hairline. */
+.p-window-titlebar {
+  border-bottom: 1px solid var(--p-window-separator);
+  flex: none;
+  padding: 8px 8px 4px;
+}
+
+.p-window-titlebar-row {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  min-height: 18px;
+  position: relative;
+}
+
+.p-window-title {
+  color: var(--p-window-title);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.p-window-title-icon {
+  color: var(--p-window-title-icon);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Toolbar row: 44×29 radius-6 buttons, adjacent. */
+.p-window-toolbar {
+  display: flex;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.p-window-toolbar-btn {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  color: var(--p-window-toolbar-icon);
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 510;
+  height: 29px;
+  justify-content: center;
+  padding: 0;
+  width: 44px;
+}
+
+.p-window-toolbar-btn:hover,
+.p-window-toolbar-btn.p-active {
+  background: var(--p-window-toolbar-hover);
+}
+
+.p-window-toolbar-btn:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 1px;
+}
+
+/* -------------------------------------------------------------- Lights */
+
+.p-traffic-lights {
+  display: flex;
+  gap: 7px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.p-traffic-light {
+  border: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px var(--p-traffic-ring);
+  cursor: pointer;
+  height: 10px;
+  padding: 0;
+  width: 10px;
+}
+
+.p-traffic-light-close { background: var(--p-traffic-close); }
+.p-traffic-light-min { background: var(--p-traffic-min); }
+.p-traffic-light-zoom { background: var(--p-traffic-zoom); }
+
+/* Unfocused window: everything grays out. */
+.p-window-inactive .p-traffic-light {
+  background: var(--p-traffic-inactive);
+}
+
+.p-window-inactive .p-window-title,
+.p-window-inactive .p-window-title-icon {
+  color: var(--p-window-title-icon);
+}
+
+/* ------------------------------------------------------------- Content */
+
+.p-window-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+}

@@ -1,0 +1,66 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Color Wells
+description: A circular color control with a rainbow ring and the current color, wrapping the native color picker.
+---
+
+import '@puppertino/colorwells.css';
+import colorwellsScript from '../../../../../src/js/colorwells.js?url';
+
+<script type="module" src={colorwellsScript}></script>
+
+A color well lets people adjust the color of text, shapes, guides, and other onscreen elements. It wraps a native `<input type="color">`, so activating it opens the platform color picker.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 24px; align-items: center;">
+  <label class="p-colorwell">
+    <input type="color" value="#FF0000" aria-label="Pick a color" />
+  </label>
+  <label class="p-colorwell p-colorwell-set" style="--p-colorwell-color: #0D6FFF;">
+    <input type="color" value="#0D6FFF" aria-label="Highlight color" />
+  </label>
+  <label class="p-colorwell p-dimmed">
+    <input type="color" disabled aria-label="Disabled color" />
+  </label>
+</div>
+
+The first well has no color yet: it shows the spectrum disc. Click it, pick a color, and it flips to the swatch state. The second well starts pre-set.
+
+## Anatomy
+
+The well is a 28px circle with two states. Empty: the whole disc fills with the rainbow (a conic gradient running red, magenta, blue, green, yellow, back to red at 72 degree stops) under a white radial highlight that fades from full white at the center to transparent at the edge. Set: the disc collapses to a 3px rainbow ring, a 2px gap, and an 18px dot showing the chosen color.
+
+| Class | Role |
+|---|---|
+| `.p-colorwell` | The well. A `<label>` wrapping `<input type="color">`, 28×28. Spectrum disc until a color is chosen. |
+| `.p-colorwell-set` | The swatch state. `colorwells.js` adds it on selection; add it yourself for wells with a known starting color. |
+| `--p-colorwell-color` | The dot color. `colorwells.js` keeps it synced to the input. |
+
+## Behavior
+
+Include `colorwells.js`: picking a color flips the well to the swatch state and keeps the dot synced from then on. For a well that should start with a color, add `.p-colorwell-set` in the markup (with `--p-colorwell-color` matching the input value for the no-JS case).
+
+## States
+
+Focus shows the standard ring, `3px rgb(0 122 255 / 50%)` with a 1px offset, following the circle. A disabled input (or `.p-dimmed`) drops the well to 50% opacity and ignores the pointer. There is no hover state; the native control does not have one either.
+
+## Dark mode
+
+Nothing changes. The rainbow and the chosen color are absolute values in both appearance modes.
+
+## Code
+
+```html
+<!-- No color yet: spectrum disc, flips on first pick -->
+<label class="p-colorwell">
+  <input type="color" value="#FF0000" aria-label="Pick a color" />
+</label>
+
+<!-- Starts with a chosen color -->
+<label class="p-colorwell p-colorwell-set" style="--p-colorwell-color: #0D6FFF;">
+  <input type="color" value="#0D6FFF" aria-label="Highlight color" />
+</label>
+```
+
+The label wrapper keeps the whole circle clickable and the input focusable. Always give the input an `aria-label`; the control has no visible text.

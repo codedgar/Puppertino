@@ -545,3 +545,22 @@
     transform: translate(-50%, -50%);
   }
 }
+
+/* Squircle corners where corner-shape ships (Chromium 139+): the
+   26px-radius surfaces are smoothed squircles natively (60% smoothing
+   → span 41.6px, superellipse exponent solved at 1.465 so the 45°
+   curvature stays 26px). Other browsers keep the plain 26px arc. */
+@supports (corner-shape: superellipse(1.465)) {
+  :root {
+    --p-desktop-modal-radius: 41.6px;
+    --p-dialog-radius: 41.6px;
+  }
+
+  .p-desktop-modal__surface,
+  .p-desktop-modal__surface::before,
+  .p-desktop-modal__surface::after,
+  .p-dialog,
+  .p-sheet {
+    corner-shape: superellipse(1.465);
+  }
+}

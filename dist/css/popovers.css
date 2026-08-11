@@ -154,3 +154,15 @@
     transition: opacity 0.18s ease;
   }
 }
+
+/* Squircle corners where corner-shape ships (Chromium 139+): radius 20
+   with the system's confirmed 60% smoothing → span 32. */
+@supports (corner-shape: superellipse(1.465)) {
+  :root {
+    --p-popover-radius: 32px;
+  }
+
+  .p-popover {
+    corner-shape: superellipse(1.465);
+  }
+}

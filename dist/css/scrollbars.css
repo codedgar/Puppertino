@@ -1,0 +1,53 @@
+/* Puppertino v2.0 — Scrollbars (macOS 26)
+   Overlay-style: 6px capsule thumb, no visible track. Apply .p-scrollbar
+   to any scroll container (or html/body for the page). */
+
+:root {
+  --p-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+  --p-scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-scrollbar-thumb: rgba(255, 255, 255, 0.25);
+  --p-scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-scrollbar-thumb: rgba(255, 255, 255, 0.25);
+    --p-scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+  }
+}
+
+/* Firefox */
+.p-scrollbar {
+  scrollbar-color: var(--p-scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+/* WebKit/Blink: 14px gutter, 6px visible thumb via 4px transparent
+   border, min length ~29px per the sheet's smallest demo. */
+.p-scrollbar::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
+}
+
+.p-scrollbar::-webkit-scrollbar-track,
+.p-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.p-scrollbar::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+  background-color: var(--p-scrollbar-thumb);
+  border: 4px solid transparent;
+  border-radius: 7px;
+  min-height: 29px;
+  min-width: 29px;
+}
+
+.p-scrollbar::-webkit-scrollbar-thumb:hover,
+.p-scrollbar::-webkit-scrollbar-thumb:active {
+  background-color: var(--p-scrollbar-thumb-hover);
+}

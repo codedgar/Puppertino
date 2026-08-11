@@ -1,0 +1,52 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Scrollbars
+description: Overlay-style scrollbars with a 6px capsule thumb and no visible track, for any scroll container.
+---
+
+import '@puppertino/scrollbars.css';
+
+A scrollbar shows position in scrollable content without claiming layout space of its own. Apply `.p-scrollbar` to any scroll container, or to `<body>` for the whole page.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 24px; flex-wrap: wrap;">
+  <div class="p-scrollbar" style="width: 240px; height: 160px; overflow-y: scroll; background: var(--p-bg-primary); border-radius: 10px; padding: 12px; font-size: 13px;">
+    <p>Scroll me. The thumb is a 6px capsule with no track behind it.</p>
+    <p>It rides in a 14px gutter, so content keeps a consistent inset.</p>
+    <p>Hovering the thumb darkens it from 15% to 35% black.</p>
+    <p>The minimum thumb length is 29px, so it never collapses to a dot.</p>
+    <p>In dark mode the thumb flips to white at 25%.</p>
+    <p>Firefox gets the thin native scrollbar in the same colors.</p>
+  </div>
+  <div class="p-scrollbar" style="width: 240px; height: 160px; overflow-x: scroll; background: var(--p-bg-primary); border-radius: 10px; padding: 12px; font-size: 13px;">
+    <p style="width: 600px;">Horizontal works the same way: a 6px tall capsule thumb in a transparent track. Scroll sideways to see it.</p>
+  </div>
+</div>
+
+## Anatomy
+
+The visible thumb is 6px thick with a full 3px capsule radius, filled `rgba(0, 0, 0, 0.15)`. There is no track. The thumb sits in a 14px gutter (a 4px transparent border on each side keeps the 6px core), which also acts as the hover target. Minimum thumb length is 29px.
+
+| State | Value |
+|---|---|
+| Rest | `rgba(0, 0, 0, 0.15)` |
+| Hover / drag | `rgba(0, 0, 0, 0.35)` |
+| Dark rest | `rgba(255, 255, 255, 0.25)` |
+| Dark hover / drag | `rgba(255, 255, 255, 0.45)` |
+
+Dark mode needs the brighter values because a 15% white thumb disappears against elevated dark surfaces. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Browser support
+
+WebKit and Blink browsers get the full treatment through `::-webkit-scrollbar`. Firefox does not expose thumb geometry, so it receives `scrollbar-width: thin` with `scrollbar-color` matching the same rest colors. Both render a quiet, trackless bar; only the exact thickness differs.
+
+## Code
+
+```html
+<div class="p-scrollbar" style="height: 300px; overflow-y: auto;">
+  <!-- long content -->
+</div>
+```
+
+Consider keeping scrollbars visible when content overflows. Overlay bars that only appear during scrolling hide the fact that content continues, and people without trackpads rely on the thumb as a drag target.

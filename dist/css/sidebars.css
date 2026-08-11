@@ -1,0 +1,204 @@
+/* Puppertino v2.0 — Sidebars (macOS 26)
+   A sidebar appears on the leading side of a view and lets people
+   navigate between sections. Gray glass panel, radius 18, rows on a
+   24/32/40 ladder with capsule selection at black @ 11%. */
+
+:root {
+  --p-sidebar-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-sidebar-bg: rgba(228, 228, 228, 0.72);
+  --p-sidebar-bg-opaque: #ececec;
+  --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-sidebar-text: rgba(0, 0, 0, 0.85);
+  --p-sidebar-text-dim: rgba(0, 0, 0, 0.5);
+  --p-sidebar-selected: rgba(0, 0, 0, 0.11);
+  --p-sidebar-hover: rgba(0, 0, 0, 0.05);
+  --p-sidebar-detail: #bfbfbf;
+  --p-sidebar-chevron: rgba(0, 0, 0, 0.25);
+  --p-sidebar-icon-selected: #0d6fff;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-sidebar-bg: rgba(40, 40, 44, 0.78);
+  --p-sidebar-bg-opaque: #2b2b2e;
+  --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  --p-sidebar-text: rgba(255, 255, 255, 0.92);
+  --p-sidebar-text-dim: rgba(255, 255, 255, 0.5);
+  --p-sidebar-selected: rgba(255, 255, 255, 0.14);
+  --p-sidebar-hover: rgba(255, 255, 255, 0.06);
+  --p-sidebar-detail: rgba(255, 255, 255, 0.3);
+  --p-sidebar-chevron: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-sidebar-bg: rgba(40, 40, 44, 0.78);
+    --p-sidebar-bg-opaque: #2b2b2e;
+    --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    --p-sidebar-text: rgba(255, 255, 255, 0.92);
+    --p-sidebar-text-dim: rgba(255, 255, 255, 0.5);
+    --p-sidebar-selected: rgba(255, 255, 255, 0.14);
+    --p-sidebar-hover: rgba(255, 255, 255, 0.06);
+    --p-sidebar-detail: rgba(255, 255, 255, 0.3);
+    --p-sidebar-chevron: rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* --------------------------------------------------------------- Panel */
+
+.p-sidebar {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-sidebar-bg);
+  border-radius: 18px;
+  box-shadow: var(--p-sidebar-shadow);
+  box-sizing: border-box;
+  color: var(--p-sidebar-text);
+  font-family: var(--p-sidebar-font);
+  padding: 10px;
+  width: 240px;
+}
+
+.p-sidebar * {
+  box-sizing: border-box;
+}
+
+/* Embedded in a window/host: square it off and let the host clip. */
+.p-sidebar.p-sidebar-attached {
+  border-radius: 0;
+  box-shadow: none;
+  height: 100%;
+}
+
+/* ---------------------------------------------------------------- Rows */
+
+/* Default = large: 40px rows, 15px/510, 20px icon. */
+.p-sidebar-row {
+  align-items: center;
+  border-radius: 8px;
+  color: var(--p-sidebar-text);
+  display: flex;
+  font-size: 15px;
+  font-weight: 510;
+  height: 40px;
+  padding: 0 10px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.p-sidebar-row:hover {
+  background: var(--p-sidebar-hover);
+}
+
+.p-sidebar-row.p-selected {
+  background: var(--p-sidebar-selected);
+}
+
+/* Selection tints only the icon — text stays put. Retint by
+   overriding --p-sidebar-icon-selected (see lists.css note on why
+   --p-color-current can't serve container tinting). */
+.p-sidebar-row.p-selected .p-sidebar-icon {
+  color: var(--p-sidebar-icon-selected);
+}
+
+.p-sidebar-row.p-dimmed,
+.p-sidebar-row[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.p-sidebar-icon {
+  flex: none;
+  height: 20px;
+  margin-right: 7px;
+  width: 20px;
+}
+
+.p-sidebar-icon img,
+.p-sidebar-icon svg {
+  border-radius: 3px;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.p-sidebar-detail {
+  color: var(--p-sidebar-detail);
+  margin-left: auto;
+}
+
+.p-sidebar-chevron {
+  color: var(--p-sidebar-chevron);
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 7px;
+}
+
+/* Indentation: 12px per level (absolute, size-independent). */
+.p-sidebar-row[data-p-level="1"] { padding-left: 22px; }
+.p-sidebar-row[data-p-level="2"] { padding-left: 34px; }
+.p-sidebar-row[data-p-level="3"] { padding-left: 46px; }
+.p-sidebar-row[data-p-level="4"] { padding-left: 58px; }
+
+/* ------------------------------------------------------------- Headers */
+
+.p-sidebar-header {
+  align-items: center;
+  color: var(--p-sidebar-text-dim);
+  display: flex;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+  min-height: 40px;
+  padding: 0 10px;
+}
+
+.p-sidebar-header .p-sidebar-detail {
+  color: var(--p-sidebar-text-dim);
+  font-size: inherit;
+  font-weight: 510;
+}
+
+/* --------------------------------------------------------------- Sizes */
+
+.p-sidebar-small .p-sidebar-row { font-size: 11px; height: 24px; padding: 0 8px; }
+.p-sidebar-small .p-sidebar-icon { height: 14px; margin-right: 4px; width: 14px; }
+.p-sidebar-small .p-sidebar-header { font-size: 11px; min-height: 28px; padding: 0 8px; }
+
+.p-sidebar-medium .p-sidebar-row { font-size: 13px; height: 32px; }
+.p-sidebar-medium .p-sidebar-icon { height: 18px; margin-right: 6px; width: 18px; }
+.p-sidebar-medium .p-sidebar-header { font-size: 11px; min-height: 36px; }
+
+/* ----------------------------------------------------------- Fallbacks */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-sidebar {
+    background: var(--p-sidebar-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-sidebar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-sidebar-bg-opaque);
+  }
+}
+
+/* Squircle corners where corner-shape ships (Chromium 139+): panel 18
+   and row capsules 8 with the system's confirmed 60% smoothing →
+   spans 28.8 / 12.8. (.p-sidebar-attached keeps its square corners —
+   higher specificity.) */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-sidebar {
+    border-radius: 28.8px;
+    corner-shape: superellipse(1.465);
+  }
+
+  .p-sidebar-row,
+  .p-sidebar-row.p-selected {
+    border-radius: 12.8px;
+    corner-shape: superellipse(1.465);
+  }
+}

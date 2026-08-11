@@ -1,0 +1,72 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Image Wells
+description: An editable image slot with the classic inset well frame, wrapping a native file input.
+---
+
+import '@puppertino/imagewells.css';
+
+An image well is an editable version of an image view. Use it where people can drop in or replace a picture, like an avatar or artwork slot. For display-only images, use a plain `<img>`.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 24px; align-items: center;">
+  <label class="p-imagewell">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%2360a5fa'/%3E%3Ccircle cx='17' cy='7' r='3.5' fill='%23fef3c7'/%3E%3Cpath d='M0 18 L8 10 L14 16 L18 12 L24 18 L24 24 L0 24 Z' fill='%232563eb'/%3E%3C/svg%3E" alt="Sample landscape" />
+    <input type="file" accept="image/*" aria-label="Change image" />
+  </label>
+  <label class="p-imagewell" style="width: 64px; height: 64px;">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23fda4af'/%3E%3Ccircle cx='7' cy='8' r='4' fill='%23fff1f2'/%3E%3Cpath d='M0 20 L10 12 L16 18 L20 14 L24 18 L24 24 L0 24 Z' fill='%23e11d48'/%3E%3C/svg%3E" alt="Sample sunset" />
+    <input type="file" accept="image/*" aria-label="Change artwork" />
+  </label>
+  <label class="p-imagewell">
+    <input type="file" accept="image/*" aria-label="Add image" />
+  </label>
+  <label class="p-imagewell p-dimmed">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23a7f3d0'/%3E%3Cpath d='M0 16 L9 8 L15 14 L24 8 L24 24 L0 24 Z' fill='%23059669'/%3E%3C/svg%3E" alt="Sample hills" />
+    <input type="file" accept="image/*" disabled aria-label="Locked image" />
+  </label>
+</div>
+
+The first two are filled wells (28px and a scaled 64px). The third is empty. The last is disabled.
+
+## Anatomy
+
+The well is a 28px box with a 2px radius holding a 24px image at a 2px inset; the image keeps square corners. The margin around the image fills with `rgba(0, 0, 0, 0.02)`. The frame runs inside to out: a 0.5px inner edge at `rgba(0, 0, 0, 0.05)`, a 1px white ring, and a 1.5px soft outer edge at 5% black. The white ring between dark hairlines is what makes it read as an inset well rather than a card.
+
+Only the 28px size is canonical, but the frame is size independent: set any width and height and the inset and rings hold.
+
+| Class | Role |
+|---|---|
+| `.p-imagewell` | The well. A `<label>` wrapping an `<img>` and a hidden `<input type="file">`. |
+| `.p-dragover` | Drop-target highlight; add it from your drag handlers. |
+| `.p-dimmed` | Disabled look; automatic when the input is disabled. |
+
+## Behavior
+
+The label makes the whole well activate the file picker, and the input stays keyboard focusable. Reading the chosen file into the `<img>` is app logic:
+
+```html
+<label class="p-imagewell">
+  <img src="avatar.png" alt="Profile picture" />
+  <input type="file" accept="image/*" aria-label="Change profile picture" />
+</label>
+
+<script>
+  document.querySelector('.p-imagewell input').addEventListener('change', (e) => {
+    const [file] = e.target.files;
+    if (file) e.target.closest('.p-imagewell').querySelector('img').src =
+      URL.createObjectURL(file);
+  });
+</script>
+```
+
+For drag and drop, toggle `.p-dragover` on `dragenter` and `dragleave` and read `event.dataTransfer.files` on `drop`.
+
+## States
+
+Focus and drag-over show the standard ring, `3px rgb(0 122 255 / 50%)` with a 2px offset. Disabled (or `.p-dimmed`) drops the well to 50% opacity, straight from the sheet's dimmed variant.
+
+## Dark mode
+
+The well fill lifts to `rgba(255, 255, 255, 0.04)`, the white ring drops to `rgba(255, 255, 255, 0.15)`, and the soft edges deepen to 30% black. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.

@@ -134,3 +134,15 @@
     background: var(--p-notification-bg-opaque);
   }
 }
+
+/* Squircle corners where corner-shape ships (Chromium 139+): radius 16
+   with the system's confirmed 60% smoothing → span 25.6. */
+@supports (corner-shape: superellipse(1.465)) {
+  :root {
+    --p-notification-radius: 25.6px;
+  }
+
+  .p-notification {
+    corner-shape: superellipse(1.465);
+  }
+}

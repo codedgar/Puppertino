@@ -1,0 +1,125 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Menu Bar & Dock
+description: The transparent top bar with capsule item highlights, and the glass dock platter with magnification and launch bounce.
+---
+
+import '@puppertino/menubar.css';
+import '@puppertino/dock.css';
+import '@puppertino/menus.css';
+import menusScript from '../../../../../src/js/menus.js?url';
+import menubarScript from '../../../../../src/js/menubar.js?url';
+import dockScript from '../../../../../src/js/dock.js?url';
+
+<script type="module" src={menusScript}></script>
+<script type="module" src={menubarScript}></script>
+<script type="module" src={dockScript}></script>
+
+The menu bar displays the top-level menus of your app. The dock holds app icons for launching and switching. Together they frame an app-like layout; both are chrome, not content.
+
+## Preview
+
+<div style="margin: 16px 0 20px; background: linear-gradient(160deg, #3730a3, #1d4ed8 55%, #60a5fa); border-radius: 10px; overflow: hidden; padding-bottom: 28px;">
+  <div class="p-menubar p-menubar-on-dark">
+    <button class="p-menubar-item p-menubar-apple" data-p-menu="#mb-demo-apple" aria-expanded="false" aria-haspopup="menu"></button>
+    <button class="p-menubar-item p-menubar-app" data-p-menu="#mb-demo-file" aria-expanded="false" aria-haspopup="menu">Finder</button>
+    <button class="p-menubar-item" data-p-menu="#mb-demo-file" aria-expanded="false" aria-haspopup="menu">File</button>
+    <button class="p-menubar-item">Edit</button>
+    <button class="p-menubar-item">View</button>
+    <div class="p-menubar-status">
+      <span class="p-menubar-item"><i class="ph-bold ph-wifi-high"></i></span>
+      <span class="p-menubar-item"><i class="ph-bold ph-magnifying-glass"></i></span>
+      <span class="p-menubar-item p-menubar-clock">Mon Jun 10  9:41 AM</span>
+    </div>
+  </div>
+  <div class="p-menu" id="mb-demo-apple" data-p-menu-float role="menu" style="min-width: 190px;">
+    <button class="p-menu__item" role="menuitem">About This Mac</button>
+    <button class="p-menu__item" role="menuitem">System Settings…</button>
+  </div>
+  <div class="p-menu" id="mb-demo-file" data-p-menu-float role="menu" style="min-width: 210px;">
+    <button class="p-menu__item" role="menuitem">New Window</button>
+    <button class="p-menu__item" role="menuitem">New Folder</button>
+    <button class="p-menu__item" role="menuitem" aria-disabled="true">Print</button>
+  </div>
+  <div style="display: flex; justify-content: center; margin-top: 140px;">
+    <div class="p-dock" data-p-dock-magnify>
+      <button class="p-dock-item p-running" aria-label="Finder"><span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;border-radius:22%;background:linear-gradient(180deg,#5AC8FA,#007AFF);color:#fff;font-size:calc(var(--p-dock-icon, 36px) / 2);"><i class="ph-bold ph-smiley"></i></span></button>
+      <button class="p-dock-item" aria-label="Mail"><span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;border-radius:22%;background:linear-gradient(180deg,#66D4FF,#0A84FF);color:#fff;font-size:calc(var(--p-dock-icon, 36px) / 2);"><i class="ph-bold ph-envelope-simple"></i></span></button>
+      <button class="p-dock-item p-running" aria-label="Music"><span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;border-radius:22%;background:linear-gradient(180deg,#FF6482,#FF2D55);color:#fff;font-size:calc(var(--p-dock-icon, 36px) / 2);"><i class="ph-bold ph-music-notes"></i></span></button>
+      <button class="p-dock-item" aria-label="Photos"><span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;border-radius:22%;background:linear-gradient(180deg,#FFD60A,#FF9F0A);color:#fff;font-size:calc(var(--p-dock-icon, 36px) / 2);"><i class="ph-bold ph-flower"></i></span></button>
+      <div class="p-dock-separator" role="separator"></div>
+      <button class="p-dock-item" aria-label="Trash"><span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;border-radius:22%;background:linear-gradient(180deg,#E5E5EA,#AEAEB2);color:#3A3A3C;font-size:calc(var(--p-dock-icon, 36px) / 2);"><i class="ph-bold ph-trash"></i></span></button>
+    </div>
+  </div>
+</div>
+
+Move the pointer along the dock to magnify. Click an icon for the launch bounce. Click a menu bar item, then slide across its neighbors.
+
+## Anatomy: menu bar
+
+The bar is 37px tall and fully transparent; the text sits on whatever is behind it. Items are 13px at weight 590 (the app name is bold, the Apple slot is 16.3px) inside 25px capsule slots with a 12.5px radius and 12px side padding. Status items align right at a 38px minimum width, ending with the clock.
+
+Because pages rarely have a wallpaper, two helpers set the ink explicitly: `.p-menubar-on-dark` for white text over dark imagery and `.p-menubar-on-light` for black text over light imagery. Without them the bar follows the page theme. Add `.p-menubar-material` for a translucent glass backing when the backdrop is busy; over variable imagery the material is the accessible choice, since bare text can drop below 4.5:1 contrast.
+
+| Class | Role |
+|---|---|
+| `.p-menubar` | The 37px transparent bar. |
+| `.p-menubar-item` | Capsule slot, 25px tall, radius 12.5px. |
+| `.p-menubar-app` / `.p-menubar-apple` | Bold app name / 16.3px Apple slot. |
+| `.p-menubar-status` | Right-aligned status group with the clock. |
+| `.p-menubar-material` | Optional glass backing. |
+
+## Behavior: menu bar
+
+Items highlight only while their menu is open, never on plain hover. The open capsule fills `rgba(0, 0, 0, 0.08)` on light backdrops and `rgba(255, 255, 255, 0.08)` on dark ones.
+
+Menus are ordinary [menu](../menus/) surfaces: point each item at one with `data-p-menu="#id"` and include `menus.js`. Adding `menubar.js` turns the bar into a session: while one menu is open, hovering another item switches to it, and Left and Right arrows walk the bar. Escape or an outside click ends the session.
+
+## Anatomy: dock
+
+The platter is 62px tall with a 15px radius and glass fill: `rgba(246, 246, 246, 0.36)` over a 20px blur in light mode, `rgba(74, 74, 74, 0.39)` in dark. A 1px inset ring adds a light rim. Icons are 36px in 9px gaps with 8px platter padding. The separator is a 1×41px line. Running apps show a 4px dot 3px below the icon.
+
+| Class | Role |
+|---|---|
+| `.p-dock` | The platter. Bottom-aligned flex, radius 15px. |
+| `.p-dock-fixed` | Pins the platter to the bottom center of the viewport. |
+| `.p-dock-item` | 36px icon button. |
+| `.p-running` | Adds the indicator dot. |
+| `.p-dock-separator` | 1×41px divider. |
+| `data-p-dock-magnify` | Opts the platter into magnification. |
+
+## Behavior: dock
+
+Magnification is off by default, matching the system. With `data-p-dock-magnify` and `dock.js`, icons scale with a parabolic falloff of the distance to the pointer: 36px at rest, 72px under the cursor, fading over one zoomed-icon width. Growth is real box size, so icons repaint sharp at every step, neighbors get pushed apart, and the platter stretches — all rising from the platter baseline. Entering the dock ramps the effect in over 150ms and leaving ramps it out, so nothing snaps. Give icon images sources of at least 144px so they stay sharp at full magnification.
+
+Clicking an icon plays the launch bounce: two decaying hops (22px, then 10px) over 0.9s. With `prefers-reduced-motion`, both magnification and bounce are disabled and icons stay at 36px.
+
+## Dark mode
+
+The menu bar stays transparent and flips its ink to white; the material backing becomes `rgba(40, 40, 44, 0.72)`. The dock platter uses the dark fill above, the separator becomes `#404042`, and the indicator dot brightens to `rgba(255, 255, 255, 0.65)`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Code
+
+```html
+<div class="p-menubar p-menubar-material">
+  <button class="p-menubar-item p-menubar-apple" data-p-menu="#apple-menu"
+    aria-expanded="false" aria-haspopup="menu"></button>
+  <button class="p-menubar-item p-menubar-app" data-p-menu="#app-menu"
+    aria-expanded="false" aria-haspopup="menu">Mail</button>
+  <button class="p-menubar-item" data-p-menu="#file-menu"
+    aria-expanded="false" aria-haspopup="menu">File</button>
+  <div class="p-menubar-status">
+    <span class="p-menubar-item p-menubar-clock">Mon Jun 10  9:41 AM</span>
+  </div>
+</div>
+
+<div class="p-dock p-dock-fixed" data-p-dock-magnify>
+  <button class="p-dock-item p-running" aria-label="Open Mail" data-p-tooltip="Mail">
+    <img src="mail.png" alt="" />
+  </button>
+  <div class="p-dock-separator" role="separator"></div>
+  <button class="p-dock-item" aria-label="Open Trash"><img src="trash.png" alt="" /></button>
+</div>
+```
+
+Dock items are buttons; give each an `aria-label` since the icon is the only content. With `dock.js` present, hovering an item shows its app-name label automatically from that same `aria-label`: a 24px dark capsule with a pointer tail, 13px white text, floating 19px above the fully magnified icon. The label is dark in both appearance modes, matching the system, and it is not a tooltip — no delay, and it rides the magnified icon.

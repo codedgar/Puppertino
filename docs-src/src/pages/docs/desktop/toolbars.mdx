@@ -1,0 +1,86 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Toolbars
+description: Floating glass item clusters with icon buttons, dividers, two sizes, and both orientations, plus the attached titlebar toolbar.
+---
+
+import '@puppertino/toolbars.css';
+
+A toolbar provides convenient access to frequently used commands, controls, navigation, and search. The floating style groups items in glass capsules; the attached style puts items directly in a window's titlebar.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap;">
+  <div class="p-toolbar-group" role="toolbar" aria-label="Formatting">
+    <button class="p-toolbar-btn" aria-label="Bold"><i class="ph-bold ph-text-b"></i></button>
+    <button class="p-toolbar-btn p-active" aria-label="Italic"><i class="ph-bold ph-text-italic"></i></button>
+    <button class="p-toolbar-btn" aria-label="Underline"><i class="ph-bold ph-text-underline"></i></button>
+  </div>
+  <div class="p-toolbar-group" role="toolbar" aria-label="View options">
+    <button class="p-toolbar-btn" aria-label="Grid"><i class="ph-bold ph-squares-four"></i></button>
+    <div class="p-toolbar-divider" role="separator"></div>
+    <button class="p-toolbar-btn" aria-label="List"><i class="ph-bold ph-list"></i></button>
+    <div class="p-toolbar-divider" role="separator"></div>
+    <button class="p-toolbar-btn" aria-label="Columns"><i class="ph-bold ph-columns"></i></button>
+    <div class="p-toolbar-divider" role="separator"></div>
+    <button class="p-toolbar-btn" disabled aria-label="Gallery"><i class="ph-bold ph-image"></i></button>
+  </div>
+  <div class="p-toolbar-group p-toolbar-group-small" role="toolbar" aria-label="Compact tools">
+    <button class="p-toolbar-btn" aria-label="Back"><i class="ph-bold ph-caret-left"></i></button>
+    <div class="p-toolbar-divider" role="separator"></div>
+    <button class="p-toolbar-btn" aria-label="Forward"><i class="ph-bold ph-caret-right"></i></button>
+  </div>
+  <div class="p-toolbar-group" role="toolbar" aria-label="Sort">
+    <button class="p-toolbar-btn p-toolbar-text-btn">Label <i class="ph-bold ph-caret-up-down" style="font-size: 10px;"></i></button>
+  </div>
+  <div class="p-toolbar-group p-toolbar-group-vertical" role="toolbar" aria-label="Vertical tools">
+    <button class="p-toolbar-btn" aria-label="Brush"><i class="ph-bold ph-paint-brush"></i></button>
+    <button class="p-toolbar-btn p-active" aria-label="Eraser"><i class="ph-bold ph-eraser"></i></button>
+    <button class="p-toolbar-btn" aria-label="Shapes"><i class="ph-bold ph-shapes"></i></button>
+  </div>
+</div>
+
+## Anatomy
+
+A group is a glass capsule: `rgba(247, 247, 247, 0.72)` over a 20px blur with 180% saturation, and the same `0 8px 40px` at 12% shadow the sidebar uses. The regular size is 36px tall with an 18px radius; the small size is 24px with a 12px radius. Both are true capsules, so the corner math needs no squircle.
+
+Items are icon buttons with 13px glyphs (10px in small). Hover and active fill the item with an `#E6E6E6` pill inset 4px from the capsule: 28px tall with a 14px radius in regular, 20px with 10px in small. Dividers are 1×20px lines in `#D9D9D9` (1×16px in small). The `.p-toolbar-text-btn` variant holds a 13px label with up-down chevrons.
+
+| Class | Role |
+|---|---|
+| `.p-toolbar-group` | Glass capsule, 36px, radius 18px. `role="toolbar"` belongs here. |
+| `.p-toolbar-group-small` | 24px capsule, radius 12px. |
+| `.p-toolbar-group-vertical` | Column orientation, same values rotated. |
+| `.p-toolbar-btn` | Icon button with the hover pill. |
+| `.p-toolbar-text-btn` | Label + chevrons variant. |
+| `.p-toolbar-divider` | 1px separator, `role="separator"`. |
+
+## Attached style and search
+
+Inside a window titlebar, use the attached style from [windows](../windows/): `.p-window-toolbar` with `.p-window-toolbar-btn` (44×29px, radius 6px, hover `rgba(0, 0, 0, 0.03)`). It is the same toolbar family without the floating capsule.
+
+Toolbar search is the standard [search field](../forms/#search-field): the 24px capsule matches the compact toolbar scale and the 36px `-xlarge` step matches the regular one. Placeholder text is `#727272`, values `#1A1A1A`, and focus shows the forms double ring.
+
+## States
+
+Hover and `[aria-pressed="true"]` (or `.p-active`) show the pill. Disabled buttons drop their ink to `#BFBFBF` and ignore the pointer. Focus uses the standard ring, 3px at 50% blue, inset to follow the pill shape.
+
+## Dark mode
+
+The capsule switches to `rgba(58, 58, 62, 0.72)`, hover pills to `rgba(255, 255, 255, 0.1)`, dividers to 15% white, and ink to `rgba(255, 255, 255, 0.92)`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Code
+
+```html
+<div class="p-toolbar-group" role="toolbar" aria-label="View options">
+  <button class="p-toolbar-btn" aria-pressed="true" aria-label="Grid view">
+    <i class="ph-bold ph-squares-four"></i>
+  </button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="List view">
+    <i class="ph-bold ph-list"></i>
+  </button>
+</div>
+```
+
+Icon-only buttons need `aria-label`s, and toggles should carry `aria-pressed` so state is announced. With `prefers-reduced-transparency` the glass becomes opaque `#F7F7F7` (dark: `#3A3A3E`).

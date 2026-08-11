@@ -1,0 +1,87 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Sidebars
+description: A gray glass navigation panel with capsule row selection, section headers, and a three-step size ladder.
+---
+
+import '@puppertino/sidebars.css';
+
+A sidebar appears on the leading side of a view and lets people navigate between sections in your app. Use it for top-level navigation with up to two levels of nesting. For data, use a [list](../lists-tables/).
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start;">
+  <nav class="p-sidebar" aria-label="Example sidebar">
+    <div class="p-sidebar-row p-selected"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-file-text"></i></span> Text Edit <span class="p-sidebar-detail">3</span></div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-clock"></i></span> Recents</div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-folder"></i></span> Shared</div>
+    <div class="p-sidebar-header">Favorites <span class="p-sidebar-detail">›</span></div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-desktop"></i></span> Desktop</div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-files"></i></span> Documents</div>
+    <div class="p-sidebar-row p-dimmed"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-trash"></i></span> Trash</div>
+  </nav>
+  <nav class="p-sidebar p-sidebar-small" aria-label="Small sidebar" style="width: 180px;">
+    <div class="p-sidebar-row p-selected">Inbox <span class="p-sidebar-detail">12</span></div>
+    <div class="p-sidebar-row">Drafts</div>
+    <div class="p-sidebar-row">Sent</div>
+    <div class="p-sidebar-header">Smart Folders</div>
+    <div class="p-sidebar-row" data-p-level="1">Receipts</div>
+  </nav>
+</div>
+
+## Anatomy
+
+The panel is 240px wide with an 18px radius and 10px padding on every side. The surface is gray glass: `rgba(228, 228, 228, 0.72)` over a 20px blur with 180% saturation, one step grayer than the menu material. The shadow is `0 8px 40px` at 12%. When the sidebar sits inside a window instead of floating, add `.p-sidebar-attached` to drop the radius and shadow.
+
+| Class | Role |
+|---|---|
+| `.p-sidebar` | The panel. 240px, radius 18px, gray glass, 10px padding. |
+| `.p-sidebar-row` | One row. 40px tall, radius 8px, 15px text at weight 510. |
+| `.p-sidebar-icon` | 20px icon slot with a 7px gap to the label. |
+| `.p-sidebar-detail` | Right-aligned secondary text in `#BFBFBF`. |
+| `.p-sidebar-header` | Section heading, 13px bold at 50% opacity, 8px top margin. |
+| `.p-sidebar-chevron` | Disclosure chevron, 11px bold at 25% opacity. |
+| `data-p-level="1..4"` | Indentation, 12px per level. |
+
+## Sizes
+
+Three sizes step the row height, font, and icon together. Indentation stays at 12px per level in every size.
+
+| Size | Class | Row | Font | Icon |
+|---|---|---|---|---|
+| Large (default) | | 40px | 15px / 510 | 20px |
+| Medium | `.p-sidebar-medium` | 32px | 13px / 510 | 18px |
+| Small | `.p-sidebar-small` | 24px | 11px / 510 | 14px |
+
+## States
+
+Selection is quiet: the capsule fills with `rgba(0, 0, 0, 0.11)` and only the icon takes the accent color. The label does not change. This keeps a column of selected and unselected labels perfectly even.
+
+| State | Class | Values |
+|---|---|---|
+| Rest | | Text `rgba(0, 0, 0, 0.85)` |
+| Hover | | Fill `rgba(0, 0, 0, 0.05)` |
+| Selected | `.p-selected` | Fill `rgba(0, 0, 0, 0.11)`, icon in the accent color |
+| Dimmed | `.p-dimmed` or `aria-disabled="true"` | Whole row at 50% opacity |
+
+To retint the selected icon, override the token on the sidebar: `style="--p-sidebar-icon-selected: #FF2D55"`.
+
+## Dark mode
+
+The panel switches to `rgba(40, 40, 44, 0.78)`. Selection flips to `rgba(255, 255, 255, 0.14)`, hover to 6%, detail text to `rgba(255, 255, 255, 0.3)`, and headers to 50% white. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Code
+
+```html
+<nav class="p-sidebar" aria-label="Mailboxes">
+  <div class="p-sidebar-row p-selected" tabindex="0" aria-current="page">
+    <span class="p-sidebar-icon"><img src="inbox.png" alt="" /></span>
+    Inbox
+    <span class="p-sidebar-detail">12</span>
+  </div>
+  <div class="p-sidebar-header">Smart Folders <span class="p-sidebar-detail">›</span></div>
+  <div class="p-sidebar-row" data-p-level="1" tabindex="0">Receipts</div>
+</nav>
+```
+
+Use `<nav>` with a label, `aria-current="page"` on the active row, and `tabindex="0"` so rows are keyboard reachable. With `prefers-reduced-transparency` the glass becomes opaque `#ECECEC` (dark: `#2B2B2E`) and the blur is removed. Browsers without `backdrop-filter` get the same fallback.
