@@ -17,7 +17,7 @@ Use the determinate bar when you can measure the work. Use the indeterminate bar
 |---|---|
 | Track | 6px capsule (10px large), `--p-fill-tertiary` |
 | Fill | Flat `--p-progress-accent`, the tintable system blue |
-| Indeterminate segment | 48% of the track, fading on its trailing side |
+| Indeterminate segment | Solid capsule, stretching to about a third of the track and compressing to a dot at each end |
 | Motion | Bounces to the far end and back, 1.6s ease-in-out |
 
 ## Determinate
@@ -48,7 +48,7 @@ One deviation from macOS: at exactly zero the native element paints nothing, whi
 <div class="p-progress-indeterminate" role="progressbar" aria-label="Loading"></div>
 ```
 
-A segment covering half the track slides to the far end and back, fading on its trailing side. This one is a `div` because the native indeterminate `progress` paints engine-specific animations that cannot be restyled. Give it `role="progressbar"` and an `aria-label`; add `aria-valuetext="Loading"` if you want more context announced.
+A solid segment inchworms to the far end and back on a 2.6 second cycle, exactly like the native macOS bar: the leading edge launches first, the trailing edge follows, and the segment compresses to a dot at each end before reversing. This one is a `div` because the native indeterminate `progress` paints engine-specific animations that cannot be restyled. Give it `role="progressbar"` and an `aria-label`; add `aria-valuetext="Loading"` if you want more context announced.
 
 Swap it for the determinate bar the moment you can measure progress. Indefinite waiting with no estimate is the last resort.
 

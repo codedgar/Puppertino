@@ -1,0 +1,316 @@
+/* Puppertino v2.0 — Menus (macOS 26)
+   A menu reveals its options when people interact with it. Custom dropdown
+   and context menu surface. Pop-up and pull-down buttons keep the native
+   select; this component is for custom command menus. */
+
+:root {
+  --p-menu-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-menu-radius: 13px;
+  --p-menu-bg: rgba(245, 245, 245, 0.67);
+  --p-menu-bg-opaque: #f0f0f0;
+  --p-menu-shadow:
+    0 0 25px rgba(0, 0, 0, 0.16),
+    0 0 2px rgba(0, 0, 0, 0.1);
+  --p-menu-text: #1a1a1a;
+  --p-menu-text-disabled: #bfbfbf;
+  --p-menu-selected-bg: #0088ff;
+  --p-menu-selected-text: #fff;
+  --p-menu-pressed-bg: #e6e6e6;
+  --p-menu-separator: #e6e6e6;
+  --p-menu-header: #727272;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-menu-bg: rgba(58, 58, 62, 0.82);
+  --p-menu-bg-opaque: #3a3a3e;
+  --p-menu-shadow:
+    0 0 25px rgba(0, 0, 0, 0.32),
+    0 0 2px rgba(0, 0, 0, 0.2);
+  --p-menu-text: rgba(255, 255, 255, 0.92);
+  --p-menu-text-disabled: rgba(255, 255, 255, 0.25);
+  --p-menu-pressed-bg: rgba(255, 255, 255, 0.13);
+  --p-menu-separator: rgba(255, 255, 255, 0.1);
+  --p-menu-header: rgba(255, 255, 255, 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-menu-bg: rgba(58, 58, 62, 0.82);
+    --p-menu-bg-opaque: #3a3a3e;
+    --p-menu-shadow:
+      0 0 25px rgba(0, 0, 0, 0.32),
+      0 0 2px rgba(0, 0, 0, 0.2);
+    --p-menu-text: rgba(255, 255, 255, 0.92);
+    --p-menu-text-disabled: rgba(255, 255, 255, 0.25);
+    --p-menu-pressed-bg: rgba(255, 255, 255, 0.13);
+    --p-menu-separator: rgba(255, 255, 255, 0.1);
+    --p-menu-header: rgba(255, 255, 255, 0.45);
+  }
+}
+
+.p-menu {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-menu-bg);
+  border-radius: var(--p-menu-radius);
+  box-shadow: var(--p-menu-shadow);
+  box-sizing: border-box;
+  color: var(--p-menu-text);
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--p-menu-font);
+  min-width: 190px;
+  padding: 5px;
+  position: relative;
+}
+
+.p-menu * {
+  box-sizing: border-box;
+}
+
+/* The surface takes focus when a menu opens (items stay unselected until
+   the keyboard steps in), so it must not draw its own ring. */
+.p-menu:focus {
+  outline: none;
+}
+
+/* Floating state: menus.js toggles .active on menus marked data-p-menu-float.
+   Inline (docs previews, always-open menus) skip the attribute. */
+.p-menu[data-p-menu-float] {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transform: scale(0.98);
+  transform-origin: top left;
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: 100;
+}
+
+.p-menu[data-p-menu-float].active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.p-menu__item {
+  align-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--p-menu-text);
+  cursor: default;
+  display: flex;
+  flex: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 510;
+  height: 24px;
+  letter-spacing: 0;
+  padding: 0 8px 0 7px;
+  text-align: left;
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.p-menu__item:hover:not(:disabled, [aria-disabled="true"]),
+.p-menu__item:focus-visible,
+.p-menu__item.is-selected {
+  background: var(--p-menu-selected-bg);
+  color: var(--p-menu-selected-text);
+  outline: none;
+}
+
+.p-menu__item:hover:not(:disabled, [aria-disabled="true"]) .p-menu__shortcut,
+.p-menu__item:focus-visible .p-menu__shortcut,
+.p-menu__item.is-selected .p-menu__shortcut,
+.p-menu__item:hover:not(:disabled, [aria-disabled="true"]) .p-menu__icon,
+.p-menu__item:focus-visible .p-menu__icon,
+.p-menu__item.is-selected .p-menu__icon {
+  color: var(--p-menu-selected-text);
+}
+
+/* Non-accent flash, used by menus.js on activation. */
+.p-menu__item.is-pressed {
+  background: var(--p-menu-pressed-bg);
+  color: var(--p-menu-text);
+}
+
+.p-menu__item:disabled,
+.p-menu__item[aria-disabled="true"] {
+  color: var(--p-menu-text-disabled);
+}
+
+.p-menu__item:disabled .p-menu__shortcut,
+.p-menu__item:disabled .p-menu__icon,
+.p-menu__item[aria-disabled="true"] .p-menu__shortcut,
+.p-menu__item[aria-disabled="true"] .p-menu__icon {
+  color: var(--p-menu-text-disabled);
+}
+
+.p-menu__icon {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  font-size: 14px;
+  justify-content: center;
+  margin-right: 6px;
+  width: 15px;
+}
+
+.p-menu__check {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  width: 18px;
+}
+
+.p-menu__shortcut {
+  color: var(--p-menu-text-disabled);
+  flex: none;
+  margin-left: auto;
+  padding-left: 24px;
+}
+
+.p-menu__chevron {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: auto;
+  padding-left: 24px;
+}
+
+.p-menu__shortcut + .p-menu__chevron,
+.p-menu__chevron + .p-menu__shortcut {
+  margin-left: 0;
+  padding-left: 8px;
+}
+
+.p-menu__separator {
+  background: var(--p-menu-separator);
+  border: 0;
+  flex: none;
+  height: 1px;
+  margin: 5px 5.5px;
+}
+
+.p-menu__header {
+  color: var(--p-menu-header);
+  display: block;
+  flex: none;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  padding: 8px 8px 4px 23px;
+  user-select: none;
+}
+
+/* Submenus: wrap the trigger item and a nested .p-menu. Opens on hover or
+   keyboard focus within. */
+.p-menu__subwrap {
+  position: relative;
+}
+
+.p-menu__subwrap > .p-menu {
+  left: calc(100% + 1px);
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: -5px;
+  transition: opacity 0.14s ease;
+  z-index: 1;
+}
+
+.p-menu__subwrap:hover > .p-menu,
+.p-menu__subwrap:focus-within > .p-menu,
+.p-menu__subwrap > .p-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.p-menu__subwrap:hover > .p-menu__item,
+.p-menu__subwrap:focus-within > .p-menu__item {
+  background: var(--p-menu-selected-bg);
+  color: var(--p-menu-selected-text);
+}
+
+.p-menu__subwrap:hover > .p-menu__item .p-menu__icon,
+.p-menu__subwrap:hover > .p-menu__item .p-menu__shortcut,
+.p-menu__subwrap:focus-within > .p-menu__item .p-menu__icon,
+.p-menu__subwrap:focus-within > .p-menu__item .p-menu__shortcut {
+  color: var(--p-menu-selected-text);
+}
+
+/* Sizes. Regular is the 24px default above. */
+.p-menu--small .p-menu__item {
+  font-size: 10px;
+  height: 19px;
+}
+
+.p-menu--small .p-menu__icon {
+  font-size: 11px;
+  width: 12px;
+}
+
+.p-menu--small .p-menu__header {
+  font-size: 9px;
+  padding-left: 19px;
+}
+
+.p-menu--small .p-menu__check {
+  font-size: 9px;
+  width: 14px;
+}
+
+.p-menu--medium .p-menu__item {
+  font-size: 11px;
+  height: 22px;
+}
+
+.p-menu--medium .p-menu__icon {
+  font-size: 12px;
+  width: 13px;
+}
+
+.p-menu--medium .p-menu__header {
+  padding-left: 21px;
+}
+
+.p-menu--medium .p-menu__check {
+  font-size: 10px;
+  width: 16px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-menu {
+    background: var(--p-menu-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-menu {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-menu-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-menu[data-p-menu-float],
+  .p-menu__subwrap > .p-menu {
+    transition: opacity 0.14s ease;
+  }
+
+  .p-menu[data-p-menu-float] {
+    transform: none;
+  }
+}

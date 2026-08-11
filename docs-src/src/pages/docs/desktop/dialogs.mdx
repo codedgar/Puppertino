@@ -1,0 +1,174 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Dialogs & Sheets
+description: macOS-style dialog windows and sheets. A 26px radius surface with form rows, footer actions, and slide-down sheet presentation.
+---
+
+import '@puppertino/modals.css';
+import '@puppertino/forms.css';
+import modalsScript from '../../../../../src/js/modals.js?url';
+
+<script type="module" src={modalsScript}></script>
+
+A dialog presents a scoped task in its own window, like saving a document. A sheet presents the same kind of task attached to the top of its parent context. Both share one surface: an opaque background, a 26px radius, and a deep shadow with a 1px edge ring. For short confirmations, use [alerts](/docs/desktop/modals/) instead.
+
+## Preview
+
+<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; justify-content: center;">
+  <div class="p-dialog" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: auto; transform: none;" aria-hidden="true">
+    <h2 class="p-dialog__title">Do you want to keep this new document “Untitled”?</h2>
+    <p class="p-dialog__message">You can choose to save your changes, or delete this document immediately. You can’t undo this action.</p>
+    <div class="p-dialog__form">
+      <label class="p-dialog__label" for="dlg-preview-name">Save As:</label>
+      <input class="p-field" id="dlg-preview-name" type="text" value="Untitled" />
+      <label class="p-dialog__label" for="dlg-preview-tags">Tags:</label>
+      <input class="p-field" id="dlg-preview-tags" type="text" />
+      <label class="p-dialog__label" for="dlg-preview-format">File Format:</label>
+      <div class="p-select">
+        <select id="dlg-preview-format">
+          <option>Rich Text Document</option>
+          <option>Plain Text</option>
+        </select>
+      </div>
+    </div>
+    <div class="p-dialog__footer">
+      <button class="p-button p-button-destructive p-dialog__footer-leading" type="button">Delete</button>
+      <button class="p-button p-button-secondary" type="button">Cancel</button>
+      <button class="p-button p-button-primary" type="button">Save</button>
+    </div>
+  </div>
+</div>
+
+## Anatomy
+
+The window is 390px wide by default, padded 20px. The title is 13px bold. The message is 11px with a 14px line height. Form rows use a two-column grid: right-aligned 13px labels in the secondary text color, then the control. Rows sit on a 30px rhythm (24px controls with 6px gaps).
+
+| Class | Role |
+|---|---|
+| `.p-dialog` | The window surface. Radius 26, 20px padding, shadow plus 1px ring. |
+| `.p-dialog__title` | 13px bold heading. |
+| `.p-dialog__message` | 11px supporting copy. |
+| `.p-dialog__form` | Two-column grid of labels and controls. |
+| `.p-dialog__label` | Right-aligned row label, secondary color. |
+| `.p-dialog__footer` | Action row, right-aligned. |
+| `.p-dialog__footer-leading` | Pushes one action (usually destructive) to the left edge. |
+| `.p-sheet` | The same surface presented from the top of a host. |
+| `.p-sheet-host` | Positioning context for an attached sheet. |
+
+Fields, selects, and buttons inside a dialog are the standard [form controls](/docs/desktop/forms/) and [buttons](/docs/desktop/buttons/). Nothing is restyled.
+
+## Footer layout
+
+Place the destructive action on the leading edge with `.p-dialog__footer-leading`, and end with Cancel then the primary action. This mirrors the order people expect on macOS: destruction far from confirmation.
+
+```html
+<div class="p-dialog__footer">
+  <button class="p-button p-button-destructive p-dialog__footer-leading">Delete</button>
+  <button class="p-button p-button-secondary" data-p-cancel>Cancel</button>
+  <button class="p-button p-button-primary">Save</button>
+</div>
+```
+
+## Opening a dialog
+
+Dialogs run through the same modal manager as alerts. Add `.p-modal` next to `.p-dialog`, put it inside `.p-modal-background`, and open it with `data-p-open-modal`.
+
+<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px;">
+  <button class="p-button p-button-primary" data-p-open-modal="#demo-dialog">Open dialog</button>
+</div>
+
+<div class="p-modal-background">
+  <div class="p-modal p-dialog" id="demo-dialog" data-p-close-on-outside="true" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="demo-dialog-title">
+    <h2 class="p-dialog__title" id="demo-dialog-title">Do you want to keep this new document “Untitled”?</h2>
+    <p class="p-dialog__message">You can choose to save your changes, or delete this document immediately. You can’t undo this action.</p>
+    <div class="p-dialog__form">
+      <label class="p-dialog__label" for="demo-dialog-name">Save As:</label>
+      <input class="p-field" id="demo-dialog-name" type="text" value="Untitled" />
+      <label class="p-dialog__label" for="demo-dialog-tags">Tags:</label>
+      <input class="p-field" id="demo-dialog-tags" type="text" />
+    </div>
+    <div class="p-dialog__footer">
+      <button class="p-button p-button-destructive p-dialog__footer-leading" type="button" data-p-cancel>Delete</button>
+      <button class="p-button p-button-secondary" type="button" data-p-cancel>Cancel</button>
+      <button class="p-button p-button-primary" type="button" data-p-cancel>Save</button>
+    </div>
+  </div>
+</div>
+
+```html
+<button class="p-button p-button-primary" data-p-open-modal="#save-dialog">Save…</button>
+
+<div class="p-modal-background">
+  <div
+    class="p-modal p-dialog"
+    id="save-dialog"
+    data-p-close-on-outside="true"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="save-dialog-title"
+  >
+    <h2 class="p-dialog__title" id="save-dialog-title">Save this document?</h2>
+    <div class="p-dialog__form">
+      <label class="p-dialog__label" for="save-name">Save As:</label>
+      <input class="p-field" id="save-name" type="text" value="Untitled" />
+    </div>
+    <div class="p-dialog__footer">
+      <button class="p-button p-button-secondary" data-p-cancel>Cancel</button>
+      <button class="p-button p-button-primary">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="path/to/puppertino/src/js/modals.js"></script>
+```
+
+## Sheets
+
+A sheet is the same surface sliding down from the top of its host. Inside a `.p-sheet-host` it attaches to that container. Inside `.p-modal-background` it attaches to the viewport. The entrance uses the 0.35s sheet timing.
+
+<div class="p-sheet-host" style="margin: 16px 0 20px; height: 280px; background: var(--p-bg-secondary); border-radius: 10px; overflow: hidden;">
+  <div class="p-sheet active" aria-hidden="true">
+    <h2 class="p-dialog__title">Rename “Quarterly Report”?</h2>
+    <p class="p-dialog__message">The new name applies everywhere this file appears.</p>
+    <div class="p-dialog__form">
+      <label class="p-dialog__label" for="sheet-preview-name">Name:</label>
+      <input class="p-field" id="sheet-preview-name" type="text" value="Quarterly Report" />
+    </div>
+    <div class="p-dialog__footer">
+      <button class="p-button p-button-secondary" type="button">Cancel</button>
+      <button class="p-button p-button-primary" type="button">Rename</button>
+    </div>
+  </div>
+</div>
+
+```html
+<div class="p-modal-background">
+  <div
+    class="p-modal p-sheet"
+    id="rename-sheet"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="rename-sheet-title"
+  >
+    <h2 class="p-dialog__title" id="rename-sheet-title">Rename “Quarterly Report”?</h2>
+    <div class="p-dialog__form">
+      <label class="p-dialog__label" for="rename-name">Name:</label>
+      <input class="p-field" id="rename-name" type="text" value="Quarterly Report" />
+    </div>
+    <div class="p-dialog__footer">
+      <button class="p-button p-button-secondary" data-p-cancel>Cancel</button>
+      <button class="p-button p-button-primary">Rename</button>
+    </div>
+  </div>
+</div>
+```
+
+## Dark mode
+
+The surface swaps to the elevated dark background (`#2C2C2E`), the ring lightens to 10% white, and shadows soften to about 70% of their light values. Titles and copy follow the dialog text tokens. Controls inside adapt on their own.
+
+## Accessibility
+
+Dialogs and sheets are modal: `role="dialog"` with `aria-modal="true"`, labelled by their title. The modal manager traps focus, closes on Escape, and returns focus to the trigger. With reduced motion, the scale and slide transitions reduce to fades. The surface is opaque in both appearances, so text contrast does not depend on the backdrop.

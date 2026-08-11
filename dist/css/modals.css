@@ -23,6 +23,14 @@
   --p-desktop-modal-destructive-bg-pressed: rgba(255, 56, 60, 0.31);
   --p-desktop-modal-destructive-text: #ff383c;
   --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.18);
+  --p-dialog-bg: #fff;
+  --p-dialog-radius: 26px;
+  --p-dialog-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.23);
+  --p-dialog-title: rgba(0, 0, 0, 0.85);
+  --p-dialog-copy: rgba(0, 0, 0, 0.85);
+  --p-dialog-label: rgba(0, 0, 0, 0.5);
 }
 
 .p-dark-mode,
@@ -39,6 +47,13 @@
   --p-desktop-modal-secondary: rgba(255, 255, 255, 0.13);
   --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.2);
   --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.24);
+  --p-dialog-bg: #2c2c2e;
+  --p-dialog-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  --p-dialog-title: rgba(255, 255, 255, 0.92);
+  --p-dialog-copy: rgba(255, 255, 255, 0.76);
+  --p-dialog-label: rgba(255, 255, 255, 0.55);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -55,6 +70,13 @@
     --p-desktop-modal-secondary: rgba(255, 255, 255, 0.13);
     --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.2);
     --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.24);
+    --p-dialog-bg: #2c2c2e;
+    --p-dialog-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+    --p-dialog-title: rgba(255, 255, 255, 0.92);
+    --p-dialog-copy: rgba(255, 255, 255, 0.76);
+    --p-dialog-label: rgba(255, 255, 255, 0.55);
   }
 }
 
@@ -331,6 +353,123 @@
   background: var(--p-desktop-modal-destructive-bg-pressed);
 }
 
+/* Dialog window (macOS 26 Save Dialog surface). Opaque white, radius 26.
+   Opens through the same modal manager: .p-modal.p-dialog + .active. */
+.p-dialog {
+  background: var(--p-dialog-bg);
+  border-radius: var(--p-dialog-radius);
+  box-shadow: var(--p-dialog-shadow);
+  box-sizing: border-box;
+  color: var(--p-dialog-copy);
+  font-family: var(--font);
+  left: 50%;
+  opacity: 0;
+  padding: 20px;
+  pointer-events: none;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -46%) scale(0.96);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 390px;
+  max-width: min(100%, calc(100vw - 32px));
+  z-index: 90;
+}
+
+.p-dialog * {
+  box-sizing: border-box;
+}
+
+.p-dialog.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.p-dialog__title {
+  color: var(--p-dialog-title);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 16px;
+  margin: 0;
+}
+
+.p-dialog__message {
+  color: var(--p-dialog-copy);
+  font-size: 11px;
+  letter-spacing: 0;
+  line-height: 14px;
+  margin: 4px 0 0;
+}
+
+.p-dialog__form {
+  align-items: center;
+  display: grid;
+  gap: 6px 8px;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin-top: 10px;
+}
+
+.p-dialog__label {
+  color: var(--p-dialog-label);
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+  text-align: right;
+}
+
+.p-dialog__footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.p-dialog__footer-leading {
+  margin-right: auto;
+}
+
+/* Sheet: identical surface, attached to the top of its host. Position it
+   inside a .p-sheet-host (or the viewport when used directly). */
+.p-sheet-host {
+  position: relative;
+}
+
+.p-sheet {
+  background: var(--p-dialog-bg);
+  border-radius: var(--p-dialog-radius);
+  box-shadow: var(--p-dialog-shadow);
+  box-sizing: border-box;
+  color: var(--p-dialog-copy);
+  font-family: var(--font);
+  left: 50%;
+  opacity: 0;
+  padding: 20px;
+  pointer-events: none;
+  position: absolute;
+  top: 12px;
+  transform: translate(-50%, -12px) scale(0.98);
+  transform-origin: top center;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 390px;
+  max-width: calc(100% - 32px);
+  z-index: 90;
+}
+
+.p-sheet * {
+  box-sizing: border-box;
+}
+
+.p-sheet.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+
 @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
   .p-modal-background::before {
     -webkit-backdrop-filter: none;
@@ -394,5 +533,15 @@
   .p-modal:not(.p-desktop-modal),
   .p-desktop-modal {
     transition: none;
+  }
+
+  .p-dialog,
+  .p-sheet {
+    transform: translate(-50%, 0);
+    transition: opacity 0.25s ease;
+  }
+
+  .p-dialog {
+    transform: translate(-50%, -50%);
   }
 }
