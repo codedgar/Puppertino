@@ -6,7 +6,7 @@ description: Puppertino does not ship icons. We recommend Phosphor for the close
 
 import IconShowcase from '../../components/IconShowcase.astro';
 
-Puppertino does not ship its own icon set. Apple's SF Symbols is the icon system that pairs with the Human Interface Guidelines, but Apple does not license SF Symbols for web use. Designing a faithful 9,000-symbol replacement is a separate project, and any compromise would feel out of place next to the rest of the framework.
+Puppertino does not ship its own icon set. Apple's SF Symbols is the icon system that pairs with the Human Interface Guidelines, but Apple does not license SF Symbols for web use.
 
 Instead, we recommend pairing Puppertino with **Phosphor Icons**. Phosphor is the closest open-source match to SF Symbols in spirit and execution.
 
@@ -133,9 +133,3 @@ If Phosphor is not the right fit, two other open-source libraries pair well with
 - **[Heroicons](https://heroicons.com)** by the Tailwind team. 300+ icons in three styles (outline, solid, mini). Smaller set, very high quality.
 
 Both render as inline SVGs rather than icon fonts, which gives you more control but requires more setup per icon.
-
-## Why Not an Icon Font of Our Own
-
-A custom Puppertino icon set would need to cover every component category at multiple weights. That is thousands of icons, each one drawn by hand, each one tested for optical balance. Any partial set would feel incomplete next to the framework's other foundations.
-
-Phosphor already does this work, openly licensed, well-maintained, and aligned with Puppertino's aesthetic. Building a parallel set would be wasted effort.

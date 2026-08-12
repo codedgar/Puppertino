@@ -2,8 +2,8 @@
   "name": "@codedgar/puppertino",
   "version": "2.0.0",
   "description": "A CSS framework based on Human Guidelines from Apple",
-  "main": "./dist/css/newfull.css",
-  "style": "./dist/css/newfull.css",
+  "main": "./dist/css/puppertino.css",
+  "style": "./dist/css/puppertino.css",
   "files": [
     "dist",
     "src",
@@ -12,9 +12,14 @@
   ],
   "exports": {
     ".": {
-      "style": "./dist/css/newfull.css",
-      "default": "./dist/css/newfull.css"
+      "style": "./dist/css/puppertino.css",
+      "default": "./dist/css/puppertino.css"
     },
+    "./min": "./dist/css/puppertino.min.css",
+    "./desktop": "./dist/css/puppertino-desktop.css",
+    "./desktop/min": "./dist/css/puppertino-desktop.min.css",
+    "./mobile": "./dist/css/puppertino-mobile.css",
+    "./mobile/min": "./dist/css/puppertino-mobile.min.css",
     "./css/*": "./dist/css/*",
     "./js/*": "./src/js/*",
     "./buttons": "./dist/css/buttons.css",
@@ -41,8 +46,18 @@
     "doc": "docs"
   },
   "scripts": {
+    "build:css": "npm run build:css:full && npm run build:css:desktop && npm run build:css:mobile",
+    "build:css:full": "lightningcss --minify --bundle --browserslist dist/css/puppertino.css -o dist/css/puppertino.min.css",
+    "build:css:desktop": "lightningcss --minify --bundle --browserslist dist/css/puppertino-desktop.css -o dist/css/puppertino-desktop.min.css",
+    "build:css:mobile": "lightningcss --minify --bundle --browserslist dist/css/puppertino-mobile.css -o dist/css/puppertino-mobile.min.css",
+    "prepublishOnly": "npm run build:css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "browserslist": [
+    ">= 0.5%",
+    "last 2 versions",
+    "not dead"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codedgar/Puppertino.git"
@@ -62,5 +77,8 @@
   "bugs": {
     "url": "https://github.com/codedgar/Puppertino/issues"
   },
-  "homepage": "https://github.com/codedgar/Puppertino#readme"
+  "homepage": "https://github.com/codedgar/Puppertino#readme",
+  "devDependencies": {
+    "lightningcss-cli": "^1.33.0"
+  }
 }

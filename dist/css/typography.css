@@ -63,8 +63,9 @@
 
 /* ─── macOS 26 / iOS type scale ────────────────────────────────────── */
 
-/* Apply this class to a section or the body to opt into the new scale.
-   It does not override `.p-layout`, so existing pages keep working. */
+/* Apply this class to a section or the body to opt into the macOS 26
+   scale. It does not override `.p-layout`, so pages built on the
+   legacy scale keep working. */
 
 .p-type {
   font-family: var(--p-font);

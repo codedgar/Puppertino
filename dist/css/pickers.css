@@ -1,6 +1,6 @@
 /* Puppertino v2.0 — Date Pickers (macOS 26)
-   Graphical calendar + analog clock, measured from the live OS
-   (NSDatePicker control-lab capture; values in specs/date-pickers.md).
+   Graphical calendar + analog clock, measured from NSDatePicker on
+   macOS 26 (values in specs/date-pickers.md).
    The grid and clock hands are driven by src/js/datepickers.js.
    Field-style date input = compose .p-field + .p-stepper. */
 
@@ -76,7 +76,7 @@
   color: var(--p-picker-label);
   flex: 1;
   /* Native: digit cap 10.0 logical (≈14.2px) but painted width matches
-     15px SF bold; 15 wins the overlay. */
+     15px SF bold, so 15px is used. */
   font-size: 15px;
   font-weight: 700;
   line-height: 13px;
@@ -122,8 +122,8 @@
   margin-top: 1px;
 }
 
-/* Day cell: 18px row pitch, 16px pill (overlay-matched to the native
-   2× capture: 11px numbers, pill inset 1px vertically). */
+/* Day cell: 18px row pitch, 16px pill (matched to native: 11px
+   numbers, pill inset 1px vertically). */
 .p-calendar-day {
   align-items: center;
   align-self: center;
@@ -148,8 +148,8 @@
   background: rgba(0, 0, 0, 0.05);
 }
 
-/* Today, unselected: neutral cell, accent number (unfocused-control
-   look from the capture). */
+/* Today, unselected: neutral cell, accent number (the native
+   unfocused-control look). */
 .p-calendar-day.p-today {
   background: var(--p-picker-today-bg);
   color: var(--p-picker-accent);

@@ -27,7 +27,7 @@
 }
 
 /* WebKit/Blink: 14px gutter, 6px visible thumb via 4px transparent
-   border, min length ~29px per the sheet's smallest demo. */
+   border, min thumb length ~29px. */
 .p-scrollbar::-webkit-scrollbar {
   height: 14px;
   width: 14px;

@@ -101,6 +101,70 @@ a:hover {
   margin-top: 16px;
 }
 
+/* Floating navigation toggle — mobile only, revealed in the 768px query */
+.sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 250;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .sidebar-toggle {
+    background: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+.sidebar-toggle-close {
+  display: none;
+}
+
+body.sidebar-open .sidebar-toggle-open {
+  display: none;
+}
+
+body.sidebar-open .sidebar-toggle-close {
+  display: inline-flex;
+}
+
+.sidebar-scrim {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-scrim {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebar-scrim {
+    transition: none;
+  }
+}
+
+/* Hairline between categories so each set reads as its own block */
+.nav-section + .nav-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
 .nav-heading {
   display: block;
   padding: 0 24px 6px;
@@ -109,6 +173,81 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-tertiary);
+}
+
+/* Collapsible sections: native details/summary, custom chevron.
+   Every chevron sits at the same right offset (24px from the sidebar
+   edge), regardless of the summary's own padding. */
+.nav-section > summary.nav-heading {
+  padding-right: 0;
+}
+
+.nav-section > summary,
+.nav-group > summary,
+.nav-item > summary {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.nav-section > summary::-webkit-details-marker,
+.nav-group > summary::-webkit-details-marker,
+.nav-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav-section > summary::after,
+.nav-group > summary::after,
+.nav-item > summary::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-right: 24px;
+  border-right: 1.5px solid var(--text-tertiary);
+  border-bottom: 1.5px solid var(--text-tertiary);
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nav-section[open] > summary::after,
+.nav-group[open] > summary::after,
+.nav-item[open] > summary::after {
+  transform: rotate(45deg);
+}
+
+.nav-section > summary:hover,
+.nav-group > summary:hover {
+  color: var(--text-primary);
+}
+
+.nav-section > summary:hover::after,
+.nav-group > summary:hover::after,
+.nav-item > summary:hover::after {
+  border-color: var(--text-primary);
+}
+
+/* Collapsible page entry with anchor children (e.g. Forms):
+   the label navigates, the rest of the row (and the chevron) toggles. */
+.nav-item > summary a {
+  flex: 0 1 auto;
+}
+
+/* Group subheadings inside a category */
+.nav-group {
+  margin-top: 10px;
+}
+
+.nav-group > summary {
+  padding: 3px 0 3px 24px;
+  font-size: 12px;
+  font-weight: 590;
+  letter-spacing: -0.004em;
+  color: var(--text-secondary);
 }
 
 .nav-section ul {
@@ -256,6 +395,37 @@ article pre {
   line-height: 1.5;
 }
 
+/* Puppertino scrollbar treatment for markdown-generated code blocks,
+   which can't carry the .p-scrollbar class. Colors come from the
+   --p-scrollbar-* tokens in scrollbars.css so the two stay in sync. */
+article pre {
+  scrollbar-color: var(--p-scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+article pre::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
+}
+
+article pre::-webkit-scrollbar-track,
+article pre::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+article pre::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+  background-color: var(--p-scrollbar-thumb);
+  border: 4px solid transparent;
+  border-radius: 7px;
+  min-width: 29px;
+}
+
+article pre::-webkit-scrollbar-thumb:hover,
+article pre::-webkit-scrollbar-thumb:active {
+  background-color: var(--p-scrollbar-thumb-hover);
+}
+
 article pre code {
   background: none;
   padding: 0;
@@ -397,6 +567,32 @@ article td code {
   gap: 24px 20px;
 }
 
+/* Docs-index hub: three larger category tiles */
+.tile-grid-hub {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.tile-grid-hub .tile-art i {
+  font-size: 64px;
+}
+
+/* Grouped component sections on the platform hub pages */
+.tile-section {
+  margin-top: 40px;
+}
+
+.tile-section > h3 {
+  margin: 0 0 4px;
+}
+
+.tile-section-note {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+  max-width: 720px;
+}
+
 .tile {
   display: block;
   text-decoration: none;
@@ -458,6 +654,23 @@ article td code {
   inset: 0;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 50%);
   pointer-events: none;
+}
+
+/* Icon-grid keylines between the gradient and the glyph: the 256px
+   grid Phosphor icons are drawn on (squares, circles, diagonals),
+   as a faint blueprint layer. The glyph stays on top via z-index. */
+.tile-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: center / auto 82% no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' fill='none' stroke='white' stroke-width='2'%3E%3Crect x='16' y='16' width='224' height='224' rx='24'/%3E%3Crect x='48' y='16' width='160' height='224' rx='16'/%3E%3Crect x='16' y='48' width='224' height='160' rx='16'/%3E%3Ccircle cx='128' cy='128' r='112'/%3E%3Ccircle cx='128' cy='128' r='64'/%3E%3Cpath d='M16 16 240 240M240 16 16 240M128 8v240M8 128h240'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  pointer-events: none;
+  /* Fade the keylines out toward the tile edges — a gradual falloff
+     from the center, so the grid reads as a watermark, not a layer */
+  -webkit-mask-image: radial-gradient(ellipse 70% 90% at center, #000 0%, transparent 88%);
+  mask-image: radial-gradient(ellipse 70% 90% at center, #000 0%, transparent 88%);
 }
 
 /* ─────────────────────────────────────────
@@ -579,8 +792,40 @@ article td code {
 }
 
 @media (max-width: 768px) {
+  /* Sidebar becomes a slide-in drawer, opened by the floating toggle */
   .sidebar {
-    display: none;
+    width: min(300px, 84vw);
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  .sidebar-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  body.sidebar-open .sidebar-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar-toggle {
+    display: flex;
   }
 
   body.has-sidebar {

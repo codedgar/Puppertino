@@ -515,8 +515,7 @@ textarea.p-form-text {
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — Forms
-   macOS 26 form controls. Values extracted from the macOS 26 Figma
-   component sheet — see specs/forms.md for the full derivation.
+   macOS 26 form controls — see specs/forms.md for the value derivation.
 
    Classes: .p-field, .p-select, .p-checkbox, .p-radio, .p-switch,
    .p-label, .p-sublabel.
@@ -525,9 +524,7 @@ textarea.p-form-text {
    --p-color-current (published by the color classes in colors.css) and
    fall back to the system blue #0D6FFF.
 
-   Borders follow the sheet's border-as-shadow recipe: 1px spread rings,
-   never strokes. Out of scope for now: the custom stepper (needs JS),
-   list rows (separate component).
+   Borders are drawn as 1px spread box-shadow rings, never strokes.
    ═════════════════════════════════════════════════════════════════════ */
 
 /* The switch's gel-morph progress. Registered so it can transition;
@@ -557,7 +554,7 @@ textarea.p-form-text {
   /* Combo box */
   --p-combo-plate-bg: #ffffff;
 
-  /* Pop-up / pull-down pressed body (sheet composite: black @ 0.15) */
+  /* Pop-up / pull-down pressed body (composite: black @ 0.15) */
   --p-popup-bg-active: rgba(0, 0, 0, 0.15);
 
   /* Toggles, checkboxes, radios.
@@ -900,9 +897,9 @@ textarea.p-field {
 }
 
 /* ─── Search field ─────────────────────────────────────────────────── */
-/* Capsule search input in five sizes. From the macOS 26 search fields
-   sheet: an empty field wears a quieter ring (0.04) than a filled one
-   (0.08), the placeholder is darker than a text field's because it
+/* Capsule search input in five sizes. On macOS 26 an empty field
+   wears a quieter ring (0.04) than a filled one (0.08), the
+   placeholder is darker than a text field's because it
    doubles as the label, and the clear button only exists while there
    is something to clear. Markup:
    <div class="p-search"><input type="search" placeholder="Search"></div> */
@@ -995,7 +992,7 @@ textarea.p-field {
   cursor: not-allowed;
 }
 
-/* Sizes from the sheet: 16 / 20 / 24 (default) / 28 / 36. */
+/* Sizes: 16 / 20 / 24 (default) / 28 / 36. */
 .p-search-mini {
   --p-search-height: 16px;
   --p-search-font: 10px;
@@ -1021,7 +1018,7 @@ textarea.p-field {
 }
 
 /* ─── Pop-up and pull-down buttons ─────────────────────────────────── */
-/* Gray button variants of the select, from the macOS 26 pop-up sheet.
+/* Gray button variants of the select.
    A pop-up chooses a value (up-down chevron); a pull-down runs an
    action from a menu (down chevron). Both wrap the same markup as
    .p-select — see specs/popup-pulldown.md. Markup:
@@ -1263,7 +1260,7 @@ textarea.p-field {
   background: var(--p-field-placeholder);
 }
 
-/* Sizes from the sheet: plate = height − 4 (xlarge − 6). */
+/* Sizes: plate = height − 4 (xlarge − 6). */
 .p-combo-mini {
   --p-combo-height: 16px;
   --p-combo-font: 10px;
@@ -1297,8 +1294,7 @@ textarea.p-field {
 
 /* ─── Checkbox ─────────────────────────────────────────────────────── */
 /* 16px squircle, radius 5. Checked state = accent fill + white SF
-   checkmark + top-light gradient + bevel, exactly like the sheet's
-   tint tiles. Markup:
+   checkmark + top-light gradient + bevel. Markup:
    <label class="p-checkbox"><input type="checkbox"><span></span> Text</label> */
 
 .p-checkbox,
@@ -1375,7 +1371,7 @@ textarea.p-field {
   opacity: 1;
 }
 
-/* Tint-sheet sizes: 20px (11px glyph) and 26px (14px glyph) */
+/* Larger sizes: 20px (11px glyph) and 26px (14px glyph) */
 .p-checkbox-large > input + span {
   --p-checkbox-size: 20px;
   --p-checkbox-glyph: 55%;
@@ -1448,8 +1444,8 @@ textarea.p-field {
    while pressed the knob inflates into a translucent lens that is
    taller than the track and overhangs the side it sits on, blurring
    the track through backdrop-filter. On release it deflates and slides
-   with a slight spring. Geometry from the macOS 26 transition frames
-   (68×30 sheet scaled to 36×16): lens 30×22, 2px outward overhang. */
+   with a slight spring. Geometry (macOS 26 reference at 68×30, scaled
+   to 36×16): lens 30×22, 2px outward overhang. */
 
 .p-switch {
   display: inline-flex;
@@ -1457,7 +1453,7 @@ textarea.p-field {
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-  background: transparent; /* same reason as .p-checkbox above */
+  background: transparent; /* cancel the .p-sys-* swatch paint on the wrapper */
   --p-control-accent: var(--p-color-current, #0D6FFF);
 }
 
@@ -1475,7 +1471,7 @@ textarea.p-field {
 .p-switch > input + span::after {
   content: "";
   position: absolute;
-  /* Whole-pixel insets: the sheet's 1.5px cannot center on a 1× pixel
+  /* Whole-pixel insets: the reference 1.5px cannot center on a 1× pixel
      grid and reads as the knob sitting low. 2px insets and a 12px knob
      stay crisp at every density. Shadow is symmetric ambient only — a
      downward offset also reads as vertical misalignment at this size. */
@@ -1504,10 +1500,10 @@ textarea.p-field {
   left: 13px;
 }
 
-/* Held (press and hold): the glass lens at full strength. From the
-   reference render: the interior goes near-transparent so the track
-   color shows through, wrapped in a thick white refraction rim, a thin
-   accent edge line, and a soft accent glow. */
+/* Held (press and hold): the glass lens at full strength. The interior
+   goes near-transparent so the track color shows through, wrapped in a
+   thick white refraction rim, a thin accent edge line, and a soft
+   accent glow. */
 .p-switch:active > input:not(:disabled) + span::after {
   top: -4px;
   bottom: -4px;
@@ -1558,8 +1554,8 @@ textarea.p-field {
   .p-switch > input:checked + span::after {
     --p-grow: calc(max(0, min(1, var(--p-gel) * 5, (1 - var(--p-gel)) * 3)));
 
-    /* Travel 2px->13px; grown the lens reaches 34x24, engulfing most of
-       the 36x16 track the way the WWDC footage shows at the flip peak. */
+    /* Travel 2px->13px; grown the lens reaches 34x24, engulfing most
+       of the 36x16 track at the flip peak. */
     left: calc(2px + 11px * var(--p-gel) - 6.5px * var(--p-grow));
     width: calc(21px + 13px * var(--p-grow));
     top: calc(2px - 6px * var(--p-grow));

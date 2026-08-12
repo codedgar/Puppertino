@@ -48,7 +48,7 @@ Include the helper once per page and the accent fill follows the thumb:
 <script src="src/js/sliders.js"></script>
 ```
 
-The helper is about twenty lines: it publishes the value as `--p-slider-fill` so the track can paint the accent portion. Firefox draws the fill natively without it. Without the helper on other browsers the track renders all gray and the slider still works, so the enhancement degrades cleanly.
+The helper publishes the value as `--p-slider-fill` so the track can paint the accent portion. Firefox draws the fill natively without it. Without the helper on other browsers the track renders all gray and the slider still works, so the enhancement degrades cleanly.
 
 ## Ticks
 
@@ -81,4 +81,4 @@ The unfilled track and thumb flip through the control tokens, and the accent swa
 
 ## Dials
 
-The macOS dial (a rotary knob) needs pointer math that CSS cannot provide. It ships later as a JS component; the slider covers linear values meanwhile.
+Puppertino does not provide the macOS dial (a rotary knob); it needs pointer math that CSS cannot provide. Use a slider for linear values.

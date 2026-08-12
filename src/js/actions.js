@@ -115,6 +115,5 @@ class PuppertinoActionsMan {
     }
   }
   
-  // Initialize the PuppertinoActionsMan instance
   const PuppertinoActionsManager = new PuppertinoActionsMan();
   

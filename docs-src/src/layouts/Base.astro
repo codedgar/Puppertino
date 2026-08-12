@@ -4,6 +4,7 @@ import '@puppertino/colors.css';
 import '@puppertino/typography.css';
 import '@puppertino/materials.css';
 import '@puppertino/buttons.css';
+import '@puppertino/scrollbars.css';
 import '@phosphor-icons/web/regular';
 import '@phosphor-icons/web/bold';
 import CopyToast from '../components/CopyToast.astro';
@@ -20,7 +21,9 @@ const hasSidebar = Astro.slots.has('sidebar');
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<!-- p-auto-dark-mode is needed on <html> too: the page scrollbar lives on the
+     root element, which cannot inherit the dark thumb color from body. -->
+<html lang="en" class="p-scrollbar p-auto-dark-mode">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,13 +33,35 @@ const hasSidebar = Astro.slots.has('sidebar');
   </head>
   <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
     {hasSidebar && (
-      <aside class="sidebar">
-        <a href={`${base}docs/`} class="sidebar-logo">Puppertino</a>
-        <Search />
-        <nav>
-          <slot name="sidebar" />
-        </nav>
-      </aside>
+      <>
+        <button class="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="docs-sidebar">
+          <i class="ph-bold ph-list sidebar-toggle-open" aria-hidden="true"></i>
+          <i class="ph-bold ph-x sidebar-toggle-close" aria-hidden="true"></i>
+        </button>
+        <div class="sidebar-scrim"></div>
+        <aside class="sidebar p-scrollbar" id="docs-sidebar">
+          <a href={`${base}docs/`} class="sidebar-logo">Puppertino</a>
+          <Search />
+          <nav>
+            <slot name="sidebar" />
+          </nav>
+        </aside>
+        <script is:inline>
+          (() => {
+            const toggle = document.querySelector('.sidebar-toggle');
+            const scrim = document.querySelector('.sidebar-scrim');
+            const set = (open) => {
+              document.body.classList.toggle('sidebar-open', open);
+              toggle.setAttribute('aria-expanded', String(open));
+            };
+            toggle.addEventListener('click', () => set(!document.body.classList.contains('sidebar-open')));
+            scrim.addEventListener('click', () => set(false));
+            window.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') set(false);
+            });
+          })();
+        </script>
+      </>
     )}
     <main>
       <slot />

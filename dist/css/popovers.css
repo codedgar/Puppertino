@@ -60,7 +60,7 @@
   outline: none;
 }
 
-/* Arrow: exact sheet silhouette (35.44 × 10.5, 45° slopes, rounded tip).
+/* Arrow silhouette: 35.44 × 10.5, 45° slopes, rounded tip.
    No backdrop-filter here: Chromium ignores it on clipped/masked
    elements, so the arrow uses a near-opaque fill that reads as the
    blurred glass. The opacity also keeps the body's hairline rim shadow
@@ -156,7 +156,7 @@
 }
 
 /* Squircle corners where corner-shape ships (Chromium 139+): radius 20
-   with the system's confirmed 60% smoothing → span 32. */
+   with the system's 60% smoothing → span 32. */
 @supports (corner-shape: superellipse(1.465)) {
   :root {
     --p-popover-radius: 32px;

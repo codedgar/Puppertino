@@ -80,7 +80,7 @@
 
 /* --------------------------------------------------------------- Items */
 
-/* Icon button. The hover/pressed pill is the sheet's #E6E6E6 rounded
+/* Icon button. The hover/pressed pill is a #E6E6E6 rounded
    capsule, inset 4 from the group height (36 → 28-tall pill r14;
    24 → 20-tall pill r10). */
 .p-toolbar-btn {

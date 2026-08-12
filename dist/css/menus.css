@@ -315,11 +315,8 @@
   }
 }
 
-/* Squircle corners where corner-shape ships (Chromium 139+). Radii and
-   the 60% smoothing are the design system's confirmed values: the item
-   pill's squircle handles survive in the sheet export (arc 8), and the
-   surface family measures 60% smoothing wherever paths preserve it
-   (windows/dialogs). span = r × 1.6; superellipse(1.465) keeps the 45°
+/* Squircle corners where corner-shape ships (Chromium 139+).
+   span = r × 1.6 for 60% smoothing; superellipse(1.465) keeps the 45°
    curvature at the design radius. */
 @supports (corner-shape: superellipse(1.465)) {
   :root {

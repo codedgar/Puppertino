@@ -162,7 +162,7 @@
   padding: 0% 5%;
 }
 
-/* Desktop alert variant based on the provided SVG. */
+/* Desktop alert variant. */
 .p-desktop-modal {
   color: var(--p-desktop-modal-copy);
   font-family: var(--font);

@@ -51,7 +51,7 @@ Combine `.p-button` with one style class to pick a role.
 
 **Destructive** is always red. It ignores any color class you drop on it. Use it only when the action removes data that cannot be recovered. Pair it with confirmation when the action is irreversible.
 
-**Primary** is the default action. It responds to the Return key. Visually identical to Colored in this release; the macOS pulse animation ships in a follow-up.
+**Primary** is the default action. It shares Colored's appearance and additionally responds to the Return key.
 
 **Borderless** is text only. Use it for tertiary actions that should feel like links inside a dense interface. Toolbar overflow menus, footer affordances, "Show more" toggles.
 
@@ -227,7 +227,7 @@ The class works on `<button>`, `<a>`, and `<input type="submit">`. Pick the elem
 
 ## Migration from v1
 
-The v1 classes (`.p-btn`, `.p-prim-col`, `.p-btn-icon`, `.p-btn-round`, `.p-btn-scope*`, `.p-btn-outline*`) remain available for backwards compatibility. They will be removed in a future major version. Move new work to `.p-button` and migrate existing code on the next pass.
+The v1 classes (`.p-btn`, `.p-prim-col`, `.p-btn-icon`, `.p-btn-round`, `.p-btn-scope*`, `.p-btn-outline*`) remain available for backwards compatibility. They will be removed in a future major version. Use `.p-button` for new work.
 
 | v1 | v2 |
 |---|---|

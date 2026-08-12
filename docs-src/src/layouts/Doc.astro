@@ -1,5 +1,6 @@
 ---
 import Base from './Base.astro';
+import { nav } from '../data/nav.js';
 
 interface Props {
   title?: string;
@@ -12,67 +13,16 @@ const title = props.title ?? props.frontmatter?.title ?? '';
 const description = props.description ?? props.frontmatter?.description;
 const base = import.meta.env.BASE_URL;
 
-const nav = [
-  {
-    heading: 'Foundations',
-    items: [
-      { label: 'Getting Started', href: `${base}docs/getting-started/` },
-      { label: 'Materials', href: `${base}docs/materials/` },
-      { label: 'Colors', href: `${base}docs/colors/` },
-      { label: 'Typography', href: `${base}docs/typography/` },
-      { label: 'Dark Mode', href: `${base}docs/dark-mode/` },
-      { label: 'Icons', href: `${base}docs/icons/` },
-    ],
-  },
-  {
-    heading: 'Mobile Components',
-    items: [
-      { label: 'Buttons', href: `${base}docs/mobile/buttons/` },
-      { label: 'Forms', href: `${base}docs/mobile/forms/` },
-      { label: 'Modals', href: `${base}docs/mobile/modals/` },
-      { label: 'Actions', href: `${base}docs/mobile/actions/` },
-      { label: 'Tabs', href: `${base}docs/mobile/tabs/` },
-    ],
-  },
-  {
-    heading: 'Desktop Components',
-    items: [
-      { label: 'Buttons', href: `${base}docs/desktop/buttons/` },
-      { label: 'Forms', href: `${base}docs/desktop/forms/` },
-      { label: 'Text Fields', href: `${base}docs/desktop/forms/#text-field`, sub: true },
-      { label: 'Search Fields', href: `${base}docs/desktop/forms/#search-field`, sub: true },
-      { label: 'Combo Boxes', href: `${base}docs/desktop/forms/#combo-box`, sub: true },
-      { label: 'Pop-up & Pull-down', href: `${base}docs/desktop/forms/#pop-up-and-pull-down-buttons`, sub: true },
-      { label: 'Toggles', href: `${base}docs/desktop/forms/#switch`, sub: true },
-      { label: 'Steppers', href: `${base}docs/desktop/forms/#stepper`, sub: true },
-      { label: 'Modals', href: `${base}docs/desktop/modals/` },
-      { label: 'Dialogs & Sheets', href: `${base}docs/desktop/dialogs/` },
-      { label: 'Menus', href: `${base}docs/desktop/menus/` },
-      { label: 'Popovers', href: `${base}docs/desktop/popovers/` },
-      { label: 'Tooltips', href: `${base}docs/desktop/tooltips/` },
-      { label: 'Notifications', href: `${base}docs/desktop/notifications/` },
-      { label: 'Segmented Controls', href: `${base}docs/desktop/segmented-controls/` },
-      { label: 'Sliders', href: `${base}docs/desktop/sliders/` },
-      { label: 'Progress Indicators', href: `${base}docs/desktop/progress-indicators/` },
-      { label: 'Disclosure Controls', href: `${base}docs/desktop/disclosure-controls/` },
-      { label: 'Lists & Tables', href: `${base}docs/desktop/lists-tables/` },
-      { label: 'Sidebars', href: `${base}docs/desktop/sidebars/` },
-      { label: 'Windows', href: `${base}docs/desktop/windows/` },
-      { label: 'Scrollbars', href: `${base}docs/desktop/scrollbars/` },
-      { label: 'Menu Bar & Dock', href: `${base}docs/desktop/menu-bar-dock/` },
-      { label: 'Color Wells', href: `${base}docs/desktop/color-wells/` },
-      { label: 'Image Wells', href: `${base}docs/desktop/image-wells/` },
-      { label: 'Toolbars', href: `${base}docs/desktop/toolbars/` },
-      { label: 'Date Pickers', href: `${base}docs/desktop/date-pickers/` },
-    ],
-  },
-];
+const navId = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-// Build a flat list with section labels for prev/next navigation.
-// Anchor sub-links are navigation shortcuts, not pages — keep them out.
-const flat = nav.flatMap((section) =>
-  section.items.filter((item) => !item.sub).map((item) => ({ ...item, section: section.heading }))
-);
+// Flat list for prev/next navigation and the eyebrow. Hub overview pages
+// are included; anchor children are shortcuts, not pages — keep them out.
+const flat = nav.flatMap((section) => [
+  { label: section.heading, href: `${base}${section.hub}`, section: section.heading },
+  ...section.groups.flatMap((group) =>
+    group.items.map((item) => ({ label: item.label, href: `${base}${item.slug}`, section: section.heading }))
+  ),
+]);
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '') + '/';
 const currentIndex = flat.findIndex((item) => item.href === currentPath);
@@ -83,18 +33,97 @@ const currentSection = currentIndex >= 0 ? flat[currentIndex].section : null;
 
 <Base title={title} description={description}>
   <Fragment slot="sidebar">
-    {nav.map(({ heading, items }) => (
-      <div class="nav-section">
-        <span class="nav-heading">{heading}</span>
+    {nav.map((section) => (
+      <details class="nav-section" data-nav={navId(section.heading)} open>
+        <summary class="nav-heading">{section.heading}</summary>
         <ul>
-          {items.map(({ label, href, sub }) => (
-            <li class={sub ? 'nav-sub' : ''}>
-              <a href={href} class={href === currentPath ? 'active' : ''}>{label}</a>
-            </li>
-          ))}
+          <li>
+            <a href={`${base}${section.hub}`} class={`${base}${section.hub}` === currentPath ? 'active' : ''}>Overview</a>
+          </li>
         </ul>
-      </div>
+        {section.groups.map((group) => {
+          const list = (
+            <ul>
+              {group.items.map((item) => (
+                <li>
+                  {item.children ? (
+                    <details class="nav-item" data-nav={`${navId(section.heading)}--${navId(item.label)}`} open>
+                      <summary>
+                        <a href={`${base}${item.slug}`} class={`${base}${item.slug}` === currentPath ? 'active' : ''}>{item.label}</a>
+                      </summary>
+                      <ul>
+                        {item.children.map((child) => (
+                          <li class="nav-sub">
+                            <a href={`${base}${item.slug}${child.anchor}`}>{child.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : (
+                    <a href={`${base}${item.slug}`} class={`${base}${item.slug}` === currentPath ? 'active' : ''}>{item.label}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          );
+          return group.heading ? (
+            <details class="nav-group" data-nav={`${navId(section.heading)}--${navId(group.heading)}`} open>
+              <summary>{group.heading}</summary>
+              {list}
+            </details>
+          ) : (
+            list
+          );
+        })}
+      </details>
     ))}
+
+    <script is:inline>
+      // Remember which sidebar sections the person collapsed, per browser.
+      // The section containing the current page is always revealed.
+      (() => {
+        const KEY = 'puppertino-docs-nav';
+        let state = {};
+        try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+
+        document.querySelectorAll('.sidebar details[data-nav]').forEach((d) => {
+          const id = d.dataset.nav;
+          if (id in state) d.open = state[id];
+          d.addEventListener('toggle', () => {
+            // Programmatic reveals (active-page force-open) are context,
+            // not a preference — don't let them overwrite the stored state.
+            if (d.dataset.skipPersist) {
+              delete d.dataset.skipPersist;
+              return;
+            }
+            state[id] = d.open;
+            try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+          });
+        });
+
+        let el = document.querySelector('.sidebar a.active');
+        while (el) {
+          const details = el.closest('details');
+          if (!details) break;
+          if (!details.open) {
+            details.dataset.skipPersist = '1';
+            details.open = true;
+          }
+          el = details.parentElement;
+        }
+
+        // A link inside a summary (e.g. Forms) must navigate, not toggle.
+        // preventDefault stops the toggle, so navigate by hand. Modified
+        // clicks (new tab) keep their default behavior.
+        document.querySelectorAll('.sidebar summary a').forEach((a) => {
+          a.addEventListener('click', (e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+            e.preventDefault();
+            window.location.href = a.href;
+          });
+        });
+      })();
+    </script>
   </Fragment>
   <article>
     {currentSection && <span class="article-eyebrow">{currentSection}</span>}

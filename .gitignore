@@ -4,6 +4,8 @@ node_modules
 
 CLAUDE.md
 specs/
+status_docs.md
+status_code_comments.md
 docs-src/node_modules/
 docs-src/dist/
 docs-src/.astro/

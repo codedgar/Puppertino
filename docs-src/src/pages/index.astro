@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
-<Base title="Home" description="Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web. Now in version 2.0.">
+<Base title="Home" description="Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web.">
   <div class="landing">
 
     <!-- ─── Hero ───────────────────────────────────────── -->
@@ -11,7 +11,7 @@ const base = import.meta.env.BASE_URL;
       <span class="landing-eyebrow">Version 2.0</span>
       <h1>Puppertino</h1>
       <p class="landing-subtitle">
-        A CSS framework that brings macOS and iOS aesthetics to the web. Rebuilt around Apple's macOS 26 specification.
+        A CSS framework that brings macOS and iOS aesthetics to the web. Built on Apple's macOS 26 specification.
       </p>
       <div class="landing-cta">
         <a href={`${base}docs/getting-started/`} class="landing-btn-primary">Get started</a>
@@ -21,9 +21,9 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ─── What it is ─────────────────────────────────── -->
     <section class="landing-section">
-      <h2>A full rebuild</h2>
+      <h2>What Puppertino is</h2>
       <p>
-        Puppertino 2.0 is a ground-up rebuild. The colors, the typography, and the materials all follow Apple's macOS 26 specification. Components are documented properly. The CSS is structured for clarity, not for accident.
+        The colors, the typography, and the materials all follow Apple's macOS 26 specification. Every component is documented with exact values, rendered previews, and copy-pasteable markup.
       </p>
       <p>
         Everything that worked in version 1 still works. Existing classes remain in place. Projects upgrading from v1 do not need to rewrite anything.
@@ -32,9 +32,9 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ─── The three foundations ──────────────────────── -->
     <section class="landing-section">
-      <h2>Three rebuilt foundations</h2>
+      <h2>Three foundations</h2>
       <p>
-        The new system rests on three pieces. Each one is documented in full and ships with light and dark mode support.
+        The system rests on three pieces. Each one is documented in full and ships with light and dark mode support.
       </p>
       <ul class="landing-list">
         <li>
@@ -53,30 +53,11 @@ const base = import.meta.env.BASE_URL;
     <section class="landing-section">
       <h2>Nothing breaks</h2>
       <p>
-        The legacy color palettes, layout classes, and shadow utilities from version 1 are still part of the package. They will be sunset gradually across the 2.x release line, with clear migration paths for each step.
+        The color palettes, layout classes, and shadow utilities from version 1 are still part of the package. Deprecations happen gradually across the 2.x release line, and each one is announced with a documented migration path.
       </p>
       <p>
         If your project is on Puppertino 1, upgrading to 2.0 is a single dependency bump.
       </p>
-    </section>
-
-    <!-- ─── What's coming ──────────────────────────────── -->
-    <section class="landing-section">
-      <h2>What's coming next</h2>
-      <p>
-        Version 2.0 ships the foundations and the existing components. The releases that follow will focus on three areas.
-      </p>
-      <ul class="landing-list">
-        <li>
-          <strong>More components.</strong> Sidebars, toolbars, popovers, search fields, and the rest of the macOS 26 component set.
-        </li>
-        <li>
-          <strong>Cleaner internals.</strong> Every legacy class will be reviewed, documented, and either kept or replaced. The CSS will be auditable end to end.
-        </li>
-        <li>
-          <strong>Enterprise readiness.</strong> Stable APIs, clear deprecation policy, accessibility-first defaults, and documentation that holds up under scrutiny.
-        </li>
-      </ul>
     </section>
 
     <!-- ─── Final CTA ──────────────────────────────────── -->

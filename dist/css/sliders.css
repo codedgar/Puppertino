@@ -139,7 +139,7 @@
 }
 
 /* ─── Disabled ─────────────────────────────────────────────────────── */
-/* Sheet: fill turns #BFBFBF, thumb ghosts. */
+/* Fill turns #BFBFBF, thumb ghosts. */
 
 .p-slider:disabled {
   --p-slider-accent: #BFBFBF;

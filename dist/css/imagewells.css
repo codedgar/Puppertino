@@ -26,7 +26,7 @@
 }
 
 /* Frame, inside → out: 0.5px dark inner edge, 1px white ring, 1.5px
-   soft dark outer edge (all from the sheet's stroke stack). The 2px
+   soft dark outer edge. The 2px
    padding is the visible well margin around the image. */
 .p-imagewell {
   background: var(--p-imagewell-bg);

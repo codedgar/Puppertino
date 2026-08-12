@@ -25,8 +25,6 @@ Use tabs when the sections carry their own content areas. Use radios when the ch
 | Selected pill | Full height, no inset, 6px radius, flat accent fill |
 | Separators | 1px, `#D9D9D9`, 5px vertical inset, hidden next to the selection |
 
-Every value is exact, not approximated.
-
 ## Basic Use
 
 <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
@@ -120,4 +118,4 @@ macOS slides the pill between segments, and so does this control, still without 
 | `.p-segmented-grey` | `.p-segmented-gray` |
 | `.p-segmented-radius`, `-outline`, `-outline-alt` | no v2 equivalent, macOS 26 has one shape |
 
-The v1 classes stay for backwards compatibility and will be removed in a future major. The v2 control needs no `.active` juggling in JavaScript; the checked radio is the state.
+The v1 classes stay for backwards compatibility and will be removed in a future major. The v2 control needs no `.active` class management in JavaScript; the checked radio is the state.

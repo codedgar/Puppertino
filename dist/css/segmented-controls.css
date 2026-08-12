@@ -98,8 +98,8 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — Segmented Controls
-   macOS 26 segmented control. Values extracted from the reference
-   sheet — see specs/segmented-controls.md.
+   macOS 26 segmented control — see specs/segmented-controls.md for
+   the value derivation.
 
    Radio-group markup, no JavaScript:
 
@@ -136,9 +136,8 @@
      var() in a custom property resolves where the property is defined. */
   --p-control-accent: var(--p-color-current, #0D6FFF);
 
-  /* Grid, not flex: 1fr columns make every segment exactly equal width,
-     which is what the sheet shows and what the sliding pill's
-     percentage math depends on. */
+  /* Grid, not flex: 1fr columns make every segment exactly equal
+     width, which the sliding pill's percentage math depends on. */
   position: relative;
   display: inline-grid;
   grid-auto-flow: column;
@@ -201,8 +200,8 @@
   opacity: 0;
 }
 
-/* Selected pill: flat accent, white label. Full height, no inset — the
-   sheet has no gradients, bevels, or shadows anywhere. Flat is correct. */
+/* Selected pill: flat accent, white label. Full height, no inset —
+   macOS 26 uses no gradients, bevels, or shadows here. */
 .p-segment > input:checked + span {
   background: var(--p-control-accent, var(--p-color-current, #0D6FFF));
   color: #ffffff;

@@ -6,15 +6,27 @@ description: Install Puppertino and bring Apple's design language to the web in 
 
 Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web. It follows Apple's Human Interface Guidelines, ships zero JavaScript dependencies, and works without a build step.
 
-This is **version 2.0** of Puppertino. The release introduces the macOS 26 color system, the materials specification, and a complete typography scale. Existing v1 classes remain available so projects can upgrade without rewrites.
+Puppertino provides the macOS 26 color system, the materials specification, and a complete typography scale. The v1 classes remain available so projects can upgrade without rewrites.
 
 ## Install via CDN
 
 The fastest way to use Puppertino is through jsDelivr. Add the full CSS to the `<head>` of your HTML.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/newfull.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino.min.css">
 ```
+
+Building for one platform only? Two smaller bundles ship alongside the full one.
+
+```html
+<!-- Desktop components only -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino-desktop.min.css">
+
+<!-- Mobile components only -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino-mobile.min.css">
+```
+
+All three include the foundations (colors, typography, materials, layout, shadows, dark mode). The desktop bundle adds the macOS component set; the mobile bundle adds buttons, forms, modals, actions, and tabs.
 
 Need only specific components? Import them individually to keep the bundle small.
 
@@ -77,7 +89,7 @@ Here is the smallest possible Puppertino setup. It pulls in the full framework, 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Puppertino app</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/newfull.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino.min.css">
   </head>
   <body class="p-type p-auto-dark-mode">
     <h1>Hello from Puppertino</h1>
@@ -110,21 +122,21 @@ For the manual approach, the dark mode manager script handles the toggle, persis
 </script>
 ```
 
-## What's New in Version 2.0
+## The Foundations
 
-Three foundations were rebuilt around Apple's macOS 26 specification.
+Three foundations follow Apple's macOS 26 specification.
 
 - **Colors.** Thirteen system accents, six text hierarchy levels, five fill tiers, and semantic background tokens. All with light and dark mode variants.
 - **Typography.** The full Apple text style scale, from Large Title to Caption 2. Nine font weights and optical letter spacing baked in.
 - **Materials.** Five thickness levels for blur and translucency, plus elevation tokens for shadows. Built with `prefers-reduced-transparency` and `@supports` fallbacks.
 
-The legacy `color_palette.css`, `layout.css`, and `shadows.css` files are still included for backwards compatibility. Projects upgrading from v1 do not need to change anything to keep working.
+The v1 `color_palette.css`, `layout.css`, and `shadows.css` files are still included for backwards compatibility. Projects upgrading from v1 do not need to change anything to keep working.
 
 ## Migrating from Version 1
 
-If you are upgrading an existing Puppertino v1 project, your code will continue to work. The new tokens live alongside the old ones.
+If you are upgrading an existing Puppertino v1 project, your code will continue to work. The v2 tokens live alongside the v1 classes.
 
-When you are ready to adopt the new system, update your imports to point at the new files.
+When you are ready to adopt the v2 system, update your imports to point at the v2 files.
 
 ```javascript
 // v1
@@ -132,13 +144,13 @@ import '@codedgar/puppertino/colors'    // color_palette.css
 import '@codedgar/puppertino/layout'    // layout.css
 import '@codedgar/puppertino/shadows'   // shadows.css
 
-// v2 (the new files include everything from v1)
-import '@codedgar/puppertino/colors'      // colors.css (new + legacy)
-import '@codedgar/puppertino/typography'  // typography.css (new + legacy)
-import '@codedgar/puppertino/materials'   // materials.css (new + legacy)
+// v2 (the v2 files include everything from v1)
+import '@codedgar/puppertino/colors'      // colors.css (v2 + v1)
+import '@codedgar/puppertino/typography'  // typography.css (v2 + v1)
+import '@codedgar/puppertino/materials'   // materials.css (v2 + v1)
 ```
 
-Note that `@codedgar/puppertino/colors` now points at the new `colors.css` which includes both the macOS 26 system tokens *and* the legacy classes. Same for materials. You get the new stuff without breaking the old stuff.
+Note that `@codedgar/puppertino/colors` points at `colors.css`, which includes both the macOS 26 system tokens *and* the v1 classes. Same for materials. Both systems are available from the same import.
 
 ## Browser Support
 

@@ -28,9 +28,9 @@
   }
 }
 
-/* The host anchors the tooltip; documented requirement. The tooltip
-   renders outside the host's box, so hosts that clip (e.g. .p-button's
-   overflow: hidden) must let it escape. */
+/* The host anchors the tooltip. The tooltip renders outside the
+   host's box, so hosts that clip (e.g. .p-button's overflow: hidden)
+   must let it escape. */
 [data-p-tooltip] {
   overflow: visible;
   position: relative;

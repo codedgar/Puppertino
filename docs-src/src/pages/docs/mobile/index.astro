@@ -1,0 +1,52 @@
+---
+import Doc from '../../../layouts/Doc.astro';
+import { nav } from '../../../data/nav.js';
+const base = import.meta.env.BASE_URL;
+
+const mobile = nav.find((s) => s.heading === 'Mobile Components');
+---
+
+<Doc title="Mobile Components" description="Components designed for touch interfaces, following iOS interaction patterns.">
+  <p>
+    Components designed for touch interfaces. Sized for 44px minimum tap targets, optimized for single-column layouts, and following iOS interaction patterns. For the visual language they build on, see <a href={`${base}docs/foundations/`}>Foundations</a>.
+  </p>
+
+  <h2>Get the mobile bundle</h2>
+
+  <p>
+    The mobile bundle ships the foundations (colors, typography, materials, layout, shadows, dark mode) plus every component on this page. Nothing desktop-only, so it stays smaller than the full build.
+  </p>
+
+  <pre><code>{`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino-mobile.min.css">`}</code></pre>
+
+  <p>Installing through npm? Import the same bundle by name.</p>
+
+  <pre><code>{`import '@codedgar/puppertino/mobile'`}</code></pre>
+
+  <p>
+    Building for both platforms, or unsure what you need? Use the full bundle, <code>puppertino.min.css</code>, which includes everything. See <a href={`${base}docs/getting-started/`}>Getting Started</a> for all the install options, including per-component imports.
+  </p>
+
+  <p>
+    Actions, tabs, and modals are interactive. Each component page documents the small vanilla JavaScript helper it needs; the CSS works without any of them.
+  </p>
+
+  <h2>Components</h2>
+
+  {mobile.groups.map((group) => (
+    <section class="tile-section">
+      <h3>{group.heading}</h3>
+      <p class="tile-section-note">{group.note}</p>
+      <div class="tile-grid">
+        {group.items.map((item) => (
+          <a href={`${base}${item.slug}`} class={`tile ${mobile.tint}`}>
+            <div class="tile-art">
+              <i class={`ph-bold ${item.icon}`}></i>
+            </div>
+            <span class="tile-label">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+</Doc>

@@ -75,7 +75,7 @@
   background: var(--p-list-hover);
 }
 
-/* Selected, window focused: sheet blue #2962D9 (deliberately darker than
+/* Selected, window focused: #2962D9 (deliberately darker than
    the control accent), white content in every slot. */
 /* Retint by overriding --p-list-selection on the list or row.
    (--p-color-current can't serve here: it's registered with

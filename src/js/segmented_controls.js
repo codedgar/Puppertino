@@ -29,5 +29,4 @@ class PuppertinoSegmentedCon {
   }
 }
 
-// Initialize the PuppertinoSegmentedCon instance
 const segmentedControlManager = new PuppertinoSegmentedCon();

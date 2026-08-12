@@ -55,8 +55,8 @@
 }
 
 /* ─── Indeterminate ────────────────────────────────────────────────── */
-/* Matched against a live NSProgressIndicator recording (macOS 26): a
-   solid capsule that inchworms side to side. The leading edge launches
+/* Reproduces NSProgressIndicator (macOS 26): a solid capsule that
+   inchworms side to side. The leading edge launches
    first, the trailing edge lingers, so the segment stretches to ~31% of
    the track mid-travel and compresses to a height-sized dot at each end
    (dwelling there ~0.2s) before reversing. No gradient — the "tail" is
@@ -95,8 +95,8 @@
 }
 
 /* Both edges traverse the same curve, the trailing edge ~15% of a
-   half-cycle behind. Stops are sampled straight from the native
-   recording; linear timing between them reproduces the easing. */
+   half-cycle behind. Stops are sampled from the native animation;
+   linear timing between them reproduces the easing. */
 @keyframes p-progress-worm {
   /* dot at the left end */
   0% {

@@ -110,7 +110,7 @@
   white-space: nowrap;
 }
 
-/* Web affordance (not sheet-derived): a fixed top-right stack for banners. */
+/* Web affordance (no macOS equivalent): a fixed top-right stack for banners. */
 .p-notification-center {
   display: flex;
   flex-direction: column;
@@ -136,7 +136,7 @@
 }
 
 /* Squircle corners where corner-shape ships (Chromium 139+): radius 16
-   with the system's confirmed 60% smoothing → span 25.6. */
+   with the system's 60% smoothing → span 25.6. */
 @supports (corner-shape: superellipse(1.465)) {
   :root {
     --p-notification-radius: 25.6px;

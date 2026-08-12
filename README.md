@@ -21,10 +21,10 @@ Welcome to **Puppertino**! This framework brings the macOS look and feel to your
 
 ## Get Started
 
-To integrate Puppertino into your project, simply include the full.css file in your HTML head tag:
+To integrate Puppertino into your project, simply include the minified bundle in your HTML head tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/newfull.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/codedgar/Puppertino@latest/dist/css/puppertino.min.css">
 ```
 ### Customize your setup
 If you only need specific components, you can import them individually to reduce file size. Here’s how you can include only the buttons:

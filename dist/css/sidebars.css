@@ -187,7 +187,7 @@
 }
 
 /* Squircle corners where corner-shape ships (Chromium 139+): panel 18
-   and row capsules 8 with the system's confirmed 60% smoothing →
+   and row capsules 8 with the system's 60% smoothing →
    spans 28.8 / 12.8. (.p-sidebar-attached keeps its square corners —
    higher specificity.) */
 @supports (corner-shape: superellipse(1.465)) {

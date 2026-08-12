@@ -1,8 +1,8 @@
 /* Puppertino v2.0 — Color Wells (macOS 26)
    A color well lets people adjust the color of text, shapes, guides,
    and other onscreen elements. Wraps a native <input type="color">, so
-   activating it opens the platform picker. The two looks in the sheet
-   are STATES: a well starts as the spectrum disc (nothing chosen yet)
+   activating it opens the platform picker. The two appearances are
+   states: a well starts as the spectrum disc (nothing chosen yet)
    and becomes the rainbow-ring + color-dot swatch once a color is
    picked (.p-colorwell-set — colorwells.js adds it on selection). */
 
@@ -54,7 +54,7 @@
   position: absolute;
 }
 
-/* …under the sheet's white radial highlight (100% center → 0 at 96%). */
+/* …under a white radial highlight (100% at center → 0 at 96%). */
 .p-colorwell::after {
   background: radial-gradient(
     circle,

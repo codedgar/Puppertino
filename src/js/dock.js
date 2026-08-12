@@ -8,14 +8,14 @@
  *   offset = min(|cursor - restCenter|, R)     R = zoomed icon size
  *   zoom   = 1 + (1 - (offset/R)^2) * (M - 1)  parabolic falloff
  *
- * Sizes are written as real box dimensions (--p-dock-icon per item), so
- * flex layout pushes neighbors, the platter stretches, and everything
- * repaints at true size — transform scaling was tried and rejected:
- * Chromium stretches the cached rest-size raster, so scaled icons come
- * out pixelated. The stability trick is that distances are measured
- * against STATIC rest centers (mapped through the platter's center
- * anchor), never live rects — live measurement feeds layout back into
- * the math and jitters. M ramps 0 -> full over ~150ms on enter and back
+ * Sizes are written as real box dimensions (--p-dock-icon per item)
+ * rather than transform scale, so flex layout pushes neighbors, the
+ * platter stretches, and everything repaints at true size (Chromium
+ * stretches the cached rest-size raster, so scaled icons pixelate).
+ * Distances are measured against STATIC rest centers (mapped through
+ * the platter's center anchor), never live rects — live measurement
+ * feeds layout back into the math and jitters. M ramps 0 -> full over
+ * ~150ms on enter and back
  * on leave (Plank's zoom_in_progress), so nothing snaps. The launch
  * bounce animates the icon's child so both effects compose. Disabled
  * under prefers-reduced-motion. No dependencies.

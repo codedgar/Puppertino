@@ -237,7 +237,7 @@
   }
 }
 
-/* ─── New shadow system (Apple-aligned elevation tiers) ────────────── */
+/* ─── Shadow system (Apple-aligned elevation tiers) ────────────────── */
 
 .p-elevation-1 {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);

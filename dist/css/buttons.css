@@ -5,8 +5,6 @@
    .p-btn and friends remain for backwards compatibility. The v2
    system below (.p-button) replaces them. New work should use
    .p-button — these classes will be removed in a future major.
-
-   See the v2 block further down for the new spec.
    ───────────────────────────────────────────────────────────────────── */
 
 :root{
@@ -78,7 +76,7 @@
   border: none;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.41), 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
   color: var(--p-prim-text-col);
-  overflow: hidden; /* Ensure the ::before element doesn't overflow */
+  overflow: hidden;
 }
 
 .p-prim-col:before {
@@ -174,9 +172,6 @@
    the element (.p-button + .p-button-colored + .p-grape, etc.).
    The retint mechanism reads --p-color-current published by every
    color class in colors.css. Default tint is the macOS system blue.
-
-   Out of scope here: arrow buttons (separate component), iOS sizes,
-   the macOS pulse animation on the default action.
    ═════════════════════════════════════════════════════════════════════ */
 
 .p-button {
@@ -198,11 +193,8 @@
   white-space: nowrap;
   overflow: hidden;
 
-  /* Component-scoped tokens — size modifiers override these.
-     Values from the macOS 26 Figma component:
-       - 24px height, 16px horizontal padding, 6px squircle radius
-       - SF Pro 13px / weight 510 / letter-spacing 0
-       - Default tint #0D6FFF (the Figma button blue) */
+  /* Component-scoped tokens (macOS 26 reference values) —
+     size modifiers override these. */
   --p-button-radius: 6px;
   --p-button-height: 24px;
   --p-button-padding-x: 16px;
@@ -229,9 +221,9 @@
 }
 
 /* Plus-darker overlay layer.
-   The Figma file uses mix-blend-mode: plus-darker at 13% opacity for
-   pressed/hover states on filled buttons. We reproduce it with a
-   ::before that scales opacity in and out on interaction. */
+   macOS composites pressed/hover on filled buttons as plus-darker
+   black at 13%; approximated with a ::before whose opacity scales
+   in and out on interaction. */
 .p-button::before {
   content: "";
   position: absolute;
@@ -266,7 +258,7 @@
 }
 
 .p-button > span {
-  position: relative; /* same — labels render above the overlay */
+  position: relative; /* labels render above the ::before overlay */
 }
 
 /* ─── Style modifiers ──────────────────────────────────────────────── */
@@ -277,8 +269,7 @@
 }
 
 /* Colored and Primary share visual treatment.
-   Primary is semantically the default action (Return key); the visual
-   distinction (pulse animation) ships in a follow-up. */
+   Primary is semantically the default action (Return key). */
 .p-button-colored,
 .p-button-primary {
   background: var(--p-color-current, var(--p-button-default-tint));
@@ -302,9 +293,9 @@
 }
 
 /* ─── Sizes (macOS-derived) ────────────────────────────────────────── */
-/* NOTE: macOS sizes intentionally violate iOS's 44px minimum tap target.
-   They target pointer input. For touch contexts use the regular
-   default or .p-button-large. Do not "fix" the smaller sizes. */
+/* NOTE: macOS sizes intentionally sit below iOS's 44px minimum tap
+   target. They target pointer input. For touch contexts use the
+   regular default or .p-button-large. */
 
 .p-button-mini {
   --p-button-height: 16px;
@@ -371,8 +362,8 @@
    Wrap an app shell in .p-window-inactive (or set
    data-window-state="inactive") to swap --p-color-current to graphite.
    Every variant retints automatically because they all read from the
-   same variable. No body:not(:focus-within) magic — it has too many
-   false positives on the web. */
+   same variable. Opt-in by class rather than focus-within detection,
+   which false-positives on the web. */
 
 .p-window-inactive .p-button-colored,
 .p-window-inactive .p-button-primary,

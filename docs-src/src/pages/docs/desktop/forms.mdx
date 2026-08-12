@@ -11,7 +11,7 @@ import steppersScript from '../../../../../src/js/steppers.js?url';
 
 A form control collects a decision from a person. A field takes text, a checkbox takes a yes or no, a radio takes one choice from a set, a switch flips a state.
 
-Puppertino ships a full set of v2 form controls with exact macOS metrics. Every size, radius, and shadow below is a specific, deliberate value, not an approximation.
+Puppertino ships a full set of v2 form controls. Every size, radius, and shadow below matches the macOS 26 metrics.
 
 ## When to Use Each Control
 
@@ -84,7 +84,7 @@ Focus replaces the outline with the macOS ring: a 1px border at `rgba(0,122,255,
 </div>
 ```
 
-The select shares the field's box: 24px tall, 6px radius, same ring and focus treatment. The up and down chevrons render in the text color at the right edge. macOS 26 popup buttons are plain, so the v1 blue chevron capsule is gone from v2.
+The select shares the field's box: 24px tall, 6px radius, same ring and focus treatment. The up and down chevrons render in the text color at the right edge. macOS 26 popup buttons are plain, so the select renders no chevron capsule. (The v1 `.p-form-select` keeps its blue capsule.)
 
 ## Stepper
 
@@ -336,6 +336,6 @@ The v1 classes remain available and unchanged. They will be removed in a future 
 | `.p-form-radio-cont` | `.p-radio` |
 | `.p-form-switch` | `.p-switch` |
 | `.p-form-label` | `.p-label` |
-| `.p-chip` | unchanged, v2 chips ship later |
+| `.p-chip` | no v2 equivalent, keep using `.p-chip` |
 
 The markup pattern stays the same: a label wrapping a hidden input plus a `<span>`. Only the class names change, so migration is a rename.
