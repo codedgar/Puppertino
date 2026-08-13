@@ -5,32 +5,43 @@ description: A transient glass surface anchored to a control, with an edge arrow
 ---
 
 import '@puppertino/popovers.css';
+import Showcase from '../../../components/Showcase.astro';
 import popoversScript from '../../../../../src/js/popovers.js?url';
 
 <script type="module" src={popoversScript}></script>
 
-A popover is a transient view that appears above other content when people click or tap a control or interactive area. Use it for lightweight tools and details that relate to one control. For commands, use a [menu](../menus/). For decisions that block the flow, use a [dialog](../dialogs/).
+A popover is a transient view that appears above other content when people click or tap a control or interactive area.
+
+## When to use it
+
+Use a popover for lightweight tools and details that relate to one control. For commands, use a [menu](../menus/). For decisions that block the flow, use a [dialog](../dialogs/).
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: center;">
-  <div class="p-popover" role="dialog" aria-label="Example popover" style="width: 200px; height: 120px;">
-    <strong style="font-size: 13px;">Arrow on top</strong>
-    <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">The default placement sits under its control.</p>
-  </div>
-  <div class="p-popover" data-p-popover-place="top" role="dialog" aria-label="Example popover" style="width: 200px; height: 120px;">
-    <strong style="font-size: 13px;">Arrow on bottom</strong>
-    <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">Placement top puts the popover above its control.</p>
-  </div>
+<Showcase
+  name="popovers-placements"
+  snippet={false}
+  code={`<div class="p-popover" role="dialog" aria-label="Example popover" style="width: 200px; height: 120px;">
+  <strong style="font-size: 13px;">Arrow on top</strong>
+  <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">The default placement sits under its control.</p>
 </div>
+<div class="p-popover" data-p-popover-place="top" role="dialog" aria-label="Example popover" style="width: 200px; height: 120px;">
+  <strong style="font-size: 13px;">Arrow on bottom</strong>
+  <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">Placement top puts the popover above its control.</p>
+</div>`}
+/>
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px;">
-  <button class="p-button" type="button" data-p-popover="#demo-popover" aria-expanded="false" aria-haspopup="dialog">Show popover</button>
-  <div class="p-popover" id="demo-popover" data-p-popover-float role="dialog" aria-label="Demo popover" style="width: 220px;">
-    <strong style="font-size: 13px;">Floating popover</strong>
-    <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">Positioned by popovers.js. Click outside or press Escape to close.</p>
-  </div>
-</div>
+<Showcase
+  name="popovers-floating"
+  snippet={false}
+  align="start"
+  compact
+  code={`<button class="p-button" type="button" data-p-popover="#demo-popover" aria-expanded="false" aria-haspopup="dialog">Show popover</button>
+<div class="p-popover" id="demo-popover" data-p-popover-float role="dialog" aria-label="Demo popover" style="width: 220px;">
+  <strong style="font-size: 13px;">Floating popover</strong>
+  <p style="font-size: 11px; margin: 6px 0 0; opacity: 0.7;">Positioned by popovers.js. Click outside or press Escape to close.</p>
+</div>`}
+/>
 
 ## Anatomy
 

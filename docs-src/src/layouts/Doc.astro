@@ -147,4 +147,58 @@ const currentSection = currentIndex >= 0 ? flat[currentIndex].section : null;
       </nav>
     )}
   </article>
+
+  <aside class="toc" aria-label="On this page" hidden>
+    <span class="toc-title">On this page</span>
+    <ul class="toc-list"></ul>
+  </aside>
+
+  <script is:inline>
+    // Table of contents built from the rendered DOM, so headings from
+    // components (variant sections) are included alongside markdown ones.
+    (() => {
+      const toc = document.querySelector('.toc');
+      const list = toc?.querySelector('.toc-list');
+      if (!toc || !list) return;
+
+      const headings = [...document.querySelectorAll('article h2[id], article h3[id]')];
+      if (headings.length < 3) return;
+
+      for (const h of headings) {
+        const li = document.createElement('li');
+        if (h.tagName === 'H3') li.className = 'toc-sub';
+        const a = document.createElement('a');
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+      }
+      toc.hidden = false;
+
+      // Scroll-spy: the current section is the last heading above the
+      // upper third of the viewport.
+      const links = new Map(headings.map((h, i) => [h.id, list.children[i].firstChild]));
+      let activeLink = null;
+      const setActive = (id) => {
+        const link = links.get(id);
+        if (link === activeLink) return;
+        activeLink?.classList.remove('is-active');
+        link?.classList.add('is-active');
+        activeLink = link ?? null;
+      };
+
+      const update = () => {
+        const line = window.innerHeight / 3;
+        let current = headings[0].id;
+        for (const h of headings) {
+          if (h.getBoundingClientRect().top <= line) current = h.id;
+          else break;
+        }
+        setActive(current);
+      };
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+    })();
+  </script>
 </Base>

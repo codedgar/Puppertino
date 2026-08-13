@@ -3,10 +3,10 @@ import Doc from '../../../layouts/Doc.astro';
 import { nav } from '../../../data/nav.js';
 const base = import.meta.env.BASE_URL;
 
-const desktop = nav.find((s) => s.heading === 'Desktop Components');
+const desktop = nav.find((s) => s.heading === 'Desktop components');
 ---
 
-<Doc title="Desktop Components" description="Components designed for pointer-driven interfaces, following macOS conventions.">
+<Doc title="Desktop components" description="Components designed for pointer-driven interfaces, following macOS conventions.">
   <p>
     Components designed for pointer-driven interfaces. Hover states, compact sizing, and interaction patterns following macOS conventions. For the visual language they build on, see <a href={`${base}docs/foundations/`}>Foundations</a>.
   </p>
@@ -24,7 +24,7 @@ const desktop = nav.find((s) => s.heading === 'Desktop Components');
   <pre><code>{`import '@codedgar/puppertino/desktop'`}</code></pre>
 
   <p>
-    Building for both platforms, or unsure what you need? Use the full bundle, <code>puppertino.min.css</code>, which includes everything. See <a href={`${base}docs/getting-started/`}>Getting Started</a> for all the install options, including per-component imports.
+    Building for both platforms, or unsure what you need? Use the full bundle, <code>puppertino.min.css</code>, which includes everything. See <a href={`${base}docs/getting-started/`}>Getting started</a> for all the install options, including per-component imports.
   </p>
 
   <p>

@@ -15,7 +15,7 @@ Puppertino ships with the full macOS 26 color system. Every color has a light an
 
 The colors live in `colors.css`. The legacy palettes from earlier versions of Puppertino remain available for backwards compatibility.
 
-## System Accents
+## System accents
 
 Thirteen accent colors form the base palette. Each color has a light mode and dark mode variant, and the dark variant is slightly more saturated to maintain visual impact against dark backgrounds.
 
@@ -51,7 +51,7 @@ Apply system colors with the utility classes or the CSS variables directly.
 }
 ```
 
-## Text Hierarchy
+## Text hierarchy
 
 Six levels of text emphasis. Primary is for body content, secondary for supporting copy, and the lower tiers are for placeholders and decorative text. Apple expanded this from four levels to six in macOS 26 to give designers more room for ultra-subtle text.
 
@@ -81,7 +81,7 @@ Three background tiers for layered surfaces, plus three more for grouped table-s
 
 Use the grouped variants (`--p-bg-grouped-primary`, `--p-bg-grouped-secondary`, `--p-bg-grouped-tertiary`) when building list-style content like settings screens.
 
-## Dark Mode
+## Dark mode
 
 All color tokens flip automatically when the page enters dark mode. Two ways to opt in:
 
@@ -95,7 +95,7 @@ All color tokens flip automatically when the page enters dark mode. Two ways to 
 
 The auto variant uses `prefers-color-scheme` and switches without any JavaScript.
 
-## Unofficial Colors
+## Unofficial colors
 
 A second palette ships alongside the system colors. These are not part of Apple's HIG, they don't flip in dark mode, and they don't carry semantic meaning. They're here because they look great, they have a full set of shades, and they make it easy to brand a Puppertino interface without leaving the framework.
 
@@ -215,4 +215,4 @@ Drop one of these classes on a button to retint it. The button picks up the new 
 
 Apple's system colors are tested for color blindness and meet WCAG AA contrast at the 4.5:1 ratio for body text. When using system accents over fills or materials, verify the contrast in both light and dark mode.
 
-For users with `prefers-contrast: more`, consider adding stronger borders to elements that rely on fill colors alone for separation.
+For people with `prefers-contrast: more`, consider adding stronger borders to elements that rely on fill colors alone for separation.

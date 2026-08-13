@@ -5,6 +5,7 @@ description: Desktop alert modals for macOS-style interfaces. Glass surfaces, st
 ---
 
 import '@puppertino/modals.css';
+import Showcase from '../../../components/Showcase.astro';
 import modalsScript from '../../../../../src/js/modals.js?url';
 
 <script type="module" src={modalsScript}></script>
@@ -56,50 +57,43 @@ import modalsScript from '../../../../../src/js/modals.js?url';
 
 Desktop modals in Puppertino are compact alert dialogs for pointer-driven interfaces: a frosted glass body, 260px width, 26px radius, and pill actions arranged either as a vertical stack or a horizontal pair.
 
-Use them for short confirmation moments, destructive warnings, and small decision points. Do not use them for large forms, long reading flows, or anything that needs a lot of scrolling.
+## When to use them
+
+Use them for short confirmation moments, destructive warnings, and small decision points. Avoid them for large forms, long reading flows, or anything that needs a lot of scrolling.
 
 ## Preview
 
 Desktop modals use two layouts. Stacked handles three actions. Split handles two.
 
-<div
-  style="margin: 16px 0 20px; padding: 20px; background: #f5f5f5; border-radius: 5px; display: flex; flex-wrap: wrap; gap: 30px;"
->
-  <div
-    class="p-desktop-modal p-desktop-modal--stacked"
-    style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 260px;"
-    aria-hidden="true"
-  >
-    <div class="p-desktop-modal__surface">
-      <div class="p-desktop-modal__body">
-        <h2 class="p-desktop-modal__title">Save this message as a draft?</h2>
-        <p class="p-desktop-modal__description">{'This message has not been sent and'}<br />{'contains unsaved changes. You can save'}<br />{'it as a draft to work on later.'}</p>
-      </div>
-      <div class="p-desktop-modal__actions">
-        <button class="p-desktop-modal__action p-desktop-modal__action--primary" type="button">Save</button>
-        <button class="p-desktop-modal__action p-desktop-modal__action--destructive" type="button">Don’t Save</button>
-        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" type="button">Cancel</button>
-      </div>
+<Showcase
+  name="modals-preview"
+  snippet={false}
+  code={`<div class="p-desktop-modal p-desktop-modal--stacked" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 260px;" aria-hidden="true">
+  <div class="p-desktop-modal__surface">
+    <div class="p-desktop-modal__body">
+      <h2 class="p-desktop-modal__title">Save this message as a draft?</h2>
+      <p class="p-desktop-modal__description">This message has not been sent and<br />contains unsaved changes. You can save<br />it as a draft to work on later.</p>
     </div>
-  </div>
-
-  <div
-    class="p-desktop-modal p-desktop-modal--split"
-    style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 260px;"
-    aria-hidden="true"
-  >
-    <div class="p-desktop-modal__surface">
-      <div class="p-desktop-modal__body">
-        <h2 class="p-desktop-modal__title">Save this message as a draft?</h2>
-        <p class="p-desktop-modal__description">{'This message has not been sent and'}<br />{'contains unsaved changes. You can save'}<br />{'it as a draft to work on later.'}</p>
-      </div>
-      <div class="p-desktop-modal__actions">
-        <button class="p-desktop-modal__action p-desktop-modal__action--secondary" type="button">Cancel</button>
-        <button class="p-desktop-modal__action p-desktop-modal__action--primary" type="button">Save</button>
-      </div>
+    <div class="p-desktop-modal__actions">
+      <button class="p-desktop-modal__action p-desktop-modal__action--primary" type="button">Save</button>
+      <button class="p-desktop-modal__action p-desktop-modal__action--destructive" type="button">Don’t Save</button>
+      <button class="p-desktop-modal__action p-desktop-modal__action--secondary" type="button">Cancel</button>
     </div>
   </div>
 </div>
+<div class="p-desktop-modal p-desktop-modal--split" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 260px;" aria-hidden="true">
+  <div class="p-desktop-modal__surface">
+    <div class="p-desktop-modal__body">
+      <h2 class="p-desktop-modal__title">Save this message as a draft?</h2>
+      <p class="p-desktop-modal__description">This message has not been sent and<br />contains unsaved changes. You can save<br />it as a draft to work on later.</p>
+    </div>
+    <div class="p-desktop-modal__actions">
+      <button class="p-desktop-modal__action p-desktop-modal__action--secondary" type="button">Cancel</button>
+      <button class="p-desktop-modal__action p-desktop-modal__action--primary" type="button">Save</button>
+    </div>
+  </div>
+</div>`}
+/>
 
 ## Variants
 
@@ -108,12 +102,13 @@ Two alert layouts are available:
 - `.p-desktop-modal--stacked` for three actions.
 - `.p-desktop-modal--split` for two actions placed side by side.
 
-<div
-  style="display: flex; flex-wrap: wrap; gap: 12px; padding: 24px; margin: 16px 0; background: var(--p-bg-secondary); border-radius: 10px;"
->
-  <button class="p-button p-button-primary" data-p-open-modal="#desktop-modal-stacked">Open stacked alert</button>
-  <button class="p-button p-button-secondary" data-p-open-modal="#desktop-modal-split">Open side-by-side alert</button>
-</div>
+<Showcase
+  name="modals-variants"
+  snippet={false}
+  compact
+  code={`<button class="p-button p-button-primary" data-p-open-modal="#desktop-modal-stacked">Open stacked alert</button>
+<button class="p-button p-button-secondary" data-p-open-modal="#desktop-modal-split">Open side-by-side alert</button>`}
+/>
 
 ## Anatomy
 
@@ -173,7 +168,7 @@ The trigger uses `data-p-open-modal` with the selector of the modal you want to 
 </div>
 ```
 
-## Action Layout
+## Action layout
 
 Use the stacked variant when you need three clear outcomes. Order the actions primary first, destructive second, and cancel last.
 

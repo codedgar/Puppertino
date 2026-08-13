@@ -32,6 +32,17 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-menubar-text: rgba(0, 0, 0, 0.85);
+  --p-menubar-text-status: rgba(0, 0, 0, 0.72);
+  --p-menubar-highlight: rgba(0, 0, 0, 0.08);
+  --p-menubar-material: rgba(246, 246, 246, 0.72);
+  --p-menubar-material-opaque: #f6f6f6;
+}
+
 /* On-image variants regardless of theme (bar over a photo/wallpaper). */
 .p-menubar-on-dark {
   --p-menubar-text: #fff;

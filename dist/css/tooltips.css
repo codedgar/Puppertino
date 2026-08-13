@@ -28,6 +28,16 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-tooltip-bg: rgba(246, 246, 246, 0.72);
+  --p-tooltip-bg-opaque: #f0f0f0;
+  --p-tooltip-text: #4d4d4d;
+  --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
 /* The host anchors the tooltip. The tooltip renders outside the
    host's box, so hosts that clip (e.g. .p-button's overflow: hidden)
    must let it escape. */

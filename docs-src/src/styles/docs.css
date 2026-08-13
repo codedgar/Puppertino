@@ -432,6 +432,81 @@ article pre code {
   font-size: 14px;
 }
 
+/* Copy button on code blocks. CopyToast wraps each pre in .code-block
+   so the button stays pinned while the pre scrolls horizontally. */
+article .code-block {
+  position: relative;
+  margin: 24px 0;
+}
+
+article .code-block pre {
+  margin: 0;
+}
+
+.code-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+
+.code-copy:hover {
+  color: var(--text-primary);
+  border-color: var(--text-tertiary);
+}
+
+/* No hover on touch screens; keep the button visible. */
+@media (hover: none) {
+  .code-copy {
+    opacity: 1;
+  }
+}
+
+/* Skip link for keyboard and screen reader use. Visually hidden
+   until focused, then floats above the sidebar. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 300;
+  padding: 10px 16px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 16px));
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+main:focus {
+  outline: none;
+}
+
 article table {
   width: 100%;
   border-collapse: collapse;
@@ -860,3 +935,269 @@ article td code {
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Showcase ──────────────────────────────────────────────────────
+   The snippet live on one neutral field that follows the page's
+   appearance. The corner button flips the field to the opposite
+   scheme through the framework's appearance scopes; the field reads
+   --p-bg-secondary, so one class change recolors everything on it. */
+
+.showcase {
+  margin: 24px 0;
+}
+
+.showcase-field {
+  position: relative;
+  background: var(--p-bg-secondary);
+  color: var(--p-text-primary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.showcase-stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+
+.showcase-compact .showcase-stage {
+  padding: 24px;
+}
+
+.showcase-appearance {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--p-text-tertiary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.showcase-appearance:hover {
+  background: var(--p-fill-tertiary);
+  color: var(--p-text-secondary);
+}
+
+/* Icon states: moon when the field shows light, sun when it shows
+   dark. With no explicit scope the field follows the page, so the
+   media query decides; an explicit scope class overrides it. */
+
+.showcase-appearance .ph-sun {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .showcase-field:not(.p-light-mode) .showcase-appearance .ph-moon {
+    display: none;
+  }
+
+  .showcase-field:not(.p-light-mode) .showcase-appearance .ph-sun {
+    display: inline;
+  }
+}
+
+.showcase-field.p-dark-mode .showcase-appearance .ph-moon {
+  display: none;
+}
+
+.showcase-field.p-dark-mode .showcase-appearance .ph-sun {
+  display: inline;
+}
+
+.showcase-field.p-light-mode .showcase-appearance .ph-moon {
+  display: inline;
+}
+
+.showcase-field.p-light-mode .showcase-appearance .ph-sun {
+  display: none;
+}
+
+.showcase-data,
+.anatomy-data {
+  display: none;
+}
+
+/* ─── Table of contents ─────────────────────────────────────────────
+   A quiet fixed rail to the right of the content column. Built and
+   scroll-spied by the script in Doc.astro; shown only where the
+   viewport has room beyond sidebar + content. */
+
+.toc {
+  display: none;
+}
+
+@media (min-width: 1420px) {
+  .toc:not([hidden]) {
+    display: block;
+    position: fixed;
+    top: 96px;
+    left: calc(var(--sidebar-width) + var(--content-max) + 8px);
+    width: 200px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    padding-right: 16px;
+  }
+}
+
+.toc-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.toc-list li {
+  margin: 0;
+}
+
+.toc-list a {
+  display: block;
+  padding: 4px 0 4px 14px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-left: 1px solid transparent;
+  margin-left: -1px;
+}
+
+.toc-list .toc-sub a {
+  padding-left: 26px;
+}
+
+.toc-list a:hover {
+  color: var(--text-primary);
+}
+
+.toc-list a.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+/* ─── Anatomy diagram ───────────────────────────────────────────────
+   The live component at large scale on the neutral field, hairline
+   leader lines out to monospace labels. Tokens sit on the diagram. */
+
+.anatomy {
+  margin: 24px 0;
+}
+
+.anatomy-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--p-bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* The diagram reads Puppertino tokens throughout, so flipping the
+   stage's appearance scope recolors field, labels, and lines together. */
+
+.anatomy-appearance {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--p-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.anatomy-appearance:hover {
+  background: var(--p-fill-tertiary);
+}
+
+.anatomy-stage.p-dark-mode .anatomy-appearance .ph-moon,
+.anatomy-stage.p-light-mode .anatomy-appearance .ph-sun {
+  display: none;
+}
+
+.anatomy-frame {
+  position: relative;
+}
+
+.anatomy-lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.anatomy-lines line {
+  stroke: var(--p-text-tertiary);
+  stroke-width: 1px;
+}
+
+.anatomy-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--p-text-secondary);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.anatomy-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 3px 6px;
+  background: var(--p-bg-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--p-text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.anatomy-label[data-copy] {
+  cursor: pointer;
+}
+
+.anatomy-label[data-copy]:hover .anatomy-token {
+  color: var(--accent);
+}
+
+.anatomy-token {
+  color: var(--p-text-tertiary);
+}
+

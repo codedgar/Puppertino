@@ -1,0 +1,124 @@
+---
+import { Code } from 'astro:components';
+
+/* Anatomy diagram: the live component rendered large on the neutral
+   field, with hairline leader lines from each part to a monospace label.
+   The subject is real markup styled by the real CSS, so the diagram
+   cannot drift from what ships. Tokens are labeled on the diagram itself.
+
+   The stage carries its own appearance scope. It starts light; the
+   corner button flips it to .p-dark-mode, and every color on the
+   diagram (field, labels, lines, subject) follows because they all
+   read Puppertino tokens.
+
+   All callout coordinates are in the component's own (unscaled) pixel
+   space: `x, y` is the dot on the part, `lx, ly` anchors the label.
+   They are multiplied by `scale`, so a callout written against the
+   36×16 switch stays correct at any zoom. Labels with a `token` copy
+   it on click.
+
+   `code` is the subject rendered on the stage; `snippet` (optional)
+   is the copy-worthy markup shown below it, collapsed to a peek. */
+
+interface Callout {
+  label: string;
+  token?: string;
+  value?: string;
+  x: number;
+  y: number;
+  lx: number;
+  ly: number;
+}
+
+interface Props {
+  name: string;
+  code: string;
+  snippet?: string;
+  /* Component's natural size in px, pre-zoom */
+  width: number;
+  height: number;
+  scale?: number;
+  callouts: Callout[];
+  /* Stage height in px, sized for the labels around the subject */
+  stageHeight?: number;
+}
+
+const {
+  name,
+  code,
+  snippet = code,
+  width,
+  height,
+  scale = 5,
+  callouts,
+  stageHeight = 240,
+} = Astro.props;
+const w = width * scale;
+const h = height * scale;
+const payload = JSON.stringify({
+  name,
+  code: snippet,
+  parts: callouts.map(({ label, token, value }) => ({ label, token, value })),
+}).replace(/</g, '\\u003c');
+---
+
+<figure class="anatomy" data-anatomy={name}>
+  <div class="anatomy-stage p-light-mode" style={`height: ${stageHeight}px;`}>
+    <button
+      class="anatomy-appearance"
+      type="button"
+      aria-label="Toggle dark appearance"
+      aria-pressed="false"
+    >
+      <i class="ph-bold ph-moon" aria-hidden="true"></i>
+      <i class="ph-bold ph-sun" aria-hidden="true"></i>
+    </button>
+    <div class="anatomy-frame" style={`width: ${w}px; height: ${h}px;`}>
+      <div class="anatomy-subject" style={`zoom: ${scale};`} set:html={code} />
+      <svg
+        class="anatomy-lines"
+        width={w}
+        height={h}
+        viewBox={`0 0 ${w} ${h}`}
+        aria-hidden="true"
+      >
+        {callouts.map((c) => (
+          <line x1={c.x * scale} y1={c.y * scale} x2={c.lx * scale} y2={c.ly * scale} />
+        ))}
+      </svg>
+      {callouts.map((c) => (
+        <>
+          <span
+            class="anatomy-dot"
+            style={`left: ${c.x * scale}px; top: ${c.y * scale}px;`}
+            aria-hidden="true"
+          ></span>
+          <span
+            class="anatomy-label"
+            style={`left: ${c.lx * scale}px; top: ${c.ly * scale}px;`}
+            data-copy={c.token}
+            title={c.token ? 'Click to copy' : undefined}
+          >
+            {c.label}
+            {c.token && <span class="anatomy-token">{c.token}</span>}
+          </span>
+        </>
+      ))}
+    </div>
+  </div>
+  <script type="application/json" class="anatomy-data" set:html={payload} />
+</figure>
+
+<Code code={snippet} lang="html" />
+
+<script>
+  document.addEventListener('click', (event) => {
+    const appearance = (event.target as HTMLElement).closest('.anatomy-appearance');
+    if (!appearance) return;
+    const stage = appearance.closest('.anatomy-stage');
+    if (!stage) return;
+    const dark = stage.classList.toggle('p-dark-mode');
+    stage.classList.toggle('p-light-mode', !dark);
+    appearance.setAttribute('aria-pressed', String(dark));
+  });
+</script>

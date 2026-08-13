@@ -5,29 +5,37 @@ description: A gray glass navigation panel with capsule row selection, section h
 ---
 
 import '@puppertino/sidebars.css';
+import Showcase from '../../../components/Showcase.astro';
 
-A sidebar appears on the leading side of a view and lets people navigate between sections in your app. Use it for top-level navigation with up to two levels of nesting. For data, use a [list](../lists-tables/).
+A sidebar appears on the leading side of a view and lets people navigate between sections in your app.
+
+## When to use it
+
+Use a sidebar for top-level navigation with up to two levels of nesting. For data, use a [list](../lists-tables/).
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start;">
-  <nav class="p-sidebar" aria-label="Example sidebar">
-    <div class="p-sidebar-row p-selected"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-file-text"></i></span> Text Edit <span class="p-sidebar-detail">3</span></div>
-    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-clock"></i></span> Recents</div>
-    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-folder"></i></span> Shared</div>
-    <div class="p-sidebar-header">Favorites <span class="p-sidebar-detail">›</span></div>
-    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-desktop"></i></span> Desktop</div>
-    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-files"></i></span> Documents</div>
-    <div class="p-sidebar-row p-dimmed"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-trash"></i></span> Trash</div>
-  </nav>
-  <nav class="p-sidebar p-sidebar-small" aria-label="Small sidebar" style="width: 180px;">
-    <div class="p-sidebar-row p-selected">Inbox <span class="p-sidebar-detail">12</span></div>
-    <div class="p-sidebar-row">Drafts</div>
-    <div class="p-sidebar-row">Sent</div>
-    <div class="p-sidebar-header">Smart Folders</div>
-    <div class="p-sidebar-row" data-p-level="1">Receipts</div>
-  </nav>
-</div>
+<Showcase
+  name="sidebars-preview"
+  snippet={false}
+  align="start"
+  code={`<nav class="p-sidebar" aria-label="Example sidebar">
+  <div class="p-sidebar-row p-selected"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-file-text"></i></span> Text Edit <span class="p-sidebar-detail">3</span></div>
+  <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-clock"></i></span> Recents</div>
+  <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-folder"></i></span> Shared</div>
+  <div class="p-sidebar-header">Favorites <span class="p-sidebar-detail">›</span></div>
+  <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-desktop"></i></span> Desktop</div>
+  <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-files"></i></span> Documents</div>
+  <div class="p-sidebar-row p-dimmed"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-trash"></i></span> Trash</div>
+</nav>
+<nav class="p-sidebar p-sidebar-small" aria-label="Small sidebar" style="width: 180px;">
+  <div class="p-sidebar-row p-selected">Inbox <span class="p-sidebar-detail">12</span></div>
+  <div class="p-sidebar-row">Drafts</div>
+  <div class="p-sidebar-row">Sent</div>
+  <div class="p-sidebar-header">Smart Folders</div>
+  <div class="p-sidebar-row" data-p-level="1">Receipts</div>
+</nav>`}
+/>
 
 ## Anatomy
 

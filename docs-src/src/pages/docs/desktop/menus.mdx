@@ -5,31 +5,39 @@ description: macOS-style menus for the web. Translucent surface, selection pills
 ---
 
 import '@puppertino/menus.css';
+import Showcase from '../../../components/Showcase.astro';
 import menusScript from '../../../../../src/js/menus.js?url';
 
 <script type="module" src={menusScript}></script>
 
-A menu reveals its options when people interact with it. Use `.p-menu` for custom command menus, context menus, and dropdowns that native `select` cannot express. For value pickers, keep [pop-up buttons](../forms/#pop-up-and-pull-down-buttons) and their native menu.
+A menu reveals its options when people interact with it.
+
+## When to use it
+
+Use `.p-menu` for custom command menus, context menus, and dropdowns that native `select` cannot express. For value pickers, keep [pop-up buttons](../forms/#pop-up-and-pull-down-buttons) and their native menu.
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-start;">
-  <div class="p-menu" role="menu" aria-label="Edit">
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-arrow-counter-clockwise"></span>Undo<span class="p-menu__shortcut">⌘Z</span></button>
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-arrow-clockwise"></span>Redo<span class="p-menu__shortcut">⇧⌘Z</span></button>
-    <hr class="p-menu__separator" />
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Paste<span class="p-menu__shortcut">⌘V</span></button>
-    <button class="p-menu__item is-selected" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-clipboard-text"></span>Paste and Match Style<span class="p-menu__shortcut">⌥⇧⌘V</span></button>
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-trash"></span>Delete</button>
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-selection-all"></span>Select All<span class="p-menu__shortcut">⌘A</span></button>
-    <hr class="p-menu__separator" />
-    <button class="p-menu__item" role="menuitem" type="button" disabled><span class="p-menu__icon ph-bold ph-link"></span>Add Link<span class="p-menu__shortcut">⌘K</span></button>
-    <hr class="p-menu__separator" />
-    <span class="p-menu__header">Header</span>
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-microphone"></span>Dictation<span class="p-menu__shortcut">D</span></button>
-    <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-smiley"></span>Emoji<span class="p-menu__shortcut">E</span></button>
-  </div>
-</div>
+<Showcase
+  name="menus-preview"
+  snippet={false}
+  align="start"
+  code={`<div class="p-menu" role="menu" aria-label="Edit">
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-arrow-counter-clockwise"></span>Undo<span class="p-menu__shortcut">⌘Z</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-arrow-clockwise"></span>Redo<span class="p-menu__shortcut">⇧⌘Z</span></button>
+  <hr class="p-menu__separator" />
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Paste<span class="p-menu__shortcut">⌘V</span></button>
+  <button class="p-menu__item is-selected" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-clipboard-text"></span>Paste and Match Style<span class="p-menu__shortcut">⌥⇧⌘V</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-trash"></span>Delete</button>
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-selection-all"></span>Select All<span class="p-menu__shortcut">⌘A</span></button>
+  <hr class="p-menu__separator" />
+  <button class="p-menu__item" role="menuitem" type="button" disabled><span class="p-menu__icon ph-bold ph-link"></span>Add Link<span class="p-menu__shortcut">⌘K</span></button>
+  <hr class="p-menu__separator" />
+  <span class="p-menu__header">Header</span>
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-microphone"></span>Dictation<span class="p-menu__shortcut">D</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-smiley"></span>Emoji<span class="p-menu__shortcut">E</span></button>
+</div>`}
+/>
 
 ## Anatomy
 
@@ -51,17 +59,20 @@ The surface uses a 13px radius, the thin menu material over a 20px blur, and a s
 
 Hover, keyboard focus, and `.is-selected` paint the pill with the selection blue (`#0088FF`) and switch every slot to white. Disabled items and their shortcuts drop to the disabled gray and do not react. Shortcuts rest in secondary gray. Selection color meets a 4.5:1 contrast ratio with its white label.
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
-  <div class="p-menu" role="menu" aria-label="States">
-    <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Default<span class="p-menu__shortcut">⌘A</span></button>
-    <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Selected<span class="p-menu__shortcut">⌘A</span></button>
-    <button class="p-menu__item" type="button" disabled><span class="p-menu__icon ph-bold ph-clipboard"></span>Disabled<span class="p-menu__shortcut">⌘A</span></button>
-  </div>
-  <div class="p-menu" role="menu" aria-label="Checkable states">
-    <button class="p-menu__item" type="button" role="menuitemcheckbox" aria-checked="true"><span class="p-menu__check">✓</span><span class="p-menu__icon ph-bold ph-clipboard"></span>Checked<span class="p-menu__shortcut">⌘A</span></button>
-    <button class="p-menu__item" type="button" role="menuitemcheckbox" aria-checked="false"><span class="p-menu__check"></span><span class="p-menu__icon ph-bold ph-clipboard"></span>Unchecked<span class="p-menu__shortcut">⌘A</span></button>
-  </div>
+<Showcase
+  name="menus-states"
+  snippet={false}
+  align="start"
+  code={`<div class="p-menu" role="menu" aria-label="States">
+  <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Default<span class="p-menu__shortcut">⌘A</span></button>
+  <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Selected<span class="p-menu__shortcut">⌘A</span></button>
+  <button class="p-menu__item" type="button" disabled><span class="p-menu__icon ph-bold ph-clipboard"></span>Disabled<span class="p-menu__shortcut">⌘A</span></button>
 </div>
+<div class="p-menu" role="menu" aria-label="Checkable states">
+  <button class="p-menu__item" type="button" role="menuitemcheckbox" aria-checked="true"><span class="p-menu__check">✓</span><span class="p-menu__icon ph-bold ph-clipboard"></span>Checked<span class="p-menu__shortcut">⌘A</span></button>
+  <button class="p-menu__item" type="button" role="menuitemcheckbox" aria-checked="false"><span class="p-menu__check"></span><span class="p-menu__icon ph-bold ph-clipboard"></span>Unchecked<span class="p-menu__shortcut">⌘A</span></button>
+</div>`}
+/>
 
 Checkable items reserve the leading column with `.p-menu__check`. Give unchecked siblings an empty check span so labels stay aligned.
 
@@ -75,20 +86,23 @@ Three sizes share the surface. Regular is the default.
 | Medium | `.p-menu--medium` | 22px | 11px |
 | Regular | none | 24px | 13px |
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
-  <div class="p-menu p-menu--small" role="menu" aria-label="Small">
-    <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Small item<span class="p-menu__shortcut">⌘Z</span></button>
-    <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Small item<span class="p-menu__shortcut">⌘Z</span></button>
-  </div>
-  <div class="p-menu p-menu--medium" role="menu" aria-label="Medium">
-    <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Medium item<span class="p-menu__shortcut">⌘Z</span></button>
-    <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Medium item<span class="p-menu__shortcut">⌘Z</span></button>
-  </div>
-  <div class="p-menu" role="menu" aria-label="Regular">
-    <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Regular item<span class="p-menu__shortcut">⌘Z</span></button>
-    <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Regular item<span class="p-menu__shortcut">⌘Z</span></button>
-  </div>
+<Showcase
+  name="menus-sizes"
+  snippet={false}
+  align="start"
+  code={`<div class="p-menu p-menu--small" role="menu" aria-label="Small">
+  <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Small item<span class="p-menu__shortcut">⌘Z</span></button>
+  <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Small item<span class="p-menu__shortcut">⌘Z</span></button>
 </div>
+<div class="p-menu p-menu--medium" role="menu" aria-label="Medium">
+  <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Medium item<span class="p-menu__shortcut">⌘Z</span></button>
+  <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Medium item<span class="p-menu__shortcut">⌘Z</span></button>
+</div>
+<div class="p-menu" role="menu" aria-label="Regular">
+  <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Regular item<span class="p-menu__shortcut">⌘Z</span></button>
+  <button class="p-menu__item is-selected" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Regular item<span class="p-menu__shortcut">⌘Z</span></button>
+</div>`}
+/>
 
 ## Submenus
 
@@ -112,9 +126,13 @@ Wrap the trigger item and a nested menu in `.p-menu__subwrap`. The submenu opens
 
 Static menus render inline, like the previews above. To open a menu from a control, add `data-p-menu-float` to the menu, point the trigger at it with `data-p-menu`, and load `menus.js`. The script positions the menu under the trigger, flips it when it would leave the viewport, and closes it on Escape or an outside click. Arrow keys move through items. Activating an item plays the macOS selection blink, then closes.
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px;">
-  <button class="p-button p-button-secondary" type="button" data-p-menu="#demo-float-menu" aria-haspopup="menu" aria-expanded="false">Open menu</button>
-</div>
+<Showcase
+  name="menus-floating"
+  snippet={false}
+  align="start"
+  compact
+  code={`<button class="p-button p-button-secondary" type="button" data-p-menu="#demo-float-menu" aria-haspopup="menu" aria-expanded="false">Open menu</button>`}
+/>
 
 <div class="p-menu" role="menu" id="demo-float-menu" data-p-menu-float aria-label="Floating demo">
   <button class="p-menu__item" role="menuitem" type="button"><span class="p-menu__icon ph-bold ph-arrow-counter-clockwise"></span>Undo<span class="p-menu__shortcut">⌘Z</span></button>

@@ -525,6 +525,45 @@ and --p-color-current is exposed for any nested component to read.
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-sys-red: #FF383C;
+  --p-sys-orange: #FF8D28;
+  --p-sys-yellow: #FFCC00;
+  --p-sys-green: #34C759;
+  --p-sys-mint: #00C8B3;
+  --p-sys-teal: #00C3D0;
+  --p-sys-cyan: #00C0E8;
+  --p-sys-blue: #0088FF;
+  --p-sys-indigo: #6155F5;
+  --p-sys-purple: #CB30E0;
+  --p-sys-pink: #FF2D55;
+  --p-sys-brown: #AC7F5E;
+  --p-sys-gray: #8E8E93;
+  --p-bg-primary: #FFFFFF;
+  --p-bg-secondary: #F2F2F7;
+  --p-bg-tertiary: #FFFFFF;
+  --p-bg-grouped-primary: #F2F2F7;
+  --p-bg-grouped-secondary: #FFFFFF;
+  --p-bg-grouped-tertiary: #F2F2F7;
+  --p-text-primary: rgba(0, 0, 0, 0.85);
+  --p-text-secondary: rgba(0, 0, 0, 0.50);
+  --p-text-tertiary: rgba(0, 0, 0, 0.25);
+  --p-text-quaternary: rgba(0, 0, 0, 0.10);
+  --p-text-quinary: rgba(0, 0, 0, 0.05);
+  --p-text-seximal: rgba(0, 0, 0, 0.03);
+  --p-fill-primary: rgba(0, 0, 0, 0.10);
+  --p-fill-secondary: rgba(0, 0, 0, 0.08);
+  --p-fill-tertiary: rgba(0, 0, 0, 0.05);
+  --p-fill-quaternary: rgba(0, 0, 0, 0.03);
+  --p-fill-quinary: rgba(0, 0, 0, 0.02);
+  --p-separator: rgba(60, 60, 67, 0.29);
+  --p-separator-opaque: #C6C6C8;
+  --p-link: #0088FF;
+}
+
 /* Background utility classes — also publish --p-color-current for components */
 .p-sys-red    { --p-color-current: var(--p-sys-red);    background: var(--p-color-current); }
 .p-sys-orange { --p-color-current: var(--p-sys-orange); background: var(--p-color-current); }

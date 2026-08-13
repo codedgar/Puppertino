@@ -10,7 +10,7 @@ Type is the heart of any interface. Puppertino uses Apple's text style system fr
 
 The system font (San Francisco) loads automatically on Apple devices through `-apple-system`. On other platforms, the stack falls back through Helvetica Neue and Inter so the rhythm stays close.
 
-## Type Scale
+## Type scale
 
 The full Apple text style ladder. Each style has a specific size, weight, line height, and letter spacing tuned for legibility at that size. Larger sizes use tighter tracking, smaller sizes use looser tracking. This is called optical sizing and it is what makes Apple's typography feel right.
 
@@ -42,7 +42,7 @@ Apply any class directly to an element.
 
 </div>
 
-## Using the Scale
+## Using the scale
 
 Apply a class directly to any element.
 
@@ -63,7 +63,7 @@ Or wrap a section in `.p-type` to get sensible defaults for headings and paragra
 </article>
 ```
 
-## Font Weights
+## Font weights
 
 San Francisco supports nine weights. Puppertino exposes all of them as utility classes.
 
@@ -81,7 +81,7 @@ San Francisco supports nine weights. Puppertino exposes all of them as utility c
 
 Avoid weights below 300 and above 700 in body text. They are for display use only.
 
-## Letter Spacing
+## Letter spacing
 
 Apple tightens letter spacing as size increases. The type styles already include the right tracking, but utility classes are available when you need to override or apply tracking to plain text.
 
@@ -93,7 +93,7 @@ Apple tightens letter spacing as size increases. The type styles already include
 <span class="p-tracking-wider">Wider tracking for labels</span>
 ```
 
-## Font Stack
+## Font stack
 
 The default font is the system font on Apple devices, with a graceful fallback chain.
 
@@ -105,7 +105,7 @@ font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
 
 Use `--p-font` for body text, `--p-font-display` for headings, and `--p-font-mono` for code.
 
-## Backwards Compatibility
+## Backwards compatibility
 
 The legacy `.p-layout`, `.p-large-title`, `.p-headline`, `.p-callout`, `.p-subhead`, `.p-footnote`, and `.p-caption` classes from earlier versions of Puppertino continue to work. Pages that use them do not need to change.
 
@@ -113,6 +113,6 @@ The new classes use a `-2` suffix where they would conflict (`.p-large-title-2`,
 
 ## Accessibility
 
-Apple's text styles are designed to support Dynamic Type on iOS, where users can scale text to meet their needs. On the web, use relative units (rem, em) where possible and avoid hard-capping line lengths so text reflows comfortably at larger sizes.
+Apple's text styles are designed to support Dynamic Type on iOS, where people can scale text to meet their needs. On the web, use relative units (rem, em) where possible and avoid hard-capping line lengths so text reflows comfortably at larger sizes.
 
 Always check contrast against your background. Apple's primary text uses 85% opacity, which gives just over 4.5:1 contrast on white at 17px. Below 17px, prefer the higher-opacity text colors.

@@ -7,17 +7,21 @@
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
   </span>
-  <span class="copy-toast-text">Copied <code id="copy-toast-value"></code></span>
+  <span class="copy-toast-text"><span id="copy-toast-msg">Copied</span> <code id="copy-toast-value"></code></span>
 </div>
 
 <script>
   const toast = document.getElementById('copy-toast');
+  const toastMsg = document.getElementById('copy-toast-msg');
   const toastValue = document.getElementById('copy-toast-value');
   let toastTimer: number | undefined;
 
-  function showToast(value: string) {
-    if (!toast || !toastValue) return;
-    toastValue.textContent = value;
+  // Default form: "Copied <value>". Plain form (code blocks): message only.
+  function showToast(value: string, plain = false) {
+    if (!toast || !toastMsg || !toastValue) return;
+    toastMsg.textContent = plain ? value : 'Copied';
+    toastValue.textContent = plain ? '' : value;
+    toastValue.hidden = plain;
     toast.classList.add('is-visible');
     if (toastTimer) window.clearTimeout(toastTimer);
     toastTimer = window.setTimeout(() => {
@@ -25,17 +29,9 @@
     }, 1800);
   }
 
-  document.addEventListener('click', async (event) => {
-    const target = event.target as HTMLElement;
-    const copyEl = target.closest<HTMLElement>('[data-copy]');
-    if (!copyEl) return;
-
-    const value = copyEl.dataset.copy;
-    if (!value) return;
-
+  async function copyText(value: string) {
     try {
       await navigator.clipboard.writeText(value);
-      showToast(value);
     } catch (err) {
       const textarea = document.createElement('textarea');
       textarea.value = value;
@@ -45,8 +41,41 @@
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      showToast(value);
     }
+  }
+
+  document.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement;
+
+    const codeBtn = target.closest<HTMLElement>('.code-copy');
+    if (codeBtn) {
+      const code = codeBtn.parentElement?.querySelector('pre code');
+      if (!code) return;
+      await copyText(code.textContent ?? '');
+      showToast('Code copied', true);
+      return;
+    }
+
+    const copyEl = target.closest<HTMLElement>('[data-copy]');
+    if (!copyEl?.dataset.copy) return;
+    await copyText(copyEl.dataset.copy);
+    showToast(copyEl.dataset.copy);
+  });
+
+  // Give every markdown code block a copy button. The pre scrolls
+  // horizontally, so the button anchors to a non-scrolling wrapper.
+  document.querySelectorAll('article pre').forEach((pre) => {
+    if (!pre.querySelector('code')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'code-block';
+    pre.parentNode?.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'code-copy';
+    btn.setAttribute('aria-label', 'Copy code');
+    btn.innerHTML = '<i class="ph-bold ph-copy" aria-hidden="true"></i>';
+    wrap.appendChild(btn);
   });
 </script>
 

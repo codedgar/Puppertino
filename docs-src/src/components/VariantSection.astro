@@ -1,0 +1,26 @@
+---
+import Showcase from './Showcase.astro';
+
+/* One variant of a component: anchor heading, compact dual-appearance
+   artwork, the snippet with its own copy button, then the use case.
+   Rendered from the component's data module so page, snippets, and
+   machine payloads share one source. */
+
+interface Props {
+  name: string;
+  variant: {
+    id: string;
+    label: string;
+    code: string;
+    use: string;
+  };
+}
+
+const { name, variant } = Astro.props;
+---
+
+<section class="variant-section">
+  <h3 id={variant.id}>{variant.label}</h3>
+  <Showcase name={`${name}-${variant.id}`} code={variant.code} compact />
+  <p set:html={variant.use} />
+</section>

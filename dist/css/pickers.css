@@ -44,6 +44,20 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-picker-bg: #fff;
+  --p-picker-border: rgba(0, 0, 0, 0.098);
+  --p-picker-label: rgba(0, 0, 0, 0.847);
+  --p-picker-secondary: rgba(0, 0, 0, 0.498);
+  --p-picker-tertiary: rgba(0, 0, 0, 0.259);
+  --p-picker-today-bg: #dcdcdc;
+  --p-picker-selection: rgb(0, 100, 225);
+  --p-clock-face: #fff;
+}
+
 /* ------------------------------------------------------------ Calendar */
 
 .p-calendar {

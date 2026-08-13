@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/Doc.astro
-title: Getting Started
+title: Getting started
 description: Install Puppertino and bring Apple's design language to the web in a few minutes.
 ---
 
@@ -68,7 +68,7 @@ You can also use plain CSS imports if your stack supports them.
 @import '@codedgar/puppertino/materials';
 ```
 
-## JavaScript Modules
+## JavaScript modules
 
 A few components ship with optional vanilla JavaScript: modals, tabs, actions, segmented controls, and the dark mode manager. Import only the ones you use.
 
@@ -78,7 +78,7 @@ import '@codedgar/puppertino/js/tabs.js'
 import '@codedgar/puppertino/js/dakmode_manager.js'
 ```
 
-## Your First Page
+## Your first page
 
 Here is the smallest possible Puppertino setup. It pulls in the full framework, applies the typography scale to the body, and enables automatic dark mode.
 
@@ -101,7 +101,7 @@ Here is the smallest possible Puppertino setup. It pulls in the full framework, 
 
 The `p-type` class opts the page into the macOS 26 typography scale. The `p-auto-dark-mode` class flips colors to dark mode when the user's system preference is dark.
 
-## Dark Mode
+## Dark mode
 
 Puppertino supports dark mode in two ways. **Automatic** uses the system preference. **Manual** lets you toggle it from a button.
 
@@ -122,7 +122,7 @@ For the manual approach, the dark mode manager script handles the toggle, persis
 </script>
 ```
 
-## The Foundations
+## The foundations
 
 Three foundations follow Apple's macOS 26 specification.
 
@@ -132,7 +132,7 @@ Three foundations follow Apple's macOS 26 specification.
 
 The v1 `color_palette.css`, `layout.css`, and `shadows.css` files are still included for backwards compatibility. Projects upgrading from v1 do not need to change anything to keep working.
 
-## Migrating from Version 1
+## Migrating from version 1
 
 If you are upgrading an existing Puppertino v1 project, your code will continue to work. The v2 tokens live alongside the v1 classes.
 
@@ -152,14 +152,14 @@ import '@codedgar/puppertino/materials'   // materials.css (v2 + v1)
 
 Note that `@codedgar/puppertino/colors` points at `colors.css`, which includes both the macOS 26 system tokens *and* the v1 classes. Same for materials. Both systems are available from the same import.
 
-## Browser Support
+## Browser support
 
 Puppertino targets modern evergreen browsers: Safari, Chrome, Firefox, and Edge. Materials use `backdrop-filter` with a `@supports` fallback for older browsers. Color tokens use CSS custom properties.
 
-## Where to Go Next
+## Where to go next
 
 - **Foundations** explain how the design system works. Start with [Colors](../colors/), [Typography](../typography/), and [Materials](../materials/).
-- **Mobile Components** cover touch-optimized elements like buttons, forms, modals, and tabs.
-- **Desktop Components** cover pointer-driven elements with hover states and macOS interaction patterns.
+- **Mobile components** cover touch-optimized elements like buttons, forms, modals, and tabs.
+- **Desktop components** cover pointer-driven elements with hover states and macOS interaction patterns.
 
 If you find a bug or want to request a component, open an issue on [the GitHub repo](https://github.com/codedgar/Puppertino/issues).

@@ -6,6 +6,7 @@ description: A horizontal track with a thumb that people adjust between a minimu
 
 import '@puppertino/forms.css';
 import '@puppertino/sliders.css';
+import Showcase from '../../../components/Showcase.astro';
 import slidersScript from '../../../../../src/js/sliders.js?url';
 
 <script type="module" src={slidersScript}></script>
@@ -14,7 +15,7 @@ A slider is a horizontal track with a control, called a thumb, that people can a
 
 Puppertino's slider is a native `input[type="range"]` wearing macOS metrics. Keyboard, touch, form submission, and screen reader semantics come from the browser.
 
-## When to Use It
+## When to use it
 
 Use a slider for a value on a continuous range where the rough position matters more than the exact number. Volume, brightness, playback position.
 
@@ -30,17 +31,16 @@ Use a stepper or a plain number field when people need a precise value. Consider
 | Ticks | 2px marks at interval boundaries, 25% black |
 | Focus | The blue double ring, on the thumb |
 
-## Basic Use
+## Basic use
 
-<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0; max-width: 360px;">
-  <input type="range" class="p-slider" min="0" max="100" value="65" aria-label="Volume" />
-  <input type="range" class="p-slider p-sys-green" min="0" max="100" value="40" aria-label="Green slider" />
-  <input type="range" class="p-slider" min="0" max="100" value="30" disabled aria-label="Disabled slider" />
-</div>
-
-```html
-<input type="range" class="p-slider" min="0" max="100" value="65" />
-```
+<Showcase
+  name="sliders-basic"
+  compact
+  code={`<input type="range" class="p-slider" min="0" max="100" value="65" aria-label="Volume" />
+<input type="range" class="p-slider p-sys-green" min="0" max="100" value="40" aria-label="Green slider" />
+<input type="range" class="p-slider" min="0" max="100" value="30" disabled aria-label="Disabled slider" />`}
+  snippet={`<input type="range" class="p-slider" min="0" max="100" value="65" />`}
+/>
 
 Include the helper once per page and the accent fill follows the thumb:
 
@@ -52,23 +52,22 @@ The helper publishes the value as `--p-slider-fill` so the track can paint the a
 
 ## Ticks
 
-<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0; max-width: 360px;">
-  <input type="range" class="p-slider p-slider-ticks" min="0" max="100" step="20" value="60" aria-label="Tick slider" />
-  <input type="range" class="p-slider p-slider-ticks" style="--p-slider-ticks: 10;" min="0" max="100" step="10" value="30" aria-label="Fine tick slider" />
-</div>
-
-```html
-<input type="range" class="p-slider p-slider-ticks"
-       style="--p-slider-ticks: 5;" min="0" max="100" step="20" />
-```
+<Showcase
+  name="sliders-ticks"
+  compact
+  code={`<input type="range" class="p-slider p-slider-ticks" min="0" max="100" step="20" value="60" aria-label="Tick slider" />
+<input type="range" class="p-slider p-slider-ticks" style="--p-slider-ticks: 10;" min="0" max="100" step="10" value="30" aria-label="Fine tick slider" />`}
+  snippet={`<input type="range" class="p-slider p-slider-ticks"
+       style="--p-slider-ticks: 5;" min="0" max="100" step="20" />`}
+/>
 
 `.p-slider-ticks` draws marks across the track. Set `--p-slider-ticks` to the number of intervals and match it to your `step` so the thumb lands on the marks. Five intervals is the default.
 
-## Changing the Color
+## Changing the color
 
 Add a `.p-sys-*` class to the input, the same tint mechanism as every other control. The fill picks up the color; the thumb and track stay neutral.
 
-## Dark Mode
+## Dark mode
 
 The unfilled track and thumb flip through the control tokens, and the accent swaps to its dark variant. No extra setup.
 

@@ -54,6 +54,22 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-window-bg: #fff;
+  --p-window-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.23);
+  --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.3);
+  --p-window-separator: rgba(0, 0, 0, 0.1);
+  --p-window-title: rgba(0, 0, 0, 0.85);
+  --p-window-title-icon: rgba(0, 0, 0, 0.5);
+  --p-window-toolbar-icon: #4d4d4d;
+  --p-window-toolbar-hover: rgba(0, 0, 0, 0.03);
+  --p-traffic-inactive: rgba(0, 0, 0, 0.15);
+  --p-traffic-ring: rgba(0, 0, 0, 0.1);
+}
+
 /* --------------------------------------------------------------- Shell */
 
 /* Document window: radius 26 (dialog-family curve) + deep shadow. */

@@ -80,6 +80,29 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-modal-bg: rgba(255, 255, 255, 0.8);
+  --p-modal-bd-color: rgba(0, 0, 0, 0.1);
+  --p-modal-fallback-color: rgba(255, 255, 255, 0.95);
+  --p-modal-color: #1d1d1f;
+  --p-desktop-modal-surface: #f5f5f5;
+  --p-desktop-modal-underlay: #262626;
+  --p-desktop-modal-highlight: rgba(255, 255, 255, 0.16);
+  --p-desktop-modal-title: rgba(0, 0, 0, 0.85);
+  --p-desktop-modal-copy: rgba(0, 0, 0, 0.85);
+  --p-desktop-modal-secondary: #e6e6e6;
+  --p-desktop-modal-secondary-pressed: #d8d8d8;
+  --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.18);
+  --p-dialog-bg: #fff;
+  --p-dialog-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.23);
+  --p-dialog-title: rgba(0, 0, 0, 0.85);
+  --p-dialog-copy: rgba(0, 0, 0, 0.85);
+  --p-dialog-label: rgba(0, 0, 0, 0.5);
+}
+
 .p-modal-opened {
   overflow: hidden;
 }
@@ -492,6 +515,14 @@
     background: rgba(44, 44, 48, 0.98);
     box-shadow:
       0 17px 45px rgba(0, 0, 0, 0.42),
+      0 0 1px rgba(0, 0, 0, 0.2);
+  }
+
+  .p-light-mode .p-desktop-modal__surface,
+  [data-p-theme="lightmode"] .p-desktop-modal__surface {
+    background: rgba(245, 245, 245, 0.98);
+    box-shadow:
+      0 17px 45px rgba(0, 0, 0, 0.32),
       0 0 1px rgba(0, 0, 0, 0.2);
   }
 }

@@ -20,6 +20,14 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+  --p-scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
+}
+
 /* Firefox */
 .p-scrollbar {
   scrollbar-color: var(--p-scrollbar-thumb) transparent;

@@ -131,6 +131,13 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-segment-separator: #D9D9D9;
+}
+
 .p-segmented {
   /* Accent resolved here (not :root) so .p-sys-* tint classes work —
      var() in a custom property resolves where the property is defined. */

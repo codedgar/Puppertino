@@ -31,6 +31,17 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-dock-bg: rgba(246, 246, 246, 0.36);
+  --p-dock-bg-opaque: #e8e8e8;
+  --p-dock-rim: rgba(255, 255, 255, 0.05);
+  --p-dock-separator: rgba(60, 60, 67, 0.29);
+  --p-dock-indicator: rgba(0, 0, 0, 0.45);
+}
+
 /* ------------------------------------------------------------- Platter */
 
 .p-dock {

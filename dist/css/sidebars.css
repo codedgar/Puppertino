@@ -44,6 +44,21 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-sidebar-bg: rgba(228, 228, 228, 0.72);
+  --p-sidebar-bg-opaque: #ececec;
+  --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-sidebar-text: rgba(0, 0, 0, 0.85);
+  --p-sidebar-text-dim: rgba(0, 0, 0, 0.5);
+  --p-sidebar-selected: rgba(0, 0, 0, 0.11);
+  --p-sidebar-hover: rgba(0, 0, 0, 0.05);
+  --p-sidebar-detail: #bfbfbf;
+  --p-sidebar-chevron: rgba(0, 0, 0, 0.25);
+}
+
 /* --------------------------------------------------------------- Panel */
 
 .p-sidebar {

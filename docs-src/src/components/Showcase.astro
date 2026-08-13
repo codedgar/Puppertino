@@ -1,0 +1,56 @@
+---
+import { Code } from 'astro:components';
+
+/* Component showcase: the snippet rendered live on a neutral field,
+   with the source as an ordinary code block below. The field follows
+   the page's appearance by default; the corner button flips it to the
+   opposite scheme via the framework's .p-light-mode / .p-dark-mode
+   appearance scopes, so dark-mode readers are not flashed white. */
+
+interface Props {
+  name: string;
+  code: string;
+  /* Copy-worthy markup when it differs from the staged demo (which may
+     add extra states or sizes). `false` drops the code block entirely,
+     for preview stages documented in the page's Code section. */
+  snippet?: string | false;
+  /* Vertical alignment for mixed-height content rows */
+  align?: 'start' | 'center' | 'end';
+  /* Shorter stage for single-element demos (per-variant sections) */
+  compact?: boolean;
+}
+
+const { name, code, snippet = code, align = 'center', compact = false } = Astro.props;
+const payload = JSON.stringify({ name, code: snippet === false ? code : snippet }).replace(
+  /</g,
+  '\\u003c'
+);
+---
+
+<figure class:list={['showcase', { 'showcase-compact': compact }]} data-showcase={name}>
+  <div class="showcase-field">
+    <button class="showcase-appearance" type="button" aria-label="Switch color scheme">
+      <i class="ph-bold ph-moon" aria-hidden="true"></i>
+      <i class="ph-bold ph-sun" aria-hidden="true"></i>
+    </button>
+    <div class="showcase-stage" style={`align-items: ${align};`} set:html={code} />
+  </div>
+  <script type="application/json" class="showcase-data" set:html={payload} />
+</figure>
+
+{snippet !== false && <Code code={snippet} lang="html" />}
+
+<script>
+  document.addEventListener('click', (event) => {
+    const btn = (event.target as HTMLElement).closest('.showcase-appearance');
+    if (!btn) return;
+    const field = btn.closest('.showcase-field');
+    if (!field) return;
+    const isDark =
+      field.classList.contains('p-dark-mode') ||
+      (!field.classList.contains('p-light-mode') &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+    field.classList.toggle('p-dark-mode', !isDark);
+    field.classList.toggle('p-light-mode', isDark);
+  });
+</script>

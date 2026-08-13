@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { nav } from '../data/nav.js';
 
 const base = import.meta.env.BASE_URL;
 
@@ -21,54 +22,47 @@ const ph = (name: string) => {
   }
 };
 
-const data = [
-  // Foundations
-  { id: 'getting-started', title: 'Getting Started', section: 'Foundations', href: `${base}docs/getting-started/`, icon: ph('rocket-launch') },
-  { id: 'materials', title: 'Materials', section: 'Foundations', href: `${base}docs/materials/`, icon: ph('drop') },
-  { id: 'colors', title: 'Colors', section: 'Foundations', href: `${base}docs/colors/`, icon: ph('palette') },
-  { id: 'typography', title: 'Typography', section: 'Foundations', href: `${base}docs/typography/`, icon: ph('text-aa') },
-  { id: 'dark-mode', title: 'Dark Mode', section: 'Foundations', href: `${base}docs/dark-mode/`, icon: ph('moon') },
-  { id: 'icons', title: 'Icons', section: 'Foundations', href: `${base}docs/icons/`, icon: ph('smiley') },
+// nav.js stores icon-font class names (ph-moon); the SVG files drop the prefix.
+const phNav = (icon: string | undefined) => ph((icon ?? 'file').replace(/^ph-/, ''));
 
-  // Mobile components
-  { id: 'mobile-buttons', title: 'Buttons', section: 'Mobile Components', href: `${base}docs/mobile/buttons/`, icon: ph('hand-tap') },
-  { id: 'mobile-forms', title: 'Forms', section: 'Mobile Components', href: `${base}docs/mobile/forms/`, icon: ph('textbox') },
-  { id: 'mobile-modals', title: 'Modals', section: 'Mobile Components', href: `${base}docs/mobile/modals/`, icon: ph('browser') },
-  { id: 'mobile-actions', title: 'Actions', section: 'Mobile Components', href: `${base}docs/mobile/actions/`, icon: ph('list') },
-  { id: 'mobile-tabs', title: 'Tabs', section: 'Mobile Components', href: `${base}docs/mobile/tabs/`, icon: ph('tabs') },
+// Every searchable page comes from nav.js, so the palette can never
+// drift from the sidebar. Hub pages get an "<Section> overview" entry;
+// anchor children (the Forms sub-entries) become deep links.
+const data = nav.flatMap((section) => [
+  {
+    id: section.hub,
+    title: `${section.heading} overview`,
+    section: section.heading,
+    href: `${base}${section.hub}`,
+    icon: phNav(section.icon),
+  },
+  ...section.groups.flatMap((group) =>
+    group.items.flatMap((item) => [
+      {
+        id: item.slug,
+        title: item.label,
+        section: section.heading,
+        href: `${base}${item.slug}`,
+        icon: phNav(item.icon),
+      },
+      ...(item.children ?? []).map((child) => ({
+        id: `${item.slug}${child.anchor}`,
+        title: child.label,
+        section: section.heading,
+        href: `${base}${item.slug}${child.anchor}`,
+        icon: phNav(child.icon ?? item.icon),
+      })),
+    ])
+  ),
+]);
 
-  // Desktop components
-  { id: 'desktop-buttons', title: 'Buttons', section: 'Desktop Components', href: `${base}docs/desktop/buttons/`, icon: ph('cursor-click') },
-  { id: 'desktop-forms', title: 'Forms', section: 'Desktop Components', href: `${base}docs/desktop/forms/`, icon: ph('text-indent') },
-  { id: 'desktop-modals', title: 'Modals', section: 'Desktop Components', href: `${base}docs/desktop/modals/`, icon: ph('app-window') },
-  { id: 'desktop-dialogs', title: 'Dialogs & Sheets', section: 'Desktop Components', href: `${base}docs/desktop/dialogs/`, icon: ph('frame-corners') },
-  { id: 'desktop-menus', title: 'Menus', section: 'Desktop Components', href: `${base}docs/desktop/menus/`, icon: ph('list') },
-  { id: 'desktop-popovers', title: 'Popovers', section: 'Desktop Components', href: `${base}docs/desktop/popovers/`, icon: ph('chat-centered') },
-  { id: 'desktop-tooltips', title: 'Tooltips', section: 'Desktop Components', href: `${base}docs/desktop/tooltips/`, icon: ph('cursor') },
-  { id: 'desktop-notifications', title: 'Notifications', section: 'Desktop Components', href: `${base}docs/desktop/notifications/`, icon: ph('bell') },
-  { id: 'desktop-segmented', title: 'Segmented Controls', section: 'Desktop Components', href: `${base}docs/desktop/segmented-controls/`, icon: ph('squares-four') },
-  { id: 'desktop-text-fields', title: 'Text Fields', section: 'Desktop Components', href: `${base}docs/desktop/forms/#text-field`, icon: ph('textbox') },
-  { id: 'desktop-search-fields', title: 'Search Fields', section: 'Desktop Components', href: `${base}docs/desktop/forms/#search-field`, icon: ph('magnifying-glass') },
-  { id: 'desktop-combo', title: 'Combo Boxes', section: 'Desktop Components', href: `${base}docs/desktop/forms/#combo-box`, icon: ph('caret-circle-down') },
-  { id: 'desktop-popup', title: 'Pop-up & Pull-down Buttons', section: 'Desktop Components', href: `${base}docs/desktop/forms/#pop-up-and-pull-down-buttons`, icon: ph('caret-up-down') },
-  { id: 'desktop-toggles', title: 'Toggles', section: 'Desktop Components', href: `${base}docs/desktop/forms/#switch`, icon: ph('toggle-right') },
-  { id: 'desktop-sliders', title: 'Sliders', section: 'Desktop Components', href: `${base}docs/desktop/sliders/`, icon: ph('sliders-horizontal') },
-  { id: 'desktop-steppers', title: 'Steppers', section: 'Desktop Components', href: `${base}docs/desktop/forms/#stepper`, icon: ph('caret-up-down') },
-  { id: 'desktop-progress', title: 'Progress Indicators', section: 'Desktop Components', href: `${base}docs/desktop/progress-indicators/`, icon: ph('spinner-gap') },
-  { id: 'desktop-disclosure', title: 'Disclosure Controls', section: 'Desktop Components', href: `${base}docs/desktop/disclosure-controls/`, icon: ph('caret-circle-down') },
-  { id: 'desktop-lists-tables', title: 'Lists & Tables', section: 'Desktop Components', href: `${base}docs/desktop/lists-tables/`, icon: ph('table') },
-  { id: 'desktop-sidebars', title: 'Sidebars', section: 'Desktop Components', href: `${base}docs/desktop/sidebars/`, icon: ph('sidebar') },
-  { id: 'desktop-windows', title: 'Windows', section: 'Desktop Components', href: `${base}docs/desktop/windows/`, icon: ph('browser') },
-  { id: 'desktop-scrollbars', title: 'Scrollbars', section: 'Desktop Components', href: `${base}docs/desktop/scrollbars/`, icon: ph('mouse-scroll') },
-  { id: 'desktop-menu-bar-dock', title: 'Menu Bar & Dock', section: 'Desktop Components', href: `${base}docs/desktop/menu-bar-dock/`, icon: ph('rows-plus-bottom') },
-  { id: 'desktop-color-wells', title: 'Color Wells', section: 'Desktop Components', href: `${base}docs/desktop/color-wells/`, icon: ph('palette') },
-  { id: 'desktop-image-wells', title: 'Image Wells', section: 'Desktop Components', href: `${base}docs/desktop/image-wells/`, icon: ph('image-square') },
-  { id: 'desktop-toolbars', title: 'Toolbars', section: 'Desktop Components', href: `${base}docs/desktop/toolbars/`, icon: ph('wrench') },
-  { id: 'desktop-date-pickers', title: 'Date Pickers', section: 'Desktop Components', href: `${base}docs/desktop/date-pickers/`, icon: ph('calendar') },
-
-  // External
-  { id: 'github', title: 'GitHub Repository', section: 'Resources', href: 'https://github.com/codedgar/Puppertino', icon: ph('github-logo') },
-];
+data.push({
+  id: 'github',
+  title: 'GitHub repository',
+  section: 'Resources',
+  href: 'https://github.com/codedgar/Puppertino',
+  icon: ph('github-logo'),
+});
 ---
 
 <button class="search-trigger" type="button" id="search-trigger" aria-label="Open search">

@@ -13,7 +13,7 @@ A material is a surface that blurs and tints the content behind it. Apple uses m
 
 Puppertino ships five thickness levels that match Apple's macOS 26 specification. Each level adapts to light and dark mode, respects reduced transparency, and falls back gracefully when the browser does not support `backdrop-filter`.
 
-## Thickness Levels
+## Thickness levels
 
 Five materials, ordered from most see-through to most opaque. Pick the one that matches the importance of the surface. Thinner materials work for light decorative chrome; thicker materials work for surfaces that hold critical content.
 
@@ -27,7 +27,7 @@ Five materials, ordered from most see-through to most opaque. Pick the one that 
 
 The two opacity values are light mode and dark mode respectively. Note that dark mode materials are more transparent than light mode materials. This is consistent with the Liquid Glass direction in macOS 26: materials should let more of the background through.
 
-## Choosing a Thickness
+## Choosing a thickness
 
 Match the material to the size of the surface and the content it carries.
 
@@ -39,7 +39,7 @@ Match the material to the size of the surface and the content it carries.
 | Thick | Sheets, modals, and dialogs |
 | Ultra Thick | Surfaces that hold critical content over a busy background |
 
-## How to Use Materials
+## How to use materials
 
 Apply a material class to any element. The class handles the blur, the saturation, and the background fill in one step.
 
@@ -57,7 +57,7 @@ The `p-material` class on its own applies the blur and saturation without settin
 </div>
 ```
 
-## Glass Components
+## Glass components
 
 Three preset glass surfaces sized for common UI elements. The opacity scales with the size: small surfaces are more transparent, large surfaces are more opaque.
 
@@ -106,7 +106,7 @@ Materials are beautiful, but they trade contrast for translucency. Three accessi
 
 **Contrast checks.** Always verify that text on top of a material meets at least 4.5:1 against the underlying content. If you cannot guarantee the background, use a thicker material or fall back to a solid color.
 
-## Backwards Compatibility
+## Backwards compatibility
 
 The legacy `.p-shadow-1` through `.p-shadow-4`, `.p-to-shadow-1` through `.p-to-shadow-4`, and `.p-blur-1` through `.p-blur-4` classes from earlier Puppertino versions remain available. Pages that use them do not need to change.
 

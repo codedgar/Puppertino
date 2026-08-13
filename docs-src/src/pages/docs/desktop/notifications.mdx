@@ -5,27 +5,34 @@ description: The macOS notification banner. App icon, bold title, two body lines
 ---
 
 import '@puppertino/notifications.css';
+import Showcase from '../../../components/Showcase.astro';
 
-A notification gives people timely, high-value information they can understand at a glance. Use it for events that happen while attention is elsewhere, like a finished export or a new message. Avoid using it for errors in the current task. Those belong in a [dialog](../dialogs/) or inline.
+A notification gives people timely, high-value information they can understand at a glance.
+
+## When to use it
+
+Use a notification for events that happen while attention is elsewhere, like a finished export or a new message. Avoid using it for errors in the current task. Those belong in a [dialog](../dialogs/) or inline.
 
 <style>{`.demo-app-icon i { color: #fff; font-size: 18px; }`}</style>
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
-  <div class="p-notification" role="status">
-    <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #34C759, #248A3D);"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i></span>
-    <p class="p-notification__title">Elit Dapibus Ligula Sit</p>
-    <span class="p-notification__time">now</span>
-    <p class="p-notification__body">Maecenas faucibus mollis interdum. Morbi leo risus.</p>
-  </div>
-  <div class="p-notification" role="status">
-    <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #0A84FF, #0055CC);"><i class="ph-bold ph-download-simple" aria-hidden="true"></i></span>
-    <p class="p-notification__title">Export finished</p>
-    <span class="p-notification__time">2m ago</span>
-    <p class="p-notification__body">Report Q3.pdf is ready in your Downloads folder.</p>
-  </div>
+<Showcase
+  name="notifications-preview"
+  snippet={false}
+  code={`<div class="p-notification" role="status">
+  <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #34C759, #248A3D);"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i></span>
+  <p class="p-notification__title">Elit Dapibus Ligula Sit</p>
+  <span class="p-notification__time">now</span>
+  <p class="p-notification__body">Maecenas faucibus mollis interdum. Morbi leo risus.</p>
 </div>
+<div class="p-notification" role="status">
+  <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #0A84FF, #0055CC);"><i class="ph-bold ph-download-simple" aria-hidden="true"></i></span>
+  <p class="p-notification__title">Export finished</p>
+  <span class="p-notification__time">2m ago</span>
+  <p class="p-notification__body">Report Q3.pdf is ready in your Downloads folder.</p>
+</div>`}
+/>
 
 ## Anatomy
 

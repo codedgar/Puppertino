@@ -5,16 +5,23 @@ description: The macOS tooltip as one HTML attribute. Pure CSS, shows on hover a
 ---
 
 import '@puppertino/tooltips.css';
+import Showcase from '../../../components/Showcase.astro';
 
-A tooltip shows the name or purpose of a control when people hover over it. Use it for icon-only buttons and truncated labels. Avoid putting information in a tooltip that people need to complete a task. Touch devices never see it.
+A tooltip shows the name or purpose of a control when people hover over it.
+
+## When to use it
+
+Use a tooltip for icon-only buttons and truncated labels. Avoid putting information in a tooltip that people need to complete a task. Touch devices never see it.
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
-  <button class="p-button" type="button" data-p-tooltip="This is a tooltip.">Hover me</button>
-  <button class="p-button" type="button" data-p-tooltip="Shown above the control" data-p-tooltip-pos="top">Tooltip on top</button>
-  <button class="p-button" type="button" data-p-tooltip="Also shows on keyboard focus">Tab to me</button>
-</div>
+<Showcase
+  name="tooltips-preview"
+  snippet={false}
+  code={`<button class="p-button" type="button" data-p-tooltip="This is a tooltip.">Hover me</button>
+<button class="p-button" type="button" data-p-tooltip="Shown above the control" data-p-tooltip-pos="top">Tooltip on top</button>
+<button class="p-button" type="button" data-p-tooltip="Also shows on keyboard focus">Tab to me</button>`}
+/>
 
 ## Usage
 

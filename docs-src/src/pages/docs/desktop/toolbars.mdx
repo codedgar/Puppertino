@@ -5,40 +5,43 @@ description: Floating glass item clusters with icon buttons, dividers, two sizes
 ---
 
 import '@puppertino/toolbars.css';
+import Showcase from '../../../components/Showcase.astro';
 
 A toolbar provides convenient access to frequently used commands, controls, navigation, and search. The floating style groups items in glass capsules; the attached style puts items directly in a window's titlebar.
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap;">
-  <div class="p-toolbar-group" role="toolbar" aria-label="Formatting">
-    <button class="p-toolbar-btn" aria-label="Bold"><i class="ph-bold ph-text-b"></i></button>
-    <button class="p-toolbar-btn p-active" aria-label="Italic"><i class="ph-bold ph-text-italic"></i></button>
-    <button class="p-toolbar-btn" aria-label="Underline"><i class="ph-bold ph-text-underline"></i></button>
-  </div>
-  <div class="p-toolbar-group" role="toolbar" aria-label="View options">
-    <button class="p-toolbar-btn" aria-label="Grid"><i class="ph-bold ph-squares-four"></i></button>
-    <div class="p-toolbar-divider" role="separator"></div>
-    <button class="p-toolbar-btn" aria-label="List"><i class="ph-bold ph-list"></i></button>
-    <div class="p-toolbar-divider" role="separator"></div>
-    <button class="p-toolbar-btn" aria-label="Columns"><i class="ph-bold ph-columns"></i></button>
-    <div class="p-toolbar-divider" role="separator"></div>
-    <button class="p-toolbar-btn" disabled aria-label="Gallery"><i class="ph-bold ph-image"></i></button>
-  </div>
-  <div class="p-toolbar-group p-toolbar-group-small" role="toolbar" aria-label="Compact tools">
-    <button class="p-toolbar-btn" aria-label="Back"><i class="ph-bold ph-caret-left"></i></button>
-    <div class="p-toolbar-divider" role="separator"></div>
-    <button class="p-toolbar-btn" aria-label="Forward"><i class="ph-bold ph-caret-right"></i></button>
-  </div>
-  <div class="p-toolbar-group" role="toolbar" aria-label="Sort">
-    <button class="p-toolbar-btn p-toolbar-text-btn">Label <i class="ph-bold ph-caret-up-down" style="font-size: 10px;"></i></button>
-  </div>
-  <div class="p-toolbar-group p-toolbar-group-vertical" role="toolbar" aria-label="Vertical tools">
-    <button class="p-toolbar-btn" aria-label="Brush"><i class="ph-bold ph-paint-brush"></i></button>
-    <button class="p-toolbar-btn p-active" aria-label="Eraser"><i class="ph-bold ph-eraser"></i></button>
-    <button class="p-toolbar-btn" aria-label="Shapes"><i class="ph-bold ph-shapes"></i></button>
-  </div>
+<Showcase
+  name="toolbars-preview"
+  snippet={false}
+  code={`<div class="p-toolbar-group" role="toolbar" aria-label="Formatting">
+  <button class="p-toolbar-btn" aria-label="Bold"><i class="ph-bold ph-text-b"></i></button>
+  <button class="p-toolbar-btn p-active" aria-label="Italic"><i class="ph-bold ph-text-italic"></i></button>
+  <button class="p-toolbar-btn" aria-label="Underline"><i class="ph-bold ph-text-underline"></i></button>
 </div>
+<div class="p-toolbar-group" role="toolbar" aria-label="View options">
+  <button class="p-toolbar-btn" aria-label="Grid"><i class="ph-bold ph-squares-four"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="List"><i class="ph-bold ph-list"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="Columns"><i class="ph-bold ph-columns"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" disabled aria-label="Gallery"><i class="ph-bold ph-image"></i></button>
+</div>
+<div class="p-toolbar-group p-toolbar-group-small" role="toolbar" aria-label="Compact tools">
+  <button class="p-toolbar-btn" aria-label="Back"><i class="ph-bold ph-caret-left"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="Forward"><i class="ph-bold ph-caret-right"></i></button>
+</div>
+<div class="p-toolbar-group" role="toolbar" aria-label="Sort">
+  <button class="p-toolbar-btn p-toolbar-text-btn">Label <i class="ph-bold ph-caret-up-down" style="font-size: 10px;"></i></button>
+</div>
+<div class="p-toolbar-group p-toolbar-group-vertical" role="toolbar" aria-label="Vertical tools">
+  <button class="p-toolbar-btn" aria-label="Brush"><i class="ph-bold ph-paint-brush"></i></button>
+  <button class="p-toolbar-btn p-active" aria-label="Eraser"><i class="ph-bold ph-eraser"></i></button>
+  <button class="p-toolbar-btn" aria-label="Shapes"><i class="ph-bold ph-shapes"></i></button>
+</div>`}
+/>
 
 ## Anatomy
 

@@ -1,15 +1,16 @@
 ---
 layout: ../../../layouts/Doc.astro
-title: Segmented Controls
+title: Segmented controls
 description: A linear set of segments, each of which functions as a button. macOS 26 metrics, accent and gray styles, no JavaScript required.
 ---
 
 import '@puppertino/forms.css';
 import '@puppertino/segmented-controls.css';
+import Showcase from '../../../components/Showcase.astro';
 
 A segmented control is a linear set of two or more segments, each of which functions as a button. One segment is always selected. Use it to switch between views or filter a collection, not to trigger actions.
 
-## When to Use It
+## When to use it
 
 Use a segmented control when people pick one of two to five views that swap in place. Day, Week, Month. List, Grid.
 
@@ -25,65 +26,62 @@ Use tabs when the sections carry their own content areas. Use radios when the ch
 | Selected pill | Full height, no inset, 6px radius, flat accent fill |
 | Separators | 1px, `#D9D9D9`, 5px vertical inset, hidden next to the selection |
 
-## Basic Use
+## Basic use
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
-  <div class="p-segmented" role="group" aria-label="Calendar view">
-    <label class="p-segment"><input type="radio" name="sc-view" checked /><span>Day</span></label>
-    <label class="p-segment"><input type="radio" name="sc-view" /><span>Week</span></label>
-    <label class="p-segment"><input type="radio" name="sc-view" /><span>Month</span></label>
-  </div>
-  <div class="p-segmented" role="group" aria-label="Sort order">
-    <label class="p-segment"><input type="radio" name="sc-sort" checked /><span>Name</span></label>
-    <label class="p-segment"><input type="radio" name="sc-sort" /><span>Kind</span></label>
-    <label class="p-segment"><input type="radio" name="sc-sort" /><span>Date</span></label>
-    <label class="p-segment"><input type="radio" name="sc-sort" /><span>Size</span></label>
-    <label class="p-segment"><input type="radio" name="sc-sort" /><span>Tags</span></label>
-  </div>
+<Showcase
+  name="segmented-basic"
+  compact
+  code={`<div class="p-segmented" role="group" aria-label="Calendar view">
+  <label class="p-segment"><input type="radio" name="sc-view" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="sc-view" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="sc-view" /><span>Month</span></label>
 </div>
-
-```html
-<div class="p-segmented" role="group" aria-label="Calendar view">
+<div class="p-segmented" role="group" aria-label="Sort order">
+  <label class="p-segment"><input type="radio" name="sc-sort" checked /><span>Name</span></label>
+  <label class="p-segment"><input type="radio" name="sc-sort" /><span>Kind</span></label>
+  <label class="p-segment"><input type="radio" name="sc-sort" /><span>Date</span></label>
+  <label class="p-segment"><input type="radio" name="sc-sort" /><span>Size</span></label>
+  <label class="p-segment"><input type="radio" name="sc-sort" /><span>Tags</span></label>
+</div>`}
+  snippet={`<div class="p-segmented" role="group" aria-label="Calendar view">
   <label class="p-segment"><input type="radio" name="view" checked /><span>Day</span></label>
   <label class="p-segment"><input type="radio" name="view" /><span>Week</span></label>
   <label class="p-segment"><input type="radio" name="view" /><span>Month</span></label>
-</div>
-```
+</div>`}
+/>
 
 It is a radio group wearing a control. Native inputs carry the state, so keyboard navigation, form submission, and screen reader semantics come free. No JavaScript.
 
 Separators sit between segments and disappear next to the selection, exactly like macOS. Pressing an unselected segment tints it with `--p-fill-tertiary` before the selection moves.
 
-## Gray Style
+## Gray style
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
-  <div class="p-segmented p-segmented-gray" role="group" aria-label="Density">
-    <label class="p-segment"><input type="radio" name="sc-density" checked /><span>Compact</span></label>
-    <label class="p-segment"><input type="radio" name="sc-density" /><span>Cozy</span></label>
-    <label class="p-segment"><input type="radio" name="sc-density" /><span>Roomy</span></label>
-  </div>
-</div>
-
-```html
-<div class="p-segmented p-segmented-gray" role="group" aria-label="Density">
-  ...
-</div>
-```
+<Showcase
+  name="segmented-gray"
+  compact
+  code={`<div class="p-segmented p-segmented-gray" role="group" aria-label="Density">
+  <label class="p-segment"><input type="radio" name="sc-density" checked /><span>Compact</span></label>
+  <label class="p-segment"><input type="radio" name="sc-density" /><span>Cozy</span></label>
+  <label class="p-segment"><input type="radio" name="sc-density" /><span>Roomy</span></label>
+</div>`}
+/>
 
 `.p-segmented-gray` swaps the accent pill for a quiet `--p-fill-tertiary` fill and keeps the label color. Consider it for secondary controls that should not compete with the view's primary action.
 
-## Changing the Color
+## Changing the color
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
-  <div class="p-segmented p-sys-purple" style="background: var(--p-fill-secondary);" role="group" aria-label="Purple example">
-    <label class="p-segment"><input type="radio" name="sc-tint1" checked /><span>One</span></label>
-    <label class="p-segment"><input type="radio" name="sc-tint1" /><span>Two</span></label>
-  </div>
-  <div class="p-segmented p-sys-green" style="background: var(--p-fill-secondary);" role="group" aria-label="Green example">
-    <label class="p-segment"><input type="radio" name="sc-tint2" checked /><span>One</span></label>
-    <label class="p-segment"><input type="radio" name="sc-tint2" /><span>Two</span></label>
-  </div>
+<Showcase
+  name="segmented-colors"
+  compact
+  code={`<div class="p-segmented p-sys-purple" style="background: var(--p-fill-secondary);" role="group" aria-label="Purple example">
+  <label class="p-segment"><input type="radio" name="sc-tint1" checked /><span>One</span></label>
+  <label class="p-segment"><input type="radio" name="sc-tint1" /><span>Two</span></label>
 </div>
+<div class="p-segmented p-sys-green" style="background: var(--p-fill-secondary);" role="group" aria-label="Green example">
+  <label class="p-segment"><input type="radio" name="sc-tint2" checked /><span>One</span></label>
+  <label class="p-segment"><input type="radio" name="sc-tint2" /><span>Two</span></label>
+</div>`}
+/>
 
 Add a `.p-sys-*` class to retint the selected pill through `--p-color-current`, the same mechanism as buttons and form controls. The color class paints its swatch background on the track, so restate the track fill with an inline style or a utility class when you tint.
 
@@ -93,19 +91,22 @@ Add a `.p-sys-*` class to retint the selected pill through `--p-color-current`, 
 - **Focus** shows the forms blue double ring on the focused segment. Arrow keys move the selection, because it is a radio group.
 - **Disabled**: put `disabled` on every input. The control fades to 50%, unselected labels drop to `#BFBFBF`, the selected label to half-opacity white.
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0;">
-  <div class="p-segmented" role="group" aria-label="Disabled example">
-    <label class="p-segment"><input type="radio" name="sc-dis" checked disabled /><span>Label</span></label>
-    <label class="p-segment"><input type="radio" name="sc-dis" disabled /><span>Label</span></label>
-    <label class="p-segment"><input type="radio" name="sc-dis" disabled /><span>Label</span></label>
-  </div>
-</div>
+<Showcase
+  name="segmented-disabled"
+  snippet={false}
+  compact
+  code={`<div class="p-segmented" role="group" aria-label="Disabled example">
+  <label class="p-segment"><input type="radio" name="sc-dis" checked disabled /><span>Label</span></label>
+  <label class="p-segment"><input type="radio" name="sc-dis" disabled /><span>Label</span></label>
+  <label class="p-segment"><input type="radio" name="sc-dis" disabled /><span>Label</span></label>
+</div>`}
+/>
 
-## Dark Mode
+## Dark mode
 
 The track and gray pill flip through the fill tokens, separators lighten to `rgba(255,255,255,0.15)`, and the accent pill picks up the dark accent from `colors.css`. No extra setup.
 
-## The Slide
+## The slide
 
 macOS slides the pill between segments, and so does this control, still without JavaScript. The track watches its own radios through `:has()`, derives the selected index and the segment count, and slides a single pill to `index / count` of its width over 0.25s. Segments are equal-width grid columns, so the position math is exact at any control width. Browsers without `:has()` fall back to a 0.15s crossfade between per-segment pills; the markup is identical either way.
 

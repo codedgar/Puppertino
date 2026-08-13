@@ -25,6 +25,15 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-imagewell-bg: rgba(0, 0, 0, 0.02);
+  --p-imagewell-ring: #fff;
+  --p-imagewell-edge: rgba(0, 0, 0, 0.05);
+}
+
 /* Frame, inside → out: 0.5px dark inner edge, 1px white ring, 1.5px
    soft dark outer edge. The 2px
    padding is the visible well margin around the image. */

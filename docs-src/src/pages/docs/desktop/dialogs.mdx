@@ -1,6 +1,6 @@
 ---
 layout: ../../../layouts/Doc.astro
-title: Dialogs & Sheets
+title: Dialogs & sheets
 description: macOS-style dialog windows and sheets. A 26px radius surface with form rows, footer actions, and slide-down sheet presentation.
 ---
 
@@ -8,36 +8,44 @@ import '@puppertino/modals.css';
 import '@puppertino/forms.css';
 import modalsScript from '../../../../../src/js/modals.js?url';
 
+import Showcase from '../../../components/Showcase.astro';
+
 <script type="module" src={modalsScript}></script>
 
-A dialog presents a scoped task in its own window, like saving a document. A sheet presents the same kind of task attached to the top of its parent context. Both share one surface: an opaque background, a 26px radius, and a deep shadow with a 1px edge ring. For short confirmations, use [alerts](../modals/) instead.
+A dialog presents a scoped task in its own window, like saving a document. A sheet presents the same kind of task attached to the top of its parent context. Both share one surface: an opaque background, a 26px radius, and a deep shadow with a 1px edge ring.
+
+## When to use them
+
+Use a dialog when the task stands alone, and a sheet when the task belongs to one view. For short confirmations, use [alerts](../modals/) instead.
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; justify-content: center;">
-  <div class="p-dialog" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: auto; transform: none;" aria-hidden="true">
-    <h2 class="p-dialog__title">Do you want to keep this new document “Untitled”?</h2>
-    <p class="p-dialog__message">You can choose to save your changes, or delete this document immediately. You can’t undo this action.</p>
-    <div class="p-dialog__form">
-      <label class="p-dialog__label" for="dlg-preview-name">Save As:</label>
-      <input class="p-field" id="dlg-preview-name" type="text" value="Untitled" />
-      <label class="p-dialog__label" for="dlg-preview-tags">Tags:</label>
-      <input class="p-field" id="dlg-preview-tags" type="text" />
-      <label class="p-dialog__label" for="dlg-preview-format">File Format:</label>
-      <div class="p-select">
-        <select id="dlg-preview-format">
-          <option>Rich Text Document</option>
-          <option>Plain Text</option>
-        </select>
-      </div>
-    </div>
-    <div class="p-dialog__footer">
-      <button class="p-button p-button-destructive p-dialog__footer-leading" type="button">Delete</button>
-      <button class="p-button p-button-secondary" type="button">Cancel</button>
-      <button class="p-button p-button-primary" type="button">Save</button>
+<Showcase
+  name="dialogs-preview"
+  snippet={false}
+  code={`<div class="p-dialog" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: auto; transform: none;" aria-hidden="true">
+  <h2 class="p-dialog__title">Do you want to keep this new document “Untitled”?</h2>
+  <p class="p-dialog__message">You can choose to save your changes, or delete this document immediately. You can’t undo this action.</p>
+  <div class="p-dialog__form">
+    <label class="p-dialog__label" for="dlg-preview-name">Save As:</label>
+    <input class="p-field" id="dlg-preview-name" type="text" value="Untitled" />
+    <label class="p-dialog__label" for="dlg-preview-tags">Tags:</label>
+    <input class="p-field" id="dlg-preview-tags" type="text" />
+    <label class="p-dialog__label" for="dlg-preview-format">File Format:</label>
+    <div class="p-select">
+      <select id="dlg-preview-format">
+        <option>Rich Text Document</option>
+        <option>Plain Text</option>
+      </select>
     </div>
   </div>
-</div>
+  <div class="p-dialog__footer">
+    <button class="p-button p-button-destructive p-dialog__footer-leading" type="button">Delete</button>
+    <button class="p-button p-button-secondary" type="button">Cancel</button>
+    <button class="p-button p-button-primary" type="button">Save</button>
+  </div>
+</div>`}
+/>
 
 ## Anatomy
 
@@ -73,9 +81,13 @@ Place the destructive action on the leading edge with `.p-dialog__footer-leading
 
 Dialogs run through the same modal manager as alerts. Add `.p-modal` next to `.p-dialog`, put it inside `.p-modal-background`, and open it with `data-p-open-modal`.
 
-<div style="margin: 16px 0 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px;">
-  <button class="p-button p-button-primary" data-p-open-modal="#demo-dialog">Open dialog</button>
-</div>
+<Showcase
+  name="dialogs-open"
+  snippet={false}
+  align="start"
+  compact
+  code={`<button class="p-button p-button-primary" data-p-open-modal="#demo-dialog">Open dialog</button>`}
+/>
 
 <div class="p-modal-background">
   <div class="p-modal p-dialog" id="demo-dialog" data-p-close-on-outside="true" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="demo-dialog-title">

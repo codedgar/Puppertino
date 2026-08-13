@@ -1,10 +1,11 @@
 ---
 layout: ../../../layouts/Doc.astro
-title: Color Wells
+title: Color wells
 description: A circular color control with a rainbow ring and the current color, wrapping the native color picker.
 ---
 
 import '@puppertino/colorwells.css';
+import Showcase from '../../../components/Showcase.astro';
 import colorwellsScript from '../../../../../src/js/colorwells.js?url';
 
 <script type="module" src={colorwellsScript}></script>
@@ -13,17 +14,19 @@ A color well lets people adjust the color of text, shapes, guides, and other ons
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 32px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 24px; align-items: center;">
-  <label class="p-colorwell">
-    <input type="color" value="#FF0000" aria-label="Pick a color" />
-  </label>
-  <label class="p-colorwell p-colorwell-set" style="--p-colorwell-color: #0D6FFF;">
-    <input type="color" value="#0D6FFF" aria-label="Highlight color" />
-  </label>
-  <label class="p-colorwell p-dimmed">
-    <input type="color" disabled aria-label="Disabled color" />
-  </label>
-</div>
+<Showcase
+  name="color-wells-preview"
+  snippet={false}
+  code={`<label class="p-colorwell">
+  <input type="color" value="#FF0000" aria-label="Pick a color" />
+</label>
+<label class="p-colorwell p-colorwell-set" style="--p-colorwell-color: #0D6FFF;">
+  <input type="color" value="#0D6FFF" aria-label="Highlight color" />
+</label>
+<label class="p-colorwell p-dimmed">
+  <input type="color" disabled aria-label="Disabled color" />
+</label>`}
+/>
 
 The first well has no color yet: it shows the spectrum disc. Click it, pick a color, and it flips to the swatch state. The second well starts pre-set.
 

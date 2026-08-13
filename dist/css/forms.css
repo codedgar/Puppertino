@@ -603,6 +603,28 @@ textarea.p-form-text {
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-checkbox-bg: transparent;
+  --p-checkbox-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.15), inset 0px 0px 2px rgba(0, 0, 0, 0.10);
+  --p-checkbox-border: rgba(0, 0, 0, 0.2);
+  --p-checkbox-gradient: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+  --p-checkbox-border-active: rgba(0, 0, 0, 0.12);
+  --p-field-bg: #ffffff;
+  --p-field-bg-disabled: rgba(255, 255, 255, 0.5);
+  --p-field-text: #1A1A1A;
+  --p-field-placeholder: #BFBFBF;
+  --p-field-ring: rgba(0, 0, 0, 0.08);
+  --p-field-ring-disabled: rgba(0, 0, 0, 0.04);
+  --p-control-fill: rgba(0, 0, 0, 0.12);
+  --p-search-ring-empty: rgba(0, 0, 0, 0.04);
+  --p-search-placeholder: #727272;
+  --p-combo-plate-bg: #ffffff;
+  --p-popup-bg-active: rgba(0, 0, 0, 0.15);
+}
+
 /* ─── Labels ───────────────────────────────────────────────────────── */
 
 .p-label,

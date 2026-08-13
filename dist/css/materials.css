@@ -123,6 +123,20 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-material-ultrathick: rgba(246, 246, 246, 0.84);
+  --p-material-thick: rgba(246, 246, 246, 0.72);
+  --p-material-medium: rgba(246, 246, 246, 0.60);
+  --p-material-thin: rgba(246, 246, 246, 0.48);
+  --p-material-ultrathin: rgba(246, 246, 246, 0.36);
+  --p-glass-sm: rgba(255, 255, 255, 0.50);
+  --p-glass-md: rgba(245, 245, 245, 0.67);
+  --p-glass-lg: rgba(250, 250, 250, 0.80);
+}
+
 /* ─── Material classes ─────────────────────────────────────────────── */
 
 .p-material {
@@ -207,6 +221,17 @@
   .p-dark-mode .p-glass-lg {
     background: rgba(0, 0, 0, 0.92);
   }
+
+  .p-light-mode .p-material-ultrathin,
+  .p-light-mode .p-material-thin,
+  .p-light-mode .p-material-medium,
+  .p-light-mode .p-material-thick,
+  .p-light-mode .p-material-ultrathick,
+  .p-light-mode .p-glass-sm,
+  .p-light-mode .p-glass-md,
+  .p-light-mode .p-glass-lg {
+    background: rgba(246, 246, 246, 0.95);
+  }
 }
 
 /* ─── Reduced transparency: respect user preference ────────────────── */
@@ -234,6 +259,17 @@
   .p-dark-mode .p-glass-md,
   .p-dark-mode .p-glass-lg {
     background: rgba(0, 0, 0, 0.94);
+  }
+
+  .p-light-mode .p-material-ultrathin,
+  .p-light-mode .p-material-thin,
+  .p-light-mode .p-material-medium,
+  .p-light-mode .p-material-thick,
+  .p-light-mode .p-material-ultrathick,
+  .p-light-mode .p-glass-sm,
+  .p-light-mode .p-glass-md,
+  .p-light-mode .p-glass-lg {
+    background: rgba(246, 246, 246, 0.96);
   }
 }
 

@@ -36,6 +36,18 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-notification-bg: rgba(245, 245, 245, 0.67);
+  --p-notification-bg-opaque: #f0f0f0;
+  --p-notification-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-notification-title: rgba(0, 0, 0, 0.85);
+  --p-notification-body: rgba(0, 0, 0, 0.85);
+  --p-notification-time: #bfbfbf;
+}
+
 .p-notification {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);

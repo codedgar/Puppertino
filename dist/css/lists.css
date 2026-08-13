@@ -41,6 +41,20 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-list-selection: #2962d9;
+  --p-list-selection-quiet: rgba(0, 0, 0, 0.14);
+  --p-list-hover: rgba(0, 0, 0, 0.03);
+  --p-list-text: rgba(0, 0, 0, 0.85);
+  --p-list-text-dim: rgba(0, 0, 0, 0.5);
+  --p-list-chevron: rgba(0, 0, 0, 0.5);
+  --p-table-separator: rgba(0, 0, 0, 0.05);
+  --p-table-divider: rgba(0, 0, 0, 0.1);
+}
+
 /* ---------------------------------------------------------------- List */
 
 .p-list {

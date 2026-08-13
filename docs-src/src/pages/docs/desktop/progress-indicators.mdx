@@ -1,13 +1,16 @@
 ---
 layout: ../../../layouts/Doc.astro
-title: Progress Indicators
+title: Progress indicators
 description: Progress bars that show your app is working. A native determinate bar and a bouncing indeterminate bar, both tintable.
 ---
 
 import '@puppertino/forms.css';
 import '@puppertino/progress.css';
+import Showcase from '../../../components/Showcase.astro';
 
 Progress indicators let people know that your app is not stalled while it loads content or performs lengthy operations.
+
+## When to use it
 
 Use the determinate bar when you can measure the work. Use the indeterminate bar when you can only promise that work is happening.
 
@@ -22,16 +25,15 @@ Use the determinate bar when you can measure the work. Use the indeterminate bar
 
 ## Determinate
 
-<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0; max-width: 360px;">
-  <progress class="p-progress" max="100" value="25" aria-label="A quarter done"></progress>
-  <progress class="p-progress" max="100" value="65" aria-label="Two thirds done"></progress>
-  <progress class="p-progress p-progress-large" max="100" value="65" aria-label="Large bar"></progress>
-  <progress class="p-progress p-sys-green" max="100" value="80" aria-label="Green bar"></progress>
-</div>
-
-```html
-<progress class="p-progress" max="100" value="65"></progress>
-```
+<Showcase
+  name="progress-determinate"
+  compact
+  code={`<progress class="p-progress" max="100" value="25" aria-label="A quarter done"></progress>
+<progress class="p-progress" max="100" value="65" aria-label="Two thirds done"></progress>
+<progress class="p-progress p-progress-large" max="100" value="65" aria-label="Large bar"></progress>
+<progress class="p-progress p-sys-green" max="100" value="80" aria-label="Green bar"></progress>`}
+  snippet={`<progress class="p-progress" max="100" value="65"></progress>`}
+/>
 
 A native `progress` element, so screen readers announce the value and updates for free. Set `value` from your code as work completes. `.p-progress-large` is the 10px variant.
 
@@ -39,27 +41,26 @@ One deviation from macOS: at exactly zero the native element paints nothing, whi
 
 ## Indeterminate
 
-<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px; background: var(--p-bg-secondary); border-radius: 10px; margin: 16px 0; max-width: 360px;">
-  <div class="p-progress-indeterminate" role="progressbar" aria-label="Loading"></div>
-  <div class="p-progress-indeterminate p-progress-indeterminate-large" role="progressbar" aria-label="Loading, large"></div>
-</div>
-
-```html
-<div class="p-progress-indeterminate" role="progressbar" aria-label="Loading"></div>
-```
+<Showcase
+  name="progress-indeterminate"
+  compact
+  code={`<div class="p-progress-indeterminate" role="progressbar" aria-label="Loading"></div>
+<div class="p-progress-indeterminate p-progress-indeterminate-large" role="progressbar" aria-label="Loading, large"></div>`}
+  snippet={`<div class="p-progress-indeterminate" role="progressbar" aria-label="Loading"></div>`}
+/>
 
 A solid segment inchworms to the far end and back on a 2.6 second cycle, exactly like the native macOS bar: the leading edge launches first, the trailing edge follows, and the segment compresses to a dot at each end before reversing. This one is a `div` because the native indeterminate `progress` paints engine-specific animations that cannot be restyled. Give it `role="progressbar"` and an `aria-label`; add `aria-valuetext="Loading"` if you want more context announced.
 
 Swap it for the determinate bar the moment you can measure progress. Indefinite waiting with no estimate is the last resort.
 
-## Changing the Color
+## Changing the color
 
 Add a `.p-sys-*` class to either bar. The fill and segment pick up the color through `--p-color-current`.
 
-## Dark Mode
+## Dark mode
 
 The track flips through `--p-fill-tertiary` and the accent swaps to its dark variant. No extra setup.
 
-## Reduced Motion
+## Reduced motion
 
 With `prefers-reduced-motion`, the bounce is replaced by a slow opacity pulse on a centered segment. Progress is still visibly alive without the travel.

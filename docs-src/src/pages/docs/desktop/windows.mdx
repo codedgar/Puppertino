@@ -5,60 +5,64 @@ description: A presentational window shell with traffic lights, a titlebar, a to
 ---
 
 import '@puppertino/windows.css';
+import Showcase from '../../../components/Showcase.astro';
 
 A window presents UI views and components in your app or game. On the web this is a presentational shell for demos, screenshots, and app-like layouts. It does not drag or resize.
 
 ## Preview
 
-<div style="margin: 16px 0 20px; padding: 40px 24px; background: var(--p-bg-secondary); border-radius: 10px; display: flex; gap: 48px; flex-wrap: wrap;">
-  <div class="p-window" style="width: 300px; height: 220px;">
-    <div class="p-window-titlebar">
-      <div class="p-window-titlebar-row">
-        <div class="p-traffic-lights">
-          <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
-          <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
-          <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
-        </div>
-        <span class="p-window-title-icon"><i class="ph-bold ph-file"></i></span>
-        <span class="p-window-title">Documents</span>
+<Showcase
+  name="windows-preview"
+  snippet={false}
+  align="start"
+  code={`<div class="p-window" style="width: 300px; height: 220px;">
+  <div class="p-window-titlebar">
+    <div class="p-window-titlebar-row">
+      <div class="p-traffic-lights">
+        <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+        <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+        <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
       </div>
+      <span class="p-window-title-icon"><i class="ph-bold ph-file"></i></span>
+      <span class="p-window-title">Documents</span>
     </div>
-    <div class="p-window-content" style="font-size: 13px;">Document window, radius 26, active.</div>
   </div>
-  <div class="p-window p-window-inactive" style="width: 300px; height: 220px;">
-    <div class="p-window-titlebar">
-      <div class="p-window-titlebar-row">
-        <div class="p-traffic-lights">
-          <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
-          <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
-          <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
-        </div>
-        <span class="p-window-title-icon"><i class="ph-bold ph-file"></i></span>
-        <span class="p-window-title">Documents</span>
-      </div>
-    </div>
-    <div class="p-window-content" style="font-size: 13px;">The same window, unfocused. Only state changes, never geometry.</div>
-  </div>
-  <div class="p-window p-window-compact" style="width: 260px; height: 200px;">
-    <div class="p-window-titlebar">
-      <div class="p-window-titlebar-row">
-        <div class="p-traffic-lights">
-          <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
-          <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
-          <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
-        </div>
-        <span class="p-window-title-icon"><i class="ph-bold ph-folder"></i></span>
-        <span class="p-window-title">Title</span>
-      </div>
-      <div class="p-window-toolbar">
-        <button class="p-window-toolbar-btn p-active" aria-label="Icon view"><i class="ph-bold ph-squares-four"></i></button>
-        <button class="p-window-toolbar-btn" aria-label="List view"><i class="ph-bold ph-list"></i></button>
-        <button class="p-window-toolbar-btn" aria-label="Share"><i class="ph-bold ph-share"></i></button>
-      </div>
-    </div>
-    <div class="p-window-content" style="font-size: 13px;">Utility panel, radius 15, with the optional toolbar row.</div>
-  </div>
+  <div class="p-window-content" style="font-size: 13px;">Document window, radius 26, active.</div>
 </div>
+<div class="p-window p-window-inactive" style="width: 300px; height: 220px;">
+  <div class="p-window-titlebar">
+    <div class="p-window-titlebar-row">
+      <div class="p-traffic-lights">
+        <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+        <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+        <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+      </div>
+      <span class="p-window-title-icon"><i class="ph-bold ph-file"></i></span>
+      <span class="p-window-title">Documents</span>
+    </div>
+  </div>
+  <div class="p-window-content" style="font-size: 13px;">The same window, unfocused. Only state changes, never geometry.</div>
+</div>
+<div class="p-window p-window-compact" style="width: 260px; height: 200px;">
+  <div class="p-window-titlebar">
+    <div class="p-window-titlebar-row">
+      <div class="p-traffic-lights">
+        <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+        <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+        <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+      </div>
+      <span class="p-window-title-icon"><i class="ph-bold ph-folder"></i></span>
+      <span class="p-window-title">Title</span>
+    </div>
+    <div class="p-window-toolbar">
+      <button class="p-window-toolbar-btn p-active" aria-label="Icon view"><i class="ph-bold ph-squares-four"></i></button>
+      <button class="p-window-toolbar-btn" aria-label="List view"><i class="ph-bold ph-list"></i></button>
+      <button class="p-window-toolbar-btn" aria-label="Share"><i class="ph-bold ph-share"></i></button>
+    </div>
+  </div>
+  <div class="p-window-content" style="font-size: 13px;">Utility panel, radius 15, with the optional toolbar row.</div>
+</div>`}
+/>
 
 ## Anatomy
 

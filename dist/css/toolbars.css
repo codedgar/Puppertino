@@ -39,6 +39,19 @@
   }
 }
 
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-toolbar-bg: rgba(247, 247, 247, 0.72);
+  --p-toolbar-bg-opaque: #f7f7f7;
+  --p-toolbar-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-toolbar-ink: #1a1a1a;
+  --p-toolbar-ink-dim: #bfbfbf;
+  --p-toolbar-hover: #e6e6e6;
+  --p-toolbar-divider: #d9d9d9;
+}
+
 /* --------------------------------------------------------------- Group */
 
 /* Regular: 36px capsule. True capsule (radius = h/2), so no

@@ -1,6 +1,6 @@
 ---
 layout: ../../../layouts/Doc.astro
-title: Menu Bar & Dock
+title: Menu bar & Dock
 description: The transparent top bar with capsule item highlights, and the glass dock platter with magnification and launch bounce.
 ---
 
@@ -90,7 +90,7 @@ The platter is 62px tall with a 15px radius and glass fill: `rgba(246, 246, 246,
 
 ## Behavior: dock
 
-Magnification is off by default, matching the system. With `data-p-dock-magnify` and `dock.js`, icons scale with a parabolic falloff of the distance to the pointer: 36px at rest, 72px under the cursor, fading over one zoomed-icon width. Growth is real box size, so icons repaint sharp at every step, neighbors get pushed apart, and the platter stretches — all rising from the platter baseline. Entering the dock ramps the effect in over 150ms and leaving ramps it out, so nothing snaps. Give icon images sources of at least 144px so they stay sharp at full magnification.
+Magnification is off by default, matching the system. With `data-p-dock-magnify` and `dock.js`, icons scale with a parabolic falloff of the distance to the pointer: 36px at rest, 72px under the cursor, fading over one zoomed-icon width. Growth is real box size, so icons repaint sharp at every step, neighbors get pushed apart, and the platter stretches, all of it rising from the platter baseline. Entering the dock ramps the effect in over 150ms and leaving ramps it out, so nothing snaps. Give icon images sources of at least 144px so they stay sharp at full magnification.
 
 Clicking an icon plays the launch bounce: two decaying hops (22px, then 10px) over 0.9s. With `prefers-reduced-motion`, both magnification and bounce are disabled and icons stay at 36px.
 
@@ -122,4 +122,4 @@ The menu bar stays transparent and flips its ink to white; the material backing 
 </div>
 ```
 
-Dock items are buttons; give each an `aria-label` since the icon is the only content. With `dock.js` present, hovering an item shows its app-name label automatically from that same `aria-label`: a 24px dark capsule with a pointer tail, 13px white text, floating 19px above the fully magnified icon. The label is dark in both appearance modes, matching the system, and it is not a tooltip — no delay, and it rides the magnified icon.
+Dock items are buttons; give each an `aria-label` since the icon is the only content. With `dock.js` present, hovering an item shows its app-name label automatically from that same `aria-label`: a 24px dark capsule with a pointer tail, 13px white text, floating 19px above the fully magnified icon. The label is dark in both appearance modes, matching the system, and it is not a tooltip: it appears with no delay and rides the magnified icon.
