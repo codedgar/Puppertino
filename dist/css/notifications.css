@@ -158,3 +158,188 @@
     corner-shape: superellipse(1.465);
   }
 }
+
+/* ─── Touch size (iOS and iPadOS) ──────────────────────────────────── */
+/* The iOS notification: a 24px-radius card on a material, 377px at most,
+   with a 38px app icon, the title and body at 15px, and the time in the
+   top trailing corner. Same slots as the macOS notification above.
+
+   Notifications stack on iOS rather than listing. .p-notification-stack
+   fans the cards behind the top one, which is presentation only; the
+   expand interaction needs script. */
+
+:root {
+  --p-notification-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-notification-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-notification-touch-title: #1a1a1a;
+  --p-notification-touch-body: #4d4d4d;
+  --p-notification-touch-time: #727272;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-notification-touch-bg: rgba(38, 38, 38, 0.72);
+  --p-notification-touch-fallback: rgba(38, 38, 38, 0.98);
+  --p-notification-touch-title: #f5f5f5;
+  --p-notification-touch-body: rgba(235, 235, 245, 0.7);
+  --p-notification-touch-time: rgba(235, 235, 245, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-notification-touch-bg: rgba(38, 38, 38, 0.72);
+    --p-notification-touch-fallback: rgba(38, 38, 38, 0.98);
+    --p-notification-touch-title: #f5f5f5;
+    --p-notification-touch-body: rgba(235, 235, 245, 0.7);
+    --p-notification-touch-time: rgba(235, 235, 245, 0.5);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-notification-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-notification-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-notification-touch-title: #1a1a1a;
+  --p-notification-touch-body: #4d4d4d;
+  --p-notification-touch-time: #727272;
+}
+
+.p-notification-touch {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 4px 12px;
+
+  width: 100%;
+  max-width: 377px;
+  min-height: 64px;
+  padding: 12px 16px;
+  border-radius: 24px;
+
+  background: var(--p-notification-touch-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+  color: var(--p-notification-touch-title);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-notification-touch * {
+  box-sizing: border-box;
+}
+
+.p-notification-touch .p-notification__icon {
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.p-notification-touch .p-notification__icon img,
+.p-notification-touch .p-notification__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.p-notification-touch .p-notification__title {
+  grid-column: 2;
+  margin: 0;
+  color: var(--p-notification-touch-title);
+  font-size: 15px;
+  font-weight: 590;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.p-notification-touch .p-notification__body {
+  grid-column: 2;
+  margin: 0;
+  color: var(--p-notification-touch-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.p-notification-touch .p-notification__time {
+  grid-column: 3;
+  grid-row: 1;
+  color: var(--p-notification-touch-time);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* Expanded: a taller card holding content rather than two lines. */
+.p-notification-touch-expanded {
+  border-radius: 32px;
+  padding: 16px;
+}
+
+/* The stack. Cards behind the top one narrow and peek below it, which
+   is how iOS shows there is more than one. Presentation only. */
+.p-notification-stack {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  max-width: 377px;
+}
+
+.p-notification-stack > .p-notification-touch {
+  grid-area: 1 / 1;
+}
+
+.p-notification-stack > .p-notification-touch:nth-child(2) {
+  width: calc(100% - 16px);
+  translate: 0 8px;
+  z-index: -1;
+}
+
+.p-notification-stack > .p-notification-touch:nth-child(3) {
+  width: calc(100% - 32px);
+  translate: 0 16px;
+  z-index: -2;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-notification-touch {
+    background: var(--p-notification-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-notification-touch {
+    background: var(--p-notification-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Expanded stack: notifications.js toggles this on tap. The cards
+   behind the top one stop overlapping and become a list. */
+.p-notification-stack-expanded {
+  display: grid;
+  gap: 8px;
+  justify-items: stretch;
+}
+
+.p-notification-stack-expanded > .p-notification-touch {
+  grid-area: auto;
+  width: 100%;
+  translate: none;
+  z-index: auto;
+}
+
+.p-notification-stack {
+  cursor: pointer;
+  transition: gap 0.2s ease-out;
+}

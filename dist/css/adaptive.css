@@ -1,0 +1,181 @@
+/* Puppertino v2.0 — Adaptive layout (iOS and iPadOS)
+   Size classes, split views, containers, and readable width.
+
+   NOT to be confused with layout.css, which despite the name is the
+   v1 type scale (.p-layout, .p-headline, .p-caption). This file is the
+   page-level structure; that one sizes text.
+
+   ─── The size class model ───────────────────────────────────────────
+   Apple describes every screen by a pair of size classes, horizontal
+   and vertical, each either compact or regular. What matters here is
+   the horizontal one:
+
+     compact    iPhone portrait, and an iPad app in Slide Over or a
+                one-third Split View
+     regular    iPad full screen, and an iPad app in a half or
+                two-thirds Split View
+
+   The second half of that compact row is the reason this file exists.
+   An iPad app can be 320pt wide at runtime because someone dragged
+   another app alongside it, so "iPad" is a range of widths rather than
+   a device. Design what happens at each size class, not per device.
+
+   The boundary is 768px, the web equivalent of Apple's ~507pt split.
+   Only the horizontal size class is implemented; the vertical one has
+   no useful web equivalent, since a browser has no home indicator to
+   lay out around. */
+
+:root {
+  /* The compact/regular boundary. Custom properties cannot be used in
+     a media query, so this is documentation; the value is repeated in
+     the queries below and they have to be changed together. */
+  --p-size-regular: 768px;
+
+  /* Content margins, per size class. */
+  --p-margin-compact: 16px;
+  --p-margin-regular: 20px;
+
+  /* Body text stops being comfortable past about this width. */
+  --p-readable-width: 672px;
+
+  /* Split view columns. The sidebar matches .p-sidebar-touch. */
+  --p-split-sidebar: 320px;
+  --p-split-supplementary: 320px;
+  --p-split-gap: 0px;
+}
+
+/* ─── Container ────────────────────────────────────────────────────── */
+/* Page-level margins that widen at regular width, the way iOS moves
+   from 16pt to 20pt. */
+
+.p-container {
+  box-sizing: border-box;
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--p-margin-compact);
+}
+
+/* Caps the container itself, rather than the text inside it. */
+.p-container-readable {
+  max-width: calc(var(--p-readable-width) + 2 * var(--p-margin-compact));
+}
+
+/* ─── Readable width ───────────────────────────────────────────────── */
+/* Applied to the text itself, so a wide layout can keep full-width
+   images and rules while the prose stays measured. */
+
+.p-readable {
+  max-width: var(--p-readable-width);
+  margin-inline: auto;
+}
+
+/* ─── Split view ───────────────────────────────────────────────────── */
+/* Compact collapses to one column: the content pane fills, and the
+   sidebar and supplementary panes are removed rather than squeezed.
+   Pair a collapsed split view with a tab bar or a back button, or the
+   app loses its navigation at compact width. */
+
+.p-split-view {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--p-split-gap);
+  width: 100%;
+  min-height: 100%;
+}
+
+.p-split-view * {
+  box-sizing: border-box;
+}
+
+.p-split-view__sidebar,
+.p-split-view__supplementary {
+  display: none;
+  min-width: 0;
+}
+
+.p-split-view__content {
+  min-width: 0;
+  overflow: auto;
+}
+
+@media (min-width: 768px) {
+  .p-split-view {
+    grid-template-columns: var(--p-split-sidebar) minmax(0, 1fr);
+  }
+
+  /* Three columns: sidebar, supplementary list, detail. */
+  .p-split-view-triple {
+    grid-template-columns:
+      var(--p-split-sidebar)
+      var(--p-split-supplementary)
+      minmax(0, 1fr);
+  }
+
+  .p-split-view__sidebar {
+    display: block;
+    overflow: auto;
+  }
+
+  /* The supplementary pane only exists in a three-column split view.
+     Revealing it unconditionally puts three children in a two-track
+     grid, which wraps the content pane onto a second row. */
+  .p-split-view-triple > .p-split-view__supplementary {
+    display: block;
+    overflow: auto;
+  }
+
+  /* The sidebar toggle every iPad app has. Hides the sidebar at
+     regular width without changing the markup. */
+  .p-split-view-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .p-split-view-collapsed.p-split-view-triple {
+    grid-template-columns: var(--p-split-supplementary) minmax(0, 1fr);
+  }
+
+  .p-split-view-collapsed > .p-split-view__sidebar {
+    display: none;
+  }
+}
+
+/* ─── Size class visibility ────────────────────────────────────────── */
+/* These only ever hide. Nothing here sets an element visible, so an
+   element keeps whatever display its own component gave it, whether
+   that is block, flex, or grid. !important because a component's own
+   display rule may load after this file in a per-component import. */
+
+@media (max-width: 767px) {
+  .p-regular-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .p-compact-only {
+    display: none !important;
+  }
+}
+
+/* ─── Panes ────────────────────────────────────────────────────────── */
+/* A pane is a column's content: it scrolls on its own and carries the
+   size-class margins, so the whole page does not scroll as one. */
+
+.p-pane-scroll {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-inline: var(--p-margin-compact);
+}
+
+@media (min-width: 768px) {
+  .p-container,
+  .p-pane-scroll {
+    padding-inline: var(--p-margin-regular);
+  }
+
+  .p-container-readable {
+    max-width: calc(var(--p-readable-width) + 2 * var(--p-margin-regular));
+  }
+}

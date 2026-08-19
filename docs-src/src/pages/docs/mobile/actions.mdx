@@ -1,0 +1,273 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Actions
+description: The iOS action sheet. A 300px material panel of capsule rows, anchored to the bottom, driven by the shared modal manager.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/modals.css';
+import '@puppertino/actions.css';
+import '@puppertino/lists.css';
+import Showcase from '../../../components/Showcase.astro';
+import modalsScript from '../../../../../src/js/modals.js?url';
+
+<script type="module" src={modalsScript}></script>
+
+<div class="p-modal-background">
+  <div
+    class="p-modal p-action-sheet"
+    id="sheet-share"
+    data-p-close-on-outside="true"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="sheet-share-title"
+  >
+    <div class="p-action-sheet__surface">
+      <div class="p-action-sheet__header">
+        <h2 class="p-action-sheet__title" id="sheet-share-title">Share “Q3 Report”</h2>
+        <p class="p-action-sheet__message">Anyone with the link will be able to view this file.</p>
+      </div>
+      <div class="p-action-sheet__actions">
+        <button class="p-action-sheet__action" type="button" data-p-cancel>Copy link</button>
+        <button class="p-action-sheet__action" type="button" data-p-cancel>Send a copy</button>
+        <button class="p-action-sheet__action" type="button" data-p-cancel>Save to Files</button>
+        <button class="p-action-sheet__action p-action-sheet__action--destructive" type="button" data-p-cancel>Remove sharing</button>
+        <button class="p-action-sheet__action p-action-sheet__cancel" type="button" data-p-cancel>Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+An action sheet offers a short list of things a person can do next, anchored to the bottom of the screen where a thumb can reach it.
+
+## When to use it
+
+Use an action sheet when a single tap needs to branch into several choices. Share, which opens Copy link, Send a copy, Save to Files. A row's overflow button, which opens Rename, Duplicate, Delete.
+
+Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/modals/`}>alert</a> when there is one decision with consequences, not a menu of options. Use a plain button when there is only one thing to do.
+
+Keep the list short. Seven rows is the practical ceiling before it stops reading as a list of choices and starts reading as a screen.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Width | 300px, capped at `100vw - 32px` |
+| Radius | 34px |
+| Surface | `rgba(245,245,245,0.60)` light, `rgba(38,38,38,0.60)` dark, blur 30px, saturate 180% |
+| Padding | 14px, plus `max(16px, env(safe-area-inset-bottom))` below the panel |
+| Header | Left aligned, 6px / 4px / 14px padding |
+| Title | 17px, weight 590, line height 22px, tracking -0.43px |
+| Message | 17px, weight 400, `--p-action-sheet-copy` |
+| Row | 272px wide at the default width, 48px tall, 24px radius |
+| Row fill | `rgba(120,120,128,0.16)` light, `rgba(120,120,128,0.32)` dark |
+| Row gap | 10px, and 8px extra above Cancel |
+| Entry | 0.28s slide from 16px below, `cubic-bezier(0.22, 1, 0.36, 1)` |
+
+<Showcase
+  name="action-sheet-preview"
+  snippet={false}
+  align="start"
+  code={`<div class="p-action-sheet" style="position: relative; left: auto; bottom: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 300px; padding-bottom: 0;" aria-hidden="true">
+  <div class="p-action-sheet__surface">
+    <div class="p-action-sheet__header">
+      <h2 class="p-action-sheet__title">Share “Q3 Report”</h2>
+      <p class="p-action-sheet__message">Anyone with the link will be able to view this file.</p>
+    </div>
+    <div class="p-action-sheet__actions">
+      <button class="p-action-sheet__action" type="button">Copy link</button>
+      <button class="p-action-sheet__action" type="button">Send a copy</button>
+      <button class="p-action-sheet__action" type="button">Save to Files</button>
+      <button class="p-action-sheet__action p-action-sheet__action--destructive" type="button">Remove sharing</button>
+      <button class="p-action-sheet__action p-action-sheet__cancel" type="button">Cancel</button>
+    </div>
+  </div>
+</div>`}
+/>
+
+The rows are capsules stacked with a 10px gap, not a divided list with hairlines between the items. That is the current iOS treatment, and it is the same 48px capsule the alert uses for its actions.
+
+The header is left aligned while the rows are centered. The alert centers both, because an alert asks a question. An action sheet labels a list, so the header reads as a caption over it.
+
+## Try it
+
+<Showcase
+  name="action-sheet-live"
+  snippet={false}
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary" data-p-open-modal="#sheet-share">Share</button>`}
+/>
+
+Escape closes it, Tab is trapped inside it, focus returns to the button that opened it, and a tap outside dismisses it. The action sheet is a `.p-modal`, so all of that comes from the shared manager rather than from anything sheet-specific.
+
+## Rows
+
+| Class | Appearance | Use it for |
+|---|---|---|
+| `.p-action-sheet__action` | Quiet fill, label color | Every ordinary choice |
+| `.p-action-sheet__action--destructive` | Quiet fill, red label | Deleting or removing something |
+| `.p-action-sheet__cancel` | Same fill, 8px of separation above | Dismissing without choosing |
+
+Cancel goes last and gets the extra gap. The separation matters more than it looks: it stops a thumb aiming for Cancel from landing on the destructive row directly above it.
+
+Destructive rows keep the quiet fill and only turn the label red, the same rule the alert follows. Put a destructive row near the bottom of the list, above Cancel, not at the top where a reflex tap lands.
+
+Label rows with verbs. Copy link, Send a copy, Remove sharing. A row labelled with a noun makes people guess what tapping it does.
+
+## Markup
+
+```html
+<div class="p-modal-background">
+  <div class="p-modal p-action-sheet" id="share-sheet"
+       data-p-close-on-outside="true"
+       role="dialog" aria-modal="true" aria-hidden="true"
+       aria-labelledby="share-sheet-title">
+    <div class="p-action-sheet__surface">
+      <div class="p-action-sheet__header">
+        <h2 class="p-action-sheet__title" id="share-sheet-title">Share “Q3 Report”</h2>
+        <p class="p-action-sheet__message">
+          Anyone with the link will be able to view this file.
+        </p>
+      </div>
+      <div class="p-action-sheet__actions">
+        <button class="p-action-sheet__action" type="button">Copy link</button>
+        <button class="p-action-sheet__action p-action-sheet__action--destructive"
+                type="button">Remove sharing</button>
+        <button class="p-action-sheet__action p-action-sheet__cancel"
+                type="button" data-p-cancel>Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="p-button p-button-touch p-button-primary"
+        data-p-open-modal="#share-sheet">Share</button>
+```
+
+The header is optional. Drop `.p-action-sheet__header` when the rows explain themselves, which is most of the time.
+
+`role="dialog"` here, not `role="alertdialog"`. An action sheet offers choices; it does not interrupt with something that must be acknowledged.
+
+## Dark mode
+
+The surface moves to `rgba(38,38,38,0.60)`, rows go from 16% to 32%, and the destructive red shifts from `#FF383C` to `#FF4245`. The blur is unchanged.
+
+## Accessibility
+
+Every row is a real `<button>`, so the list is navigable by keyboard and announced as a set of buttons. Rows that navigate rather than act should be `<a href>` instead.
+
+The panel clears the home indicator through `env(safe-area-inset-bottom)`, falling back to 16px where the environment variable resolves to zero.
+
+Reduced motion removes the slide and leaves a 0.25s fade. Reduced transparency and browsers without `backdrop-filter` both get an opaque surface, because text over a translucent panel on arbitrary content cannot be guaranteed to meet 4.5:1.
+
+Corner shape upgrades to a real squircle where `corner-shape` ships: the 34px arc becomes a 54.4px superellipse, the same ratio the alert and the desktop surfaces use.
+
+## Share sheets
+
+A share sheet offers somewhere to send the thing on screen: a person, an app, or a destination like Files.
+
+It is mostly a composition of parts that already exist. The panel is a <a href={`${import.meta.env.BASE_URL}docs/mobile/modals/#sheets`}>bottom sheet</a> and the action groups under the targets are <a href={`${import.meta.env.BASE_URL}docs/mobile/lists/`}>inset lists</a>. Both already carry the radii this sheet uses, 38px and 26px. What `.p-activity-view` adds is the target row.
+
+<Showcase
+  name="activity-view"
+  align="start"
+  snippet={`<div class="p-activity-view">
+  <div class="p-activity-view__header">
+    <div>
+      <h2 class="p-activity-view__title">Q3 Report</h2>
+      <p class="p-activity-view__subtitle">PDF Document, 2.4 MB</p>
+    </div>
+    <span></span>
+    <button class="p-activity-view__close" type="button" aria-label="Close">
+      <i class="ph-bold ph-x"></i>
+    </button>
+  </div>
+  <div class="p-activity-view__targets">
+    <button class="p-activity-view__target" type="button">
+      <span class="p-activity-view__avatar">AL</span>
+      <span class="p-activity-view__target-label">Ada</span>
+      <span class="p-activity-view__target-detail">Messages</span>
+    </button>
+    <button class="p-activity-view__target" type="button">
+      <span class="p-activity-view__app"><i class="ph-bold ph-envelope-simple"></i></span>
+      <span class="p-activity-view__target-label">Mail</span>
+    </button>
+  </div>
+</div>`}
+  code={`<div style="width: 402px; padding: 16px; background: var(--p-bg-secondary); border-radius: 24px;">
+  <div class="p-activity-view">
+    <div class="p-activity-view__header">
+      <div>
+        <h2 class="p-activity-view__title">Q3 Report</h2>
+        <p class="p-activity-view__subtitle">PDF Document, 2.4 MB</p>
+      </div>
+      <span></span>
+      <button class="p-activity-view__close" type="button" aria-label="Close"><i class="ph-bold ph-x"></i></button>
+    </div>
+    <div class="p-activity-view__targets">
+      <button class="p-activity-view__target" type="button">
+        <span class="p-activity-view__avatar" style="background:#FF8D28;color:#fff;">AL</span>
+        <span class="p-activity-view__target-label">Ada</span>
+        <span class="p-activity-view__target-detail">Messages</span>
+      </button>
+      <button class="p-activity-view__target" type="button">
+        <span class="p-activity-view__avatar" style="background:#34C759;color:#fff;">GH</span>
+        <span class="p-activity-view__target-label">Grace</span>
+        <span class="p-activity-view__target-detail">Mail</span>
+      </button>
+      <button class="p-activity-view__target" type="button">
+        <span class="p-activity-view__app" style="background:#0088FF;color:#fff;"><i class="ph-bold ph-wifi-high"></i></span>
+        <span class="p-activity-view__target-label">AirDrop</span>
+      </button>
+      <button class="p-activity-view__target" type="button">
+        <span class="p-activity-view__app" style="background:#34C759;color:#fff;"><i class="ph-bold ph-chat-circle"></i></span>
+        <span class="p-activity-view__target-label">Messages</span>
+      </button>
+      <button class="p-activity-view__target" type="button">
+        <span class="p-activity-view__app" style="background:#0088FF;color:#fff;"><i class="ph-bold ph-envelope-simple"></i></span>
+        <span class="p-activity-view__target-label">Mail</span>
+      </button>
+    </div>
+    <ul class="p-list p-list-touch p-list-inset">
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Copy</span></span><i class="p-list-trailing-icon ph-bold ph-copy" aria-hidden="true"></i></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Save to Files</span></span><i class="p-list-trailing-icon ph-bold ph-folder" aria-hidden="true"></i></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Print</span></span><i class="p-list-trailing-icon ph-bold ph-printer" aria-hidden="true"></i></li>
+    </ul>
+  </div>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Panel | 402px, 38px radius, the bottom sheet's own values |
+| Header title | 17px, weight 590, tracking -0.43px |
+| Header subtitle | 13px, tracking -0.1px, secondary |
+| Close button | 44px circle |
+| Person target | 70px circle |
+| App target | 64px rounded square at 16px radius |
+| Target label | 12px, tracking +0.06px |
+| Target detail | 11px, secondary |
+| Action groups | 26px radius, the inset list's own value |
+
+The target row scrolls sideways rather than wrapping, so the first few destinations stay in the same place however many there are. It bleeds to the panel edges, which is what signals there is more to the right.
+
+People come before apps. iOS puts the person you last shared with first, because that is the most likely destination and the least work to reach.
+
+Each target is a button with a label, so an icon-only destination still announces its name. The detail line under a person names the app the share would go through.
+
+## The legacy action sheet
+
+The v1 `.p-action-*` classes are still here and still work, with their own `actions.js`. The v2 sheet is a separate component that runs on the modal manager instead.
+
+| v1 | v2 |
+|---|---|
+| `.p-action-big-container` | `.p-modal.p-action-sheet` |
+| `.p-action-container` | `.p-action-sheet__surface` |
+| `.p-action-title` | `.p-action-sheet__title` |
+| `.p-action-neutral` | `.p-action-sheet__action` |
+| `.p-action-destructive` | `.p-action-sheet__action--destructive` |
+| `.p-action-cancel` | `.p-action-sheet__cancel` |
+| `actions.js` | `modals.js` |
+
+Adding `.p-action-sheet` opts the modal out of every v1 `.p-modal` rule, so the two can sit on the same page without interfering.

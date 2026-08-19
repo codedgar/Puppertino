@@ -1,0 +1,328 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Modals
+description: The iOS alert and the iOS sheet. Exact iOS metrics, driven by the shared modal manager, no component-specific JavaScript.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/lists.css';
+import '@puppertino/modals.css';
+import Showcase from '../../../components/Showcase.astro';
+import modalsScript from '../../../../../src/js/modals.js?url';
+import sheetsScript from '../../../../../src/js/sheets.js?url';
+
+<script type="module" src={modalsScript}></script>
+<script type="module" src={sheetsScript}></script>
+
+<div class="p-modal-background">
+  <div
+    class="p-modal p-alert"
+    id="alert-two"
+    data-p-close-on-outside="true"
+    role="alertdialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="alert-two-title"
+    aria-describedby="alert-two-message"
+  >
+    <div class="p-alert__surface">
+      <div class="p-alert__body">
+        <h2 class="p-alert__title" id="alert-two-title">Delete “Q3 Report”?</h2>
+        <p class="p-alert__message" id="alert-two-message">This file will be deleted immediately. You cannot undo this action.</p>
+      </div>
+      <div class="p-alert__actions">
+        <button class="p-alert__action" type="button" data-p-cancel>Cancel</button>
+        <button class="p-alert__action p-alert__action--destructive" type="button" data-p-cancel>Delete</button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="p-modal p-alert"
+    id="alert-three"
+    data-p-close-on-outside="true"
+    role="alertdialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="alert-three-title"
+  >
+    <div class="p-alert__surface">
+      <div class="p-alert__body">
+        <h2 class="p-alert__title" id="alert-three-title">Unsaved changes</h2>
+        <p class="p-alert__message">Your edits have not been sent. Save them as a draft to finish later.</p>
+      </div>
+      <div class="p-alert__actions">
+        <button class="p-alert__action p-alert__action--primary" type="button" data-p-cancel>Save draft</button>
+        <button class="p-alert__action p-alert__action--destructive" type="button" data-p-cancel>Discard</button>
+        <button class="p-alert__action" type="button" data-p-cancel>Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="p-modal p-bottom-sheet"
+    id="sheet-details"
+    data-p-detents="50,92"
+    data-p-close-on-outside="true"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="sheet-details-title"
+  >
+    <div class="p-bottom-sheet__grabber"></div>
+    <div class="p-bottom-sheet__header">
+      <button class="p-button p-button-touch-small p-button-borderless" type="button" data-p-cancel>Cancel</button>
+      <h2 class="p-bottom-sheet__title" id="sheet-details-title">Details</h2>
+      <button class="p-button p-button-touch-small p-button-primary" type="button" data-p-cancel>Done</button>
+    </div>
+    <div class="p-bottom-sheet__body">
+      <ul class="p-list p-list-touch p-list-inset">
+        <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Name</span></span><span class="p-list-detail">Q3 Report</span></li>
+        <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Kind</span></span><span class="p-list-detail">PDF</span></li>
+        <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Size</span></span><span class="p-list-detail">2.4 MB</span></li>
+        <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Created</span></span><span class="p-list-detail">June 2024</span></li>
+      </ul>
+      <p class="p-list-touch-footer">Shared with 3 people in your team.</p>
+    </div>
+  </div>
+</div>
+
+An alert interrupts. It stops what a person was doing to tell them something they have to act on before anything else can continue.
+
+## When to use it
+
+Use an alert when the app cannot proceed without a decision, and the decision has consequences. Deleting something permanently. Discarding unsaved work. Confirming a purchase.
+
+Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when you are offering a choice between several things rather than confirming one. Use a notification or an inline message when nothing needs deciding.
+
+Alerts are expensive. They take the screen, break concentration, and train people to dismiss without reading. An app that alerts on every save has an app where nobody reads alerts.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Width | 300px, capped at `100vw - 32px` |
+| Radius | 34px |
+| Surface | `rgba(245,245,245,0.60)` light, `rgba(38,38,38,0.60)` dark, blur 30px, saturate 180% |
+| Padding | 14px around the actions, 16px / 12px / 18px inside the body |
+| Title | 17px, weight 590, line height 22px, tracking -0.43px |
+| Message | 17px, weight 400, line height 22px, tracking -0.43px |
+| Action | 48px tall, 24px radius, 17px at weight 510 |
+| Action gap | 16px side by side, 8px stacked |
+| Entry | 0.24s, scale 1.12 to 1, `cubic-bezier(0.22, 1, 0.36, 1)` |
+
+<Showcase
+  name="alert-preview"
+  snippet={false}
+  align="start"
+  code={`<div class="p-alert" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 300px;" aria-hidden="true">
+  <div class="p-alert__surface">
+    <div class="p-alert__body">
+      <h2 class="p-alert__title">Delete “Q3 Report”?</h2>
+      <p class="p-alert__message">This file will be deleted immediately. You cannot undo this action.</p>
+    </div>
+    <div class="p-alert__actions">
+      <button class="p-alert__action" type="button">Cancel</button>
+      <button class="p-alert__action p-alert__action--destructive" type="button">Delete</button>
+    </div>
+  </div>
+</div>
+<div class="p-alert" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: none; transform: none; width: 300px;" aria-hidden="true">
+  <div class="p-alert__surface">
+    <div class="p-alert__body">
+      <h2 class="p-alert__title">Unsaved changes</h2>
+      <p class="p-alert__message">Your edits have not been sent. Save them as a draft to finish later.</p>
+    </div>
+    <div class="p-alert__actions">
+      <button class="p-alert__action p-alert__action--primary" type="button">Save draft</button>
+      <button class="p-alert__action p-alert__action--destructive" type="button">Discard</button>
+      <button class="p-alert__action" type="button">Cancel</button>
+    </div>
+  </div>
+</div>`}
+/>
+
+The actions are capsules on the surface, not divided rows across the bottom. This is the current iOS treatment and it is the biggest visual difference from the alert most people picture.
+
+Two actions sit side by side. Three or more stack. The component decides this itself through `:has(> :nth-child(3))`, so the markup is identical either way. Add `.p-alert__actions--stacked` to force a column when two labels are too long to sit next to each other. Browsers without `:has()` keep the row.
+
+## Try it
+
+<Showcase
+  name="alert-live"
+  snippet={false}
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary" data-p-open-modal="#alert-two">Two actions</button>
+<button class="p-button p-button-touch p-button-default" data-p-open-modal="#alert-three">Three actions</button>`}
+/>
+
+Escape closes it, Tab is trapped inside it, focus returns to the button that opened it, and a tap outside dismisses it because of `data-p-close-on-outside="true"`. None of that is alert-specific. The alert is a `.p-modal`, so it inherits the whole manager.
+
+## Actions
+
+| Class | Appearance | Use it for |
+|---|---|---|
+| `.p-alert__action` | Quiet fill, label color | Cancel and anything neutral |
+| `.p-alert__action--primary` | Filled accent, white label | The default action, the one Return would trigger |
+| `.p-alert__action--destructive` | Quiet fill, red label | Deleting, discarding, anything unrecoverable |
+
+Destructive keeps the quiet fill and only turns the label red. The dangerous action should never be the most prominent thing on the screen. If someone taps by reflex, reflex should land on Cancel.
+
+Use one primary action per alert, or none. Two filled buttons ask people to compare two equally loud things.
+
+Label the buttons with verbs that say what happens. Delete, Discard, Save draft. Not OK, which tells people nothing about what they just agreed to.
+
+## Writing the content
+
+The title is a short question or statement, in sentence case, ending without a period unless it is a question. The message is one or two complete sentences explaining the consequence.
+
+Put the consequence in the message, not in the title. "Delete Q3 Report?" is the question. "This file will be deleted immediately. You cannot undo this action." is why it matters.
+
+## Markup
+
+```html
+<div class="p-modal-background">
+  <div class="p-modal p-alert" id="confirm-delete"
+       data-p-close-on-outside="true"
+       role="alertdialog" aria-modal="true" aria-hidden="true"
+       aria-labelledby="confirm-delete-title"
+       aria-describedby="confirm-delete-message">
+    <div class="p-alert__surface">
+      <div class="p-alert__body">
+        <h2 class="p-alert__title" id="confirm-delete-title">Delete “Q3 Report”?</h2>
+        <p class="p-alert__message" id="confirm-delete-message">
+          This file will be deleted immediately. You cannot undo this action.
+        </p>
+      </div>
+      <div class="p-alert__actions">
+        <button class="p-alert__action" type="button" data-p-cancel>Cancel</button>
+        <button class="p-alert__action p-alert__action--destructive" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="p-button p-button-touch p-button-primary"
+        data-p-open-modal="#confirm-delete">Delete file</button>
+```
+
+One `.p-modal-background` per page, holding every alert. Open with `data-p-open-modal`, close with `data-p-cancel` or `data-p-close-modal`. Load the manager once:
+
+```html
+<script type="module" src="/js/modals.js"></script>
+```
+
+`role="alertdialog"` rather than `role="dialog"`. It tells a screen reader this is an interruption that needs a response, and it makes the message part of the announcement.
+
+## Dark mode
+
+The surface moves to `rgba(38,38,38,0.60)`, the quiet action fill becomes `rgba(118,118,128,0.36)`, and the title and label colors flip through their tokens. The blur and the red stay the same.
+
+## Accessibility
+
+Focus moves to the first interactive element when the alert opens and returns to the trigger when it closes. Tab cannot leave the alert while it is open.
+
+Reduced motion drops the scale and leaves a 0.25s fade. The alert still appears, it just does not arrive oversized.
+
+Reduced transparency swaps the material for an opaque surface and removes the blur. Text over a translucent panel sitting on arbitrary content cannot be guaranteed to meet 4.5:1, so the fallback is opaque rather than merely darker. Browsers without `backdrop-filter` get the same treatment.
+
+Corner shape upgrades to a real squircle where `corner-shape` ships. The 34px arc becomes a 54.4px superellipse, the same 1.6 ratio the desktop surfaces use. Everywhere else the plain arc stands in.
+
+## Sheets
+
+A sheet slides up from the bottom and stops short of the top, so the screen behind it stays partly visible. That gap is the whole point: it says the task is secondary and the thing behind is still there.
+
+Use a sheet when the task has content. Editing details, picking from a long list, reading something. Use an alert when there is one decision. Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when there is a short list of choices and nothing to read.
+
+<Showcase
+  name="sheet-live"
+  snippet={false}
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary" data-p-open-modal="#sheet-details">Open sheet</button>`}
+/>
+
+| Part | Value |
+|---|---|
+| Width | 420px at most, full width below that |
+| Height | 50vh by default, 92vh with `.p-bottom-sheet-large` |
+| Radius | 38px on the top corners only |
+| Background | `#F2F2F7` light, `#1C1C1E` dark, opaque |
+| Grabber | 36 x 5px at 2.5px radius, `rgba(60,60,67,0.30)` |
+| Header | 12px / 16px padding, title 17px at weight 590, centered |
+| Entry | 0.4s slide, `cubic-bezier(0.32, 0.72, 0, 1)` |
+
+```html
+<div class="p-modal p-bottom-sheet" id="details"
+     data-p-close-on-outside="true"
+     role="dialog" aria-modal="true" aria-hidden="true"
+     aria-labelledby="details-title">
+  <div class="p-bottom-sheet__grabber"></div>
+  <div class="p-bottom-sheet__header">
+    <button class="p-button p-button-touch-small p-button-borderless"
+            type="button" data-p-cancel>Cancel</button>
+    <h2 class="p-bottom-sheet__title" id="details-title">Details</h2>
+    <button class="p-button p-button-touch-small p-button-primary"
+            type="button">Done</button>
+  </div>
+  <div class="p-bottom-sheet__body">
+    ...
+  </div>
+</div>
+```
+
+### Detents
+
+`.p-bottom-sheet` stops at 50vh. Add `.p-bottom-sheet-large` for 92vh, which leaves the status bar visible, or `.p-bottom-sheet-full` for everything but a 24px strip. Override `--p-bottom-sheet-height` for anything else.
+
+Consider the medium detent when the sheet supports what is behind it, like details about a selected row. Consider large when the sheet is the task.
+
+`sheets.js` makes the grabber real: drag it to move between detents, and flick down past the smallest one to dismiss. List the detents on the sheet as viewport percentages, smallest first.
+
+```html
+<div class="p-modal p-bottom-sheet" data-p-detents="50,92">
+  <div class="p-bottom-sheet__grabber"></div>
+  …
+</div>
+```
+
+```html
+<script type="module" src="/js/sheets.js"></script>
+```
+
+Without `data-p-detents` the sheet keeps the height its class gives it and only swipe-to-dismiss applies. Without the script it stays at that height and closes the usual ways. Include the grabber only where one of those is true; a handle that never moves is a promise the interface does not keep.
+
+### The header
+
+The header is a three-column grid: leading action, title, trailing action. The title is centered on the sheet rather than on the leftover space, so adding an action to one side does not shift it.
+
+Both actions are optional. A first or last child that is not the title takes the outer column automatically, so a header with only a Done button still puts it on the right.
+
+Use `.p-button-touch-small` for header actions. They sit in a 46px band, and the regular touch size crowds it.
+
+### The body
+
+`.p-bottom-sheet__body` scrolls, and the header and grabber stay put. It clears the home indicator through `env(safe-area-inset-bottom)` with a 16px floor.
+
+The sheet is opaque rather than a material. Sheets hold content, often a list of text, and a translucent panel takes its contrast from whatever is scrolling behind it, which cannot be guaranteed to meet 4.5:1.
+
+Reduced motion replaces the slide with a fade. The sheet still arrives, it just does not travel.
+
+### Not to be confused with
+
+`modals.css` ships three things called some kind of sheet, which is Apple's naming rather than ours.
+
+| Class | What it is |
+|---|---|
+| `.p-bottom-sheet` | This component. Slides up from the bottom edge. |
+| `.p-action-sheet` | A short list of choices. Lives in `actions.css`. |
+| `.p-sheet` | The macOS window sheet, which drops from a title bar. |
+
+## The legacy modal
+
+The v1 `.p-modal` is still here and still works, with its 40vw box, `scale(1.5)` entry, and divided full-width buttons. It is now scoped as `.p-modal:not(.p-desktop-modal):not(.p-alert)`, so adding `.p-alert` opts a modal out of every v1 rule while keeping the shared manager.
+
+| v1 | v2 |
+|---|---|
+| `.p-modal` alone | `.p-modal.p-alert` |
+| `.p-modal-button-container` | `.p-alert__actions` |
+| `.p-modal-button-container > button` | `.p-alert__action` |
+
+Nothing about the JavaScript changes. Same attributes, same script, same manager.

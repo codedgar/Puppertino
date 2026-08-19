@@ -346,3 +346,213 @@
     corner-shape: superellipse(1.465);
   }
 }
+
+/* ─── Touch size (iOS and iPadOS) ──────────────────────────────────── */
+/* The iOS menu: the surface a long press or a pop-up button raises. A
+   238px panel at 32px radius over a material, with 50px rows carrying a
+   capsule highlight rather than the full-bleed one the pointer menu
+   uses. Same slots as the pointer menu, restyled.
+
+   A context menu is this surface plus an optional preview of the thing
+   the menu belongs to; .p-menu-touch-preview holds that. */
+
+:root {
+  --p-menu-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-menu-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-menu-touch-label: #1a1a1a;
+  --p-menu-touch-secondary: #727272;
+  --p-menu-touch-highlight: #ededed;
+  --p-menu-touch-separator: #e6e6e6;
+  --p-menu-touch-disabled: #bfbfbf;
+  --p-menu-touch-destructive: #ff383c;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-menu-touch-bg: rgba(38, 38, 38, 0.72);
+  --p-menu-touch-fallback: rgba(38, 38, 38, 0.98);
+  --p-menu-touch-label: #f5f5f5;
+  --p-menu-touch-secondary: #8a8a8a;
+  --p-menu-touch-highlight: #121212;
+  --p-menu-touch-separator: #1a1a1a;
+  --p-menu-touch-disabled: #6b6b6b;
+  --p-menu-touch-destructive: #ff4245;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-menu-touch-bg: rgba(38, 38, 38, 0.72);
+    --p-menu-touch-fallback: rgba(38, 38, 38, 0.98);
+    --p-menu-touch-label: #f5f5f5;
+    --p-menu-touch-secondary: #8a8a8a;
+    --p-menu-touch-highlight: #121212;
+    --p-menu-touch-separator: #1a1a1a;
+    --p-menu-touch-disabled: #6b6b6b;
+    --p-menu-touch-destructive: #ff4245;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-menu-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-menu-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-menu-touch-label: #1a1a1a;
+  --p-menu-touch-secondary: #727272;
+  --p-menu-touch-highlight: #ededed;
+  --p-menu-touch-separator: #e6e6e6;
+  --p-menu-touch-disabled: #bfbfbf;
+  --p-menu-touch-destructive: #ff383c;
+}
+
+.p-menu-touch {
+  --p-menu-touch-pad: 16px;
+
+  box-sizing: border-box;
+  min-width: 238px;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 8px var(--p-menu-touch-pad);
+  border-radius: 32px;
+
+  background: var(--p-menu-touch-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+  color: var(--p-menu-touch-label);
+}
+
+.p-menu-touch * {
+  box-sizing: border-box;
+}
+
+.p-menu-touch .p-menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-height: 50px;
+  padding: 0 8px;
+  border-radius: 0;
+
+  color: var(--p-menu-touch-label);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* The highlight is a capsule inset from the row, not a full-bleed
+   band. Drawn behind the content so the label is never washed out. */
+/* Inset a further 8px from the row, so on a 238px menu the separator
+   runs the 206px content width and the highlight sits at 190px. */
+.p-menu-touch .p-menu__item::before {
+  content: "";
+  position: absolute;
+  inset: 5px 8px;
+  border-radius: 20px;
+  background: transparent;
+  z-index: -1;
+}
+
+.p-menu-touch .p-menu__item:hover,
+.p-menu-touch .p-menu__item:focus-visible {
+  background: none;
+  color: var(--p-menu-touch-label);
+}
+
+.p-menu-touch .p-menu__item:active::before,
+.p-menu-touch .p-menu__item[aria-current]::before,
+.p-menu-touch .p-menu__item.p-is-active::before {
+  background: var(--p-menu-touch-highlight);
+}
+
+.p-menu-touch .p-menu__item:focus-visible {
+  outline: 3px solid var(--p-sys-blue, #0088ff);
+  outline-offset: -3px;
+  border-radius: 20px;
+}
+
+.p-menu-touch .p-menu__item--destructive {
+  color: var(--p-menu-touch-destructive);
+}
+
+.p-menu-touch .p-menu__item[aria-disabled="true"],
+.p-menu-touch .p-menu__item:disabled {
+  color: var(--p-menu-touch-disabled);
+  pointer-events: none;
+}
+
+/* A subtitle under the label pushes the row taller. */
+.p-menu-touch .p-menu__item:has(.p-menu-touch__subtitle) {
+  min-height: 60px;
+}
+
+.p-menu-touch__label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.p-menu-touch__subtitle {
+  color: var(--p-menu-touch-secondary);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.08px;
+}
+
+.p-menu-touch .p-menu__icon {
+  flex: none;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.p-menu-touch .p-menu__shortcut,
+.p-menu-touch .p-menu__chevron {
+  margin-left: auto;
+  color: var(--p-menu-touch-secondary);
+  font-size: 15px;
+  font-weight: 510;
+}
+
+/* Separator runs the full content width, wider than the row highlight. */
+.p-menu-touch .p-menu__separator {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--p-menu-touch-separator);
+}
+
+.p-menu-touch .p-menu__header {
+  padding: 8px;
+  color: var(--p-menu-touch-label);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* The preview a context menu shows above itself. */
+.p-menu-touch-preview {
+  margin-bottom: 8px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.24);
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-menu-touch {
+    background: var(--p-menu-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-menu-touch {
+    background: var(--p-menu-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

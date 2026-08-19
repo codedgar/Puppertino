@@ -1,0 +1,205 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Menus & popovers
+description: The iOS menu, context menu, and popover. Material surfaces raised by a long press or a control, at exact iOS metrics.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/lists.css';
+import '@puppertino/menus.css';
+import '@puppertino/popovers.css';
+import Showcase from '../../../components/Showcase.astro';
+import contextScript from '../../../../../src/js/context_menus.js?url';
+
+<script type="module" src={contextScript}></script>
+
+<div class="p-menu p-menu-touch" id="demo-context-menu" role="menu" hidden>
+  <button class="p-menu__item" role="menuitem" type="button"><span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i></button>
+  <button class="p-menu__item" role="menuitem" type="button"><span>Save Image</span><i class="p-menu__icon ph-bold ph-download-simple"></i></button>
+  <div class="p-menu__separator" role="separator"></div>
+  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i></button>
+</div>
+
+A menu is a short list of commands raised by a control. A context menu is the same list raised by pressing and holding the thing it acts on. A popover is a panel anchored to a control, holding content rather than commands.
+
+## When to use each
+
+Use a **menu** when a button offers several related commands: a More button, a sort control, a pull-down.
+
+Use a **context menu** when the commands belong to a specific item and would clutter the screen if shown all the time. Long press a message, a file, a photo.
+
+Use a **popover** when the thing you are showing has content in it rather than a list of verbs: a form, a colour picker, a small detail panel. On iPhone, consider a <a href={`${import.meta.env.BASE_URL}docs/mobile/modals/#sheets`}>sheet</a> instead; popovers are mostly an iPad shape.
+
+Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when the choices are consequential enough to deserve the bottom of the screen.
+
+## Menus
+
+<Showcase
+  name="menu-touch"
+  align="start"
+  snippet={`<div class="p-menu p-menu-touch" role="menu">
+  <button class="p-menu__item" role="menuitem" type="button">
+    <span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i>
+  </button>
+  <button class="p-menu__item" role="menuitem" type="button">
+    <span>Duplicate</span><i class="p-menu__icon ph-bold ph-copy-simple"></i>
+  </button>
+  <div class="p-menu__separator" role="separator"></div>
+  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button">
+    <span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i>
+  </button>
+</div>`}
+  code={`<div class="p-menu p-menu-touch" role="menu">
+  <button class="p-menu__item" role="menuitem" type="button"><span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i></button>
+  <button class="p-menu__item" role="menuitem" type="button"><span>Duplicate</span><i class="p-menu__icon ph-bold ph-copy-simple"></i></button>
+  <button class="p-menu__item" role="menuitem" type="button"><span>Share</span><i class="p-menu__icon ph-bold ph-share-network"></i></button>
+  <div class="p-menu__separator" role="separator"></div>
+  <button class="p-menu__item" role="menuitem" type="button" aria-disabled="true"><span>Disabled Action</span><i class="p-menu__icon ph-bold ph-prohibit"></i></button>
+  <div class="p-menu__separator" role="separator"></div>
+  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i></button>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Surface | 238px minimum, 32px radius |
+| Background | `rgba(245,245,245,0.72)` light, `rgba(38,38,38,0.72)` dark, blur 30px |
+| Padding | 8px vertical, 16px horizontal |
+| Row | 50px minimum, 60px with a subtitle |
+| Label | 15px, weight 400, tracking +0.2px |
+| Highlight | Capsule inset 5px, 20px radius, `#EDEDED` light and `#121212` dark |
+| Separator | 1px, runs wider than the highlight |
+| Shortcut and subtitle | `#727272` light, `#8A8A8A` dark |
+| Destructive | `#FF383C` light, `#FF4245` dark |
+
+The pressed highlight is a capsule inset from the row, not a full-bleed band across the surface. That is the visible difference from the pointer menu in the same file, and it is why the separator is drawn wider than the highlight rather than matching it.
+
+The icon goes on the trailing edge. iOS puts menu glyphs on the right, opposite to macOS.
+
+The slots are the pointer menu's: `.p-menu__item`, `.p-menu__separator`, `.p-menu__header`, `.p-menu__icon`, `.p-menu__shortcut`. Adding `.p-menu-touch` restyles them.
+
+### Subtitles
+
+<Showcase
+  name="menu-touch-subtitle"
+  align="start"
+  snippet={false}
+  code={`<div class="p-menu p-menu-touch" role="menu">
+  <div class="p-menu__header">Sort By</div>
+  <button class="p-menu__item" role="menuitem" type="button">
+    <span class="p-menu-touch__label"><span>Name</span><span class="p-menu-touch__subtitle">A to Z</span></span>
+    <i class="p-menu__icon ph-bold ph-check"></i>
+  </button>
+  <button class="p-menu__item" role="menuitem" type="button">
+    <span class="p-menu-touch__label"><span>Date</span><span class="p-menu-touch__subtitle">Newest first</span></span>
+  </button>
+</div>`}
+/>
+
+Wrap the label in `.p-menu-touch__label` and add a `.p-menu-touch__subtitle` at 13px. The row grows to 60px on its own through `:has()`.
+
+`.p-menu__header` is 15px Bold and names a group of items.
+
+## Context menus
+
+A context menu is the same surface, raised by a long press, optionally with a preview of the item above it.
+
+<Showcase
+  name="context-menu"
+  align="start"
+  snippet={`<div class="p-menu-touch-preview">
+  <!-- a picture of the thing being acted on -->
+</div>
+<div class="p-menu p-menu-touch" role="menu">
+  ...
+</div>`}
+  code={`<div style="width: 250px;">
+  <div class="p-menu-touch-preview" style="height: 120px; background: linear-gradient(135deg, #0088FF, #CB30E0);"></div>
+  <div class="p-menu p-menu-touch" role="menu">
+    <button class="p-menu__item" role="menuitem" type="button"><span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i></button>
+    <button class="p-menu__item" role="menuitem" type="button"><span>Save Image</span><i class="p-menu__icon ph-bold ph-download-simple"></i></button>
+    <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i></button>
+  </div>
+</div>`}
+/>
+
+`.p-menu-touch-preview` is a 30px-radius container for that picture, with the menu below it.
+
+`context_menus.js` handles the press. Point an element at a hidden menu and it opens on a long press, on right-click, and on Shift+F10 or the context-menu key:
+
+```html
+<div data-p-context-menu="#file-menu">…</div>
+
+<div class="p-menu p-menu-touch" id="file-menu" role="menu" hidden>…</div>
+```
+
+```html
+<script type="module" src="/js/context_menus.js"></script>
+```
+
+It waits 500ms, cancels if the pointer moves more than 10px so a scroll never opens a menu, positions the menu near the press and clamps it to the viewport, and closes on Escape, an outside tap, or a choice. Focus moves to the first item and returns to where it was.
+
+<Showcase
+  name="context-menu-live"
+  snippet={false}
+  compact
+  code={`<div data-p-context-menu="#demo-context-menu" tabindex="0" style="width: 200px; height: 120px; border-radius: 24px; background: linear-gradient(135deg, #0088FF, #CB30E0); display: grid; place-items: center; color: #fff; font-size: 15px; cursor: context-menu;">Long press me</div>`}
+/>
+
+A long press has no visible affordance, so people find it by already knowing it is there. Offer every command in the context menu somewhere else too: a toolbar, a swipe action, or a detail screen.
+
+## Popovers
+
+<Showcase
+  name="popover-touch"
+  align="start"
+  snippet={`<div class="p-popover p-popover-touch" data-p-popover-place="bottom">
+  <h3>Filters</h3>
+  <p>Narrow the list to what you are looking for.</p>
+</div>`}
+  code={`<div style="padding: 20px 0;">
+  <div class="p-popover p-popover-touch" data-p-popover-place="bottom" style="position: relative;">
+    <h3 style="margin: 0 0 6px; font-size: 17px; font-weight: 590; letter-spacing: -0.43px;">Filters</h3>
+    <p style="margin: 0; font-size: 15px; letter-spacing: -0.23px; opacity: 0.6;">Narrow the list to what you are looking for.</p>
+  </div>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Radius | 38px |
+| Arrow | 56 x 13px |
+| Padding | 20px, or none when the popover holds a list |
+| Width | 240px minimum, 360px maximum |
+| Background | `rgba(245,245,245,0.72)`, blur 30px |
+| Shadow | `0 10px 40px rgba(0,0,0,0.18)` over a tighter layer and a hairline rim |
+
+The touch popover is a bigger, softer object than the pointer one: 38px radius against 12px, and a 56 x 13 arrow against 35.44 x 10.5. The arrow is the same silhouette scaled to the new box, so the tip stays rounded and the shoulders keep their easing.
+
+A popover holding a `.p-list-touch` drops its padding and clips, so the rows run to the popover's own edges.
+
+Placement, floating, and the `.active` toggle are shared with the pointer popover, so `popovers.js` drives both without changes. Set `data-p-popover-place` to `top`, `bottom`, `left`, or `right`; the arrow moves to the opposite edge.
+
+```html
+<script type="module" src="/js/popovers.js"></script>
+```
+
+## Dark mode
+
+Menu surfaces move to `rgba(38,38,38,0.72)`, the row highlight from `#EDEDED` to `#121212`, secondary text from `#727272` to `#8A8A8A`, and destructive red from `#FF383C` to `#FF4245`. Popovers follow the same pattern with a deeper shadow.
+
+## Accessibility
+
+Give the menu `role="menu"` and each item `role="menuitem"`, and make the items real buttons or links. Mark separators `role="separator"`.
+
+Disabled items use `aria-disabled="true"` rather than the `disabled` attribute, so they stay reachable and announce their state instead of disappearing from the tab order.
+
+Focus draws a 3px accent ring inset into the row, matching the highlight's capsule radius so the ring and the fill agree.
+
+A menu raised by a long press needs a keyboard path too. The control that opens it should open it on Enter or Space as well.
+
+Reduced transparency and browsers without `backdrop-filter` swap the material for an opaque surface on both the menu and the popover.
+
+## The pointer versions
+
+`menus.css` and `popovers.css` each ship both platforms. `.p-menu` and `.p-popover` alone are the macOS components: smaller type, tighter rows, a full-bleed highlight, and a 12px popover radius. Adding `.p-menu-touch` or `.p-popover-touch` swaps them to iOS metrics.

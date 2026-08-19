@@ -1,0 +1,243 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Color pickers
+description: The iOS color picker. Grid, spectrum, and slider modes in a 402px panel, with 30px swatches and a real alpha checkerboard.
+---
+
+import '@puppertino/colorwells.css';
+import '@puppertino/segmented-controls.css';
+import '@puppertino/sliders.css';
+import Showcase from '../../../components/Showcase.astro';
+import colorScript from '../../../../../src/js/color_pickers.js?url';
+
+<script type="module" src={colorScript}></script>
+
+A color picker lets people choose a color for text, a shape, or anything else on screen. It has three modes: pick from a set, pick from a spectrum, or dial in each channel.
+
+## When to use it
+
+Use the full picker when any color is valid: drawing, theming, annotation.
+
+Use a plain grid of `.p-color-swatch` buttons when only a handful of colors are valid, which is most of the time. A label color, a calendar category, a highlighter. Offering a spectrum for a choice of eight is a worse experience, not a richer one.
+
+Use a native `<input type="color">` when you want the platform's own picker and do not need it to match.
+
+## Swatches
+
+The swatch is the reusable piece. It works on its own, outside the panel.
+
+<Showcase
+  name="color-swatches"
+  compact
+  code={`<button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-red);" aria-label="Red"></button>
+<button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-orange);" aria-label="Orange"></button>
+<button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-yellow);" aria-label="Yellow"></button>
+<button class="p-color-swatch p-selected" style="--p-color-swatch: var(--p-sys-green);" aria-label="Green" aria-pressed="true"></button>
+<button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-blue);" aria-label="Blue"></button>
+<button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-purple);" aria-label="Purple"></button>
+<button class="p-color-swatch" style="--p-color-swatch: rgba(175, 82, 222, 0.35);" aria-label="Purple, 35% opacity"></button>`}
+  snippet={`<button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-blue);"
+        aria-label="Blue" aria-pressed="false"></button>`}
+/>
+
+| Part | Value |
+|---|---|
+| Swatch | 30 x 30px circle |
+| Selection ring | 36px overall: a 1.5px gap in the panel color, then a 3px ring |
+| Grid pitch | 54px across, 52px down |
+| Color source | `--p-color-swatch` |
+
+The selection ring draws a gap in the panel color before the ring itself, so it reads on a swatch of any color, including one that matches the panel exactly. A ring drawn straight onto the swatch disappears on white.
+
+Every swatch carries an alpha checkerboard behind its color, so a semi-transparent swatch looks semi-transparent instead of looking like a lighter solid. The last swatch above is purple at 35%.
+
+Selection is `aria-pressed` on a toggle button, or `aria-selected` inside a listbox. Both drive the ring, so the state a screen reader announces and the state people see cannot disagree.
+
+Give every swatch an `aria-label`. A color with no name is unusable without sight, and "Purple, 35% opacity" is the kind of label that makes the difference.
+
+## The panel
+
+<Showcase
+  name="color-picker-grid"
+  align="start"
+  snippet={`<div class="p-color-picker">
+  <div class="p-color-picker__header">
+    <h2 class="p-color-picker__title">Colors</h2>
+  </div>
+  <div class="p-segmented p-segmented-touch" role="group" aria-label="Mode">…</div>
+  <div class="p-color-picker__grid" data-p-color-panel="grid">
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-red);" aria-label="Red"></button>
+    …
+  </div>
+  <div class="p-color-picker__footer">
+    <span class="p-color-picker__preview" style="--p-color-swatch: var(--p-sys-purple);"></span>
+    <div class="p-color-picker__opacity">…</div>
+  </div>
+</div>`}
+  code={`<div class="p-color-picker" style="border-radius: 20px;">
+  <div class="p-color-picker__header"><h2 class="p-color-picker__title">Colors</h2></div>
+  <div class="p-segmented p-segmented-touch" role="group" aria-label="Mode" style="width: 100%; margin-bottom: 20px;">
+    <label class="p-segment"><input type="radio" name="cp-mode" value="grid" checked /><span>Grid</span></label>
+    <label class="p-segment"><input type="radio" name="cp-mode" value="spectrum" /><span>Spectrum</span></label>
+    <label class="p-segment"><input type="radio" name="cp-mode" value="sliders" /><span>Sliders</span></label>
+  </div>
+  <div class="p-color-picker__grid" data-p-color-panel="grid">
+    <button class="p-color-swatch" style="--p-color-swatch: #000000;" aria-label="Black"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-red);" aria-label="Red"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-orange);" aria-label="Orange"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-yellow);" aria-label="Yellow"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-green);" aria-label="Green"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-teal);" aria-label="Teal"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-cyan);" aria-label="Cyan"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-blue);" aria-label="Blue"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-indigo);" aria-label="Indigo"></button>
+    <button class="p-color-swatch p-selected" style="--p-color-swatch: var(--p-sys-purple);" aria-label="Purple" aria-pressed="true"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-pink);" aria-label="Pink"></button>
+    <button class="p-color-swatch" style="--p-color-swatch: var(--p-sys-brown);" aria-label="Brown"></button>
+  </div>
+  <div class="p-color-picker__footer">
+    <span class="p-color-picker__preview" style="--p-color-swatch: var(--p-sys-purple);"></span>
+    <div class="p-color-picker__opacity">
+      <div class="p-color-picker__row">
+        <span class="p-color-picker__label">Opacity</span>
+        <input class="p-slider p-slider-touch" type="range" min="0" max="100" value="100" aria-label="Opacity" />
+        <input class="p-color-picker__value" data-p-channel="a" value="100%" aria-label="Opacity value" />
+      </div>
+    </div>
+  </div>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Panel | 402px wide, 20px padding |
+| Title | 17px, weight 590, tracking -0.43px |
+| Mode control | A touch segmented control |
+| Preview | 82 x 82px at 18px radius |
+| Value field | 75 x 40px at 8px radius |
+| Footer | 20px above and below a hairline |
+
+The panel is usually presented in a <a href={`${import.meta.env.BASE_URL}docs/mobile/modals/#sheets`}>bottom sheet</a>. It works standalone too, which is what these previews use.
+
+The three modes are a segmented control. `color_pickers.js` shows the panel whose `data-p-color-panel` matches the checked radio's `value`, so the markup is declarative:
+
+```html
+<label class="p-segment"><input type="radio" name="mode" value="grid" checked /><span>Grid</span></label>
+<div class="p-color-picker__grid" data-p-color-panel="grid">…</div>
+<div class="p-color-picker__spectrum" data-p-color-panel="spectrum">…</div>
+<div class="p-color-picker__sliders" data-p-color-panel="sliders">…</div>
+```
+
+## Spectrum
+
+<Showcase
+  name="color-picker-spectrum"
+  align="start"
+  snippet={`<div class="p-color-picker__spectrum">
+  <span class="p-color-picker__dot" style="--p-color-x: 72%; --p-color-y: 38%; --p-color-swatch: #9C4DE0;"></span>
+</div>`}
+  code={`<div class="p-color-picker" style="width: 402px; padding: 20px; border-radius: 20px;">
+  <div class="p-color-picker__spectrum">
+    <span class="p-color-picker__dot" style="--p-color-x: 72%; --p-color-y: 38%; --p-color-swatch: #9C4DE0;"></span>
+  </div>
+</div>`}
+/>
+
+Hue runs across, brightness runs down, which is the arrangement iOS uses. The field is two stacked gradients, so it needs no image and no canvas.
+
+The picker dot is 28px with a 3px white ring, positioned by `--p-color-x` and `--p-color-y` as percentages.
+
+`color_pickers.js` reads the color back out. It converts the pointer position to HSV the same way the field is painted, hue across and white through the pure hue to black down, and publishes the result. Click or drag anywhere in the field.
+
+## Sliders
+
+<Showcase
+  name="color-picker-sliders"
+  align="start"
+  snippet={`<div class="p-color-picker__row">
+  <span class="p-color-picker__label">Red</span>
+  <input class="p-color-slider" type="range" min="0" max="255" value="175"
+         style="--p-color-track: #000, #F00;" aria-label="Red" />
+  <input class="p-color-picker__value" data-p-channel="r" value="175" aria-label="Red value" />
+</div>`}
+  code={`<div class="p-color-picker" style="width: 402px; padding: 20px; border-radius: 20px;">
+  <div class="p-color-picker__sliders">
+  <div class="p-color-picker__row">
+    <span class="p-color-picker__label">Red</span>
+    <input class="p-color-slider" data-p-channel="r" type="range" min="0" max="255" value="175" style="--p-color-track: #000, #F00;" aria-label="Red" />
+    <input class="p-color-picker__value" data-p-channel="r" value="175" aria-label="Red value" />
+  </div>
+  <div class="p-color-picker__row">
+    <span class="p-color-picker__label">Green</span>
+    <input class="p-color-slider" data-p-channel="g" type="range" min="0" max="255" value="82" style="--p-color-track: #000, #0F0;" aria-label="Green" />
+    <input class="p-color-picker__value" data-p-channel="g" value="82" aria-label="Green value" />
+  </div>
+  <div class="p-color-picker__row">
+    <span class="p-color-picker__label">Blue</span>
+    <input class="p-color-slider" data-p-channel="b" type="range" min="0" max="255" value="222" style="--p-color-track: #000, #00F;" aria-label="Blue" />
+    <input class="p-color-picker__value" data-p-channel="b" value="222" aria-label="Blue value" />
+  </div>
+  <div class="p-color-picker__row">
+    <span class="p-color-picker__label">Opacity</span>
+    <input class="p-color-slider" data-p-channel="a" type="range" min="0" max="100" value="60" style="--p-color-track: transparent, #AF52DE;" aria-label="Opacity" />
+    <input class="p-color-picker__value" data-p-channel="a" value="60%" aria-label="Opacity value" />
+  </div>
+  </div>
+  <div class="p-color-picker__footer">
+    <span class="p-color-picker__preview"></span>
+    <p style="margin: 0; font-size: 15px; opacity: 0.6;">Drag a channel and the preview follows.</p>
+  </div>
+</div>`}
+/>
+
+Every channel is one rule with a different ramp. Set `--p-color-track` to the gradient stops and the track paints itself, so red, green, blue, and opacity all share `.p-color-slider`.
+
+Add `data-p-channel="r"`, `"g"`, `"b"`, or `"a"` to a slider and to its value field, and `color_pickers.js` keeps the two in step, updates the preview, and re-ramps the opacity track to the current color.
+
+The track is 28px tall with a 24px thumb, both bigger than the ordinary touch slider, because a color channel is adjusted by eye rather than by value and wants the extra grab area.
+
+An opacity track sits over the same checkerboard the swatches use, so the transparent end reads as transparent rather than as white.
+
+## The script
+
+```html
+<script type="module" src="/js/color_pickers.js"></script>
+```
+
+It wires the modes, the swatches, the spectrum, and the channel sliders, and fires a `p-color-change` event on the panel whenever the color changes:
+
+```js
+picker.addEventListener('p-color-change', (e) => {
+  console.log(e.detail); // { r, g, b, a, hex, rgba }
+});
+```
+
+`window.PuppertinoColorPickers.set(picker, '#AF52DE')` sets it from code, and `.get(picker)` reads it back.
+
+Everything still renders without the script. The swatches, the spectrum field, and the tracks are all CSS; what the script adds is the wiring between them.
+
+## A note on the palette
+
+The reference sheet's swatches use the older iOS palette, `#007AFF` blue and `#FF3B30` red. The examples here use the framework's `--p-sys-*` tokens instead, which carry the current values and flip in dark mode.
+
+One color system across the framework is worth more than matching a sheet's swatch row. If you need the exact legacy values, set `--p-color-swatch` to them directly; the swatch does not care where its color comes from.
+
+## Dark mode
+
+The panel moves from `#FFFFFF` to `#1C1C1E`, the value field and hairline through their tokens, and the selection ring from black to white. The checkerboard darkens from `#D9D9D9` to `#48484A`, so transparency still reads without glaring.
+
+## Accessibility
+
+Swatches are buttons and need `aria-label` and a pressed or selected state. A grid of unlabelled colored circles is unusable without sight.
+
+Never let color be the only way to tell two options apart. If swatches map to categories, the categories need names somewhere too.
+
+Sliders need labels and a visible numeric value. The value field beside each channel is that, and it should be editable so a specific color can be typed rather than dialled.
+
+Focus rings are drawn outside the swatch at a 3px offset so they clear the selection ring.
+
+Forced colors mode turns off color adjustment on the swatches and preview, since the whole point is the color, and marks selection with `Highlight` instead of the ring.
+
+## The macOS color well
+
+`colorwells.css` also ships `.p-colorwell` and `.p-colorwell-set`, the macOS control: a small rectangular well that opens the system color panel. It is a different shape for a different input and shares only the file.

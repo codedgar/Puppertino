@@ -188,3 +188,210 @@
 .p-mobile-tabs--content.active {
   display: block;
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-tab-bar
+   The iOS tab bar. A floating glass capsule that sits above the bottom
+   edge rather than filling it, holding two to five top-level sections.
+
+   Sizing follows one rule that reproduces every reference width: the
+   bar is 360px at most and hugs its content below that, and each tab
+   flexes from a 94px basis down to whatever fits. Five tabs land at
+   68px each, four at 85px, three or fewer keep the full 94px.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-tab-bar-surface: rgba(255, 255, 255, 0.65);
+  --p-tab-bar-fallback: #f7f7f7;
+  --p-tab-bar-item: #1a1a1a;
+  --p-tab-bar-item-selected: #0088ff;
+  --p-tab-bar-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-tab-bar-surface: rgba(40, 40, 42, 0.65);
+  --p-tab-bar-fallback: #1c1c1e;
+  --p-tab-bar-item: #f5f5f5;
+  --p-tab-bar-item-selected: #0091ff;
+  --p-tab-bar-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-tab-bar-surface: rgba(40, 40, 42, 0.65);
+    --p-tab-bar-fallback: #1c1c1e;
+    --p-tab-bar-item: #f5f5f5;
+    --p-tab-bar-item-selected: #0091ff;
+    --p-tab-bar-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.35),
+      0 1px 2px rgba(0, 0, 0, 0.25),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-tab-bar-surface: rgba(255, 255, 255, 0.65);
+  --p-tab-bar-fallback: #f7f7f7;
+  --p-tab-bar-item: #1a1a1a;
+  --p-tab-bar-item-selected: #0088ff;
+  --p-tab-bar-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
+}
+
+.p-tab-bar {
+  --p-tab-bar-height: 62px;
+  --p-tab-bar-max: 360px;
+  --p-tab-bar-tab: 94px;
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+
+  width: fit-content;
+  max-width: min(var(--p-tab-bar-max), calc(100vw - 32px));
+  height: var(--p-tab-bar-height);
+  padding: 0 10px;
+  border-radius: calc(var(--p-tab-bar-height) / 2);
+
+  background: var(--p-tab-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-tab-bar-shadow);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-tab-bar * {
+  box-sizing: border-box;
+}
+
+/* Floating placement. Opt in with .p-tab-bar-fixed so the bar can also
+   be dropped inline, in a demo or inside a phone frame. */
+.p-tab-bar-fixed {
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  z-index: 70;
+}
+
+.p-tab-bar__tab {
+  display: flex;
+  /* A definite width rather than a flex-basis: the bar sizes itself with
+     fit-content, and only a definite width contributes to that intrinsic
+     size. Shrinking from it is what produces 85px at four tabs and 68px
+     at five; growing past it never happens. */
+  width: var(--p-tab-bar-tab);
+  flex: 0 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  padding: 0 4px;
+  border: 0;
+  background: none;
+
+  color: var(--p-tab-bar-item);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: color 0.2s ease-out, opacity 0.1s ease-out;
+}
+
+.p-tab-bar__tab > i,
+.p-tab-bar__tab > svg {
+  flex-shrink: 0;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+}
+
+.p-tab-bar__tab > svg {
+  fill: currentcolor;
+}
+
+.p-tab-bar__tab > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 10px;
+  font-weight: 590;
+  line-height: 12px;
+  letter-spacing: 0;
+}
+
+/* Selected state. aria-current carries it, so the markup that tells a
+   screen reader which tab is active is the same markup that paints it.
+   .p-is-active is accepted too, matching the desktop tabs above. */
+.p-tab-bar__tab[aria-current],
+.p-tab-bar__tab.p-is-active {
+  color: var(--p-tab-bar-item-selected);
+}
+
+.p-tab-bar__tab[aria-current] > span,
+.p-tab-bar__tab.p-is-active > span {
+  letter-spacing: -0.1px;
+}
+
+.p-tab-bar__tab:active {
+  opacity: 0.5;
+}
+
+.p-tab-bar__tab:focus-visible {
+  outline: 3px solid var(--p-tab-bar-item-selected);
+  outline-offset: -2px;
+  border-radius: calc(var(--p-tab-bar-height) / 2 - 6px);
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-tab-bar {
+    background: var(--p-tab-bar-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-tab-bar {
+    background: var(--p-tab-bar-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-tab-bar__tab {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-tab-bar {
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-tab-bar__tab {
+    color: ButtonText;
+  }
+
+  .p-tab-bar__tab[aria-current],
+  .p-tab-bar__tab.p-is-active {
+    color: Highlight;
+  }
+}

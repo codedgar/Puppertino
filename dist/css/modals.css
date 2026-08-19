@@ -31,6 +31,15 @@
   --p-dialog-title: rgba(0, 0, 0, 0.85);
   --p-dialog-copy: rgba(0, 0, 0, 0.85);
   --p-dialog-label: rgba(0, 0, 0, 0.5);
+  --p-alert-surface: rgba(245, 245, 245, 0.60);
+  --p-alert-action: rgba(255, 255, 255, 0.60);
+  --p-alert-action-pressed: rgba(255, 255, 255, 0.85);
+  --p-alert-title: rgba(0, 0, 0, 0.85);
+  --p-alert-copy: rgba(0, 0, 0, 0.85);
+  --p-alert-fallback: rgba(245, 245, 245, 0.98);
+  --p-bottom-sheet-bg: #f2f2f7;
+  --p-bottom-sheet-grabber: rgba(60, 60, 67, 0.30);
+  --p-bottom-sheet-title: rgba(0, 0, 0, 0.85);
 }
 
 .p-dark-mode,
@@ -54,6 +63,15 @@
   --p-dialog-title: rgba(255, 255, 255, 0.92);
   --p-dialog-copy: rgba(255, 255, 255, 0.76);
   --p-dialog-label: rgba(255, 255, 255, 0.55);
+  --p-alert-surface: rgba(38, 38, 38, 0.60);
+  --p-alert-action: rgba(118, 118, 128, 0.36);
+  --p-alert-action-pressed: rgba(118, 118, 128, 0.52);
+  --p-alert-title: rgba(255, 255, 255, 0.92);
+  --p-alert-copy: rgba(255, 255, 255, 0.92);
+  --p-alert-fallback: rgba(38, 38, 38, 0.98);
+  --p-bottom-sheet-bg: #1c1c1e;
+  --p-bottom-sheet-grabber: rgba(235, 235, 245, 0.30);
+  --p-bottom-sheet-title: rgba(255, 255, 255, 0.92);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,6 +95,15 @@
     --p-dialog-title: rgba(255, 255, 255, 0.92);
     --p-dialog-copy: rgba(255, 255, 255, 0.76);
     --p-dialog-label: rgba(255, 255, 255, 0.55);
+    --p-alert-surface: rgba(38, 38, 38, 0.60);
+    --p-alert-action: rgba(118, 118, 128, 0.36);
+    --p-alert-action-pressed: rgba(118, 118, 128, 0.52);
+    --p-alert-title: rgba(255, 255, 255, 0.92);
+    --p-alert-copy: rgba(255, 255, 255, 0.92);
+    --p-alert-fallback: rgba(38, 38, 38, 0.98);
+    --p-bottom-sheet-bg: #1c1c1e;
+    --p-bottom-sheet-grabber: rgba(235, 235, 245, 0.30);
+    --p-bottom-sheet-title: rgba(255, 255, 255, 0.92);
   }
 }
 
@@ -101,6 +128,15 @@
   --p-dialog-title: rgba(0, 0, 0, 0.85);
   --p-dialog-copy: rgba(0, 0, 0, 0.85);
   --p-dialog-label: rgba(0, 0, 0, 0.5);
+  --p-alert-surface: rgba(245, 245, 245, 0.60);
+  --p-alert-action: rgba(255, 255, 255, 0.60);
+  --p-alert-action-pressed: rgba(255, 255, 255, 0.85);
+  --p-alert-title: rgba(0, 0, 0, 0.85);
+  --p-alert-copy: rgba(0, 0, 0, 0.85);
+  --p-alert-fallback: rgba(245, 245, 245, 0.98);
+  --p-bottom-sheet-bg: #f2f2f7;
+  --p-bottom-sheet-grabber: rgba(60, 60, 67, 0.30);
+  --p-bottom-sheet-title: rgba(0, 0, 0, 0.85);
 }
 
 .p-modal-opened {
@@ -129,8 +165,10 @@
   pointer-events: auto;
 }
 
-/* Legacy iOS modal kept intact for backwards compatibility. */
-.p-modal:not(.p-desktop-modal) {
+/* Legacy iOS modal kept intact for backwards compatibility. The v2
+   alert below opts out by class rather than by a new element, so it can
+   reuse the same .p-modal manager, focus trap, and Escape handling. */
+.p-modal:not(.p-desktop-modal):not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet) {
   background: var(--p-modal-bg);
   border-radius: 20px;
   bottom: unset;
@@ -151,7 +189,7 @@
   z-index: 90;
 }
 
-.p-modal:not(.p-desktop-modal).active {
+.p-modal:not(.p-desktop-modal):not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet).active {
   -webkit-backdrop-filter: saturate(180%) blur(10px);
   backdrop-filter: saturate(180%) blur(10px);
   opacity: 1;
@@ -181,7 +219,7 @@
   border-left: 1px solid var(--p-modal-bd-color);
 }
 
-.p-modal:not(.p-desktop-modal) p {
+.p-modal:not(.p-desktop-modal):not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet) p {
   padding: 0% 5%;
 }
 
@@ -493,13 +531,314 @@
   transform: translate(-50%, 0) scale(1);
 }
 
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-alert
+   The iOS alert. 300px wide over a material, with capsule actions
+   rather than the divided full-width rows of earlier iOS. Reuses the
+   .p-modal manager: the same open/close attributes, focus trap, and
+   Escape handling as every other modal.
+
+   Radius is 34px. The reference geometry is a squircle whose span
+   measures 54.4px; the same 1.6 ratio the desktop surfaces use, so
+   both resolve to the same shape under corner-shape below.
+   ═════════════════════════════════════════════════════════════════════ */
+
+.p-alert {
+  --p-alert-width: 300px;
+  --p-alert-radius: 34px;
+  --p-alert-pad: 14px;
+
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 90;
+
+  width: min(var(--p-alert-width), calc(100vw - 32px));
+  box-sizing: border-box;
+
+  color: var(--p-alert-copy);
+  font-family: var(--font);
+
+  opacity: 0;
+  pointer-events: none;
+  /* iOS settles the alert down onto the screen rather than growing it
+     up, so it enters slightly oversized. */
+  transform: translate(-50%, -50%) scale(1.12);
+  transition:
+    opacity 0.24s ease,
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.p-alert * {
+  box-sizing: border-box;
+}
+
+.p-alert.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.p-alert__surface {
+  padding: var(--p-alert-pad);
+  border-radius: var(--p-alert-radius);
+
+  background: var(--p-alert-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.24),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+}
+
+.p-alert__body {
+  padding: 16px 12px 18px;
+  text-align: center;
+}
+
+.p-alert__title {
+  margin: 0;
+  color: var(--p-alert-title);
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-alert__message {
+  margin: 4px 0 0;
+  color: var(--p-alert-copy);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+/* Two actions sit side by side, three or more stack. iOS makes the same
+   call, and :has() lets the markup stay identical either way. Browsers
+   without :has() keep the row, which is the common case. */
+.p-alert__actions {
+  display: flex;
+  gap: 16px;
+}
+
+.p-alert__actions:has(> :nth-child(3)),
+.p-alert__actions--stacked {
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Stacked, the main axis is vertical, so the equal-share flex-basis the
+   row uses would fight the 48px height and collapse the buttons.
+   Stretch supplies the full width instead. */
+.p-alert__actions:has(> :nth-child(3)) > .p-alert__action,
+.p-alert__actions--stacked > .p-alert__action {
+  flex: none;
+}
+
+.p-alert__action {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  flex: 1;
+
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 24px;
+
+  background: var(--p-alert-action);
+  color: var(--p-alert-title);
+
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  letter-spacing: -0.43px;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: background 0.12s ease-out;
+}
+
+.p-alert__action:hover,
+.p-alert__action:active {
+  background: var(--p-alert-action-pressed);
+}
+
+.p-alert__action:focus-visible {
+  outline: 4px solid color-mix(in oklch, var(--p-desktop-modal-primary) 50%, transparent);
+  outline-offset: 2px;
+}
+
+/* The default action, the one Return would trigger. One per alert. */
+.p-alert__action--primary {
+  background: var(--p-desktop-modal-primary);
+  color: #ffffff;
+}
+
+.p-alert__action--primary:hover,
+.p-alert__action--primary:active {
+  background: var(--p-desktop-modal-primary-pressed);
+}
+
+/* Destructive keeps the quiet fill and turns the label red, so the
+   dangerous action never becomes the most prominent thing on screen. */
+.p-alert__action--destructive {
+  color: var(--p-desktop-modal-destructive-text);
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-bottom-sheet
+   The iOS sheet. Slides up from the bottom edge, keeps the screen
+   behind it partly visible, and stops at a detent rather than filling
+   the display. Use it when the task is secondary to what is behind it.
+
+   Not to be confused with .p-sheet, which is the macOS window sheet
+   that drops from a title bar, or .p-action-sheet, which is a short
+   list of choices rather than a surface with content in it.
+
+   Composes with .p-modal, so the open/close attributes, focus trap,
+   and Escape handling are the shared ones.
+   ═════════════════════════════════════════════════════════════════════ */
+
+.p-bottom-sheet {
+  --p-bottom-sheet-radius: 38px;
+  --p-bottom-sheet-height: 50vh;
+  --p-bottom-sheet-width: 420px;
+
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 90;
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  width: min(var(--p-bottom-sheet-width), 100vw);
+  height: var(--p-bottom-sheet-height);
+  max-height: calc(100vh - 24px);
+  border-radius: var(--p-bottom-sheet-radius) var(--p-bottom-sheet-radius) 0 0;
+
+  background: var(--p-bottom-sheet-bg);
+  color: var(--p-bottom-sheet-title);
+  font-family: var(--font);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+
+  pointer-events: none;
+  /* Off the bottom edge rather than faded out: a sheet arrives by
+     moving, so opacity is not part of the transition. */
+  translate: -50% 100%;
+  transition: translate 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.p-bottom-sheet * {
+  box-sizing: border-box;
+}
+
+.p-bottom-sheet.active {
+  pointer-events: auto;
+  translate: -50% 0;
+}
+
+/* Detents. Medium is the default; large leaves the status bar visible,
+   which is what tells people the screen behind is still there. */
+.p-bottom-sheet-large {
+  --p-bottom-sheet-height: 92vh;
+}
+
+.p-bottom-sheet-full {
+  --p-bottom-sheet-height: calc(100vh - 24px);
+}
+
+/* Grabber: 36x5 at the top, the standard iOS affordance. It says the
+   sheet can be dragged even where the drag itself is not implemented,
+   so only include it when dragging or dismissal is actually wired up. */
+.p-bottom-sheet__grabber {
+  flex: none;
+  align-self: center;
+  width: 36px;
+  height: 5px;
+  margin-top: 5px;
+  border-radius: 2.5px;
+  background: var(--p-bottom-sheet-grabber);
+}
+
+/* Header: leading action, centered title, trailing action. The grid
+   keeps the title centered on the sheet rather than on the space left
+   over, so an action on one side does not shift it. */
+.p-bottom-sheet__header {
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.p-bottom-sheet__title {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+
+  color: var(--p-bottom-sheet-title);
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-bottom-sheet__header > :first-child:not(.p-bottom-sheet__title) {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.p-bottom-sheet__header > :last-child:not(.p-bottom-sheet__title) {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.p-bottom-sheet__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px;
+  /* Clear of the home indicator, and of nothing on a desktop. */
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion) {
+  .p-bottom-sheet {
+    transition: opacity 0.25s ease;
+    translate: -50% 0;
+    opacity: 0;
+  }
+
+  .p-bottom-sheet.active {
+    opacity: 1;
+  }
+}
+
+/* Same 1.6 ratio the other v2 surfaces use: 38px arc, 60.8px squircle. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-bottom-sheet {
+    border-radius: 60.8px 60.8px 0 0;
+    corner-shape: superellipse(1.465);
+  }
+}
+
 @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
   .p-modal-background::before {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
-  .p-modal:not(.p-desktop-modal) {
+  .p-modal:not(.p-desktop-modal):not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet) {
     background: var(--p-modal-fallback-color);
   }
 
@@ -525,15 +864,29 @@
       0 17px 45px rgba(0, 0, 0, 0.32),
       0 0 1px rgba(0, 0, 0, 0.2);
   }
+
+  .p-alert__surface {
+    background: var(--p-alert-fallback);
+  }
+}
+
+/* Reduced transparency: an opaque surface, and quiet fills that no
+   longer rely on what is behind them. */
+@media (prefers-reduced-transparency: reduce) {
+  .p-alert__surface {
+    background: var(--p-alert-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 @media (max-width: 568px) {
-  .p-modal:not(.p-desktop-modal) {
+  .p-modal:not(.p-desktop-modal):not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet) {
     left: 15%;
     width: 70vw;
   }
 
-  .p-modal p {
+  .p-modal:not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet) p {
     font-size: 15px;
     padding: 0% 10%;
   }
@@ -561,7 +914,7 @@
 
 @media (prefers-reduced-motion) {
   .p-modal-background,
-  .p-modal:not(.p-desktop-modal),
+  .p-modal:not(.p-desktop-modal):not(.p-alert):not(.p-action-sheet):not(.p-bottom-sheet),
   .p-desktop-modal {
     transition: none;
   }
@@ -574,6 +927,13 @@
 
   .p-dialog {
     transform: translate(-50%, -50%);
+  }
+
+  /* The alert still fades, it just stops arriving oversized. */
+  .p-alert,
+  .p-alert.active {
+    transform: translate(-50%, -50%);
+    transition: opacity 0.25s ease;
   }
 }
 
@@ -592,6 +952,12 @@
   .p-desktop-modal__surface::after,
   .p-dialog,
   .p-sheet {
+    corner-shape: superellipse(1.465);
+  }
+
+  /* Same 1.6 ratio: the alert's 34px arc becomes a 54.4px squircle. */
+  .p-alert__surface {
+    border-radius: 54.4px;
     corner-shape: superellipse(1.465);
   }
 }

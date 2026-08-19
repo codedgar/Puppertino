@@ -257,3 +257,226 @@
     outline: 1px solid var(--p-list-text);
   }
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-list-touch
+   The iOS list. Rows sit on a plate divided by hairlines rather than
+   floating as capsules the way the macOS list above does, and they are
+   tall enough to hit: 52px for one line, 68px with a subtitle.
+
+   Same slots as the macOS list (.p-list-row, .p-list-icon,
+   .p-list-detail, .p-list-chevron), restyled at iOS metrics, plus a
+   title/subtitle stack that the pointer list has no use for.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-list-touch-bg: #ffffff;
+  --p-list-touch-secondary: rgba(60, 60, 67, 0.6);
+  --p-list-touch-separator: rgba(60, 60, 67, 0.29);
+  --p-list-touch-pressed: rgba(0, 0, 0, 0.05);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-list-touch-bg: #1c1c1e;
+  --p-list-touch-secondary: rgba(235, 235, 245, 0.6);
+  --p-list-touch-separator: rgba(84, 84, 88, 0.6);
+  --p-list-touch-pressed: rgba(255, 255, 255, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-list-touch-bg: #1c1c1e;
+    --p-list-touch-secondary: rgba(235, 235, 245, 0.6);
+    --p-list-touch-separator: rgba(84, 84, 88, 0.6);
+    --p-list-touch-pressed: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-list-touch-bg: #ffffff;
+  --p-list-touch-secondary: rgba(60, 60, 67, 0.6);
+  --p-list-touch-separator: rgba(60, 60, 67, 0.29);
+  --p-list-touch-pressed: rgba(0, 0, 0, 0.05);
+}
+
+.p-list-touch {
+  --p-list-touch-pad: 16px;
+  --p-list-touch-gap: 12px;
+  --p-list-touch-icon: 30px;
+
+  background: var(--p-list-touch-bg);
+  color: var(--p-list-text);
+}
+
+/* Inset grouped: the plate becomes a rounded card. 26px is the same
+   radius the other v2 grouped surfaces use. */
+.p-list-inset {
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+.p-list-touch .p-list-row {
+  position: relative;
+  align-items: center;
+  gap: var(--p-list-touch-gap);
+  margin: 0;
+  min-height: 52px;
+  padding: 0 var(--p-list-touch-pad);
+  border-radius: 0;
+
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+/* A subtitle makes the row two lines tall. */
+.p-list-touch .p-list-row:has(.p-list-subtitle) {
+  min-height: 68px;
+}
+
+/* Hairline between rows, never after the last one. It starts where the
+   text starts, not at the plate edge, so the eye reads a single column
+   of content rather than a grid. */
+.p-list-touch .p-list-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: var(--p-list-touch-pad);
+  right: 0;
+  bottom: 0;
+  height: 0.5px;
+  background: var(--p-list-touch-separator);
+}
+
+/* With a leading icon the text starts further in, and so does the rule. */
+.p-list-touch .p-list-row:has(.p-list-icon):not(:last-child)::after {
+  left: calc(var(--p-list-touch-pad) + var(--p-list-touch-icon) + var(--p-list-touch-gap));
+}
+
+/* Touch has no hover. Pressed is the feedback, and only on rows that
+   actually do something. */
+.p-list-touch .p-list-row:hover {
+  background: none;
+}
+
+.p-list-touch .p-list-row:is(a, button):active,
+.p-list-touch .p-list-row:has(> a, > button):active,
+.p-list-touch .p-list-row[tabindex]:active {
+  background: var(--p-list-touch-pressed);
+}
+
+/* The title/subtitle stack. */
+.p-list-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.p-list-title {
+  color: var(--p-list-text);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-list-subtitle {
+  color: var(--p-list-touch-secondary);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.p-list-touch .p-list-detail {
+  color: var(--p-list-touch-secondary);
+  font-size: 17px;
+  letter-spacing: -0.43px;
+  white-space: nowrap;
+}
+
+/* Trailing slots hug the right edge. Whichever comes first takes the
+   auto margin; a chevron following a detail sits beside it rather than
+   pushing away from it. */
+.p-list-touch .p-list-chevron {
+  color: var(--p-list-touch-secondary);
+  font-size: 14px;
+  font-weight: 400;
+  width: auto;
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.p-list-touch .p-list-detail ~ .p-list-chevron {
+  margin-left: 0;
+}
+
+/* A trailing icon that is not a chevron: the glyph a share sheet or a
+   settings row puts on the right. Same placement as the chevron, at
+   the size of a leading icon, and it does not mean "goes somewhere". */
+.p-list-touch .p-list-trailing-icon {
+  flex: none;
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--p-list-touch-secondary);
+}
+
+.p-list-touch .p-list-detail ~ .p-list-trailing-icon {
+  margin-left: 0;
+}
+
+.p-list-touch .p-list-icon {
+  width: var(--p-list-touch-icon);
+  height: var(--p-list-touch-icon);
+}
+
+.p-list-touch .p-list-icon img,
+.p-list-touch .p-list-icon svg {
+  border-radius: 7px;
+}
+
+/* Avatars are circles, and iOS draws them larger than app icons. */
+.p-list-icon-round {
+  --p-list-touch-icon: 42px;
+}
+
+.p-list-touch .p-list-icon-round img,
+.p-list-touch .p-list-icon-round svg,
+.p-list-touch .p-list-icon-round {
+  border-radius: 50%;
+}
+
+/* Section header and footer sit outside the plate. */
+.p-list-touch-header {
+  color: var(--p-list-touch-secondary);
+  font-family: var(--p-list-font);
+  font-size: 17px;
+  font-weight: 590;
+  letter-spacing: -0.43px;
+  margin: 0 0 8px;
+  padding: 0 var(--p-list-touch-pad, 16px);
+}
+
+.p-list-touch-footer {
+  color: var(--p-list-touch-secondary);
+  font-family: var(--p-list-font);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.08px;
+  line-height: 18px;
+  margin: 8px 0 0;
+  padding: 0 var(--p-list-touch-pad, 16px);
+}
+
+@media (prefers-contrast: more) {
+  .p-list-touch .p-list-row:not(:last-child)::after {
+    height: 1px;
+    background: currentcolor;
+  }
+}

@@ -284,3 +284,154 @@
     transition: none !important;
   }
 }
+
+/* ─── Touch size (iOS and iPadOS) ──────────────────────────────────── */
+/* The iOS calendar: a 370px panel with 44px day cells, day numbers at
+   20px, and weekday headers at 13px. The selected day is a filled
+   circle rather than the smaller pointer marker.
+
+   Same slots as the macOS calendar above, restyled. The value capsules
+   that open it are ordinary touch buttons: .p-button .p-button-touch
+   .p-button-default. */
+
+:root {
+  --p-calendar-touch-weekday: rgba(60, 60, 67, 0.3);
+  --p-calendar-touch-day: #000000;
+  --p-calendar-touch-accent: #0088ff;
+  --p-calendar-touch-outside: rgba(60, 60, 67, 0.3);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-calendar-touch-weekday: rgba(235, 235, 245, 0.3);
+  --p-calendar-touch-day: #ffffff;
+  --p-calendar-touch-accent: #0091ff;
+  --p-calendar-touch-outside: rgba(235, 235, 245, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-calendar-touch-weekday: rgba(235, 235, 245, 0.3);
+    --p-calendar-touch-day: #ffffff;
+    --p-calendar-touch-accent: #0091ff;
+    --p-calendar-touch-outside: rgba(235, 235, 245, 0.3);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-calendar-touch-weekday: rgba(60, 60, 67, 0.3);
+  --p-calendar-touch-day: #000000;
+  --p-calendar-touch-accent: #0088ff;
+  --p-calendar-touch-outside: rgba(60, 60, 67, 0.3);
+}
+
+.p-calendar-touch {
+  box-sizing: border-box;
+  width: 370px;
+  max-width: 100%;
+  padding: 8px;
+  border-radius: 13px;
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-calendar-touch * {
+  box-sizing: border-box;
+}
+
+.p-calendar-touch .p-calendar-title {
+  font-size: 17px;
+  font-weight: 590;
+  letter-spacing: -0.43px;
+  color: var(--p-calendar-touch-day);
+}
+
+/* The macOS header is a fixed 20px tall, which 44px nav buttons
+   overflow into the weekday row. Touch gives it room instead. */
+.p-calendar-touch .p-calendar-header {
+  height: auto;
+  min-height: 44px;
+  align-items: center;
+  margin-left: 0;
+  padding: 0 4px;
+}
+
+.p-calendar-touch .p-calendar-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+
+  color: var(--p-calendar-touch-accent);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.p-calendar-touch .p-calendar-weekdays {
+  color: var(--p-calendar-touch-weekday);
+  font-size: 13px;
+  font-weight: 590;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.p-calendar-touch .p-calendar-grid {
+  gap: 0;
+}
+
+.p-calendar-touch .p-calendar-day {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  color: var(--p-calendar-touch-day);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.45px;
+}
+
+/* Days from the neighbouring month stay visible but recede. */
+.p-calendar-touch .p-calendar-day[data-p-outside],
+.p-calendar-touch .p-calendar-day.p-outside {
+  color: var(--p-calendar-touch-outside);
+}
+
+/* Touch has no hover, and the macOS today-pill background has to be
+   cleared explicitly: iOS marks today with the accent number alone. */
+.p-calendar-touch .p-calendar-day:hover {
+  background: none;
+}
+
+/* Today is the accent in text; the selected day is the accent as a
+   filled circle. A day can be both, and then the fill wins. */
+.p-calendar-touch .p-calendar-day.p-today {
+  background: none;
+  color: var(--p-calendar-touch-accent);
+  font-weight: 510;
+}
+
+.p-calendar-touch .p-calendar-day.p-selected,
+.p-calendar-touch .p-calendar-day[aria-selected="true"] {
+  background: var(--p-calendar-touch-accent);
+  color: #ffffff;
+  font-weight: 510;
+}
+
+.p-calendar-touch .p-calendar-day:focus-visible {
+  outline: 3px solid var(--p-calendar-touch-accent);
+  outline-offset: -3px;
+}
+
+.p-calendar-touch .p-calendar-day:disabled,
+.p-calendar-touch .p-calendar-day[aria-disabled="true"] {
+  color: var(--p-calendar-touch-outside);
+  pointer-events: none;
+}

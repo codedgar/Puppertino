@@ -17,6 +17,7 @@ export const nav = [
           { label: 'Materials', slug: 'docs/materials/', icon: 'ph-drop' },
           { label: 'Colors', slug: 'docs/colors/', icon: 'ph-palette' },
           { label: 'Typography', slug: 'docs/typography/', icon: 'ph-text-aa' },
+          { label: 'Layout', slug: 'docs/layout/', icon: 'ph-columns' },
           { label: 'Dark mode', slug: 'docs/dark-mode/', icon: 'ph-moon' },
           { label: 'Icons', slug: 'docs/icons/', icon: 'ph-smiley' },
         ],
@@ -34,7 +35,21 @@ export const nav = [
         note: 'The controls that collect decisions, sized for fingers.',
         items: [
           { label: 'Buttons', slug: 'docs/mobile/buttons/', icon: 'ph-hand-tap' },
-          { label: 'Forms', slug: 'docs/mobile/forms/', icon: 'ph-textbox' },
+          {
+            label: 'Forms',
+            slug: 'docs/mobile/forms/',
+            icon: 'ph-textbox',
+            children: [
+              { label: 'Text fields', anchor: '#text-fields', icon: 'ph-textbox' },
+              { label: 'Selects', anchor: '#selects', icon: 'ph-caret-up-down' },
+              { label: 'Switches', anchor: '#switches', icon: 'ph-toggle-right' },
+              { label: 'Segmented controls', anchor: '#segmented-controls', icon: 'ph-squares-four' },
+              { label: 'Sliders', anchor: '#sliders', icon: 'ph-sliders-horizontal' },
+              { label: 'Page controls', anchor: '#page-controls', icon: 'ph-dots-three' },
+              { label: 'Steppers', anchor: '#steppers', icon: 'ph-plus-minus' },
+            ],
+          },
+          { label: 'Color pickers', slug: 'docs/mobile/color-pickers/', icon: 'ph-palette' },
         ],
       },
       {
@@ -42,8 +57,29 @@ export const nav = [
         note: 'Surfaces that take over the screen and the tabs that move between them.',
         items: [
           { label: 'Modals', slug: 'docs/mobile/modals/', icon: 'ph-browser' },
-          { label: 'Actions', slug: 'docs/mobile/actions/', icon: 'ph-list' },
+          {
+            label: 'Actions',
+            slug: 'docs/mobile/actions/',
+            icon: 'ph-list',
+            children: [
+              { label: 'Action sheets', anchor: '#anatomy' },
+              { label: 'Share sheets', anchor: '#share-sheets' },
+            ],
+          },
           { label: 'Tabs', slug: 'docs/mobile/tabs/', icon: 'ph-tabs' },
+          { label: 'Bars', slug: 'docs/mobile/bars/', icon: 'ph-rows-plus-top' },
+          { label: 'Menus & popovers', slug: 'docs/mobile/menus/', icon: 'ph-list-dashes' },
+          { label: 'Sidebars', slug: 'docs/mobile/sidebars/', icon: 'ph-sidebar' },
+        ],
+      },
+      {
+        heading: 'Content',
+        note: 'Rows of data, and the plates they sit on.',
+        items: [
+          { label: 'Lists', slug: 'docs/mobile/lists/', icon: 'ph-rows' },
+          { label: 'Notifications', slug: 'docs/mobile/notifications/', icon: 'ph-bell' },
+          { label: 'Empty states', slug: 'docs/mobile/empty-states/', icon: 'ph-tray' },
+          { label: 'Date pickers', slug: 'docs/mobile/date-pickers/', icon: 'ph-calendar' },
         ],
       },
     ],

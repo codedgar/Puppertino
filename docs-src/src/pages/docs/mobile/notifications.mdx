@@ -1,0 +1,117 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Notifications
+description: The iOS notification. A 24px card on a material with a 38px app icon, and the stack iOS uses when there is more than one.
+---
+
+import '@puppertino/notifications.css';
+import Showcase from '../../../components/Showcase.astro';
+import notificationsScript from '../../../../../src/js/notifications.js?url';
+
+<script type="module" src={notificationsScript}></script>
+
+A notification delivers something timely that a person can understand at a glance, without opening the app.
+
+## When to use it
+
+Use a notification for information that is worth interrupting for and is useful immediately: a message arrived, a delivery is close, a payment failed.
+
+Avoid notifications for anything the app could show the next time it is opened. Every notification that turns out not to matter makes the next one easier to dismiss unread.
+
+## Anatomy
+
+<Showcase
+  name="notification-touch"
+  align="start"
+  snippet={`<article class="p-notification p-notification-touch">
+  <div class="p-notification__icon">
+    <img src="/icon.png" alt="" />
+  </div>
+  <h3 class="p-notification__title">Title</h3>
+  <time class="p-notification__time">9:41 AM</time>
+  <p class="p-notification__body">Description of what happened.</p>
+</article>`}
+  code={`<div style="display: grid; gap: 12px; width: 377px;">
+  <article class="p-notification p-notification-touch">
+    <div class="p-notification__icon"><svg viewBox="0 0 38 38"><rect width="38" height="38" fill="#0088FF"/></svg></div>
+    <h3 class="p-notification__title">Messages</h3>
+    <time class="p-notification__time">9:41 AM</time>
+    <p class="p-notification__body">Ada Lovelace sent you a photo.</p>
+  </article>
+  <article class="p-notification p-notification-touch">
+    <div class="p-notification__icon"><svg viewBox="0 0 38 38"><rect width="38" height="38" fill="#34C759"/></svg></div>
+    <h3 class="p-notification__title">Reminders</h3>
+    <time class="p-notification__time">now</time>
+    <p class="p-notification__body">Renew the domain before Friday.</p>
+  </article>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Card | 377px at most, 64px minimum, 24px radius |
+| Padding | 12px vertical, 16px horizontal |
+| Background | `rgba(245,245,245,0.72)` light, `rgba(38,38,38,0.72)` dark, blur 30px |
+| Icon | 38 x 38px at 9px radius |
+| Title | 15px, weight 590, tracking -0.23px |
+| Body | 15px, weight 400, tracking -0.23px |
+| Time | 13px, top trailing corner |
+| Gap | 12px between icon and text, 4px between lines |
+
+The card is a three-column grid: icon, text, time. The icon spans both text rows and centers against them, so a one-line notification and a two-line one both look right without a variant.
+
+Keep the title to a few words and the body to one line. iOS truncates the body in the banner and only shows the rest when the notification is expanded.
+
+`.p-notification-touch-expanded` takes the radius to 32px and the padding to 16px, for the taller card that holds content rather than two lines.
+
+## The stack
+
+<Showcase
+  name="notification-stack"
+  align="start"
+  snippet={`<div class="p-notification-stack">
+  <article class="p-notification p-notification-touch">…</article>
+  <article class="p-notification p-notification-touch">…</article>
+  <article class="p-notification p-notification-touch">…</article>
+</div>`}
+  code={`<div class="p-notification-stack" style="margin-bottom: 20px;">
+  <article class="p-notification p-notification-touch">
+    <div class="p-notification__icon"><svg viewBox="0 0 38 38"><rect width="38" height="38" fill="#0088FF"/></svg></div>
+    <h3 class="p-notification__title">Messages</h3>
+    <time class="p-notification__time">9:41 AM</time>
+    <p class="p-notification__body">Ada Lovelace sent you a photo.</p>
+  </article>
+  <article class="p-notification p-notification-touch"></article>
+  <article class="p-notification p-notification-touch"></article>
+</div>`}
+/>
+
+iOS stacks notifications rather than listing them. `.p-notification-stack` puts every card in the same grid cell and narrows and drops the ones behind, so the stack reads as depth rather than as a list.
+
+`notifications.js` makes both gestures work: tap the stack to fan the cards into a list, and swipe a card sideways to dismiss it.
+
+```html
+<script type="module" src="/js/notifications.js"></script>
+```
+
+Dismissing fires a cancelable `p-notification-dismiss` event on the card before it animates out, so an app can record the dismissal or call `preventDefault()` to keep it.
+
+The stack still renders without the script; it just does not expand.
+
+## Dark mode
+
+The card moves to `rgba(38,38,38,0.72)`, the title from `#1A1A1A` to `#F5F5F5`, and the body from `#4D4D4D` to `rgba(235,235,245,0.70)`.
+
+Notifications on a lock screen sit over a photograph rather than a page, which is the case the material is for. Reduced transparency swaps it for an opaque card, since white text over an arbitrary photo through a translucent panel cannot be guaranteed to meet 4.5:1.
+
+## Accessibility
+
+Use `<article>` for the card and a real heading for the title, so a screen reader announces the notification as a unit.
+
+Use `<time>` for the timestamp with a machine-readable `datetime` attribute. "now" and "9:41 AM" are readable to people but not to anything else.
+
+The icon is decoration next to a title that already names the app, so give it an empty `alt`.
+
+## The macOS notification
+
+`notifications.css` ships both. `.p-notification` alone is the macOS banner. Adding `.p-notification-touch` swaps it to iOS metrics: a larger icon, a bigger radius, and the time moved into the corner.

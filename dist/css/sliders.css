@@ -146,3 +146,130 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ─── Touch size (iOS) ─────────────────────────────────────────────── */
+/* iOS runs a thicker track than macOS, 6px against the pointer size,
+   and a 28px thumb that is its own tap target. Ticks are 4px dots
+   rather than the pointer size's hairlines. */
+
+:root {
+  --p-slider-touch-track: rgba(120, 120, 120, 0.20);
+  --p-slider-touch-fill: #0088ff;
+  --p-slider-touch-thumb: #ffffff;
+  --p-slider-touch-tick: rgba(60, 60, 67, 0.18);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-slider-touch-track: rgba(120, 120, 128, 0.36);
+  --p-slider-touch-fill: #0091ff;
+  --p-slider-touch-tick: rgba(235, 235, 245, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-slider-touch-track: rgba(120, 120, 128, 0.36);
+    --p-slider-touch-fill: #0091ff;
+    --p-slider-touch-tick: rgba(235, 235, 245, 0.16);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-slider-touch-track: rgba(120, 120, 120, 0.20);
+  --p-slider-touch-fill: #0088ff;
+  --p-slider-touch-tick: rgba(60, 60, 67, 0.18);
+}
+
+.p-slider-touch {
+  --p-slider-touch-h: 6px;
+  --p-slider-touch-thumb-size: 28px;
+
+  width: 100%;
+  height: var(--p-slider-touch-thumb-size);
+  background: none;
+}
+
+.p-slider-touch::-webkit-slider-runnable-track {
+  height: var(--p-slider-touch-h);
+  border-radius: calc(var(--p-slider-touch-h) / 2);
+  background: var(--p-slider-touch-track);
+  border: 0;
+}
+
+.p-slider-touch::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--p-slider-touch-thumb-size);
+  height: var(--p-slider-touch-thumb-size);
+  border: 0;
+  border-radius: 50%;
+  background: var(--p-slider-touch-thumb);
+  /* Apple's triple-layer thumb shadow. */
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.15),
+    0 1px 1px rgba(0, 0, 0, 0.16),
+    0 3px 1px rgba(0, 0, 0, 0.10);
+  margin-top: calc((var(--p-slider-touch-h) - var(--p-slider-touch-thumb-size)) / 2);
+}
+
+.p-slider-touch::-moz-range-track {
+  height: var(--p-slider-touch-h);
+  border-radius: calc(var(--p-slider-touch-h) / 2);
+  background: var(--p-slider-touch-track);
+  border: 0;
+}
+
+.p-slider-touch::-moz-range-progress {
+  height: var(--p-slider-touch-h);
+  border-radius: calc(var(--p-slider-touch-h) / 2);
+  background: var(--p-slider-touch-fill);
+}
+
+.p-slider-touch::-moz-range-thumb {
+  width: var(--p-slider-touch-thumb-size);
+  height: var(--p-slider-touch-thumb-size);
+  border: 0;
+  border-radius: 50%;
+  background: var(--p-slider-touch-thumb);
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.15),
+    0 1px 1px rgba(0, 0, 0, 0.16),
+    0 3px 1px rgba(0, 0, 0, 0.10);
+}
+
+/* WebKit has no track-fill pseudo-element, so the filled portion is
+   painted as a gradient sized from --p-slider-fill, the same variable
+   the pointer slider above uses and src/js/sliders.js already
+   publishes. Without that script the track reads as unfilled. */
+@supports (-webkit-appearance: none) {
+  .p-slider-touch::-webkit-slider-runnable-track {
+    background:
+      linear-gradient(var(--p-slider-touch-fill), var(--p-slider-touch-fill))
+        0 / var(--p-slider-fill, 0%) 100% no-repeat,
+      var(--p-slider-touch-track);
+  }
+}
+
+.p-slider-touch:focus-visible {
+  outline: none;
+}
+
+.p-slider-touch:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px rgba(0, 136, 255, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.p-slider-touch:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 4px rgba(0, 136, 255, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.p-slider-touch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

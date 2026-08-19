@@ -184,3 +184,342 @@
     background: var(--p-toolbar-bg-opaque);
   }
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-nav-bar and .p-toolbar-touch
+   The iOS bars. A navigation bar across the top carrying the screen's
+   title and its actions, and a toolbar floating at the bottom holding
+   the actions that operate on what is on screen.
+
+   Both sit on the same glass the tab bar uses, so an app's three bars
+   read as one material rather than three.
+
+   The macOS toolbar above is a different component: it lives in a
+   window's title bar and is sized for a pointer.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-bar-surface: rgba(255, 255, 255, 0.65);
+  --p-bar-fallback: #f7f7f7;
+  --p-bar-title: #1a1a1a;
+  --p-bar-subtitle: rgba(60, 60, 67, 0.6);
+  --p-bar-item: #0088ff;
+  --p-bar-separator: rgba(60, 60, 67, 0.29);
+  --p-bar-button: rgba(255, 255, 255, 0.65);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-bar-surface: rgba(40, 40, 42, 0.65);
+  --p-bar-fallback: #1c1c1e;
+  --p-bar-title: #f5f5f5;
+  --p-bar-subtitle: rgba(235, 235, 245, 0.6);
+  --p-bar-item: #0091ff;
+  --p-bar-separator: rgba(84, 84, 88, 0.6);
+  --p-bar-button: rgba(118, 118, 128, 0.36);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-bar-surface: rgba(40, 40, 42, 0.65);
+    --p-bar-fallback: #1c1c1e;
+    --p-bar-title: #f5f5f5;
+    --p-bar-subtitle: rgba(235, 235, 245, 0.6);
+    --p-bar-item: #0091ff;
+    --p-bar-separator: rgba(84, 84, 88, 0.6);
+    --p-bar-button: rgba(118, 118, 128, 0.36);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-bar-surface: rgba(255, 255, 255, 0.65);
+  --p-bar-fallback: #f7f7f7;
+  --p-bar-title: #1a1a1a;
+  --p-bar-subtitle: rgba(60, 60, 67, 0.6);
+  --p-bar-item: #0088ff;
+  --p-bar-separator: rgba(60, 60, 67, 0.29);
+  --p-bar-button: rgba(255, 255, 255, 0.65);
+}
+
+/* ─── Navigation bar ───────────────────────────────────────────────── */
+
+.p-nav-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top);
+
+  background: var(--p-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  color: var(--p-bar-title);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-nav-bar * {
+  box-sizing: border-box;
+}
+
+/* The row holding the actions and, in compact mode, the title. A
+   three-column grid keeps the title centred on the bar rather than on
+   whatever space the actions leave over. */
+.p-nav-bar__row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.p-nav-bar__row > :first-child:not(.p-nav-bar__title) {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.p-nav-bar__row > :last-child:not(.p-nav-bar__title) {
+  grid-column: 3;
+  justify-self: end;
+}
+
+/* Compact title: the one that sits in the row, centred. */
+.p-nav-bar__title {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+
+  color: var(--p-bar-title);
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+/* Compact title with a subtitle under it: both shrink a step. */
+.p-nav-bar__title:has(+ .p-nav-bar__subtitle),
+.p-nav-bar__titles > .p-nav-bar__title {
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.p-nav-bar__titles {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.p-nav-bar__subtitle {
+  margin: 0;
+  color: var(--p-bar-subtitle);
+  font-size: 12px;
+  font-weight: 510;
+  line-height: 15px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+/* Large title: its own row under the actions, left aligned. */
+.p-nav-bar__large {
+  margin: 0;
+  padding: 4px 0 8px;
+
+  color: var(--p-bar-title);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: 0.4px;
+}
+
+.p-nav-bar__large + .p-nav-bar__subtitle {
+  margin: -6px 0 10px;
+  font-size: 15px;
+  font-weight: 510;
+  line-height: 20px;
+  letter-spacing: -0.25px;
+  text-align: left;
+}
+
+/* Actions are text by default and pick up the accent, matching iOS. */
+.p-nav-bar__action {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: none;
+  padding: 0 4px;
+
+  min-height: 44px;
+  color: var(--p-bar-item);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  letter-spacing: -0.43px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.p-nav-bar__action:active {
+  opacity: 0.5;
+}
+
+.p-nav-bar__action:focus-visible {
+  outline: 3px solid var(--p-bar-item);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Hairline under the bar, for a bar over scrolling content. */
+.p-nav-bar-bordered {
+  box-shadow: inset 0 -0.5px 0 var(--p-bar-separator);
+}
+
+/* ─── Toolbar (touch) ──────────────────────────────────────────────── */
+/* A floating capsule, 48px tall, holding 44px round buttons. Same
+   glass and the same placement logic as the tab bar, so an app can
+   carry both without them reading as different materials. */
+
+.p-toolbar-touch {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  height: 48px;
+  padding: 0 2px;
+  border-radius: 24px;
+
+  background: var(--p-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-toolbar-touch * {
+  box-sizing: border-box;
+}
+
+.p-toolbar-touch-fixed {
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  z-index: 70;
+}
+
+.p-toolbar-touch__item {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  color: var(--p-bar-item);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: background 0.12s ease-out;
+}
+
+/* An item with a label rather than a glyph grows into a capsule. */
+.p-toolbar-touch__item:not(:has(> i, > svg)) {
+  width: auto;
+  min-width: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-toolbar-touch__item > i,
+.p-toolbar-touch__item > svg {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.p-toolbar-touch__item > svg {
+  fill: currentcolor;
+}
+
+.p-toolbar-touch__item:active {
+  opacity: 0.5;
+}
+
+.p-toolbar-touch__item[aria-current],
+.p-toolbar-touch__item.p-is-active {
+  background: var(--p-bar-button);
+}
+
+.p-toolbar-touch__item:focus-visible {
+  outline: 3px solid var(--p-bar-item);
+  outline-offset: -2px;
+}
+
+/* A divider between groups of items inside one capsule. */
+.p-toolbar-touch__divider {
+  flex: none;
+  width: 1px;
+  height: 24px;
+  margin: 0 6px;
+  background: var(--p-bar-separator);
+}
+
+/* ─── Shared fallbacks ─────────────────────────────────────────────── */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-nav-bar,
+  .p-toolbar-touch {
+    background: var(--p-bar-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-nav-bar,
+  .p-toolbar-touch {
+    background: var(--p-bar-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-toolbar-touch__item {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-nav-bar,
+  .p-toolbar-touch {
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-nav-bar__action,
+  .p-toolbar-touch__item {
+    color: LinkText;
+  }
+}

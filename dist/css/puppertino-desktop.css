@@ -10,6 +10,7 @@
 @import url('materials.css');
 @import url('shadows.css');
 @import url('layout.css');
+@import url('adaptive.css');
 
 /* Components */
 @import url('buttons.css');

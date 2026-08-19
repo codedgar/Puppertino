@@ -1,0 +1,204 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Buttons
+description: Capsule push buttons sized for fingers. Three touch sizes, six styles, exact iOS metrics, no JavaScript.
+---
+
+import '@puppertino/buttons.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A button initiates an immediate action. On touch it is a capsule, sized so a finger can land on it without aiming.
+
+## When to use it
+
+Use a button when a tap does something right away. Save, Share, Delete, Buy.
+
+Use a link when the tap navigates somewhere and the destination is a place, not an action. Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/#switches`}>switch</a> when the tap changes a setting that takes effect immediately and has no verb. Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when one tap needs to offer several choices.
+
+Put one filled button on a screen. It marks the action people came to perform, and a second one splits the decision.
+
+## Same class, different metrics
+
+Touch buttons are the same `.p-button` component the desktop side uses, with a size class that swaps the metrics. Pointer sizes target a cursor and sit as low as 16px tall. Touch sizes target a fingertip.
+
+<Showcase
+  name="mobile-button-basic"
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary" type="button">Save</button>
+<button class="p-button p-button-touch p-button-secondary" type="button">Share</button>
+<button class="p-button p-button-touch p-button-default" type="button">Cancel</button>`}
+  snippet={`<button class="p-button p-button-touch p-button-primary" type="button">Save</button>`}
+/>
+
+Add `.p-button-touch` and the button becomes a 34px capsule at 15px Regular. Nothing else changes: the tint mechanism, the states, the disabled handling, and the accessibility fallbacks are shared with the pointer sizes.
+
+## Sizes
+
+| Class | Height | Radius | Padding | Font | Tracking | Icon |
+|---|---|---|---|---|---|---|
+| `.p-button-touch-small` | 28px | capsule | 0 10px | 15px / 400 | -0.23px | 15px |
+| `.p-button-touch` | 34px | capsule | 0 14px | 15px / 400 | -0.23px | 17px |
+| `.p-button-touch-large` | 50px | capsule | 0 20px | 17px / 400 | -0.43px | 20px |
+
+<Showcase
+  name="mobile-button-sizes"
+  compact
+  code={`<button class="p-button p-button-touch-small p-button-primary" type="button">Small</button>
+<button class="p-button p-button-touch p-button-primary" type="button">Regular</button>
+<button class="p-button p-button-touch-large p-button-primary" type="button">Large</button>`}
+  snippet={`<button class="p-button p-button-touch-large p-button-primary" type="button">Continue</button>`}
+/>
+
+The radius is always half the height, so every size is a full capsule. Labels are Regular weight. Semibold labels are a common mistake on the web; iOS reserves the heavier weight for alert buttons, not for buttons in a view.
+
+Consider the large size for the single action that completes a task, like Continue at the bottom of a form. It is the only size that clears a 44px tap target on its own.
+
+Consider the small size only inside dense rows, next to a list item or a search field. Avoid it as the primary action on a screen.
+
+## Styles
+
+<Showcase
+  name="mobile-button-styles"
+  code={`<button class="p-button p-button-touch p-button-primary" type="button">Filled</button>
+<button class="p-button p-button-touch p-button-secondary" type="button">Tinted</button>
+<button class="p-button p-button-touch p-button-default" type="button">Gray</button>
+<button class="p-button p-button-touch p-button-tinted" type="button">Gray tinted</button>
+<button class="p-button p-button-touch p-button-borderless" type="button">Plain</button>
+<button class="p-button p-button-touch p-button-destructive" type="button">Delete</button>`}
+  snippet={`<button class="p-button p-button-touch p-button-primary" type="button">Filled</button>
+<button class="p-button p-button-touch p-button-secondary" type="button">Tinted</button>
+<button class="p-button p-button-touch p-button-default" type="button">Gray</button>
+<button class="p-button p-button-touch p-button-tinted" type="button">Gray tinted</button>
+<button class="p-button p-button-touch p-button-borderless" type="button">Plain</button>
+<button class="p-button p-button-touch p-button-destructive" type="button">Delete</button>`}
+/>
+
+| Style | Fill | Label | Use it for |
+|---|---|---|---|
+| `.p-button-primary` | Solid accent | White | The one action the screen exists for |
+| `.p-button-secondary` | Accent at 14% | Accent | A supporting action that should still read as tappable |
+| `.p-button-default` | `rgba(118,118,128,0.12)` | `--p-text-primary` | Cancel, Dismiss, and other neutral choices |
+| `.p-button-tinted` | `rgba(118,118,128,0.12)` | Accent | A quiet action with an accent cue, like Get |
+| `.p-button-borderless` | None | Accent | Toolbar and navigation bar actions |
+| `.p-button-destructive` | Red at 14% | `--p-sys-red` | Anything that removes data permanently |
+
+The gray fill is built on `#767680`, not on pure black. iOS runs its own fill scale, so touch buttons read from `--p-button-touch-gray` rather than the `--p-fill-*` tokens the desktop controls use. It lands at 12% in light and 24% in dark.
+
+Destructive ignores the accent entirely and stays `--p-sys-red`, `#FF383C` in light and `#FF4245` in dark. Red means the same thing on every screen, so it never retints.
+
+## Changing the color
+
+<Showcase
+  name="mobile-button-colors"
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary p-sys-purple" type="button">Purple</button>
+<button class="p-button p-button-touch p-button-primary p-sys-green" type="button">Green</button>
+<button class="p-button p-button-touch p-button-secondary p-sys-purple" type="button">Tinted</button>
+<button class="p-button p-button-touch p-button-borderless p-sys-green" type="button">Plain</button>`}
+  snippet={`<button class="p-button p-button-touch p-button-primary p-sys-purple" type="button">Purple</button>`}
+/>
+
+Drop any `.p-sys-*` class on the button to retint it. Every style reads the same `--p-color-current` variable, so filled, tinted, gray tinted, and plain all follow. Untinted, that variable resolves to `#0D6FFF`, the control blue shared with the desktop buttons. Add `.p-sys-blue` for `#0088FF`, the iOS text and link blue, if the button sits next to system-blue text.
+
+## Icons
+
+<Showcase
+  name="mobile-button-icons"
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary" type="button">
+  <i class="ph-bold ph-play"></i><span>Play</span>
+</button>
+<button class="p-button p-button-touch p-button-secondary" type="button">
+  <span>Share</span><i class="ph-bold ph-arrow-square-out"></i>
+</button>
+<button class="p-button p-button-touch p-button-default p-button-icon-only" type="button" aria-label="Add to favorites">
+  <i class="ph-bold ph-heart"></i>
+</button>`}
+  snippet={`<button class="p-button p-button-touch p-button-primary" type="button">
+  <i class="ph-bold ph-play"></i><span>Play</span>
+</button>
+<button class="p-button p-button-touch p-button-default p-button-icon-only" type="button" aria-label="Add to favorites">
+  <i class="ph-bold ph-heart"></i>
+</button>`}
+/>
+
+Icons are markup, not modifier classes. Put an `<i>` or an `<svg>` before the `<span>` for a leading icon and after it for a trailing one. Reading order follows the DOM, so a screen reader announces the parts in the order they appear.
+
+Add `.p-button-icon-only` for a button with no label. It drops the horizontal padding and squares the width against the height, which the capsule radius turns into a circle: 28px, 34px, or 50px across. An icon-only button carries no text, so it needs an `aria-label`.
+
+The gap between icon and label is 6px on touch, up from 4px on pointer sizes.
+
+## States
+
+**Pressed** dims the whole button to 60% opacity for the length of the press. That is what iOS does, and it differs from the desktop treatment, which composites a plus-darker layer over the fill. The touch behavior is scoped to `@media (hover: none)`, so a touch-sized button on a laptop still gets the pointer hover and press.
+
+**Hover** does not exist on touch. Without the media query a tapped button keeps its hover state until something else is tapped, which reads as a stuck selection. The same query zeroes it out.
+
+**Focus** draws a 4px ring in the button's own accent at 50%, offset 2px. It appears for keyboard and switch control, not for taps, because the rule is `:focus-visible`. Never remove it. People navigating with a hardware keyboard or a switch have nothing else to go on.
+
+**Disabled** drops the label to `--p-text-tertiary` at 25% and removes pointer events. Keep the fill. A disabled button that also loses its background stops looking like a button, and people cannot tell whether it is missing or off.
+
+<Showcase
+  name="mobile-button-disabled"
+  snippet={false}
+  compact
+  code={`<button class="p-button p-button-touch p-button-primary" type="button" disabled>Filled</button>
+<button class="p-button p-button-touch p-button-default" type="button" disabled>Gray</button>
+<button class="p-button p-button-touch p-button-borderless" type="button" disabled>Plain</button>`}
+/>
+
+## Tap targets
+
+Apple draws the small and regular sizes at 28px and 34px, both under the 44px minimum. Native iOS closes the gap with an invisible hit area, and so does Puppertino: every touch size lays down a transparent `::after` that is `max(100%, 44px)` tall and spans the button's width.
+
+This means the visible capsule can stay 28px while the target a finger has to hit is 44px. Nothing about the layout changes, because the pseudo-element is absolutely positioned and takes no space.
+
+The hit area extends past the visible button, so stacked touch buttons need at least 12px of vertical space between them. Below that the areas overlap and the lower button wins the tap. Consider 16px between buttons in a column.
+
+The hit area grows in one direction only. It spans the button's own width and does not pad it, because widening a button sideways would overlap whatever sits next to it in a row. A one-word label at the regular size is already 50px or so across, comfortably past the minimum. An icon-only button is exactly as wide as it is tall, so the small size lands at 28px. Consider the regular or large size for icon-only buttons that stand alone.
+
+## Dark mode
+
+The gray fill moves from 12% to 24%, the accent picks up its dark value from `colors.css`, and the destructive red shifts from `#FF383C` to `#FF4245`. Labels on filled buttons stay white in both appearances.
+
+Nothing needs to be set on the button. Put `.p-auto-dark-mode` on the body to follow the system, or `.p-dark-mode` to pin it. Use `.p-light-mode` to hold a region light inside a dark page.
+
+## Accessibility
+
+Reduced motion removes the press and focus transitions. The states still change, they just arrive instantly.
+
+Reduced transparency swaps the tinted, plain, and destructive fills for the opaque `--p-fill-secondary`, since a translucent fill over a photo can drop below the 4.5:1 contrast floor.
+
+Increased contrast adds a 2px border in the current text color, and filled buttons get a 60% black edge so the capsule still has a boundary against a light background.
+
+Forced colors mode hands the button over to the system palette: `ButtonFace`, `ButtonText`, `ButtonBorder`, and `Highlight` for focus. The plus-darker overlay is removed, because it has no meaning against system colors.
+
+## Markup
+
+Use a real `<button>` with an explicit `type`. Without it a button inside a form submits, which is rarely what a Share button should do.
+
+```html
+<button class="p-button p-button-touch-large p-button-primary" type="button">
+  Continue
+</button>
+```
+
+An `<a>` works when the tap navigates. Give it an `href`, not a click handler, so it can be opened in a new tab and read as a link.
+
+```html
+<a class="p-button p-button-touch p-button-borderless" href="/settings/">Settings</a>
+```
+
+## Migration from v1
+
+| v1 | v2 |
+|---|---|
+| `.p-btn` + `.p-btn-mob` | `.p-button` + `.p-button-touch` |
+| `.p-btn-lg` | `.p-button-touch-large` |
+| `.p-btn-sm` | `.p-button-touch-small` |
+| `.p-prim-col` | `.p-button-primary` |
+| `.p-btn-destructive` | `.p-button-destructive` |
+| `.p-btn-round` | `.p-button-icon-only` |
+| `.p-btn-outline`, `.p-btn-outline-dash` | no v2 equivalent, iOS has no outlined button |
+
+The v1 classes still work and are not going anywhere in 2.x. They will be removed in a future major. The v2 button needs no wrapper element and no JavaScript.

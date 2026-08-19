@@ -177,3 +177,127 @@
     corner-shape: superellipse(1.465);
   }
 }
+
+/* ─── Touch size (iOS and iPadOS) ──────────────────────────────────── */
+/* The touch popover is a bigger, softer object than the pointer one: a
+   38px radius against 12px, and a 56x13 arrow against 35.44x10.5. The
+   arrow path is the same silhouette scaled to the new box, so the tip
+   stays rounded and the shoulders keep their easing.
+
+   Placement, floating, and the .active toggle are shared with the
+   pointer popover, so popovers.js drives both without changes. */
+
+:root {
+  --p-popover-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-popover-touch-arrow-bg: rgba(248, 248, 248, 0.95);
+  --p-popover-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-popover-touch-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-popover-touch-bg: rgba(38, 38, 40, 0.72);
+  --p-popover-touch-arrow-bg: rgba(40, 40, 42, 0.95);
+  --p-popover-touch-fallback: rgba(38, 38, 40, 0.98);
+  --p-popover-touch-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.24),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-popover-touch-bg: rgba(38, 38, 40, 0.72);
+    --p-popover-touch-arrow-bg: rgba(40, 40, 42, 0.95);
+    --p-popover-touch-fallback: rgba(38, 38, 40, 0.98);
+    --p-popover-touch-shadow:
+      0 10px 40px rgba(0, 0, 0, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.24),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-popover-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-popover-touch-arrow-bg: rgba(248, 248, 248, 0.95);
+  --p-popover-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-popover-touch-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+}
+
+.p-popover-touch {
+  --p-popover-radius: 38px;
+  --p-popover-arrow-bg: var(--p-popover-touch-arrow-bg);
+
+  min-width: 240px;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 20px;
+
+  background: var(--p-popover-touch-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-popover-touch-shadow);
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+/* A popover holding a list runs the list to its own edges. */
+.p-popover-touch:has(> .p-list-touch) {
+  padding: 0;
+  overflow: hidden;
+}
+
+.p-popover-touch::before {
+  width: 56px;
+  height: 13px;
+  top: -13px;
+  margin-left: -28px;
+  clip-path: path("M0 13C3.95 13 5.72 12.93 7.51 12.38C9.28 11.84 10.89 10.62 12.37 9.47L16.56 6.19L21.79 2.09C23.89 0.37 25.87 0 28 0C30.13 0 32.11 0.38 34.21 2.09L39.44 6.19L43.63 9.47C45.11 10.62 46.71 11.84 48.49 12.38C50.28 12.93 52.05 13 56 13Z");
+}
+
+.p-popover-touch[data-p-popover-place="top"]::before {
+  top: 100%;
+}
+
+/* Rotating a 56x13 box a quarter turn leaves it offset by half the
+   difference between the two sides, hence 21.5px. */
+.p-popover-touch[data-p-popover-place="left"]::before {
+  margin-left: -21.5px;
+  margin-top: -6.5px;
+}
+
+.p-popover-touch[data-p-popover-place="right"]::before {
+  left: -34.5px;
+  margin-top: -6.5px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-popover-touch {
+    background: var(--p-popover-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-popover-touch {
+    background: var(--p-popover-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Same 1.6 ratio the other v2 surfaces use: 38px arc, 60.8px squircle.
+   The arrow keeps its own silhouette either way. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-popover-touch {
+    --p-popover-radius: 60.8px;
+
+    corner-shape: superellipse(1.465);
+  }
+}

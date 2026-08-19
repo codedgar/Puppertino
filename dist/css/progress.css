@@ -214,3 +214,55 @@
     50% { opacity: 1; }
   }
 }
+
+/* ─── Touch size (iOS) ─────────────────────────────────────────────── */
+/* iOS runs the same 6px track as its slider, so a progress bar and a
+   slider read as the same object in two states. */
+
+:root {
+  --p-progress-touch-track: rgba(120, 120, 120, 0.20);
+  --p-progress-touch-fill: #0088ff;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-progress-touch-track: rgba(120, 120, 128, 0.36);
+  --p-progress-touch-fill: #0091ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-progress-touch-track: rgba(120, 120, 128, 0.36);
+    --p-progress-touch-fill: #0091ff;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-progress-touch-track: rgba(120, 120, 120, 0.20);
+  --p-progress-touch-fill: #0088ff;
+}
+
+.p-progress-touch {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--p-progress-touch-track);
+}
+
+.p-progress-touch::-webkit-progress-bar {
+  border-radius: 3px;
+  background: var(--p-progress-touch-track);
+}
+
+.p-progress-touch::-webkit-progress-value {
+  border-radius: 3px;
+  background: var(--p-progress-touch-fill);
+}
+
+.p-progress-touch::-moz-progress-bar {
+  border-radius: 3px;
+  background: var(--p-progress-touch-fill);
+}

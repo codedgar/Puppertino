@@ -217,3 +217,211 @@
     corner-shape: superellipse(1.465);
   }
 }
+
+/* ─── Touch size (iPadOS) ──────────────────────────────────────────── */
+/* The iPad sidebar: a 320px material panel with 44px capsule rows. It
+   is a floating panel with its own 20px radius, not a flush column
+   attached to the window edge the way the macOS sidebar is.
+
+   Same slots as the macOS sidebar (.p-sidebar-row, .p-sidebar-header,
+   .p-sidebar-icon, .p-sidebar-detail), restyled at iPadOS metrics. */
+
+:root {
+  --p-sidebar-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-sidebar-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-sidebar-touch-label: #1a1a1a;
+  --p-sidebar-touch-secondary: rgba(60, 60, 67, 0.6);
+  --p-sidebar-touch-detail: #727272;
+  --p-sidebar-touch-selected: rgba(120, 120, 128, 0.16);
+  --p-sidebar-touch-accent: #0088ff;
+  --p-sidebar-touch-search: rgba(120, 120, 128, 0.12);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-sidebar-touch-bg: rgba(38, 38, 38, 0.72);
+  --p-sidebar-touch-fallback: rgba(38, 38, 38, 0.98);
+  --p-sidebar-touch-label: #f5f5f5;
+  --p-sidebar-touch-secondary: rgba(235, 235, 245, 0.6);
+  --p-sidebar-touch-detail: #8a8a8a;
+  --p-sidebar-touch-selected: rgba(120, 120, 128, 0.32);
+  --p-sidebar-touch-accent: #0091ff;
+  --p-sidebar-touch-search: rgba(120, 120, 128, 0.24);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-sidebar-touch-bg: rgba(38, 38, 38, 0.72);
+    --p-sidebar-touch-fallback: rgba(38, 38, 38, 0.98);
+    --p-sidebar-touch-label: #f5f5f5;
+    --p-sidebar-touch-secondary: rgba(235, 235, 245, 0.6);
+    --p-sidebar-touch-detail: #8a8a8a;
+    --p-sidebar-touch-selected: rgba(120, 120, 128, 0.32);
+    --p-sidebar-touch-accent: #0091ff;
+    --p-sidebar-touch-search: rgba(120, 120, 128, 0.24);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-sidebar-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-sidebar-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-sidebar-touch-label: #1a1a1a;
+  --p-sidebar-touch-secondary: rgba(60, 60, 67, 0.6);
+  --p-sidebar-touch-detail: #727272;
+  --p-sidebar-touch-selected: rgba(120, 120, 128, 0.16);
+  --p-sidebar-touch-accent: #0088ff;
+  --p-sidebar-touch-search: rgba(120, 120, 128, 0.12);
+}
+
+.p-sidebar-touch {
+  --p-sidebar-touch-pad: 16px;
+
+  box-sizing: border-box;
+  width: 320px;
+  padding: var(--p-sidebar-touch-pad);
+  border-radius: 20px;
+
+  background: var(--p-sidebar-touch-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  color: var(--p-sidebar-touch-label);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-sidebar-touch * {
+  box-sizing: border-box;
+}
+
+/* A narrower panel for split views that give the content more room. */
+.p-sidebar-touch-compact {
+  width: 232px;
+}
+
+.p-sidebar-touch .p-sidebar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 22px;
+  margin: 0;
+
+  color: var(--p-sidebar-touch-label);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.p-sidebar-touch .p-sidebar-row:hover {
+  background: none;
+}
+
+/* Selected: a quiet capsule fill, and the label goes accent and
+   semibold. The fill alone is subtle, so the weight carries it too. */
+.p-sidebar-touch .p-sidebar-row.p-selected,
+.p-sidebar-touch .p-sidebar-row[aria-current] {
+  background: var(--p-sidebar-touch-selected);
+  color: var(--p-sidebar-touch-accent);
+  font-weight: 590;
+}
+
+.p-sidebar-touch .p-sidebar-row:active:not(.p-selected):not([aria-current]) {
+  background: var(--p-sidebar-touch-selected);
+}
+
+.p-sidebar-touch .p-sidebar-row:focus-visible {
+  outline: 3px solid var(--p-sidebar-touch-accent);
+  outline-offset: -3px;
+}
+
+.p-sidebar-touch .p-sidebar-icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  color: var(--p-sidebar-touch-accent);
+}
+
+.p-sidebar-touch .p-sidebar-row.p-selected .p-sidebar-icon,
+.p-sidebar-touch .p-sidebar-row[aria-current] .p-sidebar-icon {
+  color: currentcolor;
+}
+
+.p-sidebar-touch .p-sidebar-detail {
+  margin-left: auto;
+  color: var(--p-sidebar-touch-detail);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.p-sidebar-touch .p-sidebar-header {
+  padding: 0 12px;
+  margin: 16px 0 4px;
+
+  color: var(--p-sidebar-touch-secondary);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+  text-transform: none;
+}
+
+.p-sidebar-touch .p-sidebar-header:first-child {
+  margin-top: 0;
+}
+
+/* Search field. A capsule rather than the 10px box a form field uses,
+   because it sits in chrome rather than in a form. */
+.p-sidebar-touch__search {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  margin-bottom: 8px;
+  border-radius: 22px;
+
+  background: var(--p-sidebar-touch-search);
+  color: var(--p-sidebar-touch-label);
+
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: -0.08px;
+}
+
+.p-sidebar-touch__search::placeholder {
+  color: var(--p-sidebar-touch-detail);
+}
+
+.p-sidebar-touch__search:focus {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25));
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-sidebar-touch {
+    background: var(--p-sidebar-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-sidebar-touch {
+    background: var(--p-sidebar-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Below the split-view threshold a sidebar has no room to sit beside
+   content. Hide it and drive navigation from a tab bar instead. */
+@media (max-width: 767px) {
+  .p-sidebar-touch-collapses {
+    display: none;
+  }
+}

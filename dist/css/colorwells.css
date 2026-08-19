@@ -97,3 +97,350 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-color-picker
+   The iOS colour picker. A 402px panel with three modes behind a
+   segmented control: a grid of swatches, a two-dimensional spectrum,
+   and a set of channel sliders. Below them sit the current colour and
+   an opacity row.
+
+   The panel is usually presented in a .p-bottom-sheet. It works
+   standalone too, which is what the previews use.
+
+   The swatch is the reusable part: .p-color-swatch takes its colour
+   from --p-color-swatch and can be used anywhere a colour needs to be
+   picked, not only inside this panel.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-color-picker-bg: #ffffff;
+  --p-color-picker-label: #1a1a1a;
+  --p-color-picker-secondary: #727272;
+  --p-color-picker-field: rgba(120, 120, 120, 0.2);
+  --p-color-picker-ring: rgba(0, 0, 0, 0.85);
+  --p-color-picker-hairline: rgba(0, 0, 0, 0.12);
+  /* Two greys, offset, make the alpha checkerboard. */
+  --p-color-checker: #d9d9d9;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-color-picker-bg: #1c1c1e;
+  --p-color-picker-label: #f5f5f5;
+  --p-color-picker-secondary: #8a8a8a;
+  --p-color-picker-field: rgba(120, 120, 128, 0.36);
+  --p-color-picker-ring: rgba(255, 255, 255, 0.92);
+  --p-color-picker-hairline: rgba(255, 255, 255, 0.16);
+  --p-color-checker: #48484a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-color-picker-bg: #1c1c1e;
+    --p-color-picker-label: #f5f5f5;
+    --p-color-picker-secondary: #8a8a8a;
+    --p-color-picker-field: rgba(120, 120, 128, 0.36);
+    --p-color-picker-ring: rgba(255, 255, 255, 0.92);
+    --p-color-picker-hairline: rgba(255, 255, 255, 0.16);
+    --p-color-checker: #48484a;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-color-picker-bg: #ffffff;
+  --p-color-picker-label: #1a1a1a;
+  --p-color-picker-secondary: #727272;
+  --p-color-picker-field: rgba(120, 120, 120, 0.2);
+  --p-color-picker-ring: rgba(0, 0, 0, 0.85);
+  --p-color-picker-hairline: rgba(0, 0, 0, 0.12);
+  --p-color-checker: #d9d9d9;
+}
+
+.p-color-picker {
+  box-sizing: border-box;
+  width: 402px;
+  max-width: 100%;
+  padding: 20px;
+
+  background: var(--p-color-picker-bg);
+  color: var(--p-color-picker-label);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-color-picker * {
+  box-sizing: border-box;
+}
+
+.p-color-picker__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.p-color-picker__title {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 590;
+  letter-spacing: -0.43px;
+}
+
+/* ─── Swatch ───────────────────────────────────────────────────────── */
+/* 30px circle. Selected draws a 36px ring: a gap in the panel colour
+   then the ring itself, so the ring reads on a swatch of any colour
+   including one that matches the panel. */
+
+.p-color-swatch {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding: 0;
+
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  background:
+    linear-gradient(var(--p-color-swatch, transparent), var(--p-color-swatch, transparent)),
+    conic-gradient(var(--p-color-checker) 0 25%, transparent 0 50%, var(--p-color-checker) 0 75%, transparent 0)
+      0 0 / 10px 10px;
+  background-color: #ffffff;
+  cursor: pointer;
+
+  transition: box-shadow 0.15s ease-out;
+}
+
+.p-color-swatch[aria-pressed="true"],
+.p-color-swatch[aria-selected="true"],
+.p-color-swatch.p-selected {
+  box-shadow:
+    0 0 0 1.5px var(--p-color-picker-bg),
+    0 0 0 3px var(--p-color-picker-ring);
+}
+
+.p-color-swatch:focus-visible {
+  outline: 3px solid var(--p-sys-blue, #0088ff);
+  outline-offset: 3px;
+}
+
+/* A swatch showing no colour yet. */
+.p-color-swatch-empty {
+  background: var(--p-color-picker-field);
+}
+
+/* ─── Grid mode ────────────────────────────────────────────────────── */
+/* 30px swatches on a 54px column pitch and a 52px row pitch. */
+
+/* Fixed 24px and 22px gaps rather than a distributed one: the pitch is
+   part of the spec, so the row is allowed to leave a remainder at the
+   end instead of stretching to fill. */
+.p-color-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 30px);
+  gap: 22px 24px;
+}
+
+/* ─── Spectrum mode ────────────────────────────────────────────────── */
+/* Hue across, saturation and brightness down, which is the layout iOS
+   uses. The picker dot is positioned by script through two variables. */
+
+.p-color-picker__spectrum {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+
+  /* White washes out the top half, black the bottom, and the hue ramp
+     shows through at full strength across the middle. Both overlays
+     have to reach zero alpha at 50%, or the midline paints over the
+     hue instead of revealing it. */
+  background:
+    linear-gradient(to bottom,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 1) 100%),
+    linear-gradient(to right,
+      #ff0000 0%, #ffff00 17%, #00ff00 33%,
+      #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+  cursor: crosshair;
+}
+
+.p-color-picker__dot {
+  position: absolute;
+  left: var(--p-color-x, 50%);
+  top: var(--p-color-y, 50%);
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border-radius: 50%;
+
+  background: var(--p-color-swatch, transparent);
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ─── Sliders mode ─────────────────────────────────────────────────── */
+/* Channel sliders. Each one paints its own track gradient, set through
+   --p-color-track, so red, green, blue, and opacity all use the same
+   rule with a different ramp. */
+
+.p-color-picker__sliders {
+  display: grid;
+  gap: 16px;
+}
+
+.p-color-picker__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.p-color-picker__label {
+  color: var(--p-color-picker-secondary);
+  font-size: 17px;
+  font-weight: 510;
+}
+
+.p-color-slider {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 28px;
+  background: none;
+}
+
+.p-color-slider::-webkit-slider-runnable-track {
+  height: 28px;
+  border-radius: 8px;
+  border: 0;
+  background:
+    linear-gradient(to right, var(--p-color-track, #000, #fff)),
+    conic-gradient(var(--p-color-checker) 0 25%, transparent 0 50%, var(--p-color-checker) 0 75%, transparent 0)
+      0 0 / 12px 12px;
+  background-color: #ffffff;
+  box-shadow: inset 0 0 0 1px var(--p-color-picker-hairline);
+}
+
+.p-color-slider::-moz-range-track {
+  height: 28px;
+  border-radius: 8px;
+  border: 0;
+  background: linear-gradient(to right, var(--p-color-track, #000, #fff));
+  box-shadow: inset 0 0 0 1px var(--p-color-picker-hairline);
+}
+
+.p-color-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.p-color-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.p-color-slider:focus-visible {
+  outline: 3px solid var(--p-sys-blue, #0088ff);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* The numeric readout beside a channel. */
+.p-color-picker__value {
+  width: 75px;
+  height: 40px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+
+  background: var(--p-color-picker-field);
+  color: var(--p-color-picker-label);
+
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+  text-align: center;
+}
+
+/* ─── Current colour ───────────────────────────────────────────────── */
+
+.p-color-picker__footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--p-color-picker-hairline);
+}
+
+.p-color-picker__preview {
+  flex: none;
+  width: 82px;
+  height: 82px;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(var(--p-color-swatch, transparent), var(--p-color-swatch, transparent)),
+    conic-gradient(var(--p-color-checker) 0 25%, transparent 0 50%, var(--p-color-checker) 0 75%, transparent 0)
+      0 0 / 16px 16px;
+  background-color: #ffffff;
+  box-shadow: inset 0 0 0 1px var(--p-color-picker-hairline);
+}
+
+.p-color-picker__opacity {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-color-swatch {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-color-swatch,
+  .p-color-picker__preview {
+    forced-color-adjust: none;
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-color-swatch[aria-pressed="true"],
+  .p-color-swatch.p-selected {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+/* Mode panels. color_pickers.js toggles the hidden attribute; these
+   panels set their own display, which would otherwise win over it. */
+.p-color-picker [data-p-color-panel][hidden] {
+  display: none;
+}

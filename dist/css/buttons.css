@@ -167,12 +167,36 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-button
-   macOS push button system. Six styles, four sizes, full state
-   coverage. Retint by dropping any color utility class directly on
+   Push button system. Seven styles, four pointer sizes and three
+   touch sizes, full state coverage. Retint by dropping any color
+   utility class directly on
    the element (.p-button + .p-button-colored + .p-grape, etc.).
    The retint mechanism reads --p-color-current published by every
    color class in colors.css. Default tint is the macOS system blue.
    ═════════════════════════════════════════════════════════════════════ */
+
+/* iOS quiet fill, used by the touch sizes. iOS keeps its own fill scale,
+   built on #767680 rather than pure black, so it cannot read from
+   --p-fill-tertiary. Declared across all four appearance scopes. */
+:root {
+  --p-button-touch-gray: rgba(118, 118, 128, 0.12);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-button-touch-gray: rgba(118, 118, 128, 0.24);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-button-touch-gray: rgba(118, 118, 128, 0.24);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-button-touch-gray: rgba(118, 118, 128, 0.12);
+}
 
 .p-button {
   /* Reset — works on <button>, <a>, <input type="submit"> */
@@ -201,7 +225,12 @@
   --p-button-font-size: 13px;
   --p-button-font-weight: 510;
   --p-button-icon-size: 13px;
+  --p-button-tracking: 0;
   --p-button-default-tint: #0D6FFF;
+  /* Quiet fill shared by the gray and tinted styles. Resolved here, not
+     in :root, so the appearance scopes above this element feed it. The
+     touch sizes below override it with the iOS fill. */
+  --p-button-gray-fill: var(--p-fill-tertiary);
 
   /* Sizing */
   height: var(--p-button-height);
@@ -210,7 +239,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
   font-size: var(--p-button-font-size);
   font-weight: var(--p-button-font-weight);
-  letter-spacing: 0;
+  letter-spacing: var(--p-button-tracking);
   line-height: 1;
 
   /* Default appearance before any style modifier */
@@ -264,8 +293,14 @@
 /* ─── Style modifiers ──────────────────────────────────────────────── */
 
 .p-button-default {
-  background: var(--p-fill-tertiary);
+  background: var(--p-button-gray-fill);
   color: var(--p-text-primary);
+}
+
+/* Gray fill, accent label. A quiet action that still reads as tappable. */
+.p-button-tinted {
+  background: var(--p-button-gray-fill);
+  color: var(--p-color-current, var(--p-button-default-tint));
 }
 
 /* Colored and Primary share visual treatment.
@@ -319,6 +354,99 @@
   --p-button-font-weight: 590;
   --p-button-icon-size: 16px;
   --p-button-radius: 8px;
+}
+
+/* ─── Touch sizes (iOS-derived) ────────────────────────────────────── */
+/* iOS buttons are capsules and are measured for fingers. Three sizes:
+   .p-button-touch is the 34px regular, with -small (28px) and -large
+   (50px) on either side. Labels are Regular weight, not Semibold, and
+   carry SF Pro's negative tracking at these sizes.
+
+   Only the large size clears Apple's 44px minimum on its own, so every
+   touch button also lays down an invisible 44px-tall hit area. That
+   needs the clip off; ::before keeps its shape through border-radius,
+   so nothing depends on the clip. */
+
+.p-button-touch,
+.p-button-touch-small,
+.p-button-touch-large {
+  --p-button-height: 34px;
+  --p-button-radius: 999px;
+  --p-button-padding-x: 14px;
+  --p-button-font-size: 15px;
+  --p-button-font-weight: 400;
+  --p-button-tracking: -0.23px;
+  --p-button-icon-size: 17px;
+  --p-button-gray-fill: var(--p-button-touch-gray);
+  overflow: visible;
+  gap: 6px;
+}
+
+.p-button-touch-small {
+  --p-button-height: 28px;
+  --p-button-padding-x: 10px;
+  --p-button-icon-size: 15px;
+}
+
+.p-button-touch-large {
+  --p-button-height: 50px;
+  --p-button-padding-x: 20px;
+  --p-button-font-size: 17px;
+  --p-button-tracking: -0.43px;
+  --p-button-icon-size: 20px;
+}
+
+.p-button-touch::after,
+.p-button-touch-small::after,
+.p-button-touch-large::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: max(100%, 44px);
+  transform: translateY(-50%);
+}
+
+/* Icon-only: a circle, matching the sheet's square outer box. */
+.p-button-icon-only {
+  --p-button-padding-x: 0;
+
+  width: var(--p-button-height);
+}
+
+/* iOS tints its quiet fills a touch stronger than macOS does. */
+.p-button-touch.p-button-secondary,
+.p-button-touch-small.p-button-secondary,
+.p-button-touch-large.p-button-secondary {
+  background: color-mix(in oklch, var(--p-color-current, var(--p-button-default-tint)) 14%, transparent);
+}
+
+.p-button-touch.p-button-destructive,
+.p-button-touch-small.p-button-destructive,
+.p-button-touch-large.p-button-destructive {
+  background: color-mix(in oklch, var(--p-sys-red) 14%, transparent);
+}
+
+/* Touch has no hover. Pressed is the only feedback, and iOS dims the
+   whole control rather than compositing a darkening layer. */
+@media (hover: none) {
+  .p-button-touch:hover::before,
+  .p-button-touch-small:hover::before,
+  .p-button-touch-large:hover::before {
+    opacity: 0;
+  }
+
+  .p-button-touch:active,
+  .p-button-touch-small:active,
+  .p-button-touch-large:active {
+    opacity: 0.6;
+  }
+
+  .p-button-touch:active::before,
+  .p-button-touch-small:active::before,
+  .p-button-touch-large:active::before {
+    opacity: 0;
+  }
 }
 
 /* ─── States ───────────────────────────────────────────────────────── */

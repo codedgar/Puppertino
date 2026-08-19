@@ -1,0 +1,393 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Forms
+description: Text fields, selects, and switches at iOS metrics. 44px targets, filled backgrounds, 17px type, no JavaScript.
+---
+
+import '@puppertino/forms.css';
+import '@puppertino/segmented-controls.css';
+import '@puppertino/sliders.css';
+import '@puppertino/page-controls.css';
+import '@puppertino/progress.css';
+import Showcase from '../../../components/Showcase.astro';
+import pageControlsScript from '../../../../../src/js/page_controls.js?url';
+
+<script type="module" src={pageControlsScript}></script>
+
+Form controls collect what a person types, picks, or switches on. On touch every one of them is at least 44px tall, because a finger has no cursor to aim with.
+
+## When to use it
+
+Use a text field when the answer is short and free-form: a name, an amount, a search term. Use a select when the answer is one of a known list. Use a switch when the setting takes effect the moment it changes and needs no Save.
+
+Avoid a form where a single tap would do. A screen that asks people to fill in three fields to change one setting is a screen that should have shown three switches.
+
+## Touch metrics, same components
+
+The controls are the same `.p-field`, `.p-select`, and `.p-switch` the desktop side documents. A touch class swaps the metrics. The difference is not only size: iOS fields are filled rather than ringed, sit at Regular weight instead of 510, and carry SF Pro's negative tracking at 17px.
+
+| Control | Pointer default | Touch |
+|---|---|---|
+| Text field | 24px tall, 13px, ringed | 44px tall, 17px, filled |
+| Select | 24px tall, 13px, ringed | 44px tall, 17px, filled |
+| Switch | 36 x 16 track | 64 x 28 track |
+| Segmented control | 24px track, 6px radius | 32px track, full capsule |
+| Slider | 4px track | 6px track, 28px thumb |
+
+## Text fields
+
+<Showcase
+  name="mobile-field-basic"
+  align="start"
+  code={`<div style="display: grid; gap: 12px; width: 320px;">
+  <label class="p-label" for="mf-name">Full name</label>
+  <input class="p-field p-field-touch" id="mf-name" type="text" placeholder="Jane Appleseed" />
+  <label class="p-label" for="mf-email">Email</label>
+  <input class="p-field p-field-touch" id="mf-email" type="email" placeholder="jane@example.com" />
+</div>`}
+  snippet={`<label class="p-label" for="name">Full name</label>
+<input class="p-field p-field-touch" id="name" type="text" placeholder="Jane Appleseed" />`}
+/>
+
+| Part | Value |
+|---|---|
+| Height | 44px, the tap target and the field are the same box |
+| Radius | 10px |
+| Padding | 0 16px |
+| Font | 17px, weight 400, tracking -0.43px |
+| Fill | `rgba(118,118,128,0.12)` light, `rgba(118,118,128,0.24)` dark |
+| Caret | `--p-sys-blue`, 2px wide |
+| Focus | 4px ring in `--p-field-ring-focus-outer` |
+
+The fill is built on `#767680`, not on pure black. iOS runs a separate fill scale from macOS, so the touch controls read from `--p-field-touch-fill` rather than the `--p-fill-*` tokens.
+
+There is no border. iOS dropped the 1px ring on filled fields, and a ring plus a fill reads as two boxes. The focus state supplies the outline when it is needed.
+
+Always pair a field with a `.p-label`. A placeholder is not a label: it disappears the moment someone types, and people who tab back to check what a field wanted find nothing there.
+
+<Showcase
+  name="mobile-field-types"
+  align="start"
+  snippet={false}
+  code={`<div style="display: grid; gap: 12px; width: 320px;">
+  <input class="p-field p-field-touch" type="text" value="Filled in" />
+  <input class="p-field p-field-touch" type="text" placeholder="Placeholder" />
+  <input class="p-field p-field-touch" type="text" value="Disabled" disabled />
+</div>`}
+/>
+
+Set the right `type` and `inputmode`. `type="email"` brings up a keyboard with an @ key, `inputmode="numeric"` brings up digits, and `type="search"` gives the keyboard a Search key instead of Return. This is the cheapest usability win on any mobile form.
+
+```html
+<input class="p-field p-field-touch" type="email" inputmode="email"
+       autocomplete="email" placeholder="jane@example.com" />
+```
+
+Add `autocomplete`. It lets the browser fill a name, an address, or a one-time code without anyone typing, and on a phone that is the difference between a form people finish and a form they abandon.
+
+## Selects
+
+<Showcase
+  name="mobile-select"
+  align="start"
+  code={`<div class="p-select p-select-touch" style="width: 220px;">
+  <select aria-label="Sort order">
+    <option>Newest first</option>
+    <option>Oldest first</option>
+    <option>Name</option>
+  </select>
+</div>`}
+  snippet={`<div class="p-select p-select-touch">
+  <select aria-label="Sort order">
+    <option>Newest first</option>
+    <option>Oldest first</option>
+    <option>Name</option>
+  </select>
+</div>`}
+/>
+
+`.p-select-touch` gives the select the same 44px box, 10px radius, and filled background as a text field, with 36px of right padding so the label never runs under the chevron. The chevron sits 14px from the right edge at 12 x 14px.
+
+It is a real `<select>`, so the tap opens the platform's own picker: the scroll wheel on iOS, the native list elsewhere. That picker already handles momentum scrolling, keyboard input, VoiceOver, and Dynamic Type. Building a custom dropdown means reimplementing all of it.
+
+## Switches
+
+<Showcase
+  name="mobile-switch"
+  code={`<label class="p-switch p-switch-touch"><input type="checkbox" checked /><span></span></label>
+<label class="p-switch p-switch-touch"><input type="checkbox" /><span></span></label>
+<label class="p-switch p-switch-touch p-sys-blue"><input type="checkbox" checked /><span></span></label>
+<label class="p-switch p-switch-touch"><input type="checkbox" checked disabled /><span></span></label>`}
+  snippet={`<label class="p-switch p-switch-touch">
+  <input type="checkbox" checked />
+  <span></span>
+</label>`}
+/>
+
+| Part | Value |
+|---|---|
+| Track | 64 x 28px, full capsule |
+| Knob | 39 x 24px, 2px inset, travels 21px |
+| On | `--p-sys-green`, `#34C759` light and `#30D158` dark |
+| Off | `rgba(60,60,67,0.30)` light, `rgba(235,235,245,0.30)` dark |
+| Target | 44px, the label carries the extra height |
+
+The knob is a wide lozenge, not a circle. It is 39px across on a 64px track, so it fills most of the control and leaves 21px of travel.
+
+Switches default to green. Add any `.p-sys-*` class to retint one, and the green steps aside. Consider keeping green unless the switch controls something the accent color already stands for.
+
+A switch takes effect immediately. If the change needs a Save button, it is not a switch, it is a checkbox in a form.
+
+### The morph
+
+Flipping a switch grows the knob into a translucent lens, travels it across the track, and sets it down on the far side. The lens overhangs the track edge by 4.5px at the peak, blurring the track color through itself.
+
+This is the same animation the desktop switch uses, scaled by tokens rather than rewritten. The geometry is `--p-switch-track-w`, `--p-switch-track-h`, `--p-switch-knob-w`, and `--p-switch-knob-inset`; travel is derived from them, so a size variant cannot drift out of alignment. Browsers without `@property` fall back to a plain slide and the markup is identical.
+
+### State without color
+
+<Showcase
+  name="mobile-switch-labels"
+  compact
+  snippet={`<label class="p-switch p-switch-touch p-switch-labels">
+  <input type="checkbox" checked />
+  <span></span>
+</label>`}
+  code={`<label class="p-switch p-switch-touch p-switch-labels"><input type="checkbox" checked /><span></span></label>
+<label class="p-switch p-switch-touch p-switch-labels"><input type="checkbox" /><span></span></label>`}
+/>
+
+On and off differ by color and by knob position, and at a glance the color is doing most of the work. Green against gray is exactly the comparison that green-weak vision flattens. `.p-switch-labels` draws a bar on the track when the switch is on and a ring when it is off, so the state survives without color.
+
+The same glyphs appear automatically under `prefers-contrast: more`, on every switch, without the class. Consider adding the class outright on switches that control something consequential.
+
+## Segmented controls
+
+<Showcase
+  name="mobile-segmented"
+  code={`<div class="p-segmented p-segmented-touch" role="group" aria-label="View" style="width: 320px;">
+  <label class="p-segment"><input type="radio" name="ms-a" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="ms-a" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="ms-a" /><span>Month</span></label>
+</div>
+<div class="p-segmented p-segmented-touch" role="group" aria-label="Sort" style="width: 320px;">
+  <label class="p-segment"><input type="radio" name="ms-b" checked /><span>All</span></label>
+  <label class="p-segment"><input type="radio" name="ms-b" /><span>Unread</span></label>
+</div>`}
+  snippet={`<div class="p-segmented p-segmented-touch" role="group" aria-label="View">
+  <label class="p-segment"><input type="radio" name="view" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="view" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="view" /><span>Month</span></label>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Track | 32px tall, 16px radius, `rgba(118,118,128,0.12)` light and `0.24` dark |
+| Pill | 28px tall, 14px radius, inset 2px, 4px between segments |
+| Pill fill | `#FFFFFF` light, `#636366` dark |
+| Label | 13px, weight 590, tracking -0.08px |
+| Large | `.p-segmented-touch-large`, 36px track holding a 32px pill |
+
+The pill is white, so the selected label keeps its own color instead of flipping to white the way the macOS control does.
+
+Those three numbers, a 2px inset and a 4px gap on a 32px track, reproduce iOS pill widths at every segment count. On a 370px track it gives 181px at two segments, 119.33px at three, 88.5px at four, and 70px at five. The pill width is computed from the segment count rather than tabulated, so it stays exact at any track width.
+
+It is still a radio group. Arrow keys move the selection, form submission works, and no JavaScript is involved. The pill slides between segments where `:has()` is available and crossfades where it is not.
+
+Five segments is the practical ceiling on a phone. Below about 60px a label truncates and the target gets hard to hit.
+
+## Sliders
+
+<Showcase
+  name="mobile-slider"
+  align="start"
+  code={`<div style="display: grid; gap: 20px; width: 320px;">
+  <input class="p-slider p-slider-touch" type="range" min="0" max="100" value="60" style="--p-slider-fill: 60%;" aria-label="Volume" />
+  <input class="p-slider p-slider-touch" type="range" min="0" max="100" value="30" style="--p-slider-fill: 30%;" aria-label="Brightness" />
+  <input class="p-slider p-slider-touch" type="range" min="0" max="100" value="45" style="--p-slider-fill: 45%;" disabled aria-label="Disabled example" />
+</div>`}
+  snippet={`<input class="p-slider p-slider-touch" type="range"
+       min="0" max="100" value="60"
+       style="--p-slider-fill: 60%;" aria-label="Volume" />`}
+/>
+
+| Part | Value |
+|---|---|
+| Track | 6px tall, 3px radius |
+| Track fill | `rgba(120,120,120,0.20)` light, `rgba(120,120,128,0.36)` dark |
+| Filled portion | `#0088FF` light, `#0091FF` dark |
+| Thumb | 28px circle, `0 3px 8px rgba(0,0,0,0.15)` over two tighter layers |
+| Focus | 4px accent ring on the thumb |
+
+The 6px track is thicker than the pointer slider's, and the 28px thumb is its own tap target, so the control needs no extra hit area.
+
+Firefox paints the filled portion natively through `::-moz-range-progress`. WebKit has no equivalent pseudo-element, so the fill is a gradient sized by `--p-slider-fill`.
+
+`sliders.js` publishes that variable on every `.p-slider`, so loading it once fills both the pointer and the touch slider. The control works without it; the track just reads unfilled in Safari and Chrome.
+
+```html
+<script type="module" src="/js/sliders.js"></script>
+```
+
+Always give a slider an `aria-label` or a visible label. A bare track announces as "slider" and nothing else.
+
+`.p-progress-touch` is the same 6px track without a thumb, so a progress bar and a slider read as the same object in two states.
+
+<Showcase
+  name="mobile-progress"
+  align="start"
+  compact
+  snippet={`<progress class="p-progress p-progress-touch" value="0.6" max="1"></progress>`}
+  code={`<div style="display: grid; gap: 16px; width: 320px;">
+  <progress class="p-progress p-progress-touch" value="0.6" max="1"></progress>
+  <progress class="p-progress p-progress-touch" value="0.25" max="1"></progress>
+</div>`}
+/>
+
+## Page controls
+
+<Showcase
+  name="mobile-page-control"
+  compact
+  code={`<nav class="p-page-control" aria-label="Page">
+  <a class="p-page-dot" href="#pc1" aria-current="true"><span>Page 1</span></a>
+  <a class="p-page-dot" href="#pc2"><span>Page 2</span></a>
+  <a class="p-page-dot" href="#pc3"><span>Page 3</span></a>
+  <a class="p-page-dot" href="#pc4"><span>Page 4</span></a>
+  <a class="p-page-dot" href="#pc5"><span>Page 5</span></a>
+</nav>`}
+  snippet={`<nav class="p-page-control" aria-label="Page">
+  <a class="p-page-dot" href="#page-1" aria-current="true"><span>Page 1</span></a>
+  <a class="p-page-dot" href="#page-2"><span>Page 2</span></a>
+  <a class="p-page-dot" href="#page-3"><span>Page 3</span></a>
+</nav>`}
+/>
+
+Dots are 8px on a 16px pitch. The current one is `rgba(0,0,0,0.85)`, the rest `rgba(0,0,0,0.30)`, and both flip in dark mode. `aria-current` carries the state, the same as the tab bar.
+
+An 8px dot is nowhere near a tap target. The row is 44px tall, and each dot extends its own target to the full row height and to exactly the 16px pitch across, through an absolutely positioned pseudo-element. The dots stay 8px, the layout does not move, and neighbouring targets never overlap and steal each other's taps.
+
+That still leaves a 16px-wide target, under the 44px guidance. Dots indicate position first and accept taps second, which is what iOS does; swiping the content is the primary way through a paged set. Consider not making the dots the only way to move between pages.
+
+Use `.p-page-control-light` over a photo, where the page content sets the contrast rather than the page background.
+
+Each dot holds a visually clipped label. It stays in the accessibility tree, so the control announces as a list of pages rather than a row of unlabelled links.
+
+For long sets iOS shrinks the dots nearest the ends instead of wrapping. `page_controls.js` applies `.p-page-dot-sm` (6px) and `.p-page-dot-xs` (4px) to the right dots as the current page moves, and keeps a set of seven or fewer at full size.
+
+Point the control at a scrolling pager and the two stay in step, in both directions:
+
+```html
+<div class="p-pager" id="gallery">…</div>
+<nav class="p-page-control" data-p-pages="#gallery" aria-label="Page">…</nav>
+```
+
+```html
+<script type="module" src="/js/page_controls.js"></script>
+```
+
+Without `data-p-pages` the dots still shrink and still respond to taps; only the scroll sync is skipped.
+
+## Steppers
+
+<Showcase
+  name="mobile-stepper"
+  code={`<div class="p-stepper-field p-stepper-field-touch">
+  <input class="p-field p-field-touch" type="number" value="2" aria-label="Guests" />
+  <span class="p-stepper p-stepper-touch">
+    <button type="button" data-p-step="down" aria-label="Decrease"></button>
+    <button type="button" data-p-step="up" aria-label="Increase"></button>
+  </span>
+</div>`}
+  snippet={`<div class="p-stepper-field p-stepper-field-touch">
+  <input class="p-field p-field-touch" type="number" value="2" aria-label="Guests" />
+  <span class="p-stepper p-stepper-touch">
+    <button type="button" data-p-step="down" aria-label="Decrease"></button>
+    <button type="button" data-p-step="up" aria-label="Increase"></button>
+  </span>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Control | 92 x 32px, full capsule at 16px radius |
+| Half | 46 x 32px each, the tap target and the shape are the same box |
+| Fill | `rgba(116,116,128,0.08)` light, `rgba(118,118,128,0.18)` dark |
+| Pressed | `rgba(0,0,0,0.08)` over the half being held |
+| Divider | 1 x 24px, `rgba(60,60,67,0.30)`, 4px inset |
+| Glyphs | Minus and plus at 14px, not chevrons |
+
+iOS lays the stepper out horizontally, where the pointer version stacks two chevrons in a 20 x 24 box. It is minus and plus rather than down and up, which is the same operation described the way a phone describes it.
+
+The stepper holds no value of its own. Pair it with a narrow field, which is what `.p-stepper-field` already does for the pointer size. `.p-stepper-field-touch` widens the gap to 12px and sizes the field at 72px, enough for a few digits, with the value centered.
+
+The native number spinners are suppressed, since the stepper already does that job. Without this, the field shows its own arrows next to the stepper's.
+
+Each half is 46px wide and 32px tall. That clears 44px across but not down, so a stepper standing alone in a row wants the row to supply the height. Inside a `.p-list-touch` row it gets 52px for free.
+
+Wire the buttons up yourself, or use `steppers.js`. The CSS carries no behavior.
+
+## Labels
+
+<Showcase
+  name="mobile-labels"
+  align="start"
+  compact
+  code={`<div style="display: grid; gap: 4px; width: 280px;">
+  <span class="p-label">Notifications</span>
+  <span class="p-sublabel">Allow alerts while the app is closed.</span>
+</div>`}
+/>
+
+`.p-label` is 13px at weight 510 in `--p-text-primary`. `.p-sublabel` is the same size in `--p-text-secondary` and carries the explanation. Put the why in the sublabel, not in a tooltip. There is no hover on a phone, so a tooltip is unreachable.
+
+## States
+
+**Focus** draws a 4px ring in `--p-field-ring-focus-outer`, wider than the 3.5px pointer ring so it stays visible next to a filled background. It appears for keyboard and switch control navigation. Never remove it.
+
+**Disabled** drops fields to `--p-field-bg-disabled` with placeholder-colored text, and fades switches to 50%. The cursor becomes `not-allowed`. Consider hiding a control people cannot use rather than disabling it, unless the disabled state itself is the information.
+
+**Invalid** is not styled automatically. The v1 `.p-form-text` classes tied red borders to `:invalid`, which fires while someone is still typing. Add your own class on blur instead.
+
+## Dark mode
+
+Field and select fills move from 12% to 24%. The switch off-track flips from `rgba(60,60,67,0.30)` to `rgba(235,235,245,0.30)`, and green shifts from `#34C759` to `#30D158`. Text and placeholder colors follow their tokens.
+
+Put `.p-auto-dark-mode` on the body to follow the system, or `.p-dark-mode` to pin it.
+
+## Accessibility
+
+Every field needs a label associated by `for` and `id`, or wrapped around the input. A `.p-label` that only sits nearby is a visual label, not an accessible one.
+
+A switch is a real `<input type="checkbox">` inside a `<label>`, so it is reachable by keyboard, toggles with Space, and announces its checked state without any ARIA. Do not replace it with a `<div role="switch">`.
+
+Reduced motion removes the field transitions and the switch morph. The switch still moves between states, it just arrives without the lens.
+
+Increased contrast turns on the switch glyphs described above.
+
+## What is not here yet
+
+Combo boxes, pop-up buttons, and pull-down buttons ship at pointer sizes only. See <a href={`${import.meta.env.BASE_URL}docs/desktop/forms/`}>desktop forms</a> for what those controls do today.
+
+For choosing one option from a list on touch, there are three shapes and they suit different situations:
+
+| Use | When |
+|---|---|
+| `.p-select-touch` | The list is plain text and any length. Opens the platform's own picker. |
+| <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>Action sheet</a> | Options need icons, subtitles, or a destructive one set apart. |
+| <a href={`${import.meta.env.BASE_URL}docs/mobile/menus/`}>Menu</a> | The control stays on screen and the list is short. |
+
+Checkboxes and radios are also pointer-sized. iOS expresses the same choices through lists: a row with a checkmark for a checkbox, and a group of rows with one checkmark for a radio group.
+
+## Migration from v1
+
+| v1 | v2 |
+|---|---|
+| `.p-form-text`, `.p-form-text-alt` | `.p-field` + `.p-field-touch` |
+| `.p-form-select` | `.p-select` + `.p-select-touch` |
+| `.p-form-switch` | `.p-switch` + `.p-switch-touch` |
+| `.p-form-label` | `.p-label` |
+| `.p-form-no-validate` | not needed, v2 does not style `:invalid` |
+
+The v1 classes still work through 2.x. The v2 controls need no wrapper for text fields and no JavaScript anywhere.

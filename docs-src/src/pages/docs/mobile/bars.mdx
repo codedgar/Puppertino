@@ -1,0 +1,167 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Bars
+description: The iOS navigation bar and toolbar. Large titles, compact titles, and a floating toolbar capsule on the same glass as the tab bar.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/lists.css';
+import '@puppertino/toolbars.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A navigation bar sits across the top of a screen and carries its title and its actions. A toolbar floats at the bottom and holds the actions that operate on what is showing.
+
+## When to use them
+
+Use a navigation bar on every screen that has a title, which is nearly all of them. It is where people look to find out where they are and how to get back.
+
+Use a toolbar for actions that apply to the current screen: share, delete, add, filter. Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/tabs/`}>tab bar</a> instead when the buttons move between sections rather than doing something. An app can carry both, and they sit on the same glass so they read as one material.
+
+## Navigation bars
+
+<Showcase
+  name="nav-bar-large"
+  align="start"
+  snippet={`<header class="p-nav-bar">
+  <div class="p-nav-bar__row">
+    <button class="p-nav-bar__action" type="button">Back</button>
+    <button class="p-nav-bar__action" type="button">Edit</button>
+  </div>
+  <h1 class="p-nav-bar__large">Library</h1>
+</header>`}
+  code={`<div style="width: 390px; border-radius: 16px; overflow: hidden;">
+  <header class="p-nav-bar">
+    <div class="p-nav-bar__row">
+      <button class="p-nav-bar__action" type="button">Back</button>
+      <button class="p-nav-bar__action" type="button">Edit</button>
+    </div>
+    <h1 class="p-nav-bar__large">Library</h1>
+  </header>
+  <ul class="p-list p-list-touch">
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Recently Added</span></span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Artists</span></span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Albums</span></span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+  </ul>
+</div>`}
+/>
+
+| Style | Value |
+|---|---|
+| Large title | 34px Bold, line height 41px, tracking +0.4px |
+| Large title subtitle | 15px, weight 510, tracking -0.25px |
+| Compact title | 17px, weight 590, tracking -0.43px |
+| Compact title with subtitle | 15px/590 over 12px/510 |
+| Action | 17px, weight 510, in the accent |
+| Row | 44px minimum |
+| Surface | `rgba(255,255,255,0.65)` light, `rgba(40,40,42,0.65)` dark, blur 30px |
+
+The large title is the only place in iOS with **positive** tracking. Everything else at 17px and above tightens; at 34px SF Pro opens back up by 0.4px. Getting this wrong is the fastest way to make a header look not-quite-right.
+
+The large title takes its own row under the actions and is left aligned. The compact title sits in the action row and is centered.
+
+<Showcase
+  name="nav-bar-compact"
+  align="start"
+  snippet={`<header class="p-nav-bar p-nav-bar-bordered">
+  <div class="p-nav-bar__row">
+    <button class="p-nav-bar__action" type="button">Back</button>
+    <h1 class="p-nav-bar__title">Albums</h1>
+    <button class="p-nav-bar__action" type="button">Edit</button>
+  </div>
+</header>`}
+  code={`<div style="display: grid; gap: 16px; width: 390px;">
+  <header class="p-nav-bar p-nav-bar-bordered">
+    <div class="p-nav-bar__row">
+      <button class="p-nav-bar__action" type="button">Back</button>
+      <h1 class="p-nav-bar__title">Albums</h1>
+      <button class="p-nav-bar__action" type="button">Edit</button>
+    </div>
+  </header>
+  <header class="p-nav-bar p-nav-bar-bordered">
+    <div class="p-nav-bar__row">
+      <button class="p-nav-bar__action" type="button">Back</button>
+      <span class="p-nav-bar__titles">
+        <span class="p-nav-bar__title">Now Playing</span>
+        <span class="p-nav-bar__subtitle">Shuffled</span>
+      </span>
+      <button class="p-nav-bar__action" type="button">Done</button>
+    </div>
+  </header>
+</div>`}
+/>
+
+The action row is a three-column grid, so the title is centered on the bar rather than on the space the actions leave over. A bar with one action on the left still centers its title.
+
+Wrap a title and subtitle in `.p-nav-bar__titles` when the screen needs both. The title drops to 15px and the subtitle sits under it at 12px.
+
+Add `.p-nav-bar-bordered` for a hairline under the bar. Consider it when the bar sits over scrolling content and needs an edge; skip it when the bar sits over a solid background.
+
+Actions are plain text in the accent, which is what iOS does. Consider a `.p-button-touch-small` only when an action needs to read as the screen's primary one.
+
+## Toolbars
+
+<Showcase
+  name="toolbar-touch"
+  code={`<div class="p-toolbar-touch">
+  <button class="p-toolbar-touch__item" type="button" aria-label="Share"><i class="ph-bold ph-share-network"></i></button>
+  <button class="p-toolbar-touch__item" type="button" aria-label="Add"><i class="ph-bold ph-plus"></i></button>
+  <span class="p-toolbar-touch__divider"></span>
+  <button class="p-toolbar-touch__item" type="button" aria-label="Filter"><i class="ph-bold ph-funnel"></i></button>
+  <button class="p-toolbar-touch__item" type="button" aria-label="Delete"><i class="ph-bold ph-trash"></i></button>
+</div>
+<div class="p-toolbar-touch">
+  <button class="p-toolbar-touch__item" type="button">Select</button>
+  <button class="p-toolbar-touch__item" type="button" aria-label="More"><i class="ph-bold ph-dots-three"></i></button>
+</div>`}
+  snippet={`<div class="p-toolbar-touch">
+  <button class="p-toolbar-touch__item" type="button" aria-label="Share">
+    <i class="ph-bold ph-share-network"></i>
+  </button>
+  <span class="p-toolbar-touch__divider"></span>
+  <button class="p-toolbar-touch__item" type="button" aria-label="Delete">
+    <i class="ph-bold ph-trash"></i>
+  </button>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Capsule | 48px tall, 24px radius, 2px padding |
+| Item | 44 x 44px circle, 20px glyph |
+| Labelled item | Grows to a capsule, 16px padding, 22px radius |
+| Divider | 1 x 24px |
+| Surface | The same glass as the navigation bar and the tab bar |
+
+The toolbar hugs its content rather than spanning the screen. Each item is a 44px circle, so every one is its own tap target with nothing extra needed.
+
+An item with a label instead of a glyph grows into a capsule automatically, through `:not(:has(> i, > svg))`. The markup is the same either way.
+
+Use `.p-toolbar-touch__divider` to separate groups of actions inside one capsule, and a second `.p-toolbar-touch` when the groups should read as separate objects.
+
+Add `.p-toolbar-touch-fixed` to float it 12px above the bottom edge, or above the home indicator where there is one. Content scrolls visibly underneath, so give the scrolling region bottom padding.
+
+An icon-only item carries no text, so it needs an `aria-label`.
+
+## The three bars together
+
+An app's navigation bar, toolbar, and tab bar all read from `--p-bar-surface` and the tab bar's own matching token, so they are the same glass at the same blur. Changing one changes the set.
+
+Do not put a toolbar and a tab bar at the bottom at the same time. iOS picks one. Two floating capsules stacked at the bottom of a phone is most of the reachable area gone.
+
+## Dark mode
+
+Surfaces move to `rgba(40,40,42,0.65)`, titles from `#1A1A1A` to `#F5F5F5`, subtitles and separators through their tokens, and the accent from `#0088FF` to `#0091FF`.
+
+## Accessibility
+
+Use `<header>` for the navigation bar and a real heading element for the title, so the page outline matches what people see.
+
+The navigation bar pads for `env(safe-area-inset-top)`, which is where the status bar and the notch live. The toolbar clears the home indicator through `env(safe-area-inset-bottom)` with a 12px floor.
+
+Every row and every item is at least 44px.
+
+Reduced transparency and browsers without `backdrop-filter` get an opaque surface. Forced colors hands the bars to the system palette with `LinkText` on the actions.
+
+## The macOS toolbar
+
+`toolbars.css` ships both. `.p-toolbar-group` and `.p-toolbar-btn` are the macOS toolbar, which lives in a window's title bar and is sized for a pointer. `.p-toolbar-touch` is this one. They share a file and nothing else.

@@ -1,0 +1,174 @@
+---
+layout: ../../layouts/Doc.astro
+title: Layout
+description: Size classes, split views, containers, and readable width. How a layout adapts between a phone, an iPad, and an iPad sharing its screen with another app.
+---
+
+import '@puppertino/adaptive.css';
+import '@puppertino/sidebars.css';
+import '@puppertino/lists.css';
+import '@puppertino/tabs.css';
+import '@puppertino/empty-states.css';
+import Showcase from '../../components/Showcase.astro';
+
+A layout has to work at more than one width. This page covers the model Apple uses to describe those widths, and the classes that respond to them.
+
+## Size classes
+
+Apple describes every screen by a pair of size classes, horizontal and vertical, each either **compact** or **regular**. The horizontal one is what matters on the web.
+
+| Context | Horizontal size class |
+|---|---|
+| iPhone, portrait | Compact |
+| iPhone, landscape | Compact |
+| iPad, full screen | Regular |
+| iPad, half or two-thirds Split View | Regular |
+| iPad, Slide Over or one-third Split View | **Compact** |
+
+That last row is the reason this exists. An iPad app can be 320pt wide while running, because someone dragged another app alongside it. **"iPad" is a range of widths, not a device.**
+
+So there is no iPad layout to design. There is what happens at regular width, what happens at compact, and the app moving between them without reloading.
+
+The boundary is **768px**, the web equivalent of Apple's split around 507pt.
+
+Only the horizontal size class is implemented. The vertical one has no useful web equivalent, since a browser has no home indicator or navigation bar to lay out around.
+
+## Split view
+
+A split view is the structure iPad apps are built on: a sidebar for sections, optionally a supplementary list, and a content pane.
+
+<Showcase
+  name="split-view"
+  align="start"
+  snippet={`<div class="p-split-view">
+  <div class="p-split-view__sidebar">
+    <nav class="p-sidebar p-sidebar-touch">…</nav>
+  </div>
+  <div class="p-split-view__content">
+    <div class="p-pane-scroll">…</div>
+  </div>
+</div>`}
+  code={`<div class="p-split-view" style="border-radius: 16px; overflow: hidden; min-height: 300px; background: var(--p-bg-secondary);">
+  <div class="p-split-view__sidebar" style="background: var(--p-bg-primary);">
+    <nav class="p-sidebar p-sidebar-touch" style="width: 100%; border-radius: 0; background: none; backdrop-filter: none;">
+      <a class="p-sidebar-row" href="#lv1" aria-current="page"><i class="p-sidebar-icon ph-bold ph-tray"></i><span>Inbox</span><span class="p-sidebar-detail">3</span></a>
+      <a class="p-sidebar-row" href="#lv2"><i class="p-sidebar-icon ph-bold ph-star"></i><span>Starred</span></a>
+      <a class="p-sidebar-row" href="#lv3"><i class="p-sidebar-icon ph-bold ph-archive"></i><span>Archive</span></a>
+    </nav>
+  </div>
+  <div class="p-split-view__content">
+    <div class="p-pane-scroll">
+      <ul class="p-list p-list-touch">
+        <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Ada Lovelace</span><span class="p-list-subtitle">Re: analytical engine</span></span><span class="p-list-detail">9:41 AM</span></li>
+        <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Grace Hopper</span><span class="p-list-subtitle">Compiler notes</span></span><span class="p-list-detail">Yesterday</span></li>
+      </ul>
+    </div>
+  </div>
+</div>`}
+/>
+
+| Class | What it does |
+|---|---|
+| `.p-split-view` | Two columns at regular width, one at compact |
+| `.p-split-view-triple` | Three columns: sidebar, supplementary, content |
+| `.p-split-view-collapsed` | Hides the sidebar at regular width, for the toggle every iPad app has |
+| `.p-split-view__sidebar` | 320px, matching `.p-sidebar-touch` |
+| `.p-split-view__supplementary` | 320px middle column |
+| `.p-split-view__content` | Fills the rest |
+
+At compact width the sidebar and supplementary panes are removed rather than squeezed, and the content pane fills. **A collapsed split view has no navigation in it**, so pair it with a tab bar or a back button.
+
+Resize this page below 768px and the preview above drops to one column.
+
+## Adapting between the two
+
+Several components come in a regular shape and a compact one. The pairs are:
+
+| Regular | Compact |
+|---|---|
+| Sidebar | Tab bar, or a pushed navigation stack |
+| Popover | Sheet |
+| Split view, side by side | One column with drill-down |
+
+`.p-regular-only` and `.p-compact-only` switch between them.
+
+```html
+<nav class="p-sidebar p-sidebar-touch p-regular-only" aria-label="Sections">…</nav>
+<nav class="p-tab-bar p-tab-bar-fixed p-compact-only" aria-label="Sections">…</nav>
+```
+
+Both are in the DOM and one is hidden, which costs some duplicate markup and needs no JavaScript. If you would rather render one or the other, the breakpoint is 768px and these classes are not required.
+
+These utilities only ever **hide**. Nothing here sets an element visible, so a component keeps whatever `display` it defines for itself, whether that is `block`, `flex`, or `grid`. Showing by breakpoint would have to guess that value and would get it wrong for the tab bar.
+
+<Showcase
+  name="adaptive-visibility"
+  compact
+  snippet={false}
+  code={`<div style="display: grid; gap: 8px; text-align: center;">
+  <span class="p-regular-only" style="padding: 8px 16px; border-radius: 8px; background: var(--p-fill-tertiary);">Visible at regular width</span>
+  <span class="p-compact-only" style="padding: 8px 16px; border-radius: 8px; background: var(--p-fill-tertiary);">Visible at compact width</span>
+</div>`}
+/>
+
+## Containers and margins
+
+iOS uses 16px content margins at compact width and 20px at regular. `.p-container` does that, and centres itself.
+
+```html
+<div class="p-container">…</div>
+```
+
+`.p-pane-scroll` is the same margins on a column that scrolls independently, so a split view scrolls per pane rather than as one page.
+
+## Readable width
+
+Body text stops being comfortable somewhere around 672px. On a 1024px iPad, a paragraph running the full width is a paragraph people lose their place in.
+
+| Class | Use |
+|---|---|
+| `.p-readable` | Caps the text, so images and rules beside it can still go full width |
+| `.p-container-readable` | Caps the container, when everything inside should be measured |
+
+```html
+<article class="p-container">
+  <img src="hero.jpg" alt="" />          <!-- full width -->
+  <div class="p-readable">
+    <p>…</p>                             <!-- capped at 672px -->
+  </div>
+</article>
+```
+
+## Tokens
+
+| Token | Default |
+|---|---|
+| `--p-size-regular` | `768px` |
+| `--p-margin-compact` | `16px` |
+| `--p-margin-regular` | `20px` |
+| `--p-readable-width` | `672px` |
+| `--p-split-sidebar` | `320px` |
+| `--p-split-supplementary` | `320px` |
+| `--p-split-gap` | `0px` |
+
+`--p-size-regular` is documentation rather than a working value. A custom property cannot be used inside a media query, so the breakpoint is written literally in the queries. Changing one means changing the other.
+
+## Accessibility
+
+An element hidden with `.p-regular-only` or `.p-compact-only` is `display: none`, so it leaves the accessibility tree as well as the page. That is what you want for a duplicate navigation: only one sidebar or tab bar is announced at a time.
+
+Give the visible pair the same `aria-label`, so the section a person is in reads the same at either width.
+
+A content pane with nothing selected is an <a href={`${import.meta.env.BASE_URL}docs/mobile/empty-states/`}>empty state</a>, not a blank column. On iPad the detail pane is visible before anything is chosen, and an empty column reads as a loading failure.
+
+## Not layout.css
+
+`layout.css` is a v1 file that, despite the name, sets type sizes: `.p-layout h1`, `.p-headline`, `.p-caption`. It is unrelated to this page.
+
+The classes here live in `adaptive.css`, imported by name:
+
+```js
+import '@codedgar/puppertino/adaptive'
+```
+
+Both are in all three bundles, so if you are using one of those you already have this.

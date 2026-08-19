@@ -119,15 +119,21 @@
 
 :root {
   --p-segment-separator: #D9D9D9;
+  --p-segmented-touch-track: rgba(118, 118, 128, 0.12);
+  --p-segmented-touch-pill: #ffffff;
 }
 
 .p-dark-mode {
   --p-segment-separator: rgba(255, 255, 255, 0.15);
+  --p-segmented-touch-track: rgba(118, 118, 128, 0.24);
+  --p-segmented-touch-pill: #636366;
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
     --p-segment-separator: rgba(255, 255, 255, 0.15);
+    --p-segmented-touch-track: rgba(118, 118, 128, 0.24);
+    --p-segmented-touch-pill: #636366;
   }
 }
 
@@ -136,6 +142,8 @@
 .p-light-mode,
 [data-p-theme="lightmode"] {
   --p-segment-separator: #D9D9D9;
+  --p-segmented-touch-track: rgba(118, 118, 128, 0.12);
+  --p-segmented-touch-pill: #ffffff;
 }
 
 .p-segmented {
@@ -336,5 +344,94 @@
   .p-segment:not(:first-child)::before,
   .p-segmented::before {
     transition: none;
+  }
+}
+
+/* ─── Touch size (iOS) ─────────────────────────────────────────────── */
+/* iOS runs a taller track than macOS and separates the pill from the
+   track on every side: a 32px capsule holding a 28px pill, inset 2px,
+   with 4px between segments. Those three numbers reproduce the
+   reference pill widths exactly at every segment count (181 at two,
+   119.33 at three, 88.5 at four, 70 at five on a 370px track).
+
+   The pill is white rather than accent-tinted, so the label keeps its
+   own color instead of flipping to white the way macOS does. */
+
+.p-segmented-touch {
+  --p-seg-pad: 2px;
+  --p-seg-gap: 4px;
+
+  height: 32px;
+  border-radius: 16px;
+  background: var(--p-segmented-touch-track);
+}
+
+.p-segmented-touch-large {
+  height: 36px;
+  border-radius: 18px;
+}
+
+.p-segmented-touch .p-segment > span {
+  min-width: 0;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 590;
+  letter-spacing: -0.08px;
+}
+
+/* Separators sit inside the taller track. */
+.p-segmented-touch .p-segment:not(:first-child)::before {
+  top: 8px;
+  bottom: 8px;
+}
+
+/* The label never inverts, because the pill underneath it is white. */
+.p-segmented-touch .p-segment > input:checked + span {
+  background: var(--p-segmented-touch-pill);
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-segmented-touch .p-segment:active > input:checked:not(:disabled) + span {
+  background: var(--p-segmented-touch-pill);
+}
+
+.p-segmented-touch input:disabled:checked + span {
+  color: var(--p-text-tertiary, rgba(0, 0, 0, 0.25));
+}
+
+@supports selector(:has(*)) {
+  /* Pill width is the track minus both insets and every gap, divided by
+     the segment count. Position steps by one pill plus one gap. */
+  .p-segmented-touch {
+    --p-seg-pill-w: calc(
+      (100% - 2 * var(--p-seg-pad) - (var(--p-seg-count) - 1) * var(--p-seg-gap))
+      / var(--p-seg-count)
+    );
+  }
+
+  .p-segmented-touch::before {
+    top: var(--p-seg-pad);
+    bottom: var(--p-seg-pad);
+    left: calc(
+      var(--p-seg-pad) + var(--p-seg-index) * (var(--p-seg-pill-w) + var(--p-seg-gap))
+    );
+    width: var(--p-seg-pill-w);
+    border-radius: 14px;
+
+    background: var(--p-segmented-touch-pill);
+    box-shadow:
+      0 3px 8px rgba(0, 0, 0, 0.12),
+      0 3px 1px rgba(0, 0, 0, 0.04);
+  }
+
+  .p-segmented-touch:has(.p-segment:active > input:checked:not(:disabled))::before {
+    background: var(--p-segmented-touch-pill);
+  }
+
+  /* Touch has no hover and no plus-darker press on the pill; the label
+     dims instead, matching the other touch controls. */
+  .p-segmented-touch:has(.p-segment:active > input:checked:not(:disabled)) .p-segment > input:checked + span {
+    opacity: 0.6;
   }
 }

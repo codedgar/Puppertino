@@ -1,0 +1,124 @@
+/* Puppertino v2.0 — Empty states (iOS and iPadOS)
+   What a screen shows when it has nothing to show: a glyph, a short
+   message, a sentence explaining it, and one action that fixes it.
+
+   Markup:
+   <div class="p-empty-state">
+     <i class="p-empty-state__glyph ph-bold ph-tray"></i>
+     <h2 class="p-empty-state__title">No Messages</h2>
+     <p class="p-empty-state__message">Messages you receive will appear here.</p>
+     <a class="p-button p-button-touch-large p-button-primary p-empty-state__action"
+        href="/new/">Start a Conversation</a>
+   </div> */
+
+:root {
+  --p-empty-title: rgba(0, 0, 0, 0.85);
+  --p-empty-message: rgba(60, 60, 67, 0.6);
+  --p-empty-glyph: #0088ff;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-empty-title: rgba(255, 255, 255, 0.92);
+  --p-empty-message: rgba(235, 235, 245, 0.6);
+  --p-empty-glyph: #0091ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-empty-title: rgba(255, 255, 255, 0.92);
+    --p-empty-message: rgba(235, 235, 245, 0.6);
+    --p-empty-glyph: #0091ff;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-empty-title: rgba(0, 0, 0, 0.85);
+  --p-empty-message: rgba(60, 60, 67, 0.6);
+  --p-empty-glyph: #0088ff;
+}
+
+.p-empty-state {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  width: 100%;
+  padding: 32px 34px;
+  text-align: center;
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-empty-state * {
+  box-sizing: border-box;
+}
+
+/* Fills the space it is given, so an empty state inside a list or a
+   sheet centres in that region rather than at the top of it. */
+.p-empty-state-fill {
+  flex: 1;
+  min-height: 240px;
+}
+
+.p-empty-state__glyph {
+  margin-bottom: 4px;
+  color: var(--p-empty-glyph);
+  font-size: 41px;
+  line-height: 1;
+}
+
+/* A smaller glyph for an empty state inside a panel rather than a
+   whole screen. */
+.p-empty-state-compact .p-empty-state__glyph {
+  font-size: 22px;
+}
+
+.p-empty-state__title {
+  margin: 0;
+  color: var(--p-empty-title);
+  font-size: 22px;
+  font-weight: 590;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.p-empty-state__message {
+  margin: 0;
+  /* Around 30 characters, which is where a centred sentence stops
+     being comfortable to read. Only binds on a wide screen; on a phone
+     the container is narrower than this. */
+  max-width: 30ch;
+  color: var(--p-empty-message);
+  font-size: 22px;
+  font-weight: 510;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+/* The action is an ordinary touch button, widened and set to the 52px
+   height iOS uses here. Compose it with a button style:
+   .p-button .p-button-touch-large .p-button-primary */
+.p-empty-state__action {
+  --p-button-height: 52px;
+
+  width: 100%;
+  max-width: 334px;
+  margin-top: 20px;
+}
+
+/* Bottom-anchored: iOS often floats the action at the foot of the
+   screen rather than under the text. */
+.p-empty-state-anchored {
+  justify-content: space-between;
+}
+
+.p-empty-state-anchored .p-empty-state__action {
+  margin-top: auto;
+}

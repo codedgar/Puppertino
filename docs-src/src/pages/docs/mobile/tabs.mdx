@@ -1,0 +1,147 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Tabs
+description: The iOS tab bar. A floating glass capsule of two to five sections, sized by one flex rule, no JavaScript.
+---
+
+import '@puppertino/tabs.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A tab bar moves between the top-level sections of an app. It is always visible, always in the same place, and every section is one tap away.
+
+## When to use it
+
+Use a tab bar for the two to five places a person switches between constantly. Home, Search, Library, Profile.
+
+Use it only for peer sections. A tab bar is not a toolbar and not a menu: nothing in it should perform an action, and nothing in it should be a destination people visit once.
+
+Avoid hiding a tab bar on scroll. It shows which section is open as well as offering the others, so hiding it removes the answer to "where am I" at the moment someone is furthest from the top of the screen.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Bar | 360px at most, 62px tall, full capsule at 31px radius |
+| Padding | 0 10px |
+| Surface | `rgba(255,255,255,0.65)` light, `rgba(40,40,42,0.65)` dark, blur 30px, saturate 180% |
+| Tab | Flexes from a 94px basis, capped at 94px |
+| Icon | 18px |
+| Label | 10px, weight 590, line height 12px |
+| Icon to label gap | 3px |
+| Selected | `#0088FF` light, `#0091FF` dark, label tracking -0.1px |
+| Unselected | `#1A1A1A` light, `#F5F5F5` dark |
+
+<Showcase
+  name="tab-bar-basic"
+  align="start"
+  code={`<nav class="p-tab-bar" aria-label="Sections">
+  <a class="p-tab-bar__tab" href="#tb-home" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+  <a class="p-tab-bar__tab" href="#tb-search"><i class="ph-bold ph-magnifying-glass"></i><span>Search</span></a>
+  <a class="p-tab-bar__tab" href="#tb-library"><i class="ph-bold ph-books"></i><span>Library</span></a>
+  <a class="p-tab-bar__tab" href="#tb-profile"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+</nav>`}
+  snippet={`<nav class="p-tab-bar" aria-label="Sections">
+  <a class="p-tab-bar__tab" href="/" aria-current="page">
+    <i class="ph-bold ph-house"></i><span>Home</span>
+  </a>
+  <a class="p-tab-bar__tab" href="/search/">
+    <i class="ph-bold ph-magnifying-glass"></i><span>Search</span>
+  </a>
+  <a class="p-tab-bar__tab" href="/library/">
+    <i class="ph-bold ph-books"></i><span>Library</span>
+  </a>
+</nav>`}
+/>
+
+It is a `<nav>` of links. No JavaScript, no state to manage, no click handlers. The page you are on is the selected tab, and `aria-current="page"` is what says so.
+
+## How the width works
+
+The bar is at most 360px and hugs its content below that. Each tab flexes from a 94px basis and is capped there, so tabs shrink but never grow past 94px.
+
+That one rule produces every width iOS uses. Five tabs share the 340px content box at 68px each. Four land at 85px. Three or fewer keep the full 94px and the bar shrinks to fit them.
+
+<Showcase
+  name="tab-bar-counts"
+  align="start"
+  snippet={false}
+  code={`<div style="display: grid; gap: 16px; justify-items: center;">
+  <nav class="p-tab-bar" aria-label="Two sections">
+    <a class="p-tab-bar__tab" href="#tb2a" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tb2b"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+  </nav>
+  <nav class="p-tab-bar" aria-label="Three sections">
+    <a class="p-tab-bar__tab" href="#tb3a" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tb3b"><i class="ph-bold ph-magnifying-glass"></i><span>Search</span></a>
+    <a class="p-tab-bar__tab" href="#tb3c"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+  </nav>
+  <nav class="p-tab-bar" aria-label="Five sections">
+    <a class="p-tab-bar__tab" href="#tb5a" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tb5b"><i class="ph-bold ph-magnifying-glass"></i><span>Search</span></a>
+    <a class="p-tab-bar__tab" href="#tb5c"><i class="ph-bold ph-books"></i><span>Library</span></a>
+    <a class="p-tab-bar__tab" href="#tb5d"><i class="ph-bold ph-bell"></i><span>Alerts</span></a>
+    <a class="p-tab-bar__tab" href="#tb5e"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+  </nav>
+</div>`}
+/>
+
+Five is the ceiling. At six, tabs drop under 60px and the labels start truncating. If an app has more than five top-level sections, it has a navigation problem that a sixth tab will not solve.
+
+Keep labels to one word. Two words fit at three tabs and truncate at five.
+
+## Floating it
+
+The bar sits inline by default, so it can be dropped into a demo or a phone frame. Add `.p-tab-bar-fixed` to pin it to the bottom of the viewport.
+
+```html
+<nav class="p-tab-bar p-tab-bar-fixed" aria-label="Sections">
+  ...
+</nav>
+```
+
+It floats 12px above the bottom edge, or above the home indicator where `env(safe-area-inset-bottom)` reports one. The bar is a capsule rather than a full-width strip, so content scrolls visibly underneath it. Add bottom padding to the scrolling region so the last item is not permanently parked behind the bar.
+
+## States
+
+**Selected** tints the icon and label to the accent and tightens the label to -0.1px tracking. Both come from `aria-current`, so there is no separate class to keep in sync. `.p-is-active` works too, matching the desktop tabs in the same file.
+
+**Pressed** drops the tab to 50% opacity. There is no hover state, because a tab bar lives on a touch screen.
+
+**Focus** draws a 3px ring in the accent, inset so it stays inside the capsule.
+
+Never rely on color alone to show the selected tab. The icon and label both change color here, which is still one signal. Consider a filled icon variant for the selected tab, swapping `ph-bold` for `ph-fill`, so the shape changes too.
+
+## Dark mode
+
+The surface moves to `rgba(40,40,42,0.65)`, unselected items flip from `#1A1A1A` to `#F5F5F5`, the accent shifts from `#0088FF` to `#0091FF`, and the shadow deepens. The blur is unchanged.
+
+## Accessibility
+
+Use `<nav>` with an `aria-label`, and real links inside it. A tab bar that navigates should be links, not buttons, so the sections can be opened in a new tab and read as destinations.
+
+`aria-current="page"` is what tells a screen reader which section is open. It is required, not decorative, which is why it also drives the visual state.
+
+Tabs are 62px tall and at least 68px wide at five tabs, so every one clears the 44px minimum in both directions without an extra hit area.
+
+Reduced transparency and browsers without `backdrop-filter` get an opaque `#F7F7F7` surface, since a translucent bar over scrolling content cannot be guaranteed to meet 4.5:1. Reduced motion removes the color transition. Forced colors hands the bar to the system palette, with `Highlight` marking the selected tab.
+
+## The other tab components
+
+`tabs.css` ships three things. Pick by platform and by what the tabs do.
+
+| Class | What it is |
+|---|---|
+| `.p-tab-bar` | This component. The iOS bottom tab bar. |
+| `.p-tabs-container` | Desktop segmented tabs with swappable panels, driven by `tabs.js`. |
+| `.p-mobile-tabs` | The v1 mobile tab bar. Full-width strip, `.active` class for state. |
+
+`.p-mobile-tabs` still works and is not going anywhere in 2.x.
+
+| v1 | v2 |
+|---|---|
+| `.p-mobile-tabs` | `.p-tab-bar` |
+| `.p-mobile-tabs a` | `.p-tab-bar__tab` |
+| `.p-mobile-tabs a.active` | `aria-current="page"` |
+| `.p-mobile-tabs--content` | no equivalent, v2 tabs navigate rather than swap panels |
+
+The v1 bar swapped content panels in place. The v2 bar navigates, which is what iOS tab bars do and what makes each section a real URL.

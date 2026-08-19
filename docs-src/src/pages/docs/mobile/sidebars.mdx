@@ -1,0 +1,112 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Sidebars
+description: The iPadOS sidebar. A 320px material panel with 44px capsule rows, for navigating sections beside the content rather than on top of it.
+---
+
+import '@puppertino/sidebars.css';
+import '@puppertino/lists.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A sidebar sits on the leading side of a view and moves between sections. It is the iPad's answer to the tab bar: the same job, done in a column beside the content instead of a bar over it.
+
+## When to use it
+
+Use a sidebar on iPad and in landscape, where there is width to spare beside the content. Use it when the app has more top-level sections than a tab bar's five, or when the sections benefit from being grouped under headings.
+
+Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/tabs/`}>tab bar</a> on iPhone and in compact width. An app can ship both and swap at the split-view threshold, which is what most iPad apps do.
+
+## Anatomy
+
+<Showcase
+  name="sidebar-touch"
+  align="start"
+  snippet={`<nav class="p-sidebar p-sidebar-touch" aria-label="Sections">
+  <input class="p-sidebar-touch__search" type="search" placeholder="Search" aria-label="Search" />
+  <a class="p-sidebar-row" href="/" aria-current="page">
+    <i class="p-sidebar-icon ph-bold ph-house"></i><span>Home</span>
+  </a>
+  <a class="p-sidebar-row" href="/recent/">
+    <i class="p-sidebar-icon ph-bold ph-clock"></i><span>Recents</span>
+    <span class="p-sidebar-detail">12</span>
+  </a>
+</nav>`}
+  code={`<nav class="p-sidebar p-sidebar-touch" aria-label="Sections">
+  <input class="p-sidebar-touch__search" type="search" placeholder="Search" aria-label="Search" />
+  <a class="p-sidebar-row" href="#sb-1" aria-current="page"><i class="p-sidebar-icon ph-bold ph-house"></i><span>Home</span></a>
+  <a class="p-sidebar-row" href="#sb-2"><i class="p-sidebar-icon ph-bold ph-clock"></i><span>Recents</span><span class="p-sidebar-detail">12</span></a>
+  <a class="p-sidebar-row" href="#sb-3"><i class="p-sidebar-icon ph-bold ph-star"></i><span>Favorites</span></a>
+  <div class="p-sidebar-header">Library</div>
+  <a class="p-sidebar-row" href="#sb-4"><i class="p-sidebar-icon ph-bold ph-books"></i><span>Albums</span><span class="p-sidebar-detail">48</span></a>
+  <a class="p-sidebar-row" href="#sb-5"><i class="p-sidebar-icon ph-bold ph-user"></i><span>Artists</span></a>
+  <a class="p-sidebar-row" href="#sb-6"><i class="p-sidebar-icon ph-bold ph-playlist"></i><span>Playlists</span></a>
+</nav>`}
+/>
+
+| Part | Value |
+|---|---|
+| Panel | 320px wide, 20px radius |
+| Background | `rgba(245,245,245,0.72)` light, `rgba(38,38,38,0.72)` dark, blur 30px |
+| Padding | 16px |
+| Row | 44px tall, 22px radius, 12px horizontal padding |
+| Row label | 17px, weight 400, tracking -0.43px |
+| Selected | `rgba(120,120,128,0.16)` fill, accent label at weight 590 |
+| Icon | 22px, in the accent |
+| Detail | 17px, `#727272` light and `#8A8A8A` dark |
+| Section heading | 17px, `rgba(60,60,67,0.60)` |
+| Search | 44px capsule, `rgba(120,120,128,0.12)` |
+
+The panel is a floating material with its own radius, not a flush column attached to the window edge. That is the clearest difference from the macOS sidebar in the same file, which is opaque and edge-to-edge.
+
+Rows are 44px on a 44px pitch, so a selected capsule fills its row with no gap above or below.
+
+The selected row changes three things at once: a quiet capsule fill, the label to the accent, and the weight to 590. The fill on its own is only a 16% tint, which is not enough to carry selection by itself.
+
+Section headings are 17px at 60% rather than the small uppercase label macOS uses. iPadOS keeps headings the same size as the rows.
+
+`.p-sidebar-touch-compact` narrows the panel to 232px for split views that want more room for content.
+
+## Search
+
+The search field is a 44px capsule rather than the 10px box a <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/`}>form field</a> uses, because it sits in chrome rather than in a form.
+
+Use `type="search"`, which gives the on-screen keyboard a Search key instead of Return, and give it an `aria-label` since it has no visible label.
+
+## Collapsing
+
+A sidebar needs width beside the content. Below the split-view threshold there is none, and a sidebar that survives into compact width covers the thing people are trying to read.
+
+`.p-sidebar-touch-collapses` hides the panel below 768px. Pair it with a tab bar for the same sections.
+
+```html
+<nav class="p-sidebar p-sidebar-touch p-sidebar-touch-collapses" aria-label="Sections">…</nav>
+<nav class="p-tab-bar p-tab-bar-fixed" aria-label="Sections">…</nav>
+```
+
+Show one or the other, never both. With both visible, the selected section is marked in two places and they have to be kept in sync.
+
+## Dark mode
+
+The panel moves to `rgba(38,38,38,0.72)`, labels from `#1A1A1A` to `#F5F5F5`, the selected fill from 16% to 32%, and the accent from `#0088FF` to `#0091FF`. The selection fill is doubled in dark mode because a 16% tint disappears against a dark material.
+
+## Accessibility
+
+Use `<nav>` with an `aria-label`, and real links for the rows. `aria-current="page"` marks the open section and drives the visual state, so the two cannot disagree.
+
+Rows are 44px tall and the panel is 320px wide, so every row clears the minimum in both directions.
+
+Focus draws a 3px accent ring inset into the row, matching the capsule radius.
+
+Reduced transparency and browsers without `backdrop-filter` get an opaque panel.
+
+## The macOS sidebar
+
+`sidebars.css` ships both. `.p-sidebar` alone is the macOS one: 13px rows, a 6px radius on the selected row, small uppercase headings, and an opaque background flush to the window edge. Adding `.p-sidebar-touch` swaps it to iPadOS metrics.
+
+| Slot | macOS | Touch |
+|---|---|---|
+| Panel | Flush, opaque, 240px | Floating material, 20px radius, 320px |
+| `.p-sidebar-row` | 13px text, 6px radius | 17px text, 44px tall, 22px radius |
+| Selected | Accent fill, white label | Quiet fill, accent label at 590 |
+| `.p-sidebar-header` | 11px Bold uppercased | 17px at 60% |
+| `.p-sidebar-icon` | 16px | 22px |

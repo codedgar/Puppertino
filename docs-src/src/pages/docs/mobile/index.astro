@@ -14,7 +14,7 @@ const mobile = nav.find((s) => s.heading === 'Mobile components');
   <h2>Get the mobile bundle</h2>
 
   <p>
-    The mobile bundle ships the foundations (colors, typography, materials, layout, shadows, dark mode) plus every component on this page. Nothing desktop-only, so it stays smaller than the full build.
+    The mobile bundle brings only what a touch interface needs: the foundations (colors, typography, materials, layout, shadows, dark mode) plus every component on this page. It leaves out the parts that only make sense with a pointer, like the Dock, the menu bar, windows, tooltips, and scrollbars.
   </p>
 
   <pre><code>{`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino-mobile.min.css">`}</code></pre>
@@ -28,7 +28,7 @@ const mobile = nav.find((s) => s.heading === 'Mobile components');
   </p>
 
   <p>
-    Actions, tabs, and modals are interactive. Each component page documents the small vanilla JavaScript helper it needs; the CSS works without any of them.
+    Most components are CSS only. The ones that open, close, or move need a small vanilla JavaScript helper: <code>modals.js</code> drives alerts, action sheets, and sheets, <code>popovers.js</code> places popovers, <code>datepickers.js</code> fills the calendar, and <code>steppers.js</code> wires the stepper. Each component page names the one it needs, and says plainly where behavior is left to you.
   </p>
 
   <h2>Components</h2>

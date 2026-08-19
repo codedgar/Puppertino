@@ -1,0 +1,108 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Empty states
+description: What a screen shows when it has nothing to show. A glyph, a short message, a sentence, and one action that fixes it.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/empty-states.css';
+import Showcase from '../../../components/Showcase.astro';
+
+An empty state is what a screen shows before it has any content. It explains why the screen is blank and offers the one action that changes that.
+
+## When to use it
+
+Use an empty state anywhere a list, a search, or a whole screen can legitimately have nothing in it: an inbox before the first message, a folder before the first file, a search with no matches.
+
+An empty screen with nothing on it reads as a loading failure. An empty state turns the same screen into an explanation.
+
+Distinguish the three cases, because they need different words:
+
+| Case | Message | Action |
+|---|---|---|
+| Nothing yet | Explain what will appear here | The thing that creates the first one |
+| Nothing found | Say what was searched for | Clear the search or widen it |
+| Nothing to do | Say the work is done | Often none |
+
+## Anatomy
+
+<Showcase
+  name="empty-state"
+  align="start"
+  snippet={`<div class="p-empty-state">
+  <i class="p-empty-state__glyph ph-bold ph-tray"></i>
+  <h2 class="p-empty-state__title">No Messages</h2>
+  <p class="p-empty-state__message">Messages you receive will appear here.</p>
+  <a class="p-button p-button-touch-large p-button-primary p-empty-state__action" href="/new/">
+    Start a Conversation
+  </a>
+</div>`}
+  code={`<div style="width: 402px;">
+  <div class="p-empty-state">
+    <i class="p-empty-state__glyph ph-bold ph-tray"></i>
+    <h2 class="p-empty-state__title">No Messages</h2>
+    <p class="p-empty-state__message">Messages you receive will appear here.</p>
+    <a class="p-button p-button-touch-large p-button-primary p-empty-state__action" href="#es">Start a Conversation</a>
+  </div>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Glyph | 41px, in the accent |
+| Title | 22px, weight 590, line height 28px |
+| Message | 22px, weight 510, `rgba(60,60,67,0.60)` |
+| Message width | 30ch, so a centered sentence stays readable |
+| Action | Full width to 334px, 52px tall, full capsule |
+| Padding | 32px vertical, 34px horizontal |
+
+The message is the same size as the title and one weight lighter, which is unusual. Most interfaces drop the supporting text a size or two. iOS keeps both at 22px and separates them with weight and color instead.
+
+The action is an ordinary touch button with `.p-empty-state__action` widening it and setting the 52px height. Compose it with any button style; primary is the usual choice since an empty state has exactly one thing worth doing.
+
+## Variants
+
+<Showcase
+  name="empty-state-variants"
+  align="start"
+  snippet={false}
+  code={`<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%;">
+  <div class="p-empty-state p-empty-state-compact" style="padding: 20px;">
+    <i class="p-empty-state__glyph ph-bold ph-magnifying-glass"></i>
+    <h2 class="p-empty-state__title">No Results</h2>
+    <p class="p-empty-state__message">No files match “budget”.</p>
+  </div>
+  <div class="p-empty-state" style="padding: 20px;">
+    <h2 class="p-empty-state__title">All Caught Up</h2>
+    <p class="p-empty-state__message">You have read everything in this folder.</p>
+  </div>
+</div>`}
+/>
+
+The glyph and the action are both optional. A "nothing found" state often has no action worth offering, and a "nothing to do" state often needs no glyph.
+
+`.p-empty-state-compact` drops the glyph to 22px, for an empty state inside a panel or a popover rather than filling a screen.
+
+`.p-empty-state-fill` gives the block `flex: 1` and a 240px minimum, so an empty state inside a list or a sheet centers in that region instead of sitting at the top of it.
+
+`.p-empty-state-anchored` pushes the action to the bottom of the available space, which is where iOS puts it on a full screen.
+
+## Writing the content
+
+Title in title case, a few words, naming what is missing. "No Messages", not "Nothing here".
+
+Message as one complete sentence explaining what will appear or why nothing did. Say what was searched for when the state is a search result; "No files match "budget"" is useful in a way that "No results" is not.
+
+Avoid apologising, and avoid exclamation marks. The screen is empty because of where the person is, not because something went wrong.
+
+## Dark mode
+
+The title moves to `rgba(255,255,255,0.92)`, the message to `rgba(235,235,245,0.60)`, and the glyph from `#0088FF` to `#0091FF`.
+
+## Accessibility
+
+Use a real heading for the title so the empty state appears in the page outline, and keep the level consistent with the screen it replaces.
+
+The glyph is decoration next to a title that already says what is missing, so mark it `aria-hidden="true"`.
+
+When an empty state replaces a list that was previously populated, put it in a container with `aria-live="polite"` so a screen reader announces the change rather than leaving the person in a silent empty region.

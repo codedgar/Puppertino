@@ -147,3 +147,428 @@
 .p-action-big-container[aria-hidden="true"] .p-action--intern {
   display: none;
 }
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-action-sheet
+   The iOS action sheet. Same 300px material panel as .p-alert, but
+   anchored to the bottom of the screen and built from a stack of
+   capsule rows rather than a pair of buttons.
+
+   Composes with .p-modal, so it reuses the modal manager: the same
+   open/close attributes, focus trap, and Escape handling. Radius is
+   34px, matching the alert; the reference squircle span is 54.4px.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-action-sheet-surface: rgba(245, 245, 245, 0.60);
+  --p-action-sheet-row: rgba(120, 120, 128, 0.16);
+  --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.28);
+  --p-action-sheet-title: rgba(0, 0, 0, 0.85);
+  --p-action-sheet-copy: rgba(0, 0, 0, 0.55);
+  --p-action-sheet-destructive: #ff383c;
+  --p-action-sheet-fallback: rgba(245, 245, 245, 0.98);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-action-sheet-surface: rgba(38, 38, 38, 0.60);
+  --p-action-sheet-row: rgba(120, 120, 128, 0.32);
+  --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.44);
+  --p-action-sheet-title: rgba(255, 255, 255, 0.92);
+  --p-action-sheet-copy: rgba(255, 255, 255, 0.55);
+  --p-action-sheet-destructive: #ff4245;
+  --p-action-sheet-fallback: rgba(38, 38, 38, 0.98);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-action-sheet-surface: rgba(38, 38, 38, 0.60);
+    --p-action-sheet-row: rgba(120, 120, 128, 0.32);
+    --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.44);
+    --p-action-sheet-title: rgba(255, 255, 255, 0.92);
+    --p-action-sheet-copy: rgba(255, 255, 255, 0.55);
+    --p-action-sheet-destructive: #ff4245;
+    --p-action-sheet-fallback: rgba(38, 38, 38, 0.98);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-action-sheet-surface: rgba(245, 245, 245, 0.60);
+  --p-action-sheet-row: rgba(120, 120, 128, 0.16);
+  --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.28);
+  --p-action-sheet-title: rgba(0, 0, 0, 0.85);
+  --p-action-sheet-copy: rgba(0, 0, 0, 0.55);
+  --p-action-sheet-destructive: #ff383c;
+  --p-action-sheet-fallback: rgba(245, 245, 245, 0.98);
+}
+
+.p-action-sheet {
+  --p-action-sheet-width: 300px;
+  --p-action-sheet-radius: 34px;
+  --p-action-sheet-pad: 14px;
+
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 90;
+
+  width: min(var(--p-action-sheet-width), calc(100vw - 32px));
+  box-sizing: border-box;
+  /* Clear of the home indicator on iOS, and of nothing on a desktop. */
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+
+  font-family: var(--font);
+
+  opacity: 0;
+  pointer-events: none;
+  /* Slides up from below rather than scaling in place. */
+  transform: translate(-50%, 16px);
+  transition:
+    opacity 0.24s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.p-action-sheet * {
+  box-sizing: border-box;
+}
+
+.p-action-sheet.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.p-action-sheet__surface {
+  padding: var(--p-action-sheet-pad);
+  border-radius: var(--p-action-sheet-radius);
+
+  background: var(--p-action-sheet-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.24),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+}
+
+/* The header is left-aligned, unlike the alert's centered block. It
+   reads as a caption over the list rather than as a question. */
+.p-action-sheet__header {
+  padding: 6px 4px 14px;
+}
+
+.p-action-sheet__title {
+  margin: 0;
+  color: var(--p-action-sheet-title);
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-action-sheet__message {
+  margin: 2px 0 0;
+  color: var(--p-action-sheet-copy);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-action-sheet__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.p-action-sheet__action {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  display: block;
+  width: 100%;
+
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 24px;
+
+  background: var(--p-action-sheet-row);
+  color: var(--p-action-sheet-title);
+
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  letter-spacing: -0.43px;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: background 0.12s ease-out;
+}
+
+.p-action-sheet__action:hover,
+.p-action-sheet__action:active {
+  background: var(--p-action-sheet-row-pressed);
+}
+
+.p-action-sheet__action:focus-visible {
+  outline: 4px solid rgba(0, 136, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.p-action-sheet__action--destructive {
+  color: var(--p-action-sheet-destructive);
+}
+
+/* Cancel sits apart from the list it is cancelling. */
+.p-action-sheet__cancel {
+  margin-top: 8px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-action-sheet__surface {
+    background: var(--p-action-sheet-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-action-sheet__surface {
+    background: var(--p-action-sheet-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-action-sheet,
+  .p-action-sheet.active {
+    transform: translate(-50%, 0);
+    transition: opacity 0.25s ease;
+  }
+}
+
+/* Same 1.6 ratio the other v2 surfaces use: 34px arc, 54.4px squircle. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-action-sheet__surface {
+    border-radius: 54.4px;
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-activity-view
+   The share sheet. Mostly a composition of parts that already exist:
+   the panel is a .p-bottom-sheet, and the action groups below the
+   targets are .p-list-touch .p-list-inset. Both already carry the
+   radii this sheet uses, 38px and 26px.
+
+   What is new is the target row: a horizontally scrolling strip of
+   people and apps to share with. People are 70px circles, apps are
+   64px rounded squares, each with a 12px label under it.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-activity-target-bg: rgba(120, 120, 128, 0.16);
+  --p-activity-label: #1a1a1a;
+  --p-activity-secondary: rgba(60, 60, 67, 0.6);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-activity-target-bg: rgba(120, 120, 128, 0.32);
+  --p-activity-label: #f5f5f5;
+  --p-activity-secondary: rgba(235, 235, 245, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-activity-target-bg: rgba(120, 120, 128, 0.32);
+    --p-activity-label: #f5f5f5;
+    --p-activity-secondary: rgba(235, 235, 245, 0.6);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-activity-target-bg: rgba(120, 120, 128, 0.16);
+  --p-activity-label: #1a1a1a;
+  --p-activity-secondary: rgba(60, 60, 67, 0.6);
+}
+
+.p-activity-view {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  color: var(--p-activity-label);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-activity-view * {
+  box-sizing: border-box;
+}
+
+/* Header: what is being shared, and a way out. */
+.p-activity-view__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.p-activity-view__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-activity-view__subtitle {
+  margin: 0;
+  color: var(--p-activity-secondary);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.1px;
+}
+
+.p-activity-view__close {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  background: var(--p-activity-target-bg);
+  color: var(--p-activity-secondary);
+  font-size: 17px;
+  cursor: pointer;
+}
+
+/* ─── Target row ───────────────────────────────────────────────────── */
+/* Scrolls sideways rather than wrapping, so the first few targets stay
+   in the same place no matter how many there are. */
+
+.p-activity-view__targets {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  /* Bleed to the panel edges so the strip reads as scrollable. */
+  margin: 0 -16px;
+  padding: 0 16px 4px;
+}
+
+.p-activity-view__targets::-webkit-scrollbar {
+  display: none;
+}
+
+.p-activity-view__target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  width: 76px;
+  scroll-snap-align: start;
+
+  border: 0;
+  background: none;
+  padding: 0;
+
+  color: var(--p-activity-label);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.p-activity-view__target:active {
+  opacity: 0.5;
+}
+
+.p-activity-view__target:focus-visible {
+  outline: 3px solid var(--p-sys-blue, #0088ff);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* A person: a 70px circle. */
+.p-activity-view__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: var(--p-activity-target-bg);
+  font-size: 25px;
+  letter-spacing: 0.06px;
+}
+
+/* An app: a 64px rounded square, matching an app icon's shape. */
+.p-activity-view__app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 3px 0;
+  border-radius: 16px;
+  overflow: hidden;
+
+  background: var(--p-activity-target-bg);
+  font-size: 28px;
+}
+
+.p-activity-view__avatar img,
+.p-activity-view__avatar svg,
+.p-activity-view__app img,
+.p-activity-view__app svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.p-activity-view__target-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  letter-spacing: 0.06px;
+  text-align: center;
+}
+
+/* A second line under the label, for a person's context. */
+.p-activity-view__target-detail {
+  color: var(--p-activity-secondary);
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.06px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-activity-view__targets {
+    scroll-behavior: auto;
+  }
+}

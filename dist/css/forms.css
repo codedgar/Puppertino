@@ -565,6 +565,10 @@ textarea.p-form-text {
      control declares it on itself instead. */
   --p-control-fill: rgba(0, 0, 0, 0.12);
   --p-control-knob: #ffffff;
+  /* iOS off-track: the tertiary label color, not a fill token. */
+  --p-switch-touch-off: rgba(60, 60, 67, 0.30);
+  /* iOS field fill, built on #767680 rather than pure black. */
+  --p-field-touch-fill: rgba(118, 118, 128, 0.12);
 
   /* Bevel treatment shared by checked checkboxes/radios and icon tiles */
   --p-control-bevel:
@@ -581,6 +585,8 @@ textarea.p-form-text {
   --p-field-ring: rgba(255, 255, 255, 0.08);
   --p-field-ring-disabled: rgba(255, 255, 255, 0.04);
   --p-control-fill: rgba(255, 255, 255, 0.10);
+  --p-switch-touch-off: rgba(235, 235, 245, 0.30);
+  --p-field-touch-fill: rgba(118, 118, 128, 0.24);
   --p-search-ring-empty: rgba(255, 255, 255, 0.04);
   --p-search-placeholder: rgba(255, 255, 255, 0.55);
   --p-combo-plate-bg: rgba(255, 255, 255, 0.15);
@@ -596,6 +602,8 @@ textarea.p-form-text {
     --p-field-ring: rgba(255, 255, 255, 0.08);
     --p-field-ring-disabled: rgba(255, 255, 255, 0.04);
     --p-control-fill: rgba(255, 255, 255, 0.10);
+    --p-switch-touch-off: rgba(235, 235, 245, 0.30);
+    --p-field-touch-fill: rgba(118, 118, 128, 0.24);
     --p-search-ring-empty: rgba(255, 255, 255, 0.04);
     --p-search-placeholder: rgba(255, 255, 255, 0.55);
     --p-combo-plate-bg: rgba(255, 255, 255, 0.15);
@@ -619,6 +627,9 @@ textarea.p-form-text {
   --p-field-ring: rgba(0, 0, 0, 0.08);
   --p-field-ring-disabled: rgba(0, 0, 0, 0.04);
   --p-control-fill: rgba(0, 0, 0, 0.12);
+  --p-switch-touch-off: rgba(60, 60, 67, 0.30);
+  /* iOS field fill, built on #767680 rather than pure black. */
+  --p-field-touch-fill: rgba(118, 118, 128, 0.12);
   --p-search-ring-empty: rgba(0, 0, 0, 0.04);
   --p-search-placeholder: #727272;
   --p-combo-plate-bg: #ffffff;
@@ -704,6 +715,25 @@ textarea.p-form-text {
   --p-field-pad: 12px;
 }
 
+/* Touch size (iOS). Not a sixth rung on the ladder above: iOS fields are
+   filled rather than ringed, sit at Regular weight, and carry SF Pro's
+   negative tracking at 17px. 44px tall, so the field is its own target. */
+.p-field-touch {
+  --p-field-height: 44px;
+  --p-field-font: 17px;
+  --p-field-pad: 16px;
+
+  border-radius: 10px;
+  background: var(--p-field-touch-fill);
+  box-shadow: none;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.p-field-touch:focus {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
+}
+
 .p-field::placeholder {
   color: var(--p-field-placeholder);
   font-weight: 510;
@@ -763,6 +793,32 @@ textarea.p-field {
 
   cursor: pointer;
   transition: box-shadow 0.12s ease-out;
+}
+
+/* Touch size, matching .p-field-touch: filled rather than ringed, and
+   tall enough to be its own tap target. */
+.p-select-touch > select {
+  height: 44px;
+  padding: 0 36px 0 16px;
+  border-radius: 10px;
+
+  background: var(--p-field-touch-fill);
+  box-shadow: none;
+
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.p-select-touch > select:focus {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
+}
+
+/* The chevron moves in to match the wider right padding. */
+.p-select-touch::after {
+  right: 14px;
+  width: 12px;
+  height: 14px;
 }
 
 /* Up/down chevrons, masked so they follow the text color token. */
@@ -1477,14 +1533,28 @@ textarea.p-field {
   -webkit-user-select: none;
   background: transparent; /* cancel the .p-sys-* swatch paint on the wrapper */
   --p-control-accent: var(--p-color-current, #0D6FFF);
+
+  /* Geometry, in tokens so a size variant is a swap rather than a second
+     copy of the morph math below. Travel is derived, never restated:
+     track width minus the knob minus both insets. */
+  --p-switch-track-w: 36px;
+  --p-switch-track-h: 16px;
+  --p-switch-knob-w: 21px;
+  --p-switch-knob-inset: 2px;
+  --p-switch-travel: calc(
+    var(--p-switch-track-w) - var(--p-switch-knob-w) - 2 * var(--p-switch-knob-inset)
+  );
+  /* How much wider the knob grows when it becomes the glass lens. Tuned
+     so the grown lens is 2px narrower than its own track. */
+  --p-switch-lens-grow: 13px;
 }
 
 .p-switch > input + span {
   position: relative;
   flex-shrink: 0;
-  width: 36px;
-  height: 16px;
-  border-radius: 8px;
+  width: var(--p-switch-track-w);
+  height: var(--p-switch-track-h);
+  border-radius: 999px;
 
   background: var(--p-control-fill);
   transition: background 0.25s ease-out;
@@ -1497,10 +1567,10 @@ textarea.p-field {
      grid and reads as the knob sitting low. 2px insets and a 12px knob
      stay crisp at every density. Shadow is symmetric ambient only — a
      downward offset also reads as vertical misalignment at this size. */
-  top: 2px;
-  bottom: 2px;
-  left: 2px;
-  width: 21px;
+  top: var(--p-switch-knob-inset);
+  bottom: var(--p-switch-knob-inset);
+  left: var(--p-switch-knob-inset);
+  width: var(--p-switch-knob-w);
   border-radius: 999px;
 
   background: var(--p-control-knob);
@@ -1519,7 +1589,7 @@ textarea.p-field {
 }
 
 .p-switch > input:checked + span::after {
-  left: 13px;
+  left: calc(var(--p-switch-knob-inset) + var(--p-switch-travel));
 }
 
 /* Held (press and hold): the glass lens at full strength. The interior
@@ -1527,9 +1597,9 @@ textarea.p-field {
    thick white refraction rim, a thin accent edge line, and a soft
    accent glow. */
 .p-switch:active > input:not(:disabled) + span::after {
-  top: -4px;
-  bottom: -4px;
-  width: 34px;
+  top: calc(var(--p-switch-knob-inset) - 6px);
+  bottom: calc(var(--p-switch-knob-inset) - 6px);
+  width: calc(var(--p-switch-knob-w) + var(--p-switch-lens-grow));
 
   background: rgb(255 255 255 / 0.5);
   box-shadow:
@@ -1542,11 +1612,12 @@ textarea.p-field {
 
 /* The lens overhangs the side the knob is on: 4px past the track edge. */
 .p-switch:active > input:not(:disabled):not(:checked) + span::after {
-  left: -4.5px;
+  left: calc(var(--p-switch-knob-inset) - 6.5px);
 }
 
 .p-switch:active > input:not(:disabled):checked + span::after {
-  left: 6.5px; /* right edge lands at 40.5px, past the track */
+  /* Right edge lands 4.5px past the track, mirroring the unchecked side. */
+  left: calc(var(--p-switch-knob-inset) + var(--p-switch-travel) - 6.5px);
 }
 
 /* ─── The lens morph on click ──────────────────────────────────────── */
@@ -1576,12 +1647,15 @@ textarea.p-field {
   .p-switch > input:checked + span::after {
     --p-grow: calc(max(0, min(1, var(--p-gel) * 5, (1 - var(--p-gel)) * 3)));
 
-    /* Travel 2px->13px; grown the lens reaches 34x24, engulfing most
-       of the 36x16 track at the flip peak. */
-    left: calc(2px + 11px * var(--p-gel) - 6.5px * var(--p-grow));
-    width: calc(21px + 13px * var(--p-grow));
-    top: calc(2px - 6px * var(--p-grow));
-    bottom: calc(2px - 6px * var(--p-grow));
+    /* The knob travels its full span while grown, so at the flip peak the
+       lens engulfs most of the track. At the default size that is a
+       34x24 lens over a 36x16 track. */
+    left: calc(
+      var(--p-switch-knob-inset) + var(--p-switch-travel) * var(--p-gel) - 6.5px * var(--p-grow)
+    );
+    width: calc(var(--p-switch-knob-w) + var(--p-switch-lens-grow) * var(--p-grow));
+    top: calc(var(--p-switch-knob-inset) - 6px * var(--p-grow));
+    bottom: calc(var(--p-switch-knob-inset) - 6px * var(--p-grow));
 
     /* Frosted, not clear: the interior goes milky (50% white) so the
        track color reads through diffused; the refraction concentrates
@@ -1606,6 +1680,93 @@ textarea.p-field {
       width 0.18s ease-out,
       background 0.18s ease-out,
       box-shadow 0.18s ease-out;
+  }
+}
+
+/* ─── Switch, touch size ───────────────────────────────────────────── */
+/* iOS runs a larger switch than macOS: a 64x28 track with a 39x24 knob
+   inset 2px, so the knob travels 21px. Only the tokens change; the
+   morph, the states, and the focus ring are shared with the default
+   size. The whole control clears 44px through the hit area below. */
+
+.p-switch-touch {
+  --p-switch-track-w: 64px;
+  --p-switch-track-h: 28px;
+  --p-switch-knob-w: 39px;
+  --p-switch-knob-inset: 2px;
+  --p-switch-lens-grow: 23px;
+
+  /* The track is 28px tall, so the label makes up the rest of the 44px
+     target. The label is the click surface, so growing it is enough. */
+  min-height: 44px;
+}
+
+/* iOS switches are green unless the app tints them. A tint class on the
+   element publishes --p-color-current, which the default accent already
+   reads, so the green default steps aside whenever one is present. */
+.p-switch-touch:not([class*="p-sys-"]) {
+  --p-control-accent: var(--p-sys-green);
+}
+
+/* Off state fill. iOS uses the tertiary label color rather than a fill
+   token, which reads slightly darker than the macOS switch track. */
+.p-switch-touch > input + span {
+  background: var(--p-switch-touch-off);
+}
+
+/* ─── Switch on/off glyphs ─────────────────────────────────────────── */
+/* A bar when on, a ring when off, so the state does not rest on color
+   alone. iOS shows these when On/Off Labels is enabled; on the web the
+   closest signal is prefers-contrast, and .p-switch-labels turns them
+   on unconditionally.
+
+   The glyph sits in the strip the knob is not covering, which is
+   exactly inset + travel wide, and is centered in it. Deriving the
+   position keeps the glyph centered at any track size rather than
+   only at the one it was measured on. Geometry is declared once and
+   switched on with content, which is inert until then. */
+
+.p-switch > input + span::before {
+  content: none;
+
+  --p-switch-gap: calc(var(--p-switch-knob-inset) + var(--p-switch-travel));
+  --p-switch-ring: calc(var(--p-switch-track-h) * 0.32);
+
+  position: absolute;
+  top: 50%;
+  right: calc(var(--p-switch-gap) / 2 - var(--p-switch-ring) / 2);
+  translate: 0 -50%;
+
+  width: var(--p-switch-ring);
+  height: var(--p-switch-ring);
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+  color: var(--p-control-knob);
+  opacity: 0.55;
+}
+
+/* On: a bar, centered in the strip on the leading side. */
+.p-switch > input:checked + span::before {
+  right: auto;
+  left: calc(var(--p-switch-gap) / 2 - 0.5px);
+
+  width: 1px;
+  height: calc(var(--p-switch-track-h) * 0.357);
+  border: 0;
+  border-radius: 0;
+  background: var(--p-control-knob);
+  opacity: 1;
+}
+
+.p-switch-labels > input + span::before,
+.p-switch-labels > input:checked + span::before {
+  content: "";
+}
+
+@media (prefers-contrast: more) {
+  .p-switch > input + span::before,
+  .p-switch > input:checked + span::before {
+    content: "";
   }
 }
 
@@ -1650,4 +1811,104 @@ textarea.p-field {
   .p-switch > input:checked + span::after {
     transition: none;
   }
+}
+/* ─── Stepper, touch size (iOS) ────────────────────────────────────── */
+/* iOS lays the stepper out horizontally rather than stacking it: a
+   92x32 capsule split into two 46px halves by a 1x24 divider, with
+   minus and plus rather than chevrons. It carries no value of its own,
+   so pair it with a narrow .p-field-touch the way .p-stepper-field
+   already does for the pointer size. */
+
+:root {
+  --p-stepper-touch-fill: rgba(116, 116, 128, 0.08);
+  --p-stepper-touch-pressed: rgba(0, 0, 0, 0.08);
+  --p-stepper-touch-divider: rgba(60, 60, 67, 0.30);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-stepper-touch-fill: rgba(118, 118, 128, 0.18);
+  --p-stepper-touch-pressed: rgba(255, 255, 255, 0.12);
+  --p-stepper-touch-divider: rgba(235, 235, 245, 0.30);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-stepper-touch-fill: rgba(118, 118, 128, 0.18);
+    --p-stepper-touch-pressed: rgba(255, 255, 255, 0.12);
+    --p-stepper-touch-divider: rgba(235, 235, 245, 0.30);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-stepper-touch-fill: rgba(116, 116, 128, 0.08);
+  --p-stepper-touch-pressed: rgba(0, 0, 0, 0.08);
+  --p-stepper-touch-divider: rgba(60, 60, 67, 0.30);
+}
+
+.p-stepper-touch {
+  flex-direction: row;
+  width: 92px;
+  height: 32px;
+  border-radius: 16px;
+
+  background: var(--p-stepper-touch-fill);
+  box-shadow: none;
+}
+
+/* Each half is 46px, which is the tap target as well as the shape. */
+.p-stepper-touch > button {
+  width: 46px;
+}
+
+/* Minus and plus, masked to the text color like the pointer chevrons. */
+.p-stepper-touch > button::before {
+  width: 14px;
+  height: 14px;
+}
+
+.p-stepper-touch > [data-p-step="up"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-stepper-touch > [data-p-step="down"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* The divider turns upright: 1x24, so 4px inset on a 32px control. */
+.p-stepper-touch::after {
+  top: 4px;
+  bottom: 4px;
+  left: 50%;
+  right: auto;
+  width: 1px;
+  height: auto;
+  margin-top: 0;
+  margin-left: -0.5px;
+  border-radius: 0.5px;
+  background: var(--p-stepper-touch-divider);
+}
+
+.p-stepper-touch > button:active:not(:disabled) {
+  background: var(--p-stepper-touch-pressed);
+}
+
+.p-stepper-touch:has(> button:focus-visible) {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
+}
+
+/* Paired value field. iOS shows the number beside the control, not
+   inside it, and the field only has to hold a few digits. */
+.p-stepper-field-touch {
+  gap: 12px;
+}
+
+.p-stepper-field-touch > .p-field-touch {
+  width: 72px;
+  text-align: center;
 }

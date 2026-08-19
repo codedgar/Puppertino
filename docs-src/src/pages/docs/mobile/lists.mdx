@@ -1,0 +1,203 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Lists
+description: The iOS list. 52px rows on a plate, hairline separators, inset grouped sections, no JavaScript.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/forms.css';
+import '@puppertino/lists.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A list presents rows of related content in a single scrolling column. Most iOS screens are a list, which makes it the component the rest of an app is arranged around.
+
+## When to use it
+
+Use a list for anything that repeats: settings, messages, search results, a library. Use it for navigation into detail screens, which is what the chevron means.
+
+Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when the rows are one-off choices rather than content. Use a grid when the items are pictures and the picture is the point.
+
+## Two shapes
+
+<Showcase
+  name="list-shapes"
+  align="start"
+  snippet={false}
+  code={`<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; align-items: start;">
+  <div>
+    <ul class="p-list p-list-touch p-list-inset">
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Airplane Mode</span></span><label class="p-switch p-switch-touch" style="margin-left:auto"><input type="checkbox"><span></span></label></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Wi-Fi</span></span><span class="p-list-detail">Home</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Bluetooth</span></span><span class="p-list-detail">On</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    </ul>
+  </div>
+  <div>
+    <ul class="p-list p-list-touch">
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Airplane Mode</span></span><label class="p-switch p-switch-touch" style="margin-left:auto"><input type="checkbox"><span></span></label></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Wi-Fi</span></span><span class="p-list-detail">Home</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Bluetooth</span></span><span class="p-list-detail">On</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    </ul>
+  </div>
+</div>`}
+/>
+
+`.p-list-touch` puts the rows on a plate. Add `.p-list-inset` to round that plate into a card at 26px, the same radius the other v2 grouped surfaces use.
+
+Consider inset for settings and forms, where the grouping carries meaning. Consider plain for long uniform content like a message list, where a card around a hundred rows is just a card.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Row | 52px minimum, 68px with a subtitle |
+| Padding | 0 16px |
+| Gap | 12px between slots |
+| Title | 17px, weight 400, line height 22px, tracking -0.43px |
+| Subtitle | 15px, weight 400, line height 20px, tracking -0.23px, secondary |
+| Detail | 17px, tracking -0.43px, secondary |
+| Separator | 0.5px, `rgba(60,60,67,0.29)` light, `rgba(84,84,88,0.60)` dark |
+| Icon | 30px at 7px radius, 42px circle for `.p-list-icon-round` |
+| Inset radius | 26px |
+| Section header | 17px, weight 590, secondary |
+| Section footer | 13px, tracking -0.08px, line height 18px, secondary |
+
+The 52px row is above the 44px minimum on its own, and the two-line row is 68px. Nothing here needs an extra hit area.
+
+## Rows
+
+<Showcase
+  name="list-rows"
+  align="start"
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 320px;">
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">Title only</span></span>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">With a detail</span></span>
+    <span class="p-list-detail">Value</span>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">Title</span><span class="p-list-subtitle">Subtitle on a second line</span></span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-icon"><svg viewBox="0 0 30 30"><rect width="30" height="30" rx="7" fill="#0088FF"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">With an icon</span></span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-icon p-list-icon-round"><svg viewBox="0 0 42 42"><circle cx="21" cy="21" r="21" fill="#FF8D28"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">Ada Lovelace</span><span class="p-list-subtitle">Sent a message</span></span>
+    <span class="p-list-detail">9:41 AM</span>
+  </li>
+</ul>`}
+  snippet={`<ul class="p-list p-list-touch p-list-inset">
+  <li class="p-list-row">
+    <span class="p-list-icon"><img src="/icon.png" alt=""></span>
+    <span class="p-list-label">
+      <span class="p-list-title">Title</span>
+      <span class="p-list-subtitle">Subtitle</span>
+    </span>
+    <span class="p-list-detail">Value</span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+</ul>`}
+/>
+
+The slots are the same ones the desktop list uses, so `.p-list-icon`, `.p-list-detail`, and `.p-list-chevron` mean the same thing on both platforms. `.p-list-label` and its title and subtitle are new, because a pointer-sized row has no space for two lines.
+
+`.p-list-trailing-icon` is the other new one: a 22px glyph on the right that is not a chevron. Use it where a row shows what it does rather than where it goes, like the Copy and Print rows in a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/#share-sheets`}>share sheet</a>. A chevron means "opens another screen", so using it for anything else sets the wrong expectation.
+
+A subtitle grows the row to 68px automatically through `:has(.p-list-subtitle)`. There is no separate class for a two-line row.
+
+## Separators
+
+The hairline starts where the text starts, not at the plate edge. With a leading icon it moves in by the icon width plus the gap, so the rules line up under the titles and the eye reads one column instead of a grid.
+
+That indent is derived, not hardcoded: `calc(16px + 30px + 12px)` from the padding, icon, and gap tokens. Changing `--p-list-touch-icon` moves the separator with it.
+
+The last row never gets one. A trailing rule inside a card reads as a missing row.
+
+Under `prefers-contrast: more` the hairline thickens to 1px and takes the text color, since a 29% separator is the first thing to disappear when contrast is the problem.
+
+## Interactive rows
+
+<Showcase
+  name="list-interactive"
+  align="start"
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 320px;">
+  <li class="p-list-row" tabindex="0">
+    <span class="p-list-label"><span class="p-list-title">Press me</span></span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">Not interactive</span></span>
+    <span class="p-list-detail">Read only</span>
+  </li>
+</ul>`}
+  snippet={`<li class="p-list-row">
+  <a href="/wi-fi/" class="p-list-title">Wi-Fi</a>
+  <i class="p-list-chevron ph-bold ph-caret-right"></i>
+</li>`}
+/>
+
+Only rows that do something get a pressed state. A row is treated as interactive when it is a link or a button, contains one, or carries a `tabindex`. A row that only displays a value stays flat, so pressing it does not promise something that will not happen.
+
+There is no hover state. The macOS list highlights on hover; this one does not, because a finger has no hover and a stuck highlight after a tap reads as a selection.
+
+Put the link on the row's content rather than wrapping the `<li>`, and give the chevron `aria-hidden="true"`. The chevron is decoration; the link text is what a screen reader should announce.
+
+## Sections
+
+<Showcase
+  name="list-sections"
+  align="start"
+  snippet={`<h3 class="p-list-touch-header">Network</h3>
+<ul class="p-list p-list-touch p-list-inset">
+  ...
+</ul>
+<p class="p-list-touch-footer">Joining a network shares it with your other devices.</p>`}
+  code={`<div style="width: 340px;">
+  <h3 class="p-list-touch-header">Network</h3>
+  <ul class="p-list p-list-touch p-list-inset">
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Wi-Fi</span></span><span class="p-list-detail">Home</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Bluetooth</span></span><span class="p-list-detail">On</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+  </ul>
+  <p class="p-list-touch-footer">Joining a network shares it with your other devices.</p>
+</div>`}
+/>
+
+`.p-list-touch-header` and `.p-list-touch-footer` sit outside the plate, aligned to the same 16px padding as the rows. The header names the group. The footer explains it, and is the right place for the sentence that would otherwise become a tooltip nobody on a phone can reach.
+
+Use a real heading element for the header so the page outline is navigable.
+
+## Dark mode
+
+The plate moves from `#FFFFFF` to `#1C1C1E`, separators from `rgba(60,60,67,0.29)` to `rgba(84,84,88,0.60)`, and secondary text from `rgba(60,60,67,0.60)` to `rgba(235,235,245,0.60)`.
+
+The separator is the one that matters. In dark mode it gets lighter and more opaque rather than darker, because a dark line on a dark plate disappears.
+
+## Accessibility
+
+Use `<ul>` and `<li>`. A list of `<div>`s is announced as a run of text, and the row count is lost.
+
+Rows are 52px and 68px, both past the 44px minimum, so nothing needs an invisible target the way small buttons do.
+
+Chevrons are decoration. Mark them `aria-hidden="true"` and let the row's link text carry the meaning. Without it a screen reader announces "Wi-Fi, Home, right chevron"; with it, "Wi-Fi, Home".
+
+Controls inside rows keep their own semantics. A `.p-switch-touch` in a row is still a checkbox, still reachable by keyboard, and still announces its state.
+
+## The macOS list
+
+`lists.css` ships both. `.p-list` alone is the macOS sidebar list: 20px capsule rows on a 30px pitch, with hover and a selection fill. Adding `.p-list-touch` swaps it to iOS metrics.
+
+| Slot | macOS | Touch |
+|---|---|---|
+| `.p-list-row` | 20px capsule, 13px text | 52px row, 17px text |
+| `.p-list-icon` | 18px, 3px radius | 30px, 7px radius |
+| `.p-list-detail` | 13px, dimmed | 17px, secondary |
+| `.p-list-chevron` | 9px, bold | 14px, secondary |
+| Row separation | None, rows float | 0.5px hairline |
+| Hover | Highlight | None |
+
+`.p-table` is unaffected and stays desktop-only. Columns that fit a desktop window need horizontal scrolling at phone width, which hides data behind a gesture. Consider a two-line list row instead, with the second column as the subtitle and the third as the detail.
