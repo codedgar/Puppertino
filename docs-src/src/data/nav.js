@@ -99,13 +99,19 @@ export const nav = [
             label: 'Forms',
             slug: 'docs/desktop/forms/',
             icon: 'ph-text-indent',
+            /* Page order, every section — the sidebar is a map of the
+               page, so a reader scrolling past a heading should be able
+               to point at it here. */
             children: [
               { label: 'Text fields', anchor: '#text-field', icon: 'ph-textbox' },
+              { label: 'Selects', anchor: '#select', icon: 'ph-caret-up-down' },
+              { label: 'Steppers', anchor: '#stepper', icon: 'ph-plus-minus' },
               { label: 'Search fields', anchor: '#search-field', icon: 'ph-magnifying-glass' },
-              { label: 'Combo boxes', anchor: '#combo-box', icon: 'ph-caret-circle-down' },
-              { label: 'Pop-up & pull-down', anchor: '#pop-up-and-pull-down-buttons', icon: 'ph-caret-up-down' },
-              { label: 'Toggles', anchor: '#switch', icon: 'ph-toggle-right' },
-              { label: 'Steppers', anchor: '#stepper', icon: 'ph-caret-up-down' },
+              { label: 'Pop-up & pull-down', anchor: '#pop-up-and-pull-down-buttons', icon: 'ph-caret-circle-down' },
+              { label: 'Combo boxes', anchor: '#combo-box', icon: 'ph-text-columns' },
+              { label: 'Checkboxes', anchor: '#checkbox', icon: 'ph-check-square' },
+              { label: 'Radios', anchor: '#radio', icon: 'ph-radio-button' },
+              { label: 'Switches', anchor: '#switch', icon: 'ph-toggle-right' },
             ],
           },
           { label: 'Segmented controls', slug: 'docs/desktop/segmented-controls/', icon: 'ph-squares-four' },

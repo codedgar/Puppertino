@@ -52,8 +52,9 @@ That capsule is an ordinary touch button in the gray style, at the same 34px hei
 
 | Part | Value |
 |---|---|
-| Panel | 370px wide, 13px radius, 8px padding |
+| Panel | 370px wide, 13px radius, 16px padding |
 | Day cell | 44 x 44px, full circle |
+| Grid | 49px column pitch, 51px row pitch |
 | Day number | 20px, weight 400, tracking -0.45px |
 | Weekday header | 13px, weight 590, uppercase, at 30% |
 | Month title | 17px, weight 590, tracking -0.43px |
@@ -62,6 +63,8 @@ That capsule is an ordinary touch button in the gray style, at the same 34px hei
 | Outside month | 30% |
 
 The day cell is 44px, so the calendar is the one place where the grid and the tap target are the same thing. That is also why the panel is 370px: seven 44px cells plus padding is what a phone width allows.
+
+The cells are spread with `space-between` rather than dropped into seven equal columns, so the first and last circle in a row sit flush against the panel's padding. At 370px that works out to 5px between cells horizontally and 7px vertically.
 
 Today and selected are two different marks. Today is the accent as a number. Selected is the accent as a filled circle. A day can be both, and the fill wins.
 

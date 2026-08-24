@@ -11,8 +11,9 @@
  *   <div class="p-menu p-menu-touch" id="file-menu" hidden> … </div>
  *
  * The menu is positioned near the press and clamped to the viewport.
- * Escape, an outside tap, or choosing an item closes it. Right-click
- * opens it too, since a pointer has no long press. No dependencies.
+ * Escape, an outside tap, or choosing an item closes it. A held mouse
+ * button opens it the same way a finger does, and right-click opens it
+ * immediately, the macOS gesture. No dependencies.
  */
 (function () {
   'use strict';
@@ -25,6 +26,7 @@
   var pending = null;
   var open = null;
   var lastTrigger = null;
+  var swallowClick = false; /* the click that ends a long press */
 
   function menuFor(host) {
     var selector = host.getAttribute('data-p-context-menu');
@@ -76,12 +78,17 @@
 
     var host = event.target.closest ? event.target.closest('[data-p-context-menu]') : null;
     if (!host) return;
-    if (event.pointerType === 'mouse') return; /* mouse uses contextmenu */
+    /* Primary button only. A right press already raises contextmenu, and
+       arming the timer there would reopen the menu half a second later. */
+    if (event.button !== 0) return;
 
     pending = { host: host, x: event.clientX, y: event.clientY };
     timer = setTimeout(function () {
       if (!pending) return;
       show(pending.host, pending.x, pending.y);
+      /* A mouse press still emits click on release; that click would land
+         outside the menu and close what the press just opened. */
+      swallowClick = true;
       pending = null;
       timer = null;
     }, HOLD_MS);
@@ -127,6 +134,10 @@
 
   /* Choosing an item closes the menu. */
   document.addEventListener('click', function (event) {
+    if (swallowClick) {
+      swallowClick = false;
+      return;
+    }
     if (!open) return;
     if (event.target.closest('.p-menu__item')) hide();
     else if (!event.target.closest('.p-menu-touch')) hide();

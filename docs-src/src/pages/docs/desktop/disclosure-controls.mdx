@@ -30,10 +30,12 @@ Use one when secondary detail would crowd the view but should stay one click awa
   name="disclosure-controls-group"
   align="start"
   compact
-  code={`<details class="p-disclosure-group">
-  <summary>Advanced options <span class="p-disclosure"></span></summary>
-  <p style="font-size: 13px; color: var(--p-text-secondary); margin: 8px 0 0;">Anything can live in here. The browser reveals and hides it, and announces the state.</p>
-</details>`}
+  code={`<div style="width: 320px; height: 84px;">
+  <details class="p-disclosure-group">
+    <summary>Advanced options <span class="p-disclosure"></span></summary>
+    <p style="font-size: 13px; color: var(--p-text-secondary); margin: 8px 0 0;">Anything can live in here. The browser reveals and hides it, and announces the state.</p>
+  </details>
+</div>`}
   snippet={`<details class="p-disclosure-group">
   <summary>Advanced options <span class="p-disclosure"></span></summary>
   <p>Anything can live in here.</p>

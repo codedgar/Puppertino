@@ -63,6 +63,13 @@
   --p-menu-header: #727272;
 }
 
+/* display on .p-menu is an author rule, so it outranks the UA's
+   [hidden] { display: none }. Restore the attribute's meaning; the
+   context-menu script hides through it. */
+.p-menu[hidden] {
+  display: none;
+}
+
 .p-menu {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);

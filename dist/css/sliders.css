@@ -20,6 +20,9 @@
   /* Resolved here, not :root, so tint classes can override. */
   --p-slider-accent: var(--p-color-current, #0D6FFF);
   --p-slider-fill: 0%;
+  /* Thumb width, so sliders.js can inset the fill by half a thumb and
+     keep the accent edge under the thumb at both ends of the track. */
+  --p-slider-thumb-w: 20px;
 
   appearance: none;
   -webkit-appearance: none;
@@ -186,6 +189,7 @@
 .p-slider-touch {
   --p-slider-touch-h: 6px;
   --p-slider-touch-thumb-size: 28px;
+  --p-slider-thumb-w: var(--p-slider-touch-thumb-size);
 
   width: 100%;
   height: var(--p-slider-touch-thumb-size);

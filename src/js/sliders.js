@@ -14,8 +14,16 @@
     var max = parseFloat(input.max);
     if (isNaN(max)) max = 100;
     var value = parseFloat(input.value) || 0;
-    var pct = max === min ? 0 : ((value - min) / (max - min)) * 100;
-    input.style.setProperty('--p-slider-fill', pct + '%');
+    var ratio = max === min ? 0 : (value - min) / (max - min);
+    // The thumb center does not travel the full track: it starts half a
+    // thumb in and stops half a thumb short. Offsetting the fill by that
+    // half keeps the edge of the accent under the thumb at every value.
+    // --p-slider-thumb-w resolves per variant (20px pointer, 28px touch).
+    input.style.setProperty('--p-slider-ratio', String(ratio));
+    input.style.setProperty(
+      '--p-slider-fill',
+      'calc(var(--p-slider-thumb-w) / 2 + ' + ratio + ' * (100% - var(--p-slider-thumb-w)))'
+    );
   }
 
   function syncAll() {

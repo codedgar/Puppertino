@@ -332,7 +332,7 @@
   box-sizing: border-box;
   width: 370px;
   max-width: 100%;
-  padding: 8px;
+  padding: 16px;
   border-radius: 13px;
 
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
@@ -356,7 +356,7 @@
   min-height: 44px;
   align-items: center;
   margin-left: 0;
-  padding: 0 4px;
+  padding: 0;
 }
 
 .p-calendar-touch .p-calendar-nav {
@@ -375,7 +375,20 @@
   line-height: 1;
 }
 
+/* Columns are 44px cells spread with space-between, not seven equal
+   fractions: at the 370px panel that lands the row on a 49px pitch with
+   the first and last circle flush against the 16px padding, which is
+   how iOS sizes it. The weekday row runs the same tracks so a label
+   sits over the center of its column, not over the gap. Below 338px of
+   content the tracks shrink together rather than overflowing. */
+
 .p-calendar-touch .p-calendar-weekdays {
+  grid-template-columns: repeat(7, minmax(0, 44px));
+  justify-content: space-between;
+  padding-bottom: 0;
+  border-bottom: 0;
+  line-height: normal;
+
   color: var(--p-calendar-touch-weekday);
   font-size: 13px;
   font-weight: 590;
@@ -383,13 +396,22 @@
   text-transform: uppercase;
 }
 
+/* 51px rows against 44px cells: the 7px of breathing room between
+   circles that the macOS 18px pitch was swallowing whole. */
 .p-calendar-touch .p-calendar-grid {
+  grid-template-columns: repeat(7, minmax(0, 44px));
+  grid-auto-rows: 51px;
+  justify-content: space-between;
   gap: 0;
+  margin-top: 2px;
 }
 
 .p-calendar-touch .p-calendar-day {
-  width: 44px;
-  height: 44px;
+  width: 100%;
+  max-width: 44px;
+  height: auto;
+  aspect-ratio: 1;
+  justify-self: center;
   border-radius: 50%;
 
   color: var(--p-calendar-touch-day);

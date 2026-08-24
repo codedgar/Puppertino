@@ -14,6 +14,8 @@
 
   var ARROW = 10.5; // arrow protrusion beyond the body edge
   var ARROW_HALF = 17.72; // half the arrow base
+  var GAP = 6; // breathing room between the arrow tip and the trigger
+  var OFFSET = ARROW + GAP; // trigger edge to popover body edge
   var MARGIN = 8; // viewport clamp inset
   var openPopover = null;
   var openTrigger = null;
@@ -33,13 +35,13 @@
     var side = popover.getAttribute('data-p-popover-place') || 'bottom';
 
     // Flip when the preferred side has no room but the opposite does.
-    if (side === 'bottom' && rect.bottom + ARROW + size.height > window.innerHeight - MARGIN && rect.top - ARROW - size.height > MARGIN) {
+    if (side === 'bottom' && rect.bottom + OFFSET + size.height > window.innerHeight - MARGIN && rect.top - OFFSET - size.height > MARGIN) {
       side = 'top';
-    } else if (side === 'top' && rect.top - ARROW - size.height < MARGIN && rect.bottom + ARROW + size.height < window.innerHeight - MARGIN) {
+    } else if (side === 'top' && rect.top - OFFSET - size.height < MARGIN && rect.bottom + OFFSET + size.height < window.innerHeight - MARGIN) {
       side = 'bottom';
-    } else if (side === 'right' && rect.right + ARROW + size.width > window.innerWidth - MARGIN && rect.left - ARROW - size.width > MARGIN) {
+    } else if (side === 'right' && rect.right + OFFSET + size.width > window.innerWidth - MARGIN && rect.left - OFFSET - size.width > MARGIN) {
       side = 'left';
-    } else if (side === 'left' && rect.left - ARROW - size.width < MARGIN && rect.right + ARROW + size.width < window.innerWidth - MARGIN) {
+    } else if (side === 'left' && rect.left - OFFSET - size.width < MARGIN && rect.right + OFFSET + size.width < window.innerWidth - MARGIN) {
       side = 'right';
     }
     popover.setAttribute('data-p-popover-place', side);
@@ -47,14 +49,14 @@
     var top;
     var left;
     if (side === 'top' || side === 'bottom') {
-      top = side === 'bottom' ? rect.bottom + ARROW : rect.top - ARROW - size.height;
+      top = side === 'bottom' ? rect.bottom + OFFSET : rect.top - OFFSET - size.height;
       left = rect.left + rect.width / 2 - size.width / 2;
       left = Math.min(Math.max(left, MARGIN), window.innerWidth - size.width - MARGIN);
       var arrowX = rect.left + rect.width / 2 - left;
       arrowX = Math.min(Math.max(arrowX, ARROW_HALF + 10), size.width - ARROW_HALF - 10);
       popover.style.setProperty('--p-popover-arrow-x', arrowX + 'px');
     } else {
-      left = side === 'right' ? rect.right + ARROW : rect.left - ARROW - size.width;
+      left = side === 'right' ? rect.right + OFFSET : rect.left - OFFSET - size.width;
       top = rect.top + rect.height / 2 - size.height / 2;
       top = Math.min(Math.max(top, MARGIN), window.innerHeight - size.height - MARGIN);
       var arrowY = rect.top + rect.height / 2 - top;
