@@ -8,8 +8,10 @@ import '@puppertino/forms.css';
 import '@puppertino/sliders.css';
 import Showcase from '../../../components/Showcase.astro';
 import slidersScript from '../../../../../src/js/sliders.js?url';
+import liquidGlassScript from '../../../../../src/js/liquid_glass.js?url';
 
 <script type="module" src={slidersScript}></script>
+<script type="module" src={liquidGlassScript}></script>
 
 A slider is a horizontal track with a control, called a thumb, that people can adjust between a minimum and maximum value.
 
@@ -49,6 +51,12 @@ Include the helper once per page and the accent fill follows the thumb:
 ```
 
 The helper publishes the value as `--p-slider-fill` so the track can paint the accent portion. Firefox draws the fill natively without it. Without the helper on other browsers the track renders all gray and the slider still works, so the enhancement degrades cleanly.
+
+Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid Glass](../../materials/#liquid-glass) lens. The lens grows to 1.65x the 20 by 16px thumb and magnifies the fill edge under it. It settles back into a solid thumb 350ms after release, and keyboard changes never lift it.
+
+```html
+<script src="src/js/liquid_glass.js"></script>
+```
 
 ## Ticks
 

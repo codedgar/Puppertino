@@ -12,9 +12,11 @@ import '@puppertino/progress.css';
 import Showcase from '../../../components/Showcase.astro';
 import pageControlsScript from '../../../../../src/js/page_controls.js?url';
 import slidersScript from '../../../../../src/js/sliders.js?url';
+import liquidGlassScript from '../../../../../src/js/liquid_glass.js?url';
 
 <script type="module" src={pageControlsScript}></script>
 <script type="module" src={slidersScript}></script>
+<script type="module" src={liquidGlassScript}></script>
 
 Form controls collect what a person types, picks, or switches on. On touch every one of them is at least 44px tall, because a finger has no cursor to aim with.
 
@@ -142,7 +144,13 @@ A switch takes effect immediately. If the change needs a Save button, it is not 
 
 ### The morph
 
-Flipping a switch grows the knob into a translucent lens, travels it across the track, and sets it down on the far side. The lens overhangs the track edge by 4.5px at the peak, blurring the track color through itself.
+Touching a switch lifts the knob into a clear [Liquid Glass](../../materials/#liquid-glass) lens, 1.65x its resting size, with the green track bending through it. Drag across the middle and the knob follows your finger to that side; lift your finger and it settles. A press that moves less than 6px counts as a tap. This needs `liquid_glass.js`:
+
+```html
+<script type="module" src="/js/liquid_glass.js"></script>
+```
+
+Without the script, a CSS-only morph grows the knob into a frosted lens, travels it, and sets it down.
 
 This is the same animation the desktop switch uses, scaled by tokens rather than rewritten. The geometry is `--p-switch-track-w`, `--p-switch-track-h`, `--p-switch-knob-w`, and `--p-switch-knob-inset`; travel is derived from them, so a size variant cannot drift out of alignment. Browsers without `@property` fall back to a plain slide and the markup is identical.
 
@@ -223,6 +231,8 @@ Five segments is the practical ceiling on a phone. Below about 60px a label trun
 | Focus | 4px accent ring on the thumb |
 
 The 6px track is thicker than the pointer slider's, and the 28px thumb is its own tap target, so the control needs no extra hit area.
+
+With `liquid_glass.js` loaded, dragging turns the thumb into a glass lens that magnifies the fill edge beneath it. It settles back into a solid thumb 350ms after release.
 
 Firefox paints the filled portion natively through `::-moz-range-progress`. WebKit has no equivalent pseudo-element, so the fill is a gradient sized by `--p-slider-fill`.
 

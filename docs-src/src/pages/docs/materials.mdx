@@ -8,6 +8,14 @@ import MaterialGrid from '../../components/MaterialGrid.astro';
 import MaterialDemo from '../../components/MaterialDemo.astro';
 import ShadowGrid from '../../components/ShadowGrid.astro';
 import ShadowDemo from '../../components/ShadowDemo.astro';
+import Showcase from '../../components/Showcase.astro';
+import '@puppertino/forms.css';
+import '@puppertino/sliders.css';
+import liquidGlassScript from '../../../../src/js/liquid_glass.js?url';
+import slidersScript from '../../../../src/js/sliders.js?url';
+
+<script type="module" src={liquidGlassScript}></script>
+<script type="module" src={slidersScript}></script>
 
 A material is a surface that blurs and tints the content behind it. Apple uses materials for navigation bars, sheets, popovers, and any element that should feel like it sits on top of the rest of the interface without hiding it completely.
 
@@ -68,6 +76,107 @@ Three preset glass surfaces sized for common UI elements. The opacity scales wit
 ```
 
 Each preset includes a sensible border radius (24px for small, 14px for medium, 10px for large) so the surface looks finished without extra styling.
+
+## Liquid Glass
+
+Liquid Glass is the material Apple introduced across its platforms in 2025. It bends the content behind it the way a real lens does, instead of only blurring it. The web has no native version, so there are two ways to approximate it: faux Liquid Glass and real-time Liquid Glass. Puppertino ships the faux kind on the controls where Apple's lens shows up most, switch knobs and slider thumbs.
+
+<Showcase
+  name="materials-liquid-glass"
+  snippet={`<label class="p-switch" aria-label="Wi-Fi">
+  <input type="checkbox" checked />
+  <span></span>
+</label>
+
+<script src="src/js/liquid_glass.js"></script>`}
+  code={`<div style="display: grid; gap: 28px; justify-items: center;">
+  <div style="display: flex; gap: 24px; align-items: center;">
+    <label class="p-switch" aria-label="Desktop switch on"><input type="checkbox" checked /><span></span></label>
+    <label class="p-switch" aria-label="Desktop switch off"><input type="checkbox" /><span></span></label>
+    <label class="p-switch p-switch-touch" aria-label="Touch switch on"><input type="checkbox" checked /><span></span></label>
+    <label class="p-switch p-switch-touch" aria-label="Touch switch off"><input type="checkbox" /><span></span></label>
+  </div>
+  <div style="display: grid; gap: 20px; width: 300px;">
+    <input type="range" class="p-slider" style="width: 100%;" min="0" max="100" value="40" aria-label="Desktop slider" />
+    <input type="range" class="p-slider p-slider-touch" min="0" max="100" value="65" aria-label="Touch slider" />
+  </div>
+</div>`}
+/>
+
+Press and hold a switch, then drag across it. The knob lifts into glass, and the track bends through it. Drag a slider and its thumb does the same. Release and the glass settles back into a solid knob.
+
+### Faux Liquid Glass
+
+Faux Liquid Glass never looks at the page behind it. A switch knob always sits on its own track, and a slider thumb always sits on its fill. Because the content under the lens is known, the lens can redraw that content inside itself, magnified and bent, and nobody can tell it is a copy.
+
+The effect is three layers stacked inside the control.
+
+| Layer | What it does |
+|---|---|
+| Baseline | The track itself. On a switch, a capsule is cut out of it wherever the lens sits, so the page shows through the glass rather than the flat track. The cut is a CSS mask that grows with the lens. |
+| Displacement | A copy of the track inside the lens, scaled up 1.65x and run through an SVG goo filter. The filter blurs the copy, then crushes its alpha (`16a − 10`) so the edges re-harden. The track color fuses into a rim at the glass edge, which reads as refraction. |
+| Knockout and glass | The resting knob fades out as the lens lifts, and a stack of 11 shadows draws the glass: white specular edges, a dark inner shade for curvature, and a soft cast shadow. An SVG filter splits red and blue a fraction of a pixel apart for faint chromatic aberration. |
+
+Every value scales with the lens. The reference is a 50px lens with a 2px goo blur and a 0.8px color split; a 24px touch knob gets half of each. The SVG filter values are absolute, so the script builds a set per lens height rather than letting the rim blur away at small sizes.
+
+One number drives all of it. `--p-lens-lift` runs from 0, a plain knob, to 1, fully lifted glass. The scale, the blur that sharpens the lens as it lifts, the cover fade, and the rim all read from it, so they can never fall out of step. It moves over 350ms on a spring sampled from a lightly damped oscillator, with a 3% overshoot as it lands. Browsers without `linear()` easing get `cubic-bezier(0.32, 1.2, 0.36, 1)`.
+
+Because nothing samples the backdrop, faux Liquid Glass works in Safari, Chrome, and Firefox alike. Consider it for small controls whose surroundings you control.
+
+The original implementation of this effect is by [Jhey Tompkins](https://jhey.dev). Puppertino adapts it to real form controls: the switch stays a native checkbox, so forms, labels, and keyboard toggling keep working. The goo and aberration filters are unchanged. The knockout is now a CSS mask instead of a black-keyed SVG filter, because Puppertino's off tracks are translucent and a black key would erase them. Every size is derived from the track tokens, so one implementation covers the 36x16px desktop switch, the 64x28px touch switch, and both slider thumbs. Drag handling no longer needs GSAP; a registered custom property and a CSS transition replace the tween.
+
+### How to use it
+
+Load the script once. It adds the lens to every `.p-switch` on the page and to every `.p-slider` while it is dragged. The markup does not change.
+
+```html
+<script src="src/js/liquid_glass.js"></script>
+```
+
+Switches added after the page loads need one call.
+
+```js
+PuppertinoLiquidGlass.enhance(container);
+```
+
+Without the script, switches keep their CSS lens morph and sliders keep a solid thumb. Nothing breaks.
+
+### Real-time Liquid Glass
+
+Real-time Liquid Glass refracts whatever is actually behind the element: text, photos, video, other controls. It is what Apple renders on toolbars, tab bars, and sheets. Every version of it on the web runs on a displacement map, an image whose red and green channels say how far to shift each pixel horizontally and vertically. Built from a rounded-rectangle distance field and Snell's law, it bends content inward at the edges like a convex lens. The derivation is in `specs/liquid-glass.md`.
+
+What differs is where that map gets applied, and that decides which browsers keep the effect.
+
+| Approach | How it works | Support |
+|---|---|---|
+| `backdrop-filter: url(#filter)` | An SVG `feDisplacementMap` bends the page behind the element. No extra code and no copies of the content. | Chromium only. Safari and Firefox drop the declaration and the refraction disappears. |
+| A plain `filter` on content the component owns | The same primitive, applied to a layer the component itself renders, like a copy of a track fill. The page behind is untouched. | Every modern engine. |
+| Capture the DOM, refract it in WebGL | A library snapshots the page (snapDOM, or html2canvas), uploads it as a texture, and a shader does the refraction, chromatic aberration, and specular highlights. | Every WebGL browser, including Safari and Firefox. |
+
+The second row is the one to reach for first, because it needs no library and no snapshot. Aave documented it in [Building Glass for the Web](https://aave.com/design/building-glass-for-the-web), and their switch and slider work the way Puppertino's do: the glass refracts a copy of the track fill rather than the page. Their write-up is also the best list of Safari's quirks, including filter output being cached by filter ID and live `<video>` never reaching the filter pipeline.
+
+The third row is what to use when the glass has to sit over real page content: text, images, video. [Glassworks](https://glassworks.codedgar.com/) does this. It comes from the same author as Puppertino, and is a fork of [liquidGL](https://github.com/naughtyduk/liquidGL) by NaughtyDuk, whose WebGL renderer it keeps. It captures with snapDOM at roughly 80ms a frame, about four times faster than html2canvas, and refracts the texture through a WebGL shader with adjustable bevel, frost, specular, and magnification. It runs in Chrome, Safari, Firefox, and Edge, falls back to a frosted `backdrop-filter` on mobile, and gets unstable in Safari once a glass element passes about half the viewport.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom/dist/snapdom.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks" defer></script>
+<script>
+  liquidGL({ target: '.liquidGL', refraction: 0.01, specular: true });
+</script>
+```
+
+The cost is that a capture is a snapshot, not a live view. Anything that moves has to be re-captured or registered as dynamic, so the technique suits a handful of large surfaces rather than every control on a page.
+
+Puppertino covers the two cases these techniques address. Controls get the faux lens above, and large surfaces get the [thickness levels](#thickness-levels), which blur and tint the backdrop in every browser. Add real-time refraction on top when a surface calls for it, over a material that already reads correctly on its own.
+
+### Accessibility of the lens
+
+The faux lens Puppertino ships steps aside whenever it would get in the way.
+
+- **Reduced motion.** With `prefers-reduced-motion` on, the knob never lifts. The switch still toggles and slides.
+- **Reduced transparency.** With `prefers-reduced-transparency` on, the knob stays solid. Glass over a busy track is exactly the contrast problem that setting exists to prevent.
+- **Semantics.** The lens is decorative and marked `aria-hidden`. The switch is still a checkbox inside its label, and the slider is still a native range input, so screen readers and keyboards see no difference.
+- **Dragging.** A switch counts a press that moves less than 6px as a tap. A drag commits the side the knob ended on and fires `input` and `change` like a click would.
 
 ## Shadows
 

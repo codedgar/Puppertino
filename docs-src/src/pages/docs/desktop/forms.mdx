@@ -7,8 +7,10 @@ description: macOS form controls. Text fields, selects, checkboxes, radios, and 
 import '@puppertino/forms.css';
 import Showcase from '../../../components/Showcase.astro';
 import steppersScript from '../../../../../src/js/steppers.js?url';
+import liquidGlassScript from '../../../../../src/js/liquid_glass.js?url';
 
 <script type="module" src={steppersScript}></script>
+<script type="module" src={liquidGlassScript}></script>
 
 A form control collects a decision from a person. A field takes text, a checkbox takes a yes or no, a radio takes one choice from a set, a switch flips a state.
 
@@ -257,7 +259,13 @@ A 16px circle. Selected, it fills with the accent and shows a white center dot a
 
 The macOS 26 switch is a 36 by 16px capsule with a wide lozenge knob, 21 by 12px, not a circle. Give every switch an accessible name, either visible text next to it or an `aria-label`.
 
-Click one and watch the knob. It lifts into a frosted glass lens that engulfs most of the track, travels, then condenses into place, the way the real iOS 26 toggle does in Apple's Liquid Glass introduction. The lens interior is milky, with the track color diffusing through it; the refraction concentrates the color into a dark rim at the glass edge, a specular line runs along the top, and the glass casts a soft shadow. Holding keeps the lens up, and releasing joins the same travel. One transitioned custom property drives it all, nothing animates on page load, and browsers without modern CSS math get a plain sprung slide.
+Press one and watch the knob. With `liquid_glass.js` loaded, it lifts into a clear glass lens 1.65x its size, and the track bends through it. Hold and drag across the middle to slide it under the pointer, then release to set it down. The knob is a faux [Liquid Glass](../../materials/#liquid-glass) lens, adapted from Jhey Tompkins' implementation; the Materials page explains the three layers.
+
+```html
+<script src="src/js/liquid_glass.js"></script>
+```
+
+Without the script, a CSS-only morph runs instead. The knob grows into a frosted lens, travels, and condenses into place. Browsers without modern CSS math get a plain sprung slide.
 
 ## Changing the color
 
