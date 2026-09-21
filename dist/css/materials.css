@@ -294,3 +294,129 @@
 .p-elevation-window {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), 0 12px 40px rgba(0, 0, 0, 0.15);
 }
+
+/* ─── Liquid Glass lens ────────────────────────────────────────────── */
+/* The faux Liquid Glass lens that switch knobs and slider thumbs turn
+   into while they are held. Adapted from Jhey Tompkins' liquid glass
+   toggle. Three layers do the work:
+
+   1. Baseline. The control paints its own track. Switches cut a hole
+      in it where the lens sits (the knockout) so the page shows through
+      the glass instead of the flat track.
+   2. Liquid. Inside the lens a copy of the track is redrawn, magnified
+      by the lens scale and run through an SVG goo filter (blur, then an
+      alpha threshold) so it melts into a colored rim at the glass edge.
+      That is the refraction.
+   3. Glass. A stack of inset and outer shadows with a sub-pixel
+      chromatic aberration filter draws the rim, specular edge, and the
+      shadow the glass casts.
+
+   It never samples the page behind it, so it runs in every modern
+   engine. The markup and the SVG filters are injected by
+   src/js/liquid_glass.js. The filters' blur and offset are absolute SVG
+   values, so the script builds a set per lens height and scales them
+   with it; #p-lens-goo and #p-lens-aberration are the 50px originals the
+   CSS falls back to. Without the script none of this CSS matches
+   anything.
+
+   Markup, as the script builds it:
+   <span class="p-lens">
+     <span class="p-lens-rim"></span>
+     <span class="p-lens-body">
+       <span class="p-lens-liquid">
+         <span class="p-lens-edge"></span>
+         <span class="p-lens-track"></span>
+       </span>
+     </span>
+     <span class="p-lens-cover"></span>
+   </span>
+
+   Hosts set --p-lens-h (resting lens height) and drive
+   --p-lens-lift from 0 (a plain knob) to 1 (fully lifted glass). */
+
+@property --p-lens-lift {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+:root {
+  /* A lightly damped spring (ζ≈0.75): quick out, a ~3% overshoot, soft
+     settle. The slide, the scale, and the blur all share it. Hosts fall
+     back to the cubic-bezier where linear() is unsupported. */
+  --p-lens-spring: linear(
+    0 0%, 0.133 5%, 0.386 10%, 0.631 15%, 0.816 20%, 0.933 25%,
+    0.997 30%, 1.023 35%, 1.028 40%, 1.024 45%, 1.017 50%, 1.01 55%,
+    1.005 60%, 1.002 65%, 1 70%, 1 100%
+  );
+  --p-lens-duration: 0.35s;
+}
+
+.p-lens {
+  /* The reference lens was 50px tall; every magic number below is
+     expressed in tenths of the lens height (u) or fiftieths (px) so the
+     same glass reads right on a 12px knob and a 28px thumb. */
+  --p-lens-u: calc(var(--p-lens-h, 50px) / 10);
+  --p-lens-px: calc(var(--p-lens-h, 50px) / 50);
+  --p-lens-scale: 1.65;
+
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  scale: calc(1 + (var(--p-lens-scale) - 1) * var(--p-lens-lift));
+}
+
+.p-lens-rim,
+.p-lens-body,
+.p-lens-liquid,
+.p-lens-edge,
+.p-lens-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+/* The glass itself: edge highlights, the inner shade that sells the
+   curvature, and the shadow cast below. Split into color channels a
+   fraction of a pixel apart by #p-lens-aberration. */
+.p-lens-rim {
+  z-index: 2;
+  opacity: var(--p-lens-lift);
+  filter: url(#p-lens-aberration);
+  box-shadow:
+    inset var(--p-lens-px) calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * 2) hsl(0 0% 100% / 0.5),
+    inset 0 calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * 2) hsl(0 0% 100% / 0.5),
+    inset calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * 2) hsl(0 0% 100% / 0.5),
+    inset var(--p-lens-px) var(--p-lens-px) calc(var(--p-lens-px) * 2) hsl(0 0% 30% / 0.5),
+    inset calc(var(--p-lens-px) * -8) calc(var(--p-lens-px) * 4) calc(var(--p-lens-px) * 10) calc(var(--p-lens-px) * -6) hsl(0 0% 30% / 0.25),
+    inset calc(var(--p-lens-px) * -1) var(--p-lens-px) calc(var(--p-lens-px) * 6) hsl(0 0% 30% / 0.25),
+    calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * 8) hsl(0 0% 60% / 0.15),
+    var(--p-lens-px) var(--p-lens-px) calc(var(--p-lens-px) * 2) hsl(0 0% 30% / 0.15),
+    calc(var(--p-lens-px) * 2) calc(var(--p-lens-px) * 2) calc(var(--p-lens-px) * 6) hsl(0 0% 30% / 0.15),
+    inset calc(var(--p-lens-px) * -2) calc(var(--p-lens-px) * -1) calc(var(--p-lens-px) * 2) hsl(0 0% 100% / 0.25),
+    calc(var(--p-lens-px) * 3) calc(var(--p-lens-px) * 6) calc(var(--p-lens-px) * 16) calc(var(--p-lens-px) * -6) hsl(0 0% 30% / 0.5);
+}
+
+/* Out of focus while the knob is at rest, sharpening as it lifts. */
+.p-lens-body {
+  clip-path: inset(0 round 999px);
+  filter: blur(max(0px, calc(var(--p-lens-u) * 1.2 * (1 - var(--p-lens-lift)))));
+}
+
+.p-lens-liquid {
+  overflow: hidden;
+  filter: url(#p-lens-goo);
+}
+
+.p-lens-track {
+  position: absolute;
+  top: 50%;
+  border-radius: 999px;
+}
+
+/* The resting knob. Fades out as the glass lifts. */
+.p-lens-cover {
+  background: var(--p-lens-knob, #ffffff);
+  opacity: calc(1 - var(--p-lens-lift));
+}

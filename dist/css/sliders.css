@@ -277,3 +277,107 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ─── Liquid Glass thumb ───────────────────────────────────────────── */
+/* While a slider is being dragged, src/js/liquid_glass.js hides the
+   native thumb and floats a .p-lens (see materials.css) over it. The
+   lens redraws the track inside itself, magnified, so the fill edge
+   bends through the glass. On release it settles back into a thumb and
+   the script hands control back to the native one.
+
+   The lens lives on <body> so no overflow or transform on an ancestor
+   can clip it; the script copies the resolved colors onto it. The
+   liquid copy passes through an alpha threshold, so the unfilled track
+   needs an opaque stand-in for its translucent token. */
+
+:root {
+  --p-slider-lens-track: #e0e0e0;
+  --p-slider-touch-lens-track: #e4e4e4;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-slider-lens-track: #3a3a3a;
+  --p-slider-touch-lens-track: #3a3a3d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-slider-lens-track: #3a3a3a;
+    --p-slider-touch-lens-track: #3a3a3d;
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-slider-lens-track: #e0e0e0;
+  --p-slider-touch-lens-track: #e4e4e4;
+}
+
+input.p-slider[data-p-lens]::-webkit-slider-thumb {
+  background: transparent;
+  box-shadow: none;
+}
+
+input.p-slider[data-p-lens]::-moz-range-thumb {
+  background: transparent;
+  box-shadow: none;
+}
+
+.p-slider-lens {
+  --p-lens-h: var(--p-slider-lens-thumb-h);
+
+  position: fixed;
+  z-index: 2147483000;
+  width: var(--p-slider-lens-thumb-w);
+  height: var(--p-slider-lens-thumb-h);
+  translate: -50% -50%;
+  transition: --p-lens-lift var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1);
+  transition: --p-lens-lift var(--p-lens-duration) var(--p-lens-spring);
+}
+
+.p-slider-lens[data-p-lift] {
+  --p-lens-lift: 1;
+}
+
+.p-slider-lens .p-lens-cover {
+  box-shadow:
+    0 0 1px rgba(0, 0, 0, 0.05),
+    0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.p-slider-lens-touch .p-lens-cover {
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.15),
+    0 1px 1px rgba(0, 0, 0, 0.16),
+    0 3px 1px rgba(0, 0, 0, 0.10);
+}
+
+/* The fill color pools on the leading edge of the glass, the track
+   color on the trailing edge. */
+.p-slider-lens .p-lens-edge {
+  box-shadow:
+    inset calc(var(--p-lens-u) * 0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.2) var(--p-slider-lens-fill),
+    inset calc(var(--p-lens-u) * -0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.2) var(--p-slider-lens-rest);
+}
+
+/* The track copy lines up with the real track, so the lens scale
+   magnifies exactly what sits under the thumb. It swells a little as
+   the glass lifts, like liquid pulled toward the lens. */
+.p-slider-lens .p-lens-track {
+  left: calc(50% - var(--p-slider-lens-offset));
+  width: var(--p-slider-lens-track-w);
+  height: calc(var(--p-slider-lens-track-h) * (1 + 0.6 * var(--p-lens-lift)));
+  translate: 0 -50%;
+  background: linear-gradient(
+    to right,
+    var(--p-slider-lens-fill) 0 var(--p-slider-lens-offset),
+    var(--p-slider-lens-rest) var(--p-slider-lens-offset)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-slider-lens {
+    transition: none;
+  }
+}

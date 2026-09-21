@@ -1716,9 +1716,13 @@ textarea.p-field {
 
 /* ─── Switch on/off glyphs ─────────────────────────────────────────── */
 /* A bar when on, a ring when off, so the state does not rest on color
-   alone. iOS shows these when On/Off Labels is enabled; on the web the
-   closest signal is prefers-contrast, and .p-switch-labels turns them
-   on unconditionally.
+   alone. Opt in with .p-switch-labels.
+
+   Deliberately not tied to prefers-contrast: on iOS that flag is
+   Increase Contrast, while the glyphs are a separate setting (On/Off
+   Labels). Drawing them for everyone who raised contrast changes a
+   control they did not ask to change, and the knob position already
+   carries the state without color.
 
    The glyph sits in the strip the knob is not covering, which is
    exactly inset + travel wide, and is centered in it. Deriving the
@@ -1763,10 +1767,186 @@ textarea.p-field {
   content: "";
 }
 
-@media (prefers-contrast: more) {
-  .p-switch > input + span::before,
-  .p-switch > input:checked + span::before {
-    content: "";
+/* ─── Switch, Liquid Glass ─────────────────────────────────────────── */
+/* src/js/liquid_glass.js adds .p-switch-liquid and injects a knockout
+   and a .p-lens (see materials.css) into the track. Press and the knob
+   lifts into glass; drag across the middle and it slides under your
+   finger; release and it settles. Without the script the CSS morph
+   above still runs, so nothing here is required.
+
+   The lens redraws the track through an SVG alpha threshold, which
+   would erase a translucent fill, so the liquid copy uses an opaque
+   equivalent of the off track. The real track keeps its translucent
+   token. */
+
+:root {
+  --p-switch-liquid-off: #e0e0e0;
+  --p-switch-touch-liquid-off: #c5c5c9;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-switch-liquid-off: #3a3a3a;
+  --p-switch-touch-liquid-off: #4a4a4d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-switch-liquid-off: #3a3a3a;
+    --p-switch-touch-liquid-off: #4a4a4d;
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-switch-liquid-off: #e0e0e0;
+  --p-switch-touch-liquid-off: #c5c5c9;
+}
+
+.p-switch-liquid {
+  --p-switch-off: var(--p-control-fill);
+  --p-switch-off-solid: var(--p-switch-liquid-off);
+  --p-switch-on: var(--p-control-accent);
+  --p-switch-knob-h: calc(var(--p-switch-track-h) - 2 * var(--p-switch-knob-inset));
+
+  /* Without this the browser claims a sideways drag as a scroll and
+     pointermove stops arriving, so the knob stops following. */
+  touch-action: none;
+}
+
+.p-switch-liquid.p-switch-touch {
+  --p-switch-off: var(--p-switch-touch-off);
+  --p-switch-off-solid: var(--p-switch-touch-liquid-off);
+}
+
+.p-switch.p-switch-liquid > input + span {
+  --p-gel: 0;
+  /* The color follows the knob, not the checkbox: it stays off until the
+     knob is 85% of the way across, then snaps and fades over 175ms.
+     Clamped so the spring's undershoot and overshoot cannot step it. */
+  --p-switch-lit: clamp(0, round(down, var(--p-gel), 0.85) / 0.85, 1);
+  --p-switch-color: color-mix(
+    in srgb,
+    var(--p-switch-on) calc(var(--p-switch-lit) * 100%),
+    var(--p-switch-off)
+  );
+  --p-switch-solid: color-mix(
+    in srgb,
+    var(--p-switch-on) calc(var(--p-switch-lit) * 100%),
+    var(--p-switch-off-solid)
+  );
+  --p-lens-h: var(--p-switch-knob-h);
+  --p-lens-scale-now: calc(1 + 0.65 * var(--p-lens-lift));
+
+  background: transparent;
+  transition:
+    --p-gel var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1),
+    --p-lens-lift var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1);
+  transition:
+    --p-gel var(--p-lens-duration) var(--p-lens-spring),
+    --p-lens-lift var(--p-lens-duration) var(--p-lens-spring);
+}
+
+/* Knob side: the checkbox, unless a drag is in progress, in which case
+   the script says which side the knob is on. */
+.p-switch.p-switch-liquid > input:checked + span,
+.p-switch.p-switch-liquid[data-p-state="on"] > input + span {
+  --p-gel: 1;
+}
+
+.p-switch.p-switch-liquid[data-p-state="off"] > input + span {
+  --p-gel: 0;
+}
+
+.p-switch.p-switch-liquid[data-p-lift] > input:not(:disabled) + span {
+  --p-lens-lift: 1;
+}
+
+/* The lens replaces the pseudo-element knob. */
+.p-switch.p-switch-liquid > input + span::after {
+  content: none;
+}
+
+/* On/off glyphs stay above the track paint. */
+.p-switch.p-switch-liquid > input + span::before {
+  z-index: 1;
+}
+
+/* Layer 1, the baseline: the track, with a capsule cut out wherever the
+   lens is. The cut is a mask built from two round caps and a bar, so
+   it follows the knob and grows with the lens every frame. */
+.p-switch-knockout {
+  --p-hole-cx: calc(
+    var(--p-switch-knob-inset) + var(--p-switch-travel) * var(--p-gel) + var(--p-switch-knob-w) / 2
+  );
+  /* At rest the hole tucks 1px under the knob so no page shows around
+     it; lifted, it opens 1px past the glass. */
+  --p-hole-pad: calc(2px * var(--p-lens-lift) - 1px);
+  --p-hole-w: calc(var(--p-switch-knob-w) * var(--p-lens-scale-now) + var(--p-hole-pad));
+  --p-hole-h: calc(var(--p-switch-knob-h) * var(--p-lens-scale-now) + var(--p-hole-pad));
+  --p-hole-l: calc(var(--p-hole-cx) - var(--p-hole-w) / 2);
+
+  position: absolute;
+  inset: 0;
+  /* Rounded with clip-path, not border-radius: Chromium leaves the
+     antialiased radius edge unmasked, a hairline arc inside the glass. */
+  clip-path: inset(0 round 999px);
+  background: var(--p-switch-color);
+  transition: background 0.175s ease-out;
+
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    radial-gradient(closest-side, #000 calc(100% - 0.5px), #0000) var(--p-hole-l) 50% / var(--p-hole-h) var(--p-hole-h) no-repeat,
+    radial-gradient(closest-side, #000 calc(100% - 0.5px), #0000) calc(var(--p-hole-l) + var(--p-hole-w) - var(--p-hole-h)) 50% / var(--p-hole-h) var(--p-hole-h) no-repeat,
+    linear-gradient(#000 0 0) calc(var(--p-hole-l) + var(--p-hole-h) / 2) 50% / calc(var(--p-hole-w) - var(--p-hole-h)) var(--p-hole-h) no-repeat;
+  mask-composite: exclude, add, add, add;
+}
+
+/* Layers 2 and 3: the lens, riding the knob position. */
+.p-switch-liquid .p-lens {
+  --p-lens-knob: var(--p-control-knob);
+
+  z-index: 2;
+  top: 50%;
+  left: var(--p-switch-knob-inset);
+  width: var(--p-switch-knob-w);
+  height: var(--p-switch-knob-h);
+  translate: calc(var(--p-switch-travel) * var(--p-gel)) -50%;
+}
+
+.p-switch-liquid .p-lens-cover {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* Refraction concentrates the track color at the glass edge, heavier on
+   the side the knob is leaving. */
+.p-switch-liquid .p-lens-edge {
+  box-shadow:
+    inset 0 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-switch-solid),
+    inset calc(var(--p-gel) * var(--p-lens-u) * 1.6 - var(--p-lens-u) * 0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-switch-solid);
+  transition: box-shadow 0.175s ease-out;
+}
+
+/* The track as seen through the glass: a band that thins while lifted,
+   magnified by the lens scale, and shifted so its rounded end sits in
+   the glass on either side. */
+.p-switch-liquid .p-lens-track {
+  --p-u: calc(var(--p-switch-track-h) / 12);
+
+  width: var(--p-switch-track-w);
+  height: max(
+    calc(var(--p-switch-track-h) - 6 * var(--p-u)),
+    calc(var(--p-switch-track-h) - 6 * var(--p-u) * var(--p-lens-lift))
+  );
+  left: calc(6 * var(--p-u) * var(--p-gel) * (1 - var(--p-lens-lift)) + 3 * var(--p-u) * var(--p-lens-lift));
+  translate: calc(var(--p-gel) * (var(--p-switch-knob-w) - var(--p-switch-track-w) - 6 * var(--p-u))) -50%;
+  background: var(--p-switch-solid);
+  transition: background 0.175s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-switch.p-switch-liquid > input + span {
+    transition: none;
   }
 }
 

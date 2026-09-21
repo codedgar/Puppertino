@@ -169,7 +169,7 @@ This is the same animation the desktop switch uses, scaled by tokens rather than
 
 On and off differ by color and by knob position, and at a glance the color is doing most of the work. Green against gray is exactly the comparison that green-weak vision flattens. `.p-switch-labels` draws a bar on the track when the switch is on and a ring when it is off, so the state survives without color.
 
-The same glyphs appear automatically under `prefers-contrast: more`, on every switch, without the class. Consider adding the class outright on switches that control something consequential.
+The glyphs are opt-in only. iOS draws them for its own On/Off Labels setting, which is separate from Increase Contrast, so Puppertino does not attach them to a contrast preference and quietly restyle every switch on the page. Consider adding the class outright on switches that control something consequential.
 
 ## Segmented controls
 
