@@ -14,7 +14,15 @@ export const nav = [
       {
         items: [
           { label: 'Getting started', slug: 'docs/getting-started/', icon: 'ph-rocket-launch' },
-          { label: 'Materials', slug: 'docs/materials/', icon: 'ph-drop' },
+          {
+            label: 'Materials',
+            slug: 'docs/materials/',
+            icon: 'ph-drop',
+            children: [
+              { label: 'Liquid Glass', anchor: '#liquid-glass', icon: 'ph-drop-half' },
+              { label: 'Puppertino Glass', anchor: '#puppertino-glass', icon: 'ph-sparkle' },
+            ],
+          },
           { label: 'Colors', slug: 'docs/colors/', icon: 'ph-palette' },
           { label: 'Typography', slug: 'docs/typography/', icon: 'ph-text-aa' },
           { label: 'Layout', slug: 'docs/layout/', icon: 'ph-columns' },

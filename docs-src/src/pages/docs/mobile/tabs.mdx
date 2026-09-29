@@ -23,7 +23,7 @@ Avoid hiding a tab bar on scroll. It shows which section is open as well as offe
 |---|---|
 | Bar | 360px at most, 62px tall, full capsule at 31px radius |
 | Padding | 0 10px |
-| Surface | `rgba(255,255,255,0.65)` light, `rgba(40,40,42,0.65)` dark, blur 30px, saturate 180% |
+| Surface | `rgba(255,255,255,0.65)` light, `rgba(40,40,42,0.65)` dark, blur 30px, saturate 180%. Regular [Puppertino Glass](../../materials/#puppertino-glass) with `glass.js` loaded. |
 | Tab | Flexes from a 94px basis, capped at 94px |
 | Icon | 18px |
 | Label | 10px, weight 590, line height 12px |
@@ -54,6 +54,8 @@ Avoid hiding a tab bar on scroll. It shows which section is open as well as offe
 />
 
 It is a `<nav>` of links. No JavaScript, no state to manage, no click handlers. The page you are on is the selected tab, and `aria-current="page"` is what says so.
+
+With `src/js/glass.js` and Glassworks loaded, the bar is [Puppertino Glass](../../materials/#puppertino-glass): it refracts the page behind it in real time instead of only blurring it. The surface above is what it shows until the glass is ready, and wherever it cannot render. A fixed bar sits at `z-index: 70`, so other glass on the same page needs `--p-glass-z: 70` too.
 
 ## How the width works
 

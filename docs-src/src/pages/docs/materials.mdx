@@ -11,11 +11,20 @@ import ShadowDemo from '../../components/ShadowDemo.astro';
 import Showcase from '../../components/Showcase.astro';
 import '@puppertino/forms.css';
 import '@puppertino/sliders.css';
+import '@puppertino/tabs.css';
 import liquidGlassScript from '../../../../src/js/liquid_glass.js?url';
 import slidersScript from '../../../../src/js/sliders.js?url';
+import glassScript from '../../../../src/js/glass.js?url';
+import glassDemoScript from '../../scripts/glass-demo.js?url';
+
+export const backdrop = `${import.meta.env.BASE_URL}images/material-backdrop.jpg`;
 
 <script type="module" src={liquidGlassScript}></script>
 <script type="module" src={slidersScript}></script>
+<script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.1/dist/glassworks.umd.min.js" defer></script>
+<script type="module" src={glassScript}></script>
+<script type="module" src={glassDemoScript}></script>
 
 A material is a surface that blurs and tints the content behind it. Apple uses materials for navigation bars, sheets, popovers, and any element that should feel like it sits on top of the rest of the interface without hiding it completely.
 
@@ -79,7 +88,7 @@ Each preset includes a sensible border radius (24px for small, 14px for medium, 
 
 ## Liquid Glass
 
-Liquid Glass is the material Apple introduced across its platforms in 2025. It bends the content behind it the way a real lens does, instead of only blurring it. The web has no native version, so there are two ways to approximate it: faux Liquid Glass and real-time Liquid Glass. Puppertino ships the faux kind on the controls where Apple's lens shows up most, switch knobs and slider thumbs.
+Liquid Glass is the material Apple introduced across its platforms in 2025. It bends the content behind it the way a real lens does, instead of only blurring it. The web has no native version, so there are two ways to approximate it: faux Liquid Glass and real-time Liquid Glass. Puppertino ships both. Switch knobs and slider thumbs get the faux lens below, and bars, buttons, and panels get [Puppertino Glass](#puppertino-glass), which refracts the real page.
 
 <Showcase
   name="materials-liquid-glass"
@@ -153,21 +162,9 @@ What differs is where that map gets applied, and that decides which browsers kee
 | A plain `filter` on content the component owns | The same primitive, applied to a layer the component itself renders, like a copy of a track fill. The page behind is untouched. | Every modern engine. |
 | Capture the DOM, refract it in WebGL | A library snapshots the page (snapDOM, or html2canvas), uploads it as a texture, and a shader does the refraction, chromatic aberration, and specular highlights. | Every WebGL browser, including Safari and Firefox. |
 
-The second row is the one to reach for first, because it needs no library and no snapshot. Aave documented it in [Building Glass for the Web](https://aave.com/design/building-glass-for-the-web), and their switch and slider work the way Puppertino's do: the glass refracts a copy of the track fill rather than the page. Their write-up is also the best list of Safari's quirks, including filter output being cached by filter ID and live `<video>` never reaching the filter pipeline.
+The second row is what the faux lens uses, because a control always knows what sits under it. Aave documented it in [Building Glass for the Web](https://aave.com/design/building-glass-for-the-web), and their switch and slider work the way Puppertino's do: the glass refracts a copy of the track fill rather than the page. Their write-up is also the best list of Safari's quirks, including filter output being cached by filter ID and live `<video>` never reaching the filter pipeline.
 
-The third row is what to use when the glass has to sit over real page content: text, images, video. [Glassworks](https://glassworks.codedgar.com/) does this. It comes from the same author as Puppertino, and is a fork of [liquidGL](https://github.com/naughtyduk/liquidGL) by NaughtyDuk, whose WebGL renderer it keeps. It captures with snapDOM at roughly 80ms a frame, about four times faster than html2canvas, and refracts the texture through a WebGL shader with adjustable bevel, frost, specular, and magnification. It runs in Chrome, Safari, Firefox, and Edge, falls back to a frosted `backdrop-filter` on mobile, and gets unstable in Safari once a glass element passes about half the viewport.
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom/dist/snapdom.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks" defer></script>
-<script>
-  liquidGL({ target: '.liquidGL', refraction: 0.01, specular: true });
-</script>
-```
-
-The cost is that a capture is a snapshot, not a live view. Anything that moves has to be re-captured or registered as dynamic, so the technique suits a handful of large surfaces rather than every control on a page.
-
-Puppertino covers the two cases these techniques address. Controls get the faux lens above, and large surfaces get the [thickness levels](#thickness-levels), which blur and tint the backdrop in every browser. Add real-time refraction on top when a surface calls for it, over a material that already reads correctly on its own.
+The third row is what a surface needs, because a tab bar or a floating button can sit over anything. That is [Puppertino Glass](#puppertino-glass).
 
 ### Accessibility of the lens
 
@@ -177,6 +174,179 @@ The faux lens Puppertino ships steps aside whenever it would get in the way.
 - **Reduced transparency.** With `prefers-reduced-transparency` on, the knob stays solid. Glass over a busy track is exactly the contrast problem that setting exists to prevent.
 - **Semantics.** The lens is decorative and marked `aria-hidden`. The switch is still a checkbox inside its label, and the slider is still a native range input, so screen readers and keyboards see no difference.
 - **Dragging.** A switch counts a press that moves less than 6px as a tap. A drag commits the side the knob ended on and fires `input` and `change` like a click would.
+
+## Puppertino Glass
+
+Puppertino Glass refracts the real page behind a surface. Content bends at the rim like it would through a lens, frosts under the middle, and keeps moving as the page scrolls. It is Apple's Liquid Glass for bars, buttons, and panels, in Safari, Chrome, Firefox, and Edge.
+
+<Showcase
+  name="materials-puppertino-glass"
+  snippet={`<nav class="p-tab-bar p-tab-bar-fixed" aria-label="Sections">
+  <a class="p-tab-bar__tab" href="/" aria-current="page">
+    <i class="ph-bold ph-house" aria-hidden="true"></i><span>Home</span>
+  </a>
+  <a class="p-tab-bar__tab" href="/search/">
+    <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i><span>Search</span>
+  </a>
+</nav>
+
+<button class="p-glass" type="button">Share</button>
+<button class="p-glass-clear" type="button" aria-label="Play">…</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.1/dist/glassworks.umd.min.js"></script>
+<script src="src/js/glass.js"></script>`}
+  code={`<div class="glass-demo" data-p-glass-backdrop style="background-image: url('${backdrop}');">
+  <button class="p-glass glass-demo-drag" type="button" aria-label="Glass pill. Drag it, or use the arrow keys."><i class="ph-bold ph-hand-grabbing" aria-hidden="true"></i>Drag the glass</button>
+  <button class="p-glass-clear glass-demo-clear" type="button" aria-label="Play"><i class="ph-bold ph-play" aria-hidden="true"></i></button>
+  <nav class="p-tab-bar" aria-label="Demo sections">
+    <button class="p-tab-bar__tab" type="button" aria-current="page"><i class="ph-bold ph-house" aria-hidden="true"></i><span>Home</span></button>
+    <button class="p-tab-bar__tab" type="button"><i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i><span>Search</span></button>
+    <button class="p-tab-bar__tab" type="button"><i class="ph-bold ph-books" aria-hidden="true"></i><span>Library</span></button>
+    <button class="p-tab-bar__tab" type="button"><i class="ph-bold ph-user" aria-hidden="true"></i><span>Profile</span></button>
+  </nav>
+</div>`}
+/>
+
+Drag the pill across the photo. The dog's outline bends at the pill's rim and stays sharp behind the Clear button. The corner toggle flips the tint between light and dark while the photo stays the same.
+
+### When to use it
+
+Use Puppertino Glass for the chrome that floats over content: tab bars, toolbars, floating buttons, and media controls. Apple reserves Liquid Glass for this navigation layer. Content itself stays on solid backgrounds, so the glass reads as a separate plane.
+
+Avoid stacking glass on glass. Each surface refracts a snapshot of the page taken without any glass in it, so glass inside glass shows the page, not the outer pane. Apple forbids it for the same reason.
+
+For surfaces that should blur without bending, like sheets and sidebars, consider a [thickness level](#thickness-levels) instead. It costs no script and no snapshot.
+
+### Variants
+
+Two variants, after Apple's.
+
+| | Regular `.p-glass` | Clear `.p-glass-clear` |
+|---|---|---|
+| Use it for | Bars, buttons, panels, anything with text | Media controls over photos and video |
+| Tint, light | `rgba(255,255,255,0.36)` | `rgba(255,255,255,0.06)` |
+| Tint, dark | `rgba(30,30,32,0.42)` | `rgba(0,0,0,0.14)` |
+| Frost | 6px blur, 160% saturation | None, 120% saturation |
+| Refraction across the pane | 4% of the shorter side | 6% of the shorter side |
+| Extra bend at the rim | 30% of the shorter side | 40% of the shorter side |
+| Rim width | 20% of the shorter side | 16% of the shorter side |
+| Before the first frame | `--p-glass-md` material | `--p-glass-sm` material |
+
+Regular is the default. Its frost and tint keep labels readable over busy content. Clear lets the backdrop through almost untouched, so white icons need a dim photo or video behind them. Avoid Clear over text or light backgrounds. Nothing guarantees contrast there.
+
+The tab bar is Regular glass. It starts from its own surface, `--p-tab-bar-surface`, rather than `--p-glass-md`.
+
+### Anatomy
+
+Glass is four layers, bottom to top.
+
+| Layer | What draws it |
+|---|---|
+| Refraction | A WebGL canvas under the surface. It samples a snapshot of the page, bent outward from the center so content compresses at the rim like a convex lens. Two slow highlights drift across it. |
+| Frost | The surface's `::before` layer, a `backdrop-filter` blur of the refracted image. |
+| Tint | The same layer's background, `--p-glass-tint`. |
+| Rim | The same layer's inset shadows: a bright top edge, a fainter return along the bottom, and a 0.5px hairline. |
+
+Your content sits above all four. Every value is a custom property, so a surface can be tuned in CSS.
+
+| Property | Default | What it does |
+|---|---|---|
+| `--p-glass-tint` | See Variants | Color laid over the refraction |
+| `--p-glass-blur` | `6px` | Frost radius |
+| `--p-glass-saturate` | `160%` | Color boost under the frost |
+| `--p-glass-rim` | Three inset shadows | The edge highlight |
+| `--p-glass-refraction` | `0.04` | Bend across the whole pane, as a fraction of the shorter side |
+| `--p-glass-bevel-depth` | `0.3` | Extra bend at the rim, same unit |
+| `--p-glass-bevel-width` | `0.2` | How far in from the edge the rim bends |
+| `--p-glass-specular` | `1` | Drifting highlights on (`1`) or off (`0`) |
+| `--p-glass-magnify` | `1` | Zoom of the content under the glass |
+| `--p-glass-surface` | `--p-glass-md` | The plain material shown before and instead of glass |
+| `--p-glass-z` | `1` | The layer every surface shares. See Limits. |
+
+Bends are relative to the surface, so a 44px button and a 62px tab bar bend in proportion. The glass inherits the surface's `border-radius`, so set one. A capsule is `border-radius: 999px`.
+
+### How to use it
+
+Load a capture engine, [Glassworks](https://github.com/codedgar/glassworks), and the script, in that order. Every `.p-glass`, `.p-glass-clear`, and `.p-tab-bar` on the page turns into glass.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.1/dist/glassworks.umd.min.js"></script>
+<script src="src/js/glass.js"></script>
+```
+
+With a bundler, install Glassworks 2 and a capture engine, then hand the library over instead of relying on globals. Glassworks 2 is on the `next` tag until it is final.
+
+```bash
+npm i @codedgar/glassworks@next @zumer/snapdom
+```
+
+```js
+import glassworks, { createSnapdomEngine } from '@codedgar/glassworks';
+import { snapdom } from '@zumer/snapdom';
+import '@codedgar/puppertino/js/glass.js';
+
+PuppertinoGlass.use(glassworks, { engine: createSnapdomEngine(snapdom) });
+```
+
+Surfaces added after the page loads need one call. Opt a surface out with `data-p-glass="off"`, and it keeps its material.
+
+```js
+PuppertinoGlass.enhance(container);
+```
+
+Glass is a snapshot of the page, not a live view. Scrolling and moving the glass update in real time, and video is picked up automatically. When the content behind the glass changes, like a new list or a swapped image, take a new snapshot.
+
+```js
+PuppertinoGlass.refresh();
+```
+
+Appearance changes recapture on their own, from the system setting, `.p-dark-mode`, `.p-light-mode`, or `data-p-theme`.
+
+By default the snapshot covers the whole `<body>`. On a long page, mark the region the glass sits over with `data-p-glass-backdrop`. A smaller snapshot captures faster and uses less GPU memory. Every glass surface on the page has to sit inside it.
+
+```html
+<main data-p-glass-backdrop>…</main>
+```
+
+### States
+
+The script marks each surface with `data-p-glass`.
+
+| Value | Meaning |
+|---|---|
+| none | Not enhanced. The surface is its plain material. |
+| `pending` | Enhanced and waiting for the first snapshot, usually under 100ms. The material shows on the `::before` layer, so nothing flashes. |
+| `live` | Refracting. The material swaps for the tint in 200ms. |
+| `off` | Left alone, set by you or because the glass could not render there. |
+
+Interaction states belong to the component. The tab bar keeps its 50% opacity press and its focus ring, and a glass button keeps whatever you give it. Glassworks turns off pointer events on the surface. Puppertino turns them back on, so glass still takes clicks.
+
+### Limits
+
+Glassworks draws every surface on one canvas, placed just under the highest surface. That shapes where glass can go.
+
+- **One layer per page.** Every surface has to share one `z-index`, `--p-glass-z` (default `1`). A fixed tab bar sits at `70`, so on a page that also has inline glass, set `--p-glass-z: 70` on them. Otherwise the canvas covers their content, and the script warns in the console.
+- **No stacking contexts above it.** A surface inside an ancestor with a `transform`, `filter`, `opacity`, a `z-index`, or similar stays a plain material. The script checks, marks it `off`, and warns.
+- **Fixed elements are not captured.** A fixed header does not show up in the glass beneath it.
+- **Size.** Safari can turn unstable once a single surface covers about half the viewport. Keep glass to chrome.
+- **Bend on long pages.** Glassworks bends in snapshot coordinates. Puppertino converts against the snapshot's longer side, so on a tall page the side edges bend a little less than the top and bottom. `data-p-glass-backdrop` evens it out.
+
+### Dark mode
+
+The refraction is the page itself, so it follows whatever the page does. The tint flips from 36% white to 42% `#1E1E20`, and the rim drops to about a third of its light-mode brightness. Clear glass goes from 6% white to 14% black. The snapshot retakes itself when the appearance changes, so the glass never shows the old scheme.
+
+### Accessibility
+
+- **Reduced transparency, increased contrast, and forced colors.** The script never starts, and every surface stays its plain material. Under reduced transparency that material turns nearly opaque. Glass over a busy backdrop is exactly the contrast problem those settings exist to prevent.
+- **Reduced motion.** The drifting highlights stop. The refraction stays, because it does not move on its own.
+- **Contrast.** The frost and tint of Regular glass carry labels over most backdrops, but the backdrop decides. Check text against the busiest spot behind it and aim for 4.5:1. Clear glass guarantees nothing, so reserve it for white icons over dimmed media.
+- **Semantics.** Glass is paint. The canvas is decorative, and the surface keeps its role, its label, its focus ring, and its 44px target.
+- **Without WebGL, a capture engine, or the script.** Every surface stays its material. Nothing breaks.
+
+Glassworks is by the author of Puppertino, a fork of [liquidGL](https://github.com/naughtyduk/liquidGL) by NaughtyDuk, whose WebGL renderer it keeps. It adds snapDOM captures, about four times faster than html2canvas, and a fix for lenses drifting on long pages. Puppertino Glass is the layer on top: the variants, the tokens, the material hand-off, and the accessibility behavior.
+
 
 ## Shadows
 

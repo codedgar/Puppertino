@@ -197,6 +197,159 @@
   border-radius: 10px;
 }
 
+/* ─── Puppertino Glass ─────────────────────────────────────────────── */
+/* Real-time Liquid Glass: the surface refracts the page behind it
+   instead of only blurring it. Rendered by Glassworks
+   (github.com/codedgar/glassworks), which snapshots the page and bends
+   it through a WebGL shader drawn under the element. src/js/glass.js
+   connects the two.
+
+   Two variants, after Apple's:
+   .p-glass        Regular. Frosted, lightly tinted, adapts to light
+                   and dark. The default for bars, buttons, and panels.
+   .p-glass-clear  Clear. Crisp and barely tinted. Needs a dim or busy
+                   backdrop to stay legible, so use it over media.
+
+   .p-tab-bar becomes Regular glass as well.
+
+   The recipe lives in the custom properties below and the script reads
+   them once per surface, so a variant is only a set of overrides.
+   Refraction (the bend across the whole pane) and bevel depth (the
+   extra bend at the rim) are fractions of the surface's shorter side,
+   so a 44px button and a 62px tab bar bend in proportion. Bevel width
+   is a fraction of the shorter side too. Specular (1 or 0) adds two
+   slowly drifting highlights, and is dropped under reduced motion.
+
+   Frost is not done in WebGL. Glassworks' own frost (--p-glass-frost)
+   samples randomly and reads as grain, so it stays at 0. The canvas
+   paints below the surface, so the tint layer's backdrop-filter blurs
+   the refracted image instead: --p-glass-blur, smooth at any size.
+
+   Until the first frame renders, and wherever the glass cannot render
+   (no script, no WebGL, reduced transparency, increased contrast), the
+   surface is a plain material: --p-glass-surface with the standard
+   blur. The script keeps that material on a ::before layer while
+   Glassworks loads, then swaps it for --p-glass-tint. So a surface's
+   own ::before is taken while it is glass.
+
+   States, set by the script on the surface:
+   data-p-glass="pending"  enhanced, waiting for the first frame
+   data-p-glass="live"     refracting
+   data-p-glass="off"      author opt-out; the script leaves it alone */
+
+:root {
+  --p-glass-surface: var(--p-glass-md);
+  --p-glass-tint: rgba(255, 255, 255, 0.36);
+  --p-glass-clear-tint: rgba(255, 255, 255, 0.06);
+
+  /* The rim: light catching the top edge, a fainter return along the
+     bottom, and a hairline that defines the shape on any backdrop. */
+  --p-glass-rim:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.75),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35);
+
+  /* Regular recipe */
+  --p-glass-refraction: 0.04;
+  --p-glass-bevel-depth: 0.3;
+  --p-glass-bevel-width: 0.2;
+  --p-glass-blur: 6px;
+  --p-glass-saturate: 160%;
+  --p-glass-frost: 0;
+  --p-glass-magnify: 1;
+  --p-glass-specular: 1;
+
+  /* Every surface on a page shares one WebGL canvas, which Glassworks
+     stacks directly under the highest one. Keep them on one layer. */
+  --p-glass-z: 1;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-glass-tint: rgba(30, 30, 32, 0.42);
+  --p-glass-clear-tint: rgba(0, 0, 0, 0.14);
+  --p-glass-rim:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-glass-tint: rgba(30, 30, 32, 0.42);
+    --p-glass-clear-tint: rgba(0, 0, 0, 0.14);
+    --p-glass-rim:
+      inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-glass-tint: rgba(255, 255, 255, 0.36);
+  --p-glass-clear-tint: rgba(255, 255, 255, 0.06);
+  --p-glass-rim:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.75),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35);
+}
+
+.p-glass,
+.p-glass-clear {
+  background: var(--p-glass-surface);
+  -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
+  backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
+}
+
+.p-glass-clear {
+  --p-glass-surface: var(--p-glass-sm);
+  --p-glass-tint: var(--p-glass-clear-tint);
+  --p-glass-refraction: 0.06;
+  --p-glass-bevel-depth: 0.4;
+  --p-glass-bevel-width: 0.16;
+  --p-glass-blur: 0px;
+  --p-glass-saturate: 120%;
+}
+
+/* Glassworks sets pointer-events: none on the surface inline. A tab bar
+   or a glass button still has to take clicks, so that is overridden. */
+[data-p-glass="pending"],
+[data-p-glass="live"] {
+  pointer-events: auto !important;
+}
+
+[data-p-glass="pending"]::before,
+[data-p-glass="live"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: background-color 0.2s ease-out;
+}
+
+[data-p-glass="pending"]::before {
+  background-color: var(--p-glass-surface);
+  -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
+  backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
+}
+
+[data-p-glass="live"]::before {
+  background-color: var(--p-glass-tint);
+  box-shadow: var(--p-glass-rim);
+  -webkit-backdrop-filter: saturate(var(--p-glass-saturate)) blur(var(--p-glass-blur));
+  backdrop-filter: saturate(var(--p-glass-saturate)) blur(var(--p-glass-blur));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-p-glass="pending"]::before,
+  [data-p-glass="live"]::before {
+    transition: none;
+  }
+}
+
 /* ─── Fallback for browsers without backdrop-filter ────────────────── */
 
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
@@ -207,7 +360,9 @@
   .p-material-ultrathick,
   .p-glass-sm,
   .p-glass-md,
-  .p-glass-lg {
+  .p-glass-lg,
+  .p-glass,
+  .p-glass-clear {
     background: rgba(246, 246, 246, 0.95);
   }
 
@@ -218,7 +373,9 @@
   .p-dark-mode .p-material-ultrathick,
   .p-dark-mode .p-glass-sm,
   .p-dark-mode .p-glass-md,
-  .p-dark-mode .p-glass-lg {
+  .p-dark-mode .p-glass-lg,
+  .p-dark-mode .p-glass,
+  .p-dark-mode .p-glass-clear {
     background: rgba(0, 0, 0, 0.92);
   }
 
@@ -229,7 +386,9 @@
   .p-light-mode .p-material-ultrathick,
   .p-light-mode .p-glass-sm,
   .p-light-mode .p-glass-md,
-  .p-light-mode .p-glass-lg {
+  .p-light-mode .p-glass-lg,
+  .p-light-mode .p-glass,
+  .p-light-mode .p-glass-clear {
     background: rgba(246, 246, 246, 0.95);
   }
 }
@@ -244,7 +403,9 @@
   .p-material-ultrathick,
   .p-glass-sm,
   .p-glass-md,
-  .p-glass-lg {
+  .p-glass-lg,
+  .p-glass,
+  .p-glass-clear {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: rgba(246, 246, 246, 0.96);
@@ -257,7 +418,9 @@
   .p-dark-mode .p-material-ultrathick,
   .p-dark-mode .p-glass-sm,
   .p-dark-mode .p-glass-md,
-  .p-dark-mode .p-glass-lg {
+  .p-dark-mode .p-glass-lg,
+  .p-dark-mode .p-glass,
+  .p-dark-mode .p-glass-clear {
     background: rgba(0, 0, 0, 0.94);
   }
 
@@ -268,7 +431,9 @@
   .p-light-mode .p-material-ultrathick,
   .p-light-mode .p-glass-sm,
   .p-light-mode .p-glass-md,
-  .p-light-mode .p-glass-lg {
+  .p-light-mode .p-glass-lg,
+  .p-light-mode .p-glass,
+  .p-light-mode .p-glass-clear {
     background: rgba(246, 246, 246, 0.96);
   }
 }

@@ -198,6 +198,9 @@
    bar is 360px at most and hugs its content below that, and each tab
    flexes from a 94px basis down to whatever fits. Five tabs land at
    68px each, four at 85px, three or fewer keep the full 94px.
+
+   With src/js/glass.js loaded, the capsule is Puppertino Glass: it
+   refracts the page behind it in real time.
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -254,6 +257,11 @@
   --p-tab-bar-height: 62px;
   --p-tab-bar-max: 360px;
   --p-tab-bar-tab: 94px;
+
+  /* Puppertino Glass (materials.css, src/js/glass.js) turns the bar
+     into Regular glass. Until then, and wherever it cannot, the bar
+     keeps this surface. */
+  --p-glass-surface: var(--p-tab-bar-surface);
 
   box-sizing: border-box;
   display: flex;
