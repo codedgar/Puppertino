@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Lists & tables
-description: Rows with capsule selection for lists, and real table styling with sortable headers, hairline separators, and full-row selection.
+description: Rows with capsule selection for lists, and real table styling on a dense striped grid with sortable headers and full-row selection.
 ---
 
 import '@puppertino/lists.css';
@@ -28,45 +28,47 @@ Use a list for navigation and single-column content. Use a table when people com
   <li class="p-list-row p-selected-quiet">Applications</li>
   <li class="p-list-row p-dimmed">Network</li>
 </ul>
-<table class="p-table" style="max-width: 360px; align-self: flex-start;">
+<table class="p-table" style="max-width: 400px; align-self: flex-start;">
   <thead>
     <tr>
       <th aria-sort="ascending">Name</th>
       <th>Kind</th>
-      <th>Size</th>
+      <th class="p-table-num">Size</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>Report.pages</td><td>Document</td><td>1.2 MB</td></tr>
-    <tr class="p-selected"><td>Mockups.fig</td><td>Figma file</td><td>48 MB</td></tr>
-    <tr><td>Notes.txt</td><td>Plain text</td><td>4 KB</td></tr>
+    <tr><td>Report.pages</td><td>Document</td><td class="p-table-num">1.2 MB</td></tr>
+    <tr><td>Notes.txt</td><td>Plain text</td><td class="p-table-num">4 KB</td></tr>
+    <tr class="p-table-group"><td colspan="3">Design</td></tr>
+    <tr class="p-selected"><td>Mockups.fig</td><td>Design file</td><td class="p-table-num">48 MB</td></tr>
+    <tr><td>Icons.svg</td><td>SVG image</td><td class="p-table-num">96 KB</td></tr>
   </tbody>
 </table>`}
 />
 
 ## Anatomy: list
 
-A row is a 20px capsule on a 30px rhythm (5px block margin above and below). The capsule radius is 10px, half the height. The label is 13px at weight 510. The disclosure chevron is 9px bold in a 10px slot. Icons are 18px with a 3px radius and a 4px gap to the label. Each indent level adds 15px of leading padding.
+A row is a 20px capsule with an 8px radius, on a 30px rhythm (5px block margin above and below). The label is 13px at weight 510. The disclosure chevron is 9px bold at 85% ink, in a 12px slot 9px from the capsule edge. Icons are 14px with a 2px radius. With a chevron and an icon, the icon starts 21px into the row and the label 41px. Each indent level adds 15px of leading padding.
 
 | Class | Role |
 |---|---|
 | `.p-list` | The row stack. Resets list styling. |
-| `.p-list-row` | One row. Flex container, capsule radius 10px. |
-| `.p-list-chevron` | Disclosure slot, 9px bold at 50% opacity. |
-| `.p-list-icon` | 18px icon slot. |
+| `.p-list-row` | One row. Flex container, radius 8px. |
+| `.p-list-chevron` | Disclosure slot, 9px bold at 85%. |
+| `.p-list-icon` | 14px icon slot, 6px before the label. |
 | `.p-list-detail` | Right-aligned secondary text. |
 | `.p-list-group-title` | Group heading, 11px at weight 590, 50% opacity. |
 | `data-p-level="1..5"` | Indentation, 15px per level. |
 
 ## States: list
 
-Selection uses a dedicated blue, `#2962D9`, darker than the control accent so white text holds contrast (7.2:1). All content in a selected row turns white, including the chevron and detail text.
+Selection uses a dedicated blue, `#0165E2`, darker than the control accent so white text holds contrast (5.3:1). All content in a selected row turns white, including the chevron and detail text.
 
 | State | Class | Values |
 |---|---|---|
 | Rest | | Text `rgba(0, 0, 0, 0.85)`, no fill |
-| Hover | | Fill `rgba(0, 0, 0, 0.03)` |
-| Selected, focused | `.p-selected` | Fill `#2962D9`, white text |
+| Hover | | Fill `rgba(0, 0, 0, 0.05)` |
+| Selected, focused | `.p-selected` | Fill `#0165E2`, white text |
 | Selected, inactive | `.p-selected-quiet` | Fill `rgba(0, 0, 0, 0.14)`, text unchanged. Use when the containing view loses focus. |
 | Dimmed | `.p-dimmed` or `aria-disabled="true"` | Text at 50%, no pointer events |
 
@@ -74,15 +76,19 @@ To retint the selection, override the token on the list: `style="--p-list-select
 
 ## Anatomy: table
 
-Apply `.p-table` to a real `<table>`. Headers are 28px tall with 11px bold text. Body cells are 28px with 13px text and 8px horizontal padding. Every row ends in a 1px separator at `rgba(0, 0, 0, 0.05)`. Columns divide with a 1px line at `rgba(0, 0, 0, 0.1)`, inset 4.5px from the top and bottom of each row so the lines never touch.
+Apply `.p-table` to a real `<table>`. Rows butt together on a dense 20px pitch, inset 10px from the table edge. There are no row hairlines. Instead, every other row is striped with an 8px-radius capsule at `rgba(0, 0, 0, 0.05)`. The stripes count across group-title rows (`tr.p-table-group`), so the rhythm never breaks. Add `.p-table-plain` to turn the stripes off.
 
-Sorting is declared, not styled by hand: set `aria-sort="ascending"` or `descending` on the sorted `<th>` and the chevron renders and flips. Screen readers announce the same attribute, so the visual and the announcement never drift apart.
+Cells are 13px at weight 510 with 8px horizontal padding. The first column reads at 85% ink and the others at 50%, so the name leads. Right-align numeric columns with `.p-table-num`.
 
-A selected row (`.p-selected` on the `<tr>`) fills every cell and rounds only the outer corners, 10px on the first and last cell. The row reads as one capsule spanning all columns.
+The header is quiet: 19px cells in a 31px band, with no line under it. The sorted column is 11px bold at 85%, and the others are 11px at weight 510 at 50%. Column dividers are 1×19px at `rgba(0, 0, 0, 0.1)` on the leading edge of each column after the first, in the header only.
+
+Sorting is declared, not styled by hand: set `aria-sort="ascending"` or `descending` on the sorted `<th>`. The column turns bold and its 9px chevron renders and flips. Screen readers announce the same attribute, so the visual and the announcement never drift apart.
+
+A selected row (`.p-selected` on the `<tr>`) fills every cell in `#0165E2` and rounds only the outer corners, 8px on the first and last cell. The row reads as one capsule spanning all columns. Use `.p-selected-quiet` when the table loses focus.
 
 ## Dark mode
 
-Selection lifts to `#3672E8` to keep its saturation against dark backgrounds. Fills flip to white equivalents: hover `rgba(255, 255, 255, 0.04)`, inactive selection `rgba(255, 255, 255, 0.14)`. Text moves to `rgba(255, 255, 255, 0.92)`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+These values are derived rather than measured. Selection lifts to `#0A6CF0`, one step brighter in the same blue family, to hold against dark backgrounds. Stripes, hover and dividers become their white-alpha mirrors: stripes and hover `rgba(255, 255, 255, 0.05)`, dividers `rgba(255, 255, 255, 0.1)`, inactive selection `rgba(255, 255, 255, 0.14)`. Text moves to `rgba(255, 255, 255, 0.85)`, with secondary columns at 50%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Code
 
@@ -108,4 +114,4 @@ Selection lifts to `#3672E8` to keep its saturation against dark backgrounds. Fi
 </table>
 ```
 
-For interactive lists give rows `tabindex="0"` and manage `aria-selected`. With `prefers-contrast: more`, the inactive selection gains a 1px outline so state never relies on the 14% fill alone.
+For interactive lists give rows `tabindex="0"` and manage `aria-selected`. With `prefers-contrast: more`, the inactive selection gains a 1px outline so state never relies on the 14% fill alone, and table rows get a 1px rule so they don't rely on the 5% stripes.

@@ -2,7 +2,8 @@
    Puppertino Typography
    Apple's Human Interface Guidelines type system for the web.
    Includes legacy `.p-layout` classes for backwards compatibility,
-   plus the full macOS 26 / iOS type scale.
+   plus the full iOS 27 type scale (sizes, weights and tracking at the
+   default Large content size).
    ───────────────────────────────────────────────────────────────────── */
 
 :root {
@@ -61,9 +62,9 @@
   font-size: 0.91rem;
 }
 
-/* ─── macOS 26 / iOS type scale ────────────────────────────────────── */
+/* ─── iOS 27 type scale ───────────────────────────────────────────── */
 
-/* Apply this class to a section or the body to opt into the macOS 26
+/* Apply this class to a section or the body to opt into the iOS 27
    scale. It does not override `.p-layout`, so pages built on the
    legacy scale keep working. */
 
@@ -76,14 +77,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Standalone text style classes. Use directly on any element. */
+/* Standalone text style classes. Use directly on any element.
+   Weights are Apple's Regular variants: all 400 except Headline. Add
+   .p-emphasized for the Emphasized variant (700 on Large Title and
+   Titles 1-2, semibold on the rest) and .p-italic for italics.
+   Tracking is SF Pro's at each size: slightly open on Large Title and
+   Title 1, tightest (-0.43px) on Body and Headline, open again on
+   Caption 2. */
 
 .p-large-title-2 {
   font-family: var(--p-font-display);
   font-size: 34px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 41px;
-  letter-spacing: -0.022em;
+  letter-spacing: 0.012em;
 }
 
 .p-title-1 {
@@ -91,7 +98,7 @@
   font-size: 28px;
   font-weight: 400;
   line-height: 34px;
-  letter-spacing: -0.018em;
+  letter-spacing: 0.0136em;
 }
 
 .p-title-2 {
@@ -107,7 +114,7 @@
   font-size: 20px;
   font-weight: 400;
   line-height: 25px;
-  letter-spacing: -0.008em;
+  letter-spacing: -0.0225em;
 }
 
 .p-headline-2 {
@@ -115,7 +122,7 @@
   font-size: 17px;
   font-weight: 600;
   line-height: 22px;
-  letter-spacing: -0.004em;
+  letter-spacing: -0.025em;
 }
 
 .p-body {
@@ -123,7 +130,7 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 22px;
-  letter-spacing: -0.004em;
+  letter-spacing: -0.025em;
 }
 
 .p-callout-2 {
@@ -131,7 +138,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 21px;
-  letter-spacing: -0.003em;
+  letter-spacing: -0.019em;
 }
 
 .p-subhead-2 {
@@ -139,7 +146,7 @@
   font-size: 15px;
   font-weight: 400;
   line-height: 20px;
-  letter-spacing: -0.002em;
+  letter-spacing: -0.015em;
 }
 
 .p-footnote-2 {
@@ -147,6 +154,7 @@
   font-size: 13px;
   font-weight: 400;
   line-height: 18px;
+  letter-spacing: -0.006em;
 }
 
 .p-caption-1 {
@@ -154,6 +162,7 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
+  letter-spacing: 0;
 }
 
 .p-caption-2 {
@@ -161,16 +170,41 @@
   font-size: 11px;
   font-weight: 400;
   line-height: 13px;
+  letter-spacing: 0.0055em;
+}
+
+/* Emphasized and italic variants */
+
+.p-large-title-2.p-emphasized,
+.p-title-1.p-emphasized,
+.p-title-2.p-emphasized {
+  font-weight: 700;
+}
+
+.p-title-3.p-emphasized,
+.p-headline-2.p-emphasized,
+.p-body.p-emphasized,
+.p-callout-2.p-emphasized,
+.p-subhead-2.p-emphasized,
+.p-footnote-2.p-emphasized,
+.p-caption-1.p-emphasized,
+.p-caption-2.p-emphasized {
+  font-weight: 600;
+}
+
+.p-italic {
+  font-style: italic;
 }
 
 /* ─── Native heading styles inside .p-type ─────────────────────────── */
+/* h1 is the Emphasized Large Title, the usual page heading. */
 
 .p-type h1 {
   font-family: var(--p-font-display);
   font-size: 34px;
   font-weight: 700;
   line-height: 41px;
-  letter-spacing: -0.022em;
+  letter-spacing: 0.012em;
   margin: 0 0 16px;
 }
 
@@ -179,7 +213,7 @@
   font-size: 28px;
   font-weight: 600;
   line-height: 34px;
-  letter-spacing: -0.018em;
+  letter-spacing: 0.0136em;
   margin: 32px 0 12px;
 }
 
@@ -197,7 +231,7 @@
   font-size: 20px;
   font-weight: 600;
   line-height: 25px;
-  letter-spacing: -0.008em;
+  letter-spacing: -0.0225em;
   margin: 20px 0 8px;
 }
 
@@ -207,6 +241,7 @@
   font-weight: 600;
   line-height: 22px;
   margin: 16px 0 4px;
+  letter-spacing: -0.025em;
 }
 
 .p-type h6 {
@@ -215,6 +250,7 @@
   font-weight: 600;
   line-height: 20px;
   margin: 16px 0 4px;
+  letter-spacing: -0.015em;
 }
 
 .p-type p {
@@ -222,6 +258,7 @@
   font-size: 17px;
   line-height: 22px;
   margin: 0 0 16px;
+  letter-spacing: -0.025em;
 }
 
 .p-type code,

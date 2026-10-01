@@ -12,10 +12,13 @@
 (function () {
   'use strict';
 
-  var ARROW = 10.5; // arrow protrusion beyond the body edge
-  var ARROW_HALF = 17.72; // half the arrow base
+  // Arrow geometry per size. Pointer: a 35.44x10.5 arrow whose centre
+  // stays 10px clear of the shoulder. Touch (.p-popover-touch): a 56x13
+  // arrow whose centre never comes closer than 72px to a body edge,
+  // which keeps it off the 38px corner.
+  var POINTER = { arrow: 10.5, clamp: 17.72 + 10 };
+  var TOUCH = { arrow: 13, clamp: 72 };
   var GAP = 6; // breathing room between the arrow tip and the trigger
-  var OFFSET = ARROW + GAP; // trigger edge to popover body edge
   var MARGIN = 8; // viewport clamp inset
   var openPopover = null;
   var openTrigger = null;
@@ -29,10 +32,19 @@
     return rect;
   }
 
+  // Keep the arrow centre `inset` from both ends of the edge; an edge
+  // too short for that centres it.
+  function clampArrow(pos, length, inset) {
+    if (length < inset * 2) return length / 2;
+    return Math.min(Math.max(pos, inset), length - inset);
+  }
+
   function place(popover, trigger) {
     var rect = trigger.getBoundingClientRect();
     var size = measure(popover);
     var side = popover.getAttribute('data-p-popover-place') || 'bottom';
+    var geo = popover.classList.contains('p-popover-touch') ? TOUCH : POINTER;
+    var OFFSET = geo.arrow + GAP; // trigger edge to popover body edge
 
     // Flip when the preferred side has no room but the opposite does.
     if (side === 'bottom' && rect.bottom + OFFSET + size.height > window.innerHeight - MARGIN && rect.top - OFFSET - size.height > MARGIN) {
@@ -53,14 +65,14 @@
       left = rect.left + rect.width / 2 - size.width / 2;
       left = Math.min(Math.max(left, MARGIN), window.innerWidth - size.width - MARGIN);
       var arrowX = rect.left + rect.width / 2 - left;
-      arrowX = Math.min(Math.max(arrowX, ARROW_HALF + 10), size.width - ARROW_HALF - 10);
+      arrowX = clampArrow(arrowX, size.width, geo.clamp);
       popover.style.setProperty('--p-popover-arrow-x', arrowX + 'px');
     } else {
       left = side === 'right' ? rect.right + OFFSET : rect.left - OFFSET - size.width;
       top = rect.top + rect.height / 2 - size.height / 2;
       top = Math.min(Math.max(top, MARGIN), window.innerHeight - size.height - MARGIN);
       var arrowY = rect.top + rect.height / 2 - top;
-      arrowY = Math.min(Math.max(arrowY, ARROW_HALF + 10), size.height - ARROW_HALF - 10);
+      arrowY = clampArrow(arrowY, size.height, geo.clamp);
       popover.style.setProperty('--p-popover-arrow-y', arrowY + 'px');
     }
     popover.style.top = Math.max(MARGIN, top) + 'px';

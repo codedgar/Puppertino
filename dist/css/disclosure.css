@@ -2,7 +2,7 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — Disclosure Controls
-   macOS 26 round chevron button. See specs/disclosure-controls.md.
+   macOS 27 chevron button. See specs/disclosure-controls.md.
 
    On a button (script toggles aria-expanded):
      <button class="p-disclosure" aria-expanded="false"
@@ -14,10 +14,59 @@
        <summary>More options <span class="p-disclosure"></span></summary>
        …content…
      </details>
+
+   Plates: rounded squares at 16/20/24 (radius a quarter of the side),
+   circles at 28/36. The chevron is a fixed glyph, not a share of the
+   plate: 8×5 ink at 16 and 20, 12×7 from 24 up.
    ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-disclosure-plate: rgba(0, 0, 0, 0.08);
+  --p-disclosure-plate-hover: rgba(0, 0, 0, 0.11);
+  --p-disclosure-plate-pressed: rgba(0, 0, 0, 0.16);
+  --p-disclosure-plate-disabled: rgba(0, 0, 0, 0.04);
+  --p-disclosure-chevron: rgba(0, 0, 0, 0.85);
+  --p-disclosure-chevron-disabled: rgba(0, 0, 0, 0.25);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-disclosure-plate: rgba(255, 255, 255, 0.07);
+  --p-disclosure-plate-hover: rgba(255, 255, 255, 0.1);
+  --p-disclosure-plate-pressed: rgba(255, 255, 255, 0.16);
+  --p-disclosure-plate-disabled: rgba(255, 255, 255, 0.04);
+  --p-disclosure-chevron: rgba(255, 255, 255, 0.85);
+  --p-disclosure-chevron-disabled: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-disclosure-plate: rgba(255, 255, 255, 0.07);
+    --p-disclosure-plate-hover: rgba(255, 255, 255, 0.1);
+    --p-disclosure-plate-pressed: rgba(255, 255, 255, 0.16);
+    --p-disclosure-plate-disabled: rgba(255, 255, 255, 0.04);
+    --p-disclosure-chevron: rgba(255, 255, 255, 0.85);
+    --p-disclosure-chevron-disabled: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-disclosure-plate: rgba(0, 0, 0, 0.08);
+  --p-disclosure-plate-hover: rgba(0, 0, 0, 0.11);
+  --p-disclosure-plate-pressed: rgba(0, 0, 0, 0.16);
+  --p-disclosure-plate-disabled: rgba(0, 0, 0, 0.04);
+  --p-disclosure-chevron: rgba(0, 0, 0, 0.85);
+  --p-disclosure-chevron-disabled: rgba(0, 0, 0, 0.25);
+}
 
 .p-disclosure {
   --p-disclosure-size: 24px;
+  --p-disclosure-radius: calc(var(--p-disclosure-size) / 4);
+  /* 13pt bold chevron.down: 12×7 ink. */
+  --p-disclosure-chevron-w: 12px;
+  --p-disclosure-chevron-h: 7px;
+  --p-disclosure-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
   appearance: none;
   -webkit-appearance: none;
@@ -29,37 +78,37 @@
   display: inline-flex;
   width: var(--p-disclosure-size);
   height: var(--p-disclosure-size);
-  border-radius: 50%;
+  border-radius: var(--p-disclosure-radius);
   flex-shrink: 0;
   vertical-align: middle;
 
-  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  background: var(--p-disclosure-plate);
   cursor: pointer;
   transition: background 0.12s ease-out;
 }
 
-/* The chevron: down at rest (collapsed), masked to the text color. */
+/* The chevron: down at rest (collapsed), masked to the label color. */
 .p-disclosure::before {
   content: "";
   position: absolute;
   inset: 0;
   margin: auto;
-  width: calc(var(--p-disclosure-size) * 0.45);
-  height: calc(var(--p-disclosure-size) * 0.38);
+  width: var(--p-disclosure-chevron-w);
+  height: var(--p-disclosure-chevron-h);
 
-  background: var(--p-text-primary, rgba(0, 0, 0, 0.85));
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 3.5 6 7l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M2.5 3.5 6 7l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  background: var(--p-disclosure-chevron);
+  -webkit-mask: var(--p-disclosure-glyph) center / 100% 100% no-repeat;
+  mask: var(--p-disclosure-glyph) center / 100% 100% no-repeat;
 
   transition: transform 0.2s ease-out;
 }
 
 .p-disclosure:hover:not(:disabled) {
-  background: var(--p-fill-secondary, rgba(0, 0, 0, 0.08));
+  background: var(--p-disclosure-plate-hover);
 }
 
 .p-disclosure:active:not(:disabled) {
-  background: var(--p-popup-bg-active, rgba(0, 0, 0, 0.15));
+  background: var(--p-disclosure-plate-pressed);
 }
 
 /* Expanded: chevron points up. Driven by aria-expanded on the button
@@ -71,25 +120,40 @@ details[open] > summary .p-disclosure::before {
 
 .p-disclosure:focus-visible {
   outline: 2px solid transparent; /* forced-colors ring */
-  box-shadow:
-    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
-    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25));
+  box-shadow: var(--p-focus-ring, 0 0 0 3.5px rgba(0, 136, 255, 0.5));
 }
 
+/* Disabled: a fainter plate and a 25% chevron, no group opacity. */
 .p-disclosure:disabled {
-  opacity: 0.5;
+  background: var(--p-disclosure-plate-disabled);
   cursor: not-allowed;
 }
 
 .p-disclosure:disabled::before {
-  background: var(--p-text-tertiary, rgba(0, 0, 0, 0.25));
+  background: var(--p-disclosure-chevron-disabled);
 }
 
-/* Sizes: the shared ladder. Chevron scales with the plate. */
+/* Sizes: the shared ladder. 16 and 20 take the 10pt chevron (8×5 ink);
+   28 and 36 are circles. */
+.p-disclosure-mini,
+.p-disclosure-small {
+  --p-disclosure-chevron-w: 8px;
+  --p-disclosure-chevron-h: 5px;
+  --p-disclosure-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5' fill='none'%3E%3Cpath d='M.8.8 4 4.2 7.2.8' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
 .p-disclosure-mini { --p-disclosure-size: 16px; }
 .p-disclosure-small { --p-disclosure-size: 20px; }
-.p-disclosure-large { --p-disclosure-size: 28px; }
-.p-disclosure-xlarge { --p-disclosure-size: 36px; }
+
+.p-disclosure-large {
+  --p-disclosure-size: 28px;
+  --p-disclosure-radius: 50%;
+}
+
+.p-disclosure-xlarge {
+  --p-disclosure-size: 36px;
+  --p-disclosure-radius: 50%;
+}
 
 /* ─── details/summary integration ──────────────────────────────────── */
 
@@ -122,14 +186,32 @@ details[open] > summary .p-disclosure::before {
 }
 
 .p-disclosure-group > summary:focus-visible .p-disclosure {
-  box-shadow:
-    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
-    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25));
+  box-shadow: var(--p-focus-ring, 0 0 0 3.5px rgba(0, 136, 255, 0.5));
 }
 
 @media (prefers-reduced-motion: reduce) {
   .p-disclosure,
   .p-disclosure::before {
     transition: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-disclosure {
+    box-shadow: inset 0 0 0 1px var(--p-disclosure-chevron-disabled);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-disclosure {
+    border: 1px solid ButtonText;
+  }
+
+  .p-disclosure::before {
+    background: ButtonText;
+  }
+
+  .p-disclosure:disabled::before {
+    background: GrayText;
   }
 }

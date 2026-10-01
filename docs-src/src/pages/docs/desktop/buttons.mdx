@@ -30,7 +30,9 @@ Avoid stacking more than one filled `.p-button-primary` in the same view. Apple'
 | `--p-button-font-size` | 13px | Matches macOS body. SF Pro fallback to system fonts. |
 | `--p-button-font-weight` | 510 | Apple's "system medium." Large bumps to 590 (semibold). |
 | `--p-button-icon-size` | 13px | Matches the label. SVG and `<i>` children both scale to this token. |
-| `--p-button-default-tint` | `#0D6FFF` | The macOS 26 button blue. Used when no color class is set. |
+| `--p-button-default-tint` | `var(--p-control-accent)` | The control accent: `#0088FF` in light mode, `#0091FF` in dark. Used when no color class is set. |
+| `--p-button-fill` | `rgba(0,0,0,0.08)` | Gray fill for Default and Tinted. `rgba(255,255,255,0.07)` in dark mode. |
+| `--p-button-tint-mix` | 20% | How much accent the Secondary and Destructive washes carry. 22% in dark mode. |
 
 Override any token on a specific button with an inline style or a new class. The button picks up the change without you writing new selectors.
 
@@ -54,7 +56,7 @@ Add a color class to any button to change its tint. The button picks up the colo
 <button class="p-button p-button-secondary p-sys-green">Save</button>`}
 />
 
-Reach for the `.p-sys-*` classes first. They follow the macOS 26 system colors and flip automatically in dark mode. The brand palette (`.p-strawberry`, `.p-grape`, `.p-lime`) is available for backwards compatibility, but its colors stay fixed across appearances.
+Reach for the `.p-sys-*` classes first. They follow the macOS system colors and flip automatically in dark mode. The brand palette (`.p-strawberry`, `.p-grape`, `.p-lime`) is available for backwards compatibility, but its colors stay fixed across appearances.
 
 A color class only retints the element you put it on. Dropping `.p-strawberry` on a card does not bleed into the buttons inside it. If you want a button to be strawberry, put the class on the button.
 
@@ -114,17 +116,41 @@ Drop an `<svg>` or an `<i>` icon font tag inside the button. Put it before the l
 
 The icon picks up the button's text color and resizes with the button's size. You do not need a separate class for leading or trailing icons. The DOM order is the order.
 
-For an icon-only button, give the button an `aria-label`. Without one, screen readers have nothing to announce.
+## Icon-only buttons
+
+Add `.p-button-icon-only` for a round button that holds a single glyph. It is a true circle, as wide as it is tall, with a slightly heavier gray fill than a labeled button so the small shape still reads as pressable.
+
+<Showcase
+  name="buttons-icon-only"
+  compact
+  code={`<button class="p-button p-button-icon-only p-button-mini" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only p-button-small" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only p-button-large" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only p-button-xlarge" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>`}
+/>
+
+| Size | Class | Diameter | Glyph |
+|---|---|---|---|
+| Mini | `.p-button-mini` | 16px | 11px |
+| Small | `.p-button-small` | 20px | 13px |
+| Regular | (default) | 24px | 13px |
+| Large | `.p-button-large` | 28px | 13px |
+| Extra large | `.p-button-xlarge` | 36px | 13px |
+
+Icon-only buttons follow the same size ladder as segmented controls and pop-up buttons, so small is 20px here rather than 19px and large is 28px rather than 32px. The fill sits at 10% black at rest, 19% pressed, and 5% disabled. In dark mode the same percentages apply in white.
+
+Always give an icon-only button an `aria-label`. Without one, screen readers have nothing to announce.
 
 ```html
-<button class="p-button p-button-borderless" aria-label="Close">
+<button class="p-button p-button-icon-only" aria-label="Close">
   <svg aria-hidden="true">...</svg>
 </button>
 ```
 
 ## States
 
-Hover, press, and focus all derive from the button's current color. Retint a button and every state retints with it.
+Every state derives from the button's current color, so a retinted button retints its states too. Each style presses in its own way.
 
 <Showcase
   name="buttons-states"
@@ -133,28 +159,79 @@ Hover, press, and focus all derive from the button's current color. Retint a but
 <button class="p-button p-button-primary" disabled>Disabled</button>`}
 />
 
-| State | What people see |
-|---|---|
-| Default | The button at full strength. |
-| Hover | The fill darkens by about 13%. |
-| Pressed | The fill darkens further, to about 20%. |
-| Focused (keyboard) | A 4px ring outside the button in the button's color, with a small gap. |
-| Disabled | The fill drops to a neutral gray, the label fades, and the button stops responding to clicks. |
+| State | Default and Tinted | Secondary and Destructive | Colored and Primary |
+|---|---|---|---|
+| Rest | 8% gray fill | 20% wash of the tint | Solid tint |
+| Hover | 11% gray fill | 24% wash | 5% darker |
+| Pressed | 16% gray fill | 28% wash | 10% darker |
+| Disabled | 4% gray fill, faded label | 12% wash, label at 40% | Tint at 40%, label at 50% white |
 
-The focus ring only appears on keyboard focus. Mouse clicks do not trigger it, which matches the macOS convention.
+Borderless has no fill in any state; see [Borderless](#borderless).
+
+In dark mode the gray fills use white instead of black (7% at rest, 16% pressed), and a pressed filled button gets slightly lighter rather than darker. That matches how macOS lights controls on a dark background.
+
+A disabled filled button keeps its color, faded. It no longer drops to gray, so a disabled Save still reads as the primary action waiting for input.
+
+Keyboard focus draws the macOS focus band: a 3.5px ring outside the button plus a 1px ring just inside its edge, both in the button's color at 50%. Mouse clicks do not trigger it.
+
+
+## Borderless
+
+A borderless button is only its label. It has no fill at rest, on hover or while pressed. Pressing darkens the label by 46 levels on every channel (it brightens in dark mode), and a disabled label drops to 50%.
+
+<Showcase
+  name="buttons-borderless"
+  compact
+  code={`<button class="p-button p-button-borderless">Show More</button>
+<button class="p-button p-button-borderless" disabled>Show More</button>`}
+/>
+
+On an opaque background the label is the control accent, `#0088FF` (`#0091FF` in dark mode). Inside a vibrant surface it switches to `--p-control-accent-text`, a darker `#0078F0` that keeps thin glyphs readable over glass. In dark mode both are `#0091FF`.
+
+## Vibrant
+
+Buttons that sit on a material (a menu, a popover, an alert) blend with the glass behind them instead of painting flat color on top. Add `.p-vibrant` to the element that paints the material and every button inside switches to the vibrant recipe. The desktop alert (`.p-desktop-modal`), `.p-popover` and `.p-menu` are vibrant already, with no extra class.
+
+<Showcase
+  name="buttons-vibrant"
+  code={`<div class="p-vibrant" style="background: rgba(236, 236, 236, 0.88); padding: 16px; border-radius: 16px; display: flex; gap: 8px;">
+  <button class="p-button">Cancel</button>
+  <button class="p-button p-button-secondary">Options</button>
+  <button class="p-button p-button-destructive">Delete</button>
+  <button class="p-button p-button-primary">Save</button>
+</div>`}
+/>
+
+| Style | On a vibrant surface |
+|---|---|
+| Default and Tinted | Black 7% plus black 12% in overlay blend, so the fill darkens with the glass. White 6% plus white 12% overlay in dark mode. |
+| Colored and Primary | The tint in `plus-darker` (light) or `plus-lighter` (dark). Pressed mixes in black 10% (white in dark mode) first. Disabled runs the same layer at 40%. |
+| Secondary and Destructive | The vibrant accent (`--p-vibrant-blue`, `--p-vibrant-red`) at 23% (20% in dark mode) with a vibrant-accent label. |
+| Borderless | The label moves to `--p-control-accent-text`. |
+
+The blend layer composites onto whatever paints the material. Put `.p-vibrant` on the element with the background, not on a transparent wrapper around it: the class makes that element its own stacking context, so a wrapper would leave the buttons nothing to blend with.
+
+Safari supports `plus-darker`. Chrome and Firefox don't, so light-mode filled buttons fall back to `multiply`. That is identical over white and a few levels lighter over light glass. Dark mode's `plus-lighter` works everywhere.
 
 ## Inactive window
 
-When a macOS window loses focus, its accent-tinted buttons fade to gray. To match that behavior, wrap your app shell in `.p-window-inactive`. Every colored button inside dims at once.
+When a macOS window loses focus, its push buttons lose their color. Filled, secondary, destructive and tinted buttons all become the plain gray button with a primary label, in every state: 8% gray at rest, 16% pressed, 4% with a faded label when disabled. Borderless buttons keep their accent label. Inside a vibrant surface they turn into the vibrant gray button instead.
 
-```html
-<div class="p-window-inactive">
+Wrap the window in `.p-window-inactive`, the same class that grays the window's traffic lights and sidebar icons.
+
+<Showcase
+  name="buttons-inactive"
+  compact
+  code={`<div class="p-window-inactive" style="display: flex; gap: 8px;">
+  <button class="p-button">Cancel</button>
+  <button class="p-button p-button-secondary">Options</button>
+  <button class="p-button p-button-destructive">Delete</button>
   <button class="p-button p-button-primary">Save</button>
-  <button class="p-button p-button-secondary">Cancel</button>
-</div>
-```
+  <button class="p-button p-button-borderless">Show More</button>
+</div>`}
+/>
 
-The `data-window-state="inactive"` attribute does the same thing if your app prefers attributes over classes. Toggle the class or attribute when your app's window loses focus.
+The `data-window-state="inactive"` attribute does the same thing if your app prefers attributes over classes. Toggle the class or attribute when your app's window loses focus. Checkboxes and radios in the same window go gray too (see [Forms](../forms/#inactive-window)).
 
 ## Dark mode
 
@@ -164,7 +241,7 @@ If you retint a button, use a `.p-sys-*` color so the new tint flips too. The br
 
 ## Accessibility
 
-- **Keyboard focus** shows a 4px ring at 50% of the button's color. Mouse clicks do not show it.
+- **Keyboard focus** shows the macOS focus band (3.5px outside, 1px inside) at 50% of the button's color. Mouse clicks do not show it.
 - **Reduced motion** removes the hover and press transitions.
 - **Reduced transparency** swaps the tinted variants to a flat opaque fill so the label stays legible.
 - **Increased contrast** adds a 2px border around every button.
@@ -196,9 +273,14 @@ If you retint a button, use a `.p-sys-*` color so the new tint flips too. The br
 </button>
 
 <!-- Icon only with accessible name -->
-<button class="p-button p-button-borderless" aria-label="Close">
+<button class="p-button p-button-icon-only" aria-label="Close">
   <svg aria-hidden="true">...</svg>
 </button>
+
+<!-- On a material: blends with the glass -->
+<div class="p-vibrant">
+  <button class="p-button p-button-primary">Save</button>
+</div>
 
 <!-- Inside an inactive window -->
 <div class="p-window-inactive">

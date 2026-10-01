@@ -1,64 +1,203 @@
 @charset "UTF-8";
 
 /* ═════════════════════════════════════════════════════════════════════
-   PUPPERTINO v2 — Sliders
-   macOS 26 slider on a native range input. See specs/sliders.md.
+   PUPPERTINO v2 — Sliders and Dials
+   macOS 27 slider on a native range input, plus the dial. See
+   specs/sliders.md.
 
    <input type="range" class="p-slider" min="0" max="100" value="50" />
 
    The filled portion left of the thumb needs the value as a CSS
-   variable; src/js/sliders.js sets --p-slider-fill on input (about
-   twenty lines, optional). Firefox paints the fill natively through
-   ::-moz-range-progress. Without JS on WebKit the track is all gray
-   and everything still works.
+   variable; src/js/sliders.js sets --p-slider-fill on input (optional).
+   Firefox paints the leading fill natively through ::-moz-range-progress.
+   Without JS on WebKit the track is all gray and everything still works.
 
-   Tint like every v2 control: a .p-sys-* class on the input (or an
-   ancestor) retints the fill through --p-color-current.
+   Sizes: .p-slider-mini (16×12 thumb), .p-slider-small (18×14), the
+   default (20×16), .p-slider-large (24×20 on a 6px track).
+   Variants: .p-slider-narrow (8×16 pointer thumb), .p-slider-centered
+   (fill grows from the middle), .p-slider-origin (a mark under the
+   middle), .p-slider-ticks (dots under the track).
+
+   Tint like every v2 control: a .p-sys-* class on the input retints the
+   fill through --p-color-current.
    ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Unfilled track: black 85% at 10% group opacity. */
+  --p-slider-track: rgba(0, 0, 0, 0.085);
+  /* Laid over the whole track while the thumb is held: the unfilled part
+     reaches ~16%, the fill darkens by 8%. */
+  --p-slider-press: rgba(0, 0, 0, 0.08);
+  --p-slider-tick: rgba(0, 0, 0, 0.21);
+  --p-slider-origin-mark: rgba(0, 0, 0, 0.85);
+  /* The in-track origin line (a plus-darker gray over the fill). */
+  --p-slider-origin-line: rgba(0, 0, 0, 0.25);
+  --p-slider-thumb-shadow: 0 0.5px 6px rgba(0, 0, 0, 0.12);
+
+  /* Pressed glass (src/js/liquid_glass.js). Light: a clear lens a few
+     percent darker than the page, gray hairline rim, no specular. */
+  --p-slider-lens-body: linear-gradient(
+    rgba(0, 0, 0, 0.01),
+    rgba(0, 0, 0, 0.05) 45%,
+    rgba(0, 0, 0, 0.02)
+  );
+  --p-slider-lens-edge: inset 0 0 0 1px rgba(0, 0, 0, 0.11);
+  --p-slider-lens-shadow: rgba(0, 0, 0, 0.6);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-slider-track: rgba(255, 255, 255, 0.085);
+  --p-slider-press: rgba(255, 255, 255, 0.08);
+  --p-slider-tick: rgba(255, 255, 255, 0.21);
+  --p-slider-origin-mark: rgba(255, 255, 255, 0.85);
+  --p-slider-origin-line: rgba(0, 0, 0, 0.35);
+  /* Dark: lifted interior, a dark outer hairline, then a bright inner
+     one that is brightest along the bottom. */
+  --p-slider-lens-body: linear-gradient(
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.05)
+  );
+  --p-slider-lens-edge:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -6px 4px -3px rgba(255, 255, 255, 0.14),
+    inset 0 2px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.07);
+  --p-slider-lens-shadow: rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-slider-track: rgba(255, 255, 255, 0.085);
+    --p-slider-press: rgba(255, 255, 255, 0.08);
+    --p-slider-tick: rgba(255, 255, 255, 0.21);
+    --p-slider-origin-mark: rgba(255, 255, 255, 0.85);
+    --p-slider-origin-line: rgba(0, 0, 0, 0.35);
+    --p-slider-lens-body: linear-gradient(
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.05)
+    );
+    --p-slider-lens-edge:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.4),
+      inset 0 -2px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -6px 4px -3px rgba(255, 255, 255, 0.14),
+      inset 0 2px 0 rgba(255, 255, 255, 0.14),
+      inset 0 0 0 2px rgba(255, 255, 255, 0.07);
+    --p-slider-lens-shadow: rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-slider-track: rgba(0, 0, 0, 0.085);
+  --p-slider-press: rgba(0, 0, 0, 0.08);
+  --p-slider-tick: rgba(0, 0, 0, 0.21);
+  --p-slider-origin-mark: rgba(0, 0, 0, 0.85);
+  --p-slider-origin-line: rgba(0, 0, 0, 0.25);
+  --p-slider-lens-body: linear-gradient(
+    rgba(0, 0, 0, 0.01),
+    rgba(0, 0, 0, 0.05) 45%,
+    rgba(0, 0, 0, 0.02)
+  );
+  --p-slider-lens-edge: inset 0 0 0 1px rgba(0, 0, 0, 0.11);
+  --p-slider-lens-shadow: rgba(0, 0, 0, 0.6);
+}
 
 .p-slider {
   /* Resolved here, not :root, so tint classes can override. */
-  --p-slider-accent: var(--p-color-current, #0D6FFF);
+  --p-slider-accent: var(--p-color-current, #0088FF);
   --p-slider-fill: 0%;
-  /* Thumb width, so sliders.js can inset the fill by half a thumb and
-     keep the accent edge under the thumb at both ends of the track. */
+  /* Geometry. sliders.js reads the thumb width to inset the fill by half
+     a thumb, keeping the accent edge under the thumb at both ends. */
   --p-slider-thumb-w: 20px;
+  --p-slider-thumb-h: 16px;
+  --p-slider-track-h: 4px;
+  /* Where the fill starts and stops along the track. */
+  --p-slider-from: 0%;
+  --p-slider-to: var(--p-slider-fill);
+  /* The pressed overlay, off until the thumb is held. */
+  --p-slider-press-now: transparent;
+  /* Optional in-track marks (the centered origin line, inset ticks). */
+  --p-slider-marks: linear-gradient(transparent, transparent);
 
   appearance: none;
   -webkit-appearance: none;
   margin: 0;
   width: 160px;
-  height: 20px; /* comfortable hit area around the 4px track */
+  /* Comfortable hit area around the track; room for tick dots below. */
+  height: max(20px, calc(var(--p-slider-thumb-h) + 4px));
   background: transparent;
   cursor: pointer;
+}
+
+/* Sizes (thumb on the shared ladder; the large track is 6px). */
+.p-slider-mini {
+  --p-slider-thumb-w: 16px;
+  --p-slider-thumb-h: 12px;
+}
+
+.p-slider-small {
+  --p-slider-thumb-w: 18px;
+  --p-slider-thumb-h: 14px;
+}
+
+.p-slider-large {
+  --p-slider-thumb-w: 24px;
+  --p-slider-thumb-h: 20px;
+  --p-slider-track-h: 6px;
+}
+
+/* Narrow pointer thumb: 8×16, or 10×18 on the small and large sizes. */
+.p-slider-narrow {
+  --p-slider-thumb-w: 8px;
+  --p-slider-thumb-h: 16px;
+}
+
+.p-slider-narrow.p-slider-small,
+.p-slider-narrow.p-slider-large {
+  --p-slider-thumb-w: 10px;
+  --p-slider-thumb-h: 18px;
+}
+
+/* Held: the whole track darkens. :active covers the plain slider;
+   with liquid_glass.js only the clear lens darkens it
+   ([data-p-lens-open] is set for the length of a drag). */
+.p-slider:not(.p-slider-touch):not(:disabled):active:not([data-p-lens-open]),
+.p-slider[data-p-lens="clear"][data-p-lens-open]:not(.p-slider-touch) {
+  --p-slider-press-now: var(--p-slider-press);
 }
 
 /* ─── WebKit ───────────────────────────────────────────────────────── */
 
 .p-slider::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(
-    to right,
-    var(--p-slider-accent) 0 var(--p-slider-fill),
-    var(--p-control-fill, rgba(0, 0, 0, 0.12)) var(--p-slider-fill)
-  );
+  height: var(--p-slider-track-h);
+  border-radius: calc(var(--p-slider-track-h) / 2);
+  background:
+    linear-gradient(var(--p-slider-press-now), var(--p-slider-press-now)),
+    var(--p-slider-marks),
+    linear-gradient(
+      to right,
+      var(--p-slider-track) 0 var(--p-slider-from),
+      var(--p-slider-accent) var(--p-slider-from) var(--p-slider-to),
+      var(--p-slider-track) var(--p-slider-to)
+    );
 }
 
 .p-slider::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: 20px;
-  height: 16px;
-  margin-top: -6px; /* centers the 16px thumb on the 4px track */
-  border-radius: 8px;
+  width: var(--p-slider-thumb-w);
+  height: var(--p-slider-thumb-h);
+  /* Centers the thumb on the track. */
+  margin-top: calc((var(--p-slider-track-h) - var(--p-slider-thumb-h)) / 2);
+  border-radius: 999px;
   border: 0;
 
   background: var(--p-control-knob, #ffffff);
-  box-shadow:
-    0 0 1px rgba(0, 0, 0, 0.05),
-    0 0 4px rgba(0, 0, 0, 0.05),
-    0 0 44px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--p-slider-thumb-shadow);
 }
 
 .p-slider:focus-visible {
@@ -67,78 +206,123 @@
 
 .p-slider:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
-    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25)),
-    0 0 1px rgba(0, 0, 0, 0.05),
-    0 0 4px rgba(0, 0, 0, 0.05);
+    0 0 0 3.5px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5)),
+    var(--p-slider-thumb-shadow);
 }
 
 /* ─── Firefox ──────────────────────────────────────────────────────── */
 
 .p-slider::-moz-range-track {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--p-control-fill, rgba(0, 0, 0, 0.12));
+  height: var(--p-slider-track-h);
+  border-radius: calc(var(--p-slider-track-h) / 2);
+  background:
+    linear-gradient(var(--p-slider-press-now), var(--p-slider-press-now)),
+    var(--p-slider-marks),
+    var(--p-slider-track);
 }
 
 .p-slider::-moz-range-progress {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--p-slider-accent);
+  height: var(--p-slider-track-h);
+  border-radius: calc(var(--p-slider-track-h) / 2);
+  background:
+    linear-gradient(var(--p-slider-press-now), var(--p-slider-press-now)),
+    var(--p-slider-accent);
 }
 
 .p-slider::-moz-range-thumb {
-  width: 20px;
-  height: 16px;
-  border-radius: 8px;
+  width: var(--p-slider-thumb-w);
+  height: var(--p-slider-thumb-h);
+  border-radius: 999px;
   border: 0;
 
   background: var(--p-control-knob, #ffffff);
-  box-shadow:
-    0 0 1px rgba(0, 0, 0, 0.05),
-    0 0 4px rgba(0, 0, 0, 0.05),
-    0 0 44px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--p-slider-thumb-shadow);
 }
 
 .p-slider:focus-visible::-moz-range-thumb {
   box-shadow:
-    0 0 0 1px var(--p-field-ring-focus, rgba(0, 122, 255, 0.15)),
-    0 0 0 3.5px var(--p-field-ring-focus-outer, rgba(0, 122, 255, 0.25)),
-    0 0 1px rgba(0, 0, 0, 0.05),
-    0 0 4px rgba(0, 0, 0, 0.05);
+    0 0 0 3.5px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5)),
+    var(--p-slider-thumb-shadow);
 }
 
-/* ─── Ticks ────────────────────────────────────────────────────────── */
-/* .p-slider-ticks draws 2px marks across the track. Set the number of
-   intervals with --p-slider-ticks (marks land on interval boundaries;
-   the two edge marks sit half-clipped in the capsule ends). */
+/* ─── Centered (bipolar) fill ──────────────────────────────────────── */
+/* The fill runs from the middle of the track to the thumb, for values
+   with a neutral midpoint (balance, exposure). A 2px line marks the
+   origin inside the track. Firefox's native progress always starts at
+   the left, so it is hidden and the fill is painted like WebKit's. */
 
-.p-slider-ticks {
-  --p-slider-ticks: 5;
+.p-slider-centered {
+  --p-slider-fill: 50%;
+  --p-slider-from: min(50%, var(--p-slider-fill));
+  --p-slider-to: max(50%, var(--p-slider-fill));
+  --p-slider-marks: linear-gradient(var(--p-slider-origin-line), var(--p-slider-origin-line))
+    50% 0 / 2px 100% no-repeat;
 }
 
-.p-slider-ticks::-webkit-slider-runnable-track {
+.p-slider-centered::-moz-range-track {
   background:
-    repeating-linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.25) 0 2px,
-      transparent 2px calc(100% / var(--p-slider-ticks))
-    ),
+    linear-gradient(var(--p-slider-press-now), var(--p-slider-press-now)),
+    var(--p-slider-marks),
     linear-gradient(
       to right,
-      var(--p-slider-accent) 0 var(--p-slider-fill),
-      var(--p-control-fill, rgba(0, 0, 0, 0.12)) var(--p-slider-fill)
+      var(--p-slider-track) 0 var(--p-slider-from),
+      var(--p-slider-accent) var(--p-slider-from) var(--p-slider-to),
+      var(--p-slider-track) var(--p-slider-to)
     );
 }
 
-.p-slider-ticks::-moz-range-track {
-  background:
-    repeating-linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.25) 0 2px,
-      transparent 2px calc(100% / var(--p-slider-ticks))
-    ),
-    var(--p-control-fill, rgba(0, 0, 0, 0.12));
+.p-slider-centered::-moz-range-progress {
+  background: transparent;
+}
+
+/* ─── Marks under the track ────────────────────────────────────────── */
+/* Painted on the input's own box: tick dots and the origin mark sit
+   below the track, where the thumb never covers them.
+
+   .p-slider-ticks: 2×2 dots 4px under the track, one per interval
+   boundary, centered under the thumb at each tick value. Set the number
+   of intervals with --p-slider-ticks (5 intervals = 6 dots).
+   .p-slider-origin: a 2×4 mark 2px under the middle of the track. */
+
+.p-slider-ticks,
+.p-slider-origin {
+  --p-slider-ticks: 5;
+  --p-slider-track-bottom: calc(50% + var(--p-slider-track-h) / 2);
+  --p-slider-tick-layer: none;
+  --p-slider-origin-layer: none;
+
+  background-image: var(--p-slider-tick-layer), var(--p-slider-origin-layer);
+  background-repeat: repeat-x, no-repeat;
+  background-size:
+    calc((100% - var(--p-slider-thumb-w)) / var(--p-slider-ticks)) 2px,
+    2px 4px;
+  background-position:
+    calc(var(--p-slider-thumb-w) / 2 - 1px) calc(var(--p-slider-track-bottom) + 4px),
+    calc(50% - 1px) calc(var(--p-slider-track-bottom) + 2px);
+  background-origin: border-box;
+}
+
+.p-slider-ticks {
+  --p-slider-tick-layer: radial-gradient(
+    circle at 1px 1px,
+    var(--p-slider-tick) 0.9px,
+    transparent 1.1px
+  );
+}
+
+.p-slider-origin {
+  --p-slider-origin-layer: linear-gradient(var(--p-slider-origin-mark), var(--p-slider-origin-mark));
+}
+
+/* The v2.0 ticks: 2px marks drawn inside the track. Opt in with
+   .p-slider-ticks-inset (it sets --p-slider-ticks the same way). */
+.p-slider-ticks-inset {
+  --p-slider-ticks: 5;
+  --p-slider-marks: repeating-linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.25) 0 2px,
+    transparent 2px calc(100% / var(--p-slider-ticks))
+  );
 }
 
 /* ─── Disabled ─────────────────────────────────────────────────────── */
@@ -151,9 +335,13 @@
 }
 
 /* ─── Touch size (iOS) ─────────────────────────────────────────────── */
-/* iOS runs a thicker track than macOS, 6px against the pointer size,
-   and a 28px thumb that is its own tap target. Ticks are 4px dots
-   rather than the pointer size's hairlines. */
+/* iOS 27 runs a thicker track than macOS, 6px against the pointer
+   size, and a white 38×24 capsule thumb with a two-layer shadow (a soft
+   drop 6px down and a tight contact shadow). The thumb sits inside the
+   track ends and the fill ends under its center. Ticks are 4px dots,
+   centered 9px below the track (a 4px gap), in the tertiary label
+   color rather than the macOS tick gray. Disabled fades the whole
+   control to 50%; the fill stays blue and the thumb white. */
 
 :root {
   --p-slider-touch-track: rgba(120, 120, 120, 0.20);
@@ -188,11 +376,22 @@
 
 .p-slider-touch {
   --p-slider-touch-h: 6px;
-  --p-slider-touch-thumb-size: 28px;
-  --p-slider-thumb-w: var(--p-slider-touch-thumb-size);
+  --p-slider-touch-thumb-w: 38px;
+  --p-slider-touch-thumb-h: 24px;
+  /* v2.0 name for the old 28px circle; now the capsule's height. */
+  --p-slider-touch-thumb-size: var(--p-slider-touch-thumb-h);
+  --p-slider-thumb-w: var(--p-slider-touch-thumb-w);
+  --p-slider-thumb-h: var(--p-slider-touch-thumb-h);
+  --p-slider-track-h: var(--p-slider-touch-h);
+  --p-slider-thumb-shadow: 0 6px 13px rgba(0, 0, 0, 0.12), 0 0.5px 4px rgba(0, 0, 0, 0.12);
+  /* The dragged glass (liquid_glass.js copies these onto the lens). */
+  --p-slider-lens-body: var(--p-slider-touch-lens-body);
+  --p-slider-lens-edge: var(--p-slider-touch-lens-edge);
+  --p-slider-lens-shadow: var(--p-slider-touch-lens-shadow);
 
   width: 100%;
-  height: var(--p-slider-touch-thumb-size);
+  /* 28px keeps the v2.0 row height and leaves room for the tick dots. */
+  height: 28px;
   background: none;
 }
 
@@ -206,17 +405,13 @@
 .p-slider-touch::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: var(--p-slider-touch-thumb-size);
-  height: var(--p-slider-touch-thumb-size);
+  width: var(--p-slider-touch-thumb-w);
+  height: var(--p-slider-touch-thumb-h);
   border: 0;
-  border-radius: 50%;
+  border-radius: 999px;
   background: var(--p-slider-touch-thumb);
-  /* Apple's triple-layer thumb shadow. */
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.15),
-    0 1px 1px rgba(0, 0, 0, 0.16),
-    0 3px 1px rgba(0, 0, 0, 0.10);
-  margin-top: calc((var(--p-slider-touch-h) - var(--p-slider-touch-thumb-size)) / 2);
+  box-shadow: var(--p-slider-thumb-shadow);
+  margin-top: calc((var(--p-slider-touch-h) - var(--p-slider-touch-thumb-h)) / 2);
 }
 
 .p-slider-touch::-moz-range-track {
@@ -233,15 +428,12 @@
 }
 
 .p-slider-touch::-moz-range-thumb {
-  width: var(--p-slider-touch-thumb-size);
-  height: var(--p-slider-touch-thumb-size);
+  width: var(--p-slider-touch-thumb-w);
+  height: var(--p-slider-touch-thumb-h);
   border: 0;
-  border-radius: 50%;
+  border-radius: 999px;
   background: var(--p-slider-touch-thumb);
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.15),
-    0 1px 1px rgba(0, 0, 0, 0.16),
-    0 3px 1px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--p-slider-thumb-shadow);
 }
 
 /* WebKit has no track-fill pseudo-element, so the filled portion is
@@ -263,14 +455,14 @@
 
 .p-slider-touch:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 4px rgba(0, 136, 255, 0.5),
-    0 3px 8px rgba(0, 0, 0, 0.15);
+    0 0 0 4px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5)),
+    var(--p-slider-thumb-shadow);
 }
 
 .p-slider-touch:focus-visible::-moz-range-thumb {
   box-shadow:
-    0 0 0 4px rgba(0, 136, 255, 0.5),
-    0 3px 8px rgba(0, 0, 0, 0.15);
+    0 0 0 4px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5)),
+    var(--p-slider-thumb-shadow);
 }
 
 .p-slider-touch:disabled {
@@ -278,33 +470,95 @@
   cursor: not-allowed;
 }
 
+/* Ticks: 4px dots in --p-slider-touch-tick, centered 9px below the
+   track center and under the thumb center at each tick value. */
+.p-slider-touch.p-slider-ticks {
+  --p-slider-tick-layer: radial-gradient(
+    circle at 2px 2px,
+    var(--p-slider-touch-tick) 1.75px,
+    transparent 2.1px
+  );
+
+  /* .p-slider-touch clears the background, so restate the layers. The
+     first and last dots sit 18px in from the track ends. */
+  background-image: var(--p-slider-tick-layer), var(--p-slider-origin-layer);
+  background-repeat: repeat-x, no-repeat;
+  background-size:
+    calc((100% - var(--p-slider-thumb-w) + 2px) / var(--p-slider-ticks)) 4px,
+    2px 4px;
+  background-position:
+    calc(var(--p-slider-thumb-w) / 2 - 3px) calc(50% + 9px),
+    calc(50% - 1px) calc(var(--p-slider-track-bottom) + 2px);
+}
+
 /* ─── Liquid Glass thumb ───────────────────────────────────────────── */
 /* While a slider is being dragged, src/js/liquid_glass.js hides the
-   native thumb and floats a .p-lens (see materials.css) over it. The
-   lens redraws the track inside itself, magnified, so the fill edge
-   bends through the glass. On release it settles back into a thumb and
-   the script hands control back to the native one.
+   native thumb and floats a .p-lens (see materials.css) over it. On
+   release it settles back into a thumb and the script hands control
+   back to the native one.
 
-   The lens lives on <body> so no overflow or transform on an ancestor
-   can clip it; the script copies the resolved colors onto it. The
-   liquid copy passes through an alpha threshold, so the unfilled track
-   needs an opaque stand-in for its translucent token. */
+   The default is the liquid lens, which redraws the track inside
+   itself, magnified, through an alpha threshold; that copy needs an
+   opaque stand-in for the translucent track token.
+
+   data-p-lens="clear" on the input opts into the flat macOS 27 / iOS 27
+   lens (.p-lens-clear): the track shows
+   through unmagnified and a soft ring shadow falls about 7px below.
+   On the pointer sizes the thumb grows 1.25× plus a 1px rim; the touch
+   capsule grows from 38×24 to 60×40, with a 0.5px hairline (dark in
+   light mode, bright in dark), a faint shade in its upper third and
+   thin bright lines inside its top and bottom edges. The lens lives on
+   <body> so no overflow or transform on an ancestor can clip it; the
+   script copies the resolved colors onto it. */
 
 :root {
   --p-slider-lens-track: #e0e0e0;
   --p-slider-touch-lens-track: #e4e4e4;
+  --p-slider-touch-lens-body:
+    linear-gradient(
+      transparent 5%,
+      rgba(0, 0, 0, 0.075) 21%,
+      transparent 38%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+  --p-slider-touch-lens-edge: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
   --p-slider-lens-track: #3a3a3a;
   --p-slider-touch-lens-track: #3a3a3d;
+  --p-slider-touch-lens-body: linear-gradient(
+    rgba(255, 255, 255, 0.1) 5%,
+    rgba(255, 255, 255, 0.045) 22%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.09) 75%,
+    rgba(255, 255, 255, 0.13) 92%
+  );
+  --p-slider-touch-lens-edge:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.3);
+  --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
     --p-slider-lens-track: #3a3a3a;
     --p-slider-touch-lens-track: #3a3a3d;
+    --p-slider-touch-lens-body: linear-gradient(
+      rgba(255, 255, 255, 0.1) 5%,
+      rgba(255, 255, 255, 0.045) 22%,
+      rgba(255, 255, 255, 0.07) 50%,
+      rgba(255, 255, 255, 0.09) 75%,
+      rgba(255, 255, 255, 0.13) 92%
+    );
+    --p-slider-touch-lens-edge:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+      inset 0 2px 0 rgba(255, 255, 255, 0.25),
+      inset 0 -2px 0 rgba(255, 255, 255, 0.3);
+    --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -312,14 +566,23 @@
 [data-p-theme="lightmode"] {
   --p-slider-lens-track: #e0e0e0;
   --p-slider-touch-lens-track: #e4e4e4;
+  --p-slider-touch-lens-body:
+    linear-gradient(
+      transparent 5%,
+      rgba(0, 0, 0, 0.075) 21%,
+      transparent 38%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+  --p-slider-touch-lens-edge: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
 }
 
-input.p-slider[data-p-lens]::-webkit-slider-thumb {
+input.p-slider[data-p-lens-open]::-webkit-slider-thumb {
   background: transparent;
   box-shadow: none;
 }
 
-input.p-slider[data-p-lens]::-moz-range-thumb {
+input.p-slider[data-p-lens-open]::-moz-range-thumb {
   background: transparent;
   box-shadow: none;
 }
@@ -341,24 +604,74 @@ input.p-slider[data-p-lens]::-moz-range-thumb {
 }
 
 .p-slider-lens .p-lens-cover {
-  box-shadow:
-    0 0 1px rgba(0, 0, 0, 0.05),
-    0 0 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--p-slider-thumb-shadow, 0 0.5px 6px rgba(0, 0, 0, 0.12));
 }
 
-.p-slider-lens-touch .p-lens-cover {
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.15),
-    0 1px 1px rgba(0, 0, 0, 0.16),
-    0 3px 1px rgba(0, 0, 0, 0.10);
+/* Clear glass: sized rather than scaled, so the rim stays 1px. Rounded
+   to whole pixels like the reference (a 20×16 thumb → 27×22 glass). */
+.p-slider-lens.p-lens-clear {
+  scale: none;
+  width: calc(
+    var(--p-slider-lens-thumb-w) +
+    round(var(--p-slider-lens-thumb-w) * 0.25 + 2px, 1px) * var(--p-lens-lift)
+  );
+  height: calc(
+    var(--p-slider-lens-thumb-h) +
+    round(var(--p-slider-lens-thumb-h) * 0.25 + 2px, 1px) * var(--p-lens-lift)
+  );
 }
 
-/* The fill color pools on the leading edge of the glass, the track
-   color on the trailing edge. */
-.p-slider-lens .p-lens-edge {
+.p-slider-lens.p-lens-clear .p-lens-rim {
+  filter: none;
+  background: var(--p-slider-lens-body);
+  box-shadow: var(--p-slider-lens-edge);
+}
+
+/* Touch: the 38×24 capsule becomes a 60×40 one. */
+.p-slider-lens-touch.p-lens-clear {
+  width: calc(var(--p-slider-lens-thumb-w) + 22px * var(--p-lens-lift));
+  height: calc(var(--p-slider-lens-thumb-h) + 16px * var(--p-lens-lift));
+}
+
+/* The cast shadow: a 1px ring 1.5px inside the glass, blurred and
+   dropped 7px, as the reference draws it. A ring rather than a filled
+   shadow, so the glass does not darken over its own shadow. */
+.p-slider-lens.p-lens-clear .p-lens-rim::before {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  z-index: -1;
+  border: 1px solid var(--p-slider-lens-shadow);
+  border-radius: inherit;
+  translate: 0 7px;
+  filter: blur(3px);
+}
+
+/* Liquid lens: refraction wraps the color under the glass all the way
+   around its edge, the same ring the switch lens draws. The thumb sits
+   where the fill ends, so the fill color rings the leading half and the
+   track color the trailing half. The goo filter fuses the ring with the
+   magnified track copy, so the color bends around the rim. */
+.p-slider-lens .p-lens-edge::before,
+.p-slider-lens .p-lens-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.p-slider-lens .p-lens-edge::before {
+  clip-path: inset(0 50% 0 0);
   box-shadow:
-    inset calc(var(--p-lens-u) * 0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.2) var(--p-slider-lens-fill),
-    inset calc(var(--p-lens-u) * -0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.2) var(--p-slider-lens-rest);
+    inset 0 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-fill),
+    inset calc(var(--p-lens-u) * 0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-fill);
+}
+
+.p-slider-lens .p-lens-edge::after {
+  clip-path: inset(0 0 0 50%);
+  box-shadow:
+    inset 0 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-rest),
+    inset calc(var(--p-lens-u) * -0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-rest);
 }
 
 /* The track copy lines up with the real track, so the lens scale
@@ -379,5 +692,171 @@ input.p-slider[data-p-lens]::-moz-range-thumb {
 @media (prefers-reduced-motion: reduce) {
   .p-slider-lens {
     transition: none;
+  }
+}
+
+/* ─── Dial ─────────────────────────────────────────────────────────── */
+/* A circular slider: a flat plate with a 2px indicator that turns with
+   the value. No glass and no shadow in macOS 27. Five sizes on the
+   shared ladder; the default is 24.
+
+   <div class="p-dial" role="slider" tabindex="0" aria-label="Angle"
+        aria-valuemin="0" aria-valuemax="360" aria-valuenow="90"></div>
+
+   src/js/sliders.js makes it turn: drag around the center, or use the
+   arrow keys, Page Up/Down and Home/End when it has focus. It keeps
+   aria-valuenow and --p-dial-angle in sync and fires input and change
+   events. Without the script, set --p-dial-angle yourself. Minimum
+   sits at 12 o'clock and the value runs clockwise through a full turn.
+   Disable with aria-disabled="true". */
+
+:root {
+  --p-dial-plate: rgba(0, 0, 0, 0.08);
+  --p-dial-plate-pressed: rgba(0, 0, 0, 0.16);
+  --p-dial-plate-disabled: rgba(0, 0, 0, 0.03);
+  --p-dial-indicator: rgba(0, 0, 0, 0.85);
+  --p-dial-indicator-disabled: rgba(0, 0, 0, 0.25);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-dial-plate: rgba(255, 255, 255, 0.07);
+  --p-dial-plate-pressed: rgba(255, 255, 255, 0.16);
+  --p-dial-plate-disabled: rgba(255, 255, 255, 0.045);
+  --p-dial-indicator: rgba(255, 255, 255, 0.85);
+  --p-dial-indicator-disabled: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-dial-plate: rgba(255, 255, 255, 0.07);
+    --p-dial-plate-pressed: rgba(255, 255, 255, 0.16);
+    --p-dial-plate-disabled: rgba(255, 255, 255, 0.045);
+    --p-dial-indicator: rgba(255, 255, 255, 0.85);
+    --p-dial-indicator-disabled: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-dial-plate: rgba(0, 0, 0, 0.08);
+  --p-dial-plate-pressed: rgba(0, 0, 0, 0.16);
+  --p-dial-plate-disabled: rgba(0, 0, 0, 0.03);
+  --p-dial-indicator: rgba(0, 0, 0, 0.85);
+  --p-dial-indicator-disabled: rgba(0, 0, 0, 0.25);
+}
+
+.p-dial {
+  --p-dial-size: 24px;
+  --p-dial-mark-h: 6px;
+  --p-dial-mark-inset: 3px;
+  --p-dial-angle: 0deg;
+
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--p-dial-size);
+  height: var(--p-dial-size);
+  border-radius: 50%;
+  vertical-align: middle;
+
+  background: var(--p-dial-plate);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.1s ease-out;
+}
+
+/* The indicator: a 2px bar hanging from the top edge, turned about the
+   plate's center. */
+.p-dial::after {
+  content: "";
+  position: absolute;
+  top: var(--p-dial-mark-inset);
+  left: calc(50% - 1px);
+  width: 2px;
+  height: var(--p-dial-mark-h);
+  border-radius: 1px;
+
+  background: var(--p-dial-indicator);
+  transform-origin: 1px calc(var(--p-dial-size) / 2 - var(--p-dial-mark-inset));
+  rotate: var(--p-dial-angle);
+}
+
+.p-dial:active:not([aria-disabled="true"]),
+.p-dial[data-p-dragging] {
+  background: var(--p-dial-plate-pressed);
+}
+
+.p-dial:focus-visible {
+  outline: 2px solid transparent; /* forced-colors ring */
+  box-shadow: var(--p-focus-ring, 0 0 0 3.5px rgba(0, 136, 255, 0.5));
+}
+
+.p-dial[aria-disabled="true"] {
+  background: var(--p-dial-plate-disabled);
+  cursor: not-allowed;
+}
+
+.p-dial[aria-disabled="true"]::after {
+  background: var(--p-dial-indicator-disabled);
+}
+
+/* Sizes: plate, indicator length, and its inset from the edge. */
+.p-dial-mini {
+  --p-dial-size: 16px;
+  --p-dial-mark-h: 4px;
+  --p-dial-mark-inset: 2px;
+}
+
+.p-dial-small {
+  --p-dial-size: 20px;
+  --p-dial-mark-h: 5px;
+  --p-dial-mark-inset: 2.5px;
+}
+
+.p-dial-large {
+  --p-dial-size: 28px;
+  --p-dial-mark-h: 6px;
+  --p-dial-mark-inset: 3px;
+}
+
+.p-dial-xlarge {
+  --p-dial-size: 36px;
+  --p-dial-mark-h: 7px;
+  --p-dial-mark-inset: 3px;
+}
+
+/* ─── Accessibility preferences ────────────────────────────────────── */
+
+@media (prefers-contrast: more) {
+  :root {
+    --p-slider-track: rgba(0, 0, 0, 0.2);
+    --p-dial-plate: rgba(0, 0, 0, 0.16);
+  }
+
+  .p-dark-mode,
+  [data-p-theme="darkmode"] {
+    --p-slider-track: rgba(255, 255, 255, 0.24);
+    --p-dial-plate: rgba(255, 255, 255, 0.16);
+  }
+
+  .p-slider::-webkit-slider-thumb {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), var(--p-slider-thumb-shadow);
+  }
+
+  .p-slider::-moz-range-thumb {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), var(--p-slider-thumb-shadow);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-dial {
+    border: 1px solid CanvasText;
+  }
+
+  .p-dial::after {
+    background: CanvasText;
   }
 }

@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Date pickers
-description: The iOS calendar. 44px day cells, 20px numbers, a filled circle for the selected day, opened from a capsule value button.
+description: The iOS calendar. A glass panel with 38px day circles, 20px numbers, a neutral circle for the selected day, opened from a capsule value button.
 ---
 
 import '@puppertino/buttons.css';
@@ -38,53 +38,72 @@ That capsule is an ordinary touch button in the gray style, at the same 34px hei
 <Showcase
   name="picker-calendar"
   align="start"
-  snippet={`<div class="p-calendar p-calendar-touch" data-p-calendar>
-  <div class="p-calendar-header">
-    <span class="p-calendar-title"></span>
-    <button class="p-calendar-nav" data-p-cal-prev aria-label="Previous month"></button>
-    <button class="p-calendar-nav" data-p-cal-next aria-label="Next month"></button>
+  snippet={`<div class="p-calendar p-calendar-touch" data-p-date="2026-04-20">
+  <div class="p-calendar-time">
+    <span>Time</span>
+    <button class="p-button p-button-touch p-button-default" type="button">9:41 AM</button>
   </div>
-  <div class="p-calendar-weekdays"></div>
-  <div class="p-calendar-grid"></div>
 </div>`}
-  code={`<div class="p-calendar p-calendar-touch" data-p-calendar></div>`}
+  code={`<div class="p-calendar p-calendar-touch" data-p-date="2026-04-20">
+  <div class="p-calendar-time">
+    <span>Time</span>
+    <button class="p-button p-button-touch p-button-default" type="button">9:41 AM</button>
+  </div>
+</div>`}
 />
 
 | Part | Value |
 |---|---|
-| Panel | 370px wide, 13px radius, 16px padding |
-| Day cell | 44 x 44px, full circle |
-| Grid | 49px column pitch, 51px row pitch |
-| Day number | 20px, weight 400, tracking -0.45px |
+| Panel | 370px wide, 13px radius, 12px side padding |
+| Material | Overlay glass: the fill, keyline, and rims of the alert surface, over `--p-shadow-overlay` (`0 8px 48px`, 25% light, 45% dark) |
+| Month title | 17px, weight 590, tracking -0.43px, with a 13px bold accent chevron |
+| Previous / next | 20pt chevrons in the label color, 44px targets |
 | Weekday header | 13px, weight 590, uppercase, at 30% |
-| Month title | 17px, weight 590, tracking -0.43px |
-| Today | Accent number, no fill |
-| Selected | Filled accent circle, white number |
-| Outside month | 30% |
+| Day circle | 38 x 38px |
+| Grid | 51px column pitch, 51px row pitch (48px for the first row) |
+| Day number | 20px, weight 400, tracking -0.45px |
+| Today | Accent number on a 12% accent circle |
+| Selected | Black circle, white 590 number (white circle, black number in dark) |
+| Time row | 52px, a hairline above, "Time" at 17px and a value capsule |
 
-The day cell is 44px, so the calendar is the one place where the grid and the tap target are the same thing. That is also why the panel is 370px: seven 44px cells plus padding is what a phone width allows.
+The panel is glass because iOS presents the calendar as a popover over its value buttons, so it borrows the same overlay material as the alerts and menus. Add `.p-calendar-touch-plain` to drop the surface when the calendar sits inline on a card of its own. Reduced transparency and increased contrast swap the glass for an opaque panel.
 
-The cells are spread with `space-between` rather than dropped into seven equal columns, so the first and last circle in a row sit flush against the panel's padding. At 370px that works out to 5px between cells horizontally and 7px vertically.
+The circles are spread with `space-between` rather than dropped into seven equal columns, so the first and last circle in a row sit flush against the panel's padding. The 38px circle is smaller than a 44px target; the cells sit on a 51px grid, so a tap anywhere near a number still lands on it.
 
-Today and selected are two different marks. Today is the accent as a number. Selected is the accent as a filled circle. A day can be both, and the fill wins.
+Today and selected are two different marks. Today is the accent: a blue number on a faint blue circle. Selected is neutral: a black circle, or white in dark mode, so the choice reads the same whatever the app's tint is. A day can be both, and the selection wins.
 
-The grid is driven by `datepickers.js`, the same script the pointer calendar uses.
+### Tinted selection
+
+`.p-calendar-touch-tinted` fills the selected day with the accent instead, for a calendar that should carry the app's tint.
+
+<Showcase
+  name="picker-calendar-tinted"
+  align="start"
+  snippet={`<div class="p-calendar p-calendar-touch p-calendar-touch-tinted" data-p-date="2026-04-20"></div>`}
+  code={`<div class="p-calendar p-calendar-touch p-calendar-touch-tinted" data-p-date="2026-04-20"></div>`}
+/>
+
+### The script
+
+The grid is driven by `datepickers.js`, the same script the pointer calendar uses. For a `.p-calendar-touch` it builds the month the iOS way: Sunday first, the full month name, SUN to SAT headers, no days from the neighbouring months, and only as many rows as the month needs. Set the selected day with `data-p-date="YYYY-MM-DD"`; it fires a bubbling `p-change` event with `{ date }` when a day is chosen.
 
 ```html
 <script type="module" src="/js/datepickers.js"></script>
 ```
 
+An optional `.p-calendar-time` row goes inside the calendar; the script keeps it below the grid.
+
 ## Dark mode
 
-Numbers flip from black to white, the accent from `#0088FF` to `#0091FF`, and the weekday headers and outside-month days stay at 30% against the light values.
+Numbers flip from black to white, the accent from `#0088FF` to `#0091FF`, and the selected circle inverts: white with a black number. The panel's glass turns to `rgba(26,26,26,0.9)` and its shadow deepens to 45%. Weekday headers stay at 30% against the light values.
 
 ## Accessibility
 
-Day cells are buttons in a grid. Give the selected one `aria-selected="true"`, which drives the visual state as well.
+Day cells are buttons. The script names each one in full, "Monday, April 20, 2026", and marks the chosen day with `aria-pressed`; hand-written markup can use `aria-selected="true"`, which drives the same visual state.
 
-Weekday headers are abbreviations, so spell them out for assistive tech rather than leaving "SUN" to be guessed at.
+Weekday headers are `<abbr>` elements with the full day name as the title, so "SUN" is not left to be guessed at. The month title is a polite live region, so moving between months is announced.
 
-Focus draws a 3px accent ring inset into the cell, matching the circle.
+Focus draws a 3px accent ring inset into the circle.
 
 A calendar is a lot of controls. Always offer a text alternative for the same value, so people who do not want to navigate 30 buttons can type a date instead.
 
@@ -92,6 +111,6 @@ A calendar is a lot of controls. Always offer a text alternative for the same va
 
 `pickers.css` ships both. `.p-calendar` alone is the macOS graphical picker: 11px numbers on an 18px pitch with a 16px pill, sized for a pointer. Adding `.p-calendar-touch` swaps it to iOS metrics.
 
-Two rules have to be cleared rather than overridden when it does: macOS marks today with a gray pill background, and its day cells take a hover fill. iOS marks today with the accent number alone, and touch has no hover.
+Touch clears the macOS hover fill on day cells, since touch has no hover, and replaces the macOS gray today pill with the blue circle.
 
 The analog clock in the same file is macOS-only and still experimental.

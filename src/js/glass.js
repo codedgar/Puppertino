@@ -1,8 +1,9 @@
 /**
  * Puppertino v2 — Puppertino Glass.
  *
- * Real-time Liquid Glass for surfaces: .p-glass, .p-glass-clear, and
- * the .p-tab-bar. The rendering is Glassworks
+ * Real-time Liquid Glass for surfaces: .p-glass, .p-glass-clear, the
+ * .p-tab-bar and its accessory circle, and the iOS nav bar buttons,
+ * toolbar, and bar search field. The rendering is Glassworks
  * (github.com/codedgar/glassworks): it snapshots the page and refracts
  * that snapshot through a WebGL shader drawn under each surface. This
  * script is the Puppertino side. It reads each surface's recipe from
@@ -13,7 +14,7 @@
  * Load a capture engine and Glassworks before this script:
  *
  *   <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom/dist/snapdom.js"></script>
- *   <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.1/dist/glassworks.umd.min.js"></script>
+ *   <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.2/dist/glassworks.umd.min.js"></script>
  *   <script src="src/js/glass.js"></script>
  *
  * With a bundler, hand Glassworks over instead:
@@ -29,12 +30,40 @@
  * PuppertinoGlass.refresh() after changing what sits behind the glass.
  * Mark the region the glass refracts with [data-p-glass-backdrop]; the
  * whole <body> is used otherwise, and a smaller region captures faster.
+ *
+ * Like Apple's, small Regular surfaces (64px or less across) flip to
+ * dark glass over dark content and light glass over light content, by
+ * setting data-p-theme on the surface. --p-glass-adaptive: 0 opts out.
+ *
+ * Small and bigger glass are tinted differently (Apple's small glass is
+ * lighter in light mode and nearly clear in dark mode; cards are close
+ * to opaque), so each surface gets data-p-glass-size="small" or
+ * "large" by the same 64px rule, and materials.css picks the tint.
  */
 (function () {
   'use strict';
 
-  var SELECTOR = '.p-glass, .p-glass-clear, .p-tab-bar';
+  // The iOS bar controls are Regular glass too. Solid (prominent) ones
+  // are not glass, so they are left out.
+  var SELECTOR = '.p-glass, .p-glass-clear, .p-tab-bar, .p-tab-bar-accessory, ' +
+    '.p-nav-bar__button:not(.p-nav-bar__button-prominent), ' +
+    '.p-toolbar-touch:not(.p-toolbar-touch-prominent), .p-bar-search';
   var BACKDROP = '[data-p-glass-backdrop]';
+
+  // Apple's lens does not grow without limit. Measured on macOS 26, a
+  // 50pt button and a 74pt bar both shift content 30-40pt at the rim,
+  // over a band 10-20pt wide. So the recipe's bend is taken against at
+  // most REACH px of the shorter side, and the rim band stops at BAND px.
+  var REACH = 48;
+  var BAND = 24;
+
+  // Small Regular surfaces (buttons, bars) flip between light and dark
+  // to suit what is behind them. Bigger ones keep the page's appearance,
+  // as Apple's do: a flip over that much area would be distracting.
+  // The same line splits the small and large tints.
+  var ADAPT_MAX = 64;
+  var TO_DARK = 0.35; // backdrop luminance below which light glass turns dark
+  var TO_LIGHT = 0.85; // and above which dark glass turns light
 
   var library = null; // set by use()
   var engine; // set by use()
@@ -136,13 +165,16 @@
   function recipe(el) {
     var style = getComputedStyle(el);
     return {
-      refraction: number(style, '--p-glass-refraction', 0.04),
-      bevelDepth: number(style, '--p-glass-bevel-depth', 0.3),
-      bevelWidth: number(style, '--p-glass-bevel-width', 0.2),
+      refraction: number(style, '--p-glass-refraction', 0.1),
+      bevelDepth: number(style, '--p-glass-bevel-depth', 0.5),
+      bevelWidth: number(style, '--p-glass-bevel-width', 0.25),
       frost: number(style, '--p-glass-frost', 0),
+      frostGrow: number(style, '--p-glass-frost-grow', 1) > 0,
       magnify: number(style, '--p-glass-magnify', 1),
-      // The highlights drift continuously, so they go with reduced motion.
-      specular: number(style, '--p-glass-specular', 1) > 0 && !reducedMotion.matches
+      // Glassworks 2 (rc.2 on) draws two fixed rim highlights (+45° and -135°);
+      // they don't move, so reduced motion leaves them alone.
+      specular: number(style, '--p-glass-specular', 0) > 0,
+      adaptive: number(style, '--p-glass-adaptive', 1) > 0
     };
   }
 
@@ -151,17 +183,51 @@
   // of its height down. The same value bends content further on a
   // bigger page, and further down than across on a long one.
   // Puppertino's recipe is a fraction of the surface's shorter side
-  // instead, so a button and a tab bar bend in proportion on any page.
-  // It is converted against the snapshot's longer side, which makes
-  // that axis exact and leaves the other bending less, never more: an
-  // under-bent edge reads as subtle, an over-bent one as a smear.
+  // instead (up to REACH px), so a button and a tab bar bend alike on
+  // any page. It is converted against the snapshot's longer side, which
+  // makes that axis exact and leaves the other bending less, never
+  // more: an under-bent edge reads as subtle, an over-bent one as a
+  // smear. Bevel width is already relative to the surface in
+  // Glassworks; it is only capped at BAND px.
   function scaled(el, values) {
     var r = renderer();
     var target = (r && r.snapshotTarget) || document.querySelector(BACKDROP) || document.body;
     var span = Math.max(target.scrollWidth, target.scrollHeight) || window.innerWidth;
     var rect = el.getBoundingClientRect();
-    var k = Math.min(rect.width, rect.height) / span;
-    return { refraction: values.refraction * k, bevelDepth: values.bevelDepth * k };
+    var side = Math.min(rect.width, rect.height) || 1;
+    var k = Math.min(side, REACH) / span;
+    return {
+      refraction: values.refraction * k,
+      bevelDepth: values.bevelDepth * k,
+      bevelWidth: Math.min(values.bevelWidth, BAND / side)
+    };
+  }
+
+  // Apple's Regular frost scales with the surface: measured on macOS 26
+  // it is about a 4pt blur on a 50pt button and 8pt on a 160pt panel.
+  // Clear frosts about 10pt at every size (--p-glass-frost-grow: 0).
+  // Frost (a blur in CSS px, done in the shader before the lens) and the
+  // CSS --p-glass-blur smoothing pass are both multiplied by this.
+  function frostScale(el) {
+    var rect = el.getBoundingClientRect();
+    var side = Math.min(rect.width, rect.height);
+    var scale = Math.min(2.5, Math.max(0.75, 0.5 + side / 100));
+    el.style.setProperty('--p-glass-scale', scale.toFixed(2));
+    sizeClass(el, side);
+    return scale;
+  }
+
+  // Marks the surface small (64px or less across) or large, which picks
+  // --p-glass-tint or --p-glass-tint-large in materials.css. A surface
+  // that isn't laid out yet (0 across) is left as it was.
+  function sizeClass(el, side) {
+    if (!side) return;
+    var size = side <= ADAPT_MAX ? 'small' : 'large';
+    if (el.getAttribute('data-p-glass-size') !== size) el.setAttribute('data-p-glass-size', size);
+  }
+
+  function frostFor(values, scale) {
+    return values.frostGrow ? values.frost * scale : values.frost;
   }
 
   function retune() {
@@ -171,7 +237,93 @@
       var bend = scaled(surface.el, surface.recipe);
       surface.lens.options.refraction = bend.refraction;
       surface.lens.options.bevelDepth = bend.bevelDepth;
+      surface.lens.options.bevelWidth = bend.bevelWidth;
+      surface.lens.options.frost = frostFor(surface.recipe, frostScale(surface.el));
     }
+    adaptSoon();
+  }
+
+  // ── Adaptive appearance ──────────────────────────────────────────────
+  // Reads the snapshot under each small Regular surface and flips it to
+  // dark glass over dark content, or light glass over light content,
+  // with hysteresis so it doesn't flicker at the boundary. The flip is
+  // data-p-theme on the surface, so its labels follow the glass.
+
+  var probe = null;
+  function luminance(r, el) {
+    var canvas = r.staticSnapshotCanvas;
+    if (!canvas || !canvas.width || !r.snapshotTarget) return null;
+    var base = r.snapshotTarget.getBoundingClientRect();
+    var rect = el.getBoundingClientRect();
+    var f = r.scaleFactor || 1;
+    var x = Math.max(0, (rect.left - base.left) * f);
+    var y = Math.max(0, (rect.top - base.top) * f);
+    var w = Math.min(canvas.width - x, rect.width * f);
+    var h = Math.min(canvas.height - y, rect.height * f);
+    if (w < 1 || h < 1) return null;
+    if (!probe) {
+      probe = document.createElement('canvas');
+      probe.width = probe.height = 8;
+    }
+    try {
+      var ctx = probe.getContext('2d', { willReadFrequently: true });
+      ctx.clearRect(0, 0, 8, 8);
+      ctx.drawImage(canvas, x, y, w, h, 0, 0, 8, 8);
+      var data = ctx.getImageData(0, 0, 8, 8).data;
+      var sum = 0, n = 0;
+      for (var i = 0; i < data.length; i += 4) {
+        if (!data[i + 3]) continue;
+        sum += (0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]) / 255;
+        n++;
+      }
+      return n ? sum / n : null;
+    } catch (e) {
+      return null; // a tainted snapshot can't be read
+    }
+  }
+
+  // The appearance the surface would have without adapting: light when
+  // its parent's large glass tint is light. (The small dark tint is a
+  // clear light gray, so it can't tell the two apart.)
+  function inherited(el) {
+    var style = getComputedStyle(el.parentElement || document.documentElement);
+    var tint = style.getPropertyValue('--p-glass-tint-large') || style.getPropertyValue('--p-glass-tint');
+    var rgb = tint.match(/[\d.]+/g);
+    if (!rgb) return 'light';
+    return (+rgb[0] + +rgb[1] + +rgb[2]) / 3 > 127 ? 'light' : 'dark';
+  }
+
+  function adapt() {
+    var r = renderer();
+    if (!r) return;
+    for (var i = 0; i < surfaces.length; i++) {
+      var surface = surfaces[i];
+      if (!surface.adaptive || surface.el.getAttribute('data-p-glass') !== 'live') continue;
+      var rect = surface.el.getBoundingClientRect();
+      var small = Math.min(rect.width, rect.height) <= ADAPT_MAX;
+      var base = inherited(surface.el);
+      if (base !== surface.base) {
+        surface.base = base;
+        surface.tone = base;
+      }
+      var tone = surface.tone || base;
+      var lum = small ? luminance(r, surface.el) : null;
+      if (lum === null) tone = base;
+      else if (tone === 'light' && lum < TO_DARK) tone = 'dark';
+      else if (tone === 'dark' && lum > TO_LIGHT) tone = 'light';
+      surface.tone = tone;
+      if (tone === base) surface.el.removeAttribute('data-p-theme');
+      else surface.el.setAttribute('data-p-theme', tone + 'mode');
+    }
+  }
+
+  var adaptFrame = 0;
+  function adaptSoon() {
+    if (adaptFrame) return;
+    adaptFrame = requestAnimationFrame(function () {
+      adaptFrame = 0;
+      adapt();
+    });
   }
 
   function find(el) {
@@ -196,7 +348,9 @@
     }
     if (surface.style === null) el.removeAttribute('style');
     else el.setAttribute('style', surface.style);
+    if (surface.adaptive) el.removeAttribute('data-p-theme');
     el.removeAttribute('data-p-glass');
+    el.removeAttribute('data-p-glass-size');
     el.removeAttribute('data-p-glass-id');
   }
 
@@ -250,10 +404,25 @@
     if (style.zIndex === 'auto') el.style.zIndex = 'var(--p-glass-z, 1)';
 
     var options = recipe(el);
-    surface.recipe = { refraction: options.refraction, bevelDepth: options.bevelDepth };
+    surface.recipe = {
+      refraction: options.refraction,
+      bevelDepth: options.bevelDepth,
+      bevelWidth: options.bevelWidth,
+      frost: options.frost,
+      frostGrow: options.frostGrow
+    };
+    // Clear glass never adapts (Apple's doesn't either), and a surface
+    // the author has pinned to an appearance keeps it.
+    surface.adaptive = options.adaptive &&
+      !el.classList.contains('p-glass-clear') &&
+      !el.hasAttribute('data-p-theme');
+    delete options.adaptive;
+    delete options.frostGrow;
     var bend = scaled(el, options);
     options.refraction = bend.refraction;
     options.bevelDepth = bend.bevelDepth;
+    options.bevelWidth = bend.bevelWidth;
+    options.frost = frostFor(surface.recipe, frostScale(el));
     options.target = '[data-p-glass-id="' + id + '"]';
     options.snapshot = document.querySelector(BACKDROP) ? BACKDROP : 'body';
     options.resolution = Math.min(2, window.devicePixelRatio || 1);
@@ -330,7 +499,7 @@
     var r = renderer();
     if (!r || !r.captureSnapshot) return;
     var run = r.captureSnapshot();
-    if (run && run.catch) run.catch(function () {});
+    if (run && run.then) run.then(adaptSoon, function () {});
   }
 
   var refreshTimer = null;
@@ -368,11 +537,16 @@
       resizeTimer = setTimeout(retune, 150);
     }, { passive: true });
 
+    // Scrolling moves content under fixed bars, so adapt again.
+    window.addEventListener('scroll', adaptSoon, { passive: true, capture: true });
+
     if (typeof MutationObserver === 'undefined') return;
     new MutationObserver(function (records) {
       if (!surfaces.length) return;
       for (var i = 0; i < records.length; i++) {
         var record = records[i];
+        // The adaptive flip on a surface doesn't change what is behind it.
+        if (record.attributeName === 'data-p-theme' && record.target.hasAttribute('data-p-glass-id')) continue;
         var now = record.target.getAttribute(record.attributeName);
         var changed = record.attributeName === 'class'
           ? themeTokens(record.oldValue) !== themeTokens(now)

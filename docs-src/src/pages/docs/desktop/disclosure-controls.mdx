@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Disclosure controls
-description: Round chevron buttons that reveal and hide related content. Five sizes, works with native details and summary, no JavaScript.
+description: Chevron buttons that reveal and hide related content. Five sizes, rounded squares at the small end and circles at the large end, works with native details and summary, no JavaScript.
 ---
 
 import '@puppertino/forms.css';
@@ -18,11 +18,12 @@ Use one when secondary detail would crowd the view but should stay one click awa
 
 | Part | Value |
 |---|---|
-| Plate | Circle, `--p-fill-tertiary`. Five sizes: 16, 20, 24, 28, 36px |
-| Chevron | ~45% of the plate, `--p-text-primary`, bold |
+| Plate | Black at 8% (white at 7% in dark mode). Rounded square at 16, 20 and 24px (radius a quarter of the side: 4, 5, 6px); circle at 28 and 36px |
+| Chevron | Bold, black at 85%. 8 by 5px at 16 and 20px, 12 by 7px from 24px up |
 | Direction | Down when collapsed, rotates 180° to up when expanded, 0.2s |
-| Hover | `--p-fill-secondary` |
-| Pressed | 15% black, the shared pressed tone |
+| Hover | 11% |
+| Pressed | 16%, light and dark |
+| Disabled | Plate 4%, chevron 25% |
 
 ## Zero-JS use
 
@@ -60,11 +61,11 @@ The `details` element does the revealing, hiding, keyboard handling, and screen 
 
 When your own script controls the reveal, use a `button` and flip `aria-expanded`; the chevron follows the attribute. Always give an icon-only button an `aria-label`, and update it with the state. The middle button above is wired so you can try the rotation.
 
-Five sizes via `.p-disclosure-mini` through `.p-disclosure-xlarge`, the shared control ladder.
+Five sizes via `.p-disclosure-mini` through `.p-disclosure-xlarge`, the shared control ladder. The three small sizes are rounded squares and the two large ones are circles. The chevron does not scale with the plate: it is the 10pt glyph at 16 and 20px and the 13pt glyph from 24px up.
 
 ## Dark mode
 
-Plate and chevron flip through the fill and text tokens. No extra setup.
+The plate turns to white at 7% (16% pressed, 4% disabled) and the chevron to white at 85%. No extra setup.
 
 ## Reduced motion
 

@@ -35,13 +35,13 @@ Use an image well where people can drop in or replace a picture, like an avatar 
 </label>`}
 />
 
-The first two are filled wells (28px and a scaled 64px). The third is empty. The last is disabled.
+The first two are filled wells (30px and a scaled 64px). The third is empty. The last is disabled.
 
 ## Anatomy
 
-The well is a 28px box with a 2px radius holding a 24px image at a 2px inset; the image keeps square corners. The margin around the image fills with `rgba(0, 0, 0, 0.02)`. The frame runs inside to out: a 0.5px inner edge at `rgba(0, 0, 0, 0.05)`, a 1px white ring, and a 1.5px soft outer edge at 5% black. The white ring between dark hairlines is what makes it read as an inset well rather than a card.
+The well is a 30px box with a 3px radius holding a 24px image at a 3px inset; the image keeps square corners. The margin around the image fills with `rgba(0, 0, 0, 0.02)`. The frame runs outside to in: a 0.5px soft edge at `rgba(0, 0, 0, 0.05)` just outside the box, a 1px white ring at the box edge, and a thin soft inner edge at 5% black under it. The white ring between dark hairlines is what makes it read as an inset well rather than a card.
 
-Only the 28px size is canonical, but the frame is size independent: set any width and height and the inset and rings hold.
+Only the 30px size is canonical, but the frame is size independent: set any width and height and the inset and rings hold.
 
 | Class | Role |
 |---|---|
@@ -72,7 +72,7 @@ For drag and drop, toggle `.p-dragover` on `dragenter` and `dragleave` and read 
 
 ## States
 
-Focus and drag-over show the standard ring, `3px rgb(0 122 255 / 50%)` with a 2px offset. Disabled (or `.p-dimmed`) drops the well to 50% opacity, the standard macOS dimmed treatment.
+Focus and drag-over show a 3.5px ring in the focus band color, `rgba(0,136,255,0.5)`, with a 1px offset. Disabled (or `.p-dimmed`) drops the well to 50% opacity, the standard macOS dimmed treatment.
 
 ## Dark mode
 

@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Buttons
-description: Capsule push buttons sized for fingers. Three touch sizes, six styles, exact iOS metrics, no JavaScript.
+description: Capsule push buttons sized for fingers. Three touch sizes, six styles, Liquid Glass buttons, exact iOS metrics, no JavaScript.
 ---
 
 import '@puppertino/buttons.css';
@@ -76,15 +76,52 @@ Consider the small size only inside dense rows, next to a list item or a search 
 | Style | Fill | Label | Use it for |
 |---|---|---|---|
 | `.p-button-primary` | Solid accent | White | The one action the screen exists for |
-| `.p-button-secondary` | Accent at 14% | Accent | A supporting action that should still read as tappable |
+| `.p-button-secondary` | `rgba(118,118,128,0.12)` | Accent | A supporting action that should still read as tappable |
 | `.p-button-default` | `rgba(118,118,128,0.12)` | `--p-text-primary` | Cancel, Dismiss, and other neutral choices |
 | `.p-button-tinted` | `rgba(118,118,128,0.12)` | Accent | A quiet action with an accent cue, like Get |
 | `.p-button-borderless` | None | Accent | Toolbar and navigation bar actions |
 | `.p-button-destructive` | Red at 14% | `--p-sys-red` | Anything that removes data permanently |
 
+On touch, `.p-button-secondary` is the iOS bordered button: the gray fill with an accent label, the same look as `.p-button-tinted`. iOS has no accent-tinted fill; only destructive keeps a colored wash.
+
 The gray fill is built on `#767680`, not on pure black. iOS runs its own fill scale, so touch buttons read from `--p-button-touch-gray` rather than the `--p-fill-*` tokens the desktop controls use. It lands at 12% in light and 24% in dark.
 
 Destructive ignores the accent entirely and stays `--p-sys-red`, `#FF383C` in light and `#FF4245` in dark. Red means the same thing on every screen, so it never retints.
+
+## Liquid Glass
+
+<Showcase
+  name="mobile-button-glass"
+  code={`<button class="p-button p-button-touch-large p-button-glass-prominent" type="button"><span>Done</span></button>
+<button class="p-button p-button-touch-large p-button-glass" type="button"><span>Done</span></button>
+<button class="p-button p-button-touch-large p-button-glass-prominent p-button-destructive" type="button"><span>Delete</span></button>
+<button class="p-button p-button-touch-large p-button-glass p-button-destructive" type="button"><span>Delete</span></button>
+<button class="p-button p-button-touch-large p-button-glass p-button-icon-only" type="button" aria-label="Done">
+  <i class="ph-bold ph-check"></i>
+</button>`}
+  snippet={`<button class="p-button p-button-touch-large p-button-glass-prominent" type="button"><span>Done</span></button>
+<button class="p-button p-button-touch-large p-button-glass" type="button"><span>Done</span></button>`}
+/>
+
+Glass buttons float over content: toolbars, the bottom of a sheet, a photo. There are two styles.
+
+| Class | Look | Use it for |
+|---|---|---|
+| `.p-button-glass` | Light translucent glass, darker toward the top, primary label | Secondary actions over content |
+| `.p-button-glass-prominent` | The accent, with a bright line inside the top and bottom edges | The one action the view exists for |
+
+Add `.p-button-destructive` for a red label on regular glass, or red prominent glass. Retint prominent glass with any `.p-sys-*` class.
+
+| Size | Height | Padding | Label |
+|---|---|---|---|
+| `.p-button-touch-small` | 28px | 0 10px | 15px / 510 |
+| default | 34px | 0 12px | 17px / 510 |
+| `.p-button-touch-large` | 50px | 0 20px | 17px / 510 |
+| `.p-button-icon-only` + large | 50px circle | none | 19px glyph |
+
+Glass labels are Medium (510) and untracked, heavier than the Regular labels on the standard buttons. The edge is the shared glass edge, a hairline keyline with bright top and bottom rims, and the shadow is the soft small-glass shadow, so both follow the [materials](../../materials/) tokens.
+
+These buttons blur what sits behind them but do not bend it. Disabled glass buttons turn into regular glass with a gray label. With reduced transparency the regular glass becomes an opaque light gray plate (dark gray in dark mode).
 
 ## Changing the color
 
@@ -98,7 +135,7 @@ Destructive ignores the accent entirely and stays `--p-sys-red`, `#FF383C` in li
   snippet={`<button class="p-button p-button-touch p-button-primary p-sys-purple" type="button">Purple</button>`}
 />
 
-Drop any `.p-sys-*` class on the button to retint it. Every style reads the same `--p-color-current` variable, so filled, tinted, gray tinted, and plain all follow. Untinted, that variable resolves to `#0D6FFF`, the control blue shared with the desktop buttons. Add `.p-sys-blue` for `#0088FF`, the iOS text and link blue, if the button sits next to system-blue text.
+Drop any `.p-sys-*` class on the button to retint it. Every style reads the same `--p-color-current` variable, so filled, tinted, gray tinted, and plain all follow. Untinted, that variable resolves to the control accent, `#0088FF` in light mode and `#0091FF` in dark, the same blue as system text and links, and shared with the desktop buttons.
 
 ## Icons
 
@@ -167,7 +204,7 @@ Nothing needs to be set on the button. Put `.p-auto-dark-mode` on the body to fo
 
 Reduced motion removes the press and focus transitions. The states still change, they just arrive instantly.
 
-Reduced transparency swaps the tinted, plain, and destructive fills for the opaque `--p-fill-secondary`, since a translucent fill over a photo can drop below the 4.5:1 contrast floor.
+Reduced transparency swaps the tinted and destructive fills for the opaque `--p-fill-secondary`, and regular glass for an opaque plate, since a translucent fill over a photo can drop below the 4.5:1 contrast floor.
 
 Increased contrast adds a 2px border in the current text color, and filled buttons get a 60% black edge so the capsule still has a boundary against a light background.
 

@@ -41,23 +41,23 @@ Use `.p-menu` for custom command menus, context menus, and dropdowns that native
 
 ## Anatomy
 
-The surface uses a 13px radius, the thin menu material over a 20px blur, and a soft double shadow (`0 0 25px` at 16% plus `0 0 2px` at 10%). Padding is 5px on every side. Items are full-width pills, 24px tall with an 8px radius. Text is 13px at weight 510.
+The surface uses a 12px radius (a continuous corner where the browser supports `corner-shape`), a neutral gray material over a 20px blur, and the shared overlay shadow, `0 8px 48px` at 25%. Its edge reads as glass: a dark 0.5px hairline just outside the shape, and a bright inner ring that is strongest along the top and bottom. Padding is 5px on every side. Items are full-width pills, 24px tall with an 8px radius. Text is 13px at weight 510.
 
 | Class | Role |
 |---|---|
-| `.p-menu` | The menu surface. Material, radius 13, 5px padding, shadow. |
+| `.p-menu` | The menu surface. Material, radius 12, glass edge, 5px padding, overlay shadow. |
 | `.p-menu__item` | One command. 24px pill, radius 8, 13px text. |
 | `.p-menu__icon` | Leading 14px icon slot, 15px wide. |
 | `.p-menu__check` | Optional 18px checkmark column for checkable items. |
 | `.p-menu__shortcut` | Right-aligned keyboard shortcut, secondary color. |
 | `.p-menu__chevron` | Right-aligned submenu indicator. |
-| `.p-menu__separator` | 1px rule with 5px vertical margins. |
-| `.p-menu__header` | 10px bold section header. |
+| `.p-menu__separator` | 1px rule with 5px vertical margins, 12% black so it always reads darker than the glass. |
+| `.p-menu__header` | Section header at the item size in bold (13px on a regular menu), aligned with the labels. |
 | `.p-menu__subwrap` | Wrapper that hosts an item plus its nested submenu. |
 
 ## States
 
-Hover, keyboard focus, and `.is-selected` paint the pill with the selection blue (`#0088FF`) and switch every slot to white. Disabled items and their shortcuts drop to the disabled gray and do not react. Shortcuts rest in secondary gray. Selection color meets a 4.5:1 contrast ratio with its white label.
+Hover, keyboard focus, and `.is-selected` paint the pill with the menu selection blue (`#0069F9`) and switch every slot to white. Disabled items and their shortcuts drop to the secondary ink and do not react. Shortcuts rest in the same secondary ink. Secondary ink (33% black, 32% white in dark mode) and headers (68% black, 70% white) are translucent, so they darken or lighten the glass behind them by a fixed amount and stay readable on any backdrop. Selection color meets a 4.5:1 contrast ratio with its white label.
 
 <Showcase
   name="menus-states"
@@ -80,11 +80,13 @@ Checkable items reserve the leading column with `.p-menu__check`. Give unchecked
 
 Three sizes share the surface. Regular is the default.
 
-| Size | Class | Item height | Font |
-|---|---|---|---|
-| Small | `.p-menu--small` | 19px | 10px |
-| Medium | `.p-menu--medium` | 22px | 11px |
-| Regular | none | 24px | 13px |
+| Size | Class | Item height | Font | Header band |
+|---|---|---|---|---|
+| Small | `.p-menu--small` | 19px | 10px | 17px |
+| Medium | `.p-menu--medium` | 22px | 11px | 20px |
+| Regular | none | 24px | 13px | 25px |
+
+Headers use the same font size as the items, in bold, and start on the same 7px inset as the labels. They do not indent to the icon column.
 
 <Showcase
   name="menus-sizes"
@@ -106,7 +108,7 @@ Three sizes share the surface. Regular is the default.
 
 ## Submenus
 
-Wrap the trigger item and a nested menu in `.p-menu__subwrap`. The submenu opens on hover and on keyboard focus, aligned to the parent item.
+Wrap the trigger item and a nested menu in `.p-menu__subwrap`. The submenu opens on hover and on keyboard focus, overlapping the parent by 5px so its first item lines up with the trigger. While the pointer or focus is inside the submenu, the parent row keeps a gray pill (13% black, 10% white in dark mode) with its normal label color, and the blue selection moves into the submenu. Adding `.active` to the nested menu holds it open with the same gray parent, which is useful for static previews.
 
 <div style="margin: 16px 0 20px; padding: 24px 24px 90px; background: var(--p-bg-secondary); border-radius: 10px;">
   <div class="p-menu" role="menu" aria-label="Submenu demo">
@@ -203,8 +205,8 @@ Keep a visible way to reach the same commands. Right-click is invisible, and peo
 
 ## Dark mode
 
-The surface swaps to the dark menu material (`rgba(58, 58, 62, 0.82)` over the same blur). Text follows the primary text token, separators lighten to 10% white, and disabled items sit at 25% white. The selection pill stays `#0088FF` in both appearances.
+The surface swaps to the dark menu material (`rgba(72, 72, 76, 0.82)` over the same blur). Labels are `#F5F5F5`, headers 70% white, separators lighten to 10% white, and shortcuts and disabled items sit at 32% white. The hairline darkens to 70% black, the inner ring softens, and the overlay shadow deepens to 45%. The selection pill stays `#0069F9` in both appearances.
 
 ## Accessibility
 
-Give the menu `role="menu"` and items `role="menuitem"` (or `menuitemcheckbox` with `aria-checked`). Triggers carry `aria-haspopup="menu"` and `aria-expanded`, which `menus.js` keeps in sync. Focus is visible: the focused item paints the same selection pill people see on hover. With reduced motion, the open transition and the selection blink reduce to simple fades. With reduced transparency, the surface switches to an opaque background.
+Give the menu `role="menu"` and items `role="menuitem"` (or `menuitemcheckbox` with `aria-checked`). Triggers carry `aria-haspopup="menu"` and `aria-expanded`, which `menus.js` keeps in sync. Focus is visible: the focused item paints the same selection pill people see on hover. With reduced motion, the open transition and the selection blink reduce to simple fades. With reduced transparency, the surface switches to an opaque background. With increased contrast, the hairline and inner ring become solid 1px lines, and in forced-colors mode the menu draws a system-colored border.

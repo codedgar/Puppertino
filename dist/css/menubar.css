@@ -1,4 +1,4 @@
-/* Puppertino v2.0 — Menu Bar (macOS 26)
+/* Puppertino v2.0 — Menu Bar (macOS 27)
    The menu bar displays the top-level menus. Transparent by default —
    text sits directly on whatever is behind it; add .p-menubar-material
    for a translucent backing when there's no wallpaper to sit on.
@@ -82,7 +82,8 @@
 
 /* --------------------------------------------------------------- Items */
 
-/* 25px capsule slot, radius 12.5; highlight only while its menu is open. */
+/* 25px capsule slot, radius 12.5, 13px side padding; highlight only while
+   its menu is open. The open capsule also blurs what is behind it. */
 .p-menubar-item {
   align-items: center;
   background: none;
@@ -95,11 +96,13 @@
   font-size: 13px;
   font-weight: 590;
   height: 25px;
-  padding: 0 12px;
+  padding: 0 13px;
 }
 
+/* The app name is heavy (860) in macOS 27. Static fonts round to the
+   nearest heavier face (Inter Black) or fall back to bold. */
 .p-menubar-app {
-  font-weight: 700;
+  font-weight: 860;
 }
 
 .p-menubar-apple {
@@ -110,6 +113,8 @@
 
 .p-menubar-item.p-open,
 .p-menubar-item[aria-expanded="true"] {
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
   background: var(--p-menubar-highlight);
 }
 
@@ -151,5 +156,11 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: var(--p-menubar-material-opaque);
+  }
+
+  .p-menubar-item.p-open,
+  .p-menubar-item[aria-expanded="true"] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }

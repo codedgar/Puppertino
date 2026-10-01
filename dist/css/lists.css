@@ -1,43 +1,50 @@
-/* Puppertino v2.0 — Lists and Tables (macOS 26)
+/* Puppertino v2.0 — Lists and Tables (macOS 27)
    Lists and tables present data in one or more columns of rows.
-   List: a row stack with capsule selection. Table: styles a real
-   <table> with sortable headers and hairline separators. */
+   List: a row stack with r8 capsule selection. Table: styles a real
+   <table> on a dense 20px pitch with alternating r8 stripes (no row
+   hairlines), a quiet header, and dividers in the header only. */
 
 :root {
   --p-list-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
-  --p-list-selection: #2962d9;
+  --p-list-selection: #0165e2;
   --p-list-selection-text: #fff;
   --p-list-selection-quiet: rgba(0, 0, 0, 0.14);
-  --p-list-hover: rgba(0, 0, 0, 0.03);
+  --p-list-hover: rgba(0, 0, 0, 0.05);
   --p-list-text: rgba(0, 0, 0, 0.85);
   --p-list-text-dim: rgba(0, 0, 0, 0.5);
-  --p-list-chevron: rgba(0, 0, 0, 0.5);
+  --p-list-chevron: rgba(0, 0, 0, 0.85);
+  --p-table-stripe: rgba(0, 0, 0, 0.05);
   --p-table-separator: rgba(0, 0, 0, 0.05);
   --p-table-divider: rgba(0, 0, 0, 0.1);
 }
 
+/* Dark values are derived (the reference is light only): selection
+   one step brighter in the same blue family, stripes/hover/dividers
+   as the white-alpha mirror of the light ones. */
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-list-selection: #3672e8;
+  --p-list-selection: #0a6cf0;
   --p-list-selection-quiet: rgba(255, 255, 255, 0.14);
-  --p-list-hover: rgba(255, 255, 255, 0.04);
-  --p-list-text: rgba(255, 255, 255, 0.92);
+  --p-list-hover: rgba(255, 255, 255, 0.05);
+  --p-list-text: rgba(255, 255, 255, 0.85);
   --p-list-text-dim: rgba(255, 255, 255, 0.5);
-  --p-list-chevron: rgba(255, 255, 255, 0.5);
+  --p-list-chevron: rgba(255, 255, 255, 0.85);
+  --p-table-stripe: rgba(255, 255, 255, 0.05);
   --p-table-separator: rgba(255, 255, 255, 0.07);
-  --p-table-divider: rgba(255, 255, 255, 0.12);
+  --p-table-divider: rgba(255, 255, 255, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-list-selection: #3672e8;
+    --p-list-selection: #0a6cf0;
     --p-list-selection-quiet: rgba(255, 255, 255, 0.14);
-    --p-list-hover: rgba(255, 255, 255, 0.04);
-    --p-list-text: rgba(255, 255, 255, 0.92);
+    --p-list-hover: rgba(255, 255, 255, 0.05);
+    --p-list-text: rgba(255, 255, 255, 0.85);
     --p-list-text-dim: rgba(255, 255, 255, 0.5);
-    --p-list-chevron: rgba(255, 255, 255, 0.5);
+    --p-list-chevron: rgba(255, 255, 255, 0.85);
+    --p-table-stripe: rgba(255, 255, 255, 0.05);
     --p-table-separator: rgba(255, 255, 255, 0.07);
-    --p-table-divider: rgba(255, 255, 255, 0.12);
+    --p-table-divider: rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -45,12 +52,13 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-list-selection: #2962d9;
+  --p-list-selection: #0165e2;
   --p-list-selection-quiet: rgba(0, 0, 0, 0.14);
-  --p-list-hover: rgba(0, 0, 0, 0.03);
+  --p-list-hover: rgba(0, 0, 0, 0.05);
   --p-list-text: rgba(0, 0, 0, 0.85);
   --p-list-text-dim: rgba(0, 0, 0, 0.5);
-  --p-list-chevron: rgba(0, 0, 0, 0.5);
+  --p-list-chevron: rgba(0, 0, 0, 0.85);
+  --p-table-stripe: rgba(0, 0, 0, 0.05);
   --p-table-separator: rgba(0, 0, 0, 0.05);
   --p-table-divider: rgba(0, 0, 0, 0.1);
 }
@@ -69,18 +77,19 @@
   box-sizing: border-box;
 }
 
-/* Row: 20px capsule on a 30px pitch (5px block margin each side). */
+/* Row: 20px r8 capsule on a 30px pitch (5px block margin each side).
+   Chevron cell at +9, 14px icon at +21, label at +41. */
 .p-list-row {
   align-items: center;
-  border-radius: 10px;
+  border-radius: 8px;
   color: var(--p-list-text);
   display: flex;
   font-size: 13px;
   font-weight: 510;
-  gap: 4px;
+  gap: 0;
   margin: 5px 0;
   min-height: 20px;
-  padding: 0 8px 0 5px;
+  padding: 0 8px 0 9px;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -89,7 +98,7 @@
   background: var(--p-list-hover);
 }
 
-/* Selected, window focused: #2962D9 (deliberately darker than
+/* Selected, window focused: #0165E2 (deliberately darker than
    the control accent), white content in every slot. */
 /* Retint by overriding --p-list-selection on the list or row.
    (--p-color-current can't serve here: it's registered with
@@ -123,18 +132,19 @@
   flex: none;
   font-size: 9px;
   font-weight: 700;
-  width: 10px;
+  width: 12px;
 }
 
 .p-list-icon {
   flex: none;
-  height: 18px;
-  width: 18px;
+  height: 14px;
+  margin-right: 6px;
+  width: 14px;
 }
 
 .p-list-icon img,
 .p-list-icon svg {
-  border-radius: 3px;
+  border-radius: 2px;
   display: block;
   height: 100%;
   width: 100%;
@@ -146,11 +156,11 @@
 }
 
 /* Indentation: 15px per level. */
-.p-list-row[data-p-level="1"] { padding-left: 20px; }
-.p-list-row[data-p-level="2"] { padding-left: 35px; }
-.p-list-row[data-p-level="3"] { padding-left: 50px; }
-.p-list-row[data-p-level="4"] { padding-left: 65px; }
-.p-list-row[data-p-level="5"] { padding-left: 80px; }
+.p-list-row[data-p-level="1"] { padding-left: 24px; }
+.p-list-row[data-p-level="2"] { padding-left: 39px; }
+.p-list-row[data-p-level="3"] { padding-left: 54px; }
+.p-list-row[data-p-level="4"] { padding-left: 69px; }
+.p-list-row[data-p-level="5"] { padding-left: 84px; }
 
 /* Group title: 11px/590 @ 50%, 16px above its first row. */
 .p-list-group-title {
@@ -164,49 +174,122 @@
 
 /* --------------------------------------------------------------- Table */
 
+/* Rows butt on a 20px pitch, inset 10px from the table edge, with
+   every other row striped (black @ 5%, r8). Separate borders so the
+   stripe and selection capsules can round their outer corners. */
 .p-table {
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
   color: var(--p-list-text);
   font-family: var(--p-list-font);
+  padding: 0 10px;
   width: 100%;
 }
 
 .p-table th,
 .p-table td {
-  border-bottom: 1px solid var(--p-table-separator);
   box-sizing: border-box;
   padding: 0 8px;
   position: relative;
   text-align: left;
+  white-space: nowrap;
 }
 
+/* Header: 19px cells in a 31px band (4 above, 8 below), no bottom
+   line. The sorted column is 11 bold @ 85%; the others 11/510 @ 50%. */
 .p-table th {
-  color: var(--p-list-text);
+  color: var(--p-list-text-dim);
   font-size: 11px;
+  font-weight: 510;
+  height: 31px;
+  padding-bottom: 8px;
+  padding-top: 4px;
+}
+
+.p-table th[aria-sort="ascending"],
+.p-table th[aria-sort="descending"] {
+  color: var(--p-list-text);
   font-weight: 700;
-  height: 28px;
 }
 
+/* Cells: 13/510. The first column reads at 85%, the rest at 50%. */
 .p-table td {
+  color: var(--p-list-text-dim);
   font-size: 13px;
-  font-weight: 400;
-  height: 28px;
+  font-weight: 510;
+  height: 20px;
+  line-height: 16px;
 }
 
-/* Column divider: 1px, vertically inset 4.5px, between columns only. */
-.p-table th:not(:last-child)::after,
-.p-table td:not(:last-child)::after {
+.p-table td:first-child {
+  color: var(--p-list-text);
+  padding-left: 9px;
+}
+
+.p-table td.p-table-num,
+.p-table th.p-table-num {
+  text-align: right;
+}
+
+/* A chevron + icon in the first cell sit inline on the list grid. */
+.p-table td .p-list-chevron,
+.p-table td .p-list-icon {
+  display: inline-block;
+  vertical-align: -2px;
+}
+
+/* Column divider: 1×19, header only, on the leading edge of every
+   column after the first. */
+.p-table th + th::after {
   background: var(--p-table-divider);
-  bottom: 4.5px;
+  bottom: 8px;
   content: "";
+  left: 0;
   position: absolute;
-  right: 0;
-  top: 4.5px;
+  top: 4px;
   width: 1px;
 }
 
-/* Sort indicator via aria-sort on the th. */
+/* Alternating stripes: the 1st, 3rd, 5th… body row, counting across
+   group-title rows so the rhythm never breaks. Zero specificity, so
+   hover, selection and group rows always win. Browsers without
+   `nth-child(… of S)` fall back to plain odd rows. */
+:where(.p-table:not(.p-table-plain) tbody tr:nth-child(odd)) td {
+  background: var(--p-table-stripe);
+}
+
+:where(.p-table:not(.p-table-plain) tbody tr:nth-child(even of :not(.p-table-group))) td {
+  background: none;
+}
+
+:where(.p-table:not(.p-table-plain) tbody tr:nth-child(odd of :not(.p-table-group))) td {
+  background: var(--p-table-stripe);
+}
+
+.p-table tbody tr td:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.p-table tbody tr td:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.p-table tbody tr:hover td {
+  background: var(--p-list-hover);
+}
+
+/* Group title row: one cell spanning the table, 11/590 @ 50%. */
+.p-table tr.p-table-group td {
+  background: none;
+  color: var(--p-list-text-dim);
+  font-size: 11px;
+  font-weight: 590;
+  height: 45px;
+  padding: 16px 8px 4px 41px;
+  vertical-align: bottom;
+}
+
+/* Sort indicator via aria-sort on the th: 9/510 @ 50%. */
 .p-table th[aria-sort] {
   cursor: pointer;
 }
@@ -216,8 +299,8 @@
   content: "\2303"; /* ⌃ */
   float: right;
   font-size: 9px;
-  font-weight: 700;
-  line-height: 28px;
+  font-weight: 510;
+  line-height: 19px;
   margin-left: 8px;
 }
 
@@ -229,23 +312,18 @@
   content: "";
 }
 
-/* Selected row: spans all columns, rounded only at the outer edges. */
+/* Selected row: spans all columns, r8 at the outer edges. */
 .p-table tr.p-selected td {
   background: var(--p-list-selection);
-  border-bottom-color: transparent;
   color: var(--p-list-selection-text);
 }
 
-.p-table tr.p-selected td::after {
-  display: none;
+.p-table tr.p-selected td .p-list-chevron {
+  color: inherit;
 }
 
-.p-table tr.p-selected td:first-child {
-  border-radius: 10px 0 0 10px;
-}
-
-.p-table tr.p-selected td:last-child {
-  border-radius: 0 10px 10px 0;
+.p-table tr.p-selected-quiet td {
+  background: var(--p-list-selection-quiet);
 }
 
 .p-table tr.p-dimmed td {
@@ -255,6 +333,10 @@
 @media (prefers-contrast: more) {
   .p-list-row.p-selected-quiet {
     outline: 1px solid var(--p-list-text);
+  }
+
+  .p-table tbody tr td {
+    box-shadow: inset 0 -1px 0 var(--p-table-divider);
   }
 }
 
@@ -432,6 +514,7 @@
 }
 
 .p-list-touch .p-list-icon {
+  margin-right: 0;
   width: var(--p-list-touch-icon);
   height: var(--p-list-touch-icon);
 }
@@ -478,5 +561,478 @@
   .p-list-touch .p-list-row:not(:last-child)::after {
     height: 1px;
     background: currentcolor;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   iOS 27 list additions: large image sizes, prominent section headers,
+   editing controls, the section index, and swipe actions.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The tray a swiped row reveals: grouped grey behind the actions. */
+  --p-list-touch-tray: var(--p-ios-gray-6, #f2f2f7);
+  --p-list-touch-accent: var(--p-control-accent, #0088ff);
+  --p-list-touch-ring: var(--p-ios-gray-3, #c7c7cc);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-list-touch-tray: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-list-touch-tray: #000000;
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-list-touch-tray: var(--p-ios-gray-6, #f2f2f7);
+}
+
+/* ─── Image sizes ─── */
+/* Small set: 30 r7 icon, 42 circle, 52 square. Large set (a row that
+   leads with a picture): 44 r11, 60 circle, 68 square. */
+.p-list-icon-large {
+  --p-list-touch-icon: 44px;
+}
+
+.p-list-touch .p-list-icon-large img,
+.p-list-touch .p-list-icon-large svg {
+  border-radius: 11px;
+}
+
+.p-list-icon-round.p-list-icon-large {
+  --p-list-touch-icon: 60px;
+}
+
+.p-list-icon-square {
+  --p-list-touch-icon: 52px;
+}
+
+.p-list-icon-square.p-list-icon-large {
+  --p-list-touch-icon: 68px;
+}
+
+.p-list-touch .p-list-icon-square img,
+.p-list-touch .p-list-icon-square svg {
+  border-radius: 0;
+}
+
+/* A row grows to hold a large image with 8pt above and below. */
+.p-list-touch .p-list-row:has(.p-list-icon-large, .p-list-icon-square) {
+  padding-block: 8px;
+}
+
+.p-list-touch .p-list-row:has(.p-list-icon-square) {
+  padding-block: 0;
+}
+
+/* ─── Prominent section headers ─── */
+/* The plain header is the 17pt dimmed one above. Prominent headers are
+   full-strength titles for screens where each section is a destination:
+   20pt semibold, or 22pt bold for the largest. Either can carry a
+   trailing 15pt action on the accent. */
+.p-list-touch-header--prominent,
+.p-list-touch-header--large {
+  color: var(--p-ios-label, #000000);
+  letter-spacing: -0.45px;
+}
+
+.p-list-touch-header--prominent {
+  font-size: 20px;
+  font-weight: 590;
+  line-height: 25px;
+}
+
+.p-list-touch-header--large {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.p-list-touch-header:has(.p-list-touch-header__action) {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.p-list-touch-header__action {
+  appearance: none;
+  -webkit-appearance: none;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--p-list-touch-accent);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: -0.23px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ─── Editing controls ─── */
+/* The leading controls of a list in edit mode: a 22pt selection circle
+   (a checkbox), and round insert and delete buttons. Each draws 22pt
+   but takes a 44pt hit area. */
+.p-list-select,
+.p-list-edit {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.p-list-select::before,
+.p-list-edit::before {
+  content: "";
+  position: absolute;
+  inset: -11px;
+}
+
+.p-list-select {
+  border: 1.5px solid var(--p-list-touch-ring);
+  background: transparent;
+}
+
+.p-list-select:checked {
+  border-color: var(--p-list-touch-accent);
+  background: var(--p-list-touch-accent);
+}
+
+/* The check: two strokes of a rotated box. */
+.p-list-select:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid #ffffff;
+  border-width: 0 2.25px 2.25px 0;
+  transform: rotate(45deg);
+}
+
+.p-list-edit--insert {
+  background: var(--p-sys-green, #34c759);
+}
+
+.p-list-edit--delete {
+  background: var(--p-sys-red, #ff383c);
+}
+
+/* Minus for delete; insert adds the vertical bar. */
+.p-list-edit::after {
+  content: "";
+  position: absolute;
+  left: 5.5px;
+  top: 9.75px;
+  width: 11px;
+  height: 2.5px;
+  border-radius: 1.25px;
+  background: currentcolor;
+}
+
+.p-list-edit--insert::after {
+  box-shadow: none;
+  background:
+    linear-gradient(currentcolor, currentcolor) center / 2.5px 11px no-repeat,
+    linear-gradient(currentcolor, currentcolor) center / 11px 2.5px no-repeat;
+  top: 5.5px;
+  height: 11px;
+  border-radius: 0;
+}
+
+.p-list-select:focus-visible,
+.p-list-edit:focus-visible {
+  outline: none;
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+.p-list-select:disabled,
+.p-list-edit:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ─── Section index ─── */
+/* The letter strip down the trailing edge of a long list. Letters are
+   12pt medium on the accent: 16pt wide on a 14pt pitch, or 30pt wide on
+   a 25pt pitch with --large. Each letter is a link to its section, so it
+   works with a keyboard and a screen reader without any script. */
+.p-list-index {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--p-list-font);
+}
+
+.p-list-index li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.p-list-index a,
+.p-list-index span {
+  display: block;
+  width: 16px;
+  color: var(--p-list-touch-accent);
+  font-size: 12px;
+  font-weight: 510;
+  line-height: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.p-list-index--large {
+  width: 30px;
+}
+
+.p-list-index--large a,
+.p-list-index--large span {
+  width: 30px;
+  line-height: 25px;
+}
+
+.p-list-index a:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+/* ─── Swipe actions ─── */
+/* A row that slides sideways to show buttons behind it. Actions sit on
+   a grey tray, 16pt from the row's edge and 10pt apart; the row that
+   slid becomes a capsule 10pt clear of the first action. Trailing
+   actions show when the row slides toward the leading edge, leading
+   actions when it slides the other way. swipe_actions.js drives the
+   gesture and the keyboard path; without it the actions are still in the
+   tab order and focusing one opens its side.
+
+   Markup: the row's content moves into .p-list-swipe__content, and each
+   side is a .p-list-swipe__actions with data-p-swipe-side. */
+.p-list-touch .p-list-row.p-list-swipe {
+  --p-list-swipe-offset: 0px;
+
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  background: var(--p-list-touch-tray);
+  isolation: isolate;
+}
+
+/* The separator travels with the content, so the li's own is off. */
+.p-list-touch .p-list-row.p-list-swipe::after {
+  content: none;
+}
+
+.p-list-swipe__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--p-list-touch-gap, 12px);
+  box-sizing: border-box;
+  min-height: inherit;
+  padding: 0 var(--p-list-touch-pad, 16px);
+  background: var(--p-list-touch-bg);
+  transform: translateX(var(--p-list-swipe-offset));
+  transition:
+    transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-radius 0.2s ease;
+  touch-action: pan-y;
+}
+
+.p-list-touch .p-list-row.p-list-swipe:has(.p-list-subtitle) {
+  min-height: 68px;
+}
+
+.p-list-touch .p-list-row.p-list-swipe:not(:has(.p-list-subtitle)) {
+  min-height: 52px;
+}
+
+/* Captioned actions need the two-line height whatever the row holds. */
+.p-list-touch .p-list-row.p-list-swipe:has(.p-swipe-action--captioned) {
+  min-height: 68px;
+}
+
+.p-list-swipe:not(:last-child) > .p-list-swipe__content::after {
+  content: "";
+  position: absolute;
+  left: var(--p-list-touch-pad, 16px);
+  right: 0;
+  bottom: 0;
+  height: 0.5px;
+  background: var(--p-list-touch-separator);
+}
+
+.p-list-swipe:not(:last-child):has(.p-list-icon) > .p-list-swipe__content::after {
+  left: calc(var(--p-list-touch-pad) + var(--p-list-touch-icon) + var(--p-list-touch-gap));
+}
+
+/* Keyboard focus on the row itself (swipe_actions.js returns focus here
+   when the row has nothing else to focus): the focus band, inset. */
+.p-list-swipe__content:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+}
+
+/* While dragged or open the content is a capsule. */
+.p-list-swipe.is-swiping > .p-list-swipe__content,
+.p-list-swipe[data-p-swipe-open] > .p-list-swipe__content {
+  border-radius: 34px;
+}
+
+.p-list-swipe.is-swiping > .p-list-swipe__content {
+  transition: none;
+}
+
+.p-list-swipe__actions {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.p-list-swipe__actions[data-p-swipe-side="trailing"] {
+  inset-inline-end: var(--p-list-touch-pad, 16px);
+}
+
+.p-list-swipe__actions[data-p-swipe-side="leading"] {
+  inset-inline-start: var(--p-list-touch-pad, 16px);
+}
+
+/* Captioned actions hang from 6pt below the top of the 68pt row. */
+.p-list-swipe__actions:has(.p-swipe-action--captioned) {
+  align-items: flex-start;
+  padding-top: 6px;
+}
+
+/* Hidden actions stay out of the way of taps. Keyboard focus still
+   reaches them; swipe_actions.js opens the side that receives it. */
+.p-list-swipe:not([data-p-swipe-open]) .p-list-swipe__actions {
+  pointer-events: none;
+}
+
+/* The action button. Tint it with --p-swipe-action-color; the default is
+   grey, and --destructive is red. Icon only: 60 × 44. With a label: an
+   icon and 13pt text, 84pt minimum. */
+.p-swipe-action {
+  --p-swipe-action-color: var(--p-ios-gray-2, #aeaeb2);
+
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: none;
+  box-sizing: border-box;
+  min-width: 60px;
+  height: 44px;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--p-swipe-action-color);
+  color: #ffffff;
+  font-family: var(--p-list-font);
+  font-size: 17px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.p-swipe-action:has(> span:not([class])) {
+  min-width: 84px;
+  font-size: 16px;
+}
+
+.p-swipe-action > span:not([class]) {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.p-swipe-action--destructive {
+  --p-swipe-action-color: var(--p-sys-red, #ff383c);
+}
+
+/* Captioned: a 60 × 38 capsule with a 13pt caption under it, for the
+   68pt row. The button is the whole column, so the caption is its name. */
+.p-swipe-action--captioned {
+  flex-direction: column;
+  gap: 5px;
+  height: auto;
+  padding: 0;
+  background: none;
+  color: var(--p-list-touch-secondary);
+}
+
+.p-swipe-action__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 60px;
+  height: 38px;
+  border-radius: 19px;
+  background: var(--p-swipe-action-color);
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.p-swipe-action__caption {
+  font-size: 13px;
+  font-weight: 510;
+  line-height: 16px;
+}
+
+.p-swipe-action:active {
+  filter: brightness(0.9);
+}
+
+.p-swipe-action:focus-visible {
+  outline: none;
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+.p-swipe-action--captioned:focus-visible {
+  box-shadow: none;
+}
+
+.p-swipe-action--captioned:focus-visible .p-swipe-action__icon {
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-list-swipe__content {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-swipe-action,
+  .p-swipe-action__icon,
+  .p-list-edit {
+    border: 1px solid ButtonText;
   }
 }

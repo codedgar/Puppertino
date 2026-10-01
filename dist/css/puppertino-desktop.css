@@ -13,6 +13,7 @@
 @import url('adaptive.css');
 
 /* Components */
+@import url('boxes.css');
 @import url('buttons.css');
 @import url('cards.css');
 @import url('colorwells.css');

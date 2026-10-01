@@ -33,7 +33,7 @@ Distinguish the three cases, because they need different words:
   <i class="p-empty-state__glyph ph-bold ph-tray"></i>
   <h2 class="p-empty-state__title">No Messages</h2>
   <p class="p-empty-state__message">Messages you receive will appear here.</p>
-  <a class="p-button p-button-touch-large p-button-primary p-empty-state__action" href="/new/">
+  <a class="p-button p-button-touch-large p-button-glass-prominent p-empty-state__action" href="/new/">
     Start a Conversation
   </a>
 </div>`}
@@ -42,7 +42,7 @@ Distinguish the three cases, because they need different words:
     <i class="p-empty-state__glyph ph-bold ph-tray"></i>
     <h2 class="p-empty-state__title">No Messages</h2>
     <p class="p-empty-state__message">Messages you receive will appear here.</p>
-    <a class="p-button p-button-touch-large p-button-primary p-empty-state__action" href="#es">Start a Conversation</a>
+    <a class="p-button p-button-touch-large p-button-glass-prominent p-empty-state__action" href="#es">Start a Conversation</a>
   </div>
 </div>`}
 />
@@ -53,12 +53,13 @@ Distinguish the three cases, because they need different words:
 | Title | 22px, weight 590, line height 28px |
 | Message | 22px, weight 510, `rgba(60,60,67,0.60)` |
 | Message width | 30ch, so a centered sentence stays readable |
-| Action | Full width to 334px, 52px tall, full capsule |
+| Badge | 50px circle, the glyph's tint at 15%, holding a 22px glyph |
+| Action | Full width to 330px, 52px tall, full capsule, no drop shadow, a glow rising into the bottom edge |
 | Padding | 32px vertical, 34px horizontal |
 
 The message is the same size as the title and one weight lighter, which is unusual. Most interfaces drop the supporting text a size or two. iOS keeps both at 22px and separates them with weight and color instead.
 
-The action is an ordinary touch button with `.p-empty-state__action` widening it and setting the 52px height. Compose it with any button style; primary is the usual choice since an empty state has exactly one thing worth doing.
+The action is an ordinary touch button with `.p-empty-state__action` widening it and setting the 52px height. Compose it with any button style. The prominent glass button, `.p-button-glass-prominent`, is the usual choice, since an empty state has exactly one thing worth doing. A plain filled button works too, and gets the same glass lines along its edges.
 
 ## Variants
 
@@ -81,7 +82,13 @@ The action is an ordinary touch button with `.p-empty-state__action` widening it
 
 The glyph and the action are both optional. A "nothing found" state often has no action worth offering, and a "nothing to do" state often needs no glyph.
 
-`.p-empty-state-compact` drops the glyph to 22px, for an empty state inside a panel or a popover rather than filling a screen.
+`.p-empty-state-compact` drops the glyph to 22px and sets it in a 50px circle washed with its own tint at 15%, for an empty state inside a panel or a popover rather than filling a screen. The same badge is available on its own as `.p-empty-state__badge`:
+
+```html
+<span class="p-empty-state__badge" aria-hidden="true"><i class="ph-bold ph-heart"></i></span>
+```
+
+The glyph does not have to be blue. Set `--p-empty-glyph` on the empty state to any system color and the glyph and its badge follow: `style="--p-empty-glyph: var(--p-sys-pink)"`.
 
 `.p-empty-state-fill` gives the block `flex: 1` and a 240px minimum, so an empty state inside a list or a sheet centers in that region instead of sitting at the top of it.
 

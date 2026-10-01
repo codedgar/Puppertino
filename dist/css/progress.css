@@ -2,7 +2,8 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — Progress Indicators
-   macOS 26 progress bars. See specs/progress-indicators.md.
+   macOS 27 progress bars, circular progress and the spinner. See
+   specs/progress-indicators.md.
 
    Determinate (native element, free semantics):
      <progress class="p-progress" max="100" value="60"></progress>
@@ -12,14 +13,53 @@
      <div class="p-progress-indeterminate" role="progressbar"
           aria-label="Loading"></div>
 
+   Circular determinate (value 0–100 as a custom property):
+     <div class="p-progress-circle" role="progressbar" aria-valuenow="40"
+          aria-valuemin="0" aria-valuemax="100" style="--p-progress-value: 40"></div>
+
+   Spinner (indeterminate, 8 spokes):
+     <span class="p-spinner" role="progressbar" aria-label="Loading"></span>
+
    Tint with a .p-sys-* class on the element, like every v2 control.
    Sizes: default 6px, .p-progress-large / .p-progress-indeterminate-large
-   for the 10px bar.
+   for the 10px bar; circle and spinner 32px, -small for 16px.
+
+   iOS 27 (touch): .p-progress-touch is a 4px bar, and .p-spinner-touch
+   is the iOS activity indicator at 14 / 20 (default) / 35px.
    ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Track: black 85% at 10% group opacity, with a 0.5px inner hairline. */
+  --p-progress-track: rgba(0, 0, 0, 0.085);
+  --p-progress-hairline: rgba(0, 0, 0, 0.07);
+  --p-spinner-color: rgba(0, 0, 0, 0.85);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-progress-track: rgba(255, 255, 255, 0.085);
+  --p-progress-hairline: rgba(255, 255, 255, 0.04);
+  --p-spinner-color: rgba(255, 255, 255, 0.85);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-progress-track: rgba(255, 255, 255, 0.085);
+    --p-progress-hairline: rgba(255, 255, 255, 0.04);
+    --p-spinner-color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-progress-track: rgba(0, 0, 0, 0.085);
+  --p-progress-hairline: rgba(0, 0, 0, 0.07);
+  --p-spinner-color: rgba(0, 0, 0, 0.85);
+}
 
 .p-progress {
   /* Resolved here, not :root, so tint classes can override. */
-  --p-progress-accent: var(--p-color-current, #0D6FFF);
+  --p-progress-accent: var(--p-color-current, #0088FF);
   --p-progress-height: 6px;
 
   appearance: none;
@@ -32,11 +72,14 @@
   overflow: hidden;
 
   /* Firefox paints the track from the element background. */
-  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  background: var(--p-progress-track);
+  box-shadow: inset 0 0 0 0.5px var(--p-progress-hairline);
 }
 
+/* The element paints the track once; the WebKit bar stays clear so the
+   two do not stack. */
 .p-progress::-webkit-progress-bar {
-  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  background: transparent;
   border-radius: calc(var(--p-progress-height) / 2);
 }
 
@@ -55,7 +98,7 @@
 }
 
 /* ─── Indeterminate ────────────────────────────────────────────────── */
-/* Reproduces NSProgressIndicator (macOS 26): a solid capsule that
+/* Reproduces NSProgressIndicator (macOS 26; unchanged in 27): a solid capsule that
    inchworms side to side. The leading edge launches
    first, the trailing edge lingers, so the segment stretches to ~31% of
    the track mid-travel and compresses to a height-sized dot at each end
@@ -64,7 +107,7 @@
    2.6s; the keyframe stops encode the measured easing. */
 
 .p-progress-indeterminate {
-  --p-progress-accent: var(--p-color-current, #0D6FFF);
+  --p-progress-accent: var(--p-color-current, #0088FF);
   --p-progress-height: 6px;
 
   position: relative;
@@ -74,7 +117,8 @@
   border-radius: calc(var(--p-progress-height) / 2);
   overflow: hidden;
 
-  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+  background: var(--p-progress-track);
+  box-shadow: inset 0 0 0 0.5px var(--p-progress-hairline);
 }
 
 .p-progress-indeterminate::before {
@@ -215,9 +259,133 @@
   }
 }
 
+/* ─── Circular determinate ─────────────────────────────────────────── */
+/* A 5px ring: the track ring (with the same 0.5px hairline on both
+   edges) and a round-capped arc that runs clockwise from 12 o'clock.
+   At 0% it is a single dot at the top; at 100% a full ring. Set the
+   value (0–100) with --p-progress-value and mirror it in aria-valuenow.
+   The value is a registered number, so changes animate. */
+
+@property --p-progress-value {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.p-progress-circle {
+  --p-progress-accent: var(--p-color-current, #0088FF);
+  --p-progress-size: 32px;
+  --p-progress-ring: 5px;
+  --p-progress-turn: calc(clamp(0, var(--p-progress-value), 100) * 3.6deg);
+
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--p-progress-size);
+  height: var(--p-progress-size);
+  border-radius: 50%;
+  vertical-align: middle;
+
+  background:
+    conic-gradient(var(--p-progress-accent) var(--p-progress-turn), transparent 0),
+    radial-gradient(
+      closest-side,
+      transparent calc(100% - var(--p-progress-ring)),
+      var(--p-progress-hairline) calc(100% - var(--p-progress-ring)) calc(100% - var(--p-progress-ring) + 0.5px),
+      transparent calc(100% - var(--p-progress-ring) + 0.5px) calc(100% - 0.5px),
+      var(--p-progress-hairline) calc(100% - 0.5px)
+    ),
+    var(--p-progress-track);
+  -webkit-mask: radial-gradient(closest-side, #0000 calc(100% - var(--p-progress-ring) - 0.25px), #000 calc(100% - var(--p-progress-ring) + 0.25px));
+  mask: radial-gradient(closest-side, #0000 calc(100% - var(--p-progress-ring) - 0.25px), #000 calc(100% - var(--p-progress-ring) + 0.25px));
+  transition: --p-progress-value 0.2s ease-out;
+}
+
+/* Round caps: one fixed at 12 o'clock, one riding the end of the arc. */
+.p-progress-circle::before,
+.p-progress-circle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(50% - var(--p-progress-ring) / 2);
+  width: var(--p-progress-ring);
+  height: var(--p-progress-ring);
+  border-radius: 50%;
+  background: var(--p-progress-accent);
+  transform-origin: 50% calc(var(--p-progress-size) / 2);
+}
+
+.p-progress-circle::after {
+  rotate: var(--p-progress-turn);
+}
+
+.p-progress-circle-small {
+  --p-progress-size: 16px;
+}
+
+/* ─── Spinner ──────────────────────────────────────────────────────── */
+/* Eight rounded spokes (2×5 at 16px, 4×10 at 32px), fading from full
+   strength around the circle, stepping one spoke per frame. The spokes
+   are a mask, so the spinner takes --p-spinner-color (or a tint). */
+
+.p-spinner {
+  --p-spinner-size: 32px;
+
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--p-spinner-size);
+  height: var(--p-spinner-size);
+  vertical-align: middle;
+
+  background: var(--p-spinner-color);
+  opacity: 0.55;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg%3E%3Crect x='7' y='0' width='2' height='5' rx='1'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.87' transform='rotate(-45 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.75' transform='rotate(-90 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.63' transform='rotate(-135 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.51' transform='rotate(180 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.39' transform='rotate(135 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.27' transform='rotate(90 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.15' transform='rotate(45 8 8)'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg%3E%3Crect x='7' y='0' width='2' height='5' rx='1'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.87' transform='rotate(-45 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.75' transform='rotate(-90 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.63' transform='rotate(-135 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.51' transform='rotate(180 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.39' transform='rotate(135 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.27' transform='rotate(90 8 8)'/%3E%3Crect x='7' y='0' width='2' height='5' rx='1' opacity='.15' transform='rotate(45 8 8)'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  animation: p-spinner-step 0.8s steps(8) infinite;
+}
+
+.p-spinner-small {
+  --p-spinner-size: 16px;
+}
+
+@keyframes p-spinner-step {
+  to { rotate: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-spinner {
+    animation: p-spinner-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes p-spinner-pulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.55; }
+  }
+}
+
+@media (forced-colors: active) {
+  .p-spinner {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .p-progress-circle {
+    forced-color-adjust: none;
+    background:
+      conic-gradient(Highlight var(--p-progress-turn), transparent 0),
+      GrayText;
+  }
+
+  .p-progress-circle::before,
+  .p-progress-circle::after {
+    background: Highlight;
+  }
+}
+
 /* ─── Touch size (iOS) ─────────────────────────────────────────────── */
-/* iOS runs the same 6px track as its slider, so a progress bar and a
-   slider read as the same object in two states. */
+/* iOS 27 draws its progress bar 4px tall with a 2px radius, thinner
+   than the 6px slider track it used to share (iOS 26). Track and fill
+   are the slider's colors. */
 
 :root {
   --p-progress-touch-track: rgba(120, 120, 120, 0.20);
@@ -246,23 +414,71 @@
 }
 
 .p-progress-touch {
+  box-shadow: none; /* the macOS hairline is not part of the iOS bar */
   width: 100%;
-  height: 6px;
-  border-radius: 3px;
+  height: 4px;
+  border-radius: 2px;
   background: var(--p-progress-touch-track);
 }
 
 .p-progress-touch::-webkit-progress-bar {
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--p-progress-touch-track);
 }
 
 .p-progress-touch::-webkit-progress-value {
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--p-progress-touch-fill);
 }
 
 .p-progress-touch::-moz-progress-bar {
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--p-progress-touch-fill);
+}
+
+/* ─── Activity indicator, touch (iOS) ──────────────────────────────── */
+/* The iOS spinner: eight rounded spokes in the secondary label color
+   (#3C3C43 at 60%, #EBEBF5 at 70% dark), fading 1 → 0.15 around the
+   circle like the macOS one. Three sizes, each with its own spoke
+   proportions:
+     .p-spinner-touch-small   14px, spokes 2 × 4
+     .p-spinner-touch         20px, spokes 2.67 × 6.67 (the default)
+     .p-spinner-touch-large   35px, spokes 5 × 13
+   Pair it with .p-spinner for the animation and the reduced-motion and
+   forced-colors handling:
+   <span class="p-spinner p-spinner-touch" role="progressbar" aria-label="Loading"></span> */
+
+.p-spinner-touch {
+  --p-spinner-size: 20px;
+  /* iOS secondary label: #3C3C43 at 60%, #EBEBF5 at 70% in dark. */
+  --p-spinner-color: var(--p-ios-label-secondary, rgba(60, 60, 67, 0.6));
+
+  opacity: 1;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cg%3E%3Crect x='26' y='0' width='8' height='20' rx='4'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.87' transform='rotate(-45 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.75' transform='rotate(-90 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.63' transform='rotate(-135 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.51' transform='rotate(180 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.39' transform='rotate(135 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.27' transform='rotate(90 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.15' transform='rotate(45 30 30)'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cg%3E%3Crect x='26' y='0' width='8' height='20' rx='4'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.87' transform='rotate(-45 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.75' transform='rotate(-90 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.63' transform='rotate(-135 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.51' transform='rotate(180 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.39' transform='rotate(135 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.27' transform='rotate(90 30 30)'/%3E%3Crect x='26' y='0' width='8' height='20' rx='4' opacity='.15' transform='rotate(45 30 30)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.p-spinner-touch-small {
+  --p-spinner-size: 14px;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cg%3E%3Crect x='6' y='0' width='2' height='4' rx='1'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.87' transform='rotate(-45 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.75' transform='rotate(-90 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.63' transform='rotate(-135 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.51' transform='rotate(180 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.39' transform='rotate(135 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.27' transform='rotate(90 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.15' transform='rotate(45 7 7)'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cg%3E%3Crect x='6' y='0' width='2' height='4' rx='1'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.87' transform='rotate(-45 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.75' transform='rotate(-90 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.63' transform='rotate(-135 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.51' transform='rotate(180 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.39' transform='rotate(135 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.27' transform='rotate(90 7 7)'/%3E%3Crect x='6' y='0' width='2' height='4' rx='1' opacity='.15' transform='rotate(45 7 7)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.p-spinner-touch-large {
+  --p-spinner-size: 35px;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 35 35'%3E%3Cg%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.87' transform='rotate(-45 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.75' transform='rotate(-90 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.63' transform='rotate(-135 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.51' transform='rotate(180 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.39' transform='rotate(135 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.27' transform='rotate(90 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.15' transform='rotate(45 17.5 17.5)'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 35 35'%3E%3Cg%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.87' transform='rotate(-45 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.75' transform='rotate(-90 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.63' transform='rotate(-135 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.51' transform='rotate(180 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.39' transform='rotate(135 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.27' transform='rotate(90 17.5 17.5)'/%3E%3Crect x='15' y='0' width='5' height='13' rx='2.5' opacity='.15' transform='rotate(45 17.5 17.5)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* The macOS reduced-motion pulse peaks at the macOS 55%; the iOS color
+   carries its own alpha, so pulse between 30% and full strength. */
+@media (prefers-reduced-motion: reduce) {
+  .p-spinner-touch {
+    animation-name: p-spinner-touch-pulse;
+  }
+
+  @keyframes p-spinner-touch-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
 }

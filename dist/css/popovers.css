@@ -1,39 +1,50 @@
-/* Puppertino v2.0 — Popovers (macOS 26)
+/* Puppertino v2.0 — Popovers (macOS 27, iOS / iPadOS 27)
    A popover is a transient view that appears above other content when
    people click or tap a control or interactive area. Free-form glass
-   container with an edge arrow; positioning via src/js/popovers.js. */
+   container with an edge arrow; positioning via src/js/popovers.js.
+
+   macOS 27 puts popovers on the shared overlay material (the alert's):
+   a slightly grey translucent fill over blur, the overlay shadow, a
+   crisp 1px keyline outside the edge, and a bright 1px line on the
+   inside top and bottom. Dark is a near-black glass, not grey. */
 
 :root {
   --p-popover-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
   --p-popover-radius: 20px;
-  --p-popover-bg: rgba(255, 255, 255, 0.72);
-  --p-popover-bg-opaque: #fcfcfc;
-  --p-popover-arrow-bg: rgba(252, 252, 252, 0.95);
-  --p-popover-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.15),
-    0 0 2.5px rgba(0, 0, 0, 0.5);
+  --p-popover-bg: rgba(246, 246, 246, 0.73);
+  --p-popover-bg-opaque: #f6f6f6;
+  --p-popover-arrow-bg: rgba(248, 248, 248, 0.95);
+  --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-popover-keyline: rgba(0, 0, 0, 0.14);
+  --p-popover-rim-top: rgba(255, 255, 255, 0.95);
+  --p-popover-rim-bottom: rgba(255, 255, 255, 0.7);
+  --p-popover-rim-side: rgba(255, 255, 255, 0.4);
   --p-popover-text: #1a1a1a;
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-popover-bg: rgba(58, 58, 62, 0.82);
-  --p-popover-bg-opaque: #3a3a3e;
-  --p-popover-arrow-bg: rgba(58, 58, 62, 0.95);
-  --p-popover-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.3),
-    0 0 2.5px rgba(0, 0, 0, 0.7);
+  --p-popover-bg: rgba(26, 26, 26, 0.73);
+  --p-popover-bg-opaque: #1e1e1e;
+  --p-popover-arrow-bg: rgba(30, 30, 30, 0.95);
+  --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+  --p-popover-keyline: rgba(0, 0, 0, 0.6);
+  --p-popover-rim-top: rgba(255, 255, 255, 0.23);
+  --p-popover-rim-bottom: rgba(255, 255, 255, 0.12);
+  --p-popover-rim-side: rgba(255, 255, 255, 0.05);
   --p-popover-text: rgba(255, 255, 255, 0.92);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-popover-bg: rgba(58, 58, 62, 0.82);
-    --p-popover-bg-opaque: #3a3a3e;
-    --p-popover-arrow-bg: rgba(58, 58, 62, 0.95);
-    --p-popover-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.3),
-      0 0 2.5px rgba(0, 0, 0, 0.7);
+    --p-popover-bg: rgba(26, 26, 26, 0.73);
+    --p-popover-bg-opaque: #1e1e1e;
+    --p-popover-arrow-bg: rgba(30, 30, 30, 0.95);
+    --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+    --p-popover-keyline: rgba(0, 0, 0, 0.6);
+    --p-popover-rim-top: rgba(255, 255, 255, 0.23);
+    --p-popover-rim-bottom: rgba(255, 255, 255, 0.12);
+    --p-popover-rim-side: rgba(255, 255, 255, 0.05);
     --p-popover-text: rgba(255, 255, 255, 0.92);
   }
 }
@@ -42,10 +53,14 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-popover-bg: rgba(255, 255, 255, 0.72);
-  --p-popover-bg-opaque: #fcfcfc;
-  --p-popover-arrow-bg: rgba(252, 252, 252, 0.95);
-  --p-popover-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 2.5px rgba(0, 0, 0, 0.5);
+  --p-popover-bg: rgba(246, 246, 246, 0.73);
+  --p-popover-bg-opaque: #f6f6f6;
+  --p-popover-arrow-bg: rgba(248, 248, 248, 0.95);
+  --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-popover-keyline: rgba(0, 0, 0, 0.14);
+  --p-popover-rim-top: rgba(255, 255, 255, 0.95);
+  --p-popover-rim-bottom: rgba(255, 255, 255, 0.7);
+  --p-popover-rim-side: rgba(255, 255, 255, 0.4);
   --p-popover-text: #1a1a1a;
 }
 
@@ -54,7 +69,12 @@
   backdrop-filter: blur(20px) saturate(180%);
   background: var(--p-popover-bg);
   border-radius: var(--p-popover-radius);
-  box-shadow: var(--p-popover-shadow);
+  box-shadow:
+    var(--p-popover-shadow),
+    0 0 0 0.5px var(--p-popover-keyline),
+    inset 0 1px 0 var(--p-popover-rim-top),
+    inset 0 -1px 0 var(--p-popover-rim-bottom),
+    inset 0 0 0 1px var(--p-popover-rim-side);
   box-sizing: border-box;
   color: var(--p-popover-text);
   display: inline-block;
@@ -74,8 +94,8 @@
 /* Arrow silhouette: 35.44 × 10.5, 45° slopes, rounded tip.
    No backdrop-filter here: Chromium ignores it on clipped/masked
    elements, so the arrow uses a near-opaque fill that reads as the
-   blurred glass. The opacity also keeps the body's hairline rim shadow
-   from showing through at the junction as a gap. */
+   blurred glass. The opacity also keeps the body's keyline from
+   showing through at the junction as a gap. */
 .p-popover::before {
   background: var(--p-popover-arrow-bg);
   clip-path: path("M0 10.5C2.5 10.5 3.62 10.44 4.75 10C5.87 9.56 6.89 8.58 7.83 7.65L10.48 5L13.79 1.69C15.12 0.3 16.37 0 17.72 0C19.07 0 20.32 0.31 21.65 1.69L24.96 5L27.61 7.65C28.55 8.58 29.56 9.56 30.69 10C31.82 10.44 32.94 10.5 35.44 10.5Z");
@@ -159,6 +179,19 @@
   }
 }
 
+@media (prefers-contrast: more) {
+  .p-popover:not(.p-popover-touch) {
+    --p-popover-keyline: rgba(0, 0, 0, 0.6);
+    background: var(--p-popover-bg-opaque);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-popover {
+    border: 1px solid CanvasText;
+  }
+}
+
 @media (prefers-reduced-motion) {
   .p-popover[data-p-popover-float] {
     transform: none;
@@ -185,38 +218,43 @@
    stays rounded and the shoulders keep their easing.
 
    Placement, floating, and the .active toggle are shared with the
-   pointer popover, so popovers.js drives both without changes. */
+   pointer popover; popovers.js reads .p-popover-touch to use the
+   bigger arrow and keep its centre at least 72px from a corner edge.
+
+   iOS 27 material: not the overlay glass the alert uses, but a near-
+   white slab. The reference lifts the backdrop additively (white 34%
+   plus-lighter), blurs it 65px, and color-dodges white 84% over it, so
+   it reads #EEEEEE over a #3D3D3D backdrop and pure white over white.
+   CSS reproduces that exactly: contrast(0.595) then brightness(1.682)
+   is v -> v + 0.341 (the plus-lighter lift), and a white 84% fill
+   over the lifted, blurred backdrop is the dodge layer's result. No
+   keyline, no rim; only a very soft 100px shadow separates it. Dark
+   is black 60% over the same blur. */
 
 :root {
-  --p-popover-touch-bg: rgba(245, 245, 245, 0.72);
-  --p-popover-touch-arrow-bg: rgba(248, 248, 248, 0.95);
-  --p-popover-touch-fallback: rgba(245, 245, 245, 0.98);
-  --p-popover-touch-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.18),
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+  --p-popover-touch-bg: rgba(255, 255, 255, 0.84);
+  --p-popover-touch-filter: blur(65px) contrast(0.595) brightness(1.682);
+  --p-popover-touch-arrow-bg: rgba(255, 255, 255, 0.91);
+  --p-popover-touch-fallback: #f7f7f7;
+  --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-popover-touch-bg: rgba(38, 38, 40, 0.72);
-  --p-popover-touch-arrow-bg: rgba(40, 40, 42, 0.95);
-  --p-popover-touch-fallback: rgba(38, 38, 40, 0.98);
-  --p-popover-touch-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.4),
-    0 2px 8px rgba(0, 0, 0, 0.24),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  --p-popover-touch-bg: rgba(0, 0, 0, 0.6);
+  --p-popover-touch-filter: blur(65px);
+  --p-popover-touch-arrow-bg: rgba(0, 0, 0, 0.6);
+  --p-popover-touch-fallback: #141414;
+  --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-popover-touch-bg: rgba(38, 38, 40, 0.72);
-    --p-popover-touch-arrow-bg: rgba(40, 40, 42, 0.95);
-    --p-popover-touch-fallback: rgba(38, 38, 40, 0.98);
-    --p-popover-touch-shadow:
-      0 10px 40px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.24),
-      inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+    --p-popover-touch-bg: rgba(0, 0, 0, 0.6);
+    --p-popover-touch-filter: blur(65px);
+    --p-popover-touch-arrow-bg: rgba(0, 0, 0, 0.6);
+    --p-popover-touch-fallback: #141414;
+    --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -224,13 +262,11 @@
    page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-popover-touch-bg: rgba(245, 245, 245, 0.72);
-  --p-popover-touch-arrow-bg: rgba(248, 248, 248, 0.95);
-  --p-popover-touch-fallback: rgba(245, 245, 245, 0.98);
-  --p-popover-touch-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.18),
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+  --p-popover-touch-bg: rgba(255, 255, 255, 0.84);
+  --p-popover-touch-filter: blur(65px) contrast(0.595) brightness(1.682);
+  --p-popover-touch-arrow-bg: rgba(255, 255, 255, 0.91);
+  --p-popover-touch-fallback: #f7f7f7;
+  --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
 }
 
 .p-popover-touch {
@@ -242,11 +278,16 @@
   padding: 20px;
 
   background: var(--p-popover-touch-bg);
-  -webkit-backdrop-filter: saturate(180%) blur(30px);
-  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: var(--p-popover-touch-filter);
+  backdrop-filter: var(--p-popover-touch-filter);
   box-shadow: var(--p-popover-touch-shadow);
   color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
 }
+
+/* The arrow is the body material. It can't carry its own backdrop
+   filter (Chromium drops it on clipped elements), so the fill is the
+   body's result flattened: white 91% lands on the same #EEEEEE over
+   #3D3D3D and white over white; dark is the same black 60%. */
 
 /* A popover holding a list runs the list to its own edges. */
 .p-popover-touch:has(> .p-list-touch) {
@@ -279,13 +320,15 @@
 }
 
 @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
-  .p-popover-touch {
+  .p-popover-touch,
+  .p-popover-touch::before {
     background: var(--p-popover-touch-fallback);
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .p-popover-touch {
+  .p-popover-touch,
+  .p-popover-touch::before {
     background: var(--p-popover-touch-fallback);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -299,5 +342,19 @@
     --p-popover-radius: 60.8px;
 
     corner-shape: superellipse(1.465);
+  }
+}
+
+/* With no rim, increased contrast gets an opaque body and a keyline. */
+@media (prefers-contrast: more) {
+  .p-popover-touch {
+    background: var(--p-popover-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: var(--p-popover-touch-shadow), 0 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .p-popover-touch::before {
+    background: var(--p-popover-touch-fallback);
   }
 }

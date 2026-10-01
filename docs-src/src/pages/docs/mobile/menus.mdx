@@ -13,11 +13,11 @@ import contextScript from '../../../../../src/js/context_menus.js?url';
 
 <script type="module" src={contextScript}></script>
 
-<div class="p-menu p-menu-touch" id="demo-context-menu" role="menu" hidden>
-  <button class="p-menu__item" role="menuitem" type="button"><span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i></button>
-  <button class="p-menu__item" role="menuitem" type="button"><span>Save Image</span><i class="p-menu__icon ph-bold ph-download-simple"></i></button>
+<div class="p-menu p-menu-touch p-menu-touch--context" id="demo-context-menu" role="menu" hidden>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-copy"></i><span>Copy</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-download-simple"></i><span>Save Image</span></button>
   <div class="p-menu__separator" role="separator"></div>
-  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i></button>
+  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-trash"></i><span>Delete</span></button>
 </div>
 
 A menu is a short list of commands raised by a control. A context menu is the same list raised by pressing and holding the thing it acts on. A popover is a panel anchored to a control, holding content rather than commands.
@@ -39,111 +39,206 @@ Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet<
   align="start"
   snippet={`<div class="p-menu p-menu-touch" role="menu">
   <button class="p-menu__item" role="menuitem" type="button">
-    <span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i>
-  </button>
-  <button class="p-menu__item" role="menuitem" type="button">
-    <span>Duplicate</span><i class="p-menu__icon ph-bold ph-copy-simple"></i>
+    <i class="p-menu__icon ph-bold ph-copy" aria-hidden="true"></i>
+    <span>Copy</span>
+    <span class="p-menu__shortcut">⌘C</span>
   </button>
   <div class="p-menu__separator" role="separator"></div>
-  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button">
-    <span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i>
+  <div class="p-menu__header">Sort By</div>
+  <button class="p-menu__item" role="menuitem" type="button">
+    <span>Name</span>
+    <i class="p-menu__chevron ph-bold ph-caret-right" aria-hidden="true"></i>
   </button>
 </div>`}
   code={`<div class="p-menu p-menu-touch" role="menu">
-  <button class="p-menu__item" role="menuitem" type="button"><span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i></button>
-  <button class="p-menu__item" role="menuitem" type="button"><span>Duplicate</span><i class="p-menu__icon ph-bold ph-copy-simple"></i></button>
-  <button class="p-menu__item" role="menuitem" type="button"><span>Share</span><i class="p-menu__icon ph-bold ph-share-network"></i></button>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-copy"></i><span>Copy</span><span class="p-menu__shortcut">⌘C</span></button>
+  <button class="p-menu__item" role="menuitem" type="button" aria-disabled="true"><i class="p-menu__icon ph-bold ph-clipboard"></i><span>Paste</span><span class="p-menu__shortcut">⌘V</span></button>
+  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-trash"></i><span>Delete</span></button>
   <div class="p-menu__separator" role="separator"></div>
-  <button class="p-menu__item" role="menuitem" type="button" aria-disabled="true"><span>Disabled Action</span><i class="p-menu__icon ph-bold ph-prohibit"></i></button>
-  <div class="p-menu__separator" role="separator"></div>
-  <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i></button>
+  <div class="p-menu__header">Sort By</div>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-text-aa"></i><span>Name</span><i class="p-menu__chevron ph-bold ph-caret-right"></i></button>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-calendar-blank"></i><span>Date Modified</span><i class="p-menu__chevron ph-bold ph-caret-right"></i></button>
 </div>`}
 />
 
 | Part | Value |
 |---|---|
-| Surface | 238px minimum, 32px radius |
-| Background | `rgba(245,245,245,0.72)` light, `rgba(38,38,38,0.72)` dark, blur 30px |
-| Padding | 8px vertical, 16px horizontal |
-| Row | 50px minimum, 60px with a subtitle |
-| Label | 15px, weight 400, tracking +0.2px |
-| Highlight | Capsule inset 5px, 20px radius, `#EDEDED` light and `#121212` dark |
-| Separator | 1px, runs wider than the highlight |
-| Shortcut and subtitle | `#727272` light, `#8A8A8A` dark |
-| Destructive | `#FF383C` light, `#FF4245` dark |
+| Surface | 238px minimum, 34px radius, 10px 16px padding |
+| Background | `rgba(246,246,246,0.73)` over `blur(30px) saturate(120%)` |
+| Edge | 0.5px dark hairline outside the shape, a bright 1px rim and a glow band along the top and bottom, no rim on the sides |
+| Shadow | `--p-shadow-overlay`: `0 8px 48px rgba(0,0,0,0.25)` |
+| Row | 40px minimum, 8px vertical padding, so a wrapped label makes a 60px row |
+| Label | 17px, weight 400, line height 22px, tracking -0.43px, `#1A1A1A` |
+| Label start | 22px from the surface edge, 58px after a glyph |
+| Glyph | 17px, in a 28px column on the leading side, 8px before the label |
+| Pressed | Full-height 190 × 40 capsule, `rgba(0,0,0,0.07)` |
+| Separator | 1px `rgba(0,0,0,0.10)`, 10px above and below. 206px wide, or 190px in a menu with glyphs |
+| Shortcut | 15px, weight 510, `#727272`. Disabled `rgba(0,0,0,0.15)` |
+| Chevron | 15px bold, in the label colour |
+| Section title | 13px, weight 510, tracking -0.08px, `rgba(0,0,0,0.26)`, lined up with the capsule |
+| Disabled | `rgba(0,0,0,0.26)` |
+| Destructive | `#FF383C` |
 
-The pressed highlight is a capsule inset from the row, not a full-bleed band across the surface. That is the visible difference from the pointer menu in the same file, and it is why the separator is drawn wider than the highlight rather than matching it.
+The glyph leads the label and the shortcut or chevron trails it. Put `.p-menu__icon` anywhere in the row: it always sorts to the leading side. A menu where some rows have glyphs and some don't reads best when the rows without one sit in their own section, like the Sort By rows above.
 
-The icon goes on the trailing edge. iOS puts menu glyphs on the right, opposite to macOS.
+The pressed capsule fills the row's height but not its width. It stops 8px short of each side, so separators run wider than the capsule. The separator narrows to the capsule's width once the menu has a glyph column, which keeps the rules lined up with the content.
 
-The slots are the pointer menu's: `.p-menu__item`, `.p-menu__separator`, `.p-menu__header`, `.p-menu__icon`, `.p-menu__shortcut`. Adding `.p-menu-touch` restyles them.
+Disabled ink, section titles, separators, and the pressed capsule are translucent black rather than flat greys. They darken whatever the glass shows, so they stay visible over any backdrop instead of dissolving into a grey that happens to match.
 
-### Subtitles
+A long label wraps onto a second line rather than truncating. The row grows to fit.
+
+The slots are the pointer menu's: `.p-menu__item`, `.p-menu__separator`, `.p-menu__header`, `.p-menu__icon`, `.p-menu__shortcut`, `.p-menu__chevron`, `.p-menu__check`. Adding `.p-menu-touch` restyles them.
+
+### Checkmarks
 
 <Showcase
-  name="menu-touch-subtitle"
+  name="menu-touch-check"
   align="start"
   snippet={false}
   code={`<div class="p-menu p-menu-touch" role="menu">
-  <div class="p-menu__header">Sort By</div>
-  <button class="p-menu__item" role="menuitem" type="button">
-    <span class="p-menu-touch__label"><span>Name</span><span class="p-menu-touch__subtitle">A to Z</span></span>
-    <i class="p-menu__icon ph-bold ph-check"></i>
-  </button>
-  <button class="p-menu__item" role="menuitem" type="button">
-    <span class="p-menu-touch__label"><span>Date</span><span class="p-menu-touch__subtitle">Newest first</span></span>
-  </button>
+  <button class="p-menu__item" role="menuitemradio" aria-checked="true" type="button"><span class="p-menu__check">✓</span><i class="p-menu__icon ph-bold ph-list"></i><span>List</span></button>
+  <button class="p-menu__item" role="menuitemradio" aria-checked="false" type="button"><span class="p-menu__check"></span><i class="p-menu__icon ph-bold ph-squares-four"></i><span>Icons</span></button>
+  <button class="p-menu__item" role="menuitemradio" aria-checked="false" type="button"><span class="p-menu__check"></span><i class="p-menu__icon ph-bold ph-columns"></i><span>Columns</span></button>
 </div>`}
 />
 
-Wrap the label in `.p-menu-touch__label` and add a `.p-menu-touch__subtitle` at 13px. The row grows to 60px on its own through `:has()`.
+`.p-menu__check` adds a 30px column in front of the glyph for a 17px, weight 590 checkmark. Keep the slot on unchecked rows too, empty, so every label starts at the same place. Mark the rows `role="menuitemradio"` or `role="menuitemcheckbox"` with `aria-checked`, since the glyph alone says nothing to a screen reader.
 
-`.p-menu__header` is 15px Bold and names a group of items.
+### Palette
+
+<Showcase
+  name="menu-touch-palette"
+  align="start"
+  snippet={`<div class="p-menu p-menu-touch" role="menu">
+  <div class="p-menu-touch__palette" role="group" aria-label="Quick actions">
+    <button class="p-menu-touch__tile" role="menuitem" type="button">
+      <i class="ph-bold ph-copy" aria-hidden="true"></i><span>Copy</span>
+    </button>
+    …
+  </div>
+  <div class="p-menu__separator" role="separator"></div>
+  …
+</div>`}
+  code={`<div class="p-menu p-menu-touch" role="menu">
+  <div class="p-menu-touch__palette" role="group" aria-label="Quick actions">
+    <button class="p-menu-touch__tile" role="menuitem" type="button"><i class="ph-bold ph-copy"></i><span>Copy</span></button>
+    <button class="p-menu-touch__tile" role="menuitem" type="button"><i class="ph-bold ph-share"></i><span>Share</span></button>
+    <button class="p-menu-touch__tile p-menu-touch__tile--destructive" role="menuitem" type="button"><i class="ph-bold ph-trash"></i><span>Delete</span></button>
+  </div>
+  <div class="p-menu__separator" role="separator"></div>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-pencil-simple"></i><span>Rename</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-folder-simple"></i><span>Move</span></button>
+</div>`}
+/>
+
+A palette puts the two or three most frequent commands in a row of tiles above the list. Each tile is 56px tall with a 20px radius, a 15px glyph over a 12px, weight 510 label. Tiles share the width equally, 10px in from the surface edge and 5px apart, so three fit a 238px menu at 69px each.
+
+A pressed, focused, or `aria-pressed="true"` tile takes the row capsule's tint. Consider the palette for commands people reach for every time (Copy, Share, Delete) and the list for everything else.
+
+### Compact size
+
+<Showcase
+  name="menu-touch-compact"
+  align="start"
+  snippet={false}
+  code={`<div class="p-menu p-menu-touch p-menu-touch--compact" role="menu">
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-scissors"></i><span>Cut</span><span class="p-menu__shortcut">⌘X</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-copy"></i><span>Copy</span><span class="p-menu__shortcut">⌘C</span></button>
+  <div class="p-menu__separator" role="separator"></div>
+  <div class="p-menu__header">Insert</div>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-link"></i><span>Add Link</span><span class="p-menu__shortcut">⌘K</span></button>
+  <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-magnifying-glass"></i><span class="p-menu-touch__label"><span>Find</span><span class="p-menu-touch__subtitle">In this note</span></span><i class="p-menu__chevron ph-bold ph-caret-right"></i></button>
+</div>`}
+/>
+
+`.p-menu-touch--compact` is the menu raised from text, like Edit or Find. Same 40px pitch at 15px, tracking -0.43px, with 10px row padding. Separators get 8.5px above and below, 3px less per block than the default. Labels start 18px from the edge (54px after a glyph), and section titles drop to 12px at 16px.
+
+A subtitle goes in `.p-menu-touch__label` with a `.p-menu-touch__subtitle` at 13px. The row grows to fit it: 58px in the compact menu.
+
+### Spacious size
+
+`.p-menu-touch--spacious` keeps the earlier touch menu: 15px text at +0.2px tracking on a 50px row, the capsule inset 5px inside it, and the glyph on the trailing side. Use it when a layout was built around the taller rows. New menus should use the default.
+
+## Edit menu bar
+
+<Showcase
+  name="menu-touch-bar"
+  snippet={`<div class="p-menu-touch-bar" role="menu" aria-label="Edit">
+  <button class="p-menu-touch-bar__item" role="menuitem" type="button">Cut</button>
+  <button class="p-menu-touch-bar__item" role="menuitem" type="button">Copy</button>
+  <button class="p-menu-touch-bar__item" role="menuitem" type="button">Paste</button>
+  <button class="p-menu-touch-bar__more" type="button" aria-label="More">
+    <i class="ph-bold ph-caret-right" aria-hidden="true"></i>
+  </button>
+</div>`}
+  code={`<div class="p-menu-touch-bar" role="menu" aria-label="Edit">
+  <button class="p-menu-touch-bar__item" role="menuitem" type="button">Cut</button>
+  <button class="p-menu-touch-bar__item" role="menuitem" type="button">Copy</button>
+  <button class="p-menu-touch-bar__item" role="menuitem" type="button">Paste</button>
+  <button class="p-menu-touch-bar__more" type="button" aria-label="More"><i class="ph-bold ph-caret-right"></i></button>
+</div>`}
+/>
+
+The horizontal menu that appears over selected text. A 44px capsule of the menu's glass, 15px commands at -0.6px tracking, 20px in from the leading edge, divided by 1 × 18px rules. The trailing 36px circle pages to more commands. Keep it to three or four commands, and put the rest behind the circle.
 
 ## Context menus
 
-A context menu is the same surface, raised by a long press, optionally with a preview of the item above it.
+A context menu is the same surface, raised by a long press, next to a preview of the item.
 
 <Showcase
   name="context-menu"
   align="start"
-  snippet={`<div class="p-menu-touch-preview">
-  <!-- a picture of the thing being acted on -->
-</div>
-<div class="p-menu p-menu-touch" role="menu">
-  ...
-</div>`}
-  code={`<div style="width: 250px;">
-  <div class="p-menu-touch-preview" style="height: 120px; background: linear-gradient(135deg, #0088FF, #CB30E0);"></div>
+  snippet={`<div class="p-menu-touch-context">
+  <div class="p-menu-touch-preview">
+    <!-- a picture of the thing being acted on -->
+  </div>
   <div class="p-menu p-menu-touch" role="menu">
-    <button class="p-menu__item" role="menuitem" type="button"><span>Copy</span><i class="p-menu__icon ph-bold ph-copy"></i></button>
-    <button class="p-menu__item" role="menuitem" type="button"><span>Save Image</span><i class="p-menu__icon ph-bold ph-download-simple"></i></button>
-    <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><span>Delete</span><i class="p-menu__icon ph-bold ph-trash"></i></button>
+    ...
+  </div>
+</div>`}
+  code={`<div class="p-menu-touch-context" data-p-menu-place="trailing">
+  <div class="p-menu-touch-preview" style="width: 200px; height: 150px; background: linear-gradient(135deg, #0088FF, #CB30E0);"></div>
+  <div class="p-menu p-menu-touch" role="menu">
+    <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-copy"></i><span>Copy</span></button>
+    <button class="p-menu__item" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-download-simple"></i><span>Save Image</span></button>
+    <div class="p-menu__separator" role="separator"></div>
+    <button class="p-menu__item p-menu__item--destructive" role="menuitem" type="button"><i class="p-menu__icon ph-bold ph-trash"></i><span>Delete</span></button>
   </div>
 </div>`}
 />
 
-`.p-menu-touch-preview` is a 30px-radius container for that picture, with the menu below it.
+`.p-menu-touch-context` lays out a preview and a 250px menu 16px apart. The menu sits below the preview, lined up with its leading edge. Set `data-p-menu-place` to change that:
+
+| Value | Placement |
+|---|---|
+| (none) or `below-start` | Below, leading edges aligned |
+| `below-end` | Below, trailing edges aligned |
+| `trailing` | Beside, after the preview, top edges aligned |
+| `leading` | Beside, before the preview, top edges aligned |
+
+`.p-menu-touch-preview` gives the preview its 30px radius. Add `.p-menu-touch--context` to a menu used on its own to get the 250px width.
 
 `context_menus.js` handles the press. Point an element at a hidden menu and it opens on a long press, on right-click, and on Shift+F10 or the context-menu key:
 
 ```html
 <div data-p-context-menu="#file-menu">…</div>
 
-<div class="p-menu p-menu-touch" id="file-menu" role="menu" hidden>…</div>
+<div class="p-menu p-menu-touch p-menu-touch--context" id="file-menu" role="menu" hidden>…</div>
 ```
 
 ```html
 <script type="module" src="/js/context_menus.js"></script>
 ```
 
-It waits 500ms, cancels if the pointer moves more than 10px so a scroll never opens a menu, positions the menu near the press and clamps it to the viewport, and closes on Escape, an outside tap, or a choice. Focus moves to the first item and returns to where it was.
+It waits 500ms and cancels if the pointer moves more than 10px, so a scroll never opens a menu. The menu floats against the element that raised it with the same geometry: 16px below, leading edge first, then trailing. Without room below it moves beside the element, then above it, and it is always clamped 8px inside the viewport. For a large surface like a canvas, where the element is too big to anchor to, add `data-p-context-menu-at="pointer"` to open at the press point instead.
+
+It closes on Escape, an outside tap, or a choice. Focus moves to the first item and returns to where it was.
 
 <Showcase
   name="context-menu-live"
   snippet={false}
   compact
-  code={`<div data-p-context-menu="#demo-context-menu" tabindex="0" style="width: 200px; height: 120px; border-radius: 24px; background: linear-gradient(135deg, #0088FF, #CB30E0); display: grid; place-items: center; color: #fff; font-size: 15px; cursor: context-menu;">Long press me</div>`}
+  code={`<div data-p-context-menu="#demo-context-menu" tabindex="0" style="width: 200px; height: 120px; border-radius: 30px; background: linear-gradient(135deg, #0088FF, #CB30E0); display: grid; place-items: center; color: #fff; font-size: 15px; cursor: context-menu;">Long press me</div>`}
 />
 
 A long press has no visible affordance, so people find it by already knowing it is there. Offer every command in the context menu somewhere else too: a toolbar, a swipe action, or a detail screen.
@@ -171,10 +266,13 @@ A long press has no visible affordance, so people find it by already knowing it 
 | Arrow | 56 x 13px |
 | Padding | 20px, or none when the popover holds a list |
 | Width | 240px minimum, 360px maximum |
-| Background | `rgba(245,245,245,0.72)`, blur 30px |
-| Shadow | `0 10px 40px rgba(0,0,0,0.18)` over a tighter layer and a hairline rim |
+| Background | `rgba(255,255,255,0.84)` over `blur(65px) contrast(0.595) brightness(1.682)` |
+| Arrow position | Centre kept at least 72px from either end of the edge it sits on |
+| Shadow | `0 10px 100px rgba(0,0,0,0.30)`, no rim |
 
-The touch popover is a bigger, softer object than the pointer one: 38px radius against 12px, and a 56 x 13 arrow against 35.44 x 10.5. The arrow is the same silhouette scaled to the new box, so the tip stays rounded and the shoulders keep their easing.
+The touch popover is a bigger, softer object than the pointer one: 38px radius against 12px, and a 56 x 13 arrow against 35.44 x 10.5. The arrow is the same silhouette scaled to the new box, so the tip stays rounded and the shoulders keep their easing. Its centre never comes closer than 72px to a corner, so the arrow never runs into the curve.
+
+The material is near-white rather than the menu's glass. The filter flattens and lifts the backdrop before the white goes on top, so the popover reads as `#EEEEEE` over a mid-grey page and pure white over a white one. It carries a wide, soft shadow and no edge rim.
 
 A popover holding a `.p-list-touch` drops its padding and clips, so the rows run to the popover's own edges.
 
@@ -186,7 +284,23 @@ Placement, floating, and the `.active` toggle are shared with the pointer popove
 
 ## Dark mode
 
-Menu surfaces move to `rgba(38,38,38,0.72)`, the row highlight from `#EDEDED` to `#121212`, secondary text from `#727272` to `#8A8A8A`, and destructive red from `#FF383C` to `#FF4245`. Popovers follow the same pattern with a deeper shadow.
+| Part | Light | Dark |
+|---|---|---|
+| Menu background | `rgba(246,246,246,0.73)`, `blur(30px) saturate(120%)` | `rgba(32,32,32,0.80)`, `blur(30px) brightness(80%) saturate(500%)` |
+| Edge hairline | `rgba(0,0,0,0.18)`, sides `0.22` | `rgba(0,0,0,0.60)`, sides `0.50` |
+| Top and bottom rim | white at 0.85 and 0.60 | white at 0.20 and 0.12 |
+| Label | `#1A1A1A` | `#F5F5F5` |
+| Pressed capsule | `rgba(0,0,0,0.07)` | `rgba(255,255,255,0.08)` |
+| Separator | `rgba(0,0,0,0.10)` | `rgba(255,255,255,0.11)` |
+| Disabled and section titles | `rgba(0,0,0,0.26)` | `rgba(255,255,255,0.28)` |
+| Shortcut | `#727272` | `rgba(255,255,255,0.60)` |
+| Destructive | `#FF383C` | `#FF4245` |
+| Shadow | `0 8px 48px rgba(0,0,0,0.25)` | `0 8px 48px rgba(0,0,0,0.45)` |
+| Popover background | `rgba(255,255,255,0.84)` | `rgba(0,0,0,0.60)` over `blur(65px)` |
+
+In dark mode the pressed capsule, separators, and dimmed ink turn to translucent white. They sit lighter than the glass, not darker, which is how the system draws them: a darker line on a dark menu disappears.
+
+The dark menu keeps the colour of what is behind it and only drops its brightness. The system does that with a luminosity blend, which CSS cannot apply to a backdrop. Puppertino darkens and saturates the blurred backdrop under a charcoal tint instead, so a blue wallpaper still reads as blue through the menu. It is close, though a little greener than the system over saturated blues.
 
 ## Accessibility
 
@@ -194,11 +308,13 @@ Give the menu `role="menu"` and each item `role="menuitem"`, and make the items 
 
 Disabled items use `aria-disabled="true"` rather than the `disabled` attribute, so they stay reachable and announce their state instead of disappearing from the tab order.
 
-Focus draws a 3px accent ring inset into the row, matching the highlight's capsule radius so the ring and the fill agree.
+Focus lights the row's capsule and draws the 3.5px accent focus band around it, so the keyboard position is visible even where a finger would leave no trace. Palette tiles and the edit bar's commands use the same band. With a pointer on iPad, hovering a row shows the capsule too.
+
+Rows are 40px, under the 44px touch minimum, because they sit edge to edge in a column: the whole row is the target and the next target starts where it ends. Avoid putting anything smaller than a row, like a separate button inside a row, in a menu.
 
 A menu raised by a long press needs a keyboard path too. The control that opens it should open it on Enter or Space as well.
 
-Reduced transparency and browsers without `backdrop-filter` swap the material for an opaque surface on both the menu and the popover.
+Reduced transparency and browsers without `backdrop-filter` swap the material for an opaque surface on the menu, the edit bar, and the popover. Increased contrast replaces the rims with a 1px keyline and draws separators in the label colour.
 
 ## The pointer versions
 

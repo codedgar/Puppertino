@@ -1,32 +1,45 @@
-/* Puppertino v2.0 — Dock (macOS 26)
-   Glass platter with app icons. Metrics: platter 62px tall, radius 15,
-   36px icons at 9px gaps. Magnification + bounce live in src/js/dock.js
-   (opt-in via data-p-dock-magnify). */
+/* Puppertino v2.0 — Dock (macOS 27)
+   Glass platter with app icons. Metrics: platter 55px tall (8 above the
+   icons, 11 below), radius 15, 36px icons at 9px gaps, a 1×36 light
+   separator with 14px clear on each side. Magnification + bounce live in
+   src/js/dock.js (opt-in via data-p-dock-magnify).
+
+   macOS 27 glass edge: a 0.5px dark outline, a strong bright rim along the
+   top and bottom with ~12px glow bands, no side rim and no soft drop
+   shadow. The light platter now darkens the wallpaper slightly instead of
+   lightening it. The fill stays a neutral tint (the system's
+   luminosity blend is not reproduced). */
 
 :root {
   --p-dock-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
-  --p-dock-bg: rgba(246, 246, 246, 0.36);
-  --p-dock-bg-opaque: #e8e8e8;
-  --p-dock-rim: rgba(255, 255, 255, 0.05);
-  --p-dock-separator: rgba(60, 60, 67, 0.29);
+  --p-dock-bg: rgba(0, 0, 0, 0.17);
+  --p-dock-bg-opaque: #707075;
+  --p-dock-rim: rgba(255, 255, 255, 0.35);
+  --p-dock-glow: rgba(255, 255, 255, 0.08);
+  --p-dock-outline: rgba(0, 0, 0, 0.5);
+  --p-dock-separator: rgba(255, 255, 255, 0.35);
   --p-dock-indicator: rgba(0, 0, 0, 0.45);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-dock-bg: rgba(74, 74, 74, 0.39);
-  --p-dock-bg-opaque: #4a4a4a;
-  --p-dock-rim: rgba(255, 255, 255, 0.1);
-  --p-dock-separator: #404042;
+  --p-dock-bg: rgba(255, 255, 255, 0.07);
+  --p-dock-bg-opaque: #2c2c2e;
+  --p-dock-rim: rgba(255, 255, 255, 0.25);
+  --p-dock-glow: rgba(255, 255, 255, 0.05);
+  --p-dock-outline: rgba(0, 0, 0, 0.8);
+  --p-dock-separator: rgba(255, 255, 255, 0.3);
   --p-dock-indicator: rgba(255, 255, 255, 0.65);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-dock-bg: rgba(74, 74, 74, 0.39);
-    --p-dock-bg-opaque: #4a4a4a;
-    --p-dock-rim: rgba(255, 255, 255, 0.1);
-    --p-dock-separator: #404042;
+    --p-dock-bg: rgba(255, 255, 255, 0.07);
+    --p-dock-bg-opaque: #2c2c2e;
+    --p-dock-rim: rgba(255, 255, 255, 0.25);
+    --p-dock-glow: rgba(255, 255, 255, 0.05);
+    --p-dock-outline: rgba(0, 0, 0, 0.8);
+    --p-dock-separator: rgba(255, 255, 255, 0.3);
     --p-dock-indicator: rgba(255, 255, 255, 0.65);
   }
 }
@@ -35,10 +48,12 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-dock-bg: rgba(246, 246, 246, 0.36);
-  --p-dock-bg-opaque: #e8e8e8;
-  --p-dock-rim: rgba(255, 255, 255, 0.05);
-  --p-dock-separator: rgba(60, 60, 67, 0.29);
+  --p-dock-bg: rgba(0, 0, 0, 0.17);
+  --p-dock-bg-opaque: #707075;
+  --p-dock-rim: rgba(255, 255, 255, 0.35);
+  --p-dock-glow: rgba(255, 255, 255, 0.08);
+  --p-dock-outline: rgba(0, 0, 0, 0.5);
+  --p-dock-separator: rgba(255, 255, 255, 0.35);
   --p-dock-indicator: rgba(0, 0, 0, 0.45);
 }
 
@@ -46,17 +61,23 @@
 
 .p-dock {
   align-items: flex-end;
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
+  /* No saturation boost: the platter keeps the wallpaper's own hue. */
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   background: var(--p-dock-bg);
   border-radius: 15px;
-  box-shadow: inset 0 0 0 1px var(--p-dock-rim);
+  box-shadow:
+    0 0 0 0.5px var(--p-dock-outline),
+    inset 0 1px 0 var(--p-dock-rim),
+    inset 0 -1px 0 var(--p-dock-rim),
+    inset 0 12px 10px -6px var(--p-dock-glow),
+    inset 0 -12px 10px -6px var(--p-dock-glow);
   box-sizing: border-box;
   display: inline-flex;
   font-family: var(--p-dock-font);
   gap: 9px;
-  height: 62px;
-  padding: 13px 8px;
+  height: 55px;
+  padding: 8px 8px 11px;
   position: relative;
 }
 
@@ -66,7 +87,7 @@
 
 /* Pin to the bottom of a positioned host (or the viewport). */
 .p-dock-fixed {
-  bottom: 8px;
+  bottom: 4px;
   left: 50%;
   position: fixed;
   transform: translateX(-50%);
@@ -105,7 +126,8 @@
   outline-offset: 2px;
 }
 
-/* Running indicator: 4px dot, 3px below the icon slot. */
+/* Running indicator: 4px dot, 4px below the icon slot (3px clear of the
+   platter's bottom edge). */
 .p-dock-item.p-running::after {
   background: var(--p-dock-indicator);
   border-radius: 50%;
@@ -118,11 +140,14 @@
   width: 4px;
 }
 
+/* 1×36 light line in both appearances. The 9px flex gap plus 5px margin
+   gives the 14px clear on each side. */
 .p-dock-separator {
   align-self: center;
   background: var(--p-dock-separator);
   flex: none;
-  height: 41px;
+  height: 36px;
+  margin: 0 5px;
   width: 1px;
 }
 
@@ -140,8 +165,9 @@
   border-radius: 12px;
   /* Measured on macOS: the tail tip floats 19px above the fully
      magnified icon's top (38 device px @2x, stable across frames). The
-     72px magnified icon pokes 23px above the platter, so 23 + 19 = 42. */
-  bottom: calc(100% + 42px);
+     72px magnified icon sits on the 11px bottom padding of the 55px
+     platter, so it pokes 28px above it: 28 + 19 = 47. */
+  bottom: calc(100% + 47px);
   box-sizing: border-box;
   color: #fff;
   font-family: var(--p-dock-font);
@@ -226,6 +252,23 @@
   }
 }
 
+@media (prefers-contrast: more) {
+  .p-dock {
+    --p-dock-outline: rgba(0, 0, 0, 0.7);
+    --p-dock-rim: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-dock {
+    border: 1px solid CanvasText;
+  }
+
+  .p-dock-separator {
+    background: CanvasText;
+  }
+}
+
 @media (prefers-reduced-motion) {
   .p-dock-item,
   .p-dock-item > * {
@@ -235,12 +278,6 @@
   }
 }
 
-/* Squircle corners where corner-shape ships (Chromium 139+): platter 15
-   with the system's 60% smoothing → span 24 (same curve the utility
-   window uses). */
-@supports (corner-shape: superellipse(1.465)) {
-  .p-dock {
-    border-radius: 24px;
-    corner-shape: superellipse(1.465);
-  }
-}
+/* macOS 27 draws the platter as a plain 15pt round rect, so there is no
+   corner-shape here (the earlier smoothed 24px span sat up to 6.6px off
+   the system outline). */

@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Notifications
-description: The macOS notification banner. App icon, bold title, two body lines, and a timestamp on the menu material, 344 pixels wide.
+description: The macOS notification banner. App icon, bold title, up to two body lines, a timestamp, and an optional attachment on a glass surface, 344 pixels wide.
 ---
 
 import '@puppertino/notifications.css';
@@ -36,9 +36,9 @@ Use a notification for events that happen while attention is elsewhere, like a f
 
 ## Anatomy
 
-The banner is 344px wide with a minimum height of 72px and a 16px radius. The surface is the menu material, `rgba(245, 245, 245, 0.67)` over a 20px blur with 180% saturation. The shadow is `0 8px 40px` at 12%.
+The banner is 344px wide with a 20px radius, and its height follows the content: 56px with one body line, 72px with two, and 77px with an attachment. The surface is `rgba(245, 245, 245, 0.67)` over a 20px blur with 180% saturation. The edge is glass: a dark 0.5px hairline outside the shape (slightly heavier on the sides) and a bright rim along the top and bottom only, with no rim on the sides. The shadow is the shared overlay shadow, `0 8px 48px` at 25%.
 
-Padding is 13px left, 12px vertical, 10px right. The icon slot is 32px with a 13px gap to the text. The title is 13px bold at `rgba(0, 0, 0, 0.85)` with a 16px line height. Body copy is 13px regular at the same color, clamped to two lines. The timestamp is 11px in `#BFBFBF`, aligned with the title.
+Padding is 12px vertical and 14px on each side. The 32px icon is vertically centered, with a 12px gap to the text column. The title is 13px bold at `rgba(0, 0, 0, 0.85)` with a 16px line height. Body copy is 13px regular at the same color, clamped to two lines. The timestamp is 11px in `#BFBFBF`, aligned with the title at the trailing edge.
 
 | Class | Role |
 |---|---|
@@ -47,7 +47,42 @@ Padding is 13px left, 12px vertical, 10px right. The icon slot is 32px with a 13
 | `.p-notification__title` | 13px bold, single line, truncates with an ellipsis. |
 | `.p-notification__body` | 13px regular, clamped to two lines. |
 | `.p-notification__time` | 11px timestamp, top right. |
-| `.p-notification-center` | Optional fixed top-right stack (16px inset, 10px gap) for showing live banners. |
+| `.p-notification__attachment` | Optional 32px thumbnail at the trailing edge, under the timestamp. |
+| `.p-notification-group` | Wraps a banner to show the next card in its group peeking below. |
+| `.p-notification-center` | Optional fixed top-right stack (16px inset, 16px gap) for showing live banners. |
+
+## Attachments
+
+Add an `img` with `.p-notification__attachment` to show a 32×32 thumbnail, such as a photo or document preview. It sits 14px from the trailing edge and 12px from the bottom, with a 6px continuous corner, under the timestamp. The body gives up the trailing column and the banner grows to 77px.
+
+<Showcase
+  name="notifications-attachment"
+  snippet={false}
+  code={`<div class="p-notification" role="status">
+  <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #FF9F0A, #FF6B00);"><i class="ph-bold ph-image" aria-hidden="true"></i></span>
+  <p class="p-notification__title">Shared Album</p>
+  <span class="p-notification__time">now</span>
+  <p class="p-notification__body">Kristina added 12 photos.</p>
+  <span class="p-notification__attachment" style="background: linear-gradient(135deg, #64D2FF, #5E5CE6);" role="img" aria-label="Photo preview"></span>
+</div>`}
+/>
+
+## Grouped notifications
+
+When several notifications from one app arrive together, macOS shows the newest and lets the next card peek out below it. Wrap the banner in `.p-notification-group` to draw that card: it is inset 16px on each side, uses the same material, radius, and edge, and shows 8px below the front banner. It is presentation only; expanding the group is up to your app.
+
+<Showcase
+  name="notifications-group"
+  snippet={false}
+  code={`<div class="p-notification-group">
+  <div class="p-notification" role="status">
+    <span class="p-notification__icon demo-app-icon" style="background: linear-gradient(180deg, #FF9F0A, #FF6B00);"><i class="ph-bold ph-house" aria-hidden="true"></i></span>
+    <p class="p-notification__title">Home</p>
+    <span class="p-notification__time">now</span>
+    <p class="p-notification__body">Outdoor Light was turned off.</p>
+  </div>
+</div>`}
+/>
 
 ## Code
 
@@ -68,11 +103,13 @@ Showing and dismissing banners is left to your app. For a floating stack, wrap b
 
 ## Dark mode
 
-The surface switches to `rgba(58, 58, 62, 0.82)`. The title becomes `rgba(255, 255, 255, 0.92)`, body copy `rgba(255, 255, 255, 0.76)`, and the timestamp `rgba(255, 255, 255, 0.25)`. The shadow deepens to 30%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+The surface switches to `rgba(58, 58, 62, 0.82)`. The title and body copy both become `#F5F5F5`, and the timestamp `rgba(255, 255, 255, 0.25)`. The hairline darkens, the top and bottom rims soften to 20% and 12% white, and the overlay shadow deepens to 45%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Accessibility
 
 - With `prefers-reduced-transparency` the surface becomes opaque `#F0F0F0` (dark: `#3A3A3E`) and the blur is removed.
 - Browsers without `backdrop-filter` get the same opaque fallback.
+- With `prefers-contrast: more` the edge becomes solid 1px lines, and forced-colors mode draws a system-colored border.
+- Give an attachment `alt` text (or `role="img"` and an `aria-label`) when it carries meaning. Leave `alt=""` when it only repeats the body.
 - Title contrast is 12.6:1 in light mode and 14.9:1 in dark mode. The timestamp is decorative and stays low contrast, so repeat critical timing in the body if it matters.
 - Body copy clamps at two lines. Put the essential fact in the first line.

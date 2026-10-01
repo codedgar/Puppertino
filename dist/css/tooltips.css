@@ -1,30 +1,40 @@
-/* Puppertino v2.0 — Tooltips (macOS 26)
+/* Puppertino v2.0 — Tooltips (macOS 27)
    Pure CSS, attribute-driven: data-p-tooltip="text" on any element.
    Appears centered under the element after a short delay, like the
-   native tooltip. data-p-tooltip-pos="top" flips it above. */
+   native tooltip. data-p-tooltip-pos="top" flips it above.
+
+   macOS 27: a square-cornered box. Light is a near-opaque grey with no
+   blur and dark #1A1A1A text; dark is black at 50% over a 10px blur
+   with a 0.6px white inner rim. Both share one two-layer shadow. */
 
 :root {
   --p-tooltip-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", sans-serif;
-  --p-tooltip-bg: rgba(246, 246, 246, 0.72);
-  --p-tooltip-bg-opaque: #f0f0f0;
-  --p-tooltip-text: #4d4d4d;
-  --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --p-tooltip-bg: rgba(236, 236, 236, 0.88);
+  --p-tooltip-bg-opaque: #ececec;
+  --p-tooltip-blur: none;
+  --p-tooltip-text: #1a1a1a;
+  --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+  --p-tooltip-rim: 0 0 transparent;
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-tooltip-bg: rgba(58, 58, 62, 0.8);
-  --p-tooltip-bg-opaque: #3a3a3e;
-  --p-tooltip-text: rgba(255, 255, 255, 0.8);
-  --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --p-tooltip-bg: rgba(0, 0, 0, 0.5);
+  --p-tooltip-bg-opaque: #0f0f0f;
+  --p-tooltip-blur: blur(10px);
+  --p-tooltip-text: #f5f5f5;
+  --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+  --p-tooltip-rim: inset 0 0 0 0.6px rgba(255, 255, 255, 0.15);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-tooltip-bg: rgba(58, 58, 62, 0.8);
-    --p-tooltip-bg-opaque: #3a3a3e;
-    --p-tooltip-text: rgba(255, 255, 255, 0.8);
-    --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --p-tooltip-bg: rgba(0, 0, 0, 0.5);
+    --p-tooltip-bg-opaque: #0f0f0f;
+    --p-tooltip-blur: blur(10px);
+    --p-tooltip-text: #f5f5f5;
+    --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+    --p-tooltip-rim: inset 0 0 0 0.6px rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -32,10 +42,12 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-tooltip-bg: rgba(246, 246, 246, 0.72);
-  --p-tooltip-bg-opaque: #f0f0f0;
-  --p-tooltip-text: #4d4d4d;
-  --p-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --p-tooltip-bg: rgba(236, 236, 236, 0.88);
+  --p-tooltip-bg-opaque: #ececec;
+  --p-tooltip-blur: none;
+  --p-tooltip-text: #1a1a1a;
+  --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+  --p-tooltip-rim: 0 0 transparent;
 }
 
 /* The host anchors the tooltip. The tooltip renders outside the
@@ -47,12 +59,12 @@
 }
 
 [data-p-tooltip]::after {
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: var(--p-tooltip-blur);
+  backdrop-filter: var(--p-tooltip-blur);
   background: var(--p-tooltip-bg);
-  border-radius: 1px;
+  border-radius: 0;
   bottom: auto;
-  box-shadow: var(--p-tooltip-shadow);
+  box-shadow: var(--p-tooltip-shadow), var(--p-tooltip-rim);
   box-sizing: border-box;
   color: var(--p-tooltip-text);
   content: attr(data-p-tooltip);
@@ -98,6 +110,19 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: var(--p-tooltip-bg-opaque);
+  }
+}
+
+@media (prefers-contrast: more) {
+  [data-p-tooltip]::after {
+    background: var(--p-tooltip-bg-opaque);
+    box-shadow: var(--p-tooltip-shadow), 0 0 0 1px rgba(128, 128, 128, 0.8);
+  }
+}
+
+@media (forced-colors: active) {
+  [data-p-tooltip]::after {
+    border: 1px solid CanvasText;
   }
 }
 

@@ -1,22 +1,24 @@
-/* Puppertino v2.0 — Scrollbars (macOS 26)
+/* Puppertino v2.0 — Scrollbars (macOS 27)
    Overlay-style: 6px capsule thumb, no visible track. Apply .p-scrollbar
-   to any scroll container (or html/body for the page). */
+   to any scroll container (or html/body for the page).
+   macOS 27 paints the thumb at black 50% (macOS 26: 15%), which is also
+   what the native overlay scroller draws. Dark mirrors it in white. */
 
 :root {
-  --p-scrollbar-thumb: rgba(0, 0, 0, 0.15);
-  --p-scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
+  --p-scrollbar-thumb: rgba(0, 0, 0, 0.5);
+  --p-scrollbar-thumb-hover: rgba(0, 0, 0, 0.62);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-scrollbar-thumb: rgba(255, 255, 255, 0.25);
-  --p-scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+  --p-scrollbar-thumb: rgba(255, 255, 255, 0.5);
+  --p-scrollbar-thumb-hover: rgba(255, 255, 255, 0.62);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-scrollbar-thumb: rgba(255, 255, 255, 0.25);
-    --p-scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+    --p-scrollbar-thumb: rgba(255, 255, 255, 0.5);
+    --p-scrollbar-thumb-hover: rgba(255, 255, 255, 0.62);
   }
 }
 
@@ -24,8 +26,8 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-scrollbar-thumb: rgba(0, 0, 0, 0.15);
-  --p-scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
+  --p-scrollbar-thumb: rgba(0, 0, 0, 0.5);
+  --p-scrollbar-thumb-hover: rgba(0, 0, 0, 0.62);
 }
 
 /* Firefox */

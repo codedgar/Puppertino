@@ -10,6 +10,7 @@
 
 /* Components */
 @import url('actions.css');
+@import url('boxes.css');
 @import url('buttons.css');
 @import url('cards.css');
 @import url('colorwells.css');

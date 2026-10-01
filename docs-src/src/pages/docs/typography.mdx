@@ -12,35 +12,47 @@ The system font (San Francisco) loads automatically on Apple devices through `-a
 
 ## Type scale
 
-The full Apple text style ladder. Each style has a specific size, weight, line height, and letter spacing tuned for legibility at that size. Larger sizes use tighter tracking, smaller sizes use looser tracking. This is called optical sizing and it is what makes Apple's typography feel right.
+The full iOS 27 text style ladder, at the default Large content size. Each style has a specific size, weight, line height, and letter spacing tuned for legibility at that size. Tracking is tightest at 17px (Body and Headline, -0.43px), opens up toward the small captions, and turns slightly positive again on Large Title and Title 1. This is SF Pro's optical sizing, and it is what makes Apple's typography feel right.
 
 Apply any class directly to an element.
 
 <div class="p-type">
 
-<TypeSpecimen className="p-large-title-2" label="Large Title" size="34px" weight="700" lineHeight="41px" tracking="-0.022em" sample="Large Title" />
+<TypeSpecimen className="p-large-title-2" label="Large Title" size="34px" weight="400" lineHeight="41px" tracking="0.012em" sample="Large Title" />
 
-<TypeSpecimen className="p-title-1" label="Title 1" size="28px" weight="400" lineHeight="34px" tracking="-0.018em" sample="Title 1" />
+<TypeSpecimen className="p-title-1" label="Title 1" size="28px" weight="400" lineHeight="34px" tracking="0.0136em" sample="Title 1" />
 
 <TypeSpecimen className="p-title-2" label="Title 2" size="22px" weight="400" lineHeight="28px" tracking="-0.012em" sample="Title 2" />
 
-<TypeSpecimen className="p-title-3" label="Title 3" size="20px" weight="400" lineHeight="25px" tracking="-0.008em" sample="Title 3" />
+<TypeSpecimen className="p-title-3" label="Title 3" size="20px" weight="400" lineHeight="25px" tracking="-0.0225em" sample="Title 3" />
 
-<TypeSpecimen className="p-headline-2" label="Headline" size="17px" weight="600" lineHeight="22px" tracking="-0.004em" sample="Headline" />
+<TypeSpecimen className="p-headline-2" label="Headline" size="17px" weight="600" lineHeight="22px" tracking="-0.025em" sample="Headline" />
 
-<TypeSpecimen className="p-body" label="Body" size="17px" weight="400" lineHeight="22px" tracking="-0.004em" sample="Body text sets the tone of every interface. It carries the most weight on the page." />
+<TypeSpecimen className="p-body" label="Body" size="17px" weight="400" lineHeight="22px" tracking="-0.025em" sample="Body text sets the tone of every interface. It carries the most weight on the page." />
 
-<TypeSpecimen className="p-callout-2" label="Callout" size="16px" weight="400" lineHeight="21px" tracking="-0.003em" sample="Callout text gives a piece of content slight emphasis." />
+<TypeSpecimen className="p-callout-2" label="Callout" size="16px" weight="400" lineHeight="21px" tracking="-0.019em" sample="Callout text gives a piece of content slight emphasis." />
 
-<TypeSpecimen className="p-subhead-2" label="Subheadline" size="15px" weight="400" lineHeight="20px" tracking="-0.002em" sample="Subheadline supports a heading without competing with it." />
+<TypeSpecimen className="p-subhead-2" label="Subheadline" size="15px" weight="400" lineHeight="20px" tracking="-0.015em" sample="Subheadline supports a heading without competing with it." />
 
-<TypeSpecimen className="p-footnote-2" label="Footnote" size="13px" weight="400" lineHeight="18px" sample="Footnote text fits comfortably below body content." />
+<TypeSpecimen className="p-footnote-2" label="Footnote" size="13px" weight="400" lineHeight="18px" tracking="-0.006em" sample="Footnote text fits comfortably below body content." />
 
-<TypeSpecimen className="p-caption-1" label="Caption 1" size="12px" weight="400" lineHeight="16px" sample="Caption 1 labels images and form fields." />
+<TypeSpecimen className="p-caption-1" label="Caption 1" size="12px" weight="400" lineHeight="16px" tracking="0" sample="Caption 1 labels images and form fields." />
 
-<TypeSpecimen className="p-caption-2" label="Caption 2" size="11px" weight="400" lineHeight="13px" sample="Caption 2 is for the smallest legal text and timestamps." />
+<TypeSpecimen className="p-caption-2" label="Caption 2" size="11px" weight="400" lineHeight="13px" tracking="0.0055em" sample="Caption 2 is for the smallest legal text and timestamps." />
 
 </div>
+
+### Emphasized and italic
+
+Every style has an Emphasized variant. Add `.p-emphasized` to a style class: Large Title, Title 1, and Title 2 go to 700, and every other style goes to semibold (600). Headline is already semibold, so it doesn't change. Add `.p-italic` for the italic variants of Body through Caption 2.
+
+```html
+<h1 class="p-large-title-2 p-emphasized">Library</h1>
+<p class="p-body p-emphasized">Your changes are saved.</p>
+<p class="p-footnote-2 p-italic">Edited just now</p>
+```
+
+Large Title is Regular (400) by default. Consider the Emphasized variant for a page's main heading, where it needs to anchor the layout. Inside `.p-type`, `h1` is already the Emphasized Large Title.
 
 ## Using the scale
 
@@ -83,7 +95,7 @@ Avoid weights below 300 and above 700 in body text. They are for display use onl
 
 ## Letter spacing
 
-Apple tightens letter spacing as size increases. The type styles already include the right tracking, but utility classes are available when you need to override or apply tracking to plain text.
+Apple sets letter spacing per size. The type styles already include the right tracking, so avoid adding tracking utilities to them. The utility classes are for plain text outside the scale.
 
 ```html
 <span class="p-tracking-tight">Tight tracking for headlines</span>

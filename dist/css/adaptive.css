@@ -140,6 +140,15 @@
   }
 }
 
+/* An attached .p-sidebar-touch (the iPadOS 27 default) fills its column
+   edge to edge and top to bottom, the way it fills a windowed app's
+   leading side. A .p-sidebar-touch-floating panel keeps its own size
+   and radius inside the column. */
+.p-split-view__sidebar > .p-sidebar-touch:not(.p-sidebar-touch-floating) {
+  width: 100%;
+  min-height: 100%;
+}
+
 /* ─── Size class visibility ────────────────────────────────────────── */
 /* These only ever hide. Nothing here sets an element visible, so an
    element keeps whatever display its own component gave it, whether

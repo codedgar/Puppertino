@@ -6,39 +6,58 @@
   --p-modal-fallback-color: rgba(255, 255, 255, 0.95);
   --p-modal-color: #1d1d1f;
   --p-desktop-modal-width: 260px;
-  --p-desktop-modal-radius: 26px;
-  --p-desktop-modal-shadow:
-    0 17px 45px rgba(0, 0, 0, 0.5),
-    0 0 1px rgba(0, 0, 0, 0.2);
-  --p-desktop-modal-surface: #f5f5f5;
+  --p-desktop-modal-radius: 34px;
+  --p-desktop-modal-shadow: var(--p-shadow-alert, 0 18px 48px rgba(0, 0, 0, 0.25));
+  --p-desktop-modal-surface: rgba(247, 247, 247, 0.73);
+  --p-desktop-modal-fallback: #ebebeb;
+  --p-desktop-modal-keyline: rgba(0, 0, 0, 0.34);
+  --p-desktop-modal-rim: rgba(255, 255, 255, 0.95);
+  --p-desktop-modal-glow: rgba(255, 255, 255, 0.85);
+  --p-desktop-modal-glow-bottom: rgba(255, 255, 255, 0.6);
   --p-desktop-modal-underlay: #262626;
   --p-desktop-modal-highlight: rgba(255, 255, 255, 0.16);
   --p-desktop-modal-title: rgba(0, 0, 0, 0.85);
   --p-desktop-modal-copy: rgba(0, 0, 0, 0.85);
-  --p-desktop-modal-primary: #0088ff;
-  --p-desktop-modal-primary-pressed: #0076dd;
-  --p-desktop-modal-secondary: #e6e6e6;
-  --p-desktop-modal-secondary-pressed: #d8d8d8;
+  --p-desktop-modal-primary: var(--p-control-accent, #0088ff);
+  --p-desktop-modal-primary-pressed: color-mix(in srgb, var(--p-desktop-modal-primary) 88%, #000);
+  --p-desktop-modal-secondary: rgba(0, 0, 0, 0.1);
+  --p-desktop-modal-secondary-pressed: rgba(0, 0, 0, 0.16);
+  --p-desktop-modal-destructive-label: var(--p-vibrant-red-resolved, #e11b1e);
   --p-desktop-modal-destructive-bg: rgba(255, 56, 60, 0.23);
   --p-desktop-modal-destructive-bg-pressed: rgba(255, 56, 60, 0.31);
   --p-desktop-modal-destructive-text: #ff383c;
   --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.18);
   --p-dialog-bg: #fff;
-  --p-dialog-radius: 26px;
-  --p-dialog-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(0, 0, 0, 0.23);
+  --p-dialog-radius: 16px;
+  --p-dialog-shadow: var(--p-shadow-window, 0 18px 54px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.8));
   --p-dialog-title: rgba(0, 0, 0, 0.85);
   --p-dialog-copy: rgba(0, 0, 0, 0.85);
   --p-dialog-label: rgba(0, 0, 0, 0.5);
-  --p-alert-surface: rgba(245, 245, 245, 0.60);
-  --p-alert-action: rgba(255, 255, 255, 0.60);
-  --p-alert-action-pressed: rgba(255, 255, 255, 0.85);
-  --p-alert-title: rgba(0, 0, 0, 0.85);
-  --p-alert-copy: rgba(0, 0, 0, 0.85);
-  --p-alert-fallback: rgba(245, 245, 245, 0.98);
-  --p-bottom-sheet-bg: #f2f2f7;
-  --p-bottom-sheet-grabber: rgba(60, 60, 67, 0.30);
+  --p-dialog-divider: rgba(0, 0, 0, 0.1);
+  --p-dialog-zebra: rgba(0, 0, 0, 0.05);
+  --p-dialog-sidebar-bg: #e6e6e6;
+  --p-dialog-source-selected: rgba(0, 0, 0, 0.055);
+  --p-dialog-source-text: #1a1a1a;
+  --p-dialog-source-heading: #727272;
+  --p-dialog-source-icon: var(--p-vibrant-blue, #0078f0);
+  --p-dialog-toggle-bg: rgba(255, 255, 255, 0.85);
+  --p-sheet-edge: 0 0 transparent;
+  --p-alert-surface: var(--p-desktop-modal-surface);
+  --p-alert-action: rgba(0, 0, 0, 0.11);
+  --p-alert-action-pressed: rgba(0, 0, 0, 0.17);
+  --p-alert-title: #000000;
+  --p-alert-copy: #000000;
+  --p-alert-destructive: #ff383c;
+  --p-alert-field: rgba(0, 0, 0, 0.11);
+  --p-alert-field-separator: rgba(0, 0, 0, 0.145);
+  --p-alert-keyline: rgba(0, 0, 0, 0.55);
+  --p-alert-rim: rgba(255, 255, 255, 0.5);
+  --p-alert-side: rgba(0, 0, 0, 0.09);
+  --p-alert-glow: rgba(255, 255, 255, 0.55);
+  --p-alert-placeholder: rgba(60, 60, 67, 0.3);
+  --p-alert-fallback: var(--p-desktop-modal-fallback);
+  --p-bottom-sheet-bg: #ffffff;
+  --p-bottom-sheet-grabber: #cccccc;
   --p-bottom-sheet-title: rgba(0, 0, 0, 0.85);
 }
 
@@ -48,27 +67,51 @@
   --p-modal-bd-color: rgba(255, 255, 255, 0.14);
   --p-modal-fallback-color: rgba(32, 32, 34, 0.95);
   --p-modal-color: rgba(255, 255, 255, 0.92);
-  --p-desktop-modal-surface: rgba(58, 58, 62, 0.82);
+  --p-desktop-modal-shadow: var(--p-shadow-alert, 0 18px 48px rgba(0, 0, 0, 0.45));
+  --p-desktop-modal-surface: rgba(26, 26, 26, 0.9);
+  --p-desktop-modal-fallback: #1a1a1a;
+  --p-desktop-modal-keyline: rgba(0, 0, 0, 0.7);
+  --p-desktop-modal-rim: rgba(255, 255, 255, 0.2);
+  --p-desktop-modal-glow: rgba(255, 255, 255, 0.07);
+  --p-desktop-modal-glow-bottom: rgba(255, 255, 255, 0.06);
   --p-desktop-modal-underlay: #0f0f11;
   --p-desktop-modal-highlight: rgba(255, 255, 255, 0.08);
   --p-desktop-modal-title: rgba(255, 255, 255, 0.92);
   --p-desktop-modal-copy: rgba(255, 255, 255, 0.76);
-  --p-desktop-modal-secondary: rgba(255, 255, 255, 0.13);
-  --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.2);
+  --p-desktop-modal-primary: var(--p-control-accent, #0091ff);
+  --p-desktop-modal-primary-pressed: color-mix(in srgb, var(--p-desktop-modal-primary) 85%, #000);
+  --p-desktop-modal-secondary: rgba(255, 255, 255, 0.085);
+  --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.14);
+  --p-desktop-modal-destructive-label: var(--p-vibrant-red, #ff4747);
   --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.24);
-  --p-dialog-bg: #2c2c2e;
-  --p-dialog-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+  --p-dialog-bg: #1e1e1e;
+  --p-dialog-shadow: var(--p-shadow-window, 0 18px 54px rgba(0, 0, 0, 0.57), 0 0 1px rgba(0, 0, 0, 0.8));
   --p-dialog-title: rgba(255, 255, 255, 0.92);
   --p-dialog-copy: rgba(255, 255, 255, 0.76);
   --p-dialog-label: rgba(255, 255, 255, 0.55);
-  --p-alert-surface: rgba(38, 38, 38, 0.60);
-  --p-alert-action: rgba(118, 118, 128, 0.36);
-  --p-alert-action-pressed: rgba(118, 118, 128, 0.52);
+  --p-dialog-divider: rgba(255, 255, 255, 0.1);
+  --p-dialog-zebra: rgba(255, 255, 255, 0.05);
+  --p-dialog-sidebar-bg: #161616;
+  --p-dialog-source-selected: rgba(255, 255, 255, 0.055);
+  --p-dialog-source-text: rgba(255, 255, 255, 0.85);
+  --p-dialog-source-heading: rgba(255, 255, 255, 0.5);
+  --p-dialog-source-icon: var(--p-vibrant-blue, #0a99ff);
+  --p-dialog-toggle-bg: rgba(255, 255, 255, 0.1);
+  --p-sheet-edge: inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
+  --p-alert-surface: var(--p-desktop-modal-surface);
+  --p-alert-action: rgba(255, 255, 255, 0.065);
+  --p-alert-action-pressed: rgba(255, 255, 255, 0.12);
   --p-alert-title: rgba(255, 255, 255, 0.92);
   --p-alert-copy: rgba(255, 255, 255, 0.92);
-  --p-alert-fallback: rgba(38, 38, 38, 0.98);
+  --p-alert-destructive: #ff5257;
+  --p-alert-field: rgba(255, 255, 255, 0.065);
+  --p-alert-field-separator: rgba(255, 255, 255, 0.1);
+  --p-alert-keyline: var(--p-desktop-modal-keyline);
+  --p-alert-rim: var(--p-desktop-modal-rim);
+  --p-alert-side: transparent;
+  --p-alert-glow: var(--p-desktop-modal-glow);
+  --p-alert-placeholder: rgba(235, 235, 245, 0.3);
+  --p-alert-fallback: var(--p-desktop-modal-fallback);
   --p-bottom-sheet-bg: #1c1c1e;
   --p-bottom-sheet-grabber: rgba(235, 235, 245, 0.30);
   --p-bottom-sheet-title: rgba(255, 255, 255, 0.92);
@@ -80,27 +123,51 @@
     --p-modal-bd-color: rgba(255, 255, 255, 0.14);
     --p-modal-fallback-color: rgba(32, 32, 34, 0.95);
     --p-modal-color: rgba(255, 255, 255, 0.92);
-    --p-desktop-modal-surface: rgba(58, 58, 62, 0.82);
+    --p-desktop-modal-shadow: var(--p-shadow-alert, 0 18px 48px rgba(0, 0, 0, 0.45));
+    --p-desktop-modal-surface: rgba(26, 26, 26, 0.9);
+    --p-desktop-modal-fallback: #1a1a1a;
+    --p-desktop-modal-keyline: rgba(0, 0, 0, 0.7);
+    --p-desktop-modal-rim: rgba(255, 255, 255, 0.2);
+    --p-desktop-modal-glow: rgba(255, 255, 255, 0.07);
+    --p-desktop-modal-glow-bottom: rgba(255, 255, 255, 0.06);
     --p-desktop-modal-underlay: #0f0f11;
     --p-desktop-modal-highlight: rgba(255, 255, 255, 0.08);
     --p-desktop-modal-title: rgba(255, 255, 255, 0.92);
     --p-desktop-modal-copy: rgba(255, 255, 255, 0.76);
-    --p-desktop-modal-secondary: rgba(255, 255, 255, 0.13);
-    --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.2);
+    --p-desktop-modal-primary: var(--p-control-accent, #0091ff);
+    --p-desktop-modal-primary-pressed: color-mix(in srgb, var(--p-desktop-modal-primary) 85%, #000);
+    --p-desktop-modal-secondary: rgba(255, 255, 255, 0.085);
+    --p-desktop-modal-secondary-pressed: rgba(255, 255, 255, 0.14);
+    --p-desktop-modal-destructive-label: var(--p-vibrant-red, #ff4747);
     --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.24);
-    --p-dialog-bg: #2c2c2e;
-    --p-dialog-shadow:
-      0 16px 48px rgba(0, 0, 0, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.1);
+    --p-dialog-bg: #1e1e1e;
+    --p-dialog-shadow: var(--p-shadow-window, 0 18px 54px rgba(0, 0, 0, 0.57), 0 0 1px rgba(0, 0, 0, 0.8));
     --p-dialog-title: rgba(255, 255, 255, 0.92);
     --p-dialog-copy: rgba(255, 255, 255, 0.76);
     --p-dialog-label: rgba(255, 255, 255, 0.55);
-    --p-alert-surface: rgba(38, 38, 38, 0.60);
-    --p-alert-action: rgba(118, 118, 128, 0.36);
-    --p-alert-action-pressed: rgba(118, 118, 128, 0.52);
+    --p-dialog-divider: rgba(255, 255, 255, 0.1);
+    --p-dialog-zebra: rgba(255, 255, 255, 0.05);
+    --p-dialog-sidebar-bg: #161616;
+    --p-dialog-source-selected: rgba(255, 255, 255, 0.055);
+    --p-dialog-source-text: rgba(255, 255, 255, 0.85);
+    --p-dialog-source-heading: rgba(255, 255, 255, 0.5);
+    --p-dialog-source-icon: var(--p-vibrant-blue, #0a99ff);
+    --p-dialog-toggle-bg: rgba(255, 255, 255, 0.1);
+    --p-sheet-edge: inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
+    --p-alert-surface: var(--p-desktop-modal-surface);
+    --p-alert-action: rgba(255, 255, 255, 0.065);
+    --p-alert-action-pressed: rgba(255, 255, 255, 0.12);
     --p-alert-title: rgba(255, 255, 255, 0.92);
     --p-alert-copy: rgba(255, 255, 255, 0.92);
-    --p-alert-fallback: rgba(38, 38, 38, 0.98);
+    --p-alert-destructive: #ff5257;
+    --p-alert-field: rgba(255, 255, 255, 0.065);
+    --p-alert-field-separator: rgba(255, 255, 255, 0.1);
+    --p-alert-keyline: var(--p-desktop-modal-keyline);
+    --p-alert-rim: var(--p-desktop-modal-rim);
+    --p-alert-side: transparent;
+    --p-alert-glow: var(--p-desktop-modal-glow);
+    --p-alert-placeholder: rgba(235, 235, 245, 0.3);
+    --p-alert-fallback: var(--p-desktop-modal-fallback);
     --p-bottom-sheet-bg: #1c1c1e;
     --p-bottom-sheet-grabber: rgba(235, 235, 245, 0.30);
     --p-bottom-sheet-title: rgba(255, 255, 255, 0.92);
@@ -115,27 +182,53 @@
   --p-modal-bd-color: rgba(0, 0, 0, 0.1);
   --p-modal-fallback-color: rgba(255, 255, 255, 0.95);
   --p-modal-color: #1d1d1f;
-  --p-desktop-modal-surface: #f5f5f5;
+  --p-desktop-modal-shadow: var(--p-shadow-alert, 0 18px 48px rgba(0, 0, 0, 0.25));
+  --p-desktop-modal-surface: rgba(247, 247, 247, 0.73);
+  --p-desktop-modal-fallback: #ebebeb;
+  --p-desktop-modal-keyline: rgba(0, 0, 0, 0.34);
+  --p-desktop-modal-rim: rgba(255, 255, 255, 0.95);
+  --p-desktop-modal-glow: rgba(255, 255, 255, 0.85);
+  --p-desktop-modal-glow-bottom: rgba(255, 255, 255, 0.6);
   --p-desktop-modal-underlay: #262626;
   --p-desktop-modal-highlight: rgba(255, 255, 255, 0.16);
   --p-desktop-modal-title: rgba(0, 0, 0, 0.85);
   --p-desktop-modal-copy: rgba(0, 0, 0, 0.85);
-  --p-desktop-modal-secondary: #e6e6e6;
-  --p-desktop-modal-secondary-pressed: #d8d8d8;
+  --p-desktop-modal-primary: var(--p-control-accent, #0088ff);
+  --p-desktop-modal-primary-pressed: color-mix(in srgb, var(--p-desktop-modal-primary) 88%, #000);
+  --p-desktop-modal-secondary: rgba(0, 0, 0, 0.1);
+  --p-desktop-modal-secondary-pressed: rgba(0, 0, 0, 0.16);
+  --p-desktop-modal-destructive-label: var(--p-vibrant-red-resolved, #e11b1e);
   --p-desktop-modal-backdrop: rgba(0, 0, 0, 0.18);
   --p-dialog-bg: #fff;
-  --p-dialog-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.23);
+  --p-dialog-shadow: var(--p-shadow-window, 0 18px 54px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.8));
   --p-dialog-title: rgba(0, 0, 0, 0.85);
   --p-dialog-copy: rgba(0, 0, 0, 0.85);
   --p-dialog-label: rgba(0, 0, 0, 0.5);
-  --p-alert-surface: rgba(245, 245, 245, 0.60);
-  --p-alert-action: rgba(255, 255, 255, 0.60);
-  --p-alert-action-pressed: rgba(255, 255, 255, 0.85);
-  --p-alert-title: rgba(0, 0, 0, 0.85);
-  --p-alert-copy: rgba(0, 0, 0, 0.85);
-  --p-alert-fallback: rgba(245, 245, 245, 0.98);
-  --p-bottom-sheet-bg: #f2f2f7;
-  --p-bottom-sheet-grabber: rgba(60, 60, 67, 0.30);
+  --p-dialog-divider: rgba(0, 0, 0, 0.1);
+  --p-dialog-zebra: rgba(0, 0, 0, 0.05);
+  --p-dialog-sidebar-bg: #e6e6e6;
+  --p-dialog-source-selected: rgba(0, 0, 0, 0.055);
+  --p-dialog-source-text: #1a1a1a;
+  --p-dialog-source-heading: #727272;
+  --p-dialog-source-icon: var(--p-vibrant-blue, #0078f0);
+  --p-dialog-toggle-bg: rgba(255, 255, 255, 0.85);
+  --p-sheet-edge: 0 0 transparent;
+  --p-alert-surface: var(--p-desktop-modal-surface);
+  --p-alert-action: rgba(0, 0, 0, 0.11);
+  --p-alert-action-pressed: rgba(0, 0, 0, 0.17);
+  --p-alert-title: #000000;
+  --p-alert-copy: #000000;
+  --p-alert-destructive: #ff383c;
+  --p-alert-field: rgba(0, 0, 0, 0.11);
+  --p-alert-field-separator: rgba(0, 0, 0, 0.145);
+  --p-alert-keyline: rgba(0, 0, 0, 0.55);
+  --p-alert-rim: rgba(255, 255, 255, 0.5);
+  --p-alert-side: rgba(0, 0, 0, 0.09);
+  --p-alert-glow: rgba(255, 255, 255, 0.55);
+  --p-alert-placeholder: rgba(60, 60, 67, 0.3);
+  --p-alert-fallback: var(--p-desktop-modal-fallback);
+  --p-bottom-sheet-bg: #ffffff;
+  --p-bottom-sheet-grabber: #cccccc;
   --p-bottom-sheet-title: rgba(0, 0, 0, 0.85);
 }
 
@@ -246,49 +339,58 @@
   transform: translate(-50%, -50%) scale(1);
 }
 
+/* macOS 27 alert surface: the shared overlay glass. A translucent
+   neutral over blur, a dark 0.5px keyline just outside the edge, a
+   bright 1px line on the inside top and bottom (sides keyline only),
+   and a soft ~8px glow that follows the top and bottom curves. The
+   glow is the reference's paired ±40px inner shadows, which CSS can
+   express directly: an inset shadow whose hole is grown 40px and
+   shifted 40px leaves only the one edge lit. */
 .p-desktop-modal__surface {
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
   background: var(--p-desktop-modal-surface);
   border-radius: var(--p-desktop-modal-radius);
   box-shadow:
     var(--p-desktop-modal-shadow),
-    0 8px 40px rgba(0, 0, 0, 0.12),
-    inset 0 0 0 0.5px var(--p-desktop-modal-highlight);
+    0 0 0 0.5px var(--p-desktop-modal-keyline),
+    inset 0 1px 0 var(--p-desktop-modal-rim),
+    inset 0 -1px 0 var(--p-desktop-modal-rim),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom),
+    inset 0 -40px 6px -40px var(--p-desktop-modal-glow-bottom);
+  box-sizing: border-box;
   overflow: hidden;
   padding: 20px 16px 16px;
   position: relative;
 }
 
-.p-desktop-modal__surface::before {
-  background: var(--p-desktop-modal-underlay);
-  border-radius: inherit;
-  content: "";
-  inset: 0;
-  mix-blend-mode: color-dodge;
-  pointer-events: none;
-  position: absolute;
-}
-
+/* The v1 color-dodge underlay and screen wash are retired: the 27
+   material is a plain translucent fill. The pseudo-elements stay
+   declared (empty) so overrides that target them keep matching. */
+.p-desktop-modal__surface::before,
 .p-desktop-modal__surface::after {
-  background: rgba(0, 0, 0, 0.2);
   border-radius: inherit;
-  content: "";
-  inset: 0;
-  mix-blend-mode: screen;
+  content: none;
   pointer-events: none;
-  position: absolute;
 }
 
-.p-desktop-modal__surface .p-desktop-modal__body,
-.p-desktop-modal__surface .p-desktop-modal__actions {
+.p-desktop-modal__surface .p-desktop-modal__body {
   z-index: 2;
 }
 
+/* The actions row stays out of the stacking order so the vibrant
+   button layers (z-index: -1) composite onto the surface itself. */
+.p-desktop-modal__surface .p-desktop-modal__actions {
+  z-index: auto;
+}
+
 .p-desktop-modal--stacked .p-desktop-modal__surface {
-  min-height: 218px;
+  min-height: 216px;
 }
 
 .p-desktop-modal--split .p-desktop-modal__surface {
-  min-height: 154px;
+  min-height: 152px;
 }
 
 .p-desktop-modal__body,
@@ -301,7 +403,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 6px 2px;
+  padding: 0 6px;
 }
 
 .p-desktop-modal__title {
@@ -404,19 +506,35 @@
   background: var(--p-desktop-modal-secondary-pressed);
 }
 
+/* Destructive is vibrant: the vibrant red (#F52F32 light, #FF4747
+   dark) composited onto the alert glass at 23% (31% hovered or
+   pressed). The alert surface is a known color, so the composite is
+   written flat with the resolved red (--p-vibrant-red-resolved), which
+   lands on the reference in every engine; a live blend against the
+   translucent glass does not. In light mode the label goes through the
+   same blend (resolved red, #E11B1E); in dark mode it is plain #FF4747. */
 .p-desktop-modal__action--destructive {
-  background: var(--p-desktop-modal-destructive-bg);
-  color: var(--p-desktop-modal-destructive-text);
+  background: color-mix(in srgb, var(--p-vibrant-red-resolved, #e11b1e) 23%, transparent);
+  color: var(--p-desktop-modal-destructive-label);
 }
 
 .p-desktop-modal__action--destructive:hover,
 .p-desktop-modal__action--destructive:active {
-  background: var(--p-desktop-modal-destructive-bg-pressed);
+  background: color-mix(in srgb, var(--p-vibrant-red-resolved, #e11b1e) 31%, transparent);
 }
 
-/* Dialog window (macOS 26 Save Dialog surface). Opaque white, radius 26.
-   Opens through the same modal manager: .p-modal.p-dialog + .active. */
+/* Dialog window (macOS 27 Save Dialog surface). Opaque white, radius 16
+   (smoothed), the window shadow plus its 1px keyline.
+   Opens through the same modal manager: .p-modal.p-dialog + .active.
+
+   Compact form metrics: a 99px right-aligned label column, 8px gutter,
+   223px controls, 36px row pitch (24px control + 12px gap). With a form
+   inside, the title and message align to the control column. */
 .p-dialog {
+  --p-dialog-label-width: 99px;
+  --p-dialog-field-width: 223px;
+  --p-dialog-row-gap: 12px;
+
   background: var(--p-dialog-bg);
   border-radius: var(--p-dialog-radius);
   box-shadow: var(--p-dialog-shadow);
@@ -462,15 +580,24 @@
   font-size: 11px;
   letter-spacing: 0;
   line-height: 14px;
-  margin: 4px 0 0;
+  margin: 6px 0 0;
+}
+
+/* A dialog with a form lines its heading up with the controls. */
+.p-dialog:has(> .p-dialog__form) > .p-dialog__title,
+.p-dialog:has(> .p-dialog__form) > .p-dialog__message,
+.p-sheet:has(> .p-dialog__form) > .p-dialog__title,
+.p-sheet:has(> .p-dialog__form) > .p-dialog__message {
+  max-width: calc(var(--p-dialog-label-width) + 8px + var(--p-dialog-field-width));
+  padding-left: calc(var(--p-dialog-label-width) + 8px);
 }
 
 .p-dialog__form {
   align-items: center;
   display: grid;
-  gap: 6px 8px;
-  grid-template-columns: max-content minmax(0, 1fr);
-  margin-top: 10px;
+  gap: var(--p-dialog-row-gap) 8px;
+  grid-template-columns: var(--p-dialog-label-width) minmax(0, var(--p-dialog-field-width));
+  margin-top: 20px;
 }
 
 .p-dialog__label {
@@ -481,27 +608,300 @@
   text-align: right;
 }
 
+/* A control with a trailing companion, like the Where popup and its
+   24px disclosure button: the first child takes the rest (191px). */
+.p-dialog__control-group {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.p-dialog__control-group > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.p-dialog__control-group > :not(:first-child) {
+  flex: none;
+}
+
 .p-dialog__footer {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .p-dialog__footer-leading {
   margin-right: auto;
 }
 
-/* Sheet: identical surface, attached to the top of its host. Position it
+/* ─── Expanded dialog (the full Save panel) ─────────────────────────
+   1000×448. A flush sidebar runs the full height of the window's
+   leading edge and carries the traffic lights and a round sidebar
+   toggle; the main pane stacks the centered form, a toolbar row, the
+   file browser (flush to the pane edges, 1px keylines above and below)
+   and the footer. Rows in the browser are 20px zebra stripes with 8px
+   rounded ends, inset 10px. */
+.p-dialog--expanded {
+  --p-dialog-field-width: 229px;
+  --p-dialog-row-gap: 13px;
+
+  display: flex;
+  height: 448px;
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
+  padding: 0;
+  width: 1000px;
+}
+
+.p-dialog__sidebar {
+  background: var(--p-dialog-sidebar-bg);
+  display: flex;
+  flex: 0 0 210px;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 10px 10px;
+}
+
+/* 52px band: traffic lights at 19,19 (reusing .p-traffic-lights from
+   windows.css, sized to the 14px sheet lights) and the 36px toggle
+   8px in from the top and trailing edge. */
+.p-dialog__sidebar-header {
+  flex: none;
+  height: 52px;
+  margin: 0 -10px;
+  position: relative;
+}
+
+.p-dialog__sidebar-header .p-traffic-lights {
+  display: flex;
+  gap: 9px;
+  left: 19px;
+  margin: 0;
+  position: absolute;
+  top: 19px;
+  transform: none;
+}
+
+.p-dialog__sidebar-header .p-traffic-light {
+  height: 14px;
+  width: 14px;
+}
+
+.p-dialog__sidebar-toggle {
+  align-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(10px) saturate(180%);
+  background: var(--p-dialog-toggle-bg);
+  border: 0;
+  border-radius: 50%;
+  box-shadow:
+    var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.04)),
+    var(--p-glass-edge, 0 0 0 0.5px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(255, 255, 255, 0.9));
+  color: var(--p-dialog-source-text);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 15px;
+  height: 36px;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 36px;
+}
+
+.p-dialog__sidebar-toggle:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 1px;
+}
+
+.p-dialog__source-heading {
+  color: var(--p-dialog-source-heading);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 14px;
+  margin: 0;
+  padding: 17px 8px 8px;
+}
+
+.p-dialog__source {
+  align-items: center;
+  border-radius: 8px;
+  color: var(--p-dialog-source-text);
+  display: flex;
+  flex: none;
+  font-size: 11px;
+  font-weight: 510;
+  gap: 8px;
+  height: 24px;
+  padding: 0 8px 0 7px;
+  text-decoration: none;
+}
+
+.p-dialog__source:hover {
+  background: var(--p-dialog-zebra);
+}
+
+.p-dialog__source[aria-current],
+.p-dialog__source.is-selected {
+  background: var(--p-dialog-source-selected);
+}
+
+.p-dialog__source:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+.p-dialog__source-icon {
+  color: var(--p-dialog-source-icon);
+  flex: none;
+  font-size: 13px;
+  text-align: center;
+  width: 17px;
+}
+
+.p-dialog__main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px 0;
+}
+
+/* Centre the control column in the pane; labels hang to its left. */
+.p-dialog--expanded .p-dialog__form {
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--p-dialog-field-width)) minmax(0, 1fr);
+  margin: 0 20px;
+}
+
+.p-dialog--expanded .p-dialog__form > .p-dialog__label {
+  grid-column: 1;
+}
+
+.p-dialog--expanded .p-dialog__form > :not(.p-dialog__label) {
+  grid-column: 2;
+}
+
+.p-dialog__toolbar {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: 8px;
+  margin-top: 19px;
+  min-height: 24px;
+  padding: 0 20px;
+}
+
+.p-dialog__toolbar-spacer {
+  flex: 1;
+}
+
+.p-dialog__browser {
+  border-block: 1px solid var(--p-dialog-divider);
+  flex: 1 1 auto;
+  margin-top: 12px;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 10px 8px;
+}
+
+.p-dialog__files {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--p-dialog-label);
+  font-size: 13px;
+  font-weight: 510;
+  width: 100%;
+}
+
+/* 28px header plus a 3px gap before the first row; the 1px rule sits
+   on the header's bottom edge. Column dividers are 1px x 14px. */
+.p-dialog__files th {
+  background:
+    linear-gradient(var(--p-dialog-divider), var(--p-dialog-divider)) left 7px / 1px 14px no-repeat;
+  border-bottom: 1px solid var(--p-dialog-divider);
+  color: var(--p-dialog-label);
+  font-size: 11px;
+  font-weight: 510;
+  height: 28px;
+  line-height: 14px;
+  padding: 0 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.p-dialog__files th:first-child {
+  background: none;
+  color: var(--p-dialog-title);
+  font-weight: 700;
+}
+
+.p-dialog__files tbody::before {
+  content: "";
+  display: block;
+  height: 3px;
+}
+
+.p-dialog__files td {
+  height: 20px;
+  line-height: 16px;
+  overflow: hidden;
+  padding: 0 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p-dialog__files td:first-child {
+  color: var(--p-dialog-title);
+}
+
+.p-dialog__files tbody tr:nth-child(odd) td {
+  background: var(--p-dialog-zebra);
+}
+
+.p-dialog__files tbody tr td:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.p-dialog__files tbody tr td:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.p-dialog__files tbody tr[aria-selected="true"] td {
+  background: var(--p-desktop-modal-primary);
+  color: #fff;
+}
+
+.p-dialog__files .p-dialog__files-num {
+  text-align: right;
+}
+
+.p-dialog--expanded .p-dialog__footer {
+  margin-top: 12px;
+  padding: 0 20px;
+}
+
+/* Sheet: the dialog surface, attached to the top of its host. Position it
    inside a .p-sheet-host (or the viewport when used directly). */
 .p-sheet-host {
   position: relative;
 }
 
 .p-sheet {
+  --p-dialog-label-width: 99px;
+  --p-dialog-field-width: 223px;
+  --p-dialog-row-gap: 12px;
+
   background: var(--p-dialog-bg);
   border-radius: var(--p-dialog-radius);
-  box-shadow: var(--p-dialog-shadow);
+  /* Dark sheets add a 0.5px white inner stroke (--p-sheet-edge). */
+  box-shadow: var(--p-dialog-shadow), var(--p-sheet-edge);
   box-sizing: border-box;
   color: var(--p-dialog-copy);
   font-family: var(--font);
@@ -533,14 +933,15 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-alert
-   The iOS alert. 300px wide over a material, with capsule actions
-   rather than the divided full-width rows of earlier iOS. Reuses the
-   .p-modal manager: the same open/close attributes, focus trap, and
-   Escape handling as every other modal.
+   The iOS 27 alert. 300px wide, with capsule actions rather than the
+   divided full-width rows of earlier iOS. Reuses the .p-modal manager:
+   the same open/close attributes, focus trap, and Escape handling as
+   every other modal.
 
-   Radius is 34px. The reference geometry is a squircle whose span
-   measures 54.4px; the same 1.6 ratio the desktop surfaces use, so
-   both resolve to the same shape under corner-shape below.
+   iOS 27 puts the alert on the same overlay glass as the macOS 27
+   alert: the --p-desktop-modal surface, keyline, rims and glows, with
+   the softer --p-shadow-overlay drop shadow. Radius is a plain 34px
+   arc (iOS 26 drew a smoothed squircle; 27 does not).
    ═════════════════════════════════════════════════════════════════════ */
 
 .p-alert {
@@ -584,16 +985,31 @@
   border-radius: var(--p-alert-radius);
 
   background: var(--p-alert-surface);
-  -webkit-backdrop-filter: saturate(180%) blur(30px);
-  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  /* The .p-desktop-modal__surface stack, with the overlay shadow. The
+     light keyline, rim and top glow are tuned to the iOS sheet (a
+     softer 1px rim, a darker hairline, and the faint darkening the
+     ±1.25px side rims leave inside each side); dark reuses the
+     desktop values unchanged. */
   box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.24),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+    var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+    0 0 0 0.5px var(--p-alert-keyline),
+    inset 0 1px 0 var(--p-alert-rim),
+    inset 0 -1px 0 var(--p-alert-rim),
+    inset 1px 0 0 var(--p-alert-side),
+    inset -1px 0 0 var(--p-alert-side),
+    inset 0 40px 10px -40px var(--p-alert-glow),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom),
+    inset 0 -40px 6px -40px var(--p-desktop-modal-glow-bottom);
 }
 
+/* Left-aligned, like iOS 26 already was: the title's first line sits
+   22px in from the top and left edges, and the message 10px under it.
+   24px separates the text from whatever follows. */
 .p-alert__body {
-  padding: 16px 12px 18px;
-  text-align: center;
+  padding: 8px 8px 24px;
+  text-align: left;
 }
 
 .p-alert__title {
@@ -606,7 +1022,7 @@
 }
 
 .p-alert__message {
-  margin: 4px 0 0;
+  margin: 10px 0 0;
   color: var(--p-alert-copy);
   font-size: 17px;
   font-weight: 400;
@@ -614,12 +1030,63 @@
   letter-spacing: -0.43px;
 }
 
+/* Text-field block: one or two inset rows on a quiet fill, 272px wide
+   (the surface's 14px inset), 52px per row, 26px corners, and a 1px
+   separator inset 16px between rows. It sits 24px under the message
+   and 19px above the actions. */
+.p-alert__fields {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 19px;
+  border-radius: 26px;
+  overflow: hidden;
+  background: var(--p-alert-field);
+}
+
+.p-alert__field {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  height: 52px;
+  margin: 0;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--p-alert-title);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+.p-alert__field:not(:last-child) {
+  background:
+    linear-gradient(var(--p-alert-field-separator), var(--p-alert-field-separator))
+    16px 100% / calc(100% - 32px) 1px no-repeat;
+}
+
+.p-alert__field::placeholder {
+  color: var(--p-alert-placeholder);
+  opacity: 1;
+}
+
+/* The block clips its rows, so focus is drawn on the block itself. */
+.p-alert__fields:focus-within {
+  outline: 3px solid color-mix(in oklch, var(--p-desktop-modal-primary) 50%, transparent);
+  outline-offset: 1px;
+}
+
 /* Two actions sit side by side, three or more stack. iOS makes the same
    call, and :has() lets the markup stay identical either way. Browsers
-   without :has() keep the row, which is the common case. */
+   without :has() keep the row, which is the common case. Both
+   arrangements leave 8px between capsules. */
 .p-alert__actions {
   display: flex;
-  gap: 16px;
+  gap: 8px;
 }
 
 .p-alert__actions:has(> :nth-child(3)),
@@ -652,7 +1119,7 @@
 
   font-family: inherit;
   font-size: 17px;
-  font-weight: 510;
+  font-weight: 590;
   letter-spacing: -0.43px;
   line-height: 1;
   text-align: center;
@@ -685,9 +1152,11 @@
 }
 
 /* Destructive keeps the quiet fill and turns the label red, so the
-   dangerous action never becomes the most prominent thing on screen. */
+   dangerous action never becomes the most prominent thing on screen.
+   iOS keeps the system red (#FF383C, lifted to #FF5257 in dark), not
+   the macOS 27 vibrant red the desktop alert uses. */
 .p-alert__action--destructive {
-  color: var(--p-desktop-modal-destructive-text);
+  color: var(--p-alert-destructive);
 }
 
 /* ═════════════════════════════════════════════════════════════════════
@@ -702,6 +1171,9 @@
 
    Composes with .p-modal, so the open/close attributes, focus trap,
    and Escape handling are the shared ones.
+
+   Top corners are a plain 38px arc (not a squircle), the light
+   surface is opaque white, and the grabber is a flat #CCCCCC.
    ═════════════════════════════════════════════════════════════════════ */
 
 .p-bottom-sheet {
@@ -824,14 +1296,6 @@
   }
 }
 
-/* Same 1.6 ratio the other v2 surfaces use: 38px arc, 60.8px squircle. */
-@supports (corner-shape: superellipse(1.465)) {
-  .p-bottom-sheet {
-    border-radius: 60.8px 60.8px 0 0;
-    corner-shape: superellipse(1.465);
-  }
-}
-
 @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
   .p-modal-background::before {
     -webkit-backdrop-filter: none;
@@ -843,26 +1307,7 @@
   }
 
   .p-desktop-modal__surface {
-    background: rgba(245, 245, 245, 0.98);
-    box-shadow:
-      0 17px 45px rgba(0, 0, 0, 0.32),
-      0 0 1px rgba(0, 0, 0, 0.2);
-  }
-
-  .p-dark-mode .p-desktop-modal__surface,
-  [data-p-theme="darkmode"] .p-desktop-modal__surface {
-    background: rgba(44, 44, 48, 0.98);
-    box-shadow:
-      0 17px 45px rgba(0, 0, 0, 0.42),
-      0 0 1px rgba(0, 0, 0, 0.2);
-  }
-
-  .p-light-mode .p-desktop-modal__surface,
-  [data-p-theme="lightmode"] .p-desktop-modal__surface {
-    background: rgba(245, 245, 245, 0.98);
-    box-shadow:
-      0 17px 45px rgba(0, 0, 0, 0.32),
-      0 0 1px rgba(0, 0, 0, 0.2);
+    background: var(--p-desktop-modal-fallback);
   }
 
   .p-alert__surface {
@@ -873,6 +1318,12 @@
 /* Reduced transparency: an opaque surface, and quiet fills that no
    longer rely on what is behind them. */
 @media (prefers-reduced-transparency: reduce) {
+  .p-desktop-modal__surface {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-desktop-modal-fallback);
+  }
+
   .p-alert__surface {
     background: var(--p-alert-fallback);
     -webkit-backdrop-filter: none;
@@ -938,26 +1389,101 @@
 }
 
 /* Squircle corners where corner-shape ships (Chromium 139+): the
-   26px-radius surfaces are smoothed squircles natively (60% smoothing
-   → span 41.6px, superellipse exponent solved at 1.465 so the 45°
-   curvature stays 26px). Other browsers keep the plain 26px arc. */
+   16px dialog and sheet are smoothed squircles natively. The reference
+   exports them with a 25.6px handle span (16 x 1.6), but measured edge
+   profiles of the rendered corners fit superellipse(1.465) at 21px
+   (0.4px RMS across four corners) and miss badly at 25.6px (7.9px), so
+   21px is the value. Other browsers keep the plain 16px arc, which is
+   within 1.4px. The macOS 27 desktop alert and the iOS 27 alert are
+   plain 34px arcs, so they stay out. */
 @supports (corner-shape: superellipse(1.465)) {
   :root {
-    --p-desktop-modal-radius: 41.6px;
-    --p-dialog-radius: 41.6px;
+    --p-dialog-radius: 21px;
   }
 
-  .p-desktop-modal__surface,
-  .p-desktop-modal__surface::before,
-  .p-desktop-modal__surface::after,
   .p-dialog,
   .p-sheet {
     corner-shape: superellipse(1.465);
   }
 
-  /* Same 1.6 ratio: the alert's 34px arc becomes a 54.4px squircle. */
-  .p-alert__surface {
-    border-radius: 54.4px;
+  /* The iOS 27 alert is a plain 34px arc and stays out. Its text-field
+     block keeps the smoothed 26px corner (41.6px span). */
+  .p-alert__fields {
+    border-radius: 41.6px;
     corner-shape: superellipse(1.465);
+  }
+}
+
+/* Increased contrast: a solid keyline and an opaque alert surface, so
+   the overlay edge never depends on the shadow or the backdrop. */
+@media (prefers-contrast: more) {
+  .p-desktop-modal__surface {
+    background: var(--p-desktop-modal-fallback);
+    box-shadow:
+      var(--p-desktop-modal-shadow),
+      0 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+
+  .p-dark-mode .p-desktop-modal__surface,
+  [data-p-theme="darkmode"] .p-desktop-modal__surface {
+    box-shadow:
+      var(--p-desktop-modal-shadow),
+      0 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .p-auto-dark-mode .p-desktop-modal__surface {
+      box-shadow:
+        var(--p-desktop-modal-shadow),
+        0 0 0 1px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .p-dialog,
+  .p-sheet {
+    box-shadow: var(--p-dialog-shadow), 0 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+
+  .p-dialog__files th,
+  .p-dialog__browser {
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .p-alert__surface {
+    background: var(--p-alert-fallback);
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+      0 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+
+  .p-dark-mode .p-alert__surface,
+  [data-p-theme="darkmode"] .p-alert__surface {
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45)),
+      0 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .p-auto-dark-mode .p-alert__surface {
+      box-shadow:
+        var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45)),
+        0 0 0 1px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .p-alert__field:not(:last-child) {
+    background:
+      linear-gradient(currentColor, currentColor)
+      16px 100% / calc(100% - 32px) 1px no-repeat;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-desktop-modal__surface,
+  .p-alert__surface,
+  .p-alert__fields,
+  .p-dialog,
+  .p-sheet {
+    border: 1px solid CanvasText;
   }
 }

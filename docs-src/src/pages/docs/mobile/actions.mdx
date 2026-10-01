@@ -54,15 +54,16 @@ Keep the list short. Seven rows is the practical ceiling before it stops reading
 | Part | Value |
 |---|---|
 | Width | 300px, capped at `100vw - 32px` |
-| Radius | 34px |
-| Surface | `rgba(245,245,245,0.60)` light, `rgba(38,38,38,0.60)` dark, blur 30px, saturate 180% |
+| Radius | 34px, a plain arc |
+| Surface | The alert's overlay glass: `rgba(247,247,247,0.73)` light, `rgba(26,26,26,0.9)` dark, blur 30px, saturate 180%, with the same hairline, rims and glow |
+| Shadow | `0 8px 48px rgba(0,0,0,0.25)` (`--p-shadow-overlay`) |
 | Padding | 14px, plus `max(16px, env(safe-area-inset-bottom))` below the panel |
-| Header | Left aligned, 6px / 4px / 14px padding |
+| Header | Left aligned; the title's first line 22px from the top and left edges, 24px above the first row |
 | Title | 17px, weight 590, line height 22px, tracking -0.43px |
-| Message | 17px, weight 400, `--p-action-sheet-copy` |
-| Row | 272px wide at the default width, 48px tall, 24px radius |
-| Row fill | `rgba(120,120,128,0.16)` light, `rgba(120,120,128,0.32)` dark |
-| Row gap | 10px, and 8px extra above Cancel |
+| Message | 17px, weight 400, same color as the title, 10px below it |
+| Row | 272px wide at the default width, 48px tall, 24px radius, label 17px at weight 590 |
+| Row fill | `rgba(0,0,0,0.11)` light, `rgba(255,255,255,0.065)` dark |
+| Row gap | 8px, and 8px extra above Cancel |
 | Entry | 0.28s slide from 16px below, `cubic-bezier(0.22, 1, 0.36, 1)` |
 
 <Showcase
@@ -151,7 +152,7 @@ The header is optional. Drop `.p-action-sheet__header` when the rows explain the
 
 ## Dark mode
 
-The surface moves to `rgba(38,38,38,0.60)`, rows go from 16% to 32%, and the destructive red shifts from `#FF383C` to `#FF4245`. The blur is unchanged.
+The surface moves to the dark overlay glass, `rgba(26,26,26,0.9)`, rows become a faint lift of `rgba(255,255,255,0.065)`, and the destructive red lightens from `#FF383C` to `#FF5257`. The blur is unchanged.
 
 ## Accessibility
 
@@ -161,7 +162,7 @@ The panel clears the home indicator through `env(safe-area-inset-bottom)`, falli
 
 Reduced motion removes the slide and leaves a 0.25s fade. Reduced transparency and browsers without `backdrop-filter` both get an opaque surface, because text over a translucent panel on arbitrary content cannot be guaranteed to meet 4.5:1.
 
-Corner shape upgrades to a real squircle where `corner-shape` ships: the 34px arc becomes a 54.4px superellipse, the same ratio the alert and the desktop surfaces use.
+The 34px corner is a plain arc, as iOS draws it, matching the alert. Increased contrast swaps the glass edge for a solid 1px keyline over an opaque surface.
 
 ## Share sheets
 

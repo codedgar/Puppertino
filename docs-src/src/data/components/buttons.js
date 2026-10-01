@@ -24,7 +24,7 @@ export default {
       id: 'secondary',
       label: 'Secondary',
       code: '<button class="p-button p-button-secondary">Secondary</button>',
-      use: 'A tinted variant of Colored. Background sits at 12% of the tint, text uses the full tint. Use it for affirmative actions that should not steal focus from a primary.',
+      use: 'A tinted variant of Colored. Background sits at 20% of the tint, text uses the full tint. Use it for affirmative actions that should not steal focus from a primary.',
     },
     {
       id: 'destructive',
@@ -42,7 +42,7 @@ export default {
       id: 'borderless',
       label: 'Borderless',
       code: '<button class="p-button p-button-borderless">Borderless</button>',
-      use: 'Text only. Use it for tertiary actions that should feel like links inside a dense interface. Toolbar overflow menus, footer affordances, “Show more” toggles.',
+      use: 'Text only, in the accent, with no background in any state. Pressing darkens the label. Use it for tertiary actions that should feel like links inside a dense interface. Toolbar overflow menus, footer affordances, “Show more” toggles.',
     },
   ],
   tokens: [
@@ -52,6 +52,8 @@ export default {
     { token: '--p-button-font-size', value: '13px', note: 'Matches macOS body.' },
     { token: '--p-button-font-weight', value: '510', note: 'Apple’s "system medium." Large bumps to 590.' },
     { token: '--p-button-icon-size', value: '13px', note: 'Matches the label. SVG and <i> children both scale to this token.' },
-    { token: '--p-button-default-tint', value: '#0D6FFF', note: 'The macOS 26 button blue, used when no color class is set.' },
+    { token: '--p-button-default-tint', value: 'var(--p-control-accent)', note: 'The control accent, #0088FF light and #0091FF dark. Used when no color class is set.' },
+    { token: '--p-button-fill', value: 'rgba(0,0,0,0.08)', note: 'Gray fill for Default and Tinted. White at 7% in dark mode.' },
+    { token: '--p-button-tint-mix', value: '20%', note: 'Accent share of the Secondary and Destructive washes. 22% in dark mode.' },
   ],
 };

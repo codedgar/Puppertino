@@ -55,7 +55,7 @@ import modalsScript from '../../../../../src/js/modals.js?url';
   </div>
 </div>
 
-Desktop modals in Puppertino are compact alert dialogs for pointer-driven interfaces: a frosted glass body, 260px width, 26px radius, and pill actions arranged either as a vertical stack or a horizontal pair.
+Desktop modals in Puppertino are compact alert dialogs for pointer-driven interfaces: a translucent glass body, 260px width, 34px radius, and pill actions arranged either as a vertical stack or a horizontal pair.
 
 ## When to use them
 
@@ -117,7 +117,7 @@ Two alert layouts are available:
 | `.p-modal-background` | Shared backdrop layer for all modals on the page. |
 | `.p-modal` | Base modal hook used by the JS manager. |
 | `.p-desktop-modal` | Desktop alert shell. Centers the modal and handles the open transition. |
-| `.p-desktop-modal__surface` | Glass card surface, radius, stroke, and shadow. |
+| `.p-desktop-modal__surface` | Glass surface. Radius 34, keyline, inner top and bottom highlight, and shadow. |
 | `.p-desktop-modal__body` | Title and description group. |
 | `.p-desktop-modal__actions` | Action row or stack. |
 | `.p-desktop-modal__action` | Shared pill button styling for alert actions. |
@@ -200,6 +200,18 @@ PuppertinoModalManager.closeModal("#example-modal");
 PuppertinoModalManager.isModalOpen("#example-modal");
 ```
 
+## Surface
+
+The surface is `rgba(247, 247, 247, 0.73)` over a 30px blur, so the backdrop shows through at roughly a quarter strength. A 0.5px dark keyline sits just outside the edge. A bright 1px line runs along the inside of the top and bottom edges, fading into a soft glow about 8px deep; the sides get the keyline only. The shadow is `0 18px 48px` at 25%. The radius is a plain 34px arc.
+
+The body sits 20px from the top and 16px from the sides and bottom. The message ends 16px above the first action. Stacked actions are 28px tall with 6px between them; side-by-side actions are 32px tall with 8px between them.
+
+Actions: the primary is the control accent (`#0088FF`, dark `#0091FF`). Cancel is a quiet fill, black at 10% (dark: white at 8.5%), so it darkens with the surface instead of sitting on it as a flat gray. Destructive uses the vibrant red because it sits on glass: `#F52F32` at 23% behind a `#E11B1E` label in light mode, `#FF4747` at 23% behind a `#FF4747` label in dark mode. Any `.p-button` you place inside the alert is vibrant too (see [Buttons](../buttons/#vibrant)).
+
+## Dark mode
+
+The surface turns into a near-black glass, `rgba(26, 26, 26, 0.9)`, with a darker keyline and a dimmer inner highlight (white at 20%). The shadow deepens to 45%.
+
 ## Accessibility
 
 - Add `role="dialog"` and `aria-modal="true"` to every modal.
@@ -207,6 +219,7 @@ PuppertinoModalManager.isModalOpen("#example-modal");
 - The manager moves focus into the modal when it opens and restores focus to the trigger when it closes.
 - `Escape` closes the active modal.
 - `data-p-cancel` keeps cancel actions semantic while still closing the dialog.
+- With `prefers-reduced-transparency` or `prefers-contrast: more` the surface becomes opaque (`#EBEBEB`, dark `#1A1A1A`). Increased contrast also draws a solid 1px edge.
 
 ## Notes
 

@@ -149,45 +149,46 @@
 }
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-action-sheet
-   The iOS action sheet. Same 300px material panel as .p-alert, but
-   anchored to the bottom of the screen and built from a stack of
-   capsule rows rather than a pair of buttons.
+   The iOS 27 action sheet. Same 300px overlay glass as .p-alert (the
+   shared --p-desktop-modal surface, keyline, rims and glows with
+   --p-shadow-overlay), but anchored to the bottom of the screen and
+   built from a stack of capsule rows rather than a pair of buttons.
 
    Composes with .p-modal, so it reuses the modal manager: the same
-   open/close attributes, focus trap, and Escape handling. Radius is
-   34px, matching the alert; the reference squircle span is 54.4px.
+   open/close attributes, focus trap, and Escape handling. Radius is a
+   plain 34px arc, matching the alert.
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --p-action-sheet-surface: rgba(245, 245, 245, 0.60);
-  --p-action-sheet-row: rgba(120, 120, 128, 0.16);
-  --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.28);
-  --p-action-sheet-title: rgba(0, 0, 0, 0.85);
-  --p-action-sheet-copy: rgba(0, 0, 0, 0.55);
+  --p-action-sheet-surface: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
+  --p-action-sheet-row: rgba(0, 0, 0, 0.11);
+  --p-action-sheet-row-pressed: rgba(0, 0, 0, 0.17);
+  --p-action-sheet-title: #000000;
+  --p-action-sheet-copy: #000000;
   --p-action-sheet-destructive: #ff383c;
-  --p-action-sheet-fallback: rgba(245, 245, 245, 0.98);
+  --p-action-sheet-fallback: var(--p-desktop-modal-fallback, #ebebeb);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-action-sheet-surface: rgba(38, 38, 38, 0.60);
-  --p-action-sheet-row: rgba(120, 120, 128, 0.32);
-  --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.44);
+  --p-action-sheet-surface: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+  --p-action-sheet-row: rgba(255, 255, 255, 0.065);
+  --p-action-sheet-row-pressed: rgba(255, 255, 255, 0.12);
   --p-action-sheet-title: rgba(255, 255, 255, 0.92);
-  --p-action-sheet-copy: rgba(255, 255, 255, 0.55);
-  --p-action-sheet-destructive: #ff4245;
-  --p-action-sheet-fallback: rgba(38, 38, 38, 0.98);
+  --p-action-sheet-copy: rgba(255, 255, 255, 0.92);
+  --p-action-sheet-destructive: #ff5257;
+  --p-action-sheet-fallback: var(--p-desktop-modal-fallback, #1a1a1a);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-action-sheet-surface: rgba(38, 38, 38, 0.60);
-    --p-action-sheet-row: rgba(120, 120, 128, 0.32);
-    --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.44);
+    --p-action-sheet-surface: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+    --p-action-sheet-row: rgba(255, 255, 255, 0.065);
+    --p-action-sheet-row-pressed: rgba(255, 255, 255, 0.12);
     --p-action-sheet-title: rgba(255, 255, 255, 0.92);
-    --p-action-sheet-copy: rgba(255, 255, 255, 0.55);
-    --p-action-sheet-destructive: #ff4245;
-    --p-action-sheet-fallback: rgba(38, 38, 38, 0.98);
+    --p-action-sheet-copy: rgba(255, 255, 255, 0.92);
+    --p-action-sheet-destructive: #ff5257;
+    --p-action-sheet-fallback: var(--p-desktop-modal-fallback, #1a1a1a);
   }
 }
 
@@ -195,13 +196,13 @@
    page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-action-sheet-surface: rgba(245, 245, 245, 0.60);
-  --p-action-sheet-row: rgba(120, 120, 128, 0.16);
-  --p-action-sheet-row-pressed: rgba(120, 120, 128, 0.28);
-  --p-action-sheet-title: rgba(0, 0, 0, 0.85);
-  --p-action-sheet-copy: rgba(0, 0, 0, 0.55);
+  --p-action-sheet-surface: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
+  --p-action-sheet-row: rgba(0, 0, 0, 0.11);
+  --p-action-sheet-row-pressed: rgba(0, 0, 0, 0.17);
+  --p-action-sheet-title: #000000;
+  --p-action-sheet-copy: #000000;
   --p-action-sheet-destructive: #ff383c;
-  --p-action-sheet-fallback: rgba(245, 245, 245, 0.98);
+  --p-action-sheet-fallback: var(--p-desktop-modal-fallback, #ebebeb);
 }
 
 .p-action-sheet {
@@ -245,17 +246,27 @@
   border-radius: var(--p-action-sheet-radius);
 
   background: var(--p-action-sheet-surface);
-  -webkit-backdrop-filter: saturate(180%) blur(30px);
-  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  /* The alert's stack (.p-alert__surface in modals.css): the shared
+     overlay glass with the overlay shadow and the iOS rim values. */
   box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.24),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+    var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+    0 0 0 0.5px var(--p-alert-keyline, rgba(0, 0, 0, 0.55)),
+    inset 0 1px 0 var(--p-alert-rim, rgba(255, 255, 255, 0.5)),
+    inset 0 -1px 0 var(--p-alert-rim, rgba(255, 255, 255, 0.5)),
+    inset 1px 0 0 var(--p-alert-side, rgba(0, 0, 0, 0.09)),
+    inset -1px 0 0 var(--p-alert-side, rgba(0, 0, 0, 0.09)),
+    inset 0 40px 10px -40px var(--p-alert-glow, rgba(255, 255, 255, 0.55)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6)),
+    inset 0 -40px 6px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6));
 }
 
-/* The header is left-aligned, unlike the alert's centered block. It
-   reads as a caption over the list rather than as a question. */
+/* The header is left-aligned, like the alert: the title's first line
+   22px in from the top and left edges, the message 10px under it, and
+   24px down to the first row. */
 .p-action-sheet__header {
-  padding: 6px 4px 14px;
+  padding: 8px 8px 24px;
 }
 
 .p-action-sheet__title {
@@ -268,7 +279,7 @@
 }
 
 .p-action-sheet__message {
-  margin: 2px 0 0;
+  margin: 10px 0 0;
   color: var(--p-action-sheet-copy);
   font-size: 17px;
   font-weight: 400;
@@ -279,7 +290,7 @@
 .p-action-sheet__actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .p-action-sheet__action {
@@ -299,7 +310,7 @@
 
   font-family: inherit;
   font-size: 17px;
-  font-weight: 510;
+  font-weight: 590;
   letter-spacing: -0.43px;
   line-height: 1;
   text-align: center;
@@ -350,11 +361,33 @@
   }
 }
 
-/* Same 1.6 ratio the other v2 surfaces use: 34px arc, 54.4px squircle. */
-@supports (corner-shape: superellipse(1.465)) {
+@media (prefers-contrast: more) {
   .p-action-sheet__surface {
-    border-radius: 54.4px;
-    corner-shape: superellipse(1.465);
+    background: var(--p-action-sheet-fallback);
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+      0 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+
+  .p-dark-mode .p-action-sheet__surface,
+  [data-p-theme="darkmode"] .p-action-sheet__surface {
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45)),
+      0 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  .p-auto-dark-mode .p-action-sheet__surface {
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45)),
+      0 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-action-sheet__surface {
+    border: 1px solid CanvasText;
   }
 }
 

@@ -1,13 +1,13 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Toolbars
-description: Floating glass item clusters with icon buttons, dividers, two sizes, and both orientations, plus the attached titlebar toolbar.
+description: Liquid Glass item clusters with icon buttons, dividers, two sizes and both orientations, plus round glass buttons and popup chips.
 ---
 
 import '@puppertino/toolbars.css';
 import Showcase from '../../../components/Showcase.astro';
 
-A toolbar provides convenient access to frequently used commands, controls, navigation, and search. The floating style groups items in glass capsules; the attached style puts items directly in a window's titlebar.
+A toolbar provides convenient access to frequently used commands, controls, navigation, and search. Items sit in glass capsules that float in a window's titlebar.
 
 ## Preview
 
@@ -40,14 +40,22 @@ A toolbar provides convenient access to frequently used commands, controls, navi
   <button class="p-toolbar-btn" aria-label="Brush"><i class="ph-bold ph-paint-brush"></i></button>
   <button class="p-toolbar-btn p-active" aria-label="Eraser"><i class="ph-bold ph-eraser"></i></button>
   <button class="p-toolbar-btn" aria-label="Shapes"><i class="ph-bold ph-shapes"></i></button>
-</div>`}
+</div>
+<button class="p-toolbar-circle" aria-label="Share"><i class="ph-bold ph-export"></i></button>
+<button class="p-toolbar-popup" aria-haspopup="menu" aria-label="View options"><i class="ph-bold ph-squares-four"></i><i class="ph-bold ph-caret-down p-toolbar-popup-chevron"></i></button>`}
 />
 
 ## Anatomy
 
-A group is a glass capsule: `rgba(247, 247, 247, 0.72)` over a 20px blur with 180% saturation, and the same `0 8px 40px` at 12% shadow the sidebar uses. The regular size is 36px tall with an 18px radius; the small size is 24px with a 12px radius. Both are true capsules, so the corner math needs no squircle.
+A group is a Liquid Glass capsule. Three layers make the glass:
 
-Items are icon buttons with 13px glyphs (10px in small). Hover and active fill the item with an `#E6E6E6` pill inset 4px from the capsule: 28px tall with a 14px radius in regular, 20px with 10px in small. Dividers are 1×20px lines in `#D9D9D9` (1×16px in small). The `.p-toolbar-text-btn` variant holds a 13px label with up-down chevrons.
+- **Keyline.** A 0.5px dark line outside the shape, heavier on the rounded ends.
+- **Speculars.** A 1px white highlight on the top and bottom inner edges.
+- **Fill.** A soft vertical gradient: darkest (about `#F1F1F1` on white) a third of the way down, clearing to white at the bottom.
+
+The glass is translucent, so over the `#E6E6E6` sidebar it reads a few steps darker than over a white titlebar. The shadow is almost nothing, `0 8px 15px` at 2 to 4% (`--p-shadow-glass-control`). Depth comes from the rim, not the shadow. The regular size is 36px tall with an 18px radius, and the small size is 24px with a 12px radius. Both are true capsules, so the corners need no squircle.
+
+Items are 32px cells with 2px of padding at each end of the group, so three icons make a 100px group. Glyphs are 13px (10px in small) in `#1A1A1A`. Hover and pressed states show a 32×28px pill with a 14px radius, inset 4px from the capsule (24×20px with a 10px radius in small). The pill is a blend rather than a flat fill: black at 10% (`#E6E6E6` on white), so it follows the gradient underneath. A group with dividers spaces its items 3px apart. Its dividers are 1×20px lines (1×16px in small) at black 15%.
 
 | Class | Role |
 |---|---|
@@ -57,20 +65,24 @@ Items are icon buttons with 13px glyphs (10px in small). Hover and active fill t
 | `.p-toolbar-btn` | Icon button with the hover pill. |
 | `.p-toolbar-text-btn` | Label + chevrons variant. |
 | `.p-toolbar-divider` | 1px separator, `role="separator"`. |
+| `.p-toolbar-circle` | A single glass icon button, a 36px circle (`-small`: 24px). |
+| `.p-toolbar-popup` | Popup chip: icon + down chevron in a 50×36px capsule (`-small`: 39×24px). |
 
-## Attached style and search
+## Placement and search
 
-Inside a window titlebar, use the attached style from [windows](../windows/): `.p-window-toolbar` with `.p-window-toolbar-btn` (44×29px, radius 6px, hover `rgba(0, 0, 0, 0.03)`). It is the same toolbar family without the floating capsule.
+In a window, groups sit in the titlebar 8px from the band edges and 8px apart. The first group sits 16px after the zoom light, and the title follows it 8px later. See [windows](../windows/) for the three titlebar layouts. The flat macOS 26 slots (`.p-window-toolbar-btn` in a `.p-window-toolbar-flat` row) remain for existing layouts, but glass groups are the default look.
 
-Toolbar search is the standard [search field](../forms/#search-field): the 24px capsule matches the compact toolbar scale and the 36px `-xlarge` step matches the regular one. Placeholder text is `#727272`, values `#1A1A1A`, and focus shows the forms double ring.
+Toolbar search is the standard [search field](../forms/#search-field): the 24px capsule matches the small toolbar scale and the 36px `-xlarge` step matches the regular one.
 
 ## States
 
 Hover and `[aria-pressed="true"]` (or `.p-active`) show the pill. Disabled buttons drop their ink to `#BFBFBF` and ignore the pointer. Focus uses the standard ring, 3px at 50% blue, inset to follow the pill shape.
 
+When the window loses focus (`.p-window-inactive` on the window, or `.p-inactive` on the glass itself), the glass flattens. The gradient and speculars drop away and only the keyline remains.
+
 ## Dark mode
 
-The capsule switches to `rgba(58, 58, 62, 0.72)`, hover pills to `rgba(255, 255, 255, 0.1)`, dividers to 15% white, and ink to `rgba(255, 255, 255, 0.92)`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+Dark glass is additive light: white at about 6% at the top rising to 15% at the bottom (about `#2C2C2C` to `#3F3F3F` on `#1E1E1E`). It sits inside a near-black keyline, with bright 1px rims top and bottom. The hover pill and dividers turn lighter than the glass: white at 9% and 18%. Ink is `#F5F5F5`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Code
 
@@ -86,4 +98,4 @@ The capsule switches to `rgba(58, 58, 62, 0.72)`, hover pills to `rgba(255, 255,
 </div>
 ```
 
-Icon-only buttons need `aria-label`s, and toggles should carry `aria-pressed` so state is announced. With `prefers-reduced-transparency` the glass becomes opaque `#F7F7F7` (dark: `#3A3A3E`).
+Icon-only buttons need `aria-label`s, and toggles should carry `aria-pressed` so state is announced. With `prefers-reduced-transparency` the glass becomes an opaque gradient with the same ramp, and with `prefers-contrast: more` the keyline becomes a solid 1px line in the ink color.

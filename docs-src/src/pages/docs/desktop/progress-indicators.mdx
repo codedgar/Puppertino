@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Progress indicators
-description: Progress bars that show your app is working. A native determinate bar and a bouncing indeterminate bar, both tintable.
+description: Progress bars, circular progress and the spinner that show your app is working. Native determinate bars, an indeterminate bar, and macOS 27 circular indicators, all tintable.
 ---
 
 import '@puppertino/forms.css';
@@ -12,16 +12,18 @@ Progress indicators let people know that your app is not stalled while it loads 
 
 ## When to use it
 
-Use the determinate bar when you can measure the work. Use the indeterminate bar when you can only promise that work is happening.
+Use the determinate bar when you can measure the work. Use the indeterminate bar when you can only promise that work is happening. The circular indicator and the spinner are the compact versions of the same two ideas, for toolbars, table rows and buttons where a bar does not fit.
 
 ## Anatomy
 
 | Part | Value |
 |---|---|
-| Track | 6px capsule (10px large), `--p-fill-tertiary` |
-| Fill | Flat `--p-progress-accent`, the tintable system blue |
+| Track | 6px capsule (10px large), black at 8.5% with a 0.5px inner hairline at 7% |
+| Fill | Flat `--p-progress-accent`, the tintable system blue (`#0088FF`) |
+| Circular | 5px ring on a 16 or 32px circle, round-capped arc clockwise from 12 o'clock |
+| Spinner | 8 rounded spokes, 2 × 5 at 16px and 4 × 10 at 32px, fading around the circle |
 | Indeterminate segment | Solid capsule, stretching to about a third of the track and compressing to a dot at each end |
-| Motion | Bounces to the far end and back, 1.6s ease-in-out |
+| Motion | Inchworms to the far end and back on a 2.6s cycle |
 
 ## Determinate
 
@@ -53,14 +55,43 @@ A solid segment inchworms to the far end and back on a 2.6 second cycle, exactly
 
 Swap it for the determinate bar the moment you can measure progress. Indefinite waiting with no estimate is the last resort.
 
+## Circular
+
+<Showcase
+  name="progress-circular"
+  compact
+  code={`<div class="p-progress-circle p-progress-circle-small" role="progressbar" aria-label="A quarter done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" style="--p-progress-value: 25"></div>
+<div class="p-progress-circle p-progress-circle-small" role="progressbar" aria-label="Three quarters done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" style="--p-progress-value: 75"></div>
+<div class="p-progress-circle" role="progressbar" aria-label="Just started" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="--p-progress-value: 0"></div>
+<div class="p-progress-circle" role="progressbar" aria-label="Half done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" style="--p-progress-value: 50"></div>
+<div class="p-progress-circle" role="progressbar" aria-label="Done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="--p-progress-value: 100"></div>`}
+  snippet={`<div class="p-progress-circle" role="progressbar" aria-label="Downloading"
+     aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"
+     style="--p-progress-value: 40"></div>`}
+/>
+
+A determinate indicator in a circle: a 5px ring on the same 8.5% track, and an accent arc with round caps that runs clockwise from 12 o'clock. At zero it is a single dot at the top, so unlike the bar it always shows it is primed. Set the value from 0 to 100 through `--p-progress-value` and mirror it in `aria-valuenow`. Changes animate over 0.2s. `.p-progress-circle-small` is the 16px size.
+
+## Spinner
+
+<Showcase
+  name="progress-spinner"
+  compact
+  code={`<span class="p-spinner p-spinner-small" role="progressbar" aria-label="Loading"></span>
+<span class="p-spinner" role="progressbar" aria-label="Loading"></span>`}
+  snippet={`<span class="p-spinner" role="progressbar" aria-label="Loading"></span>`}
+/>
+
+Eight rounded spokes, the leading one at full strength and each one behind it fainter, stepping around once every 0.8 seconds. It is black at 85% under a 55% group opacity, white in dark mode. `.p-spinner-small` is the 16px size. Give it `role="progressbar"` and an `aria-label`.
+
 ## Changing the color
 
-Add a `.p-sys-*` class to either bar. The fill and segment pick up the color through `--p-color-current`.
+Add a `.p-sys-*` class to a bar or a circular indicator. The fill, segment or arc picks up the color through `--p-color-current`. The spinner stays neutral; set `--p-spinner-color` if you need to change it.
 
 ## Dark mode
 
-The track flips through `--p-fill-tertiary` and the accent swaps to its dark variant. No extra setup.
+The track turns to white at 8.5% with a 4% hairline, the spinner turns white, and the accent swaps to `#0091FF`. No extra setup.
 
 ## Reduced motion
 
-With `prefers-reduced-motion`, the bounce is replaced by a slow opacity pulse on a centered segment. Progress is still visibly alive without the travel.
+With `prefers-reduced-motion`, the bar's travel is replaced by a slow opacity pulse on a centered segment, and the spinner stops turning and pulses instead. Progress is still visibly alive without the motion.

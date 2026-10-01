@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Forms
-description: Text fields, selects, and switches at iOS metrics. 44px targets, filled backgrounds, 17px type, no JavaScript.
+description: Text fields, selects, switches, sliders, and pop-up buttons at iOS metrics. Grouped field rows, 44px targets, 17px type.
 ---
 
 import '@puppertino/forms.css';
@@ -28,29 +28,80 @@ Avoid a form where a single tap would do. A screen that asks people to fill in t
 
 ## Touch metrics, same components
 
-The controls are the same `.p-field`, `.p-select`, and `.p-switch` the desktop side documents. A touch class swaps the metrics. The difference is not only size: iOS fields are filled rather than ringed, sit at Regular weight instead of 510, and carry SF Pro's negative tracking at 17px.
+The controls are the same `.p-field`, `.p-select`, and `.p-switch` the desktop side documents. A touch class swaps the metrics. The difference is not only size: iOS fields are rows of a grouped card (or filled pills on their own) rather than ringed boxes, and carry SF Pro's negative tracking at 17px.
 
 | Control | Pointer default | Touch |
 |---|---|---|
-| Text field | 24px tall, 13px, ringed | 44px tall, 17px, filled |
+| Text field | 24px tall, 13px, ringed | 52px row in a grouped card, 17px; 44px filled on its own |
 | Select | 24px tall, 13px, ringed | 44px tall, 17px, filled |
 | Switch | 36 x 16 track | 64 x 28 track |
 | Segmented control | 24px track, 6px radius | 32px track, full capsule |
-| Slider | 4px track | 6px track, 28px thumb |
+| Slider | 4px track | 6px track, 38 x 24px thumb |
 
 ## Text fields
+
+iOS presents text fields as the rows of an inset grouped card: no box around each field, just the text, a hairline between rows, and the card around all of them. Put the fields in `.p-field-group-touch`.
+
+<Showcase
+  name="mobile-field-group"
+  align="start"
+  code={`<div class="p-field-group-touch" style="width: 360px;">
+  <input class="p-field p-field-touch" type="text" placeholder="First name" aria-label="First name" autocomplete="given-name" />
+  <div class="p-field-touch-row">
+    <input class="p-field p-field-touch" type="text" value="Appleseed" aria-label="Last name" autocomplete="family-name" />
+    <button class="p-field-touch-clear" type="button" aria-label="Clear last name" onclick="const f = this.previousElementSibling; f.value = ''; f.focus();"></button>
+  </div>
+  <input class="p-field p-field-touch" type="email" placeholder="Email" aria-label="Email" autocomplete="email" />
+</div>`}
+  snippet={`<div class="p-field-group-touch">
+  <input class="p-field p-field-touch" type="text" placeholder="First name" aria-label="First name" />
+  <input class="p-field p-field-touch" type="email" placeholder="Email" aria-label="Email" />
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Card | 26px radius, `#FFFFFF` light, `#1C1C1E` dark |
+| Row | 52px tall, 16px side padding, no fill |
+| Separator | 1px, inset 16px on both sides, between rows only |
+| Font | 17px, weight 510, tracking -0.43px, `#000000` / `#FFFFFF` |
+| Placeholder | `rgba(60,60,67,0.30)` light, `rgba(235,235,245,0.30)` dark |
+| Caret | `--p-sys-blue`, 2px wide |
+| Clear button | 17px `xmark.circle.fill` in the placeholder color, 44px target |
+
+Set the card on the grouped background (`#F2F2F7` light, black dark) so it reads as a card. The card clips its rows, so the first and last rows need no radius of their own.
+
+Rows carry no label of their own on iOS, so give each field an `aria-label`, or a visible `.p-label` above the card that names the group.
+
+### The clear button
+
+While a field has focus and a value, iOS shows a clear button at the trailing edge. Wrap the field in `.p-field-touch-row` and add a `.p-field-touch-clear` button after it. The CSS shows and hides the button; clearing the value takes one line of script, since the button is an ordinary button:
+
+```js
+clear.addEventListener('click', () => { field.value = ''; field.focus(); });
+```
+
+A `type="search"` field needs no extra markup: the browser's own cancel button takes the same glyph.
+
+### Focus
+
+iOS marks the focused row with the caret alone. On the web a caret is easy to lose, so the focused row also shows a 3px accent bar on its leading edge, drawn inside the row so the card never clips it.
+
+## Standalone filled field
+
+Outside a grouped card, a field is the filled form: a 44px pill with its own background. Add `.p-field-touch-filled` to ask for it explicitly, including inside a card. A `.p-field-touch` placed outside a card gets this look without the modifier.
 
 <Showcase
   name="mobile-field-basic"
   align="start"
   code={`<div style="display: grid; gap: 12px; width: 320px;">
   <label class="p-label" for="mf-name">Full name</label>
-  <input class="p-field p-field-touch" id="mf-name" type="text" placeholder="Jane Appleseed" />
+  <input class="p-field p-field-touch p-field-touch-filled" id="mf-name" type="text" placeholder="Jane Appleseed" />
   <label class="p-label" for="mf-email">Email</label>
-  <input class="p-field p-field-touch" id="mf-email" type="email" placeholder="jane@example.com" />
+  <input class="p-field p-field-touch p-field-touch-filled" id="mf-email" type="email" placeholder="jane@example.com" />
 </div>`}
   snippet={`<label class="p-label" for="name">Full name</label>
-<input class="p-field p-field-touch" id="name" type="text" placeholder="Jane Appleseed" />`}
+<input class="p-field p-field-touch p-field-touch-filled" id="name" type="text" placeholder="Jane Appleseed" />`}
 />
 
 | Part | Value |
@@ -58,25 +109,24 @@ The controls are the same `.p-field`, `.p-select`, and `.p-switch` the desktop s
 | Height | 44px, the tap target and the field are the same box |
 | Radius | 10px |
 | Padding | 0 16px |
-| Font | 17px, weight 400, tracking -0.43px |
+| Font | 17px, weight 510, tracking -0.43px |
 | Fill | `rgba(118,118,128,0.12)` light, `rgba(118,118,128,0.24)` dark |
-| Caret | `--p-sys-blue`, 2px wide |
 | Focus | 4px ring in `--p-field-ring-focus-outer` |
 
 The fill is built on `#767680`, not on pure black. iOS runs a separate fill scale from macOS, so the touch controls read from `--p-field-touch-fill` rather than the `--p-fill-*` tokens.
 
-There is no border. iOS dropped the 1px ring on filled fields, and a ring plus a fill reads as two boxes. The focus state supplies the outline when it is needed.
+There is no border. A ring plus a fill reads as two boxes. The focus state supplies the outline when it is needed.
 
-Always pair a field with a `.p-label`. A placeholder is not a label: it disappears the moment someone types, and people who tab back to check what a field wanted find nothing there.
+Always pair a standalone field with a `.p-label`. A placeholder is not a label: it disappears the moment someone types, and people who tab back to check what a field wanted find nothing there.
 
 <Showcase
   name="mobile-field-types"
   align="start"
   snippet={false}
   code={`<div style="display: grid; gap: 12px; width: 320px;">
-  <input class="p-field p-field-touch" type="text" value="Filled in" />
-  <input class="p-field p-field-touch" type="text" placeholder="Placeholder" />
-  <input class="p-field p-field-touch" type="text" value="Disabled" disabled />
+  <input class="p-field p-field-touch p-field-touch-filled" type="text" value="Filled in" aria-label="Filled in" />
+  <input class="p-field p-field-touch p-field-touch-filled" type="text" placeholder="Placeholder" aria-label="Placeholder" />
+  <input class="p-field p-field-touch p-field-touch-filled" type="text" value="Disabled" aria-label="Disabled" disabled />
 </div>`}
 />
 
@@ -131,12 +181,13 @@ It is a real `<select>`, so the tap opens the platform's own picker: the scroll 
 | Part | Value |
 |---|---|
 | Track | 64 x 28px, full capsule |
-| Knob | 39 x 24px, 2px inset, travels 21px |
+| Knob | 38 x 24px, 2px inset, travels 22px |
+| Pressed | 60 x 40px clear glass lens, 9px past the track end |
 | On | `--p-sys-green`, `#34C759` light and `#30D158` dark |
 | Off | `rgba(60,60,67,0.30)` light, `rgba(235,235,245,0.30)` dark |
 | Target | 44px, the label carries the extra height |
 
-The knob is a wide lozenge, not a circle. It is 39px across on a 64px track, so it fills most of the control and leaves 21px of travel.
+The knob is a wide lozenge, not a circle. It is 38px across on a 64px track, so it fills most of the control and leaves 22px of travel.
 
 Switches default to green. Add any `.p-sys-*` class to retint one, and the green steps aside. Consider keeping green unless the switch controls something the accent color already stands for.
 
@@ -144,13 +195,17 @@ A switch takes effect immediately. If the change needs a Save button, it is not 
 
 ### The morph
 
-Touching a switch lifts the knob into a clear [Liquid Glass](../../materials/#liquid-glass) lens, 1.65x its resting size, with the green track bending through it. Drag across the middle and the knob follows your finger to that side; lift your finger and it settles. A press that moves less than 6px counts as a tap. This needs `liquid_glass.js`:
+Touching a switch lifts the knob into a [Liquid Glass](../../materials/#liquid-glass) lens. The 38 x 24 knob grows to 60 x 40, centered where it sat, so it reaches 9px past the end of the track. The track is cut out under the glass and redrawn inside it, magnified, so its color bends at the rim. Drag across the middle and the knob follows your finger to that side; lift your finger and it settles. A press that moves less than 6px counts as a tap. This needs `liquid_glass.js`:
 
 ```html
 <script type="module" src="/js/liquid_glass.js"></script>
 ```
 
-Without the script, a CSS-only morph grows the knob into a frosted lens, travels it, and sets it down.
+Without the script, a CSS-only morph grows the knob into a clear lens, travels it, and sets it down.
+
+For the flatter iOS 27 look, add `data-p-lens="clear"` to the label: the track shows through unmagnified, and the glass gets a 9% white body, a hairline edge, thin lines inside its top and bottom edges tinted with the track color, and a soft shadow about 7px below.
+
+A disabled switch fades as a whole to 50%, knob included.
 
 This is the same animation the desktop switch uses, scaled by tokens rather than rewritten. The geometry is `--p-switch-track-w`, `--p-switch-track-h`, `--p-switch-knob-w`, and `--p-switch-knob-inset`; travel is derived from them, so a size variant cannot drift out of alignment. Browsers without `@property` fall back to a plain slide and the markup is identical.
 
@@ -195,13 +250,17 @@ The glyphs are opt-in only. iOS draws them for its own On/Off Labels setting, wh
 |---|---|
 | Track | 32px tall, 16px radius, `rgba(118,118,128,0.12)` light and `0.24` dark |
 | Pill | 28px tall, 14px radius, inset 2px, 4px between segments |
-| Pill fill | `#FFFFFF` light, `#636366` dark |
-| Label | 13px, weight 590, tracking -0.08px |
+| Pill fill | `#FFFFFF` light, `rgba(255,255,255,0.27)` dark |
+| Pill shadow | `0 2px 20px rgba(0,0,0,0.06)` |
+| Separators | None |
+| Label | 13px, tracking -0.08px, weight 590 selected and 510 otherwise, black (white in dark) |
 | Large | `.p-segmented-touch-large`, 36px track holding a 32px pill |
+| Extra large | `.p-segmented-touch-xlarge`, 50px track holding a 46px pill |
+| Disabled | The whole control at 50% |
 
-The pill is white, so the selected label keeps its own color instead of flipping to white the way the macOS control does.
+The pill is white, so the selected label keeps its own color instead of flipping to white the way the macOS control does. There are no separators between segments; the pill and its soft shadow carry the selection on their own.
 
-Those three numbers, a 2px inset and a 4px gap on a 32px track, reproduce iOS pill widths at every segment count. On a 370px track it gives 181px at two segments, 119.33px at three, 88.5px at four, and 70px at five. The pill width is computed from the segment count rather than tabulated, so it stays exact at any track width.
+Those three numbers, a 2px inset and a 4px gap on a 32px track, reproduce iOS pill widths at every segment count. On a 430px track it gives 211px at two segments, 139.33px at three, 103.5px at four, and 82px at five. The pill width is computed from the segment count rather than tabulated, so it stays exact at any track width.
 
 It is still a radio group. Arrow keys move the selection, form submission works, and no JavaScript is involved. The pill slides between segments where `:has()` is available and crossfades where it is not.
 
@@ -227,12 +286,15 @@ Five segments is the practical ceiling on a phone. Below about 60px a label trun
 | Track | 6px tall, 3px radius |
 | Track fill | `rgba(120,120,120,0.20)` light, `rgba(120,120,128,0.36)` dark |
 | Filled portion | `#0088FF` light, `#0091FF` dark |
-| Thumb | 28px circle, `0 3px 8px rgba(0,0,0,0.15)` over two tighter layers |
+| Thumb | 38 x 24px white capsule, `0 6px 13px rgba(0,0,0,0.12), 0 0.5px 4px rgba(0,0,0,0.12)` |
+| Ticks | `.p-slider-ticks`: 4px dots in `rgba(60,60,67,0.18)`, 9px below the track center |
+| Dragged | 60 x 40px clear glass lens |
+| Disabled | The whole control at 50%; the fill stays blue |
 | Focus | 4px accent ring on the thumb |
 
-The 6px track is thicker than the pointer slider's, and the 28px thumb is its own tap target, so the control needs no extra hit area.
+The 6px track is thicker than the pointer slider's. The thumb sits inside the track ends, and the fill stops under its center. Set the number of tick intervals with `--p-slider-ticks`; the first and last dots sit 18px in from the ends, under the thumb at the minimum and maximum.
 
-With `liquid_glass.js` loaded, dragging turns the thumb into a glass lens that magnifies the fill edge beneath it. It settles back into a solid thumb 350ms after release.
+With `liquid_glass.js` loaded, dragging turns the thumb into a Liquid Glass lens that magnifies the fill edge as it passes, and it settles back into a solid thumb 350ms after release. Add `data-p-lens="clear"` to the input for the flatter iOS 27 look: the 38 x 24 capsule grows to 60 x 40, the track and fill show through unmagnified, and a soft ring shadow falls about 7px below.
 
 Firefox paints the filled portion natively through `::-moz-range-progress`. WebKit has no equivalent pseudo-element, so the fill is a gradient sized by `--p-slider-fill`.
 
@@ -244,7 +306,7 @@ Firefox paints the filled portion natively through `::-moz-range-progress`. WebK
 
 Always give a slider an `aria-label` or a visible label. A bare track announces as "slider" and nothing else.
 
-`.p-progress-touch` is the same 6px track without a thumb, so a progress bar and a slider read as the same object in two states.
+`.p-progress-touch` is a 4px bar with a 2px radius, in the slider's track and fill colors.
 
 <Showcase
   name="mobile-progress"
@@ -256,6 +318,19 @@ Always give a slider an `aria-label` or a visible label. A bare track announces 
   <progress class="p-progress p-progress-touch" value="0.25" max="1"></progress>
 </div>`}
 />
+
+The activity indicator is `.p-spinner-touch`, added to `.p-spinner`: eight spokes in the secondary label color, `rgba(60,60,67,0.6)` in light and `rgba(235,235,245,0.7)` in dark, fading around the circle. The default is 20px; `.p-spinner-touch-small` is 14px and `.p-spinner-touch-large` is 35px. Each size has its own spoke proportions, so scale by class rather than by width.
+
+<Showcase
+  name="mobile-spinner"
+  compact
+  snippet={`<span class="p-spinner p-spinner-touch" role="progressbar" aria-label="Loading"></span>`}
+  code={`<span class="p-spinner p-spinner-touch p-spinner-touch-small" role="progressbar" aria-label="Loading"></span>
+<span class="p-spinner p-spinner-touch" role="progressbar" aria-label="Loading"></span>
+<span class="p-spinner p-spinner-touch p-spinner-touch-large" role="progressbar" aria-label="Loading"></span>`}
+/>
+
+Reduced motion replaces the rotation with a slow pulse.
 
 ## Page controls
 
@@ -276,7 +351,9 @@ Always give a slider an `aria-label` or a visible label. A bare track announces 
 </nav>`}
 />
 
-Dots are 8px on a 16px pitch. The current one is `rgba(0,0,0,0.85)`, the rest `rgba(0,0,0,0.30)`, and both flip in dark mode. `aria-current` carries the state, the same as the tab bar.
+Dots are 8px on a 16px pitch. The current one is pure `#000000`, the rest the tertiary label `rgba(60,60,67,0.30)`; in dark mode `#FFFFFF` and `rgba(235,235,245,0.30)`. `aria-current` carries the state, the same as the tab bar.
+
+The dots sit on a glass platter: a 24px capsule, 12px of padding past the first and last dot, a 20px backdrop blur and an almost clear tint (white 10% in light, black 2% in dark). No rim, no shadow. It is the thinnest glass in the system, there so the dots stay legible wherever a paged set lands on a photo or a colored page. `.p-page-control-plain` removes it for the bare dots. Reduced transparency swaps the blur for an opaque capsule.
 
 An 8px dot is nowhere near a tap target. The row is 44px tall, and each dot extends its own target to the full row height and to exactly the 16px pitch across, through an absolutely positioned pseudo-element. The dots stay 8px, the layout does not move, and neighbouring targets never overlap and steal each other's taps.
 
@@ -325,7 +402,7 @@ Without `data-p-pages` the dots still shrink and still respond to taps; only the
 |---|---|
 | Control | 92 x 32px, full capsule at 16px radius |
 | Half | 46 x 32px each, the tap target and the shape are the same box |
-| Fill | `rgba(116,116,128,0.08)` light, `rgba(118,118,128,0.18)` dark |
+| Fill | `rgba(118,118,128,0.12)` light, `rgba(118,118,128,0.24)` dark, the same gray as the touch fields and buttons |
 | Pressed | `rgba(0,0,0,0.08)` over the half being held |
 | Divider | 1 x 24px, `rgba(60,60,67,0.30)`, 4px inset |
 | Glyphs | Minus and plus at 14px, not chevrons |
@@ -339,6 +416,46 @@ The native number spinners are suppressed, since the stepper already does that j
 Each half is 46px wide and 32px tall. That clears 44px across but not down, so a stepper standing alone in a row wants the row to supply the height. Inside a `.p-list-touch` row it gets 52px for free.
 
 Wire the buttons up yourself, or use `steppers.js`. The CSS carries no behavior.
+
+## Pop-up buttons
+
+<Showcase
+  name="mobile-popup"
+  compact
+  code={`<div class="p-popup-touch">
+  <select aria-label="Sort by">
+    <option>Newest</option>
+    <option>Oldest</option>
+    <option>Name</option>
+  </select>
+</div>
+<div class="p-popup-touch">
+  <select aria-label="Sort by" disabled>
+    <option>Newest</option>
+  </select>
+</div>`}
+  snippet={`<div class="p-popup-touch">
+  <select aria-label="Sort by">
+    <option>Newest</option>
+    <option>Oldest</option>
+  </select>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Label | 17px, weight 590, in the accent color |
+| Chevron | Up and down, 11 x 15px, 5px after the label, same color |
+| Fill | None, and no border |
+| Height | 44px, the tap target |
+| Disabled | Label and chevron in the tertiary label color, `rgba(60,60,67,0.30)` |
+| Pressed | Label and chevron dim to 60% |
+
+A pop-up button shows the current choice and opens a menu of the others. On iOS it has no background at all: the accent-colored value and its chevron are the whole control. Use it inline in a sentence-like row, in a toolbar, or at the trailing edge of a list row.
+
+`.p-popup-touch` wraps a real `<select>`, so a tap opens the platform's own picker. Tint it with a `.p-sys-*` class on the wrapper. Give the select an `aria-label` when the value alone does not say what it chooses.
+
+Use `.p-select-touch` instead when the choice is one field among many in a form, where a filled box lines up with the text fields around it.
 
 ## Labels
 
@@ -356,15 +473,15 @@ Wire the buttons up yourself, or use `steppers.js`. The CSS carries no behavior.
 
 ## States
 
-**Focus** draws a 4px ring in `--p-field-ring-focus-outer`, wider than the 3.5px pointer ring so it stays visible next to a filled background. It appears for keyboard and switch control navigation. Never remove it.
+**Focus** on a row in a grouped card draws a 3px accent bar at its leading edge. On a standalone field it draws a 4px ring in `--p-field-ring-focus-outer`, wider than the 3.5px pointer ring so it stays visible next to a filled background. It appears for keyboard and switch control navigation. Never remove it.
 
-**Disabled** drops fields to `--p-field-bg-disabled` with placeholder-colored text, and fades switches to 50%. The cursor becomes `not-allowed`. Consider hiding a control people cannot use rather than disabling it, unless the disabled state itself is the information.
+**Disabled** turns a row's text to the placeholder color, drops standalone fields to `--p-field-bg-disabled` with placeholder-colored text, and fades switches to 50%. The cursor becomes `not-allowed`. Consider hiding a control people cannot use rather than disabling it, unless the disabled state itself is the information.
 
 **Invalid** is not styled automatically. The v1 `.p-form-text` classes tied red borders to `:invalid`, which fires while someone is still typing. Add your own class on blur instead.
 
 ## Dark mode
 
-Field and select fills move from 12% to 24%. The switch off-track flips from `rgba(60,60,67,0.30)` to `rgba(235,235,245,0.30)`, and green shifts from `#34C759` to `#30D158`. Text and placeholder colors follow their tokens.
+The grouped card moves from `#FFFFFF` to `#1C1C1E` and its separators to white at 10%. Field and select fills move from 12% to 24%. The switch off-track flips from `rgba(60,60,67,0.30)` to `rgba(235,235,245,0.30)`, and green shifts from `#34C759` to `#30D158`. Text and placeholder colors follow their tokens.
 
 Put `.p-auto-dark-mode` on the body to follow the system, or `.p-dark-mode` to pin it.
 
@@ -380,13 +497,14 @@ Increased contrast turns on the switch glyphs described above.
 
 ## What is not here yet
 
-Combo boxes, pop-up buttons, and pull-down buttons ship at pointer sizes only. See <a href={`${import.meta.env.BASE_URL}docs/desktop/forms/`}>desktop forms</a> for what those controls do today.
+Combo boxes and pull-down buttons ship at pointer sizes only. See <a href={`${import.meta.env.BASE_URL}docs/desktop/forms/`}>desktop forms</a> for what those controls do today.
 
 For choosing one option from a list on touch, there are three shapes and they suit different situations:
 
 | Use | When |
 |---|---|
-| `.p-select-touch` | The list is plain text and any length. Opens the platform's own picker. |
+| `.p-select-touch` | The list is plain text and any length, inside a form. Opens the platform's own picker. |
+| `.p-popup-touch` | The same, as a borderless accent value in a row or toolbar. |
 | <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>Action sheet</a> | Options need icons, subtitles, or a destructive one set apart. |
 | <a href={`${import.meta.env.BASE_URL}docs/mobile/menus/`}>Menu</a> | The control stays on screen and the list is short. |
 

@@ -13,11 +13,26 @@
 @property --p-color-current {
   syntax: "<color>";
   inherits: false;
-  /* The control tint blue. Registered properties always resolve, so this
-     initial IS the default accent for every v2 control — the var()
-     fallbacks downstream never fire. #0088FF is the text/link/selection
-     blue; #0D6FFF is the control fill blue the components document. */
-  initial-value: #0D6FFF;
+  /* The control tint blue. Registered properties always resolve, so the
+     var() fallbacks downstream never fire. macOS 27 uses one blue for
+     text, links, selection and control fills: #0088FF light, #0091FF
+     dark (macOS 26 filled controls with #0D6FFF; that value is retired).
+     The initial value only shows where the rule below cannot reach. */
+  initial-value: #0088FF;
+}
+
+/* Appearance-aware default for --p-color-current.
+   A non-inheriting registered property can't be flipped by setting it
+   on .p-dark-mode, so every element sets its own default from
+   --p-sys-blue, which does inherit and is redefined in each appearance
+   scope below. :where() keeps this at zero specificity: any color class,
+   component rule or inline style still wins, and a color class on a
+   wrapper still doesn't leak into its children.
+   It reads --p-sys-blue rather than --p-control-accent on purpose:
+   components set --p-control-accent from --p-color-current, and reading
+   it back here would be a cycle. */
+:where(*, *::before, *::after) {
+  --p-color-current: var(--p-sys-blue, #0088FF);
 }
 
 :root{
@@ -388,8 +403,11 @@ and --p-color-current is exposed for any nested component to read.
 .p-white-color { --p-color-current: var(--p-white); color: var(--p-color-current); }
 
 /* ─────────────────────────────────────────────────────────────────────
-   macOS 26 Color System
-   Tokens following Apple's Liquid Glass color system.
+   macOS 27 / iOS 27 Color System
+   Tokens following Apple's Liquid Glass color system. The macOS 27
+   accents, fills and text levels are unchanged from macOS 26. iOS 27
+   shares the twelve accents; the --p-ios-* tokens carry the iOS gray
+   scale, labels, fills and separator, which differ from macOS.
    Legacy classes above remain for backwards compatibility.
    ───────────────────────────────────────────────────────────────────── */
 
@@ -438,6 +456,64 @@ and --p-color-current is exposed for any nested component to read.
 
   /* Link */
   --p-link: #0088FF;
+
+  /* Control accent: the fill blue for buttons, switches, sliders,
+     selected segments and every other tinted control. */
+  --p-control-accent: #0088FF;
+
+  /* Accent as text on a control with no fill of its own, sitting on a
+     material: the borderless button label inside a vibrant surface.
+     Darker than the fill in light mode (#0078F0, the vibrant blue) so
+     thin glyphs keep their contrast over glass; in dark mode it is the
+     control blue (#0091FF). */
+  --p-control-accent-text: #0078F0;
+
+  /* Keyboard focus band: 3.5px outside the control plus 1px inside it,
+     both accent at 50%. Use as a box-shadow; add the control's own
+     ring after it if it has one. */
+  --p-focus-ring-color: rgba(0, 136, 255, 0.5);
+  --p-focus-ring:
+    0 0 0 3.5px var(--p-focus-ring-color),
+    inset 0 0 0 1px var(--p-focus-ring-color);
+
+  /* ── iOS (touch) tokens ──
+     iOS 27 values that differ from macOS or that macOS has no use for.
+     Desktop components keep the macOS tokens above. */
+
+  /* iOS gray scale. Gray is #8E8E93 in both appearances on iOS (macOS
+     dark gray is #98989F). */
+  --p-ios-gray: #8E8E93;
+  --p-ios-gray-2: #AEAEB2;
+  --p-ios-gray-3: #C7C7CC;
+  --p-ios-gray-4: #D1D1D6;
+  --p-ios-gray-5: #E5E5EA;
+  --p-ios-gray-6: #F2F2F7;
+
+  /* iOS labels */
+  --p-ios-label: #000000;
+  --p-ios-label-secondary: rgba(60, 60, 67, 0.60);
+  --p-ios-label-tertiary: rgba(60, 60, 67, 0.30);
+  --p-ios-label-quaternary: rgba(60, 60, 67, 0.18);
+
+  /* iOS fills: thin tints for controls (secondary for search fields,
+     tertiary for gray buttons, quaternary for steppers) */
+  --p-ios-fill: rgba(120, 120, 128, 0.20);
+  --p-ios-fill-secondary: rgba(120, 120, 128, 0.16);
+  --p-ios-fill-tertiary: rgba(118, 118, 128, 0.12);
+  --p-ios-fill-quaternary: rgba(116, 116, 128, 0.08);
+
+  /* iOS non-opaque separator: lighter than the macOS one */
+  --p-ios-separator: rgba(0, 0, 0, 0.12);
+
+  /* Elevated backgrounds: what sheets, popovers and modal cards sit on.
+     Identical to the base tiers in light mode, one step lighter in dark
+     mode, so layers read without shadows. */
+  --p-bg-elevated-primary: #FFFFFF;
+  --p-bg-elevated-secondary: #F2F2F7;
+  --p-bg-elevated-tertiary: #FFFFFF;
+  --p-bg-grouped-elevated-primary: #F2F2F7;
+  --p-bg-grouped-elevated-secondary: #FFFFFF;
+  --p-bg-grouped-elevated-tertiary: #F2F2F7;
 }
 
 .p-dark-mode,
@@ -480,6 +556,35 @@ and --p-color-current is exposed for any nested component to read.
   --p-separator-opaque: #38383A;
 
   --p-link: #0091FF;
+
+  --p-control-accent: #0091FF;
+  --p-control-accent-text: #0091FF;
+  --p-focus-ring-color: rgba(0, 145, 255, 0.5);
+  --p-focus-ring:
+    0 0 0 3.5px var(--p-focus-ring-color),
+    inset 0 0 0 1px var(--p-focus-ring-color);
+
+  --p-ios-gray: #8E8E93;
+  --p-ios-gray-2: #636366;
+  --p-ios-gray-3: #48484A;
+  --p-ios-gray-4: #3A3A3C;
+  --p-ios-gray-5: #2C2C2E;
+  --p-ios-gray-6: #1C1C1E;
+  --p-ios-label: #FFFFFF;
+  --p-ios-label-secondary: rgba(235, 235, 245, 0.70);
+  --p-ios-label-tertiary: rgba(235, 235, 245, 0.30);
+  --p-ios-label-quaternary: rgba(235, 235, 245, 0.16);
+  --p-ios-fill: rgba(120, 120, 128, 0.36);
+  --p-ios-fill-secondary: rgba(120, 120, 128, 0.32);
+  --p-ios-fill-tertiary: rgba(118, 118, 128, 0.24);
+  --p-ios-fill-quaternary: rgba(118, 118, 128, 0.18);
+  --p-ios-separator: rgba(255, 255, 255, 0.17);
+  --p-bg-elevated-primary: #1C1C1E;
+  --p-bg-elevated-secondary: #2C2C2E;
+  --p-bg-elevated-tertiary: #3A3A3C;
+  --p-bg-grouped-elevated-primary: #1C1C1E;
+  --p-bg-grouped-elevated-secondary: #2C2C2E;
+  --p-bg-grouped-elevated-tertiary: #3A3A3C;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -522,6 +627,35 @@ and --p-color-current is exposed for any nested component to read.
     --p-separator-opaque: #38383A;
 
     --p-link: #0091FF;
+
+    --p-control-accent: #0091FF;
+    --p-control-accent-text: #0091FF;
+    --p-focus-ring-color: rgba(0, 145, 255, 0.5);
+    --p-focus-ring:
+      0 0 0 3.5px var(--p-focus-ring-color),
+      inset 0 0 0 1px var(--p-focus-ring-color);
+
+    --p-ios-gray: #8E8E93;
+    --p-ios-gray-2: #636366;
+    --p-ios-gray-3: #48484A;
+    --p-ios-gray-4: #3A3A3C;
+    --p-ios-gray-5: #2C2C2E;
+    --p-ios-gray-6: #1C1C1E;
+    --p-ios-label: #FFFFFF;
+    --p-ios-label-secondary: rgba(235, 235, 245, 0.70);
+    --p-ios-label-tertiary: rgba(235, 235, 245, 0.30);
+    --p-ios-label-quaternary: rgba(235, 235, 245, 0.16);
+    --p-ios-fill: rgba(120, 120, 128, 0.36);
+    --p-ios-fill-secondary: rgba(120, 120, 128, 0.32);
+    --p-ios-fill-tertiary: rgba(118, 118, 128, 0.24);
+    --p-ios-fill-quaternary: rgba(118, 118, 128, 0.18);
+    --p-ios-separator: rgba(255, 255, 255, 0.17);
+    --p-bg-elevated-primary: #1C1C1E;
+    --p-bg-elevated-secondary: #2C2C2E;
+    --p-bg-elevated-tertiary: #3A3A3C;
+    --p-bg-grouped-elevated-primary: #1C1C1E;
+    --p-bg-grouped-elevated-secondary: #2C2C2E;
+    --p-bg-grouped-elevated-tertiary: #3A3A3C;
   }
 }
 
@@ -562,6 +696,194 @@ and --p-color-current is exposed for any nested component to read.
   --p-separator: rgba(60, 60, 67, 0.29);
   --p-separator-opaque: #C6C6C8;
   --p-link: #0088FF;
+  --p-control-accent: #0088FF;
+  --p-control-accent-text: #0078F0;
+  --p-focus-ring-color: rgba(0, 136, 255, 0.5);
+  --p-focus-ring:
+    0 0 0 3.5px var(--p-focus-ring-color),
+    inset 0 0 0 1px var(--p-focus-ring-color);
+
+  --p-ios-gray: #8E8E93;
+  --p-ios-gray-2: #AEAEB2;
+  --p-ios-gray-3: #C7C7CC;
+  --p-ios-gray-4: #D1D1D6;
+  --p-ios-gray-5: #E5E5EA;
+  --p-ios-gray-6: #F2F2F7;
+  --p-ios-label: #000000;
+  --p-ios-label-secondary: rgba(60, 60, 67, 0.60);
+  --p-ios-label-tertiary: rgba(60, 60, 67, 0.30);
+  --p-ios-label-quaternary: rgba(60, 60, 67, 0.18);
+  --p-ios-fill: rgba(120, 120, 128, 0.20);
+  --p-ios-fill-secondary: rgba(120, 120, 128, 0.16);
+  --p-ios-fill-tertiary: rgba(118, 118, 128, 0.12);
+  --p-ios-fill-quaternary: rgba(116, 116, 128, 0.08);
+  --p-ios-separator: rgba(0, 0, 0, 0.12);
+  --p-bg-elevated-primary: #FFFFFF;
+  --p-bg-elevated-secondary: #F2F2F7;
+  --p-bg-elevated-tertiary: #FFFFFF;
+  --p-bg-grouped-elevated-primary: #F2F2F7;
+  --p-bg-grouped-elevated-secondary: #FFFFFF;
+  --p-bg-grouped-elevated-tertiary: #F2F2F7;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Vibrant accents (macOS 27)
+   Twelve accents for color that sits on a material (glass, menus,
+   popovers, alerts) instead of an opaque background. Gray has no
+   vibrant form.
+
+   --p-vibrant-<color> is the source fill. Apple does not paint it
+   flat: it composites it onto whatever is behind, in two steps:
+     1. #808080 with mix-blend-mode: saturation (strips the hue of
+        the backdrop, keeps its lightness),
+     2. the source with mix-blend-mode: plus-darker in light mode
+        (backdrop + source − 1: on white it is the source, on gray it
+        darkens by the gray) or plus-lighter in dark mode (backdrop +
+        source: on black it is the source, on gray it brightens).
+   Use it as a layer, with mix-blend-mode: var(--p-vibrant-blend).
+
+   --p-vibrant-<color>-resolved is the same recipe worked out over the
+   macOS 27 overlay glass (#EBEBEB light, #1A1A1A dark): the flat
+   color to use where a blend layer isn't possible, such as text.
+
+   plus-lighter works in every current engine. plus-darker is Safari
+   only; elsewhere --p-vibrant-blend falls back to multiply, which
+   matches plus-darker exactly over white and stays within a few
+   levels over light glass.
+   ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  --p-vibrant-blend-darker: plus-darker;
+}
+
+@supports not (mix-blend-mode: plus-darker) {
+  :root {
+    --p-vibrant-blend-darker: multiply;
+  }
+}
+
+:root {
+  --p-vibrant-red: #F52F32;
+  --p-vibrant-orange: #F58625;
+  --p-vibrant-yellow: #F5C200;
+  --p-vibrant-green: #26BF4D;
+  --p-vibrant-mint: #00BDA9;
+  --p-vibrant-teal: #00B3BF;
+  --p-vibrant-cyan: #00ABCF;
+  --p-vibrant-blue: #0078F0;
+  --p-vibrant-indigo: #5C50E6;
+  --p-vibrant-purple: #B72BC9;
+  --p-vibrant-pink: #F5234B;
+  --p-vibrant-brown: #9E7354;
+
+  --p-vibrant-red-resolved: #E11B1E;
+  --p-vibrant-orange-resolved: #E17211;
+  --p-vibrant-yellow-resolved: #E1AE00;
+  --p-vibrant-green-resolved: #12AB39;
+  --p-vibrant-mint-resolved: #00A995;
+  --p-vibrant-teal-resolved: #009FAB;
+  --p-vibrant-cyan-resolved: #0097BB;
+  --p-vibrant-blue-resolved: #0064DC;
+  --p-vibrant-indigo-resolved: #483CD2;
+  --p-vibrant-purple-resolved: #A317B5;
+  --p-vibrant-pink-resolved: #E10F37;
+  --p-vibrant-brown-resolved: #8A5F40;
+
+  --p-vibrant-blend: var(--p-vibrant-blend-darker);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-vibrant-red: #FF4747;
+  --p-vibrant-orange: #FF9E33;
+  --p-vibrant-yellow: #FFE014;
+  --p-vibrant-green: #3BDB63;
+  --p-vibrant-mint: #2DE0CD;
+  --p-vibrant-teal: #2DD7E0;
+  --p-vibrant-cyan: #47D8FC;
+  --p-vibrant-blue: #0A99FF;
+  --p-vibrant-indigo: #7163FF;
+  --p-vibrant-purple: #E647FC;
+  --p-vibrant-pink: #FF4169;
+  --p-vibrant-brown: #C29672;
+
+  --p-vibrant-red-resolved: #FF6161;
+  --p-vibrant-orange-resolved: #FFB84D;
+  --p-vibrant-yellow-resolved: #FFFA2E;
+  --p-vibrant-green-resolved: #55F57D;
+  --p-vibrant-mint-resolved: #47FAE7;
+  --p-vibrant-teal-resolved: #47F1FA;
+  --p-vibrant-cyan-resolved: #61F2FF;
+  --p-vibrant-blue-resolved: #24B3FF;
+  --p-vibrant-indigo-resolved: #8B7DFF;
+  --p-vibrant-purple-resolved: #FF61FF;
+  --p-vibrant-pink-resolved: #FF5B83;
+  --p-vibrant-brown-resolved: #DCB08C;
+
+  --p-vibrant-blend: plus-lighter;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-vibrant-red: #FF4747;
+    --p-vibrant-orange: #FF9E33;
+    --p-vibrant-yellow: #FFE014;
+    --p-vibrant-green: #3BDB63;
+    --p-vibrant-mint: #2DE0CD;
+    --p-vibrant-teal: #2DD7E0;
+    --p-vibrant-cyan: #47D8FC;
+    --p-vibrant-blue: #0A99FF;
+    --p-vibrant-indigo: #7163FF;
+    --p-vibrant-purple: #E647FC;
+    --p-vibrant-pink: #FF4169;
+    --p-vibrant-brown: #C29672;
+
+    --p-vibrant-red-resolved: #FF6161;
+    --p-vibrant-orange-resolved: #FFB84D;
+    --p-vibrant-yellow-resolved: #FFFA2E;
+    --p-vibrant-green-resolved: #55F57D;
+    --p-vibrant-mint-resolved: #47FAE7;
+    --p-vibrant-teal-resolved: #47F1FA;
+    --p-vibrant-cyan-resolved: #61F2FF;
+    --p-vibrant-blue-resolved: #24B3FF;
+    --p-vibrant-indigo-resolved: #8B7DFF;
+    --p-vibrant-purple-resolved: #FF61FF;
+    --p-vibrant-pink-resolved: #FF5B83;
+    --p-vibrant-brown-resolved: #DCB08C;
+
+    --p-vibrant-blend: plus-lighter;
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-vibrant-red: #F52F32;
+  --p-vibrant-orange: #F58625;
+  --p-vibrant-yellow: #F5C200;
+  --p-vibrant-green: #26BF4D;
+  --p-vibrant-mint: #00BDA9;
+  --p-vibrant-teal: #00B3BF;
+  --p-vibrant-cyan: #00ABCF;
+  --p-vibrant-blue: #0078F0;
+  --p-vibrant-indigo: #5C50E6;
+  --p-vibrant-purple: #B72BC9;
+  --p-vibrant-pink: #F5234B;
+  --p-vibrant-brown: #9E7354;
+
+  --p-vibrant-red-resolved: #E11B1E;
+  --p-vibrant-orange-resolved: #E17211;
+  --p-vibrant-yellow-resolved: #E1AE00;
+  --p-vibrant-green-resolved: #12AB39;
+  --p-vibrant-mint-resolved: #00A995;
+  --p-vibrant-teal-resolved: #009FAB;
+  --p-vibrant-cyan-resolved: #0097BB;
+  --p-vibrant-blue-resolved: #0064DC;
+  --p-vibrant-indigo-resolved: #483CD2;
+  --p-vibrant-purple-resolved: #A317B5;
+  --p-vibrant-pink-resolved: #E10F37;
+  --p-vibrant-brown-resolved: #8A5F40;
+
+  --p-vibrant-blend: var(--p-vibrant-blend-darker);
 }
 
 /* Background utility classes — also publish --p-color-current for components */
@@ -616,3 +938,16 @@ and --p-color-current is exposed for any nested component to read.
 .p-bg-grouped-primary { background: var(--p-bg-grouped-primary); }
 .p-bg-grouped-secondary { background: var(--p-bg-grouped-secondary); }
 .p-bg-grouped-tertiary { background: var(--p-bg-grouped-tertiary); }
+/* Elevated background utilities (sheets, popovers, modal cards) */
+.p-bg-elevated-primary { background: var(--p-bg-elevated-primary); }
+.p-bg-elevated-secondary { background: var(--p-bg-elevated-secondary); }
+.p-bg-elevated-tertiary { background: var(--p-bg-elevated-tertiary); }
+.p-bg-grouped-elevated-primary { background: var(--p-bg-grouped-elevated-primary); }
+.p-bg-grouped-elevated-secondary { background: var(--p-bg-grouped-elevated-secondary); }
+.p-bg-grouped-elevated-tertiary { background: var(--p-bg-grouped-elevated-tertiary); }
+
+/* iOS label utilities */
+.p-ios-label { color: var(--p-ios-label); }
+.p-ios-label-secondary { color: var(--p-ios-label-secondary); }
+.p-ios-label-tertiary { color: var(--p-ios-label-tertiary); }
+.p-ios-label-quaternary { color: var(--p-ios-label-quaternary); }

@@ -6,6 +6,15 @@
  * drag a .p-slider and its thumb does the same. The styles live in
  * materials.css (the lens), forms.css, and sliders.css.
  *
+ * The default is the liquid lens: a knockout cuts the track out under
+ * the glass and a magnified copy of the track, run through per-size SVG
+ * goo and aberration filters, fills it.
+ *
+ * The flat macOS 27 / iOS 27 look is an opt-in: put data-p-lens="clear"
+ * on the switch's label or on the slider input for a .p-lens-clear (a
+ * rim and the resting knob, sized rather than scaled; no magnified
+ * copy, no filters).
+ *
  * Optional: without this script switches keep their CSS morph and
  * sliders keep a plain thumb. No dependencies.
  *
@@ -125,15 +134,32 @@
     return node;
   }
 
-  function buildLens() {
+  // The liquid lens is the default; data-p-lens="clear" opts out.
+  function wantsLiquid(el) {
+    return el.getAttribute('data-p-lens') !== 'clear';
+  }
+
+  // clear: the flat macOS 27 / iOS 27 lens, just the glass rim over the
+  // real track plus the resting knob. Otherwise the liquid lens.
+  function buildLens(clear) {
     var lens = part('p-lens');
     lens.setAttribute('aria-hidden', 'true');
     part('p-lens-rim', lens);
-    var liquid = part('p-lens-liquid', part('p-lens-body', lens));
-    part('p-lens-edge', liquid);
-    part('p-lens-track', liquid);
+    if (clear) {
+      lens.classList.add('p-lens-clear');
+    } else {
+      var liquid = part('p-lens-liquid', part('p-lens-body', lens));
+      part('p-lens-edge', liquid);
+      part('p-lens-track', liquid);
+    }
     part('p-lens-cover', lens);
     return lens;
+  }
+
+  // Liquid lenses only: the clear lens has no filters to size.
+  function sizeFilters(lens) {
+    if (lens.classList.contains('p-lens-clear')) return;
+    scaleFilters(lens, restingHeight(lens));
   }
 
   /* ─── Switches ─────────────────────────────────────────────────── */
@@ -148,9 +174,9 @@
     label.classList.add('p-switch-liquid');
     var knockout = part('p-switch-knockout', track);
     knockout.setAttribute('aria-hidden', 'true');
-    var lens = buildLens();
+    var lens = buildLens(!wantsLiquid(label));
     track.appendChild(lens);
-    scaleFilters(lens, restingHeight(lens));
+    sizeFilters(lens);
 
     var pointerId = null;
     var startX = 0;
@@ -162,7 +188,7 @@
     function lift() {
       if (calm()) return;
       // Re-sized on every lift, so a switch resized after load stays right.
-      scaleFilters(lens, restingHeight(lens));
+      sizeFilters(lens);
       clearTimeout(timer);
       label.setAttribute('data-p-lift', '');
     }
@@ -268,9 +294,10 @@
     var touch = input.classList.contains('p-slider-touch');
     var rect = input.getBoundingClientRect();
 
+    // Every size publishes its thumb and track as tokens (sliders.css).
     var thumbW = parseFloat(resolved(style, '--p-slider-thumb-w', '20')) || 20;
-    var thumbH = touch ? thumbW : 16;
-    var trackH = touch ? parseFloat(resolved(style, '--p-slider-touch-h', '6')) || 6 : 4;
+    var thumbH = parseFloat(resolved(style, '--p-slider-thumb-h', touch ? String(thumbW) : '16')) || 16;
+    var trackH = parseFloat(resolved(style, '--p-slider-track-h', touch ? '6' : '4')) || 4;
 
     var min = parseFloat(input.min) || 0;
     var max = parseFloat(input.max);
@@ -294,7 +321,7 @@
     if (!active) {
       var style = getComputedStyle(input);
       var touch = input.classList.contains('p-slider-touch');
-      var lens = buildLens();
+      var lens = buildLens(!wantsLiquid(input));
       lens.classList.add('p-slider-lens');
       if (touch) lens.classList.add('p-slider-lens-touch');
 
@@ -302,7 +329,12 @@
       // class, so it carries the colors the input resolved.
       lens.style.setProperty('--p-slider-lens-fill', touch
         ? resolved(style, '--p-slider-touch-fill', '#0088ff')
-        : resolved(style, '--p-slider-accent', '#0D6FFF'));
+        : resolved(style, '--p-slider-accent', '#0088FF'));
+      ['--p-slider-lens-body', '--p-slider-lens-edge', '--p-slider-lens-shadow',
+        '--p-slider-thumb-shadow'].forEach(function (name) {
+        var value = resolved(style, name, '');
+        if (value) lens.style.setProperty(name, value);
+      });
       lens.style.setProperty('--p-slider-lens-rest', touch
         ? resolved(style, '--p-slider-touch-lens-track', '#e4e4e4')
         : resolved(style, '--p-slider-lens-track', '#e0e0e0'));
@@ -314,8 +346,8 @@
       document.body.appendChild(lens);
       active = { input: input, lens: lens, timer: null };
       placeLens();
-      scaleFilters(lens, restingHeight(lens));
-      input.setAttribute('data-p-lens', '');
+      sizeFilters(lens);
+      input.setAttribute('data-p-lens-open', '');
       lens.getBoundingClientRect(); // commit lift 0 so the lift transitions
     }
 
@@ -328,7 +360,7 @@
     var current = active;
     function remove() {
       current.lens.remove();
-      current.input.removeAttribute('data-p-lens');
+      current.input.removeAttribute('data-p-lens-open');
       if (active === current) active = null;
     }
     clearTimeout(current.timer);

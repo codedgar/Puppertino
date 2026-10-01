@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
-title: Sliders
-description: A horizontal track with a thumb that people adjust between a minimum and maximum value. Native range inputs with macOS metrics.
+title: Sliders and Dials
+description: A horizontal track with a thumb, or a circular dial, that people adjust between a minimum and maximum value. Native range inputs with macOS 27 metrics.
 ---
 
 import '@puppertino/forms.css';
@@ -27,11 +27,12 @@ Use a stepper or a plain number field when people need a precise value. Consider
 
 | Part | Value |
 |---|---|
-| Track | 4px tall capsule, `--p-control-fill` when unfilled |
-| Fill | `--p-slider-accent`, the tintable system blue, left of the thumb |
-| Thumb | 20 by 16px white lozenge, radius 8, soft triple shadow |
-| Ticks | 2px marks at interval boundaries, 25% black |
-| Focus | The blue double ring, on the thumb |
+| Track | 4px capsule (6px on the large size), black at 8.5% when unfilled |
+| Fill | `--p-slider-accent`, the tintable system blue (`#0088FF`, `#0091FF` in dark mode) |
+| Thumb | 20 by 16px white lozenge, one soft shadow `0 0.5px 6px rgba(0,0,0,0.12)` |
+| Pressed | The thumb turns into a Liquid Glass lens that magnifies the track. With `data-p-lens="clear"`: clear glass 1.25x its size plus a 1px rim, and the whole track darkens by 8% |
+| Ticks | 2 by 2px dots, 4px under the track, black at 21% |
+| Focus | A 3.5px accent band around the thumb |
 
 ## Basic use
 
@@ -52,11 +53,51 @@ Include the helper once per page and the accent fill follows the thumb:
 
 The helper publishes the value as `--p-slider-fill` so the track can paint the accent portion. Firefox draws the fill natively without it. Without the helper on other browsers the track renders all gray and the slider still works, so the enhancement degrades cleanly.
 
-Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid Glass](../../materials/#liquid-glass) lens. The lens grows to 1.65x the 20 by 16px thumb and magnifies the fill edge under it. It settles back into a solid thumb 350ms after release, and keyboard changes never lift it.
+Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid Glass](../../materials/#liquid-glass) lens that magnifies the track and bends the fill edge as it passes. Add `data-p-lens="clear"` to the input for the flatter macOS 27 look. That glass is clear: it grows to 1.25x the thumb plus a 1px rim (27 by 22px for the default thumb), shows the track underneath without magnifying it, and casts a soft shadow about 7px below. In light mode the rim is a gray hairline; in dark mode a dark outer line with a bright inner one, brightest along the bottom. While you drag, the unfilled track darkens from 8.5% to 16% and the fill darkens by 8%. The glass settles back into a solid thumb 350ms after release, and keyboard changes never lift it.
 
 ```html
 <script src="src/js/liquid_glass.js"></script>
 ```
+
+## Sizes
+
+<Showcase
+  name="sliders-sizes"
+  compact
+  code={`<input type="range" class="p-slider p-slider-mini" min="0" max="100" value="65" aria-label="Mini slider" />
+<input type="range" class="p-slider p-slider-small" min="0" max="100" value="65" aria-label="Small slider" />
+<input type="range" class="p-slider" min="0" max="100" value="65" aria-label="Regular slider" />
+<input type="range" class="p-slider p-slider-large" min="0" max="100" value="65" aria-label="Large slider" />`}
+/>
+
+| Class | Thumb | Track | Pressed glass |
+|---|---|---|---|
+| `.p-slider-mini` | 16 × 12 | 4px | 22 × 17 |
+| `.p-slider-small` | 18 × 14 | 4px | 25 × 20 |
+| `.p-slider` | 20 × 16 | 4px | 27 × 22 |
+| `.p-slider-large` | 24 × 20 | 6px | 32 × 27 |
+
+## Narrow thumb
+
+<Showcase
+  name="sliders-narrow"
+  compact
+  code={`<input type="range" class="p-slider p-slider-narrow p-slider-ticks" style="--p-slider-ticks: 4;" min="0" max="100" step="25" value="75" aria-label="Narrow slider" />
+<input type="range" class="p-slider p-slider-small p-slider-narrow" min="0" max="100" value="40" aria-label="Small narrow slider" />`}
+/>
+
+`.p-slider-narrow` swaps the lozenge for an 8 by 16px pointer (10 by 18px on the small and large sizes). It reads as a precise position, which suits sliders with ticks.
+
+## Centered fill
+
+<Showcase
+  name="sliders-centered"
+  compact
+  code={`<input type="range" class="p-slider p-slider-centered" min="-50" max="50" value="20" aria-label="Balance" />
+<input type="range" class="p-slider p-slider-narrow p-slider-centered p-slider-origin" min="-50" max="50" value="-15" aria-label="Exposure" />`}
+/>
+
+`.p-slider-centered` grows the fill from the middle of the track toward the thumb, for values with a neutral midpoint like balance or exposure. A 2px line marks the origin inside the track. Add `.p-slider-origin` for a 2 by 4px mark under the middle as well. The centered fill needs `sliders.js`.
 
 ## Ticks
 
@@ -69,7 +110,7 @@ Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid 
        style="--p-slider-ticks: 5;" min="0" max="100" step="20" />`}
 />
 
-`.p-slider-ticks` draws marks across the track. Set `--p-slider-ticks` to the number of intervals and match it to your `step` so the thumb lands on the marks. Five intervals is the default.
+`.p-slider-ticks` draws 2 by 2px dots 4px under the track, one under each position the thumb can stop at. Set `--p-slider-ticks` to the number of intervals and match it to your `step` so the thumb lands on the dots. Five intervals is the default. The older style, 2px marks drawn inside the track, is still available as `.p-slider-ticks-inset`.
 
 ## Changing the color
 
@@ -77,15 +118,38 @@ Add a `.p-sys-*` class to the input, the same tint mechanism as every other cont
 
 ## Dark mode
 
-The unfilled track and thumb flip through the control tokens, and the accent swaps to its dark variant. No extra setup.
+The unfilled track turns to white at 8.5%, the ticks to white at 21%, the thumb stays white, and the accent swaps to `#0091FF`. The pressed glass switches to its dark rim. No extra setup.
 
 ## Accessibility
 
 - **Keyboard**: arrows adjust by `step`, Page Up and Down jump larger amounts, Home and End hit the extremes. All native.
-- **Focus** shows the blue double ring on the thumb. Mouse clicks do not trigger it.
+- **Focus** shows a 3.5px accent band on the thumb. Mouse clicks do not trigger it.
 - **Labeling**: a slider has no visible label of its own. Pair it with a `.p-label` and `for`/`id`, or set `aria-label`.
 - The 20px input height keeps the touch target comfortable around the 4px track.
 
 ## Dials
 
-Puppertino does not provide the macOS dial (a rotary knob); it needs pointer math that CSS cannot provide. Use a slider for linear values.
+<Showcase
+  name="sliders-dials"
+  compact
+  code={`<div class="p-dial p-dial-mini" role="slider" tabindex="0" aria-label="Mini dial" aria-valuemin="0" aria-valuemax="360" aria-valuenow="45"></div>
+<div class="p-dial p-dial-small" role="slider" tabindex="0" aria-label="Small dial" aria-valuemin="0" aria-valuemax="360" aria-valuenow="90"></div>
+<div class="p-dial" role="slider" tabindex="0" aria-label="Angle" aria-valuemin="0" aria-valuemax="360" aria-valuenow="135"></div>
+<div class="p-dial p-dial-large" role="slider" tabindex="0" aria-label="Large dial" aria-valuemin="0" aria-valuemax="360" aria-valuenow="200"></div>
+<div class="p-dial p-dial-xlarge" role="slider" tabindex="0" aria-label="Extra large dial" aria-valuemin="0" aria-valuemax="360" aria-valuenow="300"></div>
+<div class="p-dial" role="slider" tabindex="0" aria-label="Disabled dial" aria-disabled="true" aria-valuemin="0" aria-valuemax="360" aria-valuenow="90"></div>`}
+  snippet={`<div class="p-dial" role="slider" tabindex="0" aria-label="Angle"
+     aria-valuemin="0" aria-valuemax="360" aria-valuenow="90"></div>`}
+/>
+
+A dial is a circular slider for values that wrap around, like an angle or a hue. It is a flat plate, black at 8% (white at 7% in dark mode), with a 2px indicator that turns with the value. Pressed, the plate goes to 16%. Disabled, it drops to about 3% and the indicator to 25%. There is no shadow and no glass.
+
+The minimum sits at 12 o'clock and the value runs clockwise through one full turn. `sliders.js` makes it work: drag around the center, or focus it and use the arrow keys (step from `data-step`, default 1), Page Up and Down, Home and End. The script keeps `aria-valuenow` in sync and fires `input` and `change` events on the dial. Without it, set `--p-dial-angle` yourself.
+
+| Class | Plate | Indicator | Inset from edge |
+|---|---|---|---|
+| `.p-dial-mini` | 16 | 2 × 4 | 2 |
+| `.p-dial-small` | 20 | 2 × 5 | 2.5 |
+| `.p-dial` | 24 | 2 × 6 | 3 |
+| `.p-dial-large` | 28 | 2 × 6 | 3 |
+| `.p-dial-xlarge` | 36 | 2 × 7 | 3 |

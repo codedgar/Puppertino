@@ -1,7 +1,12 @@
-/* Puppertino v2.0 — Page controls (iOS)
+/* Puppertino v2.0 — Page controls (iOS 27)
    A row of dots showing how many pages a scrolling set holds and which
    one is showing. 8px dots on a 16px pitch, the current one opaque and
-   the rest faded.
+   the rest at the tertiary label color.
+
+   iOS 27 sets the dots on a glass platter: a 24px capsule with 12px of
+   padding either side, a heavy backdrop blur and an almost clear tint
+   (white 10% in light, black 2% in dark), with no rim and no shadow.
+   .p-page-control-plain drops it for the bare iOS 26 dots.
 
    Markup is a nav of links, one per page, so the control is navigable
    and announced rather than decorative:
@@ -15,20 +20,26 @@
    visually, not hidden from the accessibility tree. */
 
 :root {
-  --p-page-dot: rgba(0, 0, 0, 0.85);
-  --p-page-dot-dim: rgba(0, 0, 0, 0.30);
+  --p-page-dot: #000000;
+  --p-page-dot-dim: rgba(60, 60, 67, 0.30);
+  --p-page-platter: rgba(255, 255, 255, 0.10);
+  --p-page-platter-fallback: rgba(242, 242, 247, 0.92);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-page-dot: rgba(255, 255, 255, 0.92);
-  --p-page-dot-dim: rgba(255, 255, 255, 0.30);
+  --p-page-dot: #ffffff;
+  --p-page-dot-dim: rgba(235, 235, 245, 0.30);
+  --p-page-platter: rgba(0, 0, 0, 0.02);
+  --p-page-platter-fallback: rgba(28, 28, 30, 0.92);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-page-dot: rgba(255, 255, 255, 0.92);
-    --p-page-dot-dim: rgba(255, 255, 255, 0.30);
+    --p-page-dot: #ffffff;
+    --p-page-dot-dim: rgba(235, 235, 245, 0.30);
+    --p-page-platter: rgba(0, 0, 0, 0.02);
+    --p-page-platter-fallback: rgba(28, 28, 30, 0.92);
   }
 }
 
@@ -36,8 +47,10 @@
    page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-page-dot: rgba(0, 0, 0, 0.85);
-  --p-page-dot-dim: rgba(0, 0, 0, 0.30);
+  --p-page-dot: #000000;
+  --p-page-dot-dim: rgba(60, 60, 67, 0.30);
+  --p-page-platter: rgba(255, 255, 255, 0.10);
+  --p-page-platter-fallback: rgba(242, 242, 247, 0.92);
 }
 
 /* Over a photo, where the page content sets the contrast rather than
@@ -48,13 +61,57 @@
 }
 
 .p-page-control {
+  position: relative;
   display: inline-flex;
   align-items: center;
   /* 8px dot on a 16px pitch. The row is 44px tall so the control is
      comfortable to hit even though the dots themselves are small. */
   gap: 8px;
   min-height: 44px;
+  padding: 0 12px;
+}
+
+/* The platter: 24px tall, full width of the row, centered. It blurs
+   whatever the pager shows behind it, so the dots read on any page. */
+.p-page-control::before {
+  content: "";
+  /* No z-index: the dots are positioned too and follow it in tree
+     order, so they paint on top. (Isolating the control would cut the
+     blur off from the page behind it.) */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 24px;
+  margin-top: -12px;
+  border-radius: 12px;
+  pointer-events: none;
+
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background: var(--p-page-platter);
+}
+
+.p-page-control-plain {
   padding: 0 8px;
+}
+
+.p-page-control-plain::before {
+  content: none;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .p-page-control::before {
+    background: var(--p-page-platter-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-page-control::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-page-platter-fallback);
+  }
 }
 
 .p-page-dot {
@@ -127,7 +184,18 @@
   }
 }
 
+@media (prefers-contrast: more) {
+  .p-page-control::before {
+    background: var(--p-page-platter-fallback);
+    box-shadow: inset 0 0 0 1px var(--p-page-dot-dim);
+  }
+}
+
 @media (forced-colors: active) {
+  .p-page-control::before {
+    content: none;
+  }
+
   .p-page-dot {
     background: ButtonBorder;
     forced-color-adjust: none;

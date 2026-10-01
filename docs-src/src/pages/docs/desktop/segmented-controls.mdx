@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Segmented controls
-description: A linear set of segments, each of which functions as a button. macOS 26 metrics, accent and gray styles, no JavaScript required.
+description: A linear set of segments, each of which functions as a button. macOS 27 metrics, five sizes, accent and gray styles, no JavaScript required.
 ---
 
 import '@puppertino/forms.css';
@@ -20,11 +20,11 @@ Use tabs when the sections carry their own content areas. Use radios when the ch
 
 | Part | Value |
 |---|---|
-| Track | 24px tall, 6px radius, `--p-fill-secondary` background |
-| Segments | Equal width, 54px minimum, 10px horizontal padding |
+| Track | 24px tall, 6px radius, `--p-segmented-track` background (black 10%, white 9% in dark mode) |
+| Segments | Equal width, 54px minimum including padding, 10px horizontal padding |
 | Label | 13px, weight 510. Unselected `--p-text-primary`, selected white |
-| Selected pill | Full height, no inset, 6px radius, flat accent fill |
-| Separators | 1px, `#D9D9D9`, 5px vertical inset, hidden next to the selection |
+| Selected pill | Full height, no inset, 6px radius, flat `--p-control-accent` fill |
+| Separators | 1px, black at 25% (white at 25% in dark mode), 14px tall, hidden next to the selection |
 
 ## Basic use
 
@@ -54,6 +54,54 @@ It is a radio group wearing a control. Native inputs carry the state, so keyboar
 
 Separators sit between segments and disappear next to the selection, exactly like macOS. Pressing an unselected segment tints it with `--p-fill-tertiary` before the selection moves.
 
+## Sizes
+
+Five sizes share the macOS control ladder with buttons and pop-up buttons. The two largest turn into capsules: the track and the selected pill both round fully.
+
+<Showcase
+  name="segmented-sizes"
+  compact
+  code={`<div class="p-segmented p-segmented-mini" role="group" aria-label="Mini">
+  <label class="p-segment"><input type="radio" name="sc-s16" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s16" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s16" /><span>Month</span></label>
+</div>
+<div class="p-segmented p-segmented-small" role="group" aria-label="Small">
+  <label class="p-segment"><input type="radio" name="sc-s20" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s20" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s20" /><span>Month</span></label>
+</div>
+<div class="p-segmented" role="group" aria-label="Regular">
+  <label class="p-segment"><input type="radio" name="sc-s24" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s24" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s24" /><span>Month</span></label>
+</div>
+<div class="p-segmented p-segmented-large" role="group" aria-label="Large">
+  <label class="p-segment"><input type="radio" name="sc-s28" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s28" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s28" /><span>Month</span></label>
+</div>
+<div class="p-segmented p-segmented-xlarge" role="group" aria-label="Extra large">
+  <label class="p-segment"><input type="radio" name="sc-s36" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s36" /><span>Week</span></label>
+  <label class="p-segment"><input type="radio" name="sc-s36" /><span>Month</span></label>
+</div>`}
+  snippet={`<div class="p-segmented p-segmented-large" role="group" aria-label="View">
+  <label class="p-segment"><input type="radio" name="view" checked /><span>Day</span></label>
+  <label class="p-segment"><input type="radio" name="view" /><span>Week</span></label>
+</div>`}
+/>
+
+| Size | Class | Height | Radius | Label | Padding | Separator |
+|---|---|---|---|---|---|---|
+| Mini | `.p-segmented-mini` | 16px | 4px | 10px | 6px | 10px |
+| Small | `.p-segmented-small` | 20px | 5px | 11px | 8px | 12px |
+| Regular | (default) | 24px | 6px | 13px | 10px | 14px |
+| Large | `.p-segmented-large` | 28px | capsule | 13px | 12px | 18px |
+| Extra large | `.p-segmented-xlarge` | 36px | capsule | 13px | 14px | 20px |
+
+Every label is weight 510. Mini and small are for dense inspectors and toolbars; they sit well below the 44px touch minimum, so keep them to pointer interfaces.
+
 ## Gray style
 
 <Showcase
@@ -66,18 +114,18 @@ Separators sit between segments and disappear next to the selection, exactly lik
 </div>`}
 />
 
-`.p-segmented-gray` swaps the accent pill for a quiet `--p-fill-tertiary` fill and keeps the label color. Consider it for secondary controls that should not compete with the view's primary action.
+`.p-segmented-gray` swaps the accent pill for a quiet gray pill (black 10% over the track, 19% pressed) and keeps the label color. Consider it for secondary controls that should not compete with the view's primary action.
 
 ## Changing the color
 
 <Showcase
   name="segmented-colors"
   compact
-  code={`<div class="p-segmented p-sys-purple" style="background: var(--p-fill-secondary);" role="group" aria-label="Purple example">
+  code={`<div class="p-segmented p-sys-purple" style="background: var(--p-segmented-track);" role="group" aria-label="Purple example">
   <label class="p-segment"><input type="radio" name="sc-tint1" checked /><span>One</span></label>
   <label class="p-segment"><input type="radio" name="sc-tint1" /><span>Two</span></label>
 </div>
-<div class="p-segmented p-sys-green" style="background: var(--p-fill-secondary);" role="group" aria-label="Green example">
+<div class="p-segmented p-sys-green" style="background: var(--p-segmented-track);" role="group" aria-label="Green example">
   <label class="p-segment"><input type="radio" name="sc-tint2" checked /><span>One</span></label>
   <label class="p-segment"><input type="radio" name="sc-tint2" /><span>Two</span></label>
 </div>`}
@@ -87,8 +135,8 @@ Add a `.p-sys-*` class to retint the selected pill through `--p-color-current`, 
 
 ## States
 
-- **Pressed** on the selected pill darkens it by 13%, the same plus-darker recipe as buttons. Pressed on an unselected segment shows a quiet fill.
-- **Focus** shows the forms blue double ring on the focused segment. Arrow keys move the selection, because it is a radio group.
+- **Pressed** on the selected pill darkens it by 15% (in dark mode it lightens slightly). Pressed on an unselected segment shows a quiet fill.
+- **Focus** shows the macOS focus band on the focused segment: 3.5px outside, 1px inside, accent at 50%. Arrow keys move the selection, because it is a radio group.
 - **Disabled**: put `disabled` on every input. The control fades to 50%, unselected labels drop to `#BFBFBF`, the selected label to half-opacity white.
 
 <Showcase
@@ -104,7 +152,7 @@ Add a `.p-sys-*` class to retint the selected pill through `--p-color-current`, 
 
 ## Dark mode
 
-The track and gray pill flip through the fill tokens, separators lighten to `rgba(255,255,255,0.15)`, and the accent pill picks up the dark accent from `colors.css`. No extra setup.
+The track flips to white at 9%, the gray pill to white at 10%, separators to white at 25%, and the accent pill picks up the dark accent (`#0091FF`) from `colors.css`. No extra setup.
 
 ## The slide
 
@@ -117,6 +165,6 @@ macOS slides the pill between segments, and so does this control, still without 
 | `.p-segmented-controls` + `.active` | `.p-segmented` with radio inputs |
 | `.p-segmented-controls-alt` | `.p-segmented-gray` (closest) |
 | `.p-segmented-grey` | `.p-segmented-gray` |
-| `.p-segmented-radius`, `-outline`, `-outline-alt` | no v2 equivalent, macOS 26 has one shape |
+| `.p-segmented-radius`, `-outline`, `-outline-alt` | `.p-segmented-large` or `-xlarge` for a capsule; no outline equivalent |
 
 The v1 classes stay for backwards compatibility and will be removed in a future major. The v2 control needs no `.active` class management in JavaScript; the checked radio is the state.

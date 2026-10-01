@@ -2,16 +2,20 @@
  * Puppertino v2 — colour picker.
  *
  * Wires .p-color-picker: switches between the Grid, Spectrum, and
- * Sliders panels, reads a colour out of the spectrum field, keeps the
- * channel sliders and their value fields in step, and publishes the
- * result on the preview and every swatch.
+ * Sliders panels, fills Apple's 12 x 10 colour grid, reads a colour out
+ * of the spectrum field, keeps the channel sliders and their value
+ * fields in step, saves the current colour from the "+" swatch, and
+ * publishes the result on the preview and every swatch.
  *
  * Markup contract:
  *   .p-color-picker                     the panel
  *     [data-p-color-panel="grid"]       a panel, shown when its mode
  *                                       radio is checked
  *     .p-segment > input[value="grid"]  the mode control
+ *     .p-color-picker__palette          the 12 x 10 grid; filled with
+ *                                       .p-color-cell buttons when empty
  *     .p-color-swatch[data-p-color]     picks that colour
+ *     .p-color-swatch-add               saves the current colour
  *     .p-color-picker__spectrum         click or drag to pick
  *     .p-color-slider[data-p-channel]   r | g | b | a
  *     .p-color-picker__value[data-p-channel]
@@ -63,6 +67,46 @@
     return 'rgba(' + Math.round(c.r) + ', ' + Math.round(c.g) + ', ' + Math.round(c.b) + ', ' + c.a + ')';
   }
 
+  /* Apple's grid: a white-to-black ramp, then eleven hue columns (plus a
+     green) from dark to light. Row-major, 12 per row. */
+  var PALETTE = [
+    'FEFFFE', 'EBEBEB', 'D6D6D6', 'C2C2C2', 'ADADAD', '999999', '858585', '707070', '5C5C5C', '474747', '333333', '000000',
+    '00374A', '011D57', '11053B', '2E063D', '3C071B', '5C0701', '5A1C00', '583300', '563D00', '666100', '4F5504', '263E0F',
+    '004D65', '012F7B', '1A0A52', '450D59', '551029', '831100', '7B2900', '7A4A00', '785800', '8D8602', '6F760A', '38571A',
+    '016E8F', '0042A9', '2C0977', '61187C', '791A3D', 'B51A00', 'AD3E00', 'A96800', 'A67B01', 'C4BC00', '9BA50E', '4E7A27',
+    '008CB4', '0056D6', '371A94', '7A219E', '99244F', 'E22400', 'DA5100', 'D38301', 'D19D01', 'F5EC00', 'C3D117', '669D34',
+    '00A1D8', '0061FD', '4D22B2', '982ABC', 'B92D5D', 'FF4015', 'FF6A00', 'FFAB01', 'FCC700', 'FEFB41', 'D9EC37', '76BB40',
+    '01C7FC', '3A87FD', '5E30EB', 'BE38F3', 'E63B7A', 'FE6250', 'FE8648', 'FEB43F', 'FECB3E', 'FFF76B', 'E4EF65', '96D35F',
+    '52D6FC', '74A7FF', '864FFD', 'D357FE', 'EE719E', 'FF8C82', 'FEA57D', 'FEC777', 'FED977', 'FFF994', 'EAF28F', 'B1DD8B',
+    '93E3FC', 'A7C6FF', 'B18CFE', 'E292FE', 'F4A4C0', 'FFB5AF', 'FFC5AB', 'FED9A8', 'FDE4A8', 'FFFBB9', 'F1F7B7', 'CDE8B5',
+    'CBF0FF', 'D2E2FE', 'D8C9FE', 'EFCAFE', 'F9D3E0', 'FFDAD8', 'FFE2D6', 'FEECD4', 'FEF1D5', 'FDFBDD', 'F6FADB', 'DEEED4'
+  ];
+  var COLUMNS = 12;
+
+  function fillPalette(palette) {
+    if (palette.children.length) return;
+    palette.setAttribute('role', 'listbox');
+    if (!palette.hasAttribute('aria-label')) palette.setAttribute('aria-label', 'Colors');
+    for (var i = 0; i < PALETTE.length; i++) {
+      var cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'p-color-cell';
+      cell.setAttribute('role', 'option');
+      cell.setAttribute('aria-selected', 'false');
+      cell.setAttribute('aria-label', '#' + PALETTE[i]);
+      cell.setAttribute('data-p-color', '#' + PALETTE[i]);
+      cell.style.setProperty('--p-color-swatch', '#' + PALETTE[i]);
+      cell.tabIndex = i === 0 ? 0 : -1;
+      palette.appendChild(cell);
+    }
+  }
+
+  /* One tab stop for the whole grid: arrows move between cells. */
+  function rove(palette, cell) {
+    var cells = palette.querySelectorAll('.p-color-cell');
+    for (var i = 0; i < cells.length; i++) cells[i].tabIndex = cells[i] === cell ? 0 : -1;
+  }
+
   /* Current colour per panel, so a picker can be read back later. */
   var state = new WeakMap();
 
@@ -101,7 +145,7 @@
     if (alpha) {
       alpha.style.setProperty(
         '--p-color-track',
-        'transparent, rgb(' + Math.round(colour.r) + ',' + Math.round(colour.g) + ',' + Math.round(colour.b) + ')'
+        'transparent 12%, rgb(' + Math.round(colour.r) + ',' + Math.round(colour.g) + ',' + Math.round(colour.b) + ') 88%'
       );
     }
 
@@ -118,7 +162,7 @@
      Otherwise selecting a swatch that had no attribute leaves the whole
      group with nothing pressed. */
   function markSelected(panel, swatch) {
-    var all = panel.querySelectorAll('.p-color-swatch');
+    var all = panel.querySelectorAll('.p-color-swatch:not(.p-color-swatch-add), .p-color-cell');
     for (var i = 0; i < all.length; i++) {
       var on = all[i] === swatch;
       all[i].classList.toggle('p-selected', on);
@@ -152,9 +196,32 @@
   /* ─── Swatches ───────────────────────────────────────────────────── */
 
   document.addEventListener('click', function (event) {
-    var swatch = event.target.closest ? event.target.closest('.p-color-swatch') : null;
+    if (!event.target.closest) return;
+
+    /* "+" saves the current colour as a new swatch before it. */
+    var add = event.target.closest('.p-color-swatch-add');
+    if (add) {
+      var host = add.closest('.p-color-picker');
+      if (!host) return;
+      var c = current(host);
+      var saved = document.createElement('button');
+      saved.type = 'button';
+      saved.className = 'p-color-swatch';
+      saved.setAttribute('data-p-color', css(c));
+      saved.setAttribute('aria-label', 'Saved color ' + css(c));
+      saved.style.setProperty('--p-color-swatch', css(c));
+      add.parentNode.insertBefore(saved, add);
+      markSelected(host, saved);
+      return;
+    }
+
+    var swatch = event.target.closest('.p-color-swatch, .p-color-cell');
     if (!swatch) return;
     var picker = swatch.closest('.p-color-picker');
+    if (swatch.classList.contains('p-color-cell')) {
+      var pal = swatch.closest('.p-color-picker__palette');
+      if (pal) rove(pal, swatch);
+    }
     var colour = parse(swatch.getAttribute('data-p-color')) ||
       parse(getComputedStyle(swatch).getPropertyValue('--p-color-swatch'));
     if (!colour) return;
@@ -162,6 +229,29 @@
       markSelected(picker, swatch);
       publish(picker, colour);
     }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    var cell = event.target.closest ? event.target.closest('.p-color-cell') : null;
+    if (!cell) return;
+    var palette = cell.closest('.p-color-picker__palette');
+    if (!palette) return;
+    var cells = Array.prototype.slice.call(palette.querySelectorAll('.p-color-cell'));
+    var i = cells.indexOf(cell);
+    var next = i;
+    switch (event.key) {
+      case 'ArrowRight': next = i + 1; break;
+      case 'ArrowLeft': next = i - 1; break;
+      case 'ArrowDown': next = i + COLUMNS; break;
+      case 'ArrowUp': next = i - COLUMNS; break;
+      case 'Home': next = i - (i % COLUMNS); break;
+      case 'End': next = i - (i % COLUMNS) + COLUMNS - 1; break;
+      default: return;
+    }
+    if (next < 0 || next >= cells.length) return;
+    event.preventDefault();
+    rove(palette, cells[next]);
+    cells[next].focus();
   });
 
   /* ─── Spectrum ───────────────────────────────────────────────────── */
@@ -256,11 +346,26 @@
 
   function init() {
     var pickers = document.querySelectorAll('.p-color-picker');
+    var palettes = document.querySelectorAll('.p-color-picker__palette');
+    for (var p = 0; p < palettes.length; p++) fillPalette(palettes[p]);
+
     for (var i = 0; i < pickers.length; i++) {
       var picker = pickers[i];
       var checked = picker.querySelector('.p-segment > input[type="radio"]:checked');
       if (checked) showPanel(picker, checked.value);
-      var selected = picker.querySelector('.p-color-swatch.p-selected, .p-color-swatch[aria-pressed="true"]');
+      var selected = picker.querySelector(
+        '.p-color-cell.p-selected, .p-color-swatch.p-selected, .p-color-swatch[aria-pressed="true"]'
+      );
+      /* A picker can name its starting grid colour: data-p-color="#BE38F3". */
+      var named = picker.getAttribute('data-p-color');
+      if (!selected && named) {
+        var match = picker.querySelector('.p-color-cell[data-p-color="' + named.toUpperCase() + '"]');
+        if (match) {
+          selected = match;
+          markSelected(picker, match);
+          rove(match.parentNode, match);
+        }
+      }
       var start =
         (selected && (parse(selected.getAttribute('data-p-color')) ||
           parse(getComputedStyle(selected).getPropertyValue('--p-color-swatch')))) ||

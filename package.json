@@ -24,6 +24,7 @@
     "./js/*": "./src/js/*",
     "./actions": "./dist/css/actions.css",
     "./adaptive": "./dist/css/adaptive.css",
+    "./boxes": "./dist/css/boxes.css",
     "./buttons": "./dist/css/buttons.css",
     "./cards": "./dist/css/cards.css",
     "./color-palette": "./dist/css/color_palette.css",

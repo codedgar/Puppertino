@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Doc.astro
 title: Colors
-description: Puppertino's color system follows Apple's macOS 26 specification. System accents, fill levels, text hierarchy, and semantic backgrounds.
+description: Puppertino's color system follows Apple's macOS 27 and iOS 27 specifications. System accents, fill levels, text hierarchy, and semantic backgrounds.
 ---
 
 import ColorSwatch from '../../components/ColorSwatch.astro';
@@ -11,7 +11,7 @@ import TextHierarchyDemo from '../../components/TextHierarchyDemo.astro';
 import FillDemo from '../../components/FillDemo.astro';
 import BackgroundDemo from '../../components/BackgroundDemo.astro';
 
-Puppertino ships with the full macOS 26 color system. Every color has a light and dark mode variant, every fill level adapts to its surface, and the text hierarchy gives six tiers of emphasis instead of four.
+Puppertino ships with the full macOS 27 color system. Every color has a light and dark mode variant, every fill level adapts to its surface, and the text hierarchy gives six tiers of emphasis instead of four.
 
 The colors live in `colors.css`. The legacy palettes from earlier versions of Puppertino remain available for backwards compatibility.
 
@@ -51,9 +51,85 @@ Apply system colors with the utility classes or the CSS variables directly.
 }
 ```
 
+## Control accent
+
+Blue is also the accent for every tinted control: filled buttons, switches, sliders, progress bars, and the selected segment. It is the same blue as text links and selection, `#0088FF` in light mode and `#0091FF` in dark mode.
+
+| Token | Light | Dark | What it is |
+|---|---|---|---|
+| `--p-control-accent` | `#0088FF` | `#0091FF` | The default control fill |
+| `--p-color-current` | Follows `--p-sys-blue` | Follows `--p-sys-blue` | The tint a control actually uses |
+| `--p-focus-ring` | 3.5px band outside plus 1px inside, `rgba(0,136,255,0.5)` | Same, `rgba(0,145,255,0.5)` | Keyboard focus on fields and controls |
+| `--p-control-accent-text` | `#0078F0` | `#0091FF` | Accent as text on a material, such as a borderless button label inside a vibrant surface |
+
+Every color class also sets `--p-color-current`, so a class on a control retints it. The tint stays on that element and does not spread to its children, so a colored card does not retint the buttons inside it.
+
+```html
+<button class="p-button p-button-colored">Blue in light, brighter blue in dark</button>
+<button class="p-button p-button-colored p-sys-green">Green</button>
+```
+
+Use the focus ring as a box shadow on your own controls.
+
+```css
+.my-field:focus-visible {
+  outline: none;
+  box-shadow: var(--p-focus-ring);
+}
+```
+
+## Vibrant accents
+
+Color that sits on a material (a menu, a popover, an alert, a sidebar) is vibrant: instead of painting a flat color, it blends with the glass behind it. There are twelve vibrant accents, one for each system accent except gray.
+
+<SwatchGrid>
+  <ColorSwatch name="Red" cssVar="--p-vibrant-red" lightHex="#F52F32" darkHex="#FF4747" />
+  <ColorSwatch name="Orange" cssVar="--p-vibrant-orange" lightHex="#F58625" darkHex="#FF9E33" />
+  <ColorSwatch name="Yellow" cssVar="--p-vibrant-yellow" lightHex="#F5C200" darkHex="#FFE014" />
+  <ColorSwatch name="Green" cssVar="--p-vibrant-green" lightHex="#26BF4D" darkHex="#3BDB63" />
+  <ColorSwatch name="Mint" cssVar="--p-vibrant-mint" lightHex="#00BDA9" darkHex="#2DE0CD" />
+  <ColorSwatch name="Teal" cssVar="--p-vibrant-teal" lightHex="#00B3BF" darkHex="#2DD7E0" />
+  <ColorSwatch name="Cyan" cssVar="--p-vibrant-cyan" lightHex="#00ABCF" darkHex="#47D8FC" />
+  <ColorSwatch name="Blue" cssVar="--p-vibrant-blue" lightHex="#0078F0" darkHex="#0A99FF" />
+  <ColorSwatch name="Indigo" cssVar="--p-vibrant-indigo" lightHex="#5C50E6" darkHex="#7163FF" />
+  <ColorSwatch name="Purple" cssVar="--p-vibrant-purple" lightHex="#B72BC9" darkHex="#E647FC" />
+  <ColorSwatch name="Pink" cssVar="--p-vibrant-pink" lightHex="#F5234B" darkHex="#FF4169" />
+  <ColorSwatch name="Brown" cssVar="--p-vibrant-brown" lightHex="#9E7354" darkHex="#C29672" />
+</SwatchGrid>
+
+Each vibrant color is a layer, not a finished color. In light mode it composites with `mix-blend-mode: plus-darker`, which adds the layer to the backdrop and subtracts white: over white you see the color exactly, over gray glass it darkens by the gray. In dark mode it uses `plus-lighter`, which adds the two: over black you see the color, over dark glass it brightens. `--p-vibrant-blend` holds the right mode for the current appearance.
+
+```css
+.my-badge::before {
+  background: var(--p-vibrant-red);
+  mix-blend-mode: var(--p-vibrant-blend);
+}
+```
+
+Where a blend isn't possible, such as a text color, use the resolved token. It is the same recipe worked out over the standard overlay glass (`#EBEBEB` in light mode, `#1A1A1A` in dark).
+
+| Color | Layer (light) | Layer (dark) | `-resolved` (light) | `-resolved` (dark) |
+|---|---|---|---|---|
+| Red | `#F52F32` | `#FF4747` | `#E11B1E` | `#FF6161` |
+| Orange | `#F58625` | `#FF9E33` | `#E17211` | `#FFB84D` |
+| Yellow | `#F5C200` | `#FFE014` | `#E1AE00` | `#FFFA2E` |
+| Green | `#26BF4D` | `#3BDB63` | `#12AB39` | `#55F57D` |
+| Mint | `#00BDA9` | `#2DE0CD` | `#00A995` | `#47FAE7` |
+| Teal | `#00B3BF` | `#2DD7E0` | `#009FAB` | `#47F1FA` |
+| Cyan | `#00ABCF` | `#47D8FC` | `#0097BB` | `#61F2FF` |
+| Blue | `#0078F0` | `#0A99FF` | `#0064DC` | `#24B3FF` |
+| Indigo | `#5C50E6` | `#7163FF` | `#483CD2` | `#8B7DFF` |
+| Purple | `#B72BC9` | `#E647FC` | `#A317B5` | `#FF61FF` |
+| Pink | `#F5234B` | `#FF4169` | `#E10F37` | `#FF5B83` |
+| Brown | `#9E7354` | `#C29672` | `#8A5F40` | `#DCB08C` |
+
+Safari supports `plus-darker`. Chrome and Firefox don't, so there `--p-vibrant-blend` resolves to `multiply` in light mode, which matches over white and lands a few levels lighter over light glass. `plus-lighter` works in every current browser.
+
+Buttons pick these up on their own inside vibrant surfaces. See [Buttons](../desktop/buttons/#vibrant).
+
 ## Text hierarchy
 
-Six levels of text emphasis. Primary is for body content, secondary for supporting copy, and the lower tiers are for placeholders and decorative text. Apple expanded this from four levels to six in macOS 26 to give designers more room for ultra-subtle text.
+Six levels of text emphasis. Primary is for body content, secondary for supporting copy, and the lower tiers are for placeholders and decorative text. Apple expanded this from four levels to six with Liquid Glass to give designers more room for ultra-subtle text.
 
 Notice that primary text is not pure black. Apple uses 85% opacity so the surface behind shows through subtly. This is part of the Liquid Glass aesthetic.
 
@@ -69,7 +145,7 @@ Notice that primary text is not pure black. Apple uses 85% opacity so the surfac
 
 Five fill tiers for subtle background tints. Use them for buttons, segmented control backgrounds, search bars, or any element that needs a quiet container without competing with the surface.
 
-The macOS 26 fills use pure black (light mode) or pure white (dark mode) at low opacity. Apple replaced the older tinted-gray fills with this approach in macOS 26; it composites better over translucent surfaces.
+The macOS fills use pure black (light mode) or pure white (dark mode) at low opacity. Apple replaced the older tinted-gray fills with this approach with Liquid Glass; it composites better over translucent surfaces.
 
 <FillDemo />
 
@@ -80,6 +156,67 @@ Three background tiers for layered surfaces, plus three more for grouped table-s
 <BackgroundDemo />
 
 Use the grouped variants (`--p-bg-grouped-primary`, `--p-bg-grouped-secondary`, `--p-bg-grouped-tertiary`) when building list-style content like settings screens.
+
+### Elevated backgrounds
+
+Sheets, popovers, and modal cards sit on the elevated tiers. In light mode they equal the base tiers. In dark mode each one is a step lighter, so a sheet reads as a separate layer without a heavy shadow.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--p-bg-elevated-primary` | `#FFFFFF` | `#1C1C1E` |
+| `--p-bg-elevated-secondary` | `#F2F2F7` | `#2C2C2E` |
+| `--p-bg-elevated-tertiary` | `#FFFFFF` | `#3A3A3C` |
+| `--p-bg-grouped-elevated-primary` | `#F2F2F7` | `#1C1C1E` |
+| `--p-bg-grouped-elevated-secondary` | `#FFFFFF` | `#2C2C2E` |
+| `--p-bg-grouped-elevated-tertiary` | `#F2F2F7` | `#3A3A3C` |
+
+Each token has a matching utility class, such as `.p-bg-elevated-secondary`.
+
+## iOS colors
+
+iOS shares the twelve accents with macOS. Its grays, labels, fills, and separator differ, so touch components use the `--p-ios-*` tokens. Desktop components keep the macOS tokens above.
+
+### Gray scale
+
+On iOS, Gray stays `#8E8E93` in dark mode. The macOS dark gray (`--p-sys-gray`) is `#98989F`.
+
+<SwatchGrid>
+  <ColorSwatch name="Gray" cssVar="--p-ios-gray" lightHex="#8E8E93" darkHex="#8E8E93" />
+  <ColorSwatch name="Gray 2" cssVar="--p-ios-gray-2" lightHex="#AEAEB2" darkHex="#636366" />
+  <ColorSwatch name="Gray 3" cssVar="--p-ios-gray-3" lightHex="#C7C7CC" darkHex="#48484A" />
+  <ColorSwatch name="Gray 4" cssVar="--p-ios-gray-4" lightHex="#D1D1D6" darkHex="#3A3A3C" />
+  <ColorSwatch name="Gray 5" cssVar="--p-ios-gray-5" lightHex="#E5E5EA" darkHex="#2C2C2E" />
+  <ColorSwatch name="Gray 6" cssVar="--p-ios-gray-6" lightHex="#F2F2F7" darkHex="#1C1C1E" />
+</SwatchGrid>
+
+### Labels, fills, and separator
+
+| Token | Light | Dark | Use it for |
+|---|---|---|---|
+| `--p-ios-label` | `#000000` | `#FFFFFF` | Primary text |
+| `--p-ios-label-secondary` | `rgba(60,60,67,0.60)` | `rgba(235,235,245,0.70)` | Subtitles, detail text |
+| `--p-ios-label-tertiary` | `rgba(60,60,67,0.30)` | `rgba(235,235,245,0.30)` | Placeholders, disabled text |
+| `--p-ios-label-quaternary` | `rgba(60,60,67,0.18)` | `rgba(235,235,245,0.16)` | Watermarks |
+| `--p-ios-fill` | `rgba(120,120,128,0.20)` | `rgba(120,120,128,0.36)` | Thin, small shapes like slider tracks |
+| `--p-ios-fill-secondary` | `rgba(120,120,128,0.16)` | `rgba(120,120,128,0.32)` | Search fields, selected sidebar rows |
+| `--p-ios-fill-tertiary` | `rgba(118,118,128,0.12)` | `rgba(118,118,128,0.24)` | Gray buttons |
+| `--p-ios-fill-quaternary` | `rgba(116,116,128,0.08)` | `rgba(118,118,128,0.18)` | Steppers, large quiet areas |
+| `--p-ios-separator` | `rgba(0,0,0,0.12)` | `rgba(255,255,255,0.17)` | Hairlines in lists and bars |
+
+The iOS separator is lighter than the macOS one (`--p-separator`). Over white it lands at `#E0E0E0`, where the macOS value lands at `#C6C6C8`. The opaque separator, `--p-separator-opaque`, is the same on both platforms.
+
+The label tokens have utility classes: `.p-ios-label`, `.p-ios-label-secondary`, `.p-ios-label-tertiary`, `.p-ios-label-quaternary`.
+
+```css
+.my-list-row {
+  color: var(--p-ios-label);
+  box-shadow: inset 0 -0.5px 0 var(--p-ios-separator);
+}
+
+.my-list-row small {
+  color: var(--p-ios-label-secondary);
+}
+```
 
 ## Dark mode
 

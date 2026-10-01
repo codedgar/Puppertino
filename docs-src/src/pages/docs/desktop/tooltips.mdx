@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Tooltips
-description: The macOS tooltip as one HTML attribute. Pure CSS, shows on hover and keyboard focus after a short delay, with light and dark glass.
+description: The macOS tooltip as one HTML attribute. Pure CSS, shows on hover and keyboard focus after a short delay, with a flat light box and a dark glass one.
 ---
 
 import '@puppertino/tooltips.css';
@@ -40,17 +40,17 @@ The tooltip appears 0.5 seconds after hover begins, like the native delay, and h
 
 ## Anatomy
 
-The box is 18px tall with a 1px radius, the smallest radius in the framework. The fill is `rgba(246, 246, 246, 0.72)` over a 10px blur. Text is 11px at weight 510 in `#4D4D4D` with 6px side padding. The shadow is `0 1px 3px` at 20%.
+The box is 18px tall with square corners, the only unrounded surface in the framework. The fill is a near-opaque `rgba(236, 236, 236, 0.88)` with no blur. Text is 11px at weight 510 in `#1A1A1A` with 6px side padding. Two shadows give it an edge: `0 2px 8px` at 20% and `0 0 2px` at 40%.
 
 The tooltip ignores pointer events, so it never blocks the control underneath it.
 
 ## Dark mode
 
-The fill switches to `rgba(58, 58, 62, 0.80)` and the text to `rgba(255, 255, 255, 0.80)`. The shadow deepens to 40%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+The fill switches to black at 50% over a 10px blur, with a 0.6px inner rim of white at 15%. Text switches to `#F5F5F5`. The shadow stays the same as in light mode. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Accessibility
 
 - The attribute is presentation only. Screen readers do not read it. Pair it with `aria-label` (or visible text) on the control itself.
-- With `prefers-reduced-transparency` the fill becomes opaque `#F0F0F0` (dark: `#3A3A3E`).
+- With `prefers-reduced-transparency` the fill becomes opaque `#ECECEC` (dark: `#0F0F0F`) and the blur is removed. With `prefers-contrast: more` it also gains a solid 1px edge.
 - With `prefers-reduced-motion` the fade is removed. The tooltip still waits 0.5 seconds, then appears instantly.
 - Keep tooltip text short. One clause, no punctuation-heavy sentences. The box does not wrap.

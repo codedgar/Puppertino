@@ -1,10 +1,11 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Sidebars
-description: A gray glass navigation panel with capsule row selection, section headers, and a three-step size ladder.
+description: A full-height navigation strip on the window's leading edge with tinted icons, quiet capsule selection, section headers, and a three-step size ladder.
 ---
 
 import '@puppertino/sidebars.css';
+import '@puppertino/toolbars.css';
 import Showcase from '../../../components/Showcase.astro';
 
 A sidebar appears on the leading side of a view and lets people navigate between sections in your app.
@@ -19,7 +20,7 @@ Use a sidebar for top-level navigation with up to two levels of nesting. For dat
   name="sidebars-preview"
   snippet={false}
   align="start"
-  code={`<nav class="p-sidebar" aria-label="Example sidebar">
+  code={`<nav class="p-sidebar" aria-label="Example sidebar" style="border-radius: 12px;">
   <div class="p-sidebar-row p-selected"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-file-text"></i></span> Text Edit <span class="p-sidebar-detail">3</span></div>
   <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-clock"></i></span> Recents</div>
   <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-folder"></i></span> Shared</div>
@@ -28,7 +29,7 @@ Use a sidebar for top-level navigation with up to two levels of nesting. For dat
   <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-files"></i></span> Documents</div>
   <div class="p-sidebar-row p-dimmed"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-trash"></i></span> Trash</div>
 </nav>
-<nav class="p-sidebar p-sidebar-small" aria-label="Small sidebar" style="width: 180px;">
+<nav class="p-sidebar p-sidebar-small p-sidebar-floating" aria-label="Small sidebar" style="width: 180px;">
   <div class="p-sidebar-row p-selected">Inbox <span class="p-sidebar-detail">12</span></div>
   <div class="p-sidebar-row">Drafts</div>
   <div class="p-sidebar-row">Sent</div>
@@ -39,44 +40,53 @@ Use a sidebar for top-level navigation with up to two levels of nesting. For dat
 
 ## Anatomy
 
-The panel is 240px wide with an 18px radius and 10px padding on every side. The surface is gray glass: `rgba(228, 228, 228, 0.72)` over a 20px blur with 180% saturation, one step grayer than the menu material. The shadow is `0 8px 40px` at 12%. When the sidebar sits inside a window instead of floating, add `.p-sidebar-attached` to drop the radius and shadow.
+By default the sidebar is a full-bleed strip on the window's leading edge. It is 240px wide and runs the full height of the window, with no radius, shadow, inset or divider; the window clips it at its corner. The material is a flat, neutral `#E6E6E6`. Rows are inset 10px, so a selection capsule is 220px wide. In a window, the sidebar also holds the traffic lights (see [windows](../windows/#sidebar-windows)).
+
+The macOS 26 floating panel is still available as `.p-sidebar-floating`: radius 18px, gray glass at `rgba(228, 228, 228, 0.72)` over a 20px blur, and a `0 8px 40px` shadow at 12%. `.p-sidebar-attached` still works: it fills the host's height.
 
 | Class | Role |
 |---|---|
-| `.p-sidebar` | The panel. 240px, radius 18px, gray glass, 10px padding. |
-| `.p-sidebar-row` | One row. 40px tall, radius 8px, 15px text at weight 510. |
-| `.p-sidebar-icon` | 20px icon slot with a 7px gap to the label. |
+| `.p-sidebar` | The strip. 240px, flat `#E6E6E6`, 10px padding. |
+| `.p-sidebar-floating` | Floating glass panel, radius 18px, soft shadow. |
+| `.p-sidebar-attached` | Fills the host's height. |
+| `.p-sidebar-titlebar` | 52px header zone: lights at 19,19, first row 52px down. |
+| `.p-sidebar-toggle` | Places a 36px round glass button (`.p-toolbar-circle`) 8px from the top and trailing edges. |
+| `.p-sidebar-row` | One row. 36px tall, radius 8px, 15px text at weight 510. |
+| `.p-sidebar-icon` | 20px icon slot. Label starts 36px into the row. |
 | `.p-sidebar-detail` | Right-aligned secondary text in `#BFBFBF`. |
-| `.p-sidebar-header` | Section heading, 13px bold at 50% opacity, 8px top margin. |
-| `.p-sidebar-chevron` | Disclosure chevron, 11px bold at 25% opacity. |
+| `.p-sidebar-header` | Section heading, 13px bold in `#727272`, 8px in from the row edge. |
+| `.p-sidebar-chevron` | Disclosure chevron, 11px bold in `#BFBFBF`. |
 | `data-p-level="1..4"` | Indentation, 12px per level. |
 
 ## Sizes
 
-Three sizes step the row height, font, and icon together. Indentation stays at 12px per level in every size.
+Three sizes step the row height, font, and icon together. The label starts 32px into the row in small and medium, and 36px in large. Image icons take a 4px radius. Indentation stays at 12px per level in every size.
 
 | Size | Class | Row | Font | Icon |
 |---|---|---|---|---|
-| Large (default) | | 40px | 15px / 510 | 20px |
+| Large (default) | | 36px | 15px / 510 | 20px |
 | Medium | `.p-sidebar-medium` | 32px | 13px / 510 | 18px |
-| Small | `.p-sidebar-small` | 24px | 11px / 510 | 14px |
+| Small | `.p-sidebar-small` | 24px | 11px / 510 | 16px |
+
+Section headers are 13px bold in large and medium and 11px bold in small. They sit in a 43px gap between rows (39px in small).
 
 ## States
 
-Selection is quiet: the capsule fills with `rgba(0, 0, 0, 0.11)` and only the icon takes the accent color. The label does not change. This keeps a column of selected and unselected labels perfectly even.
+Every row icon carries the accent tint, `#0078F0`. Selection stays quiet: the capsule darkens the material by 13 levels (`rgba(0, 0, 0, 0.056)`, which gives `#D9D9D9` on the strip), and the label does not change. Hover darkens it by 4 levels.
 
 | State | Class | Values |
 |---|---|---|
-| Rest | | Text `rgba(0, 0, 0, 0.85)` |
-| Hover | | Fill `rgba(0, 0, 0, 0.05)` |
-| Selected | `.p-selected` | Fill `rgba(0, 0, 0, 0.11)`, icon in the accent color |
-| Dimmed | `.p-dimmed` or `aria-disabled="true"` | Whole row at 50% opacity |
+| Rest | | Label `#1A1A1A`, icon `#0078F0` |
+| Hover | | Fill `rgba(0, 0, 0, 0.018)` |
+| Selected | `.p-selected` | Fill `rgba(0, 0, 0, 0.056)` (`#D9D9D9` on the strip) |
+| Dimmed | `.p-dimmed` or `aria-disabled="true"` | Label `#BFBFBF`; the icon keeps its tint |
+| Inactive window | `.p-window-inactive` on the window, or `.p-inactive` | Material lightens to `#F1F1F1`, icons turn `#878787` |
 
-To retint the selected icon, override the token on the sidebar: `style="--p-sidebar-icon-selected: #FF2D55"`.
+To retint the icons, override the token on the sidebar: `style="--p-sidebar-icon: #FF2D55"`.
 
 ## Dark mode
 
-The panel switches to `rgba(40, 40, 44, 0.78)`. Selection flips to `rgba(255, 255, 255, 0.14)`, hover to 6%, detail text to `rgba(255, 255, 255, 0.3)`, and headers to 50% white. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+The strip becomes `#161616`. Selection lightens it by 13 levels (`#232323`) and hover by 7. Icons turn `#0A99FF`, labels `#F5F5F5` and headers `#8A8A8A`. In an inactive window the strip goes to `#141414` and the icons to `#666666`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Code
 
@@ -92,4 +102,4 @@ The panel switches to `rgba(40, 40, 44, 0.78)`. Selection flips to `rgba(255, 25
 </nav>
 ```
 
-Use `<nav>` with a label, `aria-current="page"` on the active row, and `tabindex="0"` so rows are keyboard reachable. With `prefers-reduced-transparency` the glass becomes opaque `#ECECEC` (dark: `#2B2B2E`) and the blur is removed. Browsers without `backdrop-filter` get the same fallback.
+Use `<nav>` with a label, `aria-current="page"` on the active row, and `tabindex="0"` so rows are keyboard reachable. The default strip is already opaque. For the floating panel, `prefers-reduced-transparency` turns the glass opaque `#ECECEC` (dark: `#2B2B2E`) and removes the blur, and browsers without `backdrop-filter` get the same fallback. With `prefers-contrast: more` the selected row gains a 1px ring.

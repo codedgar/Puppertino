@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────────────────────────────
    Puppertino Materials
-   The macOS 26 material system: shadows, blur, and glass surfaces.
+   The macOS 27 material system: shadows, blur, and glass surfaces.
    Includes legacy shadow and blur classes for backwards compatibility.
    ───────────────────────────────────────────────────────────────────── */
 
@@ -73,23 +73,51 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────
-   macOS 26 Material System
-   Five thickness levels with proper light and dark mode handling.
-   Matches the Figma macOS 26 community file specification.
+   macOS 27 Material System
+   Five thickness levels with proper light and dark mode handling, the
+   glass surface tints, the glass edge, and the shared shadow tokens.
    ───────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Material backgrounds (light) */
-  --p-material-ultrathick: rgba(246, 246, 246, 0.84);
+  /* Material backgrounds (light). Ultra Thick is a lighter gray at a
+     higher opacity than the other four in macOS 27. */
+  --p-material-ultrathick: rgba(236, 236, 236, 0.88);
   --p-material-thick: rgba(246, 246, 246, 0.72);
   --p-material-medium: rgba(246, 246, 246, 0.60);
   --p-material-thin: rgba(246, 246, 246, 0.48);
   --p-material-ultrathin: rgba(246, 246, 246, 0.36);
 
-  /* Glass surface backgrounds by component size */
-  --p-glass-sm: rgba(255, 255, 255, 0.50);
-  --p-glass-md: rgba(245, 245, 245, 0.67);
-  --p-glass-lg: rgba(250, 250, 250, 0.80);
+  /* Chrome: the near-opaque, lightly blurred bar material (title bars,
+     toolbars, scroll edges). Pair it with a 0.67px separator on the edge
+     that meets the content. */
+  --p-material-chrome: rgba(255, 255, 255, 0.85);
+  --p-material-chrome-separator: rgba(0, 0, 0, 0.05);
+  --p-material-chrome-separator-width: 0.67px;
+  --p-material-chrome-blur: 3px;
+
+  /* iOS chrome (touch bars). Light is the same as macOS; dark differs:
+     iOS 27 darkens with black .55 and a black hairline, where macOS
+     uses #1F1F1F with a white one. */
+  --p-material-chrome-touch: rgba(255, 255, 255, 0.85);
+  --p-material-chrome-touch-separator: rgba(0, 0, 0, 0.05);
+
+  /* Glass surface backgrounds by component size. macOS 27 and iOS 27
+     draw medium and large glass with one recipe; small glass (64px or
+     less across) lifts a mid-gray backdrop and dims white slightly, so
+     it reads on both. */
+  --p-glass-sm: rgba(242, 242, 242, 0.55);
+  --p-glass-md: rgba(245, 245, 245, 0.72);
+  --p-glass-lg: rgba(245, 245, 245, 0.72);
+
+  /* Shadows. Overlay: menus, notifications, popovers. Alert: alerts and
+     glass cards. Window: active and inactive windows, with a crisp
+     hairline. Glass control: small glass buttons and toolbar groups,
+     barely there. Dark mode deepens every one of them. */
+  --p-shadow-overlay: 0 8px 48px rgba(0, 0, 0, 0.25);
+  --p-shadow-alert: 0 18px 48px rgba(0, 0, 0, 0.25);
+  --p-shadow-window: 0 18px 54px rgba(0, 0, 0, 0.30), 0 0 1px rgba(0, 0, 0, 0.8);
+  --p-shadow-window-inactive: 0 7px 21px rgba(0, 0, 0, 0.20), 0 0 1px rgba(0, 0, 0, 0.8);
+  --p-shadow-glass-control: 0 8px 15px rgba(0, 0, 0, 0.02);
 
   /* Standard blur values */
   --p-material-blur: 30px;
@@ -104,9 +132,24 @@
   --p-material-thin: rgba(0, 0, 0, 0.20);
   --p-material-ultrathin: rgba(0, 0, 0, 0.10);
 
-  --p-glass-sm: rgba(0, 0, 0, 0.45);
-  --p-glass-md: rgba(0, 0, 0, 0.67);
-  --p-glass-lg: rgba(0, 0, 0, 0.85);
+  --p-material-chrome: rgba(31, 31, 31, 0.55);
+  --p-material-chrome-separator: rgba(255, 255, 255, 0.10);
+  --p-material-chrome-touch: rgba(0, 0, 0, 0.55);
+  --p-material-chrome-touch-separator: rgba(0, 0, 0, 0.10);
+
+  /* Dark glass has a luminance floor: over black it settles near #1A,
+     never pure black. Small glass is nearly clear: a faint gray that
+     pulls whatever sits behind it 17% toward #999. Medium and large
+     glass is close to opaque #1A (iOS 27 reads #1D-#1F over #999). */
+  --p-glass-sm: rgba(153, 153, 153, 0.17);
+  --p-glass-md: rgba(26, 26, 26, 0.96);
+  --p-glass-lg: rgba(26, 26, 26, 0.96);
+
+  --p-shadow-overlay: 0 8px 48px rgba(0, 0, 0, 0.45);
+  --p-shadow-alert: 0 18px 48px rgba(0, 0, 0, 0.45);
+  --p-shadow-window: 0 18px 54px rgba(0, 0, 0, 0.57), 0 0 1px rgba(0, 0, 0, 0.8);
+  --p-shadow-window-inactive: 0 7px 21px rgba(0, 0, 0, 0.35), 0 0 1px rgba(0, 0, 0, 0.8);
+  --p-shadow-glass-control: 0 8px 15px rgba(0, 0, 0, 0.04);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -117,9 +160,24 @@
     --p-material-thin: rgba(0, 0, 0, 0.20);
     --p-material-ultrathin: rgba(0, 0, 0, 0.10);
 
-    --p-glass-sm: rgba(0, 0, 0, 0.45);
-    --p-glass-md: rgba(0, 0, 0, 0.67);
-    --p-glass-lg: rgba(0, 0, 0, 0.85);
+    --p-material-chrome: rgba(31, 31, 31, 0.55);
+    --p-material-chrome-separator: rgba(255, 255, 255, 0.10);
+    --p-material-chrome-touch: rgba(0, 0, 0, 0.55);
+    --p-material-chrome-touch-separator: rgba(0, 0, 0, 0.10);
+
+    /* Dark glass has a luminance floor: over black it settles near #1A,
+       never pure black. Small glass is nearly clear: a faint gray that
+       pulls whatever sits behind it 17% toward #999. Medium and large
+       glass is close to opaque #1A (iOS 27 reads #1D-#1F over #999). */
+    --p-glass-sm: rgba(153, 153, 153, 0.17);
+    --p-glass-md: rgba(26, 26, 26, 0.96);
+    --p-glass-lg: rgba(26, 26, 26, 0.96);
+
+    --p-shadow-overlay: 0 8px 48px rgba(0, 0, 0, 0.45);
+    --p-shadow-alert: 0 18px 48px rgba(0, 0, 0, 0.45);
+    --p-shadow-window: 0 18px 54px rgba(0, 0, 0, 0.57), 0 0 1px rgba(0, 0, 0, 0.8);
+    --p-shadow-window-inactive: 0 7px 21px rgba(0, 0, 0, 0.35), 0 0 1px rgba(0, 0, 0, 0.8);
+    --p-shadow-glass-control: 0 8px 15px rgba(0, 0, 0, 0.04);
   }
 }
 
@@ -127,14 +185,23 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-material-ultrathick: rgba(246, 246, 246, 0.84);
+  --p-material-ultrathick: rgba(236, 236, 236, 0.88);
   --p-material-thick: rgba(246, 246, 246, 0.72);
   --p-material-medium: rgba(246, 246, 246, 0.60);
   --p-material-thin: rgba(246, 246, 246, 0.48);
   --p-material-ultrathin: rgba(246, 246, 246, 0.36);
-  --p-glass-sm: rgba(255, 255, 255, 0.50);
-  --p-glass-md: rgba(245, 245, 245, 0.67);
-  --p-glass-lg: rgba(250, 250, 250, 0.80);
+  --p-material-chrome: rgba(255, 255, 255, 0.85);
+  --p-material-chrome-separator: rgba(0, 0, 0, 0.05);
+  --p-material-chrome-touch: rgba(255, 255, 255, 0.85);
+  --p-material-chrome-touch-separator: rgba(0, 0, 0, 0.05);
+  --p-glass-sm: rgba(242, 242, 242, 0.55);
+  --p-glass-md: rgba(245, 245, 245, 0.72);
+  --p-glass-lg: rgba(245, 245, 245, 0.72);
+  --p-shadow-overlay: 0 8px 48px rgba(0, 0, 0, 0.25);
+  --p-shadow-alert: 0 18px 48px rgba(0, 0, 0, 0.25);
+  --p-shadow-window: 0 18px 54px rgba(0, 0, 0, 0.30), 0 0 1px rgba(0, 0, 0, 0.8);
+  --p-shadow-window-inactive: 0 7px 21px rgba(0, 0, 0, 0.20), 0 0 1px rgba(0, 0, 0, 0.8);
+  --p-shadow-glass-control: 0 8px 15px rgba(0, 0, 0, 0.02);
 }
 
 /* ─── Material classes ─────────────────────────────────────────────── */
@@ -174,13 +241,34 @@
   backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
 }
 
+/* Chrome: bars that sit on the window edge. Add the separator yourself
+   on the edge that meets the content, e.g.
+   box-shadow: inset 0 calc(var(--p-material-chrome-separator-width) * -1) 0 var(--p-material-chrome-separator); */
+.p-material-chrome {
+  background: var(--p-material-chrome);
+  -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-chrome-blur));
+  backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-chrome-blur));
+}
+
+/* iOS chrome: touch nav bars, toolbars and scroll edges. Same as
+   .p-material-chrome in light mode; darker, with a dark hairline, in
+   dark mode. Add the separator on the edge that meets the content. */
+.p-material-chrome-touch {
+  background: var(--p-material-chrome-touch);
+  -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-chrome-blur));
+  backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-chrome-blur));
+}
+
 /* ─── Glass component sizes ────────────────────────────────────────── */
+/* Every size carries the glass edge. Small glass gets the barely-there
+   control shadow; medium and large glass float like cards. */
 
 .p-glass-sm {
   background: var(--p-glass-sm);
   -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   border-radius: 24px;
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
 }
 
 .p-glass-md {
@@ -188,6 +276,7 @@
   -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   border-radius: 14px;
+  box-shadow: var(--p-glass-edge), var(--p-shadow-alert);
 }
 
 .p-glass-lg {
@@ -195,6 +284,7 @@
   -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   border-radius: 10px;
+  box-shadow: var(--p-glass-edge), var(--p-shadow-alert);
 }
 
 /* ─── Puppertino Glass ─────────────────────────────────────────────── */
@@ -205,25 +295,39 @@
    connects the two.
 
    Two variants, after Apple's:
-   .p-glass        Regular. Frosted, lightly tinted, adapts to light
+   .p-glass        Regular. Lightly frosted and tinted, adapts to light
                    and dark. The default for bars, buttons, and panels.
-   .p-glass-clear  Clear. Crisp and barely tinted. Needs a dim or busy
+   .p-glass-clear  Clear. Barely tinted and more see-through. Needs a dim or busy
                    backdrop to stay legible, so use it over media.
 
    .p-tab-bar becomes Regular glass as well.
 
    The recipe lives in the custom properties below and the script reads
    them once per surface, so a variant is only a set of overrides.
-   Refraction (the bend across the whole pane) and bevel depth (the
-   extra bend at the rim) are fractions of the surface's shorter side,
-   so a 44px button and a 62px tab bar bend in proportion. Bevel width
-   is a fraction of the shorter side too. Specular (1 or 0) adds two
-   slowly drifting highlights, and is dropped under reduced motion.
+   Values follow native macOS 26 glass (NSGlassEffectView) measured
+   over test patterns; see specs/liquid-glass.md.
+   The lens (Glassworks 2, rc.2 on) leaves the middle of the pane flat and
+   bends only a band around the rim. There it shifts content along the
+   edge's normal, toward the centre, so the rim shows a compressed
+   sliver of what is behind the glass, as Apple's does. Refraction (the
+   broad bend across the band) and bevel depth (the steep bend right at
+   the edge) are fractions of the surface's shorter side, counted up to
+   48px. Bevel width, the band, is a fraction of the shorter side up to
+   24px. Specular (1 or 0) adds two fixed rim highlights at +45 and
+   -135 degrees; native macOS 26 shows none, so it is off.
 
-   Frost is not done in WebGL. Glassworks' own frost (--p-glass-frost)
-   samples randomly and reads as grain, so it stays at 0. The canvas
-   paints below the surface, so the tint layer's backdrop-filter blurs
-   the refracted image instead: --p-glass-blur, smooth at any size.
+   Frost is a blur in CSS px that the shader applies before the lens, as
+   Apple does, so the rim band stays sharp. Regular frost grows with the
+   surface (the script multiplies it by --p-glass-scale: about 4px on a
+   50px button, 8px on a 160px panel); Clear frosts about 10px at every
+   size (--p-glass-frost-grow: 0). --p-glass-blur is only a light
+   smoothing pass on the tint layer after the lens.
+
+   Small Regular surfaces (64px or less across, like buttons and tab
+   bars) flip to dark glass over dark content and to light glass over
+   light content, as Apple's do. The script sets data-p-theme on the
+   surface for that. Set --p-glass-adaptive: 0 to pin a surface to the
+   page's appearance. Clear glass never adapts.
 
    Until the first frame renders, and wherever the glass cannot render
    (no script, no WebGL, reduced transparency, increased contrast), the
@@ -235,29 +339,55 @@
    States, set by the script on the surface:
    data-p-glass="pending"  enhanced, waiting for the first frame
    data-p-glass="live"     refracting
-   data-p-glass="off"      author opt-out; the script leaves it alone */
+   data-p-glass="off"      author opt-out; the script leaves it alone
+   data-p-glass-size="small|large"  64px or less across, or bigger;
+                           picks --p-glass-tint or --p-glass-tint-large */
 
 :root {
   --p-glass-surface: var(--p-glass-md);
-  --p-glass-tint: rgba(255, 255, 255, 0.36);
-  --p-glass-clear-tint: rgba(255, 255, 255, 0.06);
 
-  /* The rim: light catching the top edge, a fainter return along the
-     bottom, and a hairline that defines the shape on any backdrop. */
-  --p-glass-rim:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.75),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.3),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35);
+  /* Live tint by size (the script sets data-p-glass-size). Small glass,
+     64px or less across (buttons, tab bars, nav circles), and medium or
+     large glass (cards, panels, sheets, menus) use different recipes in
+     macOS 27 and iOS 27:
+       small light  rgba(242,242,242,.55)  over #666 -> #B3, white -> #F8
+       large light  rgba(245,245,245,.72)  over #666 -> #CD
+       small dark   rgba(153,153,153,.17)  nearly clear
+       large dark   rgba(26,26,26,.96)     close to opaque */
+  --p-glass-tint: rgba(242, 242, 242, 0.55);
+  --p-glass-tint-large: rgba(245, 245, 245, 0.72);
+  --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+
+  /* The macOS 27 glass edge, as a box-shadow list:
+     - a dark 0.5px keyline just outside the shape, which is what keeps
+       glass visible on white;
+     - a slightly heavier keyline sliver on the left and right sides;
+     - a bright 1px rim inside the top edge and an equally bright one
+       inside the bottom edge, each with a soft glow (stronger along the
+       bottom). The sides get the keyline only.
+     Plus-darker keylines can't be done in CSS, so black alpha stands in.
+     --p-glass-rim is the same value, kept under its v2.0 name. */
+  --p-glass-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    -1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
+    1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 6px 6px -6px rgba(255, 255, 255, 0.3),
+    inset 0 -12px 10px -6px rgba(255, 255, 255, 0.4);
+  --p-glass-rim: var(--p-glass-edge);
 
   /* Regular recipe */
-  --p-glass-refraction: 0.04;
-  --p-glass-bevel-depth: 0.3;
+  --p-glass-refraction: 0.2;
+  --p-glass-bevel-depth: 0.7;
   --p-glass-bevel-width: 0.2;
-  --p-glass-blur: 6px;
+  --p-glass-blur: 1px;
   --p-glass-saturate: 160%;
-  --p-glass-frost: 0;
+  --p-glass-frost: 3.8;
+  --p-glass-frost-grow: 1;
   --p-glass-magnify: 1;
-  --p-glass-specular: 1;
+  --p-glass-specular: 0;
+  --p-glass-adaptive: 1;
 
   /* Every surface on a page shares one WebGL canvas, which Glassworks
      stacks directly under the highest one. Keep them on one layer. */
@@ -266,33 +396,54 @@
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-glass-tint: rgba(30, 30, 32, 0.42);
-  --p-glass-clear-tint: rgba(0, 0, 0, 0.14);
-  --p-glass-rim:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.1),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
+  --p-glass-surface: var(--p-glass-md);
+  --p-glass-tint: rgba(153, 153, 153, 0.17);
+  --p-glass-tint-large: rgba(26, 26, 26, 0.96);
+  --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+  --p-glass-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.8),
+    -1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
+    1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 6px 6px -6px rgba(255, 255, 255, 0.05),
+    inset 0 -12px 10px -6px rgba(255, 255, 255, 0.06);
+  --p-glass-rim: var(--p-glass-edge);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-glass-tint: rgba(30, 30, 32, 0.42);
-    --p-glass-clear-tint: rgba(0, 0, 0, 0.14);
-    --p-glass-rim:
-      inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
-      inset 0 -1px 1px rgba(255, 255, 255, 0.1),
-      inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
+    --p-glass-surface: var(--p-glass-md);
+    --p-glass-tint: rgba(153, 153, 153, 0.17);
+    --p-glass-tint-large: rgba(26, 26, 26, 0.96);
+    --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+    --p-glass-edge:
+      0 0 0 0.5px rgba(0, 0, 0, 0.8),
+      -1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
+      1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 6px 6px -6px rgba(255, 255, 255, 0.05),
+      inset 0 -12px 10px -6px rgba(255, 255, 255, 0.06);
+    --p-glass-rim: var(--p-glass-edge);
   }
 }
 
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-glass-tint: rgba(255, 255, 255, 0.36);
-  --p-glass-clear-tint: rgba(255, 255, 255, 0.06);
-  --p-glass-rim:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.75),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.3),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35);
+  --p-glass-surface: var(--p-glass-md);
+  --p-glass-tint: rgba(242, 242, 242, 0.55);
+  --p-glass-tint-large: rgba(245, 245, 245, 0.72);
+  --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+  --p-glass-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    -1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
+    1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 6px 6px -6px rgba(255, 255, 255, 0.3),
+    inset 0 -12px 10px -6px rgba(255, 255, 255, 0.4);
+  --p-glass-rim: var(--p-glass-edge);
 }
 
 .p-glass,
@@ -300,15 +451,31 @@
   background: var(--p-glass-surface);
   -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
+  box-shadow: var(--p-glass-edge);
 }
 
+/* Once enhanced, the edge moves to the ::before layer with the tint, so
+   it is not drawn twice. */
+.p-glass[data-p-glass="pending"],
+.p-glass[data-p-glass="live"],
+.p-glass-clear[data-p-glass="pending"],
+.p-glass-clear[data-p-glass="live"] {
+  box-shadow: none;
+}
+
+/* Clear is barely tinted and the same in light and dark. Measured on
+   macOS 26 it bends over a wider band than Regular and frosts more, not
+   less: about a 10pt blur at every size. */
 .p-glass-clear {
   --p-glass-surface: var(--p-glass-sm);
   --p-glass-tint: var(--p-glass-clear-tint);
-  --p-glass-refraction: 0.06;
-  --p-glass-bevel-depth: 0.4;
-  --p-glass-bevel-width: 0.16;
-  --p-glass-blur: 0px;
+  --p-glass-tint-large: var(--p-glass-clear-tint);
+  --p-glass-refraction: 0.55;
+  --p-glass-bevel-depth: 0.45;
+  --p-glass-bevel-width: 0.275;
+  --p-glass-frost: 10.5;
+  --p-glass-frost-grow: 0;
+  --p-glass-blur: 2px;
   --p-glass-saturate: 120%;
 }
 
@@ -332,6 +499,7 @@
 
 [data-p-glass="pending"]::before {
   background-color: var(--p-glass-surface);
+  box-shadow: var(--p-glass-rim);
   -webkit-backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
   backdrop-filter: saturate(var(--p-material-saturate)) blur(var(--p-material-blur));
 }
@@ -339,8 +507,19 @@
 [data-p-glass="live"]::before {
   background-color: var(--p-glass-tint);
   box-shadow: var(--p-glass-rim);
-  -webkit-backdrop-filter: saturate(var(--p-glass-saturate)) blur(var(--p-glass-blur));
-  backdrop-filter: saturate(var(--p-glass-saturate)) blur(var(--p-glass-blur));
+  -webkit-backdrop-filter: saturate(var(--p-glass-saturate)) blur(calc(var(--p-glass-blur) * var(--p-glass-scale, 1)));
+  backdrop-filter: saturate(var(--p-glass-saturate)) blur(calc(var(--p-glass-blur) * var(--p-glass-scale, 1)));
+}
+
+/* Small Regular glass waits on the small material, so the hand-off to
+   the small tint doesn't shift its tone. */
+.p-glass[data-p-glass-size="small"] {
+  --p-glass-surface: var(--p-glass-sm);
+}
+
+/* Medium and large glass: the card recipe. */
+[data-p-glass="live"][data-p-glass-size="large"]::before {
+  background-color: var(--p-glass-tint-large);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -358,6 +537,8 @@
   .p-material-medium,
   .p-material-thick,
   .p-material-ultrathick,
+  .p-material-chrome,
+  .p-material-chrome-touch,
   .p-glass-sm,
   .p-glass-md,
   .p-glass-lg,
@@ -371,6 +552,8 @@
   .p-dark-mode .p-material-medium,
   .p-dark-mode .p-material-thick,
   .p-dark-mode .p-material-ultrathick,
+  .p-dark-mode .p-material-chrome,
+  .p-dark-mode .p-material-chrome-touch,
   .p-dark-mode .p-glass-sm,
   .p-dark-mode .p-glass-md,
   .p-dark-mode .p-glass-lg,
@@ -384,6 +567,8 @@
   .p-light-mode .p-material-medium,
   .p-light-mode .p-material-thick,
   .p-light-mode .p-material-ultrathick,
+  .p-light-mode .p-material-chrome,
+  .p-light-mode .p-material-chrome-touch,
   .p-light-mode .p-glass-sm,
   .p-light-mode .p-glass-md,
   .p-light-mode .p-glass-lg,
@@ -401,6 +586,8 @@
   .p-material-medium,
   .p-material-thick,
   .p-material-ultrathick,
+  .p-material-chrome,
+  .p-material-chrome-touch,
   .p-glass-sm,
   .p-glass-md,
   .p-glass-lg,
@@ -416,6 +603,8 @@
   .p-dark-mode .p-material-medium,
   .p-dark-mode .p-material-thick,
   .p-dark-mode .p-material-ultrathick,
+  .p-dark-mode .p-material-chrome,
+  .p-dark-mode .p-material-chrome-touch,
   .p-dark-mode .p-glass-sm,
   .p-dark-mode .p-glass-md,
   .p-dark-mode .p-glass-lg,
@@ -429,12 +618,64 @@
   .p-light-mode .p-material-medium,
   .p-light-mode .p-material-thick,
   .p-light-mode .p-material-ultrathick,
+  .p-light-mode .p-material-chrome,
+  .p-light-mode .p-material-chrome-touch,
   .p-light-mode .p-glass-sm,
   .p-light-mode .p-glass-md,
   .p-light-mode .p-glass-lg,
   .p-light-mode .p-glass,
   .p-light-mode .p-glass-clear {
     background: rgba(246, 246, 246, 0.96);
+  }
+}
+
+/* ─── Increased contrast: a keyline you can see on any backdrop ─────── */
+
+@media (prefers-contrast: more) {
+  :root,
+  .p-light-mode,
+  [data-p-theme="lightmode"] {
+    --p-glass-edge:
+      0 0 0 1px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.8);
+    --p-glass-rim: var(--p-glass-edge);
+    --p-material-chrome-separator: rgba(0, 0, 0, 0.3);
+  }
+
+  .p-dark-mode,
+  [data-p-theme="darkmode"] {
+    --p-glass-edge:
+      0 0 0 1px rgba(255, 255, 255, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+    --p-glass-rim: var(--p-glass-edge);
+    --p-material-chrome-separator: rgba(255, 255, 255, 0.35);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-glass-edge:
+      0 0 0 1px rgba(255, 255, 255, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+    --p-glass-rim: var(--p-glass-edge);
+    --p-material-chrome-separator: rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* ─── Forced colors: shadows are dropped, so outline the glass ────── */
+
+@media (forced-colors: active) {
+  .p-material-chrome,
+  .p-material-chrome-touch,
+  .p-glass-sm,
+  .p-glass-md,
+  .p-glass-lg,
+  .p-glass,
+  .p-glass-clear {
+    outline: 1px solid CanvasText;
   }
 }
 
@@ -462,8 +703,19 @@
 
 /* ─── Liquid Glass lens ────────────────────────────────────────────── */
 /* The faux Liquid Glass lens that switch knobs and slider thumbs turn
-   into while they are held. Adapted from Jhey Tompkins' liquid glass
-   toggle. Three layers do the work:
+   into while they are held. There are two looks:
+
+   - Clear (.p-lens-clear, opt-in with data-p-lens="clear"): the flat
+     macOS 27 / iOS 27 look. A near-transparent body, a hairline rim and a
+     soft cast shadow. No magnification, goo, or color split; it uses the
+     rim and cover layers only. Its tokens live with the host control in
+     forms.css (switch) and sliders.css (slider).
+   - Liquid: the default, at every size. The refracting lens described
+     below, with the knockout. The clear lens is opt-in with
+     data-p-lens="clear" on the switch label or the slider input.
+
+   The liquid lens is adapted from Jhey Tompkins' liquid glass toggle.
+   Three layers do the work:
 
    1. Baseline. The control paints its own track. Switches cut a hole
       in it where the lens sits (the knockout) so the page shows through

@@ -45,9 +45,9 @@ Use a popover for lightweight tools and details that relate to one control. For 
 
 ## Anatomy
 
-The surface is white glass, brighter than the menu material. The background is `rgba(255, 255, 255, 0.72)` over a 20px blur with 180% saturation. The radius is 20px. The shadow pairs a soft drop (`0 4px 20px` at 15%) with a hairline rim (`0 0 2.5px` at 50%). Content padding is 16px.
+The surface uses the same overlay glass as alerts: `rgba(246, 246, 246, 0.73)` over a 20px blur with 180% saturation, so it picks up a little of what sits behind it. The radius is 20px. The shadow is a wide, soft drop (`0 8px 48px` at 25%). The edge is a crisp 0.5px keyline just outside the surface, plus a bright 1px line on the inside of the top and bottom edges. Content padding is 16px.
 
-The arrow protrudes 10.5px beyond the body edge. Its base spans 35.44px with 45 degree slopes and a rounded tip. It uses a near-opaque fill (`rgba(252, 252, 252, 0.95)`) that matches the blurred body, so it reads as one surface.
+The arrow protrudes 10.5px beyond the body edge. Its base spans 35.44px with 45 degree slopes and a rounded tip. It uses a near-opaque fill (`rgba(248, 248, 248, 0.95)`) that matches the blurred body, so it reads as one surface.
 
 | Class | Role |
 |---|---|
@@ -55,6 +55,8 @@ The arrow protrudes 10.5px beyond the body edge. Its base spans 35.44px with 45 
 | `data-p-popover-place` | Placement relative to the trigger: `bottom` (default), `top`, `left`, `right`. The arrow sits on the opposite edge. |
 | `.p-popover--no-arrow` | Removes the arrow for edge-to-edge or detached uses. |
 | `data-p-popover-float` | Marks a floating popover. Hidden and fixed until opened by the script. |
+
+Buttons inside a popover are vibrant: their fills blend with the glass instead of sitting on it, with no extra class (see [Buttons](../buttons/#vibrant)). Menus work the same way.
 
 ## Behavior
 
@@ -83,11 +85,11 @@ The popover has two states. Closed: `opacity: 0`, `scale(0.98)`, no pointer even
 
 ## Dark mode
 
-The surface switches to `rgba(58, 58, 62, 0.82)`, the same dark family as menus. The rim darkens to 70% and the drop shadow doubles to 30%. Text switches to `rgba(255, 255, 255, 0.92)`. Both the class-based (`.p-dark-mode`) and automatic (`.p-auto-dark-mode`) modes are supported.
+The surface switches to a near-black glass, `rgba(26, 26, 26, 0.73)`, with a matching arrow fill. The keyline darkens to black at 60%, the inner top line drops to white at 23%, and the drop shadow deepens to 45%. Text switches to `rgba(255, 255, 255, 0.92)`. Both the class-based (`.p-dark-mode`) and automatic (`.p-auto-dark-mode`) modes are supported.
 
 ## Accessibility
 
-- With `prefers-reduced-transparency` the glass becomes opaque `#FCFCFC` (dark: `#3A3A3E`) and the blur is removed.
+- With `prefers-reduced-transparency` the glass becomes opaque `#F6F6F6` (dark: `#1E1E1E`) and the blur is removed.
 - Browsers without `backdrop-filter` get the same opaque fallback.
 - Browsers without `clip-path: path()` drop the arrow and keep the surface.
 - Content inside the popover keeps its own focus order. Interactive content should be reachable with Tab after the surface receives focus.

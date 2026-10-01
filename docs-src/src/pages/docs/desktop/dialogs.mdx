@@ -1,18 +1,19 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Dialogs & sheets
-description: macOS-style dialog windows and sheets. A 26px radius surface with form rows, footer actions, and slide-down sheet presentation.
+description: macOS-style dialog windows and sheets. A 16px radius surface with form rows, footer actions, an expanded file-browser layout, and slide-down sheet presentation.
 ---
 
 import '@puppertino/modals.css';
 import '@puppertino/forms.css';
+import '@puppertino/windows.css';
 import modalsScript from '../../../../../src/js/modals.js?url';
 
 import Showcase from '../../../components/Showcase.astro';
 
 <script type="module" src={modalsScript}></script>
 
-A dialog presents a scoped task in its own window, like saving a document. A sheet presents the same kind of task attached to the top of its parent context. Both share one surface: an opaque background, a 26px radius, and a deep shadow with a 1px edge ring.
+A dialog presents a scoped task in its own window, like saving a document. A sheet presents the same kind of task attached to the top of its parent context. Both share one surface: an opaque background, a 16px smoothed radius, and the window shadow with its 1px keyline.
 
 ## When to use them
 
@@ -38,10 +39,20 @@ Use a dialog when the task stands alone, and a sheet when the task belongs to on
         <option>Plain Text</option>
       </select>
     </div>
+    <label class="p-dialog__label" for="dlg-preview-where">Where:</label>
+    <div class="p-dialog__control-group">
+      <div class="p-select">
+        <select id="dlg-preview-where">
+          <option>Desktop</option>
+          <option>Documents</option>
+        </select>
+      </div>
+      <button class="p-button" type="button" aria-label="Show all locations" style="width: 24px; padding: 0;">⌄</button>
+    </div>
   </div>
   <div class="p-dialog__footer">
     <button class="p-button p-button-destructive p-dialog__footer-leading" type="button">Delete</button>
-    <button class="p-button p-button-secondary" type="button">Cancel</button>
+    <button class="p-button" type="button">Cancel</button>
     <button class="p-button p-button-primary" type="button">Save</button>
   </div>
 </div>`}
@@ -49,21 +60,87 @@ Use a dialog when the task stands alone, and a sheet when the task belongs to on
 
 ## Anatomy
 
-The window is 390px wide by default, padded 20px. The title is 13px bold. The message is 11px with a 14px line height. Form rows use a two-column grid: right-aligned 13px labels in the secondary text color, then the control. Rows sit on a 30px rhythm (24px controls with 6px gaps).
+The window is 390px wide by default, padded 20px. Form rows use a two-column grid: a 99px column of right-aligned 13px labels in the secondary text color, an 8px gutter, then 223px controls. Rows sit on a 36px rhythm (24px controls with 12px gaps). When the dialog has a form, the 13px bold title and the 11px message (14px line height) line up with the control column, 6px apart. The form starts 20px below the message, and the footer 22px below the last row.
+
+Tune the columns with `--p-dialog-label-width`, `--p-dialog-field-width` and `--p-dialog-row-gap` on the dialog.
 
 | Class | Role |
 |---|---|
-| `.p-dialog` | The window surface. Radius 26, 20px padding, shadow plus 1px ring. |
+| `.p-dialog` | The window surface. Radius 16, 20px padding, window shadow plus 1px keyline. |
 | `.p-dialog__title` | 13px bold heading. |
 | `.p-dialog__message` | 11px supporting copy. |
 | `.p-dialog__form` | Two-column grid of labels and controls. |
 | `.p-dialog__label` | Right-aligned row label, secondary color. |
+| `.p-dialog__control-group` | A control plus a trailing companion, like a popup and its 24px disclosure button. |
 | `.p-dialog__footer` | Action row, right-aligned. |
 | `.p-dialog__footer-leading` | Pushes one action (usually destructive) to the left edge. |
 | `.p-sheet` | The same surface presented from the top of a host. |
 | `.p-sheet-host` | Positioning context for an attached sheet. |
 
 Fields, selects, and buttons inside a dialog are the standard [form controls](../forms/) and [buttons](../buttons/). Nothing is restyled.
+
+## Expanded dialog
+
+The expanded form is the full save panel: 1000 by 448. A 210px sidebar runs flush down the leading edge, with the traffic lights at the top, a 36px round sidebar toggle in the corner, and 24px source rows with 8px corners. The main pane stacks a centered form (37px row pitch), a toolbar row, the file browser, and the footer. The browser runs flush to the pane edges between two 1px keylines; its rows are 20px tall, zebra-striped with 8px rounded ends, and inset 10px.
+
+<div style="overflow-x: auto; margin: 16px 0 20px;">
+  <div class="p-dialog p-dialog--expanded" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: auto; transform: none;" aria-hidden="true">
+    <aside class="p-dialog__sidebar">
+      <div class="p-dialog__sidebar-header">
+        <div class="p-traffic-lights">
+          <button class="p-traffic-light p-traffic-light-close" type="button" aria-label="Close" tabindex="-1"></button>
+          <button class="p-traffic-light p-traffic-light-min" type="button" aria-label="Minimize" tabindex="-1"></button>
+          <button class="p-traffic-light p-traffic-light-zoom" type="button" aria-label="Zoom" tabindex="-1"></button>
+        </div>
+        <button class="p-dialog__sidebar-toggle" type="button" aria-label="Hide sidebar" tabindex="-1"><i class="ph-bold ph-sidebar-simple"></i></button>
+      </div>
+      <a class="p-dialog__source" aria-current="page" href="#" tabindex="-1"><i class="p-dialog__source-icon ph-bold ph-clock"></i>Recents</a>
+      <a class="p-dialog__source" href="#" tabindex="-1"><i class="p-dialog__source-icon ph-bold ph-folder-user"></i>Shared</a>
+      <h3 class="p-dialog__source-heading">Favorites</h3>
+      <a class="p-dialog__source" href="#" tabindex="-1"><i class="p-dialog__source-icon ph-bold ph-desktop"></i>Desktop</a>
+      <a class="p-dialog__source" href="#" tabindex="-1"><i class="p-dialog__source-icon ph-bold ph-file"></i>Documents</a>
+      <a class="p-dialog__source" href="#" tabindex="-1"><i class="p-dialog__source-icon ph-bold ph-download-simple"></i>Downloads</a>
+    </aside>
+    <div class="p-dialog__main">
+      <div class="p-dialog__form">
+        <label class="p-dialog__label" for="dlg-x-name">Save As:</label>
+        <input class="p-field" id="dlg-x-name" type="text" value="Untitled" tabindex="-1" />
+        <label class="p-dialog__label" for="dlg-x-tags">Tags:</label>
+        <input class="p-field" id="dlg-x-tags" type="text" tabindex="-1" />
+      </div>
+      <div class="p-dialog__browser">
+        <table class="p-dialog__files">
+          <thead><tr><th>Name</th><th>Date Modified</th><th class="p-dialog__files-num">Size</th><th>Kind</th></tr></thead>
+          <tbody>
+            <tr><td>Delivery</td><td>3/28/26, 11:26 AM</td><td class="p-dialog__files-num">––</td><td>Folder</td></tr>
+            <tr><td>Designs</td><td>3/28/26, 10:41 AM</td><td class="p-dialog__files-num">––</td><td>Folder</td></tr>
+            <tr><td>Wallpaper.png</td><td>3/24/26, 1:38 PM</td><td class="p-dialog__files-num">68.6 MB</td><td>PNG image</td></tr>
+            <tr><td>Notes.rtf</td><td>3/23/26, 9:00 AM</td><td class="p-dialog__files-num">12 KB</td><td>Rich Text</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-dialog__footer">
+        <button class="p-button" type="button" tabindex="-1">New Folder</button>
+        <button class="p-button" type="button" tabindex="-1">Cancel</button>
+        <button class="p-button p-button-primary" type="button" tabindex="-1">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+| Class | Role |
+|---|---|
+| `.p-dialog--expanded` | 1000×448 window, no padding, sidebar and main pane side by side. |
+| `.p-dialog__sidebar` | Flush 210px sidebar. |
+| `.p-dialog__sidebar-header` | 52px band holding `.p-traffic-lights` (from windows.css) and the toggle. |
+| `.p-dialog__sidebar-toggle` | 36px round glass button, 8px from the top and trailing edge. |
+| `.p-dialog__source-heading` | 11px bold section title. |
+| `.p-dialog__source` | 24px source row. Mark the current one with `aria-current`. |
+| `.p-dialog__source-icon` | Accent-tinted row icon. |
+| `.p-dialog__main` | The main pane. |
+| `.p-dialog__toolbar` | Optional row of controls between the form and the browser. |
+| `.p-dialog__browser` | Scrolling file area between two 1px keylines. |
+| `.p-dialog__files` | The file table: 28px header, 20px zebra rows. `.p-dialog__files-num` right-aligns a column. |
 
 ## Footer layout
 
@@ -72,7 +149,7 @@ Place the destructive action on the leading edge with `.p-dialog__footer-leading
 ```html
 <div class="p-dialog__footer">
   <button class="p-button p-button-destructive p-dialog__footer-leading">Delete</button>
-  <button class="p-button p-button-secondary" data-p-cancel>Cancel</button>
+  <button class="p-button" data-p-cancel>Cancel</button>
   <button class="p-button p-button-primary">Save</button>
 </div>
 ```
@@ -101,7 +178,7 @@ Dialogs run through the same modal manager as alerts. Add `.p-modal` next to `.p
     </div>
     <div class="p-dialog__footer">
       <button class="p-button p-button-destructive p-dialog__footer-leading" type="button" data-p-cancel>Delete</button>
-      <button class="p-button p-button-secondary" type="button" data-p-cancel>Cancel</button>
+      <button class="p-button" type="button" data-p-cancel>Cancel</button>
       <button class="p-button p-button-primary" type="button" data-p-cancel>Save</button>
     </div>
   </div>
@@ -126,7 +203,7 @@ Dialogs run through the same modal manager as alerts. Add `.p-modal` next to `.p
       <input class="p-field" id="save-name" type="text" value="Untitled" />
     </div>
     <div class="p-dialog__footer">
-      <button class="p-button p-button-secondary" data-p-cancel>Cancel</button>
+      <button class="p-button" data-p-cancel>Cancel</button>
       <button class="p-button p-button-primary">Save</button>
     </div>
   </div>
@@ -148,7 +225,7 @@ A sheet is the same surface sliding down from the top of its host. Inside a `.p-
       <input class="p-field" id="sheet-preview-name" type="text" value="Quarterly Report" />
     </div>
     <div class="p-dialog__footer">
-      <button class="p-button p-button-secondary" type="button">Cancel</button>
+      <button class="p-button" type="button">Cancel</button>
       <button class="p-button p-button-primary" type="button">Rename</button>
     </div>
   </div>
@@ -170,7 +247,7 @@ A sheet is the same surface sliding down from the top of its host. Inside a `.p-
       <input class="p-field" id="rename-name" type="text" value="Quarterly Report" />
     </div>
     <div class="p-dialog__footer">
-      <button class="p-button p-button-secondary" data-p-cancel>Cancel</button>
+      <button class="p-button" data-p-cancel>Cancel</button>
       <button class="p-button p-button-primary">Rename</button>
     </div>
   </div>
@@ -179,8 +256,8 @@ A sheet is the same surface sliding down from the top of its host. Inside a `.p-
 
 ## Dark mode
 
-The surface swaps to the elevated dark background (`#2C2C2E`), the ring lightens to 10% white, and shadows soften to about 70% of their light values. Titles and copy follow the dialog text tokens. Controls inside adapt on their own.
+The surface swaps to `#1E1E1E` and the shadow deepens to 57%, with the same black keyline. Sheets also get a 0.5px inner stroke of white at 20% so their edge holds against a dark window. In the expanded dialog the sidebar turns `#161616`, zebra stripes and dividers switch to white at 5% and 10%, and row icons brighten to `#0A99FF`. Titles and copy follow the dialog text tokens. Controls inside adapt on their own.
 
 ## Accessibility
 
-Dialogs and sheets are modal: `role="dialog"` with `aria-modal="true"`, labelled by their title. The modal manager traps focus, closes on Escape, and returns focus to the trigger. With reduced motion, the scale and slide transitions reduce to fades. The surface is opaque in both appearances, so text contrast does not depend on the backdrop.
+Dialogs and sheets are modal: `role="dialog"` with `aria-modal="true"`, labelled by their title. The modal manager traps focus, closes on Escape, and returns focus to the trigger. With reduced motion, the scale and slide transitions reduce to fades. The surface is opaque in both appearances, so text contrast does not depend on the backdrop. With `prefers-contrast: more` the keyline becomes a solid 1px edge.

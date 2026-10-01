@@ -10,7 +10,15 @@
  *   <div data-p-context-menu="#file-menu"> … </div>
  *   <div class="p-menu p-menu-touch" id="file-menu" hidden> … </div>
  *
- * The menu is positioned near the press and clamped to the viewport.
+ * The menu floats beside the element that raised it, the way iOS places
+ * a context menu against its preview: 16px below it, lined up with its
+ * leading edge (or its trailing edge when the leading one would run off
+ * screen). When there is no room below, it sits beside the element,
+ * top edges aligned, then above it. Add data-p-context-menu-at="pointer"
+ * to the element to open the menu at the press point instead, for large
+ * surfaces like a canvas where the whole element is not a useful anchor.
+ * Everything is clamped to the viewport.
+ *
  * Escape, an outside tap, or choosing an item closes it. A held mouse
  * button opens it the same way a finger does, and right-click opens it
  * immediately, the macOS gesture. No dependencies.
@@ -20,7 +28,8 @@
 
   var HOLD_MS = 500;
   var MOVE_TOLERANCE = 10; /* a scroll must not open a menu */
-  var GAP = 8;
+  var GAP = 16;    /* between the anchor and the menu (iOS 27) */
+  var MARGIN = 8;  /* kept clear at the viewport edges */
 
   var timer = null;
   var pending = null;
@@ -34,18 +43,72 @@
     try { return document.querySelector(selector); } catch (e) { return null; }
   }
 
-  function place(menu, x, y) {
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(value, max));
+  }
+
+  /* Anchored to a rect: below (leading, then trailing edge), beside
+     (trailing side, then leading side), above, and last of all whatever
+     fits once clamped. */
+  function placeAgainst(menu, anchor, rtl) {
+    var rect = menu.getBoundingClientRect();
+    var w = rect.width;
+    var h = rect.height;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var maxLeft = vw - w - MARGIN;
+    var maxTop = vh - h - MARGIN;
+    var lead = rtl ? anchor.right - w : anchor.left;
+    var trail = rtl ? anchor.left : anchor.right - w;
+    var alignedLeft = lead >= MARGIN && lead <= maxLeft ? lead : trail;
+    var left;
+    var top;
+
+    if (anchor.bottom + GAP + h <= vh - MARGIN) {
+      left = alignedLeft;
+      top = anchor.bottom + GAP;
+    } else {
+      var after = rtl ? anchor.left - GAP - w : anchor.right + GAP;
+      var before = rtl ? anchor.right + GAP : anchor.left - GAP - w;
+      top = clamp(anchor.top, MARGIN, maxTop);
+      if (after >= MARGIN && after <= maxLeft) {
+        left = after;
+      } else if (before >= MARGIN && before <= maxLeft) {
+        left = before;
+      } else {
+        left = alignedLeft;
+        top = anchor.top - GAP - h;
+      }
+    }
+
+    return {
+      left: clamp(left, MARGIN, Math.max(MARGIN, maxLeft)),
+      top: clamp(top, MARGIN, Math.max(MARGIN, maxTop))
+    };
+  }
+
+  /* At a point: just below it, flipping above when it would run off. */
+  function placeAtPoint(menu, x, y) {
+    var rect = menu.getBoundingClientRect();
+    var left = Math.min(Math.max(MARGIN, x), window.innerWidth - rect.width - MARGIN);
+    var top = y + MARGIN;
+    if (top + rect.height > window.innerHeight - MARGIN) {
+      top = Math.max(MARGIN, y - rect.height - MARGIN);
+    }
+    return { left: left, top: top };
+  }
+
+  function place(menu, host, x, y) {
     menu.hidden = false;
     menu.style.position = 'fixed';
     menu.style.margin = '0';
-    var rect = menu.getBoundingClientRect();
-    var left = Math.min(Math.max(GAP, x), window.innerWidth - rect.width - GAP);
-    var top = y + GAP;
-    if (top + rect.height > window.innerHeight - GAP) {
-      top = Math.max(GAP, y - rect.height - GAP);
-    }
-    menu.style.left = left + 'px';
-    menu.style.top = top + 'px';
+    menu.style.left = '0px';
+    menu.style.top = '0px';
+    var atPointer = host.getAttribute('data-p-context-menu-at') === 'pointer' && x != null;
+    var rtl = getComputedStyle(host).direction === 'rtl';
+    var pos = atPointer ? placeAtPoint(menu, x, y) : placeAgainst(menu, host.getBoundingClientRect(), rtl);
+    menu.style.left = pos.left + 'px';
+    menu.style.top = pos.top + 'px';
     menu.style.zIndex = '100';
   }
 
@@ -54,7 +117,7 @@
     if (!menu) return;
     hide();
     lastTrigger = document.activeElement;
-    place(menu, x, y);
+    place(menu, host, x, y);
     open = menu;
     var first = menu.querySelector('.p-menu__item:not([aria-disabled="true"])');
     if (first && first.focus) first.focus();
@@ -127,8 +190,7 @@
       var host = event.target.closest ? event.target.closest('[data-p-context-menu]') : null;
       if (!host || !menuFor(host)) return;
       event.preventDefault();
-      var r = host.getBoundingClientRect();
-      show(host, r.left, r.top + r.height / 2);
+      show(host, null, null);
     }
   });
 

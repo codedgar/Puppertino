@@ -1,8 +1,9 @@
-/* Puppertino v2.0 — Image Wells (macOS 26)
-   An image well is an editable version of an image view. 28×28 inset
-   well: 24×24 image at a 2px inset, framed by a white ring between two
-   soft dark hairlines. Wrap a hidden <input type="file"> to make it
-   editable; swapping the image is app logic. */
+/* Puppertino v2.0 — Image Wells (macOS 27)
+   An image well is an editable version of an image view. 30×30 well
+   with a 3px radius: a 24×24 image at a 3px inset, framed by a white
+   ring just inside the edge between two soft dark hairlines. Wrap a
+   hidden <input type="file"> to make it editable; swapping the image
+   is app logic. */
 
 :root {
   --p-imagewell-bg: rgba(0, 0, 0, 0.02);
@@ -34,24 +35,25 @@
   --p-imagewell-edge: rgba(0, 0, 0, 0.05);
 }
 
-/* Frame, inside → out: 0.5px dark inner edge, 1px white ring, 1.5px
-   soft dark outer edge. The 2px
-   padding is the visible well margin around the image. */
+/* Frame, outside → in: 0.5px soft dark edge outside the box, a 1px
+   white ring at the box edge, and a 1.5px soft dark inner edge under
+   the white (so 0.5px of it shows). The 3px padding is the visible
+   well margin around the image. */
 .p-imagewell {
   background: var(--p-imagewell-bg);
-  border-radius: 2px;
+  border-radius: 3px;
   box-shadow:
-    inset 0 0 0 0.5px var(--p-imagewell-edge),
-    0 0 0 1px var(--p-imagewell-ring),
-    0 0 0 1.5px var(--p-imagewell-edge);
+    0 0 0 0.5px var(--p-imagewell-edge),
+    inset 0 0 0 1px var(--p-imagewell-ring),
+    inset 0 0 0 1.5px var(--p-imagewell-edge);
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
-  height: 28px;
-  padding: 2px;
+  height: 30px;
+  padding: 3px;
   position: relative;
   vertical-align: middle;
-  width: 28px;
+  width: 30px;
 }
 
 .p-imagewell img,
@@ -75,8 +77,8 @@
 
 .p-imagewell:focus-within,
 .p-imagewell.p-dragover {
-  outline: 3px solid rgb(0 122 255 / 50%);
-  outline-offset: 2px;
+  outline: 3.5px solid var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline-offset: 1px;
 }
 
 .p-imagewell.p-dimmed,
