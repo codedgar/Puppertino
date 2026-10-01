@@ -657,3 +657,9 @@
   cursor: pointer;
   transition: gap 0.2s ease-out;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .p-notification-stack {
+    transition: none;
+  }
+}

@@ -7,9 +7,7 @@
  * {date} on selection. A .p-calendar-touch calendar is built the iOS
  * way instead: Sunday-first, full month name, SUN–SAT headers, no
  * days from the neighbouring months and only as many rows as the
- * month needs. Also drives .p-clock hands: static from
- * data-p-clock-time="9:41:00", or live with data-p-clock-live.
- * No dependencies.
+ * month needs. No dependencies.
  */
 (function () {
   'use strict';
@@ -149,48 +147,8 @@
     }
   });
 
-  // ---- clocks ----
-
-  function setHands(clock, h, m, s) {
-    clock.style.setProperty('--p-clock-h', ((h % 12) + m / 60) / 12);
-    clock.style.setProperty('--p-clock-m', (m + s / 60) / 60);
-    clock.style.setProperty('--p-clock-s', s / 60);
-    var mer = clock.querySelector('.p-clock-meridiem');
-    if (mer) mer.textContent = h < 12 ? 'AM' : 'PM';
-  }
-
-  function initClock(clock) {
-    if (clock._init) return;
-    clock._init = true;
-    if (!clock.querySelector('.p-clock-num')) {
-      var html = '';
-      for (var n = 1; n <= 12; n++) {
-        html += '<span class="p-clock-num" style="--p-clock-n:' + n + '">' + n + '</span>';
-      }
-      html +=
-        '<span class="p-clock-meridiem">AM</span>' +
-        '<span class="p-clock-hand p-hour"></span>' +
-        '<span class="p-clock-hand p-minute"></span>' +
-        '<span class="p-clock-hand p-second"></span>';
-      clock.insertAdjacentHTML('beforeend', html);
-    }
-    var live = clock.hasAttribute('data-p-clock-live');
-    if (live) {
-      var tick = function () {
-        var now = new Date();
-        setHands(clock, now.getHours(), now.getMinutes(), now.getSeconds());
-      };
-      tick();
-      setInterval(tick, 1000);
-    } else {
-      var parts = (clock.getAttribute('data-p-clock-time') || '10:09:30').split(':');
-      setHands(clock, +parts[0] || 0, +parts[1] || 0, +parts[2] || 0);
-    }
-  }
-
   function init() {
     document.querySelectorAll('.p-calendar').forEach(initCalendar);
-    document.querySelectorAll('.p-clock').forEach(initClock);
   }
 
   if (document.readyState === 'loading') {

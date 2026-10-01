@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Doc.astro
 title: Date pickers
-description: The graphical month calendar, plus the compact field-and-stepper composition. Analog clock included as experimental.
+description: The graphical month calendar, plus the compact field-and-stepper composition.
 ---
 
 import '@puppertino/pickers.css';
@@ -36,10 +36,6 @@ Today (when unselected) shows a `#DCDCDC` rounded cell with the number in the ac
 | `.p-calendar-day` | Generated day button. `.p-today`, `.p-selected`, `.p-outside` states. |
 
 Selection dispatches a bubbling `p-change` event with `detail.date`.
-
-## Analog clock (experimental)
-
-An analog clock companion (`.p-clock`) ships in `pickers.css` and `datepickers.js` but is experimental: the rendering is not consistent across browsers, it has no preview here, and its geometry may change between releases. The targets are 122px overall, a 5px metallic bezel, 13px numbers on a 44px ring, black hour and minute hands, and a thin red second hand. Hands rotate via `--p-clock-h`, `--p-clock-m`, and `--p-clock-s`; set `data-p-clock-time="9:41:00"` for a static time or `data-p-clock-live` to run. Avoid it in production.
 
 ## Compact style
 

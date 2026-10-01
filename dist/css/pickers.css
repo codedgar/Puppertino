@@ -1,7 +1,7 @@
 /* Puppertino v2.0 — Date Pickers (macOS 26)
-   Graphical calendar + analog clock, measured from NSDatePicker on
-   macOS 26 (values in specs/date-pickers.md).
-   The grid and clock hands are driven by src/js/datepickers.js.
+   Graphical calendar, measured from NSDatePicker on macOS 26
+   (values in specs/date-pickers.md).
+   The grid is driven by src/js/datepickers.js.
    Field-style date input = compose .p-field + .p-stepper. */
 
 :root {
@@ -14,9 +14,6 @@
   --p-picker-today-bg: #dcdcdc;
   --p-picker-selection: rgb(0, 100, 225);
   --p-picker-accent: #007aff;
-  --p-clock-face: #fff;
-  --p-clock-hand: #1a1a1a;
-  --p-clock-second: #ff3b30;
 }
 
 .p-dark-mode,
@@ -28,7 +25,6 @@
   --p-picker-tertiary: rgba(255, 255, 255, 0.247);
   --p-picker-today-bg: rgba(255, 255, 255, 0.14);
   --p-picker-selection: rgb(0, 89, 209);
-  --p-clock-face: #ececec;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,7 +36,6 @@
     --p-picker-tertiary: rgba(255, 255, 255, 0.247);
     --p-picker-today-bg: rgba(255, 255, 255, 0.14);
     --p-picker-selection: rgb(0, 89, 209);
-    --p-clock-face: #ececec;
   }
 }
 
@@ -55,7 +50,6 @@
   --p-picker-tertiary: rgba(0, 0, 0, 0.259);
   --p-picker-today-bg: #dcdcdc;
   --p-picker-selection: rgb(0, 100, 225);
-  --p-clock-face: #fff;
 }
 
 /* ------------------------------------------------------------ Calendar */
@@ -180,109 +174,6 @@
 .p-calendar-day:focus-visible {
   outline: 3px solid rgb(0 122 255 / 50%);
   outline-offset: -1px;
-}
-
-/* -------------------------------------------- Clock (EXPERIMENTAL) */
-
-/* 122×122 analog clock. EXPERIMENTAL: rendering doesn't yet hold up
-   against the native control across browsers (number placement relies
-   on CSS trig; bezel/hand polish pending). Not previewed in docs;
-   geometry may change. Hands rotate via --p-clock-h/m/s (turns);
-   datepickers.js sets them (or set them inline for a static time). */
-.p-clock {
-  background:
-    radial-gradient(circle at 50% 38%, rgba(0, 0, 0, 0.04), transparent 62%),
-    var(--p-clock-face);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.12),
-    0 0 0 5px #c8c8cc,
-    0 0 0 5.5px rgba(0, 0, 0, 0.35),
-    0 2px 6px rgba(0, 0, 0, 0.25);
-  color: var(--p-picker-label);
-  font-family: var(--p-picker-font);
-  height: 112px;
-  margin: 5px;
-  position: relative;
-  -webkit-user-select: none;
-  user-select: none;
-  width: 112px;
-}
-
-/* Metallic bezel: vertical silver gradient over the flat ring. */
-.p-clock::before {
-  border-radius: 50%;
-  box-shadow: 0 0 0 5px transparent;
-  content: "";
-  inset: -5px;
-  background: linear-gradient(180deg, #e8e9eb, #86878b);
-  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 4.5px));
-  mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 4.5px));
-  position: absolute;
-}
-
-.p-clock-num {
-  font-size: 13px;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%) translate(calc(sin(var(--p-clock-n) * 30deg) * 44px), calc(cos(var(--p-clock-n) * 30deg) * -44px));
-}
-
-.p-clock-meridiem {
-  color: var(--p-picker-secondary);
-  font-size: 12px;
-  left: 50%;
-  position: absolute;
-  top: 66%;
-  transform: translateX(-50%);
-}
-
-.p-clock-hand {
-  background: var(--p-clock-hand);
-  border-radius: 2px;
-  bottom: 50%;
-  left: calc(50% - 1.75px);
-  position: absolute;
-  transform-origin: 50% 100%;
-  width: 3.5px;
-}
-
-.p-clock-hand.p-hour {
-  height: 28px;
-  transform: rotate(calc(var(--p-clock-h, 0) * 1turn));
-}
-
-.p-clock-hand.p-minute {
-  height: 40px;
-  transform: rotate(calc(var(--p-clock-m, 0) * 1turn));
-}
-
-.p-clock-hand.p-second {
-  background: var(--p-clock-second);
-  border-radius: 1px;
-  height: 48px;
-  left: calc(50% - 0.5px);
-  transform: rotate(calc(var(--p-clock-s, 0) * 1turn));
-  transform-origin: 50% calc(100% - 8px);
-  width: 1px;
-}
-
-.p-clock::after {
-  background: var(--p-clock-second);
-  border-radius: 50%;
-  content: "";
-  height: 5px;
-  left: calc(50% - 2.5px);
-  position: absolute;
-  top: calc(50% - 2.5px);
-  width: 5px;
-}
-
-@media (prefers-reduced-motion) {
-  .p-clock-hand {
-    transition: none !important;
-  }
 }
 
 /* ─── Touch size (iOS and iPadOS 27) ───────────────────────────────── */

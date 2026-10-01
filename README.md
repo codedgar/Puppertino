@@ -79,7 +79,7 @@ import '@codedgar/puppertino/tabs'
 ```javascript
 // ES6 imports
 import '@codedgar/puppertino/js/modals.js'
-import '@codedgar/puppertino/js/dakmode_manager.js'
+import '@codedgar/puppertino/js/darkmode_manager.js'
 import '@codedgar/puppertino/js/tabs.js'
 
 // CommonJS require

@@ -6,7 +6,7 @@ description: Install Puppertino and bring Apple's design language to the web in 
 
 Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web. It follows Apple's Human Interface Guidelines, ships zero JavaScript dependencies, and works without a build step.
 
-Puppertino provides the macOS 26 color system, the materials specification, and a complete typography scale. The v1 classes remain available so projects can upgrade without rewrites.
+Puppertino provides the macOS 27 color system, the materials specification, and a complete typography scale. The v1 classes remain available so projects can upgrade without rewrites.
 
 ## Install via CDN
 
@@ -75,7 +75,7 @@ A few components ship with optional vanilla JavaScript: modals, tabs, actions, s
 ```javascript
 import '@codedgar/puppertino/js/modals.js'
 import '@codedgar/puppertino/js/tabs.js'
-import '@codedgar/puppertino/js/dakmode_manager.js'
+import '@codedgar/puppertino/js/darkmode_manager.js'
 ```
 
 ## Your first page
@@ -99,7 +99,7 @@ Here is the smallest possible Puppertino setup. It pulls in the full framework, 
 </html>
 ```
 
-The `p-type` class opts the page into the macOS 26 typography scale. The `p-auto-dark-mode` class flips colors to dark mode when the user's system preference is dark.
+The `p-type` class opts the page into the macOS 27 typography scale. The `p-auto-dark-mode` class flips colors to dark mode when the user's system preference is dark.
 
 ## Dark mode
 
@@ -116,7 +116,7 @@ Puppertino supports dark mode in two ways. **Automatic** uses the system prefere
 For the manual approach, the dark mode manager script handles the toggle, persistence, and tab synchronization.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/src/js/dakmode_manager.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/src/js/darkmode_manager.js"></script>
 <script>
   puppertinoThemeMan.init({ autoDetect: true });
 </script>
@@ -124,7 +124,7 @@ For the manual approach, the dark mode manager script handles the toggle, persis
 
 ## The foundations
 
-Three foundations follow Apple's macOS 26 specification.
+Three foundations follow Apple's macOS 27 specification.
 
 - **Colors.** Thirteen system accents, six text hierarchy levels, five fill tiers, and semantic background tokens. All with light and dark mode variants.
 - **Typography.** The full Apple text style scale, from Large Title to Caption 2. Nine font weights and optical letter spacing baked in.
@@ -150,7 +150,7 @@ import '@codedgar/puppertino/typography'  // typography.css (v2 + v1)
 import '@codedgar/puppertino/materials'   // materials.css (v2 + v1)
 ```
 
-Note that `@codedgar/puppertino/colors` points at `colors.css`, which includes both the macOS 26 system tokens *and* the v1 classes. Same for materials. Both systems are available from the same import.
+Note that `@codedgar/puppertino/colors` points at `colors.css`, which includes both the macOS 27 system tokens *and* the v1 classes. Same for materials. Both systems are available from the same import.
 
 ## Browser support
 

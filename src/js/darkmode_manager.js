@@ -1,8 +1,3 @@
-/* Deprecated path. This file was renamed to darkmode_manager.js in 2.0;
-   it remains, with the same contents, so existing script tags and
-   imports keep working. It will be removed in a future major version.
-   It is a full copy rather than a loader because a classic script tag
-   must define puppertinoThemeMan before the next inline script runs. */
 const puppertinoThemeMan = (function () {
   let options = {
     autoDetect: true,
