@@ -30,7 +30,7 @@ Use a stepper or a plain number field when people need a precise value. Consider
 | Track | 4px capsule (6px on the large size), black at 8.5% when unfilled |
 | Fill | `--p-slider-accent`, the tintable system blue (`#0088FF`, `#0091FF` in dark mode) |
 | Thumb | 20 by 16px white lozenge, one soft shadow `0 0.5px 6px rgba(0,0,0,0.12)` |
-| Pressed | The thumb turns into a Liquid Glass lens that magnifies the track. With `data-p-lens="clear"`: clear glass 1.25x its size plus a 1px rim, and the whole track darkens by 8% |
+| Pressed | The thumb turns into a clear Liquid Glass lens, slightly larger than the thumb, and the whole track darkens by 8%. With `data-p-lens="clear"`: flat clear glass 1.25x its size plus a 1px rim |
 | Ticks | 2 by 2px dots, 4px under the track, black at 21% |
 | Focus | A 3.5px accent band around the thumb |
 
@@ -53,7 +53,9 @@ Include the helper once per page and the accent fill follows the thumb:
 
 The helper publishes the value as `--p-slider-fill` so the track can paint the accent portion. Firefox draws the fill natively without it. Without the helper on other browsers the track renders all gray and the slider still works, so the enhancement degrades cleanly.
 
-Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid Glass](../../materials/#liquid-glass) lens that magnifies the track and bends the fill edge as it passes. Add `data-p-lens="clear"` to the input for the flatter macOS 27 look. That glass is clear: it grows to 1.25x the thumb plus a 1px rim (27 by 22px for the default thumb), shows the track underneath without magnifying it, and casts a soft shadow about 7px below. In light mode the rim is a gray hairline; in dark mode a dark outer line with a bright inner one, brightest along the bottom. While you drag, the unfilled track darkens from 8.5% to 16% and the fill darkens by 8%. The glass settles back into a solid thumb 350ms after release, and keyboard changes never lift it.
+Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid Glass](../../materials/#liquid-glass) lens. The glass grows 5px wider and 4px taller than the thumb (25 by 20px for the default thumb) and stays a rounded rectangle. It is clear: the page and the track show through at their real size and in focus, and the fill ends in a rounded cap under the glass. The rim is a hairline, dark along the top and left and bright along the bottom and right. The fill color wraps it wherever the fill sits under the lens, deepest on the leading edge, so the rim is plain at the minimum, colored on its leading half mid-track, and colored all the way around at the maximum. A soft shadow falls about 6px below. While you drag, the unfilled track darkens from 8.5% to 16% and the fill darkens by 8%. The glass settles back into a solid thumb 350ms after release, and keyboard changes never lift it.
+
+Add `data-p-lens="clear"` to the input for the flatter macOS 27 look. That glass grows to 1.25x the thumb plus a 1px rim (27 by 22px for the default thumb), with a ring shadow about 7px below. In light mode its rim is a gray hairline; in dark mode a dark outer line with a bright inner one, brightest along the bottom.
 
 ```html
 <script src="src/js/liquid_glass.js"></script>
@@ -72,10 +74,10 @@ Load `liquid_glass.js` as well and dragging turns the thumb into a faux [Liquid 
 
 | Class | Thumb | Track | Pressed glass |
 |---|---|---|---|
-| `.p-slider-mini` | 16 × 12 | 4px | 22 × 17 |
-| `.p-slider-small` | 18 × 14 | 4px | 25 × 20 |
-| `.p-slider` | 20 × 16 | 4px | 27 × 22 |
-| `.p-slider-large` | 24 × 20 | 6px | 32 × 27 |
+| `.p-slider-mini` | 16 × 12 | 4px | 21 × 16 |
+| `.p-slider-small` | 18 × 14 | 4px | 23 × 18 |
+| `.p-slider` | 20 × 16 | 4px | 25 × 20 |
+| `.p-slider-large` | 24 × 20 | 6px | 29 × 24 |
 
 ## Narrow thumb
 

@@ -2314,14 +2314,17 @@ button.p-form-row-more:focus-visible {
 }
 
 /* Held: the whole track darkens under the lens. (Not on the iOS touch
-   size, which keeps its own track.) */
-.p-switch:not(.p-switch-touch):active > input:not(:disabled) + span {
+   size, which keeps its own track, and not once liquid_glass.js has
+   enhanced the switch: there the track is painted by the knockout
+   layer and this element must stay transparent, or the old state's
+   color shows around and through the glass while it is dragged.) */
+.p-switch:not(.p-switch-touch):not(.p-switch-liquid):active > input:not(:disabled) + span {
   background:
     linear-gradient(var(--p-switch-press), var(--p-switch-press)),
     var(--p-switch-track-off);
 }
 
-.p-switch:not(.p-switch-touch):active > input:not(:disabled):checked + span {
+.p-switch:not(.p-switch-touch):not(.p-switch-liquid):active > input:not(:disabled):checked + span {
   background:
     linear-gradient(var(--p-switch-press), var(--p-switch-press)),
     var(--p-control-accent);

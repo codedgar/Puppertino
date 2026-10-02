@@ -43,6 +43,15 @@
   );
   --p-slider-lens-edge: inset 0 0 0 1px rgba(0, 0, 0, 0.11);
   --p-slider-lens-shadow: rgba(0, 0, 0, 0.6);
+  /* Liquid glass (the default lens). A faint shade for the body and a
+     soft shadow cast below, measured from NSSlider on macOS 26. The
+     scheme is a keyword: the rim's gradients are built from the fill
+     color, and a var() inside a custom property resolves where it is
+     defined, so they cannot be tokens here. liquid_glass.js reads the
+     keyword and puts a class on the lens. */
+  --p-slider-glass-scheme: light;
+  --p-slider-glass-body: rgba(0, 0, 0, 0.031);
+  --p-slider-glass-cast: 0 6px 10px 2px rgba(0, 29, 69, 0.125);
 }
 
 .p-dark-mode,
@@ -65,6 +74,9 @@
     inset 0 2px 0 rgba(255, 255, 255, 0.14),
     inset 0 0 0 2px rgba(255, 255, 255, 0.07);
   --p-slider-lens-shadow: rgba(0, 0, 0, 0.35);
+  --p-slider-glass-body: rgba(255, 255, 255, 0.093);
+  --p-slider-glass-scheme: dark;
+  --p-slider-glass-cast: 0 6px 10px 2px rgba(153, 196, 255, 0.084);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -85,6 +97,9 @@
       inset 0 2px 0 rgba(255, 255, 255, 0.14),
       inset 0 0 0 2px rgba(255, 255, 255, 0.07);
     --p-slider-lens-shadow: rgba(0, 0, 0, 0.35);
+    --p-slider-glass-body: rgba(255, 255, 255, 0.093);
+    --p-slider-glass-scheme: dark;
+    --p-slider-glass-cast: 0 6px 10px 2px rgba(153, 196, 255, 0.084);
   }
 }
 
@@ -104,6 +119,15 @@
   );
   --p-slider-lens-edge: inset 0 0 0 1px rgba(0, 0, 0, 0.11);
   --p-slider-lens-shadow: rgba(0, 0, 0, 0.6);
+  /* Liquid glass (the default lens). A faint shade for the body and a
+     soft shadow cast below, measured from NSSlider on macOS 26. The
+     scheme is a keyword: the rim's gradients are built from the fill
+     color, and a var() inside a custom property resolves where it is
+     defined, so they cannot be tokens here. liquid_glass.js reads the
+     keyword and puts a class on the lens. */
+  --p-slider-glass-scheme: light;
+  --p-slider-glass-body: rgba(0, 0, 0, 0.031);
+  --p-slider-glass-cast: 0 6px 10px 2px rgba(0, 29, 69, 0.125);
 }
 
 .p-slider {
@@ -120,6 +144,10 @@
   --p-slider-to: var(--p-slider-fill);
   /* The pressed overlay, off until the thumb is held. */
   --p-slider-press-now: transparent;
+  /* How much the pressed glass outgrows the thumb (liquid_glass.js):
+     25×20 for the default thumb, measured from NSSlider on macOS 26. */
+  --p-slider-lens-grow-w: 5px;
+  --p-slider-lens-grow-h: 4px;
   /* Optional in-track marks (the centered origin line, inset ticks). */
   --p-slider-marks: linear-gradient(transparent, transparent);
 
@@ -163,10 +191,10 @@
 }
 
 /* Held: the whole track darkens. :active covers the plain slider;
-   with liquid_glass.js only the clear lens darkens it
-   ([data-p-lens-open] is set for the length of a drag). */
-.p-slider:not(.p-slider-touch):not(:disabled):active:not([data-p-lens-open]),
-.p-slider[data-p-lens="clear"][data-p-lens-open]:not(.p-slider-touch) {
+   with liquid_glass.js [data-p-lens-open] is set for the length of a
+   drag. */
+.p-slider:not(.p-slider-touch):not(:disabled):active,
+.p-slider[data-p-lens-open]:not(.p-slider-touch) {
   --p-slider-press-now: var(--p-slider-press);
 }
 
@@ -384,10 +412,17 @@
   --p-slider-thumb-h: var(--p-slider-touch-thumb-h);
   --p-slider-track-h: var(--p-slider-touch-h);
   --p-slider-thumb-shadow: 0 6px 13px rgba(0, 0, 0, 0.12), 0 0.5px 4px rgba(0, 0, 0, 0.12);
-  /* The dragged glass (liquid_glass.js copies these onto the lens). */
+  /* The dragged glass is 58×38, measured from UISlider on iOS 26
+     (liquid_glass.js copies these onto the lens). The liquid lens and
+     the clear one share a body. */
+  --p-slider-lens-grow-w: 20px;
+  --p-slider-lens-grow-h: 14px;
   --p-slider-lens-body: var(--p-slider-touch-lens-body);
   --p-slider-lens-edge: var(--p-slider-touch-lens-edge);
   --p-slider-lens-shadow: var(--p-slider-touch-lens-shadow);
+  --p-slider-glass-body: var(--p-slider-touch-glass-body);
+  --p-slider-glass-rim: var(--p-slider-touch-glass-rim);
+  --p-slider-glass-cast: var(--p-slider-touch-glass-cast);
 
   width: 100%;
   /* 28px keeps the v2.0 row height and leaves room for the tick dots. */
@@ -497,9 +532,11 @@
    release it settles back into a thumb and the script hands control
    back to the native one.
 
-   The default is the liquid lens, which redraws the track inside
-   itself, magnified, through an alpha threshold; that copy needs an
-   opaque stand-in for the translucent track token.
+   The default is the liquid lens: clear glass, a little larger than
+   the thumb, that cuts the real track out underneath and redraws it
+   inside itself at its real thickness and in focus. The copy sits over
+   the page, so it needs an opaque stand-in for the translucent track
+   token.
 
    data-p-lens="clear" on the input opts into the flat macOS 27 / iOS 27
    lens (.p-lens-clear): the track shows
@@ -512,7 +549,7 @@
    script copies the resolved colors onto it. */
 
 :root {
-  --p-slider-lens-track: #e0e0e0;
+  --p-slider-lens-track: #e1e1e1;
   --p-slider-touch-lens-track: #e4e4e4;
   --p-slider-touch-lens-body:
     linear-gradient(
@@ -523,12 +560,15 @@
     linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
   --p-slider-touch-lens-edge: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
   --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
+  --p-slider-touch-glass-cast: 0 3px 5px rgba(0, 0, 0, 0.12);
+  --p-slider-touch-glass-rim: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  --p-slider-touch-glass-body: var(--p-slider-touch-lens-body);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-slider-lens-track: #3a3a3a;
-  --p-slider-touch-lens-track: #3a3a3d;
+  --p-slider-lens-track: #464646;
+  --p-slider-touch-lens-track: #4c4c50;
   --p-slider-touch-lens-body: linear-gradient(
     rgba(255, 255, 255, 0.1) 5%,
     rgba(255, 255, 255, 0.045) 22%,
@@ -541,12 +581,15 @@
     inset 0 2px 0 rgba(255, 255, 255, 0.25),
     inset 0 -2px 0 rgba(255, 255, 255, 0.3);
   --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
+  --p-slider-touch-glass-cast: 0 4px 6px rgba(0, 0, 0, 0.25);
+  --p-slider-touch-glass-rim: inset 0 0 0 0.67px rgba(0, 0, 0, 0.5), inset 0 1.33px 1px rgba(255, 255, 255, 0.3), inset 0 -1.33px 1px rgba(255, 255, 255, 0.3);
+  --p-slider-touch-glass-body: linear-gradient(rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.03) 44%, rgba(255, 255, 255, 0.07) 56%);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-slider-lens-track: #3a3a3a;
-    --p-slider-touch-lens-track: #3a3a3d;
+    --p-slider-lens-track: #464646;
+    --p-slider-touch-lens-track: #4c4c50;
     --p-slider-touch-lens-body: linear-gradient(
       rgba(255, 255, 255, 0.1) 5%,
       rgba(255, 255, 255, 0.045) 22%,
@@ -559,12 +602,15 @@
       inset 0 2px 0 rgba(255, 255, 255, 0.25),
       inset 0 -2px 0 rgba(255, 255, 255, 0.3);
     --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
+    --p-slider-touch-glass-cast: 0 4px 6px rgba(0, 0, 0, 0.25);
+    --p-slider-touch-glass-rim: inset 0 0 0 0.67px rgba(0, 0, 0, 0.5), inset 0 1.33px 1px rgba(255, 255, 255, 0.3), inset 0 -1.33px 1px rgba(255, 255, 255, 0.3);
+    --p-slider-touch-glass-body: linear-gradient(rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.03) 44%, rgba(255, 255, 255, 0.07) 56%);
   }
 }
 
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-slider-lens-track: #e0e0e0;
+  --p-slider-lens-track: #e1e1e1;
   --p-slider-touch-lens-track: #e4e4e4;
   --p-slider-touch-lens-body:
     linear-gradient(
@@ -575,6 +621,9 @@
     linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
   --p-slider-touch-lens-edge: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
   --p-slider-touch-lens-shadow: rgba(0, 0, 0, 0.4);
+  --p-slider-touch-glass-cast: 0 3px 5px rgba(0, 0, 0, 0.12);
+  --p-slider-touch-glass-rim: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  --p-slider-touch-glass-body: var(--p-slider-touch-lens-body);
 }
 
 input.p-slider[data-p-lens-open]::-webkit-slider-thumb {
@@ -589,14 +638,39 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
 
 .p-slider-lens {
   --p-lens-h: var(--p-slider-lens-thumb-h);
+  /* The glass keeps the thumb's corner radius as it grows, plus half a
+     pixel (8.5px on the default thumb, measured from NSSlider on
+     macOS 26), so the lifted lens is a rounded rectangle rather than a
+     capsule. */
+  --p-slider-lens-radius: calc(var(--p-slider-lens-thumb-h) / 2 + 0.5px);
 
   position: fixed;
   z-index: 2147483000;
-  width: var(--p-slider-lens-thumb-w);
-  height: var(--p-slider-lens-thumb-h);
+  /* Sized rather than scaled: the glass is a little larger than the
+     thumb and shows the track at its real thickness. */
+  scale: none;
+  width: calc(var(--p-slider-lens-thumb-w) + var(--p-slider-lens-grow-w) * var(--p-lens-lift));
+  height: calc(var(--p-slider-lens-thumb-h) + var(--p-slider-lens-grow-h) * var(--p-lens-lift));
   translate: -50% -50%;
   transition: --p-lens-lift var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1);
   transition: --p-lens-lift var(--p-lens-duration) var(--p-lens-spring);
+}
+
+.p-slider-lens,
+.p-slider-lens .p-lens-rim,
+.p-slider-lens .p-lens-liquid,
+.p-slider-lens .p-lens-edge,
+.p-slider-lens .p-lens-cover {
+  border-radius: var(--p-slider-lens-radius);
+}
+
+.p-slider-lens .p-lens-body {
+  clip-path: inset(0 round var(--p-slider-lens-radius));
+}
+
+/* Touch: the 38×24 capsule becomes a 58×38 one and stays a capsule. */
+.p-slider-lens-touch {
+  --p-slider-lens-radius: 999px;
 }
 
 .p-slider-lens[data-p-lift] {
@@ -607,10 +681,9 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
   box-shadow: var(--p-slider-thumb-shadow, 0 0.5px 6px rgba(0, 0, 0, 0.12));
 }
 
-/* Clear glass: sized rather than scaled, so the rim stays 1px. Rounded
-   to whole pixels like the reference (a 20×16 thumb → 27×22 glass). */
+/* Clear glass: sized so the rim stays 1px. Rounded to whole pixels like
+   the reference (a 20×16 thumb → 27×22 glass). */
 .p-slider-lens.p-lens-clear {
-  scale: none;
   width: calc(
     var(--p-slider-lens-thumb-w) +
     round(var(--p-slider-lens-thumb-w) * 0.25 + 2px, 1px) * var(--p-lens-lift)
@@ -627,7 +700,7 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
   box-shadow: var(--p-slider-lens-edge);
 }
 
-/* Touch: the 38×24 capsule becomes a 60×40 one. */
+/* Touch: the clear glass is 60×40. */
 .p-slider-lens-touch.p-lens-clear {
   width: calc(var(--p-slider-lens-thumb-w) + 22px * var(--p-lens-lift));
   height: calc(var(--p-slider-lens-thumb-h) + 16px * var(--p-lens-lift));
@@ -647,50 +720,524 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
   filter: blur(3px);
 }
 
-/* Liquid lens: refraction wraps the color under the glass all the way
-   around its edge, the same ring the switch lens draws. The thumb sits
-   where the fill ends, so the fill color rings the leading half and the
-   track color the trailing half. The goo filter fuses the ring with the
-   magnified track copy, so the color bends around the rim. */
+/* Liquid lens: clear glass that shows the page and the track through it
+   at their real size.
+
+   Knockout. The real track is cut out under the glass, so everything
+   seen through the lens is the lens's own drawing. The hole lifts with the glass (the script sets [data-p-lens-lift] on
+   the input as it lifts the lens) and stays a pixel inside the rim, so
+   the rim always covers the cut ends of the real track. */
+input.p-slider[data-p-lens-open]:not([data-p-lens="clear"]) {
+  --p-slider-knockout-w: calc(var(--p-slider-thumb-w) + var(--p-slider-lens-grow-w) * var(--p-lens-lift) - 2px);
+
+  -webkit-mask:
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0)
+      calc(var(--p-slider-lens-at, -99px) - var(--p-slider-knockout-w) / 2) 0 /
+      var(--p-slider-knockout-w) 100% no-repeat;
+  mask:
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0)
+      calc(var(--p-slider-lens-at, -99px) - var(--p-slider-knockout-w) / 2) 0 /
+      var(--p-slider-knockout-w) 100% no-repeat;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: --p-lens-lift var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1);
+  transition: --p-lens-lift var(--p-lens-duration) var(--p-lens-spring);
+}
+
+input.p-slider[data-p-lens-lift] {
+  --p-lens-lift: 1;
+}
+
+/* The rim element only casts the shadow. The rim itself is drawn inside
+   the body, over the track copy (see below). filter: none, because the
+   base lens's color-split filter clips anything past its filter region
+   and this shadow reaches past it. */
+.p-slider-lens:not(.p-lens-clear) .p-lens-rim {
+  filter: none;
+  box-shadow: var(--p-slider-glass-cast, 0 6px 12px rgba(0, 0, 0, 0.12));
+}
+
+/* The body barely tints what is behind it. */
+.p-slider-lens:not(.p-lens-clear) .p-lens-body {
+  background: var(--p-slider-glass-body, transparent);
+}
+
+/* No goo filter: the track copy is shown at its own thickness, not
+   melted into the rim. */
+.p-slider-lens .p-lens-liquid {
+  filter: none;
+}
+
+/* ── Pointer rim ──
+   Rings, each a conic gradient shown only along the edge of the glass
+   (a padding-wide band, cut out with an excluding mask), so the color
+   can change around the perimeter the way light does on the native
+   lens:
+
+   1. The glass's own hairline: dark along the top and the left, bright
+      along the bottom and the right.
+   2. The fill's color, wrapped around the rim wherever the fill sits
+      under the glass: nothing at the minimum, the leading half
+      mid-track, the whole rim at the maximum. Deep on the leading edge,
+      faint over the top, a pale shifted tint around the lower rim.
+   3. A fainter fringe just inside ring 2.
+
+   The stops are measured from NSSlider on macOS 26, in light and dark.
+
+   Conic angles run clockwise from the top. */
+.p-slider-lens .p-lens-liquid::before,
+.p-slider-lens .p-lens-liquid::after,
 .p-slider-lens .p-lens-edge::before,
 .p-slider-lens .p-lens-edge::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  /* Each ring is a crisp half-pixel line; its ::after twin is twice as
+     wide and fainter, the soft inner edge of the same line. Drawn as a
+     transparent border so the width snaps to device pixels; the
+     gradients are sized to the border box so they do not wrap. */
+  box-sizing: border-box;
+  border: 0.5px solid transparent;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
-.p-slider-lens .p-lens-edge::before {
-  clip-path: inset(0 50% 0 0);
-  box-shadow:
-    inset 0 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-fill),
-    inset calc(var(--p-lens-u) * 0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-fill);
-}
-
+.p-slider-lens .p-lens-liquid::after,
 .p-slider-lens .p-lens-edge::after {
-  clip-path: inset(0 0 0 50%);
-  box-shadow:
-    inset 0 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-rest),
-    inset calc(var(--p-lens-u) * -0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-slider-lens-rest);
+  border-width: 1px;
+  opacity: 0.55;
 }
 
-/* The track copy lines up with the real track, so the lens scale
-   magnifies exactly what sits under the thumb. It swells a little as
-   the glass lifts, like liquid pulled toward the lens. */
-.p-slider-lens .p-lens-track {
-  left: calc(50% - var(--p-slider-lens-offset));
-  width: var(--p-slider-lens-track-w);
-  height: calc(var(--p-slider-lens-track-h) * (1 + 0.6 * var(--p-lens-lift)));
-  translate: 0 -50%;
-  background: linear-gradient(
-    to right,
-    var(--p-slider-lens-fill) 0 var(--p-slider-lens-offset),
-    var(--p-slider-lens-rest) var(--p-slider-lens-offset)
+.p-slider-lens-dark .p-lens-liquid::after {
+  opacity: 0.7;
+}
+
+.p-slider-lens .p-lens-liquid {
+  --p-ring-glass: conic-gradient(
+    rgba(0, 75, 120, 0.5) 0deg,
+    rgba(0, 75, 120, 0.3) 30deg,
+    rgba(0, 75, 120, 0.08) 45deg,
+    rgba(255, 255, 255, 0.1) 70deg,
+    rgba(255, 255, 255, 0.45) 90deg,
+    rgba(0, 75, 120, 0.06) 108deg,
+    rgba(255, 250, 240, 0.2) 135deg,
+    rgba(255, 255, 255, 0.5) 180deg,
+    rgba(255, 255, 255, 0.4) 210deg,
+    rgba(0, 75, 120, 0.15) 240deg,
+    rgba(0, 75, 120, 0.3) 255deg,
+    rgba(0, 75, 120, 0.55) 270deg,
+    rgba(0, 75, 120, 0.65) 300deg,
+    rgba(0, 75, 120, 0.5) 345deg,
+    rgba(0, 75, 120, 0.5) 360deg
   );
 }
 
+.p-slider-lens-dark .p-lens-liquid {
+  --p-ring-glass: conic-gradient(
+    rgb(5, 31, 59) 0deg,
+    rgb(10, 54, 72) 30deg,
+    rgba(39, 55, 63, 0.6) 45deg,
+    rgb(64, 86, 82) 60deg,
+    rgb(120, 127, 126) 90deg,
+    rgb(120, 124, 108) 120deg,
+    rgb(109, 112, 110) 160deg,
+    rgb(67, 67, 69) 180deg,
+    rgb(109, 112, 111) 200deg,
+    rgb(62, 69, 72) 225deg,
+    rgb(41, 73, 75) 240deg,
+    rgb(10, 58, 83) 255deg,
+    rgb(5, 45, 80) 270deg,
+    rgb(0, 27, 49) 300deg,
+    rgb(5, 31, 59) 360deg
+  );
+}
+
+.p-slider-lens .p-lens-liquid::before,
+.p-slider-lens .p-lens-liquid::after {
+  z-index: 1;
+  background: var(--p-ring-glass) border-box;
+}
+
+/* The flare. Where the track meets the rim, the edge of the glass
+   smears its color a few pixels up and down the rim on both sides. The
+   soft rings carry it: the rest color here, over ring 1's soft twin,
+   and the fill color in ring 3. */
+.p-slider-lens .p-lens-liquid::after {
+  background:
+    conic-gradient(
+      transparent 58deg,
+      var(--p-slider-lens-rest) 66deg,
+      var(--p-slider-lens-rest) 114deg,
+      transparent 122deg,
+      transparent 238deg,
+      var(--p-slider-lens-rest) 246deg,
+      var(--p-slider-lens-rest) 294deg,
+      transparent 302deg
+    ) border-box,
+    var(--p-ring-glass) border-box;
+}
+
+.p-slider-lens .p-lens-edge {
+  z-index: 2;
+  /* The fill's colors as they read on the rim: deep (leading edge),
+     mid (over the top and the far edge), pale and hue-shifted (the
+     lower rim), and the cooler fringe inside it. Plain fill where
+     relative colors are unsupported. */
+  --p-ring-deep: var(--p-slider-lens-fill);
+  --p-ring-mid: var(--p-slider-lens-fill);
+  --p-ring-pale: var(--p-slider-lens-fill);
+  --p-ring-warm: var(--p-slider-lens-fill);
+  --p-ring-cool: var(--p-slider-lens-fill);
+  --p-ring-deep: oklch(from var(--p-slider-lens-fill) calc(l - 0.09) calc(c * 1.12) h);
+  --p-ring-mid: oklch(from var(--p-slider-lens-fill) calc(l + 0.05) calc(c * 0.8) h);
+  --p-ring-pale: oklch(from var(--p-slider-lens-fill) 0.84 calc(c * 0.3) calc(h + 25));
+  --p-ring-warm: oklch(from var(--p-slider-lens-fill) 0.68 calc(c * 0.7) calc(h + 30));
+  --p-ring-cool: oklch(from var(--p-slider-lens-fill) 0.8 calc(c * 0.5) calc(h - 20));
+  /* Fades out just before the fill end. The end is pushed 60% further
+     from the lens center so the ring is gone at the minimum and closed
+     at the maximum. */
+  --p-ring-end: calc(50% + (var(--p-slider-lens-fill-to) - var(--p-slider-lens-offset)) * 1.6);
+
+  -webkit-mask: linear-gradient(to right, #000 calc(var(--p-ring-end) - 15%), transparent var(--p-ring-end));
+  mask: linear-gradient(to right, #000 calc(var(--p-ring-end) - 15%), transparent var(--p-ring-end));
+  /* A crescent of the fill color: thickest on the leading edge, thinning
+     out around the curve, and a paler one on the far edge. */
+  box-shadow:
+    inset 2px 0 1px -0.5px var(--p-ring-deep),
+    inset -2px 0 1px -0.5px var(--p-ring-mid);
+}
+
+.p-slider-lens .p-lens-edge::before {
+  z-index: 1;
+  background: conic-gradient(
+    color-mix(in srgb, var(--p-ring-mid) 30%, transparent) 0deg,
+    var(--p-ring-mid) 30deg,
+    var(--p-ring-pale) 45deg,
+    var(--p-ring-pale) 75deg,
+    var(--p-ring-mid) 90deg,
+    var(--p-ring-cool) 108deg,
+    var(--p-ring-pale) 130deg,
+    var(--p-ring-pale) 165deg,
+    #fff 180deg,
+    var(--p-ring-pale) 195deg,
+    var(--p-ring-pale) 235deg,
+    var(--p-ring-warm) 252deg,
+    var(--p-ring-deep) 266deg,
+    var(--p-ring-deep) 300deg,
+    var(--p-ring-mid) 318deg,
+    color-mix(in srgb, var(--p-ring-mid) 30%, transparent) 360deg
+  ) border-box;
+}
+
+.p-slider-lens .p-lens-edge::after {
+  --p-ring-tone: color-mix(in srgb, var(--p-slider-lens-fill) 80%, #fff);
+  opacity: 0.75;
+  background: conic-gradient(
+    transparent 36deg,
+    var(--p-ring-cool) 50deg,
+    var(--p-ring-tone) 64deg,
+    var(--p-ring-tone) 116deg,
+    var(--p-ring-cool) 130deg,
+    transparent 144deg,
+    transparent 216deg,
+    var(--p-ring-cool) 230deg,
+    var(--p-ring-tone) 244deg,
+    var(--p-ring-deep) 262deg,
+    var(--p-ring-deep) 278deg,
+    var(--p-ring-tone) 296deg,
+    transparent 310deg
+  ) border-box;
+}
+
+/* Dark: the leading edge and the far edge glow in the fill color, the
+   lower rim picks up a pale tint, and the top stays dark. */
+.p-slider-lens-dark .p-lens-edge {
+  --p-ring-deep: oklch(from var(--p-slider-lens-fill) l calc(c * 1.25) h);
+  --p-ring-mid: color-mix(in srgb, var(--p-slider-lens-fill) 35%, rgb(0, 27, 49));
+  --p-ring-pale: color-mix(in srgb, var(--p-slider-lens-fill) 45%, rgb(139, 154, 160));
+  --p-ring-warm: color-mix(in srgb, var(--p-slider-lens-fill) 30%, rgb(0, 72, 96));
+  --p-ring-cool: color-mix(in srgb, var(--p-slider-lens-fill) 65%, rgb(159, 224, 255));
+  box-shadow:
+    inset 2px 0 1px -0.5px var(--p-ring-deep),
+    inset -2px 0 1.5px -0.5px color-mix(in srgb, var(--p-slider-lens-fill) 55%, transparent);
+}
+
+.p-slider-lens-dark .p-lens-edge::before {
+  background: conic-gradient(
+    transparent 0deg,
+    var(--p-ring-mid) 30deg,
+    var(--p-ring-deep) 75deg,
+    var(--p-ring-cool) 90deg,
+    var(--p-ring-pale) 110deg,
+    var(--p-ring-pale) 165deg,
+    transparent 180deg,
+    var(--p-ring-pale) 195deg,
+    var(--p-ring-warm) 235deg,
+    var(--p-ring-deep) 258deg,
+    var(--p-ring-deep) 278deg,
+    var(--p-ring-warm) 292deg,
+    var(--p-ring-mid) 310deg,
+    transparent 335deg
+  ) border-box;
+}
+
+.p-slider-lens-dark .p-lens-edge::after {
+  --p-ring-tone: color-mix(in srgb, var(--p-slider-lens-fill) 80%, #333);
+  background: conic-gradient(
+    transparent 50deg,
+    var(--p-ring-cool) 64deg,
+    var(--p-ring-cool) 116deg,
+    transparent 130deg,
+    transparent 230deg,
+    var(--p-ring-tone) 244deg,
+    var(--p-ring-deep) 264deg,
+    var(--p-ring-deep) 276deg,
+    var(--p-ring-tone) 296deg,
+    transparent 310deg
+  ) border-box;
+}
+
+/* The track copy lines up with the real track, at its real thickness
+   and in focus, with the faint glow the glass scatters around it. The
+   edge shading and the glow are what soften it. */
+.p-slider-lens .p-lens-track {
+  left: calc(50% - var(--p-slider-lens-offset));
+  width: var(--p-slider-lens-track-w);
+  height: var(--p-slider-lens-track-h);
+  translate: 0 -50%;
+  /* Through the glass the top and bottom edges of the track shade a
+     little toward the body: lighter in light, darker in dark. */
+  --p-track-edge: rgba(255, 255, 255, 0.16);
+  --p-track-edge-in: rgba(255, 255, 255, 0.05);
+  --p-track-shade: linear-gradient(
+    var(--p-track-edge),
+    var(--p-track-edge-in) 9%,
+    transparent 28%,
+    transparent 72%,
+    var(--p-track-edge-in) 91%,
+    var(--p-track-edge)
+  );
+  /* Seen through the glass, an end of the track does not stop at a
+     hard cap. Over its last 2.5px it thins to about three quarters of
+     its color, and that thinned color carries on to the rim (the flare
+     below). Measured from NSSlider on macOS 26 at both ends of the
+     travel. */
+  --p-track-soft: 2.5px;
+  --p-track-thin: 74%;
+  --p-track-rest-thin: color-mix(in srgb, var(--p-slider-lens-rest) var(--p-track-thin), transparent);
+  background:
+    var(--p-track-shade),
+    linear-gradient(
+      to right,
+      var(--p-track-rest-thin),
+      var(--p-slider-lens-rest) var(--p-track-soft),
+      var(--p-slider-lens-rest) calc(100% - var(--p-track-soft)),
+      var(--p-track-rest-thin)
+    );
+  box-shadow: 0 0 2px color-mix(in srgb, var(--p-slider-lens-rest) 30%, transparent);
+}
+
+.p-slider-lens-dark .p-lens-track {
+  --p-track-edge: rgba(0, 0, 0, 0.07);
+  --p-track-edge-in: rgba(0, 0, 0, 0.03);
+}
+
+/* The fill, with a rounded end where it stops under the glass. It
+   carries the held track's shade, then reads a touch lighter through
+   the glass, with a faint halo of its own color. */
+.p-slider-lens .p-lens-track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--p-slider-lens-fill-from);
+  width: calc(var(--p-slider-lens-fill-to) - var(--p-slider-lens-fill-from));
+  border-radius: 999px;
+  /* The fill thins the same way, but only at an end that is also an
+     end of the track: the soft length is 0 anywhere else, so the fill
+     keeps its rounded end where it stops under the glass. */
+  --p-fill-soft-l: min(var(--p-track-soft), max(0px, 0.01px - var(--p-slider-lens-fill-from)) * 1000);
+  --p-fill-soft-r: min(var(--p-track-soft), max(0px, var(--p-slider-lens-fill-to) - var(--p-slider-lens-track-w) + 0.01px) * 1000);
+  --p-fill-lift: rgba(255, 255, 255, 0.065);
+  --p-fill-press: var(--p-slider-lens-press, transparent);
+  --p-fill-lift-thin: color-mix(in srgb, var(--p-fill-lift) var(--p-track-thin), transparent);
+  --p-fill-press-thin: color-mix(in srgb, var(--p-fill-press) var(--p-track-thin), transparent);
+  --p-fill-thin: color-mix(in srgb, var(--p-slider-lens-fill) var(--p-track-thin), transparent);
+  background:
+    var(--p-track-shade),
+    linear-gradient(to right, var(--p-fill-lift-thin), var(--p-fill-lift) var(--p-fill-soft-l), var(--p-fill-lift) calc(100% - var(--p-fill-soft-r)), var(--p-fill-lift-thin)),
+    linear-gradient(to right, var(--p-fill-press-thin), var(--p-fill-press) var(--p-fill-soft-l), var(--p-fill-press) calc(100% - var(--p-fill-soft-r)), var(--p-fill-press-thin)),
+    linear-gradient(to right, var(--p-fill-thin), var(--p-slider-lens-fill) var(--p-fill-soft-l), var(--p-slider-lens-fill) calc(100% - var(--p-fill-soft-r)), var(--p-fill-thin));
+  box-shadow: 0 0 2.5px color-mix(in srgb, var(--p-slider-lens-fill) 30%, transparent);
+}
+
+/* The flare in the track itself. Where the track meets the rim the edge
+   of the glass bends it: it reads thicker there (a concave fillet in
+   each corner between the track and the rim), and at either end of the
+   thumb's travel, where the track's own rounded end sits just inside
+   the rim, its color carries on across the gap to the rim. A taller
+   copy of the track's colors, masked down to the four fillets, a band
+   along each rim, and a strip beside each band. */
+.p-slider-lens .p-lens-track::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: calc(var(--p-slider-flare-h) * -1);
+  bottom: calc(var(--p-slider-flare-h) * -1);
+  --p-slider-flare-h: 2px;
+  --p-slider-flare-w: 4px;
+  /* The band spans the glass's overhang past the end of the track,
+     plus 0.75px so no seam shows where the two meet. */
+  --p-slider-flare-band: calc(var(--p-slider-lens-grow-w) / 2 + 0.75px);
+  /* The lens edges and the fill end, in this box's coordinates (4px
+     wider than the copy on each side). The fill end runs on to the rim
+     once the fill reaches the end of the track. */
+  --p-slider-lens-half: calc((var(--p-slider-lens-thumb-w) + var(--p-slider-lens-grow-w) * var(--p-lens-lift)) / 2);
+  --p-slider-flare-l: calc(var(--p-slider-lens-offset) + 4px - var(--p-slider-lens-half));
+  --p-slider-flare-r: calc(var(--p-slider-lens-offset) + 4px + var(--p-slider-lens-half));
+  --p-slider-flare-fill: calc(
+    var(--p-slider-lens-fill-to) + min(4px, var(--p-slider-lens-fill-to) * 1000) +
+    min(8px, max(0px, var(--p-slider-lens-fill-to) - var(--p-slider-lens-track-w) + 0.01px) * 1000)
+  );
+  /* The fillets only exist where the track really runs under the rim.
+     At the very ends of the thumb's travel the glass overhangs the end
+     of the track; once the rim is past the end (give or take a pixel
+     of its rounded cap), the fillet on that side is moved out of
+     sight. */
+  --p-slider-fillet-l: calc(
+    var(--p-slider-flare-l) -
+    min(999px, max(0px, 4px + 1px - var(--p-slider-flare-l)) * 1000)
+  );
+  --p-slider-fillet-r: calc(
+    var(--p-slider-flare-r) +
+    min(999px, max(0px, var(--p-slider-flare-r) + 1px - 4px - var(--p-slider-lens-track-w)) * 1000)
+  );
+  --p-slider-flare-size: var(--p-slider-flare-w) var(--p-slider-flare-h);
+  --p-slider-flare-cut: ellipse var(--p-slider-flare-w) var(--p-slider-flare-h);
+  /* The band is strongest along the middle of the track and fades
+     toward its top and bottom edges. The strip beside it covers only
+     those edges, which fills the corners the track's rounded end
+     leaves open. */
+  --p-slider-flare-haze: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.76) 35%, rgba(0, 0, 0, 0.76) 65%, rgba(0, 0, 0, 0.3));
+  --p-slider-flare-corner: linear-gradient(rgba(0, 0, 0, 0.3), transparent 38%, transparent 62%, rgba(0, 0, 0, 0.3));
+  --p-slider-flare-rows: calc(100% - var(--p-slider-flare-h) * 2);
+  /* The band and the strip belong to an end of the track. While the
+     rim on that side is still over the track they are moved out of
+     sight, the reverse of the fillets. */
+  --p-slider-band-l: calc(
+    var(--p-slider-flare-l) -
+    min(999px, max(0px, var(--p-slider-flare-l) - 4px + 0.01px) * 1000)
+  );
+  --p-slider-band-r: calc(
+    var(--p-slider-flare-r) +
+    min(999px, max(0px, 4px + var(--p-slider-lens-track-w) - var(--p-slider-flare-r) + 0.01px) * 1000)
+  );
+  background:
+    linear-gradient(to right, transparent var(--p-slider-flare-fill), var(--p-slider-lens-rest) var(--p-slider-flare-fill)),
+    linear-gradient(rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.065)),
+    linear-gradient(var(--p-slider-lens-press, transparent), var(--p-slider-lens-press, transparent)),
+    var(--p-slider-lens-fill);
+  -webkit-mask:
+    radial-gradient(var(--p-slider-flare-cut) at 100% 0, transparent 96%, #000) var(--p-slider-fillet-l) 0 / var(--p-slider-flare-size) no-repeat,
+    radial-gradient(var(--p-slider-flare-cut) at 100% 100%, transparent 96%, #000) var(--p-slider-fillet-l) 100% / var(--p-slider-flare-size) no-repeat,
+    radial-gradient(var(--p-slider-flare-cut) at 0 0, transparent 96%, #000) calc(var(--p-slider-fillet-r) - var(--p-slider-flare-w)) 0 / var(--p-slider-flare-size) no-repeat,
+    radial-gradient(var(--p-slider-flare-cut) at 0 100%, transparent 96%, #000) calc(var(--p-slider-fillet-r) - var(--p-slider-flare-w)) 100% / var(--p-slider-flare-size) no-repeat,
+    var(--p-slider-flare-haze) var(--p-slider-band-l) 50% / var(--p-slider-flare-band) var(--p-slider-flare-rows) no-repeat,
+    var(--p-slider-flare-haze) calc(var(--p-slider-band-r) - var(--p-slider-flare-band)) 50% / var(--p-slider-flare-band) var(--p-slider-flare-rows) no-repeat,
+    var(--p-slider-flare-corner) calc(var(--p-slider-band-l) + var(--p-slider-flare-band)) 50% / 2px var(--p-slider-flare-rows) no-repeat,
+    var(--p-slider-flare-corner) calc(var(--p-slider-band-r) - var(--p-slider-flare-band) - 2px) 50% / 2px var(--p-slider-flare-rows) no-repeat;
+  mask:
+    radial-gradient(var(--p-slider-flare-cut) at 100% 0, transparent 96%, #000) var(--p-slider-fillet-l) 0 / var(--p-slider-flare-size) no-repeat,
+    radial-gradient(var(--p-slider-flare-cut) at 100% 100%, transparent 96%, #000) var(--p-slider-fillet-l) 100% / var(--p-slider-flare-size) no-repeat,
+    radial-gradient(var(--p-slider-flare-cut) at 0 0, transparent 96%, #000) calc(var(--p-slider-fillet-r) - var(--p-slider-flare-w)) 0 / var(--p-slider-flare-size) no-repeat,
+    radial-gradient(var(--p-slider-flare-cut) at 0 100%, transparent 96%, #000) calc(var(--p-slider-fillet-r) - var(--p-slider-flare-w)) 100% / var(--p-slider-flare-size) no-repeat,
+    var(--p-slider-flare-haze) var(--p-slider-band-l) 50% / var(--p-slider-flare-band) var(--p-slider-flare-rows) no-repeat,
+    var(--p-slider-flare-haze) calc(var(--p-slider-band-r) - var(--p-slider-flare-band)) 50% / var(--p-slider-flare-band) var(--p-slider-flare-rows) no-repeat,
+    var(--p-slider-flare-corner) calc(var(--p-slider-band-l) + var(--p-slider-flare-band)) 50% / 2px var(--p-slider-flare-rows) no-repeat,
+    var(--p-slider-flare-corner) calc(var(--p-slider-band-r) - var(--p-slider-flare-band) - 2px) 50% / 2px var(--p-slider-flare-rows) no-repeat;
+}
+
+/* ── Touch glass ──
+   Measured from UISlider on iOS 26. The rim is a dark hairline with a bright
+   line inside its top and bottom edges (box shadows on the rim layer),
+   so the pointer rings are off. The track reads in focus through the
+   glass and dims toward the far rim. The fill ends at the middle of
+   the lens, dims where it enters the glass, and flares along the rim
+   at that point. */
+.p-slider-lens-touch:not(.p-lens-clear) .p-lens-rim {
+  box-shadow:
+    var(--p-slider-glass-rim, inset 0 0 0 0.5px rgba(0, 0, 0, 0.2)),
+    var(--p-slider-glass-cast, 0 3px 5px rgba(0, 0, 0, 0.2));
+}
+
+.p-slider-lens-touch .p-lens-liquid::before,
+.p-slider-lens-touch .p-lens-liquid::after,
+.p-slider-lens-touch .p-lens-edge::after {
+  display: none;
+}
+
+.p-slider-lens-touch .p-lens-edge {
+  display: none;
+}
+
+.p-slider-lens-touch .p-lens-track {
+  /* Where the lens ends, in the copy's coordinates. */
+  --p-slider-lens-half: calc((var(--p-slider-lens-thumb-w) + var(--p-slider-lens-grow-w)) / 2);
+  background:
+    linear-gradient(to right, transparent, rgba(0, 0, 0, var(--p-slider-lens-dim, 0.1)))
+      calc(var(--p-slider-lens-offset) + var(--p-slider-lens-half) - 14px) 0 / 14px 100% no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.03), rgba(255, 255, 255, 0.02)),
+    var(--p-slider-lens-rest);
+  box-shadow: none;
+}
+
+.p-slider-lens-touch .p-lens-track::before {
+  /* The fill dims where it enters the glass, easing out over 17px. */
+  --p-slider-lens-enter: calc(
+    var(--p-slider-lens-offset) - var(--p-slider-lens-fill-from) -
+    (var(--p-slider-lens-thumb-w) + var(--p-slider-lens-grow-w)) / 2
+  );
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, var(--p-slider-lens-dim, 0.1)), transparent)
+      var(--p-slider-lens-enter) 0 / 17px 100% no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.03), rgba(255, 255, 255, 0.03)),
+    linear-gradient(rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04)),
+    var(--p-slider-lens-fill);
+  box-shadow: none;
+}
+
+/* How much the track dims toward the rim of the touch glass. The dark
+   value is measured from UISlider on iOS 26. */
+.p-slider-lens-touch.p-slider-lens-dark {
+  --p-slider-lens-dim: 0.22;
+}
+
+/* The touch flare is larger and translucent: the fill's own color,
+   thinning out into the glass. */
+.p-slider-lens-touch .p-lens-track::after {
+  --p-slider-flare-h: 4px;
+  --p-slider-flare-w: 5px;
+  --p-slider-flare-band: 0px;
+  --p-slider-flare-corner: linear-gradient(transparent, transparent);
+  opacity: 0.6;
+  background:
+    linear-gradient(to right, transparent var(--p-slider-flare-fill), var(--p-slider-lens-rest) var(--p-slider-flare-fill)),
+    var(--p-slider-lens-fill);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .p-slider-lens {
+  .p-slider-lens,
+  input.p-slider[data-p-lens-open] {
     transition: none;
   }
 }

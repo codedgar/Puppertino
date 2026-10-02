@@ -580,6 +580,15 @@
   grid-area: 1 / 1;
 }
 
+/* Paint order. The front card is raised and the cards behind keep
+   z-index: auto, so they stay above the background of whatever holds
+   the stack; a negative z-index would put them under it. Among the
+   cards behind, `order` paints the further one first. Every card is in
+   the same cell, so `order` moves nothing. */
+.p-notification-stack > .p-notification-touch:first-child {
+  z-index: 1;
+}
+
 /* A card behind is clipped to what shows below the one in front: its
    8px peek plus the 4px the front card's 23px corner curve uncovers
    10px in, at the narrower card's edge. Otherwise the front card's glass would pick up
@@ -595,13 +604,18 @@
 .p-notification-stack > .p-notification-touch:nth-child(2) {
   width: calc(100% - 20px);
   translate: 0 8px;
-  z-index: -1;
+  order: 2;
 }
 
 .p-notification-stack > .p-notification-touch:nth-child(3) {
   width: calc(100% - 40px);
   translate: 0 16px;
-  z-index: -2;
+  order: 1;
+}
+
+/* Two cards show behind the front one, however many there are. */
+.p-notification-stack > .p-notification-touch:nth-child(n + 4) {
+  visibility: hidden;
 }
 
 @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
@@ -650,7 +664,8 @@
   grid-area: auto;
   width: 100%;
   translate: none;
-  z-index: auto;
+  order: 0;
+  visibility: visible;
 }
 
 .p-notification-stack {

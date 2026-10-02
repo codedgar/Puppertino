@@ -713,6 +713,9 @@
    - Liquid: the default, at every size. The refracting lens described
      below, with the knockout. The clear lens is opt-in with
      data-p-lens="clear" on the switch label or the slider input.
+     A slider's liquid lens keeps the knockout and the track copy but
+     does not magnify, goo, or split color: sliders.css restyles it as
+     clear glass with the fill color wrapped around the rim.
 
    The liquid lens is adapted from Jhey Tompkins' liquid glass toggle.
    Three layers do the work:

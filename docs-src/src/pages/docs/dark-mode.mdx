@@ -69,19 +69,65 @@ Call `puppertinoThemeMan.toggle()` from a button click. The manager adds or remo
 
 ### Reading the current theme
 
-Use `isDarkThemeActive()` to check whether dark mode is currently applied. Useful when you need to render different content based on the theme.
+Use `isDarkThemeActive()` to check whether dark mode is currently applied. Useful when your code needs to branch on the theme, like picking which chart palette to load.
 
 ```javascript
 if (puppertinoThemeMan.isDarkThemeActive()) {
-  showDarkLogo();
+  loadDarkChartPalette();
 } else {
-  showLightLogo();
+  loadLightChartPalette();
 }
 ```
+
+If you only need to change how something looks, you do not need JavaScript. See [Styling your own CSS](#styling-your-own-css) below.
 
 ### Cross-tab sync
 
 When the user toggles dark mode in one tab, every other open tab in the same browser updates immediately. The manager listens to the `storage` event from `localStorage` and applies the new theme without a reload. No configuration needed.
+
+## Styling your own CSS
+
+Manual theming is a class, so your own CSS can follow it with a selector. No script has to read the theme first.
+
+When the class is on `<body>`, anything inside it is a descendant. Write the dark variant of your rule under `.p-dark-mode`.
+
+```css
+.site-logo {
+  background-image: url('logo-light.svg');
+}
+
+.p-dark-mode .site-logo {
+  background-image: url('logo-dark.svg');
+}
+```
+
+When the class sits somewhere else, use `:has()`. It lets a rule react to the class from outside it, which covers two cases the descendant selector cannot: styling `<body>` itself, and styling elements that are not inside the dark region.
+
+```css
+/* The class is on a wrapper, and the page behind it should follow */
+body:has(.p-dark-mode) {
+  background: #000000;
+}
+
+/* A header that sits outside the themed wrapper */
+body:has(.p-dark-mode) .site-header {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+```
+
+`:has()` works in every current browser.
+
+For automatic mode there is no class to hook into when the system flips, so pair the class with the media query.
+
+```css
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode .site-logo {
+    background-image: url('logo-dark.svg');
+  }
+}
+```
+
+Consider reaching for the tokens first. A rule that reads `var(--p-text-primary)` or `var(--p-bg-primary)` already follows both modes and needs none of the selectors above. Keep the selectors for what tokens cannot express, like swapping an image.
 
 ## How it works under the hood
 

@@ -2,9 +2,8 @@
 /* Puppertino 1 — frozen bundle. Deprecated.
 
    This file is the complete version 1 stylesheet, compiled into one
-   file, and it stays version 1 for good so that pages already linking
-   to it keep rendering exactly as they do today. It receives no new
-   components and no fixes.
+   file, and it stays version 1 so that pages already linking to it
+   keep rendering the same. It does not receive components or fixes.
 
    For new work, use puppertino.css or puppertino.min.css instead. */
 

@@ -7,8 +7,9 @@
  * materials.css (the lens), forms.css, and sliders.css.
  *
  * The default is the liquid lens: a knockout cuts the track out under
- * the glass and a magnified copy of the track, run through per-size SVG
- * goo and aberration filters, fills it.
+ * the glass and a copy of the track fills it. A switch magnifies its
+ * copy through per-size SVG goo and aberration filters; a slider shows
+ * it at its own thickness, as the native control does.
  *
  * The flat macOS 27 / iOS 27 look is an opt-in: put data-p-lens="clear"
  * on the switch's label or on the slider input for a .p-lens-clear (a
@@ -156,9 +157,11 @@
     return lens;
   }
 
-  // Liquid lenses only: the clear lens has no filters to size.
+  // Switch liquid lenses only: the clear lens has no filters to size,
+  // and a slider's glass does not magnify, so it skips the goo and the
+  // color split.
   function sizeFilters(lens) {
-    if (lens.classList.contains('p-lens-clear')) return;
+    if (lens.classList.contains('p-lens-clear') || lens.classList.contains('p-slider-lens')) return;
     scaleFilters(lens, restingHeight(lens));
   }
 
@@ -313,6 +316,32 @@
     lens.style.setProperty('--p-slider-lens-track-w', rect.width + 'px');
     lens.style.setProperty('--p-slider-lens-track-h', trackH + 'px');
     lens.style.setProperty('--p-slider-lens-offset', offset + 'px');
+
+    // Where the fill ends under the glass, which is not where the real
+    // track's fill ends (under the thumb's center). A pointer slider's
+    // follows the value across the whole track, as NSSlider's does, so
+    // it is empty at the minimum and runs through the lens at the
+    // maximum. A touch slider's, as UISlider's does, stops
+    // at the middle of the glass, except at the two ends of its travel:
+    // empty at the minimum, and filling the whole bar at the maximum,
+    // so no unfilled stub shows through the glass. It runs out to the
+    // end of the bar over the last 3px of travel rather than jumping.
+    // A centered slider fills between the middle and the value.
+    var end;
+    if (!touch) {
+      end = ratio * rect.width;
+    } else if (ratio <= 0) {
+      end = 0;
+    } else {
+      var last = rect.width - thumbW / 2; // thumb center at the maximum
+      var near = Math.max(0, Math.min(1, (offset - (last - 3)) / 3));
+      end = offset + near * (rect.width - offset);
+    }
+    var start = input.classList.contains('p-slider-centered') ? rect.width / 2 : 0;
+    lens.style.setProperty('--p-slider-lens-fill-from', Math.min(start, end) + 'px');
+    lens.style.setProperty('--p-slider-lens-fill-to', Math.max(start, end) + 'px');
+    // Where the lens sits along the input, for the knockout.
+    input.style.setProperty('--p-slider-lens-at', offset + 'px');
   }
 
   function openLens(input) {
@@ -331,13 +360,28 @@
         ? resolved(style, '--p-slider-touch-fill', '#0088ff')
         : resolved(style, '--p-slider-accent', '#0088FF'));
       ['--p-slider-lens-body', '--p-slider-lens-edge', '--p-slider-lens-shadow',
+        '--p-slider-glass-body', '--p-slider-glass-rim', '--p-slider-glass-cast',
+        '--p-slider-lens-grow-w', '--p-slider-lens-grow-h',
         '--p-slider-thumb-shadow'].forEach(function (name) {
         var value = resolved(style, name, '');
         if (value) lens.style.setProperty(name, value);
       });
+      // The pointer rim is a set of conic gradients built from the fill
+      // color, different in light and dark. Gradients like that cannot
+      // travel as resolved tokens, so the stylesheet publishes a keyword
+      // and the lens, which sits on <body> outside any appearance scope,
+      // gets a class.
+      if (resolved(style, '--p-slider-glass-scheme', 'light') === 'dark') {
+        lens.classList.add('p-slider-lens-dark');
+      }
       lens.style.setProperty('--p-slider-lens-rest', touch
         ? resolved(style, '--p-slider-touch-lens-track', '#e4e4e4')
         : resolved(style, '--p-slider-lens-track', '#e0e0e0'));
+      // Held, a pointer slider's track darkens; the copy under the glass
+      // darkens with it.
+      lens.style.setProperty('--p-slider-lens-press', touch
+        ? 'transparent'
+        : resolved(style, '--p-slider-press', 'transparent'));
       lens.style.setProperty('--p-lens-knob', touch
         ? resolved(style, '--p-slider-touch-thumb', '#ffffff')
         : resolved(style, '--p-control-knob', '#ffffff'));
@@ -353,6 +397,8 @@
 
     clearTimeout(active.timer);
     active.lens.setAttribute('data-p-lift', '');
+    // The input lifts in step, so the knockout grows with the glass.
+    input.setAttribute('data-p-lens-lift', '');
   }
 
   function closeLens(now) {
@@ -361,9 +407,11 @@
     function remove() {
       current.lens.remove();
       current.input.removeAttribute('data-p-lens-open');
+      current.input.style.removeProperty('--p-slider-lens-at');
       if (active === current) active = null;
     }
     clearTimeout(current.timer);
+    current.input.removeAttribute('data-p-lens-lift');
     if (now) return remove();
     current.lens.removeAttribute('data-p-lift');
     current.timer = setTimeout(remove, SLIDE + SETTLE);

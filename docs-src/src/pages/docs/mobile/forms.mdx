@@ -288,13 +288,13 @@ Five segments is the practical ceiling on a phone. Below about 60px a label trun
 | Filled portion | `#0088FF` light, `#0091FF` dark |
 | Thumb | 38 x 24px white capsule, `0 6px 13px rgba(0,0,0,0.12), 0 0.5px 4px rgba(0,0,0,0.12)` |
 | Ticks | `.p-slider-ticks`: 4px dots in `rgba(60,60,67,0.18)`, 9px below the track center |
-| Dragged | 60 x 40px clear glass lens |
+| Dragged | 58 x 38px glass lens |
 | Disabled | The whole control at 50%; the fill stays blue |
 | Focus | 4px accent ring on the thumb |
 
 The 6px track is thicker than the pointer slider's. The thumb sits inside the track ends, and the fill stops under its center. Set the number of tick intervals with `--p-slider-ticks`; the first and last dots sit 18px in from the ends, under the thumb at the minimum and maximum.
 
-With `liquid_glass.js` loaded, dragging turns the thumb into a Liquid Glass lens that magnifies the fill edge as it passes, and it settles back into a solid thumb 350ms after release. Add `data-p-lens="clear"` to the input for the flatter iOS 27 look: the 38 x 24 capsule grows to 60 x 40, the track and fill show through unmagnified, and a soft ring shadow falls about 7px below.
+With `liquid_glass.js` loaded, dragging turns the thumb into a Liquid Glass lens. The 38 x 24 capsule grows to 58 x 38 and turns to glass: the track shows through at its real size and in focus, and the fill ends in a rounded cap at the middle of the lens, dimming slightly and flaring along the rim where it enters the glass. In dark mode the glass has a dark hairline with thin bright lines inside its top and bottom edges. It settles back into a solid thumb 350ms after release. Add `data-p-lens="clear"` to the input for the flatter iOS 27 look: a 60 x 40 glass with the unmodified track underneath and a soft ring shadow about 7px below.
 
 Firefox paints the filled portion natively through `::-moz-range-progress`. WebKit has no equivalent pseudo-element, so the fill is a gradient sized by `--p-slider-fill`.
 
