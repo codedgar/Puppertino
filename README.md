@@ -10,7 +10,7 @@ Puppertino brings the look of macOS and iOS to the web. It is a CSS framework th
 
 It is plain CSS. There is no build step and there are no dependencies. Some components come with a small vanilla JavaScript helper, and each one is optional.
 
-**[Read the documentation](https://codedgar.github.io/Puppertino/)**
+**[Read the documentation](https://puppertino.com/)**
 
 ## Quick start
 
@@ -137,8 +137,8 @@ The dark mode script was renamed from `dakmode_manager.js` to `darkmode_manager.
 
 The docs are also published as plain text, generated from the same sources as the site.
 
-- [`llms.txt`](https://codedgar.github.io/Puppertino/llms.txt) is an index of every page.
-- [`llms-full.txt`](https://codedgar.github.io/Puppertino/llms-full.txt) is the full documentation in one file, with an index of every class.
+- [`llms.txt`](https://puppertino.com/llms.txt) is an index of every page.
+- [`llms-full.txt`](https://puppertino.com/llms-full.txt) is the full documentation in one file, with an index of every class.
 
 ## Contributing
 

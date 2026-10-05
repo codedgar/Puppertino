@@ -29,6 +29,7 @@ const hasSidebar = Astro.slots.has('sidebar');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" href={`${base}doggo.png`} />
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
     <title>{title} - Puppertino</title>
   </head>
   <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
