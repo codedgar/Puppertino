@@ -9,6 +9,7 @@ import '@phosphor-icons/web/regular';
 import '@phosphor-icons/web/bold';
 import CopyToast from '../components/CopyToast.astro';
 import Search from '../components/Search.astro';
+import { cardSlug } from '../og/pages.js';
 
 interface Props {
   title: string;
@@ -18,6 +19,10 @@ interface Props {
 const { title, description = 'A CSS framework for building web interfaces with Apple\'s macOS design language.' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const hasSidebar = Astro.slots.has('sidebar');
+const path = Astro.url.pathname.slice(base.length - 1);
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogTitle = path === '/' ? 'Puppertino' : `${title} - Puppertino`;
+const ogImage = new URL(`${base}og/${cardSlug(path)}.png`, Astro.site).href;
 ---
 
 <!DOCTYPE html>
@@ -30,6 +35,20 @@ const hasSidebar = Astro.slots.has('sidebar');
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" href={`${base}doggo.png`} />
     <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Puppertino" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <title>{title} - Puppertino</title>
   </head>
   <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
