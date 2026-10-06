@@ -24,6 +24,11 @@ const path = Astro.url.pathname.slice(base.length - 1);
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogTitle = path === '/' ? 'Puppertino' : `${title} - Puppertino`;
 const ogImage = new URL(`${base}og/${cardSlug(path)}.png`, Astro.site).href;
+
+/* Google Analytics. Only production builds load it, so local work is
+   not counted. */
+const ANALYTICS_ID = 'UA-176821843-1';
+const analytics = import.meta.env.PROD;
 ---
 
 <!DOCTYPE html>
@@ -53,6 +58,17 @@ const ogImage = new URL(`${base}og/${cardSlug(path)}.png`, Astro.site).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <title>{title} - Puppertino</title>
+    {analytics && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}`}></script>
+        <script is:inline define:vars={{ ANALYTICS_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          gtag('js', new Date());
+          gtag('config', ANALYTICS_ID);
+        </script>
+      </>
+    )}
   </head>
   <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
     <a class="skip-link" href="#main-content">Skip to content</a>
