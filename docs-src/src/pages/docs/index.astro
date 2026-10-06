@@ -1,0 +1,26 @@
+---
+import Doc from '../../layouts/Doc.astro';
+import { nav } from '../../data/nav.js';
+const base = import.meta.env.BASE_URL;
+---
+
+<Doc title="Documentation" description="Puppertino component documentation. A CSS framework that brings macOS and iOS aesthetics to the web.">
+  <p>
+    Puppertino provides modular CSS components that follow Apple's Human Interface Guidelines. Each component supports light and dark mode, respects accessibility preferences, and works without JavaScript dependencies.
+  </p>
+
+  <section class="doc-grid">
+    <h2>Explore the documentation</h2>
+    <p>Start with the foundations that define how Puppertino looks and feels, then pick the component set for your platform. New to Puppertino? See <a href={`${base}docs/getting-started/`}>Getting started</a>.</p>
+    <div class="tile-grid tile-grid-hub">
+      {nav.map((section) => (
+        <a href={`${base}${section.hub}`} class={`tile ${section.tint}`}>
+          <div class="tile-art">
+            <i class={`ph-bold ${section.icon}`}></i>
+          </div>
+          <span class="tile-label">{section.heading}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Doc>

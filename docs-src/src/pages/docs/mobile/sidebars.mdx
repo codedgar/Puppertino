@@ -1,0 +1,177 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Sidebars
+description: The iPadOS sidebar. A 320px column attached to the window edge, with glass header controls and 44px capsule rows, plus the iPad app window it sits in.
+---
+
+import '@puppertino/sidebars.css';
+import '@puppertino/lists.css';
+import '@puppertino/windows.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A sidebar sits on the leading side of a view and moves between sections. It is the iPad's answer to the tab bar: the same job, done in a column beside the content instead of a bar over it.
+
+## When to use it
+
+Use a sidebar on iPad and in landscape, where there is width to spare beside the content. Use it when the app has more top-level sections than a tab bar's five, or when the sections benefit from being grouped under headings.
+
+Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/tabs/`}>tab bar</a> on iPhone and in compact width. An app can ship both and swap at the split-view threshold, which is what most iPad apps do.
+
+## Anatomy
+
+<Showcase
+  name="sidebar-touch"
+  align="start"
+  snippet={`<nav class="p-sidebar p-sidebar-touch" aria-label="Sections">
+  <div class="p-sidebar-touch__header">
+    <button class="p-sidebar-touch__button" type="button">Edit</button>
+    <span class="p-sidebar-touch__spacer"></span>
+    <button class="p-sidebar-touch__button" type="button" aria-label="Hide sidebar">
+      <i class="ph-bold ph-sidebar-simple"></i>
+    </button>
+  </div>
+  <input class="p-sidebar-touch__search" type="search" placeholder="Search" aria-label="Search" />
+  <a class="p-sidebar-row" href="/" aria-current="page">
+    <i class="p-sidebar-icon ph-bold ph-house"></i><span>Home</span>
+  </a>
+  <a class="p-sidebar-row" href="/recent/">
+    <i class="p-sidebar-icon ph-bold ph-clock"></i><span>Recents</span>
+    <span class="p-sidebar-detail">12</span>
+  </a>
+</nav>`}
+  code={`<nav class="p-sidebar p-sidebar-touch" aria-label="Sections">
+  <div class="p-sidebar-touch__header">
+    <button class="p-sidebar-touch__button" type="button">Edit</button>
+    <span class="p-sidebar-touch__spacer"></span>
+    <button class="p-sidebar-touch__button" type="button" aria-label="New folder"><i class="ph-bold ph-folder-plus"></i></button>
+    <button class="p-sidebar-touch__button" type="button" aria-label="Hide sidebar"><i class="ph-bold ph-sidebar-simple"></i></button>
+  </div>
+  <input class="p-sidebar-touch__search" type="search" placeholder="Search" aria-label="Search" />
+  <a class="p-sidebar-row" href="#sb-1"><i class="p-sidebar-icon ph-bold ph-house"></i><span>Home</span></a>
+  <a class="p-sidebar-row" href="#sb-2" aria-current="page"><i class="p-sidebar-icon ph-bold ph-clock"></i><span>Recents</span><span class="p-sidebar-detail">12</span></a>
+  <a class="p-sidebar-row" href="#sb-3"><i class="p-sidebar-icon ph-bold ph-star"></i><span>Favorites</span></a>
+  <div class="p-sidebar-header">Library</div>
+  <a class="p-sidebar-row" href="#sb-4"><i class="p-sidebar-icon ph-bold ph-books"></i><span>Albums</span><span class="p-sidebar-detail">48</span></a>
+  <a class="p-sidebar-row" href="#sb-5"><i class="p-sidebar-icon ph-bold ph-user"></i><span>Artists</span></a>
+  <a class="p-sidebar-row" href="#sb-6"><i class="p-sidebar-icon ph-bold ph-playlist"></i><span>Playlists</span></a>
+</nav>`}
+/>
+
+| Part | Value |
+|---|---|
+| Panel | 320px wide, attached: full height, square corners, no shadow |
+| Material | `#D6D6D6` light, `#EDEDED` when the window is inactive; `#161616` dark |
+| Inset | 10px, so rows and search are 300px wide |
+| Header | Glass controls 12px apart: an Edit capsule 60 x 44px and 44px circles |
+| Search | 44px capsule, `rgba(120,120,128,0.16)`, 22px above the first row |
+| Row | 44px tall, 22px radius, icon 14px in, label 48px in |
+| Row label | 17px, weight 400, tracking -0.43px |
+| Icon | 22px, in the accent on every row |
+| Selected | The material 18 levels darker (`rgba(0,0,0,0.084)`); the label keeps its color and weight |
+| Detail | 17px, `#727272` light and `#8A8A8A` dark |
+| Section heading | 44px row, 10px above, 17px at `rgba(60,60,67,0.60)` |
+
+The sidebar is an opaque column attached to the leading edge of the window, the same form the macOS 27 sidebar takes. The window clips it at the corner. Glass lives only on the header controls, never on the panel.
+
+The material reads `#D6D6D6` over any backdrop. It is a luminosity material: it takes the tone of what is behind it but not its brightness, so for CSS it is a flat color.
+
+Rows are 44px on a 44px pitch, so a selected capsule fills its row with no gap above or below.
+
+The selected row is a darker capsule and nothing else. The label stays black at regular weight, and the icon keeps the accent every row already has. The capsule and `aria-current` carry the state.
+
+Section headings are 17px at 60% rather than the small bold label macOS uses. iPadOS keeps headings the same size as the rows.
+
+`.p-sidebar-touch-compact` narrows the panel to 232px for split views that want more room for content.
+
+### The floating panel
+
+`.p-sidebar-touch-floating` keeps the iPadOS 26 panel: floating, 20px radius, 16px inset, `rgba(245,245,245,0.72)` light and `rgba(38,38,38,0.72)` dark at blur 30px, with a soft shadow. Use it where a sidebar sits over content rather than beside it.
+
+## Search
+
+The search field is a 44px capsule rather than the 10px box a <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/`}>form field</a> uses, because it sits in chrome rather than in a form.
+
+Use `type="search"`, which gives the on-screen keyboard a Search key instead of Return, and give it an `aria-label` since it has no visible label.
+
+## In a window
+
+On iPad an app can run in a window. `.p-window-touch` (in `windows.css`) is that window: a 34px radius, a deep soft shadow, and a resize grip in the bottom-right corner. An attached sidebar runs its full height.
+
+The window's controls lead the sidebar header: `.p-traffic-lights-touch`, three 6px dots in a 41 x 22px glass capsule. These are the iPadOS colors, `#FF5F57`, `#FEBC2F` and `#27C840`, not the macOS window's traffic lights.
+
+<Showcase
+  name="sidebar-window"
+  align="start"
+  snippet={`<div class="p-window-touch">
+  <nav class="p-sidebar p-sidebar-touch" aria-label="Sections">
+    <div class="p-sidebar-touch__header">
+      <button class="p-traffic-lights-touch" type="button" aria-label="Window controls">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="p-sidebar-touch__button" type="button">Edit</button>
+    </div>
+    …
+  </nav>
+  <main class="p-window-touch__content">…</main>
+</div>`}
+  code={`<div class="p-window-touch" style="width: 640px; height: 360px;">
+  <nav class="p-sidebar p-sidebar-touch" aria-label="Sections" style="width: 280px;">
+    <div class="p-sidebar-touch__header">
+      <button class="p-traffic-lights-touch" type="button" aria-label="Window controls"><span></span><span></span><span></span></button>
+      <button class="p-sidebar-touch__button" type="button">Edit</button>
+    </div>
+    <a class="p-sidebar-row" href="#sw-1" aria-current="page"><i class="p-sidebar-icon ph-bold ph-tray"></i><span>Inbox</span><span class="p-sidebar-detail">4</span></a>
+    <a class="p-sidebar-row" href="#sw-2"><i class="p-sidebar-icon ph-bold ph-paper-plane-tilt"></i><span>Sent</span></a>
+    <a class="p-sidebar-row" href="#sw-3"><i class="p-sidebar-icon ph-bold ph-archive"></i><span>Archive</span></a>
+  </nav>
+  <div class="p-window-touch__content"></div>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Window | 34px radius, `0 30px 140px rgba(0,0,0,0.30)` |
+| Resize grip | A 3.5px arc following the corner, 4px in |
+| Controls | 41 x 22px glass capsule, 6px dots on a 10.5px pitch, 44px touch target |
+| Inactive | `.p-window-touch-inactive`: the controls flatten to a gray capsule with gray dots, the sidebar lightens to `#EDEDED` |
+
+Add `.p-window-touch-static` for a window that cannot be resized, which removes the grip.
+
+## Collapsing
+
+A sidebar needs width beside the content. Below the split-view threshold there is none, and a sidebar that survives into compact width covers the thing people are trying to read.
+
+`.p-sidebar-touch-collapses` hides the panel below 768px. Pair it with a tab bar for the same sections.
+
+```html
+<nav class="p-sidebar p-sidebar-touch p-sidebar-touch-collapses" aria-label="Sections">…</nav>
+<nav class="p-tab-bar p-tab-bar-fixed" aria-label="Sections">…</nav>
+```
+
+Show one or the other, never both. With both visible, the selected section is marked in two places and they have to be kept in sync.
+
+## Dark mode
+
+The panel moves to `#161616`, labels from `#1A1A1A` to `#F5F5F5`, the selected capsule lightens the material instead of darkening it, and the accent shifts from `#0088FF` to `#0091FF`. The header glass follows the small-glass tint.
+
+## Accessibility
+
+Use `<nav>` with an `aria-label`, and real links for the rows. `aria-current="page"` marks the open section and drives the visual state, so the two cannot disagree.
+
+Rows are 44px tall and the panel is 320px wide, so every row clears the minimum in both directions.
+
+Focus draws a 3px accent ring inset into the row, matching the capsule radius. Increased contrast outlines the selected capsule.
+
+The window controls are 22px tall but take a 44px touch target. Reduced transparency and browsers without `backdrop-filter` get opaque header buttons and an opaque floating panel.
+
+## The macOS sidebar
+
+`sidebars.css` ships both. `.p-sidebar` alone is the macOS one: 36px rows, small bold headings, and an opaque background flush to the window edge. Adding `.p-sidebar-touch` swaps it to iPadOS metrics.
+
+| Slot | macOS | Touch |
+|---|---|---|
+| Panel | Attached, opaque, 240px | Attached, opaque, 320px (floating with `.p-sidebar-touch-floating`) |
+| `.p-sidebar-row` | 15px text, 36px tall, 8px radius | 17px text, 44px tall, 22px radius |
+| Selected | Quiet capsule, label unchanged | Darker capsule, label unchanged |
+| `.p-sidebar-header` | 13px Bold, `#727272` | 17px at 60% |
+| `.p-sidebar-icon` | 20px, accent | 22px, accent |

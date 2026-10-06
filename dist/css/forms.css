@@ -1,3 +1,13 @@
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY FORMS (Puppertino v1)
+   .p-form-* and friends remain for backwards compatibility. The v2
+   system at the bottom of this file (.p-field, .p-checkbox, .p-radio,
+   .p-switch, .p-select) replaces them. New work should use the v2
+   classes — these will be removed in a future major.
+
+   See specs/forms.md for the v2 reference values.
+   ───────────────────────────────────────────────────────────────────── */
+
 :root {
   --primary-col:linear-gradient(to bottom, #4fc5fa 0%,#0f75f5 100%);
   --primary-col-ac:#0f75f5;
@@ -501,4 +511,2716 @@ textarea.p-form-text {
 .p-form-radio-cont[disabled]{
   filter: grayscale(1) opacity(.3);
   pointer-events: none;
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Forms
+   macOS 27 form controls — see specs/forms.md for the value derivation.
+
+   Classes: .p-field, .p-select, .p-stepper, .p-search, .p-popup,
+   .p-pulldown, .p-combo, .p-checkbox, .p-radio, .p-switch,
+   .p-form-group, .p-label, .p-sublabel.
+
+   Controls retint the same way v2 buttons do: they read
+   --p-color-current (published by the color classes in colors.css),
+   which defaults to the system blue, #0088FF light and #0091FF dark.
+
+   Borders are drawn as 1px spread box-shadow rings, never strokes.
+   Keyboard focus is the macOS 27 focus band, --p-focus-ring from
+   colors.css: 3.5px outside plus 1px inside, accent at 50%.
+   Fields are flat in macOS 27. No glass, no gradients.
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* The switch's gel-morph progress. Registered so it can transition;
+   browsers without @property simply skip it and the switch falls back
+   to the plain slide. */
+@property --p-gel {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+:root {
+  /* Field (text input / select) */
+  --p-field-bg: #ffffff;
+  --p-field-bg-disabled: rgba(255, 255, 255, 0.5);
+  --p-field-text: rgba(0, 0, 0, 0.85);
+  --p-field-placeholder: #BFBFBF;
+  --p-field-ring: rgba(0, 0, 0, 0.08);
+  --p-field-ring-disabled: rgba(0, 0, 0, 0.04);
+  /* Legacy macOS 26 focus pair. v2 controls now use --p-focus-ring; these
+     stay for the iOS touch fields and anything reading them directly. */
+  --p-field-ring-focus: rgba(0, 122, 255, 0.15);
+  --p-field-ring-focus-outer: rgba(0, 122, 255, 0.25);
+
+  /* Search field */
+  --p-search-ring-empty: rgba(0, 0, 0, 0.08);
+  --p-search-placeholder: #727272;
+
+  /* Combo box plate and stepper halves: flat gray, no ring, no shadow. */
+  --p-combo-plate-bg: rgba(0, 0, 0, 0.08);
+  --p-combo-plate-bg-active: rgba(0, 0, 0, 0.16);
+  --p-combo-plate-bg-disabled: rgba(0, 0, 0, 0.04);
+  --p-combo-glyph-disabled: rgba(0, 0, 0, 0.25);
+  --p-stepper-divider: rgba(0, 0, 0, 0.12);
+  --p-stepper-divider-disabled: rgba(0, 0, 0, 0.06);
+
+  /* Pop-up / pull-down body */
+  --p-popup-bg: rgba(0, 0, 0, 0.08);
+  --p-popup-bg-active: rgba(0, 0, 0, 0.16);
+  --p-popup-bg-disabled: rgba(0, 0, 0, 0.04);
+  --p-popup-text-disabled: rgba(0, 0, 0, 0.25);
+
+  /* Grouped form (.p-form-group) */
+  --p-form-group-bg: rgba(0, 0, 0, 0.03);
+  --p-form-group-separator: rgba(0, 0, 0, 0.05);
+
+  /* Toggles, checkboxes, radios.
+     NOTE: --p-control-accent is deliberately NOT defined here. A var()
+     inside a custom property resolves where the property is defined, so
+     a :root definition would freeze the accent to blue before any
+     .p-sys-* class on the control could publish --p-color-current. Each
+     control declares it on itself instead. */
+  --p-control-fill: rgba(0, 0, 0, 0.12);
+  --p-control-knob: #ffffff;
+  /* Checkbox and radio off fill: rest / pressed / disabled. */
+  --p-check-fill: rgba(0, 0, 0, 0.10);
+  --p-check-fill-pressed: rgba(0, 0, 0, 0.19);
+  --p-check-fill-disabled: rgba(0, 0, 0, 0.05);
+  /* Checked + pressed: the accent darkened about 13%. */
+  --p-check-press-mix: black 13%;
+  /* Inactive window: checked boxes and radios go gray. Rest / pressed /
+     disabled fill, then the glyph ink and its disabled ink. */
+  --p-check-inactive-fill: rgba(0, 0, 0, 0.14);
+  --p-check-inactive-fill-pressed: rgba(0, 0, 0, 0.18);
+  --p-check-inactive-fill-disabled: rgba(0, 0, 0, 0.05);
+  --p-check-inactive-ink: rgba(0, 0, 0, 0.7);
+  --p-check-inactive-ink-disabled: rgba(0, 0, 0, 0.22);
+  /* iOS off-track: the tertiary label color, not a fill token. */
+  --p-switch-touch-off: rgba(60, 60, 67, 0.30);
+  /* iOS field fill, built on #767680 rather than pure black. */
+  --p-field-touch-fill: rgba(118, 118, 128, 0.12);
+  /* iOS 27 field rows: the tertiary label placeholder, the grouped card
+     and its row separator (plus-darker #E6E6E6 on white). */
+  --p-field-touch-placeholder: rgba(60, 60, 67, 0.30);
+  --p-field-touch-text: #000000;
+  --p-field-group-touch-bg: #ffffff;
+  --p-field-group-touch-separator: rgba(0, 0, 0, 0.10);
+  /* xmark.circle.fill, used as a mask by the touch clear buttons. */
+  --p-field-clear-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cmask id='m'%3E%3Crect width='16' height='16' fill='white'/%3E%3Cpath d='M5.6 5.6 10.4 10.4M10.4 5.6 5.6 10.4' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/mask%3E%3Ccircle cx='8' cy='8' r='7.5' fill='white' mask='url(%23m)'/%3E%3C/svg%3E");
+
+  /* Bevel treatment shared by the large checkboxes and icon tiles */
+  --p-control-bevel:
+    0 0.5px 1.5px rgba(0, 0, 0, 0.2),
+    inset 0 0.5px 0.25px rgba(255, 255, 255, 0.8),
+    inset 0 -0.5px 0.25px rgba(26, 26, 26, 0.15);
+}
+
+/* Dark: fields sit at the window color (#1E1E1E) and are drawn by a
+   white 4% hairline outside the edge. Gray plates flip to white fills. */
+.p-dark-mode {
+  --p-field-bg: #1E1E1E;
+  --p-field-bg-disabled: rgba(30, 30, 30, 0.5);
+  --p-field-text: rgba(255, 255, 255, 0.85);
+  --p-field-placeholder: rgba(255, 255, 255, 0.25);
+  --p-field-ring: rgba(255, 255, 255, 0.04);
+  --p-field-ring-disabled: rgba(255, 255, 255, 0.04);
+  --p-control-fill: rgba(255, 255, 255, 0.10);
+  --p-check-fill: rgba(255, 255, 255, 0.10);
+  --p-check-fill-pressed: rgba(255, 255, 255, 0.19);
+  --p-check-fill-disabled: rgba(255, 255, 255, 0.04);
+  --p-check-press-mix: white 8%;
+  --p-check-inactive-fill: rgba(255, 255, 255, 0.10);
+  --p-check-inactive-fill-pressed: rgba(255, 255, 255, 0.19);
+  --p-check-inactive-fill-disabled: rgba(255, 255, 255, 0.03);
+  --p-check-inactive-ink: #ffffff;
+  --p-check-inactive-ink-disabled: rgba(255, 255, 255, 0.22);
+  --p-switch-touch-off: rgba(235, 235, 245, 0.30);
+  --p-field-touch-fill: rgba(118, 118, 128, 0.24);
+  --p-field-touch-placeholder: rgba(235, 235, 245, 0.30);
+  --p-field-touch-text: #ffffff;
+  --p-field-group-touch-bg: #1c1c1e;
+  --p-field-group-touch-separator: rgba(255, 255, 255, 0.10);
+  --p-search-ring-empty: rgba(255, 255, 255, 0.04);
+  --p-search-placeholder: rgba(255, 255, 255, 0.55);
+  --p-combo-plate-bg: rgba(255, 255, 255, 0.07);
+  --p-combo-plate-bg-active: rgba(255, 255, 255, 0.16);
+  --p-combo-plate-bg-disabled: rgba(255, 255, 255, 0.04);
+  --p-combo-glyph-disabled: rgba(255, 255, 255, 0.25);
+  /* The divider stays a dark cut in dark mode too. */
+  --p-stepper-divider: rgba(0, 0, 0, 0.12);
+  --p-stepper-divider-disabled: rgba(0, 0, 0, 0.06);
+  --p-popup-bg: rgba(255, 255, 255, 0.07);
+  --p-popup-bg-active: rgba(255, 255, 255, 0.16);
+  --p-popup-bg-disabled: rgba(255, 255, 255, 0.04);
+  --p-popup-text-disabled: rgba(255, 255, 255, 0.25);
+  --p-form-group-bg: rgba(255, 255, 255, 0.03);
+  --p-form-group-separator: rgba(255, 255, 255, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-field-bg: #1E1E1E;
+    --p-field-bg-disabled: rgba(30, 30, 30, 0.5);
+    --p-field-text: rgba(255, 255, 255, 0.85);
+    --p-field-placeholder: rgba(255, 255, 255, 0.25);
+    --p-field-ring: rgba(255, 255, 255, 0.04);
+    --p-field-ring-disabled: rgba(255, 255, 255, 0.04);
+    --p-control-fill: rgba(255, 255, 255, 0.10);
+    --p-check-fill: rgba(255, 255, 255, 0.10);
+    --p-check-fill-pressed: rgba(255, 255, 255, 0.19);
+    --p-check-fill-disabled: rgba(255, 255, 255, 0.04);
+    --p-check-press-mix: white 8%;
+    --p-check-inactive-fill: rgba(255, 255, 255, 0.10);
+    --p-check-inactive-fill-pressed: rgba(255, 255, 255, 0.19);
+    --p-check-inactive-fill-disabled: rgba(255, 255, 255, 0.03);
+    --p-check-inactive-ink: #ffffff;
+    --p-check-inactive-ink-disabled: rgba(255, 255, 255, 0.22);
+    --p-switch-touch-off: rgba(235, 235, 245, 0.30);
+    --p-field-touch-fill: rgba(118, 118, 128, 0.24);
+    --p-field-touch-placeholder: rgba(235, 235, 245, 0.30);
+    --p-field-touch-text: #ffffff;
+    --p-field-group-touch-bg: #1c1c1e;
+    --p-field-group-touch-separator: rgba(255, 255, 255, 0.10);
+    --p-search-ring-empty: rgba(255, 255, 255, 0.04);
+    --p-search-placeholder: rgba(255, 255, 255, 0.55);
+    --p-combo-plate-bg: rgba(255, 255, 255, 0.07);
+    --p-combo-plate-bg-active: rgba(255, 255, 255, 0.16);
+    --p-combo-plate-bg-disabled: rgba(255, 255, 255, 0.04);
+    --p-combo-glyph-disabled: rgba(255, 255, 255, 0.25);
+    --p-stepper-divider: rgba(0, 0, 0, 0.12);
+    --p-stepper-divider-disabled: rgba(0, 0, 0, 0.06);
+    --p-popup-bg: rgba(255, 255, 255, 0.07);
+    --p-popup-bg-active: rgba(255, 255, 255, 0.16);
+    --p-popup-bg-disabled: rgba(255, 255, 255, 0.04);
+    --p-popup-text-disabled: rgba(255, 255, 255, 0.25);
+    --p-form-group-bg: rgba(255, 255, 255, 0.03);
+    --p-form-group-separator: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-checkbox-bg: transparent;
+  --p-checkbox-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.15), inset 0px 0px 2px rgba(0, 0, 0, 0.10);
+  --p-checkbox-border: rgba(0, 0, 0, 0.2);
+  --p-checkbox-gradient: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+  --p-checkbox-border-active: rgba(0, 0, 0, 0.12);
+  --p-field-bg: #ffffff;
+  --p-field-bg-disabled: rgba(255, 255, 255, 0.5);
+  --p-field-text: rgba(0, 0, 0, 0.85);
+  --p-field-placeholder: #BFBFBF;
+  --p-field-ring: rgba(0, 0, 0, 0.08);
+  --p-field-ring-disabled: rgba(0, 0, 0, 0.04);
+  --p-control-fill: rgba(0, 0, 0, 0.12);
+  --p-check-fill: rgba(0, 0, 0, 0.10);
+  --p-check-fill-pressed: rgba(0, 0, 0, 0.19);
+  --p-check-fill-disabled: rgba(0, 0, 0, 0.05);
+  --p-check-press-mix: black 13%;
+  --p-check-inactive-fill: rgba(0, 0, 0, 0.14);
+  --p-check-inactive-fill-pressed: rgba(0, 0, 0, 0.18);
+  --p-check-inactive-fill-disabled: rgba(0, 0, 0, 0.05);
+  --p-check-inactive-ink: rgba(0, 0, 0, 0.7);
+  --p-check-inactive-ink-disabled: rgba(0, 0, 0, 0.22);
+  --p-switch-touch-off: rgba(60, 60, 67, 0.30);
+  /* iOS field fill, built on #767680 rather than pure black. */
+  --p-field-touch-fill: rgba(118, 118, 128, 0.12);
+  --p-field-touch-placeholder: rgba(60, 60, 67, 0.30);
+  --p-field-touch-text: #000000;
+  --p-field-group-touch-bg: #ffffff;
+  --p-field-group-touch-separator: rgba(0, 0, 0, 0.10);
+  --p-search-ring-empty: rgba(0, 0, 0, 0.08);
+  --p-search-placeholder: #727272;
+  --p-combo-plate-bg: rgba(0, 0, 0, 0.08);
+  --p-combo-plate-bg-active: rgba(0, 0, 0, 0.16);
+  --p-combo-plate-bg-disabled: rgba(0, 0, 0, 0.04);
+  --p-combo-glyph-disabled: rgba(0, 0, 0, 0.25);
+  --p-stepper-divider: rgba(0, 0, 0, 0.12);
+  --p-stepper-divider-disabled: rgba(0, 0, 0, 0.06);
+  --p-popup-bg: rgba(0, 0, 0, 0.08);
+  --p-popup-bg-active: rgba(0, 0, 0, 0.16);
+  --p-popup-bg-disabled: rgba(0, 0, 0, 0.04);
+  --p-popup-text-disabled: rgba(0, 0, 0, 0.25);
+  --p-form-group-bg: rgba(0, 0, 0, 0.03);
+  --p-form-group-separator: rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Labels ───────────────────────────────────────────────────────── */
+
+.p-label,
+.p-sublabel {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  letter-spacing: 0;
+}
+
+.p-label {
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-size: 13px;
+  font-weight: 510;
+  line-height: 16px;
+}
+
+.p-sublabel {
+  color: var(--p-text-secondary, rgba(0, 0, 0, 0.5));
+  font-size: 11px;
+  font-weight: 510;
+  line-height: 14px;
+}
+
+/* ─── Text field ───────────────────────────────────────────────────── */
+/* 24px tall, radius 6, white, border drawn as a 1px spread ring.
+   Works on input[type=text|email|password|number|search|url] and
+   textarea (which unlocks its height). */
+
+.p-field {
+  --p-field-height: 24px;
+  --p-field-font: 13px;
+  --p-field-pad: 8px;
+  --p-field-radius: 6px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: var(--p-field-height);
+  padding: 0 var(--p-field-pad);
+  border-radius: var(--p-field-radius);
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+  caret-color: var(--p-sys-blue, #0088FF);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-field-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  transition: box-shadow 0.12s ease-out;
+}
+
+/* Sizes: the shared five-height ladder. Radius is a quarter of the
+   height: 4 / 5 / 6 / 7 / 9. */
+.p-field-mini {
+  --p-field-height: 16px;
+  --p-field-font: 10px;
+  --p-field-pad: 6px;
+  --p-field-radius: 4px;
+}
+
+.p-field-small {
+  --p-field-height: 20px;
+  --p-field-font: 11px;
+  --p-field-pad: 7px;
+  --p-field-radius: 5px;
+}
+
+.p-field-large {
+  --p-field-height: 28px;
+  --p-field-pad: 9px;
+  --p-field-radius: 7px;
+}
+
+.p-field-xlarge {
+  --p-field-height: 36px;
+  --p-field-pad: 12px;
+  --p-field-radius: 9px;
+}
+
+/* Touch size (iOS 27). Not a sixth rung on the ladder above. iOS draws
+   a text field as a row of an inset grouped card: 52px rows, no fill of
+   their own, 17px at weight 510 with SF Pro's -0.43px tracking, and a
+   #3C3C43 @ 30% placeholder. Put the fields in .p-field-group-touch:
+
+   <div class="p-field-group-touch">
+     <input class="p-field p-field-touch" type="text" placeholder="Name" />
+     <input class="p-field p-field-touch" type="email" placeholder="Email" />
+   </div>
+
+   A field outside a group, or one carrying .p-field-touch-filled, is the
+   standalone filled field instead: 44px, radius 10, the #767680 fill. */
+.p-field-touch {
+  --p-field-height: 44px;
+  --p-field-font: 17px;
+  --p-field-pad: 16px;
+
+  border-radius: 10px;
+  background: var(--p-field-touch-fill);
+  box-shadow: none;
+  color: var(--p-field-touch-text);
+  font-weight: 510;
+  letter-spacing: -0.43px;
+}
+
+.p-field-touch:focus {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
+}
+
+.p-field::placeholder {
+  color: var(--p-field-placeholder);
+  font-weight: 510;
+}
+
+.p-field-touch::placeholder {
+  color: var(--p-field-touch-placeholder);
+}
+
+/* The grouped card: 26px radius, the grouped secondary background
+   (white / #1C1C1E), rows separated by a hairline inset 16px on both
+   sides. The card clips, so the first and last rows need no radius. */
+.p-field-group-touch {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 26px;
+  background: var(--p-field-group-touch-bg);
+}
+
+.p-field-group-touch > .p-field-touch:not(.p-field-touch-filled),
+.p-field-group-touch > .p-field-touch-row > .p-field-touch:not(.p-field-touch-filled) {
+  --p-field-height: 52px;
+
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+/* Separator: a 1px band between rows, inset 16px each side. Drawn on
+   the row below so the last row has none. Longhands only, so the row's
+   own background rules never wipe it. */
+.p-field-group-touch > .p-field-touch:not(:first-child),
+.p-field-group-touch > .p-field-touch-row:not(:first-child) {
+  background-image: linear-gradient(var(--p-field-group-touch-separator), var(--p-field-group-touch-separator));
+  background-position: 16px 0;
+  background-repeat: no-repeat;
+  background-size: calc(100% - 32px) 1px;
+}
+
+/* Focus inside the card: iOS shows the caret alone. The web keeps a
+   visible mark, drawn inside the row so the card's clip never cuts it. */
+.p-field-group-touch > .p-field-touch:not(.p-field-touch-filled):focus,
+.p-field-group-touch > .p-field-touch-row > .p-field-touch:not(.p-field-touch-filled):focus {
+  box-shadow: inset 3px 0 0 var(--p-control-accent, #0088FF);
+}
+
+.p-field-group-touch > .p-field-touch:not(.p-field-touch-filled):focus:not(:focus-visible),
+.p-field-group-touch > .p-field-touch-row > .p-field-touch:not(.p-field-touch-filled):focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+.p-field-group-touch > .p-field-touch:disabled,
+.p-field-group-touch > .p-field-touch-row > .p-field-touch:disabled {
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--p-field-touch-placeholder);
+}
+
+/* A row with a trailing clear button. The button shows while the field
+   has focus and a value, the way iOS shows xmark.circle.fill.
+   <div class="p-field-touch-row">
+     <input class="p-field p-field-touch" type="text" value="Value" />
+     <button class="p-field-touch-clear" type="button" aria-label="Clear"></button>
+   </div>
+   type="search" fields get the same glyph from the engine's own cancel
+   button, so they need no extra markup. */
+.p-field-touch-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.p-field-touch-row > .p-field-touch {
+  flex: 1;
+  min-width: 0;
+  padding-right: 44px;
+}
+
+.p-field-touch-clear {
+  appearance: none;
+  -webkit-appearance: none;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  visibility: hidden;
+
+  background: transparent;
+}
+
+.p-field-touch-clear::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 17px;
+  height: 17px;
+  background: var(--p-field-touch-placeholder);
+  -webkit-mask: var(--p-field-clear-glyph) center / contain no-repeat;
+  mask: var(--p-field-clear-glyph) center / contain no-repeat;
+}
+
+/* :active keeps the button up through the press: the field blurs on
+   pointerdown, before the click lands. */
+.p-field-touch-row:focus-within > .p-field-touch:not(:placeholder-shown) ~ .p-field-touch-clear,
+.p-field-touch-clear:active,
+.p-field-touch-clear:focus-visible {
+  visibility: visible;
+}
+
+.p-field-touch-clear:focus-visible {
+  outline: 2px solid var(--p-control-accent, #0088FF);
+  outline-offset: -8px;
+  border-radius: 50%;
+}
+
+.p-field-touch[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  cursor: pointer;
+  background: var(--p-field-touch-placeholder);
+  -webkit-mask: var(--p-field-clear-glyph) center / contain no-repeat;
+}
+
+@media (prefers-contrast: more) {
+  .p-field-group-touch {
+    box-shadow: inset 0 0 0 1px var(--p-field-group-touch-separator);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-field-group-touch {
+    border: 1px solid CanvasText;
+  }
+
+  .p-field-group-touch > :not(:first-child) {
+    border-top: 1px solid GrayText;
+  }
+}
+
+/* Focus: the macOS 27 focus band over the field's own ring. The iOS
+   touch field keeps its own focus rule above. */
+.p-field:not(.p-field-touch):focus,
+.p-field:not(.p-field-touch):focus-visible {
+  box-shadow:
+    var(--p-focus-ring),
+    0 0 0 1px var(--p-field-ring);
+}
+
+.p-field[disabled],
+.p-field:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  cursor: not-allowed;
+}
+
+textarea.p-field {
+  height: auto;
+  min-height: 72px;
+  padding: 6px 8px;
+  resize: vertical;
+}
+
+/* ─── Select (popup button) ────────────────────────────────────────── */
+/* The 24px pop-up button. macOS 27 draws every pop-up as a flat gray
+   body (8% black, 16% pressed, 4% disabled), including the ones in
+   dialogs and forms, so .p-select now matches .p-popup instead of the
+   white, ringed text-field box it used under macOS 26. The chevrons
+   render in text color at the right edge, no accent capsule.
+   Markup: <div class="p-select"><select>…</select></div> */
+
+.p-select {
+  display: inline-block;
+  position: relative;
+}
+
+.p-select > select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: 24px;
+  padding: 0 27px 0 12px;
+  border-radius: 6px;
+  width: 100%;
+
+  background: var(--p-popup-bg);
+  box-shadow: none;
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+
+  cursor: pointer;
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+.p-select:not(.p-select-touch) > select:active {
+  background: var(--p-popup-bg-active);
+}
+
+/* Touch size, matching .p-field-touch: filled rather than ringed, and
+   tall enough to be its own tap target. */
+.p-select-touch > select {
+  height: 44px;
+  padding: 0 36px 0 16px;
+  border-radius: 10px;
+
+  background: var(--p-field-touch-fill);
+  box-shadow: none;
+
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.p-select-touch > select:focus {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
+}
+
+/* The chevron moves in to match the wider right padding. */
+.p-select-touch::after {
+  right: 14px;
+  width: 12px;
+  height: 14px;
+}
+
+/* Up/down chevrons, masked so they follow the text color token. */
+.p-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  width: 10px;
+  height: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-field-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-select:not(.p-select-touch) > select:focus-visible {
+  box-shadow: var(--p-focus-ring);
+}
+
+.p-select > select[disabled],
+.p-select > select:disabled {
+  background: var(--p-popup-bg-disabled);
+  color: var(--p-popup-text-disabled);
+  cursor: not-allowed;
+}
+
+.p-select:has(> select:disabled)::after {
+  background: var(--p-popup-text-disabled);
+}
+
+/* The iOS touch select keeps its filled-field disabled look. */
+.p-select-touch > select[disabled],
+.p-select-touch > select:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  color: var(--p-field-placeholder);
+}
+
+/* ─── Stepper ──────────────────────────────────────────────────────── */
+/* Two-segment increment/decrement control. Pair it with a number field
+   and src/js/steppers.js (stepUp/stepDown + press-and-hold repeat).
+   Markup:
+
+   <div class="p-stepper-field">
+     <input class="p-field" type="number" value="3" min="0" max="10" />
+     <span class="p-stepper">
+       <button type="button" data-p-step="up" aria-label="Increment"></button>
+       <button type="button" data-p-step="down" aria-label="Decrement"></button>
+     </span>
+   </div>
+
+   macOS 27 draws the stepper as two flat gray halves (8% black, 16%
+   pressed, 4% disabled) with no ring of its own. Add
+   .p-stepper-field-inset to sink the stepper into the field's right
+   end instead of sitting 4px beside it. */
+
+.p-stepper-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* The value is centred in the field's text area. */
+.p-stepper-field > input[type="number"] {
+  text-align: center;
+}
+
+/* Inset: the stepper covers the field's last 20px, no gap. The field
+   keeps the whole ring, so it reads as one control. */
+.p-stepper-field-inset {
+  position: relative;
+  gap: 0;
+}
+
+.p-stepper-field-inset > .p-field {
+  width: 62px;
+  padding-right: 20px;
+  padding-left: 0;
+}
+
+.p-stepper-field-inset > .p-stepper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  border-radius: 0 var(--p-field-radius, 6px) var(--p-field-radius, 6px) 0;
+}
+
+/* Focus on either half rings the whole field, not the inset stepper. */
+.p-stepper-field-inset > .p-stepper:has(> button:focus-visible) {
+  box-shadow: none;
+}
+
+.p-stepper-field.p-stepper-field-inset > .p-stepper:has(> button:focus-visible)::before {
+  box-shadow: none;
+}
+
+.p-stepper-field-inset:has(> .p-stepper > button:focus-visible) > .p-field {
+  box-shadow:
+    var(--p-focus-ring),
+    0 0 0 1px var(--p-field-ring);
+}
+
+/* The paired number field: no native spinners, stepper does that job. */
+.p-stepper-field > input::-webkit-inner-spin-button,
+.p-stepper-field > input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.p-stepper-field > input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.p-stepper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  width: 20px;
+  height: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+
+  background: none;
+  box-shadow: none;
+}
+
+.p-stepper > button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  position: relative;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Chevrons, masked to the text color: 12pt
+   chevron.up / chevron.down, about 10×5 of ink. */
+.p-stepper > button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 12px;
+  height: 8px;
+  background: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-stepper > [data-p-step="up"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 6 6 1.8 10.5 6' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 6 6 1.8 10.5 6' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-stepper > [data-p-step="down"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 2 6 6.2 10.5 2' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 2 6 6.2 10.5 2' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Divider: 14×1 centered, 12% black; fades when disabled. */
+.p-stepper::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  right: 3px;
+  height: 1px;
+  margin-top: -0.5px;
+  border-radius: 0.5px;
+  background: var(--p-stepper-divider);
+  pointer-events: none;
+}
+
+/* Each half carries its own flat fill, so a pressed half swaps to the
+   pressed value instead of stacking on top of the rest value. */
+.p-stepper:not(.p-stepper-touch) > button {
+  background: var(--p-combo-plate-bg);
+  transition: background 0.12s ease-out;
+}
+
+.p-stepper:not(.p-stepper-touch) > button:active:not(:disabled) {
+  background: var(--p-combo-plate-bg-active);
+}
+
+.p-stepper:not(.p-stepper-touch) > button:disabled {
+  background: var(--p-combo-plate-bg-disabled);
+}
+
+/* Focus band. The halves paint over the stepper's own background, so
+   the band's inner 1px is redrawn on ::before, above them. */
+.p-stepper:has(> button:focus-visible) {
+  box-shadow: var(--p-focus-ring);
+}
+
+.p-stepper::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.p-stepper:not(.p-stepper-touch):has(> button:focus-visible)::before {
+  box-shadow: inset 0 0 0 1px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+}
+
+.p-stepper > button:focus-visible {
+  outline: 2px solid transparent; /* forced-colors ring */
+}
+
+.p-stepper:has(> button:disabled)::after {
+  background: var(--p-stepper-divider-disabled);
+}
+
+.p-stepper > button:disabled {
+  cursor: not-allowed;
+}
+
+.p-stepper > button:disabled::before {
+  background: var(--p-text-tertiary, rgba(0, 0, 0, 0.25));
+}
+
+/* ─── Search field ─────────────────────────────────────────────────── */
+/* Capsule search input in five sizes. macOS 27 draws the same 0.08
+   ring whether the field is empty or filled (macOS 26 used a quieter
+   0.04 ring when empty; --p-search-ring-empty now matches the field
+   ring). The placeholder is darker than a text field's because it
+   doubles as the label, and the clear button only exists while there
+   is something to clear. Focus keeps the focus band. Markup:
+   <div class="p-search"><input type="search" placeholder="Search"></div> */
+
+.p-search {
+  --p-search-height: 24px;
+  --p-search-font: 13px;
+  --p-search-icon: 13px;
+  --p-search-pad: 8px;
+
+  position: relative;
+  display: inline-block;
+}
+
+.p-search > input {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  width: 120px;
+  height: var(--p-search-height);
+  border-radius: calc(var(--p-search-height) / 2);
+  padding: 0 var(--p-search-pad) 0 calc(var(--p-search-pad) + var(--p-search-icon) + 4px);
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-search-ring-empty);
+  caret-color: var(--p-sys-blue, #0088FF);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-search-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  transition: box-shadow 0.12s ease-out;
+}
+
+.p-search > input::placeholder {
+  color: var(--p-search-placeholder);
+  font-weight: 500;
+}
+
+/* Content present: step the ring up to the text-field weight. */
+.p-search > input:not(:placeholder-shown) {
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+}
+
+.p-search > input:focus,
+.p-search > input:focus-visible {
+  box-shadow:
+    var(--p-focus-ring),
+    0 0 0 1px var(--p-field-ring);
+}
+
+/* Magnifier, masked so it follows the text color token. */
+.p-search::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: var(--p-search-pad);
+  width: var(--p-search-icon);
+  height: var(--p-search-icon);
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-field-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13' fill='none'%3E%3Ccircle cx='5.5' cy='5.5' r='4' stroke='black' stroke-width='1.5'/%3E%3Cpath d='M8.7 8.7 12 12' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13' fill='none'%3E%3Ccircle cx='5.5' cy='5.5' r='4' stroke='black' stroke-width='1.5'/%3E%3Cpath d='M8.7 8.7 12 12' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Clear button: restyled WebKit cancel button (xmark.circle.fill).
+   Engines without it simply show no clear affordance. */
+.p-search > input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  width: var(--p-search-icon);
+  height: var(--p-search-icon);
+  margin: 0;
+  cursor: pointer;
+
+  background: var(--p-search-placeholder);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cmask id='m'%3E%3Crect width='16' height='16' fill='white'/%3E%3Cpath d='M5.6 5.6 10.4 10.4M10.4 5.6 5.6 10.4' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/mask%3E%3Ccircle cx='8' cy='8' r='7' fill='white' mask='url(%23m)'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-search > input[disabled],
+.p-search > input:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  cursor: not-allowed;
+}
+
+/* Sizes: 16 / 20 / 24 (default) / 28 / 36. */
+.p-search-mini {
+  --p-search-height: 16px;
+  --p-search-font: 10px;
+  --p-search-icon: 10px;
+  --p-search-pad: 6px;
+}
+
+.p-search-small {
+  --p-search-height: 20px;
+  --p-search-font: 11px;
+  --p-search-icon: 11px;
+  --p-search-pad: 7px;
+}
+
+.p-search-large {
+  --p-search-height: 28px;
+  --p-search-pad: 9px;
+}
+
+.p-search-xlarge {
+  --p-search-height: 36px;
+  --p-search-pad: 12px;
+}
+
+/* ─── Pop-up and pull-down buttons ─────────────────────────────────── */
+/* Gray button variants of the select.
+   A pop-up chooses a value (up-down chevron); a pull-down runs an
+   action from a menu (down chevron). Both wrap the same markup as
+   .p-select — see specs/popup-pulldown.md. Markup:
+   <div class="p-popup"><select>…</select></div>
+
+   macOS 27: flat 8% body (16% pressed, 4% disabled with 25% text), no
+   ring or glass. Radius 4 / 5 / 6 at 16 / 20 / 24, capsule at 28 and
+   36. The regular pull-down chevron is 13px, the pop-up chevron 11px. */
+
+.p-popup,
+.p-pulldown {
+  --p-popup-height: 24px;
+  --p-popup-font: 13px;
+  --p-popup-radius: 6px;
+  --p-popup-chevron: 11px;
+  --p-popup-pad: 12px;
+
+  position: relative;
+  display: inline-block;
+}
+
+.p-pulldown {
+  --p-popup-chevron: 13px;
+}
+
+.p-popup > select,
+.p-pulldown > select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: var(--p-popup-height);
+  border-radius: var(--p-popup-radius);
+  padding: 0 calc(var(--p-popup-chevron) + 16px) 0 var(--p-popup-pad);
+
+  background: var(--p-popup-bg);
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-popup-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  cursor: pointer;
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+/* Chevrons follow the text color. Pop-up: up-down. Pull-down: down. */
+.p-popup::after,
+.p-pulldown::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: var(--p-popup-chevron);
+  height: var(--p-popup-chevron);
+  transform: translateY(-50%);
+  pointer-events: none;
+  background: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-popup::after {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' fill='none'%3E%3Cpath d='M1 4.2 5 1l4 3.2M1 7.8 5 11l4-3.2' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-pulldown::after {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-popup > select:active,
+.p-pulldown > select:active {
+  background: var(--p-popup-bg-active);
+}
+
+.p-popup > select:focus-visible,
+.p-pulldown > select:focus-visible {
+  box-shadow: var(--p-focus-ring);
+}
+
+.p-popup > select:disabled,
+.p-pulldown > select:disabled {
+  background: var(--p-popup-bg-disabled);
+  color: var(--p-popup-text-disabled);
+  cursor: not-allowed;
+}
+
+.p-popup:has(> select:disabled)::after,
+.p-pulldown:has(> select:disabled)::after {
+  background: var(--p-popup-text-disabled);
+}
+
+/* Sizes: radius grows with the control; 28 and 36 are capsules.
+   Chevrons: pop-up 10 / 11 / 11 / 13 / 13, pull-down 10 / 10 / 13 / 13 / 13. */
+.p-popup-mini,
+.p-pulldown-mini {
+  --p-popup-height: 16px;
+  --p-popup-font: 10px;
+  --p-popup-radius: 4px;
+  --p-popup-chevron: 10px;
+  --p-popup-pad: 7px;
+}
+
+.p-popup-small,
+.p-pulldown-small {
+  --p-popup-height: 20px;
+  --p-popup-font: 11px;
+  --p-popup-radius: 5px;
+  --p-popup-chevron: 10px;
+  --p-popup-pad: 10px;
+}
+
+.p-popup-small {
+  --p-popup-chevron: 11px;
+}
+
+.p-popup-large,
+.p-pulldown-large {
+  --p-popup-height: 28px;
+  --p-popup-radius: 14px;
+  --p-popup-chevron: 13px;
+  --p-popup-pad: 14px;
+}
+
+.p-popup-xlarge,
+.p-pulldown-xlarge {
+  --p-popup-height: 36px;
+  --p-popup-radius: 18px;
+  --p-popup-chevron: 13px;
+  --p-popup-pad: 18px;
+}
+
+/* Circular, chevron only: a 24px circle holding just the up-down
+   chevron, for a pop-up whose value shows elsewhere. The select keeps
+   its options and value; only the label is hidden. Give it an
+   aria-label. <div class="p-popup p-popup-circular"><select aria-label="…"> */
+.p-popup-circular > select {
+  width: var(--p-popup-height);
+  padding: 0;
+  border-radius: 50%;
+  color: transparent;
+  text-indent: -999px;
+}
+
+.p-popup-circular > select > option {
+  color: initial;
+}
+
+.p-popup-circular::after {
+  right: calc((var(--p-popup-height) - var(--p-popup-chevron)) / 2);
+}
+
+/* Borderless, for a row in a .p-form-group: the value as plain text
+   followed by a 16px circular plate holding a 10px up-down chevron. */
+.p-popup-borderless {
+  --p-popup-chevron: 10px;
+  --p-popup-plate: 16px;
+}
+
+.p-popup-borderless > select {
+  padding: 0 calc(var(--p-popup-plate) + 12px) 0 0;
+  background: transparent;
+}
+
+.p-popup-borderless > select:active {
+  background: transparent;
+}
+
+.p-popup-borderless > select:disabled {
+  background: transparent;
+}
+
+.p-popup-borderless::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: var(--p-popup-plate);
+  height: var(--p-popup-plate);
+  transform: translateY(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--p-popup-bg);
+  transition: background 0.12s ease-out;
+}
+
+.p-popup-borderless:has(> select:active)::before {
+  background: var(--p-popup-bg-active);
+}
+
+.p-popup-borderless:has(> select:disabled)::before {
+  background: var(--p-popup-bg-disabled);
+}
+
+.p-popup-borderless::after {
+  right: calc((var(--p-popup-plate) - var(--p-popup-chevron)) / 2);
+}
+
+/* ─── Combo box ────────────────────────────────────────────────────── */
+/* A text field with a pull-down button in a single control. The input
+   carries the whole box (so focus rings wrap everything); the chevron
+   plate and glyph are pseudo-elements. Pair with <datalist> for native
+   editable-text-plus-suggestions, no JavaScript. Markup:
+
+   <div class="p-combo">
+     <input type="text" list="breeds" placeholder="Value" />
+   </div>
+   <datalist id="breeds">…</datalist> */
+
+.p-combo {
+  --p-combo-height: 24px;
+  --p-combo-font: 13px;
+  --p-combo-plate-w: 24px;
+  --p-combo-plate-h: 20px;
+  --p-combo-inset: 2px;
+  --p-combo-chevron: 11px;
+  --p-combo-radius: 6px;
+  --p-combo-plate-radius: 7.2px;
+
+  position: relative;
+  display: inline-block;
+}
+
+.p-combo > input {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  width: 120px;
+  height: var(--p-combo-height);
+  border-radius: var(--p-combo-radius);
+  padding: 0 calc(var(--p-combo-plate-w) + var(--p-combo-inset) + 6px) 0 8px;
+
+  background: var(--p-field-bg);
+  box-shadow: 0 0 0 1px var(--p-field-ring);
+  caret-color: var(--p-sys-blue, #0088FF);
+
+  color: var(--p-field-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-combo-font);
+  font-weight: 510;
+  letter-spacing: 0;
+
+  transition: box-shadow 0.12s ease-out;
+}
+
+.p-combo > input::placeholder {
+  color: var(--p-field-placeholder);
+  font-weight: 510;
+}
+
+/* Hide the native datalist arrow where engines draw one. */
+.p-combo > input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+.p-combo > input:focus,
+.p-combo > input:focus-visible {
+  box-shadow:
+    var(--p-focus-ring),
+    0 0 0 1px var(--p-field-ring);
+}
+
+.p-combo > input[disabled],
+.p-combo > input:disabled {
+  background: var(--p-field-bg-disabled);
+  box-shadow: 0 0 0 1px var(--p-field-ring-disabled);
+  cursor: not-allowed;
+}
+
+/* The pull-down plate: a flat gray rounded square inset at the right.
+   No ring, no shadow (macOS 27: 8% black rest, 16% pressed, 4% off). */
+.p-combo::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: var(--p-combo-inset);
+  width: var(--p-combo-plate-w);
+  height: var(--p-combo-plate-h);
+  transform: translateY(-50%);
+  border-radius: var(--p-combo-plate-radius);
+  pointer-events: none;
+
+  background: var(--p-combo-plate-bg);
+  transition: background 0.12s ease-out;
+}
+
+/* The chevron, above the plate, masked to follow the text color. */
+.p-combo::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: calc(var(--p-combo-inset) + (var(--p-combo-plate-w) - var(--p-combo-chevron)) / 2);
+  width: var(--p-combo-chevron);
+  height: var(--p-combo-chevron);
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-field-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Pressed anywhere on the control: the plate darkens. */
+.p-combo:active::after {
+  background: var(--p-combo-plate-bg-active);
+}
+
+/* Disabled: quieter plate, faded chevron. */
+.p-combo:has(> input:disabled)::after {
+  background: var(--p-combo-plate-bg-disabled);
+}
+
+.p-combo:has(> input:disabled)::before {
+  background: var(--p-combo-glyph-disabled);
+}
+
+/* Sizes: plate = height − 4 (xlarge − 6). Field radius is a quarter of
+   the height (4 / 5 / 6 / 7 / 9); plate radius 4 / 5.6 / 7.2 / 8.8 / 10.4. */
+.p-combo-mini {
+  --p-combo-height: 16px;
+  --p-combo-font: 10px;
+  --p-combo-plate-w: 16px;
+  --p-combo-plate-h: 12px;
+  --p-combo-chevron: 9px;
+  --p-combo-radius: 4px;
+  --p-combo-plate-radius: 4px;
+}
+
+.p-combo-small {
+  --p-combo-height: 20px;
+  --p-combo-font: 11px;
+  --p-combo-plate-w: 20px;
+  --p-combo-plate-h: 16px;
+  --p-combo-chevron: 10px;
+  --p-combo-radius: 5px;
+  --p-combo-plate-radius: 5.6px;
+}
+
+.p-combo-large {
+  --p-combo-height: 28px;
+  --p-combo-plate-w: 24px;
+  --p-combo-plate-h: 24px;
+  --p-combo-chevron: 12.5px;
+  --p-combo-radius: 7px;
+  --p-combo-plate-radius: 8.8px;
+}
+
+.p-combo-xlarge {
+  --p-combo-height: 36px;
+  --p-combo-plate-w: 30px;
+  --p-combo-plate-h: 30px;
+  --p-combo-inset: 3px;
+  --p-combo-chevron: 13px;
+  --p-combo-radius: 9px;
+  --p-combo-plate-radius: 10.4px;
+}
+
+/* ─── Grouped form ─────────────────────────────────────────────────── */
+/* The macOS 27 settings form: a rounded 12px box at 3% fill holding
+   42px rows, each inset 10px from the box edge and split by a 1px
+   separator at 5%. The label sits left; everything after it is pushed
+   to the trailing edge. Markup:
+
+   <div class="p-form-group">
+     <div class="p-form-row">
+       <span class="p-form-row-label">Detail</span>
+       <span class="p-form-row-detail">Label</span>
+       <span class="p-form-row-chevron" aria-hidden="true"></span>
+     </div>
+     <div class="p-form-row">
+       <label class="p-form-row-label" for="size">Size</label>
+       <div class="p-popup p-popup-borderless"><select id="size">…</select></div>
+     </div>
+   </div> */
+
+.p-form-group {
+  display: block;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-radius: 12px;
+
+  background: var(--p-form-group-bg);
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+  line-height: 16px;
+}
+
+.p-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 42px;
+  box-shadow: inset 0 -1px 0 var(--p-form-group-separator);
+}
+
+.p-form-row:last-child {
+  box-shadow: none;
+}
+
+.p-form-row-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-form-row-detail {
+  color: var(--p-text-secondary, rgba(0, 0, 0, 0.5));
+}
+
+/* Neighbouring checkboxes or radios sit 18px apart. */
+.p-form-row > .p-checkbox + .p-checkbox,
+.p-form-row > .p-radio + .p-radio {
+  margin-left: 10px;
+}
+
+/* Trailing glyphs: chevron.right (disclosure, 25%), info.circle and
+   ellipsis (50%). Info and ellipsis can be <button>s. The glyph is a
+   mask on ::before so the element itself can still show a focus ring. */
+.p-form-row-chevron,
+.p-form-row-info,
+.p-form-row-more {
+  --p-form-glyph: var(--p-text-secondary, rgba(0, 0, 0, 0.5));
+
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: none;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+}
+
+.p-form-row-chevron::before,
+.p-form-row-info::before,
+.p-form-row-more::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--p-form-glyph);
+  -webkit-mask: var(--p-form-glyph-mask) center / contain no-repeat;
+  mask: var(--p-form-glyph-mask) center / contain no-repeat;
+}
+
+.p-form-row-chevron {
+  --p-form-glyph: var(--p-text-tertiary, rgba(0, 0, 0, 0.25));
+  --p-form-glyph-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 12' fill='none'%3E%3Cpath d='M2 1.5 6.5 6 2 10.5' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  width: 8px;
+  height: 12px;
+  border-radius: 0;
+}
+
+.p-form-row-info {
+  --p-form-glyph-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15' fill='none'%3E%3Ccircle cx='7.5' cy='7.5' r='6.6' stroke='black' stroke-width='1.2'/%3E%3Ccircle cx='7.5' cy='4.6' r='0.95' fill='black'/%3E%3Cpath d='M6.3 6.6h1.4v4.2M6.2 10.8h2.7' stroke='black' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.p-form-row-more {
+  --p-form-glyph-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Ccircle cx='2.2' cy='7.5' r='1.3'/%3E%3Ccircle cx='7.5' cy='7.5' r='1.3'/%3E%3Ccircle cx='12.8' cy='7.5' r='1.3'/%3E%3C/svg%3E");
+}
+
+button.p-form-row-info,
+button.p-form-row-more {
+  cursor: pointer;
+}
+
+button.p-form-row-info:active,
+button.p-form-row-more:active {
+  --p-form-glyph: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+button.p-form-row-info:focus-visible,
+button.p-form-row-more:focus-visible {
+  outline: 2px solid transparent; /* forced-colors ring */
+  box-shadow: 0 0 0 3.5px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+}
+
+/* ─── Checkbox ─────────────────────────────────────────────────────── */
+/* 16px squircle, radius 5. Checked state = accent fill + white SF
+   checkmark + top-light gradient + bevel. Markup:
+   <label class="p-checkbox"><input type="checkbox"><span></span> Text</label> */
+
+.p-checkbox,
+.p-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: 0;
+  line-height: 16px;
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+
+  /* Color utility classes (.p-sys-*) paint a swatch background. On a
+     control wrapper we only want the published --p-color-current, so
+     cancel the paint. Works because forms.css loads after colors.css. */
+  background: transparent;
+
+  /* Resolved here, where .p-sys-* classes land, so tints actually work. */
+  --p-control-accent: var(--p-color-current, #0088FF);
+}
+
+.p-checkbox > input,
+.p-radio > input,
+.p-switch > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.p-checkbox > input + span {
+  --p-checkbox-size: 16px;
+  --p-checkbox-glyph: 60%;
+  /* The 16px box is flat in macOS 27: no top-light sheen, no bevel.
+     The larger sizes below keep both. */
+  --p-checkbox-sheen: rgba(255, 255, 255, 0);
+  --p-checkbox-bevel: none;
+
+  position: relative;
+  flex-shrink: 0;
+  width: var(--p-checkbox-size);
+  height: var(--p-checkbox-size);
+  border-radius: 5px;
+
+  background: var(--p-check-fill);
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+/* Checkmark + optional top-light sheen live on the ::before layer */
+.p-checkbox > input + span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.10791 7.81299C3.83545 7.81299 3.6084 7.70459 3.42676 7.48779L1.15918 4.74121C1.08008 4.65039 1.02441 4.5625 0.992188 4.47754C0.959961 4.39258 0.943848 4.30469 0.943848 4.21387C0.943848 4.00586 1.0127 3.83447 1.15039 3.69971C1.29102 3.56201 1.4668 3.49316 1.67773 3.49316C1.91211 3.49316 2.10693 3.58838 2.26221 3.77881L4.10791 6.04297L7.68066 0.368652C7.77148 0.230957 7.86523 0.134277 7.96191 0.0786133C8.06152 0.0200195 8.18311 -0.00927734 8.32666 -0.00927734C8.5376 -0.00927734 8.71191 0.0581055 8.84961 0.192871C8.9873 0.327637 9.05615 0.497559 9.05615 0.702637C9.05615 0.778809 9.04297 0.85791 9.0166 0.939941C8.99023 1.02197 8.94922 1.10693 8.89355 1.19482L4.80225 7.45703C4.64111 7.69434 4.40967 7.81299 4.10791 7.81299Z' fill='white'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, var(--p-checkbox-sheen), rgba(255, 255, 255, 0));
+  background-size: var(--p-checkbox-glyph), 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.p-checkbox > input:checked + span {
+  background: var(--p-control-accent);
+  box-shadow: var(--p-checkbox-bevel);
+}
+
+.p-checkbox > input:checked + span::before {
+  opacity: 1;
+}
+
+/* Pressed: off darkens to 19%, on darkens the accent (lightens in dark). */
+.p-checkbox:active > input:not(:disabled) + span,
+.p-radio:active > input:not(:disabled) + span {
+  background: var(--p-check-fill-pressed);
+}
+
+.p-checkbox:active > input:not(:disabled):checked + span,
+.p-radio:active > input:not(:disabled):checked + span {
+  background: var(--p-control-accent);
+  background: color-mix(in srgb, var(--p-control-accent), var(--p-check-press-mix));
+}
+
+/* Larger sizes: 20px (11px glyph) and 26px (14px glyph), with the
+   sheen and bevel that scale up well. */
+.p-checkbox-large > input + span {
+  --p-checkbox-size: 20px;
+  --p-checkbox-glyph: 55%;
+  --p-checkbox-sheen: rgba(255, 255, 255, 0.2);
+  --p-checkbox-bevel: var(--p-control-bevel);
+}
+
+.p-checkbox-xlarge > input + span {
+  --p-checkbox-size: 26px;
+  --p-checkbox-glyph: 54%;
+  --p-checkbox-sheen: rgba(255, 255, 255, 0.2);
+  --p-checkbox-bevel: var(--p-control-bevel);
+}
+
+/* ─── Radio ────────────────────────────────────────────────────────── */
+/* 16px circle, selected = accent fill + 4.8px white dot (30% of box). */
+
+.p-radio > input + span {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  background: var(--p-check-fill);
+  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+/* Kept as a hook; the 16px radio is flat in macOS 27, so it paints
+   nothing by default. */
+.p-radio > input + span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: none;
+  transition: opacity 0.12s ease-out;
+}
+
+.p-radio > input + span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: var(--p-control-knob);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.6);
+  transition: opacity 0.12s ease-out, transform 0.18s ease-out;
+}
+
+.p-radio > input:checked + span {
+  background: var(--p-control-accent);
+}
+
+.p-radio > input:checked + span::before {
+  opacity: 1;
+}
+
+.p-radio > input:checked + span::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ─── Inactive window ──────────────────────────────────────────────── */
+/* When the window loses focus, a checked checkbox or radio drops the
+   accent: light mode fills the box with black 14% and draws the glyph in
+   black 70%; dark mode uses a white 10% box with a white glyph. Unchecked
+   boxes look the same as in an active window. Wrap the window in
+   .p-window-inactive or set data-window-state="inactive" on an ancestor. */
+:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-checkbox, .p-radio) > input:checked + span {
+  background: var(--p-check-inactive-fill);
+  box-shadow: none;
+}
+
+:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-checkbox, .p-radio):active > input:not(:disabled):checked + span {
+  background: var(--p-check-inactive-fill-pressed);
+}
+
+:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-checkbox, .p-radio) > input:disabled:checked + span {
+  background: var(--p-check-inactive-fill-disabled);
+  opacity: 1;
+}
+
+/* The checkmark is drawn as a mask so it can take the ink color. */
+:is(.p-window-inactive, [data-window-state="inactive"]) .p-checkbox > input:checked + span::before {
+  background: var(--p-check-inactive-ink);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.10791 7.81299C3.83545 7.81299 3.6084 7.70459 3.42676 7.48779L1.15918 4.74121C1.08008 4.65039 1.02441 4.5625 0.992188 4.47754C0.959961 4.39258 0.943848 4.30469 0.943848 4.21387C0.943848 4.00586 1.0127 3.83447 1.15039 3.69971C1.29102 3.56201 1.4668 3.49316 1.67773 3.49316C1.91211 3.49316 2.10693 3.58838 2.26221 3.77881L4.10791 6.04297L7.68066 0.368652C7.77148 0.230957 7.86523 0.134277 7.96191 0.0786133C8.06152 0.0200195 8.18311 -0.00927734 8.32666 -0.00927734C8.5376 -0.00927734 8.71191 0.0581055 8.84961 0.192871C8.9873 0.327637 9.05615 0.497559 9.05615 0.702637C9.05615 0.778809 9.04297 0.85791 9.0166 0.939941C8.99023 1.02197 8.94922 1.10693 8.89355 1.19482L4.80225 7.45703C4.64111 7.69434 4.40967 7.81299 4.10791 7.81299Z' fill='white'/%3E%3C/svg%3E%0A") center / var(--p-checkbox-glyph) no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.10791 7.81299C3.83545 7.81299 3.6084 7.70459 3.42676 7.48779L1.15918 4.74121C1.08008 4.65039 1.02441 4.5625 0.992188 4.47754C0.959961 4.39258 0.943848 4.30469 0.943848 4.21387C0.943848 4.00586 1.0127 3.83447 1.15039 3.69971C1.29102 3.56201 1.4668 3.49316 1.67773 3.49316C1.91211 3.49316 2.10693 3.58838 2.26221 3.77881L4.10791 6.04297L7.68066 0.368652C7.77148 0.230957 7.86523 0.134277 7.96191 0.0786133C8.06152 0.0200195 8.18311 -0.00927734 8.32666 -0.00927734C8.5376 -0.00927734 8.71191 0.0581055 8.84961 0.192871C8.9873 0.327637 9.05615 0.497559 9.05615 0.702637C9.05615 0.778809 9.04297 0.85791 9.0166 0.939941C8.99023 1.02197 8.94922 1.10693 8.89355 1.19482L4.80225 7.45703C4.64111 7.69434 4.40967 7.81299 4.10791 7.81299Z' fill='white'/%3E%3C/svg%3E%0A") center / var(--p-checkbox-glyph) no-repeat;
+}
+
+:is(.p-window-inactive, [data-window-state="inactive"]) .p-radio > input:checked + span::after {
+  background: var(--p-check-inactive-ink);
+}
+
+:is(.p-window-inactive, [data-window-state="inactive"]) .p-checkbox > input:disabled:checked + span::before,
+:is(.p-window-inactive, [data-window-state="inactive"]) .p-radio > input:disabled:checked + span::after {
+  background: var(--p-check-inactive-ink-disabled);
+}
+
+/* ─── Switch (toggle) ──────────────────────────────────────────────── */
+/* macOS 27 switch. Five sizes on the shared 16/20/24/28/36 ladder; the
+   default is the 36×16 track with a 21×13 lozenge knob inset 1.5px.
+   Markup:
+   <label class="p-switch"><input type="checkbox"><span></span></label>
+
+   Pressed, the knob turns into a clear glass lens: taller than the
+   track, overhanging the side the knob sits on, with a white 9% body, a
+   0.5px hairline rim, a darker band inside its top edge and a soft
+   shadow cast about 7px below. The track shows through it unmagnified.
+   While the switch is held the whole track darkens: +8% black over the
+   accent (+8% white in dark), and the off track goes from 8.5% to 16%.
+
+   Lens geometry, per size (track → knob → lens, overhang past the track
+   end on the knob's side):
+     36×16 → 21×13 → 35×22, 6px     44×20 → 26×16 → 42×28, 6px
+     54×24 → 32×20 → 52×33, 7px     64×28 → 38×24 → 61×39, 7.5px
+     80×36 → 47×30 → 75×48, 10px
+   About 1.65× the knob, but not uniformly, so each size carries the
+   lens box as tokens rather than a scale factor. */
+
+:root {
+  /* Off track: black 85% at 10% group opacity. */
+  --p-switch-track-off: rgba(0, 0, 0, 0.085);
+  --p-switch-track-disabled: rgba(0, 0, 0, 0.05);
+  /* Pressed overlay, laid over the whole track (on and off alike). */
+  --p-switch-press: rgba(0, 0, 0, 0.08);
+  --p-switch-knob-shadow: 0 3px 36px rgba(0, 0, 0, 0.05);
+  /* The clear lens. */
+  --p-switch-lens-body: rgba(255, 255, 255, 0.09);
+  --p-switch-lens-rim: rgba(0, 0, 0, 0.12);
+  --p-switch-lens-band: rgba(0, 0, 0, 0.06);
+  --p-switch-lens-glint: rgba(255, 255, 255, 0);
+  --p-switch-lens-shadow: rgba(0, 0, 0, 0.07);
+  --p-switch-lens-ring: rgba(0, 0, 0, 0.65);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-switch-track-off: rgba(255, 255, 255, 0.085);
+  --p-switch-track-disabled: rgba(255, 255, 255, 0.055);
+  --p-switch-press: rgba(255, 255, 255, 0.08);
+  --p-switch-lens-body: rgba(255, 255, 255, 0.09);
+  --p-switch-lens-rim: rgba(0, 0, 0, 0.4);
+  --p-switch-lens-band: rgba(0, 0, 0, 0.06);
+  --p-switch-lens-glint: rgba(255, 255, 255, 0.28);
+  --p-switch-lens-shadow: rgba(0, 0, 0, 0.1);
+  --p-switch-lens-ring: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-switch-track-off: rgba(255, 255, 255, 0.085);
+    --p-switch-track-disabled: rgba(255, 255, 255, 0.055);
+    --p-switch-press: rgba(255, 255, 255, 0.08);
+    --p-switch-lens-body: rgba(255, 255, 255, 0.09);
+    --p-switch-lens-rim: rgba(0, 0, 0, 0.4);
+    --p-switch-lens-band: rgba(0, 0, 0, 0.06);
+    --p-switch-lens-glint: rgba(255, 255, 255, 0.28);
+    --p-switch-lens-shadow: rgba(0, 0, 0, 0.1);
+    --p-switch-lens-ring: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-switch-track-off: rgba(0, 0, 0, 0.085);
+  --p-switch-track-disabled: rgba(0, 0, 0, 0.05);
+  --p-switch-press: rgba(0, 0, 0, 0.08);
+  --p-switch-lens-body: rgba(255, 255, 255, 0.09);
+  --p-switch-lens-rim: rgba(0, 0, 0, 0.12);
+  --p-switch-lens-band: rgba(0, 0, 0, 0.06);
+  --p-switch-lens-glint: rgba(255, 255, 255, 0);
+  --p-switch-lens-shadow: rgba(0, 0, 0, 0.07);
+  --p-switch-lens-ring: rgba(0, 0, 0, 0.65);
+}
+
+.p-switch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  background: transparent; /* cancel the .p-sys-* swatch paint on the wrapper */
+  --p-control-accent: var(--p-color-current, #0088FF);
+
+  /* Geometry, in tokens so a size variant is a swap rather than a second
+     copy of the morph math below. Travel is derived, never restated:
+     track width minus the knob minus both insets. */
+  --p-switch-track-w: 36px;
+  --p-switch-track-h: 16px;
+  --p-switch-knob-w: 21px;
+  --p-switch-knob-inset: 1.5px;
+  --p-switch-travel: calc(
+    var(--p-switch-track-w) - var(--p-switch-knob-w) - 2 * var(--p-switch-knob-inset)
+  );
+  /* The pressed lens box, and how far it reaches past the track end on
+     the side the knob sits on. */
+  --p-switch-lens-w: 35px;
+  --p-switch-lens-h: 22px;
+  --p-switch-lens-overhang: 6px;
+  /* Legacy token (v2.0 morph): how much wider the knob grows. Derived. */
+  --p-switch-lens-grow: calc(var(--p-switch-lens-w) - var(--p-switch-knob-w));
+  /* Lens left edge, relative to the track, when fully pressed off (0)
+     and on (1). */
+  --p-switch-lens-x0: calc(var(--p-switch-lens-overhang) * -1);
+  --p-switch-lens-x1: calc(
+    var(--p-switch-track-w) + var(--p-switch-lens-overhang) - var(--p-switch-lens-w)
+  );
+  /* Lens top edge to track top edge. The refraction band (darker, just
+     inside the glass where the track begins) sits here. */
+  --p-switch-lens-rise: calc((var(--p-switch-lens-h) - var(--p-switch-track-h)) / 2);
+}
+
+/* Sizes. The default is the 16px track (mini on the shared ladder);
+   .p-switch-mini names it explicitly. */
+.p-switch-small {
+  --p-switch-track-w: 44px;
+  --p-switch-track-h: 20px;
+  --p-switch-knob-w: 26px;
+  --p-switch-knob-inset: 2px;
+  --p-switch-lens-w: 42px;
+  --p-switch-lens-h: 28px;
+  --p-switch-lens-overhang: 6px;
+}
+
+.p-switch-regular {
+  --p-switch-track-w: 54px;
+  --p-switch-track-h: 24px;
+  --p-switch-knob-w: 32px;
+  --p-switch-knob-inset: 2px;
+  --p-switch-lens-w: 52px;
+  --p-switch-lens-h: 33px;
+  --p-switch-lens-overhang: 7px;
+}
+
+.p-switch-large {
+  --p-switch-track-w: 64px;
+  --p-switch-track-h: 28px;
+  --p-switch-knob-w: 38px;
+  --p-switch-knob-inset: 2px;
+  --p-switch-lens-w: 61px;
+  --p-switch-lens-h: 39px;
+  --p-switch-lens-overhang: 7.5px;
+}
+
+.p-switch-xlarge {
+  --p-switch-track-w: 80px;
+  --p-switch-track-h: 36px;
+  --p-switch-knob-w: 47px;
+  --p-switch-knob-inset: 3px;
+  --p-switch-lens-w: 75px;
+  --p-switch-lens-h: 48px;
+  --p-switch-lens-overhang: 10px;
+}
+
+.p-switch > input + span {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--p-switch-track-w);
+  height: var(--p-switch-track-h);
+  border-radius: 999px;
+
+  background: var(--p-switch-track-off);
+  transition: background 0.25s ease-out;
+}
+
+/* Held: the whole track darkens under the lens. (Not on the iOS touch
+   size, which keeps its own track, and not once liquid_glass.js has
+   enhanced the switch: there the track is painted by the knockout
+   layer and this element must stay transparent, or the old state's
+   color shows around and through the glass while it is dragged.) */
+.p-switch:not(.p-switch-touch):not(.p-switch-liquid):active > input:not(:disabled) + span {
+  background:
+    linear-gradient(var(--p-switch-press), var(--p-switch-press)),
+    var(--p-switch-track-off);
+}
+
+.p-switch:not(.p-switch-touch):not(.p-switch-liquid):active > input:not(:disabled):checked + span {
+  background:
+    linear-gradient(var(--p-switch-press), var(--p-switch-press)),
+    var(--p-control-accent);
+}
+
+.p-switch > input + span::after {
+  content: "";
+  position: absolute;
+  /* Top and bottom anchored, so the knob stays centered at any inset.
+     The shadow is the macOS 27 knob shadow: one very soft drop. */
+  top: var(--p-switch-knob-inset);
+  bottom: var(--p-switch-knob-inset);
+  left: var(--p-switch-knob-inset);
+  width: var(--p-switch-knob-w);
+  border-radius: 999px;
+
+  background: var(--p-control-knob);
+  box-shadow: var(--p-switch-knob-shadow);
+  transition:
+    left 0.35s cubic-bezier(0.3, 1.25, 0.5, 1),
+    top 0.15s ease-out,
+    bottom 0.15s ease-out,
+    width 0.15s ease-out,
+    background 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+.p-switch > input:checked + span {
+  background: var(--p-control-accent);
+}
+
+.p-switch > input:checked + span::after {
+  left: calc(var(--p-switch-knob-inset) + var(--p-switch-travel));
+}
+
+/* Disabled: the knob stays solid white; only the track fades (off to
+   5%, on to a 50% accent). Overrides the shared 50% group opacity. */
+.p-switch:not(.p-switch-touch) > input:disabled + span {
+  opacity: 1;
+  background: var(--p-switch-track-disabled);
+}
+
+.p-switch:not(.p-switch-touch) > input:disabled:checked + span {
+  background: color-mix(in srgb, var(--p-control-accent) 50%, transparent);
+}
+
+.p-switch:not(.p-switch-touch) > input:disabled + span > .p-switch-knockout {
+  opacity: 0.6;
+}
+
+/* Held (press and hold): the knob becomes the clear lens. */
+.p-switch:active > input:not(:disabled) + span::after {
+  top: calc((var(--p-switch-track-h) - var(--p-switch-lens-h)) / 2);
+  bottom: calc((var(--p-switch-track-h) - var(--p-switch-lens-h)) / 2);
+  left: var(--p-switch-lens-x0);
+  width: var(--p-switch-lens-w);
+
+  background:
+    linear-gradient(
+      transparent calc(var(--p-switch-lens-rise) - 2px),
+      var(--p-switch-lens-band) calc(var(--p-switch-lens-rise) + 2px),
+      transparent calc(var(--p-switch-lens-rise) + 9px)
+    ),
+    var(--p-switch-lens-body);
+  box-shadow:
+    0 7px 6px -1.5px var(--p-switch-lens-shadow),
+    inset 0 0 0 0.5px var(--p-switch-lens-rim),
+    inset 0 2px 0.5px -0.5px var(--p-switch-lens-glint),
+    inset 0 -2px 0.5px -0.5px var(--p-switch-lens-glint);
+}
+
+/* The lens overhangs the track end on the side the knob is on. */
+.p-switch:active > input:not(:disabled):checked + span::after {
+  left: var(--p-switch-lens-x1);
+}
+
+/* ─── The lens morph on click ──────────────────────────────────────── */
+/* The animation contract: grow, travel while grown, shrink into place —
+   on a plain click, no holding required. One registered custom property
+   --p-gel transitions 0↔1 on toggle. Position is linear in it; the lens
+   amount is a plateau, max(0, min(1, gel×5, (1−gel)×3)): fully grown by
+   20% of the timeline, held grown through the travel, shrunk over the
+   last third. Releasing a held switch joins the same curve, so a hold
+   keeps the lens up, travels, then sets it down. Transitions never run
+   at initial style, so pre-checked switches do not flash on page load.
+   Browsers without modern CSS math keep the plain slide above. */
+
+@supports (width: calc(21px + sin(90deg) * 9px)) {
+  .p-switch > input + span {
+    --p-gel: 0;
+    transition:
+      background 0.2s ease-out,
+      --p-gel 0.42s cubic-bezier(0.32, 1.2, 0.36, 1);
+  }
+
+  .p-switch > input:checked + span {
+    --p-gel: 1;
+  }
+
+  .p-switch > input + span::after,
+  .p-switch > input:checked + span::after {
+    --p-grow: calc(max(0, min(1, var(--p-gel) * 5, (1 - var(--p-gel)) * 3)));
+    /* Knob box and lens box at the current travel; the morph blends
+       between them by --p-grow. */
+    --p-switch-knob-x: calc(var(--p-switch-knob-inset) + var(--p-switch-travel) * var(--p-gel));
+    --p-switch-lens-x: calc(
+      var(--p-switch-lens-x0) + (var(--p-switch-lens-x1) - var(--p-switch-lens-x0)) * var(--p-gel)
+    );
+    --p-switch-lens-y: calc((var(--p-switch-track-h) - var(--p-switch-lens-h)) / 2);
+
+    left: calc(
+      var(--p-switch-knob-x) + (var(--p-switch-lens-x) - var(--p-switch-knob-x)) * var(--p-grow)
+    );
+    width: calc(
+      var(--p-switch-knob-w) + (var(--p-switch-lens-w) - var(--p-switch-knob-w)) * var(--p-grow)
+    );
+    top: calc(
+      var(--p-switch-knob-inset) + (var(--p-switch-lens-y) - var(--p-switch-knob-inset)) * var(--p-grow)
+    );
+    bottom: calc(
+      var(--p-switch-knob-inset) + (var(--p-switch-lens-y) - var(--p-switch-knob-inset)) * var(--p-grow)
+    );
+
+    /* Clear, not frosted: the white knob thins to a 9% white body, and
+       the glass edges fade in as it grows. */
+    background:
+      linear-gradient(
+        transparent calc(var(--p-switch-lens-rise) - 2px),
+        color-mix(in srgb, var(--p-switch-lens-band) calc(var(--p-grow) * 100%), transparent) calc(var(--p-switch-lens-rise) + 2px),
+        transparent calc(var(--p-switch-lens-rise) + 9px)
+      ),
+      color-mix(
+        in srgb,
+        var(--p-switch-lens-body) calc(var(--p-grow) * 100%),
+        var(--p-control-knob)
+      );
+    box-shadow:
+      0 3px 36px rgb(0 0 0 / calc(0.05 * (1 - var(--p-grow)))),
+      0 7px 6px -1.5px color-mix(in srgb, var(--p-switch-lens-shadow) calc(var(--p-grow) * 100%), transparent),
+      inset 0 0 0 0.5px color-mix(in srgb, var(--p-switch-lens-rim) calc(var(--p-grow) * 100%), transparent),
+      inset 0 2px 0.5px -0.5px color-mix(in srgb, var(--p-switch-lens-glint) calc(var(--p-grow) * 100%), transparent),
+      inset 0 -2px 0.5px -0.5px color-mix(in srgb, var(--p-switch-lens-glint) calc(var(--p-grow) * 100%), transparent);
+
+    /* These only fire on :active enter/exit — the gel-driven values
+       change through the animating variable, which does not trigger
+       property transitions of its own. */
+    transition:
+      top 0.18s ease-out,
+      bottom 0.18s ease-out,
+      left 0.18s ease-out,
+      width 0.18s ease-out,
+      background 0.18s ease-out,
+      box-shadow 0.18s ease-out;
+  }
+}
+
+/* ─── Switch, touch size ───────────────────────────────────────────── */
+/* iOS 27 runs a larger switch than macOS: a 64x28 track with a 38x24
+   knob inset 2px, so the knob travels 22px. Pressed, the knob becomes
+   the same clear lens as macOS 27 at iOS proportions: 60x40, centered
+   on the knob, so it overhangs the track end by 9px. Only the tokens
+   change; the morph, the states, and the focus ring are shared with
+   the default size. Unlike macOS the track does not darken while held,
+   and disabled fades the whole control to 50%. The whole control
+   clears 44px through the hit area below. */
+
+/* The lens rim lines pick up the track color: a pale tint of it in
+   light mode, a stronger one in dark (--p-switch-touch-glint-tint is
+   the track's share). */
+:root {
+  --p-switch-touch-lens-rim: rgba(0, 0, 0, 0.2);
+  --p-switch-touch-lens-glint: rgba(255, 255, 255, 0.95);
+  --p-switch-touch-glint-tint: 25%;
+  --p-switch-touch-lens-ring: rgba(0, 0, 0, 0.5);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-switch-touch-lens-rim: rgba(0, 0, 0, 0.8);
+  --p-switch-touch-lens-glint: rgba(255, 255, 255, 0.4);
+  --p-switch-touch-glint-tint: 45%;
+  --p-switch-touch-lens-ring: rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-switch-touch-lens-rim: rgba(0, 0, 0, 0.8);
+    --p-switch-touch-lens-glint: rgba(255, 255, 255, 0.4);
+    --p-switch-touch-glint-tint: 45%;
+    --p-switch-touch-lens-ring: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-switch-touch-lens-rim: rgba(0, 0, 0, 0.2);
+  --p-switch-touch-lens-glint: rgba(255, 255, 255, 0.95);
+  --p-switch-touch-glint-tint: 25%;
+  --p-switch-touch-lens-ring: rgba(0, 0, 0, 0.5);
+}
+
+.p-switch-touch {
+  --p-switch-track-w: 64px;
+  --p-switch-track-h: 28px;
+  --p-switch-knob-w: 38px;
+  --p-switch-knob-inset: 2px;
+  --p-switch-lens-w: 60px;
+  --p-switch-lens-h: 40px;
+  --p-switch-lens-overhang: 9px;
+  --p-switch-lens-rim: var(--p-switch-touch-lens-rim);
+  --p-switch-lens-glint: var(--p-switch-touch-lens-glint);
+  --p-switch-lens-ring: var(--p-switch-touch-lens-ring);
+
+  /* The track is 28px tall, so the label makes up the rest of the 44px
+     target. The label is the click surface, so growing it is enough. */
+  min-height: 44px;
+}
+
+/* iOS switches are green unless the app tints them. A tint class on the
+   element publishes --p-color-current, which the default accent already
+   reads, so the green default steps aside whenever one is present. */
+.p-switch-touch:not([class*="p-sys-"]) {
+  --p-control-accent: var(--p-sys-green);
+}
+
+/* Off state fill. iOS uses the tertiary label color rather than a fill
+   token, which reads slightly darker than the macOS switch track. */
+.p-switch-touch > input + span {
+  background: var(--p-switch-touch-off);
+}
+
+/* With liquid_glass.js: the lens rim lines take the live track color
+   (--p-switch-color is set on the track), a line 1px inside the top and
+   bottom edges. */
+.p-switch-touch.p-switch-liquid .p-lens-clear .p-lens-rim {
+  --p-switch-lens-glint: color-mix(
+    in srgb,
+    var(--p-switch-color, var(--p-control-accent)) var(--p-switch-touch-glint-tint),
+    var(--p-switch-touch-lens-glint)
+  );
+
+  box-shadow:
+    inset 0 0 0 0.5px var(--p-switch-lens-rim),
+    inset 0 2.5px 0 -0.5px var(--p-switch-lens-glint),
+    inset 0 -2.5px 0 -0.5px var(--p-switch-lens-glint);
+}
+
+
+/* ─── Switch on/off glyphs ─────────────────────────────────────────── */
+/* A bar when on, a ring when off, so the state does not rest on color
+   alone. Opt in with .p-switch-labels.
+
+   Deliberately not tied to prefers-contrast: on iOS that flag is
+   Increase Contrast, while the glyphs are a separate setting (On/Off
+   Labels). Drawing them for everyone who raised contrast changes a
+   control they did not ask to change, and the knob position already
+   carries the state without color.
+
+   The glyph sits in the strip the knob is not covering, which is
+   exactly inset + travel wide, and is centered in it. Deriving the
+   position keeps the glyph centered at any track size rather than
+   only at the one it was measured on. Geometry is declared once and
+   switched on with content, which is inert until then. */
+
+.p-switch > input + span::before {
+  content: none;
+
+  --p-switch-gap: calc(var(--p-switch-knob-inset) + var(--p-switch-travel));
+  --p-switch-ring: calc(var(--p-switch-track-h) * 0.32);
+
+  position: absolute;
+  top: 50%;
+  right: calc(var(--p-switch-gap) / 2 - var(--p-switch-ring) / 2);
+  translate: 0 -50%;
+
+  width: var(--p-switch-ring);
+  height: var(--p-switch-ring);
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+  color: var(--p-control-knob);
+  opacity: 0.55;
+}
+
+/* On: a bar, centered in the strip on the leading side. */
+.p-switch > input:checked + span::before {
+  right: auto;
+  left: calc(var(--p-switch-gap) / 2 - 0.5px);
+
+  width: 1px;
+  height: calc(var(--p-switch-track-h) * 0.357);
+  border: 0;
+  border-radius: 0;
+  background: var(--p-control-knob);
+  opacity: 1;
+}
+
+.p-switch-labels > input + span::before,
+.p-switch-labels > input:checked + span::before {
+  content: "";
+}
+
+/* ─── Switch, Liquid Glass ─────────────────────────────────────────── */
+/* src/js/liquid_glass.js adds .p-switch-liquid and injects a knockout
+   and a .p-lens (see materials.css) into the track. Press and the knob
+   lifts into glass; drag across the middle and it slides under your
+   finger; release and it settles. Without the script the CSS morph
+   above still runs, so nothing here is required.
+
+   The default is the liquid lens: the knockout cuts the track out
+   under the glass and the lens redraws the track, magnified, through
+   an SVG alpha threshold. That would erase a translucent fill, so the
+   liquid copy uses an opaque equivalent of the off track. The real
+   track keeps its translucent token.
+
+   data-p-lens="clear" on the label opts into the flat macOS 27 / iOS 27
+   lens: a .p-lens-clear (a rim and the resting knob, no refraction
+   layers), no knockout, and the track shows through unmagnified. On
+   macOS its pressed overlay darkens the track; the touch size keeps
+   its track as it is. */
+
+:root {
+  --p-switch-liquid-off: #e0e0e0;
+  --p-switch-touch-liquid-off: #c5c5c9;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-switch-liquid-off: #3a3a3a;
+  --p-switch-touch-liquid-off: #4a4a4d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-switch-liquid-off: #3a3a3a;
+    --p-switch-touch-liquid-off: #4a4a4d;
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-switch-liquid-off: #e0e0e0;
+  --p-switch-touch-liquid-off: #c5c5c9;
+}
+
+.p-switch-liquid {
+  --p-switch-off: var(--p-switch-track-off);
+  --p-switch-off-solid: var(--p-switch-liquid-off);
+  --p-switch-on: var(--p-control-accent);
+  --p-switch-knob-h: calc(var(--p-switch-track-h) - 2 * var(--p-switch-knob-inset));
+
+  /* Without this the browser claims a sideways drag as a scroll and
+     pointermove stops arriving, so the knob stops following. */
+  touch-action: none;
+}
+
+.p-switch-liquid.p-switch-touch {
+  --p-switch-off: var(--p-switch-touch-off);
+  --p-switch-off-solid: var(--p-switch-touch-liquid-off);
+}
+
+.p-switch.p-switch-liquid > input + span {
+  --p-gel: 0;
+  /* The color follows the knob, not the checkbox: it stays off until the
+     knob is 85% of the way across, then snaps and fades over 175ms.
+     Clamped so the spring's undershoot and overshoot cannot step it. */
+  --p-switch-lit: clamp(0, round(down, var(--p-gel), 0.85) / 0.85, 1);
+  --p-switch-color: color-mix(
+    in srgb,
+    var(--p-switch-on) calc(var(--p-switch-lit) * 100%),
+    var(--p-switch-off)
+  );
+  --p-switch-solid: color-mix(
+    in srgb,
+    var(--p-switch-on) calc(var(--p-switch-lit) * 100%),
+    var(--p-switch-off-solid)
+  );
+  --p-lens-h: var(--p-switch-knob-h);
+  --p-lens-scale-now: calc(1 + 0.65 * var(--p-lens-lift));
+
+  background: transparent;
+  transition:
+    --p-gel var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1),
+    --p-lens-lift var(--p-lens-duration) cubic-bezier(0.32, 1.2, 0.36, 1);
+  transition:
+    --p-gel var(--p-lens-duration) var(--p-lens-spring),
+    --p-lens-lift var(--p-lens-duration) var(--p-lens-spring);
+}
+
+/* Knob side: the checkbox, unless a drag is in progress, in which case
+   the script says which side the knob is on. */
+.p-switch.p-switch-liquid > input:checked + span,
+.p-switch.p-switch-liquid[data-p-state="on"] > input + span {
+  --p-gel: 1;
+}
+
+.p-switch.p-switch-liquid[data-p-state="off"] > input + span {
+  --p-gel: 0;
+}
+
+.p-switch.p-switch-liquid[data-p-lift] > input:not(:disabled) + span {
+  --p-lens-lift: 1;
+}
+
+/* The lens replaces the pseudo-element knob. */
+.p-switch.p-switch-liquid > input + span::after {
+  content: none;
+}
+
+/* On/off glyphs stay above the track paint. */
+.p-switch.p-switch-liquid > input + span::before {
+  z-index: 1;
+}
+
+/* Layer 1, the baseline: the track, with a capsule cut out wherever the
+   lens is. The cut is a mask built from two round caps and a bar, so
+   it follows the knob and grows with the lens every frame. */
+.p-switch-knockout {
+  --p-hole-cx: calc(
+    var(--p-switch-knob-inset) + var(--p-switch-travel) * var(--p-gel) + var(--p-switch-knob-w) / 2
+  );
+  /* At rest the hole tucks 1px under the knob so no page shows around
+     it; lifted, it opens 1px past the glass. */
+  --p-hole-pad: calc(2px * var(--p-lens-lift) - 1px);
+  --p-hole-w: calc(var(--p-switch-knob-w) * var(--p-lens-scale-now) + var(--p-hole-pad));
+  --p-hole-h: calc(var(--p-switch-knob-h) * var(--p-lens-scale-now) + var(--p-hole-pad));
+  --p-hole-l: calc(var(--p-hole-cx) - var(--p-hole-w) / 2);
+
+  position: absolute;
+  inset: 0;
+  /* Rounded with clip-path, not border-radius: Chromium leaves the
+     antialiased radius edge unmasked, a hairline arc inside the glass. */
+  clip-path: inset(0 round 999px);
+  background: var(--p-switch-color);
+  transition: background 0.175s ease-out;
+
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    radial-gradient(closest-side, #000 calc(100% - 0.5px), #0000) var(--p-hole-l) 50% / var(--p-hole-h) var(--p-hole-h) no-repeat,
+    radial-gradient(closest-side, #000 calc(100% - 0.5px), #0000) calc(var(--p-hole-l) + var(--p-hole-w) - var(--p-hole-h)) 50% / var(--p-hole-h) var(--p-hole-h) no-repeat,
+    linear-gradient(#000 0 0) calc(var(--p-hole-l) + var(--p-hole-h) / 2) 50% / calc(var(--p-hole-w) - var(--p-hole-h)) var(--p-hole-h) no-repeat;
+  mask-composite: exclude, add, add, add;
+}
+
+/* Clear lens (opt-in): no hole. The whole track stays painted; on
+   macOS it darkens by the pressed overlay as the glass lifts. */
+.p-switch-liquid[data-p-lens="clear"] .p-switch-knockout {
+  mask: none;
+}
+
+.p-switch-liquid:not(.p-switch-touch)[data-p-lens="clear"] .p-switch-knockout {
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--p-switch-press) calc(var(--p-lens-lift) * 100%), transparent),
+      color-mix(in srgb, var(--p-switch-press) calc(var(--p-lens-lift) * 100%), transparent)
+    ),
+    var(--p-switch-color);
+}
+
+/* Layers 2 and 3: the lens, riding the knob position. */
+.p-switch-liquid .p-lens {
+  --p-lens-knob: var(--p-control-knob);
+
+  z-index: 2;
+  top: 50%;
+  left: var(--p-switch-knob-inset);
+  width: var(--p-switch-knob-w);
+  height: var(--p-switch-knob-h);
+  translate: calc(var(--p-switch-travel) * var(--p-gel)) -50%;
+}
+
+.p-switch-liquid .p-lens-cover {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* The clear lens is sized, not scaled, so its hairline stays 0.5px:
+   it blends from the knob box to the lens box (see the size tokens) by
+   the lift, and from the off to the on position by --p-gel. */
+.p-switch-liquid .p-lens-clear {
+  --p-switch-knob-x: calc(var(--p-switch-knob-inset) + var(--p-switch-travel) * var(--p-gel));
+  --p-switch-lens-x: calc(
+    var(--p-switch-lens-x0) + (var(--p-switch-lens-x1) - var(--p-switch-lens-x0)) * var(--p-gel)
+  );
+
+  scale: none;
+  translate: 0 -50%;
+  left: calc(
+    var(--p-switch-knob-x) + (var(--p-switch-lens-x) - var(--p-switch-knob-x)) * var(--p-lens-lift)
+  );
+  width: calc(
+    var(--p-switch-knob-w) + (var(--p-switch-lens-w) - var(--p-switch-knob-w)) * var(--p-lens-lift)
+  );
+  height: calc(
+    var(--p-switch-knob-h) + (var(--p-switch-lens-h) - var(--p-switch-knob-h)) * var(--p-lens-lift)
+  );
+}
+
+.p-switch-liquid .p-lens-clear .p-lens-cover {
+  box-shadow: var(--p-switch-knob-shadow);
+}
+
+.p-switch-liquid .p-lens-clear .p-lens-rim {
+  filter: none;
+  background:
+    linear-gradient(
+      transparent calc(var(--p-switch-lens-rise) - 2px),
+      var(--p-switch-lens-band) calc(var(--p-switch-lens-rise) + 2px),
+      transparent calc(var(--p-switch-lens-rise) + 9px)
+    ),
+    var(--p-switch-lens-body);
+  box-shadow:
+    inset 0 0 0 0.5px var(--p-switch-lens-rim),
+    inset 0 2px 0.5px -0.5px var(--p-switch-lens-glint),
+    inset 0 -2px 0.5px -0.5px var(--p-switch-lens-glint);
+}
+
+/* The cast shadow: a 1px ring 1.5px inside the glass, blurred and
+   dropped 7px, as the reference draws it. (The CSS-only morph above
+   approximates it with a box-shadow.) */
+.p-switch-liquid .p-lens-clear .p-lens-rim::before {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  z-index: -1;
+  border: 1px solid var(--p-switch-lens-ring);
+  border-radius: inherit;
+  translate: 0 7px;
+  filter: blur(3px);
+}
+
+/* Refraction concentrates the track color at the glass edge, heavier on
+   the side the knob is leaving. */
+.p-switch-liquid .p-lens-edge {
+  box-shadow:
+    inset 0 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-switch-solid),
+    inset calc(var(--p-gel) * var(--p-lens-u) * 1.6 - var(--p-lens-u) * 0.8) 0 calc(var(--p-lens-u) * 0.6) calc(var(--p-lens-u) * 0.8) var(--p-switch-solid);
+  transition: box-shadow 0.175s ease-out;
+}
+
+/* The track as seen through the glass: a band that thins while lifted,
+   magnified by the lens scale, and shifted so its rounded end sits in
+   the glass on either side. */
+.p-switch-liquid .p-lens-track {
+  --p-u: calc(var(--p-switch-track-h) / 12);
+
+  width: var(--p-switch-track-w);
+  height: max(
+    calc(var(--p-switch-track-h) - 6 * var(--p-u)),
+    calc(var(--p-switch-track-h) - 6 * var(--p-u) * var(--p-lens-lift))
+  );
+  left: calc(6 * var(--p-u) * var(--p-gel) * (1 - var(--p-lens-lift)) + 3 * var(--p-u) * var(--p-lens-lift));
+  translate: calc(var(--p-gel) * (var(--p-switch-knob-w) - var(--p-switch-track-w) - 6 * var(--p-u))) -50%;
+  background: var(--p-switch-solid);
+  transition: background 0.175s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-switch.p-switch-liquid > input + span {
+    transition: none;
+  }
+}
+
+/* ─── Shared states ────────────────────────────────────────────────── */
+
+/* Checkbox and radio: the macOS 27 focus band (outer 3.5px only; the
+   inner 1px would vanish into the filled box). */
+.p-checkbox > input:focus-visible + span,
+.p-radio > input:focus-visible + span {
+  box-shadow: 0 0 0 3.5px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline: 2px solid transparent; /* keeps a ring in forced-colors mode */
+  outline-offset: 2px;
+}
+
+/* Switch: the same outer band (the inner 1px would vanish into the
+   filled track). */
+.p-switch > input:focus-visible + span {
+  box-shadow: 0 0 0 3.5px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline: 2px solid transparent; /* keeps a ring in forced-colors mode */
+  outline-offset: 2px;
+}
+
+.p-checkbox > input:disabled ~ *,
+.p-radio > input:disabled ~ *,
+.p-switch > input:disabled ~ * {
+  opacity: 0.5;
+}
+
+.p-checkbox:has(> input:disabled),
+.p-radio:has(> input:disabled),
+.p-switch:has(> input:disabled) {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-field,
+  .p-select > select,
+  .p-search > input,
+  .p-combo > input,
+  .p-combo::after,
+  .p-stepper > button,
+  .p-popup > select,
+  .p-pulldown > select,
+  .p-popup-borderless::before,
+  .p-checkbox > input + span,
+  .p-checkbox > input + span::before,
+  .p-radio > input + span,
+  .p-radio > input + span::before,
+  .p-radio > input + span::after,
+  .p-switch > input + span,
+  .p-switch > input:checked + span,
+  .p-switch > input + span::after,
+  .p-switch > input:checked + span::after {
+    transition: none;
+  }
+}
+
+/* Increased contrast: the hairlines and flat plates are faint by
+   design, so strengthen them. */
+@media (prefers-contrast: more) {
+  :root {
+    --p-field-ring: rgba(0, 0, 0, 0.35);
+    --p-search-ring-empty: rgba(0, 0, 0, 0.35);
+    --p-combo-plate-bg: rgba(0, 0, 0, 0.14);
+    --p-popup-bg: rgba(0, 0, 0, 0.14);
+    --p-check-fill: rgba(0, 0, 0, 0.18);
+    --p-form-group-separator: rgba(0, 0, 0, 0.2);
+  }
+
+  .p-dark-mode,
+  [data-p-theme="darkmode"] {
+    --p-field-ring: rgba(255, 255, 255, 0.35);
+    --p-search-ring-empty: rgba(255, 255, 255, 0.35);
+    --p-combo-plate-bg: rgba(255, 255, 255, 0.16);
+    --p-popup-bg: rgba(255, 255, 255, 0.16);
+    --p-check-fill: rgba(255, 255, 255, 0.22);
+    --p-form-group-separator: rgba(255, 255, 255, 0.2);
+  }
+
+  .p-form-group {
+    box-shadow: 0 0 0 1px var(--p-field-ring);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-field-ring: rgba(255, 255, 255, 0.35);
+    --p-search-ring-empty: rgba(255, 255, 255, 0.35);
+    --p-combo-plate-bg: rgba(255, 255, 255, 0.16);
+    --p-popup-bg: rgba(255, 255, 255, 0.16);
+    --p-check-fill: rgba(255, 255, 255, 0.22);
+    --p-form-group-separator: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Forced colors drops box-shadow, which draws every field ring and the
+   focus band. Put real outlines back. */
+@media (forced-colors: active) {
+  .p-field,
+  .p-select > select,
+  .p-search > input,
+  .p-combo > input,
+  .p-stepper,
+  .p-popup > select,
+  .p-pulldown > select {
+    outline: 1px solid ButtonBorder;
+  }
+
+  .p-popup-borderless > select {
+    outline: 0;
+  }
+
+  .p-field:focus-visible,
+  .p-select > select:focus-visible,
+  .p-search > input:focus-visible,
+  .p-combo > input:focus-visible,
+  .p-stepper:has(> button:focus-visible),
+  .p-popup > select:focus-visible,
+  .p-pulldown > select:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 1px;
+  }
+
+  .p-form-row {
+    border-bottom: 1px solid CanvasText;
+  }
+
+  .p-form-row:last-child {
+    border-bottom: 0;
+  }
+
+  .p-form-row-chevron::before,
+  .p-form-row-info::before,
+  .p-form-row-more::before {
+    background: CanvasText;
+  }
+}
+
+/* ─── Stepper, touch size (iOS) ────────────────────────────────────── */
+/* iOS lays the stepper out horizontally rather than stacking it: a
+   92x32 capsule split into two 46px halves by a 1x24 divider, with
+   minus and plus rather than chevrons. It carries no value of its own,
+   so pair it with a narrow .p-field-touch the way .p-stepper-field
+   already does for the pointer size. iOS 27 rests it on the standard
+   iOS gray fill (#767680 at 12%, 24% dark), the same value as
+   --p-field-touch-fill and --p-button-touch-gray; a held half takes
+   black 8% on top. */
+
+:root {
+  --p-stepper-touch-fill: rgba(118, 118, 128, 0.12);
+  --p-stepper-touch-pressed: rgba(0, 0, 0, 0.08);
+  --p-stepper-touch-divider: rgba(60, 60, 67, 0.30);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-stepper-touch-fill: rgba(118, 118, 128, 0.24);
+  --p-stepper-touch-pressed: rgba(255, 255, 255, 0.12);
+  --p-stepper-touch-divider: rgba(235, 235, 245, 0.30);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-stepper-touch-fill: rgba(118, 118, 128, 0.24);
+    --p-stepper-touch-pressed: rgba(255, 255, 255, 0.12);
+    --p-stepper-touch-divider: rgba(235, 235, 245, 0.30);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-stepper-touch-fill: rgba(118, 118, 128, 0.12);
+  --p-stepper-touch-pressed: rgba(0, 0, 0, 0.08);
+  --p-stepper-touch-divider: rgba(60, 60, 67, 0.30);
+}
+
+.p-stepper-touch {
+  flex-direction: row;
+  width: 92px;
+  height: 32px;
+  border-radius: 16px;
+
+  background: var(--p-stepper-touch-fill);
+  box-shadow: none;
+}
+
+/* Each half is 46px, which is the tap target as well as the shape. */
+.p-stepper-touch > button {
+  width: 46px;
+}
+
+/* Minus and plus, masked to the text color like the pointer chevrons. */
+.p-stepper-touch > button::before {
+  width: 14px;
+  height: 14px;
+}
+
+.p-stepper-touch > [data-p-step="up"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-stepper-touch > [data-p-step="down"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M1.5 7h11' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* The divider turns upright: 1x24, so 4px inset on a 32px control. */
+.p-stepper-touch::after {
+  top: 4px;
+  bottom: 4px;
+  left: 50%;
+  right: auto;
+  width: 1px;
+  height: auto;
+  margin-top: 0;
+  margin-left: -0.5px;
+  border-radius: 0.5px;
+  background: var(--p-stepper-touch-divider);
+}
+
+.p-stepper-touch > button:active:not(:disabled) {
+  background: var(--p-stepper-touch-pressed);
+}
+
+.p-stepper-touch:has(> button:focus-visible) {
+  box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
+}
+
+/* Paired value field. iOS shows the number beside the control, not
+   inside it, and the field only has to hold a few digits. */
+.p-stepper-field-touch {
+  gap: 12px;
+}
+
+.p-stepper-field-touch > .p-field-touch {
+  width: 72px;
+  text-align: center;
+}
+
+/* ─── Pop-up button, touch size (iOS) ──────────────────────────────── */
+/* The iOS pop-up button: no fill and no border, just the current value
+   in the accent color at 17px Semibold, followed ~5px later by an
+   up-and-down chevron in the same color. Disabled, both turn the
+   tertiary label color. It wraps a real <select>, so a tap opens the
+   platform picker. Use it inline, in a toolbar or a list row's trailing
+   edge; .p-select-touch stays the filled form field.
+
+   <div class="p-popup-touch"><select aria-label="Sort">…</select></div>
+
+   The label is 44px tall, which is the tap target. Tint with a
+   .p-sys-* class on the wrapper. */
+
+.p-popup-touch {
+  --p-popup-touch-color: var(--p-color-current, var(--p-control-accent, #0088FF));
+  --p-popup-touch-chevron-w: 11px;
+  --p-popup-touch-chevron-h: 15px;
+  --p-popup-touch-gap: 5px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: transparent; /* cancel the .p-sys-* swatch paint */
+}
+
+.p-popup-touch > select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  height: 44px;
+  padding: 0 calc(var(--p-popup-touch-chevron-w) + var(--p-popup-touch-gap)) 0 0;
+  border-radius: 8px;
+  background: transparent;
+
+  color: var(--p-popup-touch-color);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 17px;
+  font-weight: 590;
+  letter-spacing: -0.43px;
+
+  cursor: pointer;
+  transition: opacity 0.1s ease-out;
+}
+
+/* chevron.up.chevron.down, masked so it takes the label color. */
+.p-popup-touch::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: var(--p-popup-touch-chevron-w);
+  height: var(--p-popup-touch-chevron-h);
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: var(--p-popup-touch-color);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 15' fill='none'%3E%3Cpath d='M1.6 5.4 5.5 1.6l3.9 3.8M1.6 9.6l3.9 3.8 3.9-3.8' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 15' fill='none'%3E%3Cpath d='M1.6 5.4 5.5 1.6l3.9 3.8M1.6 9.6l3.9 3.8 3.9-3.8' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: opacity 0.1s ease-out;
+}
+
+/* Pressed: iOS dims the label and chevron together. */
+.p-popup-touch:has(> select:active:not(:disabled)) > select,
+.p-popup-touch:has(> select:active:not(:disabled))::after {
+  opacity: 0.6;
+}
+
+.p-popup-touch > select:focus-visible {
+  box-shadow: 0 0 0 3.5px var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline: 2px solid transparent; /* keeps a ring in forced-colors mode */
+}
+
+.p-popup-touch:has(> select:disabled) {
+  --p-popup-touch-color: var(--p-ios-label-tertiary, rgba(60, 60, 67, 0.3));
+}
+
+.p-popup-touch > select:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-popup-touch > select,
+  .p-popup-touch::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-popup-touch::after {
+    background: LinkText;
+  }
+
+  .p-popup-touch:has(> select:disabled)::after {
+    background: GrayText;
+  }
 }

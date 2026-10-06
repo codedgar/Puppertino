@@ -1,0 +1,59 @@
+---
+interface Props {
+  className: string;
+  label: string;
+  size: string;
+  weight: string;
+  lineHeight: string;
+  tracking?: string;
+  sample?: string;
+}
+
+const {
+  className,
+  label,
+  size,
+  weight,
+  lineHeight,
+  tracking = '0',
+  sample = 'The quick brown fox',
+} = Astro.props;
+---
+
+<div class="type-specimen">
+  <div class={className}>{sample}</div>
+  <div class="type-meta">
+    <span class="type-label">{label}</span>
+    <span class="type-stats">{size} · {weight} · {lineHeight} · {tracking}</span>
+  </div>
+</div>
+
+<style is:global>
+  .type-specimen {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .type-specimen:last-child {
+    border-bottom: none;
+  }
+
+  .type-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .type-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .type-stats {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+</style>

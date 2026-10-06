@@ -1,0 +1,67 @@
+---
+const fills = [
+  { name: 'Primary', cssVar: '--p-fill-primary', class: 'p-fill-primary' },
+  { name: 'Secondary', cssVar: '--p-fill-secondary', class: 'p-fill-secondary' },
+  { name: 'Tertiary', cssVar: '--p-fill-tertiary', class: 'p-fill-tertiary' },
+  { name: 'Quaternary', cssVar: '--p-fill-quaternary', class: 'p-fill-quaternary' },
+  { name: 'Quinary', cssVar: '--p-fill-quinary', class: 'p-fill-quinary' },
+];
+---
+
+<div class="fill-grid">
+  {fills.map((fill) => (
+    <button class="fill-tile" type="button" data-copy={fill.cssVar} aria-label={`Copy ${fill.cssVar}`}>
+      <div class={`fill-tile-swatch ${fill.class}`}></div>
+      <span class="fill-tile-name">{fill.name}</span>
+      <code class="fill-tile-var">{fill.cssVar}</code>
+    </button>
+  ))}
+</div>
+
+<style>
+  .fill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    margin: 24px 0 32px;
+  }
+
+  .fill-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .fill-tile:hover {
+    transform: translateY(-2px);
+  }
+
+  .fill-tile-swatch {
+    aspect-ratio: 5 / 3;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .fill-tile-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.004em;
+  }
+
+  .fill-tile-var {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    background: none;
+    padding: 0;
+  }
+</style>

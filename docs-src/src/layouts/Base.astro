@@ -1,0 +1,135 @@
+---
+import '../styles/docs.css';
+import '@puppertino/colors.css';
+import '@puppertino/typography.css';
+import '@puppertino/materials.css';
+import '@puppertino/buttons.css';
+import '@puppertino/scrollbars.css';
+import '@phosphor-icons/web/regular';
+import '@phosphor-icons/web/bold';
+import CopyToast from '../components/CopyToast.astro';
+import Search from '../components/Search.astro';
+import Logo from '../components/Logo.astro';
+import { cardSlug } from '../og/pages.js';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A CSS framework for building web interfaces with Apple\'s macOS design language.' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const hasSidebar = Astro.slots.has('sidebar');
+const path = Astro.url.pathname.slice(base.length - 1);
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogTitle = path === '/' ? 'Puppertino' : `${title} - Puppertino`;
+const ogImage = new URL(`${base}og/${cardSlug(path)}.png`, Astro.site).href;
+---
+
+<!DOCTYPE html>
+<!-- p-auto-dark-mode is needed on <html> too: the page scrollbar lives on the
+     root element, which cannot inherit the dark thumb color from body. -->
+<html lang="en" class="p-scrollbar p-auto-dark-mode">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" sizes="180x180" href={`${base}apple-touch-icon.png`} />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Puppertino" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <title>{title} - Puppertino</title>
+  </head>
+  <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    {hasSidebar && (
+      <>
+        <button class="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="docs-sidebar">
+          <i class="ph-bold ph-list sidebar-toggle-open" aria-hidden="true"></i>
+          <i class="ph-bold ph-x sidebar-toggle-close" aria-hidden="true"></i>
+        </button>
+        <div class="sidebar-scrim"></div>
+        <aside class="sidebar p-scrollbar" id="docs-sidebar">
+          <a href={`${base}docs/`} class="sidebar-logo"><Logo />Puppertino</a>
+          <Search />
+          <nav>
+            <slot name="sidebar" />
+          </nav>
+        </aside>
+        <script is:inline>
+          (() => {
+            const toggle = document.querySelector('.sidebar-toggle');
+            const scrim = document.querySelector('.sidebar-scrim');
+            const sidebar = document.getElementById('docs-sidebar');
+            const drawerMq = window.matchMedia('(max-width: 768px)');
+            const isOpen = () => document.body.classList.contains('sidebar-open');
+
+            const set = (open) => {
+              const was = isOpen();
+              document.body.classList.toggle('sidebar-open', open);
+              toggle.setAttribute('aria-expanded', String(open));
+              // In drawer mode, focus follows the drawer: into it on open,
+              // back to the toggle on close.
+              if (!drawerMq.matches || open === was) return;
+              if (open) {
+                const first = sidebar.querySelector('a, button');
+                if (first) first.focus();
+              } else {
+                toggle.focus();
+              }
+            };
+
+            toggle.addEventListener('click', () => set(!isOpen()));
+            scrim.addEventListener('click', () => set(false));
+
+            window.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') {
+                set(false);
+                return;
+              }
+              // Trap Tab inside the open drawer (plus its toggle); without
+              // this, focus escapes behind the scrim.
+              if (e.key !== 'Tab' || !drawerMq.matches || !isOpen()) return;
+              const focusables = [
+                toggle,
+                ...sidebar.querySelectorAll('a[href], button, input, [tabindex]:not([tabindex="-1"])'),
+              ].filter((el) => el.getClientRects().length > 0);
+              if (!focusables.length) return;
+              const first = focusables[0];
+              const last = focusables[focusables.length - 1];
+              const active = document.activeElement;
+              if (e.shiftKey && active === first) {
+                e.preventDefault();
+                last.focus();
+              } else if (!e.shiftKey && active === last) {
+                e.preventDefault();
+                first.focus();
+              } else if (active !== toggle && !sidebar.contains(active)) {
+                e.preventDefault();
+                first.focus();
+              }
+            });
+          })();
+        </script>
+      </>
+    )}
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <CopyToast />
+  </body>
+</html>

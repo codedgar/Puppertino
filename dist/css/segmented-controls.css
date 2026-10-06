@@ -1,3 +1,13 @@
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY SEGMENTED CONTROLS (Puppertino v1)
+   .p-segmented-controls and friends remain for backwards compatibility.
+   The v2 system at the bottom of this file (.p-segmented / .p-segment)
+   replaces them. New work should use the v2 classes — these will be
+   removed in a future major.
+
+   See specs/segmented-controls.md for the v2 reference values.
+   ───────────────────────────────────────────────────────────────────── */
+
 :root{
 --p-segmented-bg: #fff;
 }
@@ -83,4 +93,440 @@
 .p-segmented-grey {
   --color-segmented: #555761;
   --color-lighter-segment: #d4d4d4;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Segmented Controls
+   macOS 27 segmented control — see specs/segmented-controls.md for
+   the value derivation. Five sizes on the shared control ladder:
+   .p-segmented-mini (16), -small (20), regular (24), -large (28) and
+   -xlarge (36). The two largest are capsules, track and pill alike.
+
+   Radio-group markup, no JavaScript:
+
+   <div class="p-segmented" role="group" aria-label="View">
+     <label class="p-segment">
+       <input type="radio" name="view" checked><span>Day</span>
+     </label>
+     <label class="p-segment">
+       <input type="radio" name="view"><span>Week</span>
+     </label>
+   </div>
+
+   The selected pill reads --p-color-current like every v2 control, so
+   color classes retint it. .p-segmented-gray swaps the accent pill for
+   the neutral fill style.
+
+   Fills are flat alpha with no rims: track black 10% (white 9% dark),
+   separators black 25% (white 25% dark), accent pill #0088FF with a
+   3% shade (#0091FF with a 4% lift in dark).
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-segment-separator: rgba(0, 0, 0, 0.25);
+  --p-segmented-track: rgba(0, 0, 0, 0.10);
+  --p-segment-pill-shade: rgba(0, 0, 0, 0.03);
+  --p-segment-pill-pressed: rgba(0, 0, 0, 0.15);
+  --p-segment-gray-pill: rgba(0, 0, 0, 0.10);
+  --p-segment-gray-pill-pressed: rgba(0, 0, 0, 0.19);
+  --p-segmented-touch-track: rgba(118, 118, 128, 0.12);
+  --p-segmented-touch-pill: #ffffff;
+  --p-segmented-touch-separator: #D9D9D9;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-segment-separator: rgba(255, 255, 255, 0.25);
+  --p-segmented-track: rgba(255, 255, 255, 0.09);
+  --p-segment-pill-shade: rgba(255, 255, 255, 0.04);
+  --p-segment-pill-pressed: rgba(255, 255, 255, 0.10);
+  --p-segment-gray-pill: rgba(255, 255, 255, 0.10);
+  --p-segment-gray-pill-pressed: rgba(255, 255, 255, 0.19);
+  --p-segmented-touch-track: rgba(118, 118, 128, 0.24);
+  --p-segmented-touch-pill: rgba(255, 255, 255, 0.27);
+  --p-segmented-touch-separator: rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-segment-separator: rgba(255, 255, 255, 0.25);
+    --p-segmented-track: rgba(255, 255, 255, 0.09);
+    --p-segment-pill-shade: rgba(255, 255, 255, 0.04);
+    --p-segment-pill-pressed: rgba(255, 255, 255, 0.10);
+    --p-segment-gray-pill: rgba(255, 255, 255, 0.10);
+    --p-segment-gray-pill-pressed: rgba(255, 255, 255, 0.19);
+    --p-segmented-touch-track: rgba(118, 118, 128, 0.24);
+    --p-segmented-touch-pill: rgba(255, 255, 255, 0.27);
+    --p-segmented-touch-separator: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-segment-separator: rgba(0, 0, 0, 0.25);
+  --p-segmented-track: rgba(0, 0, 0, 0.10);
+  --p-segment-pill-shade: rgba(0, 0, 0, 0.03);
+  --p-segment-pill-pressed: rgba(0, 0, 0, 0.15);
+  --p-segment-gray-pill: rgba(0, 0, 0, 0.10);
+  --p-segment-gray-pill-pressed: rgba(0, 0, 0, 0.19);
+  --p-segmented-touch-track: rgba(118, 118, 128, 0.12);
+  --p-segmented-touch-pill: #ffffff;
+  --p-segmented-touch-separator: #D9D9D9;
+}
+
+.p-segmented {
+  /* Accent resolved here (not :root) so .p-sys-* tint classes work —
+     var() in a custom property resolves where the property is defined. */
+  --p-control-accent: var(--p-color-current, #0088FF);
+
+  /* Size tokens (regular, 24px). The size modifiers below override
+     them; the pill and separators read them. */
+  --p-seg-height: 24px;
+  --p-seg-radius: 6px;
+  --p-seg-font-size: 13px;
+  --p-seg-padding-x: 10px;
+  --p-seg-min-width: 54px;
+  --p-seg-separator-inset: 5px;
+
+  /* The selected pill: accent with a faint shade layer over it. */
+  --p-seg-pill: linear-gradient(var(--p-segment-pill-shade), var(--p-segment-pill-shade)),
+    var(--p-control-accent);
+  --p-seg-pill-pressed: linear-gradient(var(--p-segment-pill-pressed), var(--p-segment-pill-pressed)),
+    var(--p-control-accent);
+
+  /* Grid, not flex: 1fr columns make every segment exactly equal
+     width, which the sliding pill's percentage math depends on. */
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: var(--p-seg-height);
+  border-radius: var(--p-seg-radius);
+  background: var(--p-segmented-track, rgba(0, 0, 0, 0.10));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+/* ─── Sizes ────────────────────────────────────────────────────────── */
+/* Heights 16 / 20 / 24 / 28 / 36. Label 10 / 11 / 13 / 13 / 13 at
+   weight 510, text inset 6 / 8 / 10 / 12 / 14, separators 10 / 12 /
+   14 / 18 / 20 tall. 28 and 36 are capsules. */
+
+.p-segmented-mini {
+  --p-seg-height: 16px;
+  --p-seg-radius: 4px;
+  --p-seg-font-size: 10px;
+  --p-seg-padding-x: 6px;
+  --p-seg-min-width: 38px;
+  --p-seg-separator-inset: 3px;
+}
+.p-segmented-small {
+  --p-seg-height: 20px;
+  --p-seg-radius: 5px;
+  --p-seg-font-size: 11px;
+  --p-seg-padding-x: 8px;
+  --p-seg-min-width: 44px;
+  --p-seg-separator-inset: 4px;
+}
+.p-segmented-large {
+  --p-seg-height: 28px;
+  --p-seg-radius: 14px;
+  --p-seg-padding-x: 12px;
+  --p-seg-min-width: 58px;
+  --p-seg-separator-inset: 5px;
+}
+.p-segmented-xlarge {
+  --p-seg-height: 36px;
+  --p-seg-radius: 18px;
+  --p-seg-padding-x: 14px;
+  --p-seg-min-width: 62px;
+  --p-seg-separator-inset: 8px;
+}
+
+.p-segment {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.p-segment > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.p-segment > span {
+  position: relative;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box; /* min-width is the whole segment, padding included */
+  min-width: var(--p-seg-min-width);
+  padding: 0 var(--p-seg-padding-x);
+  border-radius: var(--p-seg-radius);
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-size: var(--p-seg-font-size);
+  font-weight: 510;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+
+  transition: background 0.15s ease-out, color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* Separators: on every segment after the first, hidden next to the
+   selection. 1px wide, inset per size (14px tall on the 24px track). */
+.p-segment:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  left: -0.5px;
+  top: var(--p-seg-separator-inset, 5px);
+  bottom: var(--p-seg-separator-inset, 5px);
+  width: 1px;
+  background: var(--p-segment-separator);
+  transition: opacity 0.15s ease-out;
+}
+
+.p-segment:has(> input:checked)::before,
+.p-segment:has(> input:checked) + .p-segment::before {
+  opacity: 0;
+}
+
+/* Selected pill: flat accent, white label. Full height, no inset —
+   macOS 27 uses no gradients, bevels, rims or shadows here. */
+.p-segment > input:checked + span {
+  background: var(--p-seg-pill);
+  color: #ffffff;
+}
+
+/* Pressed: black 15% on the selected pill (lighter in dark mode),
+   quiet fill on unselected. */
+.p-segment:active > input:checked:not(:disabled) + span {
+  background: var(--p-seg-pill-pressed);
+}
+
+.p-segment:active > input:not(:checked):not(:disabled) + span {
+  background: var(--p-fill-tertiary, rgba(0, 0, 0, 0.05));
+}
+
+/* Gray style: neutral fill pill (10%, pressed 19%) over the track,
+   text keeps its color. */
+.p-segmented-gray .p-segment > input:checked + span {
+  background: var(--p-segment-gray-pill, rgba(0, 0, 0, 0.10));
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+.p-segmented-gray .p-segment:active > input:checked:not(:disabled) + span {
+  background: var(--p-segment-gray-pill-pressed, rgba(0, 0, 0, 0.19));
+}
+
+/* Focus: the macOS 27 focus band (3.5px outside, 1px inside). */
+.p-segment > input:focus-visible + span {
+  box-shadow: var(--p-focus-ring,
+    0 0 0 3.5px rgba(0, 136, 255, 0.5),
+    inset 0 0 0 1px rgba(0, 136, 255, 0.5));
+  outline: 2px solid transparent; /* keeps a ring in forced-colors mode */
+  outline-offset: 2px;
+}
+
+/* Disabled: fade the control; selected label drops to 50% white. */
+.p-segmented:has(input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.p-segmented:has(input:disabled) .p-segment {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.p-segmented input:disabled:not(:checked) + span {
+  color: #BFBFBF;
+}
+
+.p-segmented input:disabled:checked + span {
+  color: rgb(255 255 255 / 0.5);
+}
+
+/* ─── Sliding pill (progressive enhancement) ───────────────────────── */
+/* macOS slides the selection between segments. With :has() the track
+   itself can know which segment is checked (--p-seg-index) and how many
+   segments it holds (--p-seg-count), so a single ::before pill slides to
+   left: index/count of the track width. Segments are equal 1fr columns,
+   so the math is exact. Browsers without :has() keep the per-segment
+   pill above and simply crossfade. */
+
+@supports selector(:has(*)) {
+  .p-segmented {
+    --p-seg-count: 2;
+    --p-seg-index: 0;
+  }
+
+  .p-segmented:has(> .p-segment:nth-child(3)) { --p-seg-count: 3; }
+  .p-segmented:has(> .p-segment:nth-child(4)) { --p-seg-count: 4; }
+  .p-segmented:has(> .p-segment:nth-child(5)) { --p-seg-count: 5; }
+  .p-segmented:has(> .p-segment:nth-child(6)) { --p-seg-count: 6; }
+  .p-segmented:has(> .p-segment:nth-child(7)) { --p-seg-count: 7; }
+  .p-segmented:has(> .p-segment:nth-child(8)) { --p-seg-count: 8; }
+
+  .p-segmented:has(> .p-segment:nth-child(2) > input:checked) { --p-seg-index: 1; }
+  .p-segmented:has(> .p-segment:nth-child(3) > input:checked) { --p-seg-index: 2; }
+  .p-segmented:has(> .p-segment:nth-child(4) > input:checked) { --p-seg-index: 3; }
+  .p-segmented:has(> .p-segment:nth-child(5) > input:checked) { --p-seg-index: 4; }
+  .p-segmented:has(> .p-segment:nth-child(6) > input:checked) { --p-seg-index: 5; }
+  .p-segmented:has(> .p-segment:nth-child(7) > input:checked) { --p-seg-index: 6; }
+  .p-segmented:has(> .p-segment:nth-child(8) > input:checked) { --p-seg-index: 7; }
+
+  /* The segment-local pill hands off to the sliding one. */
+  .p-segmented:has(input:checked) .p-segment > input:checked + span,
+  .p-segmented:has(input:checked) .p-segment:active > input:checked:not(:disabled) + span {
+    background: none;
+  }
+
+  .p-segmented::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--p-seg-index) * 100% / var(--p-seg-count));
+    width: calc(100% / var(--p-seg-count));
+    border-radius: var(--p-seg-radius, 6px);
+
+    background: var(--p-seg-pill);
+    transition: left 0.25s cubic-bezier(0.3, 1.1, 0.4, 1), background 0.15s ease-out;
+  }
+
+  /* No selection, no pill. */
+  .p-segmented:not(:has(input:checked))::before {
+    content: none;
+  }
+
+  .p-segmented:has(.p-segment:active > input:checked:not(:disabled))::before {
+    background: var(--p-seg-pill-pressed);
+  }
+
+  .p-segmented-gray::before {
+    background: var(--p-segment-gray-pill, rgba(0, 0, 0, 0.10));
+  }
+
+  .p-segmented-gray:has(.p-segment:active > input:checked:not(:disabled))::before {
+    background: var(--p-segment-gray-pill-pressed, rgba(0, 0, 0, 0.19));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-segment > span,
+  .p-segment:not(:first-child)::before,
+  .p-segmented::before {
+    transition: none;
+  }
+}
+
+/* ─── Touch size (iOS) ─────────────────────────────────────────────── */
+/* iOS 27 runs a taller track than macOS and separates the pill from the
+   track on every side: a 32px capsule holding a 28px pill, inset 2px,
+   with 4px between segments. Those three numbers reproduce the
+   reference pill widths exactly at every segment count (211 at two,
+   139.33 at three, 103.5 at four, 82 at five on a 430px track).
+
+   The pill is white (white 27% in dark) with a soft 0 2px 20px shadow,
+   so the label keeps its own color instead of flipping to white the
+   way macOS does. There are no separators. Labels are 13px, Semibold
+   (590) when selected and Medium (510) otherwise. A disabled control
+   fades as a whole to 50%.
+
+   Sizes: the default 32px, .p-segmented-touch-large (36px) and
+   .p-segmented-touch-xlarge (50px, a 46px pill). */
+
+.p-segmented-touch {
+  --p-seg-pad: 2px;
+  --p-seg-gap: 4px;
+  --p-seg-touch-h: 32px;
+  --p-segment-separator: var(--p-segmented-touch-separator);
+
+  height: var(--p-seg-touch-h);
+  border-radius: calc(var(--p-seg-touch-h) / 2);
+  background: var(--p-segmented-touch-track);
+}
+
+.p-segmented-touch-large {
+  --p-seg-touch-h: 36px;
+}
+
+.p-segmented-touch-xlarge {
+  --p-seg-touch-h: 50px;
+}
+
+/* Labels are the iOS label color, black (white in dark). */
+.p-segmented-touch .p-segment > span {
+  min-width: 0;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--p-ios-label, var(--p-text-primary));
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: -0.08px;
+}
+
+/* iOS draws no separators between segments. */
+.p-segmented-touch .p-segment:not(:first-child)::before {
+  content: none;
+}
+
+/* The label never inverts, because the pill underneath it is white. */
+.p-segmented-touch .p-segment > input:checked + span {
+  background: var(--p-segmented-touch-pill);
+  color: var(--p-ios-label, var(--p-text-primary));
+  font-weight: 590;
+}
+
+.p-segmented-touch .p-segment:active > input:checked:not(:disabled) + span {
+  background: var(--p-segmented-touch-pill);
+}
+
+/* Disabled: the whole control is at 50% (above); labels keep their
+   colors rather than taking the macOS disabled grays. */
+.p-segmented-touch input:disabled:not(:checked) + span,
+.p-segmented-touch input:disabled:checked + span {
+  color: var(--p-ios-label, var(--p-text-primary));
+}
+
+@supports selector(:has(*)) {
+  /* Pill width is the track minus both insets and every gap, divided by
+     the segment count. Position steps by one pill plus one gap. */
+  .p-segmented-touch {
+    --p-seg-pill-w: calc(
+      (100% - 2 * var(--p-seg-pad) - (var(--p-seg-count) - 1) * var(--p-seg-gap))
+      / var(--p-seg-count)
+    );
+  }
+
+  .p-segmented-touch::before {
+    top: var(--p-seg-pad);
+    bottom: var(--p-seg-pad);
+    left: calc(
+      var(--p-seg-pad) + var(--p-seg-index) * (var(--p-seg-pill-w) + var(--p-seg-gap))
+    );
+    width: var(--p-seg-pill-w);
+    border-radius: 999px;
+
+    background: var(--p-segmented-touch-pill);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  .p-segmented-touch:has(.p-segment:active > input:checked:not(:disabled))::before {
+    background: var(--p-segmented-touch-pill);
+  }
+
+  /* Touch has no hover and no plus-darker press on the pill; the label
+     dims instead, matching the other touch controls. */
+  .p-segmented-touch:has(.p-segment:active > input:checked:not(:disabled)) .p-segment > input:checked + span {
+    opacity: 0.6;
+  }
 }

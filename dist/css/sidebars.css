@@ -1,0 +1,679 @@
+/* Puppertino v2.0 — Sidebars (macOS 27)
+   A sidebar appears on the leading side of a view and lets people
+   navigate between sections. By default a full-bleed 240px strip on
+   the window's leading edge: a flat material (#E6E6E6 / #161616), no
+   radius, shadow or divider. Rows on a 24/32/36 ladder, every row icon
+   tinted, selection a quiet capsule. The macOS 26 floating glass panel
+   is still available as .p-sidebar-floating. */
+
+:root {
+  --p-sidebar-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  /* The macOS 27 material: a luminosity-toned neutral. Rendered flat. */
+  --p-sidebar-material: #e6e6e6;
+  --p-sidebar-material-inactive: #f1f1f1;
+  /* Floating panel (macOS 26 look, .p-sidebar-floating). */
+  --p-sidebar-bg: rgba(228, 228, 228, 0.72);
+  --p-sidebar-bg-opaque: #ececec;
+  --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-sidebar-text: #1a1a1a;
+  --p-sidebar-text-dim: #727272;
+  --p-sidebar-text-disabled: #bfbfbf;
+  /* Selection subtracts 13 levels (#E6E6E6 → #D9D9D9); hover 4. */
+  --p-sidebar-selected: rgba(0, 0, 0, 0.056);
+  --p-sidebar-hover: rgba(0, 0, 0, 0.018);
+  --p-sidebar-detail: #bfbfbf;
+  --p-sidebar-chevron: #bfbfbf;
+  /* Row icons take the vibrant blue from colors.css (#0078F0 light,
+     #0A99FF dark): the sidebar is a material. The literal is the
+     fallback when colors.css isn't loaded. */
+  --p-sidebar-icon: var(--p-vibrant-blue, #0078f0);
+  --p-sidebar-icon-inactive: #878787;
+  /* Legacy name: the selected-row icon tint. Now every icon is tinted. */
+  --p-sidebar-icon-selected: var(--p-sidebar-icon);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-sidebar-material: #161616;
+  --p-sidebar-material-inactive: #141414;
+  --p-sidebar-bg: rgba(40, 40, 44, 0.78);
+  --p-sidebar-bg-opaque: #2b2b2e;
+  --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  --p-sidebar-text: #f5f5f5;
+  --p-sidebar-text-dim: #8a8a8a;
+  --p-sidebar-text-disabled: rgba(255, 255, 255, 0.3);
+  /* Selection adds 13 levels (#161616 → #232323); hover 7. */
+  --p-sidebar-selected: rgba(255, 255, 255, 0.056);
+  --p-sidebar-hover: rgba(255, 255, 255, 0.03);
+  --p-sidebar-detail: rgba(255, 255, 255, 0.3);
+  --p-sidebar-chevron: rgba(255, 255, 255, 0.3);
+  --p-sidebar-icon: var(--p-vibrant-blue, #0a99ff);
+  --p-sidebar-icon-inactive: #666;
+  --p-sidebar-icon-selected: var(--p-sidebar-icon);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-sidebar-material: #161616;
+    --p-sidebar-material-inactive: #141414;
+    --p-sidebar-bg: rgba(40, 40, 44, 0.78);
+    --p-sidebar-bg-opaque: #2b2b2e;
+    --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    --p-sidebar-text: #f5f5f5;
+    --p-sidebar-text-dim: #8a8a8a;
+    --p-sidebar-text-disabled: rgba(255, 255, 255, 0.3);
+    --p-sidebar-selected: rgba(255, 255, 255, 0.056);
+    --p-sidebar-hover: rgba(255, 255, 255, 0.03);
+    --p-sidebar-detail: rgba(255, 255, 255, 0.3);
+    --p-sidebar-chevron: rgba(255, 255, 255, 0.3);
+    --p-sidebar-icon: var(--p-vibrant-blue, #0a99ff);
+    --p-sidebar-icon-inactive: #666;
+    --p-sidebar-icon-selected: var(--p-sidebar-icon);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-sidebar-material: #e6e6e6;
+  --p-sidebar-material-inactive: #f1f1f1;
+  --p-sidebar-bg: rgba(228, 228, 228, 0.72);
+  --p-sidebar-bg-opaque: #ececec;
+  --p-sidebar-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --p-sidebar-text: #1a1a1a;
+  --p-sidebar-text-dim: #727272;
+  --p-sidebar-text-disabled: #bfbfbf;
+  --p-sidebar-selected: rgba(0, 0, 0, 0.056);
+  --p-sidebar-hover: rgba(0, 0, 0, 0.018);
+  --p-sidebar-detail: #bfbfbf;
+  --p-sidebar-chevron: #bfbfbf;
+  --p-sidebar-icon: var(--p-vibrant-blue, #0078f0);
+  --p-sidebar-icon-inactive: #878787;
+  --p-sidebar-icon-selected: var(--p-sidebar-icon);
+}
+
+/* --------------------------------------------------------------- Panel */
+
+/* Full-bleed strip: square, flat, no shadow. The host (a window)
+   clips it at its corner. Rows are inset 10px (220px capsules). */
+.p-sidebar {
+  background: var(--p-sidebar-material);
+  border-radius: 0;
+  box-sizing: border-box;
+  color: var(--p-sidebar-text);
+  flex: none;
+  font-family: var(--p-sidebar-font);
+  padding: 10px;
+  width: 240px;
+}
+
+.p-sidebar * {
+  box-sizing: border-box;
+}
+
+/* Embedded in a window/host: fill its height. */
+.p-sidebar.p-sidebar-attached {
+  border-radius: 0;
+  box-shadow: none;
+  height: 100%;
+}
+
+/* Floating panel (the macOS 26 look): glass, radius 18, soft shadow. */
+.p-sidebar.p-sidebar-floating {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-sidebar-bg);
+  border-radius: 18px;
+  box-shadow: var(--p-sidebar-shadow);
+}
+
+/* Unfocused window: a lighter material and gray icons. */
+.p-window-inactive .p-sidebar:not(.p-sidebar-floating),
+.p-sidebar.p-inactive:not(.p-sidebar-floating) {
+  background: var(--p-sidebar-material-inactive);
+}
+
+.p-window-inactive .p-sidebar,
+.p-sidebar.p-inactive {
+  --p-sidebar-icon: var(--p-sidebar-icon-inactive);
+  --p-sidebar-icon-selected: var(--p-sidebar-icon-inactive);
+}
+
+/* ------------------------------------------------------- Header zone */
+
+/* The top of a full-height sidebar: 52px tall, traffic lights at 19,19
+   and an optional round glass sidebar toggle 8px from the top and
+   trailing edges. The first row starts 52px down. */
+.p-sidebar-titlebar {
+  height: 52px;
+  margin: -10px -10px 0;
+  position: relative;
+}
+
+.p-sidebar-titlebar .p-traffic-lights {
+  left: 19px;
+  margin: 0;
+  position: absolute;
+  top: 19px;
+}
+
+/* Round glass toggle, 36px. Pair with .p-toolbar-circle (toolbars.css)
+   for the glass; this class only places it. */
+.p-sidebar-toggle {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+
+/* ---------------------------------------------------------------- Rows */
+
+/* Default = large: 36px rows, 15px/510, 20px icon; label 36px in.
+   Indentation is 12px per level from the row's base padding. */
+.p-sidebar-row {
+  --p-sidebar-indent-base: 6px;
+  --p-sidebar-level: 0;
+
+  align-items: center;
+  border-radius: 8px;
+  color: var(--p-sidebar-text);
+  display: flex;
+  font-size: 15px;
+  font-weight: 510;
+  height: 36px;
+  padding: 0 10px 0 calc(var(--p-sidebar-indent-base) + var(--p-sidebar-level) * 12px);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* A leading disclosure chevron hangs 2px from the capsule edge. */
+.p-sidebar-row:has(> .p-sidebar-chevron:first-child) {
+  --p-sidebar-indent-base: 2px;
+}
+
+.p-sidebar-row:hover {
+  background: var(--p-sidebar-hover);
+}
+
+.p-sidebar-row.p-selected {
+  background: var(--p-sidebar-selected);
+}
+
+/* Every row icon carries the accent tint (#0078F0 / #0A99FF). Retint
+   by overriding --p-sidebar-icon (see lists.css note on why
+   --p-color-current can't serve container tinting). */
+.p-sidebar .p-sidebar-icon {
+  color: var(--p-sidebar-icon);
+}
+
+.p-sidebar-row.p-selected .p-sidebar-icon {
+  color: var(--p-sidebar-icon-selected);
+}
+
+/* Dimmed: the label goes #BFBFBF; the icon keeps its tint. */
+.p-sidebar-row.p-dimmed,
+.p-sidebar-row[aria-disabled="true"] {
+  color: var(--p-sidebar-text-disabled);
+  pointer-events: none;
+}
+
+.p-sidebar-icon {
+  flex: none;
+  height: 20px;
+  margin-right: 10px;
+  width: 20px;
+}
+
+.p-sidebar-icon img,
+.p-sidebar-icon svg {
+  border-radius: 4px;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.p-sidebar-detail {
+  color: var(--p-sidebar-detail);
+  margin-left: auto;
+}
+
+.p-sidebar-chevron {
+  color: var(--p-sidebar-chevron);
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 7px;
+}
+
+/* Indentation: 12px per level. */
+.p-sidebar-row[data-p-level="1"] { --p-sidebar-level: 1; }
+.p-sidebar-row[data-p-level="2"] { --p-sidebar-level: 2; }
+.p-sidebar-row[data-p-level="3"] { --p-sidebar-level: 3; }
+.p-sidebar-row[data-p-level="4"] { --p-sidebar-level: 4; }
+
+/* ------------------------------------------------------------- Headers */
+
+/* Section header: 13px bold #727272, 8px in from the row edge; 43px
+   from the row above to the row below. */
+.p-sidebar-header {
+  align-items: center;
+  color: var(--p-sidebar-text-dim);
+  display: flex;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 9px;
+  min-height: 34px;
+  padding: 0 10px 0 8px;
+}
+
+.p-sidebar-header:first-child {
+  margin-top: 0;
+}
+
+.p-sidebar-header .p-sidebar-detail {
+  color: var(--p-sidebar-text-dim);
+  font-size: inherit;
+  font-weight: 510;
+}
+
+/* --------------------------------------------------------------- Sizes */
+
+.p-sidebar-small .p-sidebar-row { font-size: 11px; height: 24px; }
+.p-sidebar-small .p-sidebar-icon { height: 16px; margin-right: 10px; width: 16px; }
+.p-sidebar-small .p-sidebar-header { font-size: 11px; min-height: 30px; }
+
+.p-sidebar-medium .p-sidebar-row { font-size: 13px; height: 32px; }
+.p-sidebar-medium .p-sidebar-icon { height: 18px; margin-right: 8px; width: 18px; }
+
+/* ----------------------------------------------------------- Fallbacks */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-sidebar.p-sidebar-floating {
+    background: var(--p-sidebar-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-sidebar.p-sidebar-floating {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-sidebar-bg-opaque);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-sidebar-row.p-selected {
+    box-shadow: inset 0 0 0 1px var(--p-sidebar-text-dim);
+  }
+}
+
+/* Squircle corners where corner-shape ships (Chromium 139+): floating
+   panel 18 and row capsules 8 with the system's 60% smoothing →
+   spans 28.8 / 12.8. The full-bleed strip stays square. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-sidebar.p-sidebar-floating {
+    border-radius: 28.8px;
+    corner-shape: superellipse(1.465);
+  }
+
+  .p-sidebar-row,
+  .p-sidebar-row.p-selected {
+    border-radius: 12.8px;
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* ─── Touch size (iPadOS 27) ───────────────────────────────────────── */
+/* The iPad sidebar: a 320px column with 44px capsule rows inset 10px
+   (300px wide). Like the macOS 27 sidebar it is attached: full height,
+   square, no shadow, on an opaque luminosity material that reads #D6D6D6
+   over any backdrop (#EDEDED when its window is inactive). The window
+   clips it at its corner. The iPadOS 26 floating panel, 20px radius and
+   translucent, is still available as .p-sidebar-touch-floating.
+
+   The panel is not glass. The glass is on the header controls: a 60px
+   Edit capsule and 44px circles, 12px apart.
+
+   Same slots as the macOS sidebar (.p-sidebar-row, .p-sidebar-header,
+   .p-sidebar-icon, .p-sidebar-detail), restyled at iPadOS metrics. */
+
+:root {
+  --p-sidebar-touch-bg: #d6d6d6;
+  --p-sidebar-touch-bg-inactive: #ededed;
+  --p-sidebar-touch-floating-bg: rgba(245, 245, 245, 0.72);
+  --p-sidebar-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-sidebar-touch-label: #1a1a1a;
+  --p-sidebar-touch-secondary: rgba(60, 60, 67, 0.6);
+  --p-sidebar-touch-detail: #727272;
+  /* Selection darkens the material 18 levels (#D6D6D6 → #C4C4C4). */
+  --p-sidebar-touch-selected: rgba(0, 0, 0, 0.084);
+  --p-sidebar-touch-accent: var(--p-control-accent, #0088ff);
+  --p-sidebar-touch-search: rgba(120, 120, 128, 0.16);
+  --p-sidebar-touch-glass: var(--p-glass-tint, rgba(242, 242, 242, 0.55));
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-sidebar-touch-bg: var(--p-sidebar-material, #161616);
+  --p-sidebar-touch-bg-inactive: var(--p-sidebar-material-inactive, #141414);
+  --p-sidebar-touch-floating-bg: rgba(38, 38, 38, 0.72);
+  --p-sidebar-touch-fallback: rgba(38, 38, 38, 0.98);
+  --p-sidebar-touch-label: #f5f5f5;
+  --p-sidebar-touch-secondary: rgba(235, 235, 245, 0.6);
+  --p-sidebar-touch-detail: #8a8a8a;
+  --p-sidebar-touch-selected: rgba(255, 255, 255, 0.075);
+  --p-sidebar-touch-accent: var(--p-control-accent, #0091ff);
+  --p-sidebar-touch-search: rgba(120, 120, 128, 0.24);
+  --p-sidebar-touch-glass: var(--p-glass-tint, rgba(153, 153, 153, 0.17));
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-sidebar-touch-bg: var(--p-sidebar-material, #161616);
+    --p-sidebar-touch-bg-inactive: var(--p-sidebar-material-inactive, #141414);
+    --p-sidebar-touch-floating-bg: rgba(38, 38, 38, 0.72);
+    --p-sidebar-touch-fallback: rgba(38, 38, 38, 0.98);
+    --p-sidebar-touch-label: #f5f5f5;
+    --p-sidebar-touch-secondary: rgba(235, 235, 245, 0.6);
+    --p-sidebar-touch-detail: #8a8a8a;
+    --p-sidebar-touch-selected: rgba(255, 255, 255, 0.075);
+    --p-sidebar-touch-accent: var(--p-control-accent, #0091ff);
+    --p-sidebar-touch-search: rgba(120, 120, 128, 0.24);
+    --p-sidebar-touch-glass: var(--p-glass-tint, rgba(153, 153, 153, 0.17));
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-sidebar-touch-bg: #d6d6d6;
+  --p-sidebar-touch-bg-inactive: #ededed;
+  --p-sidebar-touch-floating-bg: rgba(245, 245, 245, 0.72);
+  --p-sidebar-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-sidebar-touch-label: #1a1a1a;
+  --p-sidebar-touch-secondary: rgba(60, 60, 67, 0.6);
+  --p-sidebar-touch-detail: #727272;
+  --p-sidebar-touch-selected: rgba(0, 0, 0, 0.084);
+  --p-sidebar-touch-accent: var(--p-control-accent, #0088ff);
+  --p-sidebar-touch-search: rgba(120, 120, 128, 0.16);
+  --p-sidebar-touch-glass: var(--p-glass-tint, rgba(242, 242, 242, 0.55));
+}
+
+.p-sidebar-touch {
+  --p-sidebar-touch-pad: 10px;
+
+  box-sizing: border-box;
+  width: 320px;
+  min-height: 100%;
+  padding: var(--p-sidebar-touch-pad);
+  border-radius: 0;
+
+  background: var(--p-sidebar-touch-bg);
+  color: var(--p-sidebar-touch-label);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-sidebar-touch * {
+  box-sizing: border-box;
+}
+
+.p-sidebar.p-sidebar-touch {
+  box-shadow: none;
+}
+
+/* Inactive window: the material lightens. */
+.p-sidebar-touch.p-inactive:not(.p-sidebar-touch-floating),
+:is(.p-window-inactive, .p-window-touch-inactive) .p-sidebar-touch.p-sidebar-touch:not(.p-sidebar-touch-floating) {
+  background: var(--p-sidebar-touch-bg-inactive);
+}
+
+/* The iPadOS 26 panel: floating, translucent, 20px radius, 16px inset,
+   with the shadow the macOS sidebar carried before macOS 27. */
+.p-sidebar-touch.p-sidebar-touch-floating {
+  --p-sidebar-touch-pad: 16px;
+  min-height: 0;
+  border-radius: 20px;
+  background: var(--p-sidebar-touch-floating-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-sidebar-shadow);
+}
+
+/* A narrower panel for split views that give the content more room. */
+.p-sidebar-touch-compact {
+  width: 232px;
+}
+
+/* Header: the sidebar's own controls, above the search field. Glass
+   buttons, 12px apart, the trailing ones pushed to the end. */
+.p-sidebar-touch__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin-bottom: 10px;
+}
+
+.p-sidebar-touch__header > .p-sidebar-touch__spacer {
+  flex: 1;
+}
+
+/* In a windowed app the window controls lead the header, 21px in from
+   the sidebar's edge. */
+.p-sidebar-touch__header > .p-traffic-lights-touch {
+  margin-left: 11px;
+}
+
+.p-sidebar-touch__button {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+
+  background: var(--p-sidebar-touch-glass);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+
+  color: var(--p-sidebar-touch-label);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.p-sidebar-touch__button > i,
+.p-sidebar-touch__button > svg {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.p-sidebar-touch__button > svg {
+  fill: currentcolor;
+}
+
+/* Edit, or any text button: a capsule, 60px wide for "Edit". */
+.p-sidebar-touch__button:not(:has(> i, > svg)) {
+  width: auto;
+  min-width: 44px;
+  padding: 0 14px;
+}
+
+.p-sidebar-touch__button:active {
+  opacity: 0.5;
+}
+
+.p-sidebar-touch__button:focus-visible {
+  outline: 3px solid var(--p-sidebar-touch-accent);
+  outline-offset: 2px;
+}
+
+.p-sidebar-touch .p-sidebar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  height: 44px;
+  padding: 0 12px 0 14px;
+  border-radius: 22px;
+  margin: 0;
+
+  color: var(--p-sidebar-touch-label);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+  text-decoration: none;
+}
+
+.p-sidebar-touch .p-sidebar-row:hover {
+  background: none;
+}
+
+/* Selected: a capsule that darkens the material. The label keeps its
+   colour and weight; the accent icon, the capsule and aria-current
+   carry the state. */
+.p-sidebar-touch .p-sidebar-row.p-selected,
+.p-sidebar-touch .p-sidebar-row[aria-current] {
+  background: var(--p-sidebar-touch-selected);
+  color: var(--p-sidebar-touch-label);
+  font-weight: 400;
+}
+
+.p-sidebar-touch .p-sidebar-row:active:not(.p-selected):not([aria-current]) {
+  background: var(--p-sidebar-touch-selected);
+}
+
+.p-sidebar-touch .p-sidebar-row:focus-visible {
+  outline: 3px solid var(--p-sidebar-touch-accent);
+  outline-offset: -3px;
+}
+
+/* Every row icon is the accent, selected or not. */
+.p-sidebar-touch .p-sidebar-icon {
+  flex: none;
+  margin-right: 0;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  color: var(--p-sidebar-touch-accent);
+}
+
+.p-sidebar-touch .p-sidebar-row.p-selected .p-sidebar-icon,
+.p-sidebar-touch .p-sidebar-row[aria-current] .p-sidebar-icon {
+  color: var(--p-sidebar-touch-accent);
+}
+
+.p-sidebar-touch .p-sidebar-detail {
+  margin-left: auto;
+  color: var(--p-sidebar-touch-detail);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.p-sidebar-touch .p-sidebar-header {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  margin: 10px 0 0;
+
+  color: var(--p-sidebar-touch-secondary);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+  text-transform: none;
+}
+
+.p-sidebar-touch .p-sidebar-header:first-child {
+  margin-top: 0;
+}
+
+/* Search field. A capsule rather than the 10px box a form field uses,
+   because it sits in chrome rather than in a form. */
+.p-sidebar-touch__search {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  margin-bottom: 22px;
+  border-radius: 22px;
+
+  background: var(--p-sidebar-touch-search);
+  color: var(--p-sidebar-touch-label);
+
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: -0.08px;
+}
+
+.p-sidebar-touch__search::placeholder {
+  color: var(--p-sidebar-touch-detail);
+}
+
+.p-sidebar-touch__search:focus {
+  box-shadow: var(--p-focus-ring, 0 0 0 4px rgba(0, 136, 255, 0.25));
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-sidebar-touch.p-sidebar-touch-floating {
+    background: var(--p-sidebar-touch-fallback);
+  }
+
+  .p-sidebar-touch__button {
+    background: var(--p-sidebar-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-sidebar-touch.p-sidebar-touch-floating,
+  .p-sidebar-touch__button {
+    background: var(--p-sidebar-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-sidebar-touch .p-sidebar-row.p-selected,
+  .p-sidebar-touch .p-sidebar-row[aria-current] {
+    box-shadow: inset 0 0 0 1px var(--p-sidebar-touch-label);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-sidebar-touch__button {
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-sidebar-touch .p-sidebar-row.p-selected,
+  .p-sidebar-touch .p-sidebar-row[aria-current] {
+    outline: 1px solid Highlight;
+  }
+}
+
+/* Below the split-view threshold a sidebar has no room to sit beside
+   content. Hide it and drive navigation from a tab bar instead. */
+@media (max-width: 767px) {
+  .p-sidebar-touch-collapses {
+    display: none;
+  }
+}

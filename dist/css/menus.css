@@ -1,0 +1,1099 @@
+/* Puppertino v2.0 — Menus (macOS 27)
+   A menu reveals its options when people interact with it. Custom dropdown
+   and context menu surface. Pop-up and pull-down buttons keep the native
+   select; this component is for custom command menus.
+
+   macOS 27 glass edge: a dark hairline just outside the shape, a bright
+   inner ring that is stronger along the top and bottom, and the shared
+   overlay shadow (0 8 48). The material stays a neutral tint; the system's
+   wallpaper-tinted (luminosity) fill is not reproduced. */
+
+:root {
+  --p-menu-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-menu-radius: 12px;
+  --p-menu-bg: rgba(217, 217, 217, 0.73);
+  --p-menu-bg-opaque: #f0f0f0;
+  /* Overlay shadow shared with notifications and popovers. */
+  --p-menu-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-menu-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.85),
+    inset 0 6px 5px -4px rgba(255, 255, 255, 0.12),
+    inset 0 -6px 5px -4px rgba(255, 255, 255, 0.1);
+  --p-menu-text: #1a1a1a;
+  /* Secondary ink (shortcuts, disabled items) and headers are the system's
+     plus-darker #BFBFBF / #727272 (plus-lighter #404040 / #8A8A8A in dark):
+     they darken (lighten) whatever glass is behind them by a fixed amount,
+     so they are translucent black (white) here, not flat grays that
+     vanish against the gray material. */
+  --p-menu-text-disabled: rgba(0, 0, 0, 0.33);
+  /* The menu selection is its own deeper blue, the same in both modes. */
+  --p-menu-selected-bg: #0069f9;
+  --p-menu-selected-text: #fff;
+  --p-menu-pressed-bg: #e6e6e6;
+  /* Parent row of an open submenu: a gray pill that darkens the glass. */
+  --p-menu-open-bg: rgba(0, 0, 0, 0.13);
+  /* Translucent, so the line always reads darker than the glass. */
+  --p-menu-separator: rgba(0, 0, 0, 0.12);
+  --p-menu-header: rgba(0, 0, 0, 0.68);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-menu-bg: rgba(72, 72, 76, 0.82);
+  --p-menu-bg-opaque: #3a3a3e;
+  --p-menu-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+  --p-menu-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.17),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.11),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.3),
+    inset 0 6px 5px -4px rgba(255, 255, 255, 0.05),
+    inset 0 -6px 5px -4px rgba(255, 255, 255, 0.04);
+  --p-menu-text: #f5f5f5;
+  --p-menu-text-disabled: rgba(255, 255, 255, 0.32);
+  --p-menu-pressed-bg: rgba(255, 255, 255, 0.13);
+  --p-menu-open-bg: rgba(255, 255, 255, 0.1);
+  --p-menu-separator: rgba(255, 255, 255, 0.1);
+  --p-menu-header: rgba(255, 255, 255, 0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-menu-bg: rgba(72, 72, 76, 0.82);
+    --p-menu-bg-opaque: #3a3a3e;
+    --p-menu-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+    --p-menu-edge:
+      0 0 0 0.5px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.17),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.11),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.3),
+      inset 0 6px 5px -4px rgba(255, 255, 255, 0.05),
+      inset 0 -6px 5px -4px rgba(255, 255, 255, 0.04);
+    --p-menu-text: #f5f5f5;
+    --p-menu-text-disabled: rgba(255, 255, 255, 0.32);
+    --p-menu-pressed-bg: rgba(255, 255, 255, 0.13);
+    --p-menu-open-bg: rgba(255, 255, 255, 0.1);
+    --p-menu-separator: rgba(255, 255, 255, 0.1);
+    --p-menu-header: rgba(255, 255, 255, 0.7);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-menu-bg: rgba(217, 217, 217, 0.73);
+  --p-menu-bg-opaque: #f0f0f0;
+  --p-menu-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-menu-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.85),
+    inset 0 6px 5px -4px rgba(255, 255, 255, 0.12),
+    inset 0 -6px 5px -4px rgba(255, 255, 255, 0.1);
+  --p-menu-text: #1a1a1a;
+  --p-menu-text-disabled: rgba(0, 0, 0, 0.33);
+  --p-menu-pressed-bg: #e6e6e6;
+  --p-menu-open-bg: rgba(0, 0, 0, 0.13);
+  --p-menu-separator: rgba(0, 0, 0, 0.12);
+  --p-menu-header: rgba(0, 0, 0, 0.68);
+}
+
+/* display on .p-menu is an author rule, so it outranks the UA's
+   [hidden] { display: none }. Restore the attribute's meaning; the
+   context-menu script hides through it. */
+.p-menu[hidden] {
+  display: none;
+}
+
+.p-menu {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-menu-bg);
+  border-radius: var(--p-menu-radius);
+  box-shadow: var(--p-menu-edge), var(--p-menu-shadow);
+  box-sizing: border-box;
+  color: var(--p-menu-text);
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--p-menu-font);
+  min-width: 190px;
+  padding: 5px;
+  position: relative;
+}
+
+.p-menu * {
+  box-sizing: border-box;
+}
+
+/* The surface takes focus when a menu opens (items stay unselected until
+   the keyboard steps in), so it must not draw its own ring. */
+.p-menu:focus {
+  outline: none;
+}
+
+/* Floating state: menus.js toggles .active on menus marked data-p-menu-float.
+   Inline (docs previews, always-open menus) skip the attribute. */
+.p-menu[data-p-menu-float] {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transform: scale(0.98);
+  transform-origin: top left;
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: 100;
+}
+
+.p-menu[data-p-menu-float].active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.p-menu__item {
+  align-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--p-menu-text);
+  cursor: default;
+  display: flex;
+  flex: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 510;
+  height: 24px;
+  letter-spacing: 0;
+  padding: 0 8px 0 7px;
+  text-align: left;
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.p-menu__item:hover:not(:disabled, [aria-disabled="true"]),
+.p-menu__item:focus-visible,
+.p-menu__item.is-selected {
+  background: var(--p-menu-selected-bg);
+  color: var(--p-menu-selected-text);
+  outline: none;
+}
+
+.p-menu__item:hover:not(:disabled, [aria-disabled="true"]) .p-menu__shortcut,
+.p-menu__item:focus-visible .p-menu__shortcut,
+.p-menu__item.is-selected .p-menu__shortcut,
+.p-menu__item:hover:not(:disabled, [aria-disabled="true"]) .p-menu__icon,
+.p-menu__item:focus-visible .p-menu__icon,
+.p-menu__item.is-selected .p-menu__icon {
+  color: var(--p-menu-selected-text);
+}
+
+/* Non-accent flash, used by menus.js on activation. */
+.p-menu__item.is-pressed {
+  background: var(--p-menu-pressed-bg);
+  color: var(--p-menu-text);
+}
+
+.p-menu__item:disabled,
+.p-menu__item[aria-disabled="true"] {
+  color: var(--p-menu-text-disabled);
+}
+
+.p-menu__item:disabled .p-menu__shortcut,
+.p-menu__item:disabled .p-menu__icon,
+.p-menu__item[aria-disabled="true"] .p-menu__shortcut,
+.p-menu__item[aria-disabled="true"] .p-menu__icon {
+  color: var(--p-menu-text-disabled);
+}
+
+.p-menu__icon {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  font-size: 14px;
+  justify-content: center;
+  margin-right: 5px;
+  width: 15px;
+}
+
+.p-menu__check {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  width: 18px;
+}
+
+.p-menu__shortcut {
+  color: var(--p-menu-text-disabled);
+  flex: none;
+  margin-left: auto;
+  padding-left: 24px;
+}
+
+.p-menu__chevron {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: auto;
+  padding-left: 24px;
+}
+
+.p-menu__shortcut + .p-menu__chevron,
+.p-menu__chevron + .p-menu__shortcut {
+  margin-left: 0;
+  padding-left: 8px;
+}
+
+.p-menu__separator {
+  background: var(--p-menu-separator);
+  border: 0;
+  flex: none;
+  height: 1px;
+  margin: 5px 5.5px;
+}
+
+/* Section header: the item size in bold, on the same 7px inset as the
+   labels (not the icon column), in a band one point taller than a row. */
+.p-menu__header {
+  color: var(--p-menu-header);
+  display: block;
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 16px;
+  padding: 5px 8px 4px 7px;
+  user-select: none;
+}
+
+/* Submenus: wrap the trigger item and a nested .p-menu. Opens on hover or
+   keyboard focus within. */
+.p-menu__subwrap {
+  position: relative;
+}
+
+.p-menu__subwrap > .p-menu {
+  left: 100%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: -5px;
+  transition: opacity 0.14s ease;
+  z-index: 1;
+}
+
+.p-menu__subwrap:hover > .p-menu,
+.p-menu__subwrap:focus-within > .p-menu,
+.p-menu__subwrap > .p-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* While its submenu is open the parent row keeps a gray pill and label
+   color; the blue selection moves into the submenu. Hovering the parent
+   itself (before the pointer crosses over) still shows the blue pill. */
+.p-menu__subwrap:hover > .p-menu__item,
+.p-menu__subwrap:focus-within > .p-menu__item,
+.p-menu__subwrap:has(> .p-menu.active) > .p-menu__item {
+  background: var(--p-menu-open-bg);
+  color: var(--p-menu-text);
+}
+
+.p-menu__subwrap:hover > .p-menu__item .p-menu__icon,
+.p-menu__subwrap:focus-within > .p-menu__item .p-menu__icon,
+.p-menu__subwrap:has(> .p-menu.active) > .p-menu__item .p-menu__icon {
+  color: var(--p-menu-text);
+}
+
+.p-menu__subwrap:hover > .p-menu__item .p-menu__shortcut,
+.p-menu__subwrap:focus-within > .p-menu__item .p-menu__shortcut,
+.p-menu__subwrap:has(> .p-menu.active) > .p-menu__item .p-menu__shortcut {
+  color: var(--p-menu-text-disabled);
+}
+
+.p-menu__subwrap > .p-menu__item:hover:not(:disabled, [aria-disabled="true"]),
+.p-menu__subwrap > .p-menu__item:focus-visible {
+  background: var(--p-menu-selected-bg);
+  color: var(--p-menu-selected-text);
+}
+
+.p-menu__subwrap > .p-menu__item:hover:not(:disabled, [aria-disabled="true"]) .p-menu__icon,
+.p-menu__subwrap > .p-menu__item:hover:not(:disabled, [aria-disabled="true"]) .p-menu__shortcut,
+.p-menu__subwrap > .p-menu__item:focus-visible .p-menu__icon,
+.p-menu__subwrap > .p-menu__item:focus-visible .p-menu__shortcut {
+  color: var(--p-menu-selected-text);
+}
+
+/* Sizes. Regular is the 24px default above. */
+.p-menu--small .p-menu__item {
+  font-size: 10px;
+  height: 19px;
+}
+
+.p-menu--small .p-menu__icon {
+  font-size: 11px;
+  width: 12px;
+}
+
+.p-menu--small .p-menu__header {
+  font-size: 10px;
+  line-height: 12px;
+  padding-bottom: 2px;
+  padding-top: 3px;
+}
+
+.p-menu--small .p-menu__check {
+  font-size: 9px;
+  width: 14px;
+}
+
+.p-menu--medium .p-menu__item {
+  font-size: 11px;
+  height: 22px;
+}
+
+.p-menu--medium .p-menu__icon {
+  font-size: 12px;
+  width: 13px;
+}
+
+.p-menu--medium .p-menu__header {
+  font-size: 11px;
+  line-height: 14px;
+  padding-bottom: 2.5px;
+  padding-top: 3.5px;
+}
+
+.p-menu--medium .p-menu__check {
+  font-size: 10px;
+  width: 16px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-menu {
+    background: var(--p-menu-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-menu {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-menu-bg-opaque);
+  }
+}
+
+/* Stronger keyline for increased contrast; a real border where the
+   system paints its own colors. */
+@media (prefers-contrast: more) {
+  .p-menu {
+    --p-menu-edge:
+      0 0 0 1px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-menu {
+    border: 1px solid CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-menu[data-p-menu-float],
+  .p-menu__subwrap > .p-menu {
+    transition: opacity 0.14s ease;
+  }
+
+  .p-menu[data-p-menu-float] {
+    transform: none;
+  }
+}
+
+/* Squircle corners where corner-shape ships (Chromium 139+).
+   superellipse(1.465) radii fitted against the system's own corner
+   outlines (60% smoothing), not a fixed ratio: the r12 menu corner fits
+   at 15.5px (0.08px RMS; the old r × 1.6 = 19.2 rule was 1.2px off), and
+   the r8 pill on a 24px row, whose smoothing is clamped by the height,
+   at 10.25px (0.09px RMS). */
+@supports (corner-shape: superellipse(1.465)) {
+  :root {
+    --p-menu-radius: 15.5px;
+  }
+
+  .p-menu {
+    corner-shape: superellipse(1.465);
+  }
+
+  .p-menu__item {
+    border-radius: 10.25px;
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* ─── Touch size (iOS and iPadOS 27) ──────────────────────────────── */
+/* The iOS menu: the surface a long press or a pop-up button raises. A
+   238px panel at 34px radius, 17pt rows on a 40pt pitch, each with a
+   full-height 190px capsule for the pressed state rather than the
+   full-bleed band the pointer menu uses. Same slots as the pointer
+   menu, restyled. Glyphs lead the label, as on macOS; shortcuts and
+   chevrons trail.
+
+   iOS 27 draws the menu with the same glass edge as the macOS 27 menu
+   (--p-menu-edge above) minus its 0.5px inner ring: a dark hairline
+   outside the shape, a bright rim and glow band along the top and the
+   bottom, nothing bright on the sides. Shadow is the shared overlay
+   shadow. Row ink that the system draws with plus-darker (light) or
+   plus-lighter (dark) blending, the pressed pill, separators, disabled
+   labels, section titles, is translucent black or white here, so it
+   darkens or lightens whatever glass is behind it. That is why the dark
+   pill and separators read lighter than the glass, not darker.
+
+   A context menu is this surface plus a preview of the thing the menu
+   belongs to; .p-menu-touch-context lays the two out. */
+
+:root {
+  --p-menu-touch-bg: rgba(246, 246, 246, 0.73);
+  /* The light glass is a plain tint over the blur; the system does not
+     saturate it. */
+  --p-menu-touch-filter: blur(30px) saturate(120%);
+  --p-menu-touch-fallback: rgba(246, 246, 246, 0.98);
+  --p-menu-touch-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.18),
+    -1.25px 0 0 -0.75px rgba(0, 0, 0, 0.22),
+    1.25px 0 0 -0.75px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 8px 6px -4px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -10px 8px -4px rgba(255, 255, 255, 0.85);
+  --p-menu-touch-label: #1a1a1a;
+  --p-menu-touch-secondary: #727272;
+  --p-menu-touch-highlight: rgba(0, 0, 0, 0.07);
+  --p-menu-touch-separator: rgba(0, 0, 0, 0.1);
+  --p-menu-touch-disabled: rgba(0, 0, 0, 0.26);
+  --p-menu-touch-disabled-secondary: rgba(0, 0, 0, 0.15);
+  --p-menu-touch-destructive: #ff383c;
+  --p-menu-touch-divider: #cccccc;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  /* The system fills the dark menu with #1A1A1A in luminosity blend:
+     the backdrop keeps its hue and loses its brightness. CSS cannot
+     blend with the backdrop, so this darkens and saturates it under a
+     lighter tint that lets the colour through. */
+  --p-menu-touch-bg: rgba(32, 32, 32, 0.8);
+  --p-menu-touch-filter: blur(30px) brightness(80%) saturate(500%);
+  --p-menu-touch-fallback: rgba(28, 28, 28, 0.98);
+  --p-menu-touch-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.6),
+    -1.25px 0 0 -0.75px rgba(0, 0, 0, 0.5),
+    1.25px 0 0 -0.75px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 8px 7px -6px rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -10px 8px -5px rgba(255, 255, 255, 0.09);
+  --p-menu-touch-label: #f5f5f5;
+  --p-menu-touch-secondary: rgba(255, 255, 255, 0.6);
+  --p-menu-touch-highlight: rgba(255, 255, 255, 0.08);
+  --p-menu-touch-separator: rgba(255, 255, 255, 0.11);
+  --p-menu-touch-disabled: rgba(255, 255, 255, 0.28);
+  --p-menu-touch-disabled-secondary: rgba(255, 255, 255, 0.15);
+  --p-menu-touch-destructive: #ff4245;
+  --p-menu-touch-divider: rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-menu-touch-bg: rgba(32, 32, 32, 0.8);
+    --p-menu-touch-filter: blur(30px) brightness(80%) saturate(500%);
+    --p-menu-touch-fallback: rgba(28, 28, 28, 0.98);
+    --p-menu-touch-edge:
+      0 0 0 0.5px rgba(0, 0, 0, 0.6),
+      -1.25px 0 0 -0.75px rgba(0, 0, 0, 0.5),
+      1.25px 0 0 -0.75px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 8px 7px -6px rgba(255, 255, 255, 0.05),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -10px 8px -5px rgba(255, 255, 255, 0.09);
+    --p-menu-touch-label: #f5f5f5;
+    --p-menu-touch-secondary: rgba(255, 255, 255, 0.6);
+    --p-menu-touch-highlight: rgba(255, 255, 255, 0.08);
+    --p-menu-touch-separator: rgba(255, 255, 255, 0.11);
+    --p-menu-touch-disabled: rgba(255, 255, 255, 0.28);
+    --p-menu-touch-disabled-secondary: rgba(255, 255, 255, 0.15);
+    --p-menu-touch-destructive: #ff4245;
+    --p-menu-touch-divider: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-menu-touch-bg: rgba(246, 246, 246, 0.73);
+  --p-menu-touch-filter: blur(30px) saturate(120%);
+  --p-menu-touch-fallback: rgba(246, 246, 246, 0.98);
+  --p-menu-touch-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.18),
+    -1.25px 0 0 -0.75px rgba(0, 0, 0, 0.22),
+    1.25px 0 0 -0.75px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 8px 6px -4px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -10px 8px -4px rgba(255, 255, 255, 0.85);
+  --p-menu-touch-label: #1a1a1a;
+  --p-menu-touch-secondary: #727272;
+  --p-menu-touch-highlight: rgba(0, 0, 0, 0.07);
+  --p-menu-touch-separator: rgba(0, 0, 0, 0.1);
+  --p-menu-touch-disabled: rgba(0, 0, 0, 0.26);
+  --p-menu-touch-disabled-secondary: rgba(0, 0, 0, 0.15);
+  --p-menu-touch-destructive: #ff383c;
+  --p-menu-touch-divider: #cccccc;
+}
+
+.p-menu-touch {
+  /* Metrics. The compact and spacious modifiers below retune these. */
+  --p-menu-touch-pad: 16px;
+  --p-menu-touch-row: 40px;
+  --p-menu-touch-font: 17px;
+  --p-menu-touch-line: 22px;
+  --p-menu-touch-tracking: -0.43px;
+  --p-menu-touch-row-pad: 8px;    /* a wrapped two-line row is 60pt */
+  --p-menu-touch-lead: 6px;       /* label start: 22pt from the edge */
+  --p-menu-touch-trail: 10px;
+  --p-menu-touch-pill-x: 8px;     /* 190pt pill on a 238pt menu */
+  --p-menu-touch-pill-y: 0px;     /* the pill fills the 40pt row */
+  --p-menu-touch-sep-gap: 10px;   /* above and below each separator */
+  --p-menu-touch-icon: 28px;      /* glyph column: glyph at +26, label at +58 */
+  --p-menu-touch-icon-size: 17px;
+  --p-menu-touch-check: 30px;
+  --p-menu-touch-radius: 34px;
+
+  box-sizing: border-box;
+  min-width: 238px;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 10px var(--p-menu-touch-pad);
+  border-radius: var(--p-menu-touch-radius);
+  corner-shape: round;
+
+  background: var(--p-menu-touch-bg);
+  -webkit-backdrop-filter: var(--p-menu-touch-filter);
+  backdrop-filter: var(--p-menu-touch-filter);
+  box-shadow:
+    var(--p-menu-touch-edge),
+    var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  color: var(--p-menu-touch-label);
+}
+
+.p-menu-touch * {
+  box-sizing: border-box;
+}
+
+/* Rows. Colours go through --p-menu-touch-ink so the destructive and
+   disabled states survive the pointer menu's hover and selection rules
+   (which recolour the row blue and white) without a specificity race. */
+.p-menu-touch .p-menu__item {
+  --p-menu-touch-ink: var(--p-menu-touch-label);
+  --p-menu-touch-sub: var(--p-menu-touch-secondary);
+
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+
+  height: auto;
+  min-height: var(--p-menu-touch-row);
+  padding:
+    var(--p-menu-touch-row-pad)
+    var(--p-menu-touch-trail)
+    var(--p-menu-touch-row-pad)
+    var(--p-menu-touch-lead);
+  border-radius: 0;
+  corner-shape: round;
+
+  color: var(--p-menu-touch-ink);
+  font-size: var(--p-menu-touch-font);
+  font-weight: 400;
+  letter-spacing: var(--p-menu-touch-tracking);
+  line-height: var(--p-menu-touch-line);
+  white-space: normal;
+}
+
+.p-menu-touch .p-menu__item--destructive {
+  --p-menu-touch-ink: var(--p-menu-touch-destructive);
+}
+
+.p-menu-touch .p-menu__item[aria-disabled="true"],
+.p-menu-touch .p-menu__item:disabled {
+  --p-menu-touch-ink: var(--p-menu-touch-disabled);
+  --p-menu-touch-sub: var(--p-menu-touch-disabled-secondary);
+  pointer-events: none;
+}
+
+/* Touch has no selection colour: the pointer menu's blue hover and
+   keyboard selection become the grey pill below. */
+.p-menu-touch .p-menu__item:is(:hover, :focus-visible, .is-selected, .is-pressed),
+.p-menu-touch .p-menu__item:hover:not(:disabled, [aria-disabled="true"]) {
+  background: none;
+  color: var(--p-menu-touch-ink);
+  outline: none;
+}
+
+/* The pill: drawn behind the content so the label is never washed out,
+   inset from the row sides so it is narrower than the separators. */
+.p-menu-touch .p-menu__item::before {
+  content: "";
+  position: absolute;
+  inset: var(--p-menu-touch-pill-y) var(--p-menu-touch-pill-x);
+  border-radius: calc(var(--p-menu-touch-row) / 2);
+  background: transparent;
+  z-index: -1;
+}
+
+.p-menu-touch .p-menu__item:active::before,
+.p-menu-touch .p-menu__item[aria-current]::before,
+.p-menu-touch .p-menu__item[aria-expanded="true"]::before,
+.p-menu-touch .p-menu__item:is(.p-is-active, .is-selected, .is-pressed)::before,
+.p-menu-touch .p-menu__item:focus-visible::before {
+  background: var(--p-menu-touch-highlight);
+}
+
+/* iPad with a pointer: the row under it lifts to the same pill. */
+@media (hover: hover) {
+  .p-menu-touch .p-menu__item:hover::before {
+    background: var(--p-menu-touch-highlight);
+  }
+}
+
+.p-menu-touch .p-menu__item:focus-visible::before {
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+/* A long label wraps rather than truncating, and the row grows. */
+.p-menu-touch .p-menu__item > span:not([class]),
+.p-menu-touch__label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.p-menu-touch__label {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-menu-touch__subtitle {
+  color: var(--p-menu-touch-sub);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.08px;
+  line-height: 18px;
+}
+
+/* Glyph column on the leading side. */
+.p-menu-touch .p-menu__icon,
+.p-menu-touch .p-menu__item:is(:hover, :focus-visible, .is-selected):not(:disabled, [aria-disabled="true"]) .p-menu__icon,
+.p-menu-touch .p-menu__item:is(:disabled, [aria-disabled="true"]) .p-menu__icon {
+  color: inherit;
+}
+
+.p-menu-touch .p-menu__icon {
+  flex: none;
+  order: -1;
+  justify-content: center;
+  width: var(--p-menu-touch-icon);
+  height: var(--p-menu-touch-line);
+  margin: 0 8px 0 0;
+  font-size: var(--p-menu-touch-icon-size);
+  line-height: 1;
+}
+
+/* Checkmark column: a 30pt slot before the glyph and label. Leave the
+   slot empty on unchecked rows so every label keeps the same start. */
+.p-menu-touch .p-menu__check {
+  flex: none;
+  order: -2;
+  width: var(--p-menu-touch-check);
+  margin-left: 2px;
+  font-size: var(--p-menu-touch-font);
+  font-weight: 590;
+  line-height: 1;
+  text-align: left;
+}
+
+.p-menu-touch .p-menu__check + .p-menu__icon,
+.p-menu-touch .p-menu__icon + .p-menu__check {
+  margin-left: 0;
+}
+
+.p-menu-touch .p-menu__shortcut,
+.p-menu-touch .p-menu__item .p-menu__shortcut,
+.p-menu-touch .p-menu__item:is(:hover, :focus-visible, .is-selected):not(:disabled, [aria-disabled="true"]) .p-menu__shortcut,
+.p-menu-touch .p-menu__item:is(:disabled, [aria-disabled="true"]) .p-menu__shortcut {
+  color: var(--p-menu-touch-sub);
+}
+
+.p-menu-touch .p-menu__shortcut {
+  flex: none;
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 15px;
+  font-weight: 510;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* Submenu and pull-down chevrons are bold, in the label's own colour. */
+.p-menu-touch .p-menu__chevron {
+  flex: none;
+  margin-left: auto;
+  padding-left: 12px;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.p-menu-touch .p-menu__shortcut + .p-menu__chevron,
+.p-menu-touch .p-menu__chevron + .p-menu__shortcut {
+  margin-left: 0;
+  padding-left: 8px;
+}
+
+/* Separator: the full 206pt content width, or the pill's 190pt when the
+   menu has a glyph column. */
+.p-menu-touch .p-menu__separator {
+  height: 1px;
+  margin: var(--p-menu-touch-sep-gap) 0;
+  background: var(--p-menu-touch-separator);
+}
+
+.p-menu-touch:has(.p-menu__icon) .p-menu__separator {
+  margin-left: var(--p-menu-touch-pill-x);
+  margin-right: var(--p-menu-touch-pill-x);
+}
+
+/* Section title: 13pt medium in the dimmed ink, aligned to the pill. */
+.p-menu-touch .p-menu__header {
+  padding: 2.5px var(--p-menu-touch-pill-x) 9px;
+  color: var(--p-menu-touch-disabled);
+  font-size: 13px;
+  font-weight: 510;
+  letter-spacing: -0.08px;
+  line-height: 18px;
+}
+
+/* Compact: the 15pt menu the system raises from text (Edit, Find in
+   Note). Same 40pt pitch, tighter tracking since iOS 27, and each
+   separator block 3pt shorter. Labels and titles start 4pt further out. */
+.p-menu-touch--compact {
+  --p-menu-touch-font: 15px;
+  --p-menu-touch-line: 20px;
+  --p-menu-touch-tracking: -0.43px;
+  --p-menu-touch-row-pad: 10px;
+  --p-menu-touch-lead: 2px;
+  --p-menu-touch-trail: 2px;
+  --p-menu-touch-sep-gap: 8.5px;
+  --p-menu-touch-icon-size: 15px;
+}
+
+.p-menu-touch--compact .p-menu__header {
+  padding: 5px 0 6.5px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.p-menu-touch--compact:has(.p-menu__icon) .p-menu__separator {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Spacious: the pre-2.0 touch menu, kept for layouts built around it.
+   15pt text on a 50pt row, the pill inset 5pt inside the row, glyphs
+   trailing. */
+.p-menu-touch--spacious {
+  --p-menu-touch-row: 50px;
+  --p-menu-touch-font: 15px;
+  --p-menu-touch-line: 20px;
+  --p-menu-touch-tracking: 0.2px;
+  --p-menu-touch-row-pad: 15px;
+  --p-menu-touch-lead: 8px;
+  --p-menu-touch-trail: 8px;
+  --p-menu-touch-pill-y: 5px;
+  --p-menu-touch-sep-gap: 4px;
+
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.p-menu-touch--spacious .p-menu__item::before {
+  border-radius: 20px;
+}
+
+.p-menu-touch--spacious .p-menu__icon {
+  order: 0;
+  width: 20px;
+  margin: 0 0 0 auto;
+  font-size: 20px;
+}
+
+.p-menu-touch--spacious .p-menu__header {
+  padding: 8px;
+  color: var(--p-menu-touch-label);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Palette: a row of up to three tiles above the items (a glyph over a
+   12pt label), for actions that belong together, like Copy, Share and
+   Delete. The selected or pressed tile takes the row pill's tint. */
+.p-menu-touch__palette {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: 5px;
+  margin: 0 -6px;
+}
+
+.p-menu-touch__palette + :not(.p-menu__separator) {
+  margin-top: var(--p-menu-touch-sep-gap);
+}
+
+.p-menu-touch__tile {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  height: 56px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--p-menu-touch-label);
+  font-family: inherit;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 510;
+  line-height: 16px;
+  cursor: default;
+}
+
+.p-menu-touch__tile > i,
+.p-menu-touch__tile > svg {
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.p-menu-touch__tile > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p-menu-touch__tile:active,
+.p-menu-touch__tile[aria-pressed="true"],
+.p-menu-touch__tile[aria-checked="true"],
+.p-menu-touch__tile:focus-visible {
+  background: var(--p-menu-touch-highlight);
+}
+
+.p-menu-touch__tile:focus-visible {
+  outline: none;
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+.p-menu-touch__tile--destructive {
+  color: var(--p-menu-touch-destructive);
+}
+
+@supports (corner-shape: superellipse(1.465)) {
+  .p-menu-touch__tile {
+    border-radius: 25px;
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* Edit menu bar: the horizontal callout that appears over selected
+   text. A 44pt capsule of the same glass, 15pt commands divided by
+   short rules, and a round button that pages to more commands. */
+.p-menu-touch-bar {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 44px;
+  padding: 0 4px 0 0;
+  border-radius: 22px;
+
+  background: var(--p-menu-touch-bg);
+  -webkit-backdrop-filter: var(--p-menu-touch-filter);
+  backdrop-filter: var(--p-menu-touch-filter);
+  box-shadow:
+    var(--p-menu-touch-edge),
+    var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  color: var(--p-menu-touch-label);
+  font-family: var(--p-menu-font);
+}
+
+.p-menu-touch-bar__item {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  height: 44px;
+  padding: 0 17px 0 16px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: -0.6px;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.p-menu-touch-bar__item:first-child {
+  padding-left: 20px;
+}
+
+/* 1 × 18pt divider after every command but the last. */
+.p-menu-touch-bar__item:not(:last-child, :has(+ .p-menu-touch-bar__more))::after {
+  content: "";
+  position: absolute;
+  top: 13px;
+  right: 0;
+  width: 1px;
+  height: 18px;
+  background: var(--p-menu-touch-divider);
+}
+
+.p-menu-touch-bar__item:active {
+  color: var(--p-menu-touch-secondary);
+}
+
+.p-menu-touch-bar__more {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--p-menu-touch-highlight);
+  color: inherit;
+  font-size: 15px;
+  font-weight: 590;
+  cursor: default;
+}
+
+.p-menu-touch-bar__item:focus-visible,
+.p-menu-touch-bar__more:focus-visible {
+  outline: none;
+  box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+  border-radius: 18px;
+}
+
+/* The preview a context menu shows beside or above itself. */
+.p-menu-touch-preview {
+  margin-bottom: 16px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.24);
+}
+
+/* Context menu layout: a preview and a 250pt menu, 16pt apart. The menu
+   lines up with the preview's leading edge by default. Set
+   data-p-menu-place to "below-end" to align it with the trailing edge,
+   or to "trailing" / "leading" to put it beside the preview, top edges
+   aligned. context_menus.js uses the same geometry when it floats a menu
+   next to the element that raised it. */
+.p-menu-touch-context {
+  --p-menu-touch-context-gap: 16px;
+
+  display: inline-grid;
+  grid-template-columns: auto;
+  justify-items: start;
+  align-items: start;
+  gap: var(--p-menu-touch-context-gap);
+}
+
+.p-menu-touch-context > .p-menu-touch,
+.p-menu-touch--context {
+  width: 250px;
+  min-width: 250px;
+}
+
+.p-menu-touch-context > .p-menu-touch-preview {
+  margin: 0;
+}
+
+.p-menu-touch-context[data-p-menu-place="below-end"] {
+  justify-items: end;
+}
+
+.p-menu-touch-context[data-p-menu-place="trailing"],
+.p-menu-touch-context[data-p-menu-place="leading"] {
+  grid-auto-flow: column;
+  grid-template-columns: none;
+}
+
+.p-menu-touch-context[data-p-menu-place="leading"] > .p-menu-touch {
+  order: -1;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-menu-touch,
+  .p-menu-touch-bar {
+    background: var(--p-menu-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-menu-touch,
+  .p-menu-touch-bar {
+    background: var(--p-menu-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* A stronger keyline and solid rules for increased contrast. */
+@media (prefers-contrast: more) {
+  .p-menu-touch,
+  .p-menu-touch-bar {
+    --p-menu-touch-edge:
+      0 0 0 1px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    --p-menu-touch-separator: currentcolor;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-menu-touch-bar {
+    border: 1px solid CanvasText;
+  }
+
+  .p-menu-touch .p-menu__item:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

@@ -188,3 +188,549 @@
 .p-mobile-tabs--content.active {
   display: block;
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-tab-bar (iOS 27)
+   The iOS tab bar. A floating glass capsule that sits above the bottom
+   edge rather than filling it, holding two to five top-level sections.
+
+   Sizing follows one rule that reproduces every reference width: each
+   tab is an 84px cell inside 10px of padding, and the bar hugs them.
+   Two tabs make 188px and three 272px. From four tabs the bar fills its
+   360px maximum instead, so four land at 85px each and five shrink to
+   68px.
+
+   The selected tab sits on a pill: 54px tall, inset 4px, 6px wider than
+   its cell on each side (96px at two tabs, 80px at five). Apple draws
+   the pill as a darkening of whatever glass is under it (#EDEDED
+   plus-darker, 18 levels down in light mode; #121212 plus-lighter, 18
+   up in dark) and the selected icon and label as the accent over a
+   half-white (half-black in dark) wash, blended the same way.
+
+   CSS can't do either blend here: the bar's backdrop-filter makes it
+   an isolated group, so anything inside it blends with the bar's own
+   translucent tint rather than with the page behind. So both are
+   resolved to plain colours that give Apple's result over typical
+   glass: a 7.5% black (or 8.5% white) pill, and the accent 5% darker
+   (10% lighter in dark), #0081F2 / #1A9CFF for the default accent.
+
+   Around the bar:
+   .p-tab-bar-group      a bar plus a trailing 62px circle (search, or
+                         any accessory), pinned to the bar's right end
+   .p-tab-bar-minimized  the bar shrinks to a 48px circle holding the
+                         selected tab (src/js/tab_bar.js can do this on
+                         scroll)
+   .p-tab-bar-top        the iPadOS tab bar: 44px, text tabs, sits at
+                         the top of the window
+
+   The glass is the shared macOS/iOS 27 recipe from materials.css:
+   --p-glass-tint for the small-glass surface, --p-glass-edge for the
+   keyline and speculars, --p-shadow-glass-control for the drop shadow.
+   With src/js/glass.js loaded the bar is Puppertino Glass: it refracts
+   the page behind it in real time.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-tab-bar-surface: var(--p-glass-tint, rgba(242, 242, 242, 0.55));
+  --p-tab-bar-fallback: #f7f7f7;
+  --p-tab-bar-item: #1a1a1a;
+  --p-tab-bar-item-selected: color-mix(in srgb, var(--p-control-accent, #0088ff) 95%, #000);
+  --p-tab-bar-pill: rgba(0, 0, 0, 0.075);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-tab-bar-surface: var(--p-glass-tint, rgba(153, 153, 153, 0.17));
+  --p-tab-bar-fallback: #1c1c1e;
+  --p-tab-bar-item: #f5f5f5;
+  --p-tab-bar-item-selected: color-mix(in srgb, var(--p-control-accent, #0091ff) 90%, #fff);
+  --p-tab-bar-pill: rgba(255, 255, 255, 0.085);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-tab-bar-surface: var(--p-glass-tint, rgba(153, 153, 153, 0.17));
+    --p-tab-bar-fallback: #1c1c1e;
+    --p-tab-bar-item: #f5f5f5;
+    --p-tab-bar-item-selected: color-mix(in srgb, var(--p-control-accent, #0091ff) 90%, #fff);
+    --p-tab-bar-pill: rgba(255, 255, 255, 0.085);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-tab-bar-surface: var(--p-glass-tint, rgba(242, 242, 242, 0.55));
+  --p-tab-bar-fallback: #f7f7f7;
+  --p-tab-bar-item: #1a1a1a;
+  --p-tab-bar-item-selected: color-mix(in srgb, var(--p-control-accent, #0088ff) 95%, #000);
+  --p-tab-bar-pill: rgba(0, 0, 0, 0.075);
+}
+
+.p-tab-bar {
+  --p-tab-bar-height: 62px;
+  --p-tab-bar-max: 360px;
+  --p-tab-bar-tab: 84px;
+  /* Declared here rather than at :root so it picks up the edge of the
+     bar's own appearance, including the one glass.js flips it to. */
+  --p-tab-bar-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+
+  /* Puppertino Glass (materials.css, src/js/glass.js) turns the bar
+     into Regular glass. Until then, and wherever it cannot, the bar
+     keeps this surface. */
+  --p-glass-surface: var(--p-tab-bar-surface);
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  /* Keeps the pill (z-index -1) inside the bar even where the browser
+     has no backdrop-filter to form a stacking context. */
+  isolation: isolate;
+
+  width: fit-content;
+  max-width: min(var(--p-tab-bar-max), calc(100vw - 32px));
+  height: var(--p-tab-bar-height);
+  padding: 0 10px;
+  border-radius: calc(var(--p-tab-bar-height) / 2);
+
+  background: var(--p-tab-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-tab-bar-shadow);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-tab-bar * {
+  box-sizing: border-box;
+}
+
+/* Four or five tabs fill the full width; fewer hug their cells. */
+.p-tab-bar:where(:has(> .p-tab-bar__tab ~ .p-tab-bar__tab ~ .p-tab-bar__tab ~ .p-tab-bar__tab)) {
+  width: min(var(--p-tab-bar-max), calc(100vw - 32px));
+}
+
+/* Once glass.js has taken over, the edge is drawn on the ::before layer
+   with the tint (materials.css). Only the drop shadow stays here, so the
+   rim is not drawn twice. */
+.p-tab-bar[data-p-glass="pending"],
+.p-tab-bar[data-p-glass="live"] {
+  box-shadow: var(--p-shadow-glass-control, none);
+}
+
+/* Floating placement. Opt in with .p-tab-bar-fixed so the bar can also
+   be dropped inline, in a demo or inside a phone frame. */
+.p-tab-bar-fixed {
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  z-index: 70;
+}
+
+.p-tab-bar__tab {
+  position: relative;
+  display: flex;
+  /* A definite width rather than a flex-basis: the bar sizes itself with
+     fit-content, and only a definite width contributes to that intrinsic
+     size. Tabs grow from it only when the bar is wider than its cells
+     (four tabs at 360px) and shrink from it when narrower (five). */
+  width: var(--p-tab-bar-tab);
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  padding: 0 4px;
+  border: 0;
+  background: none;
+
+  color: var(--p-tab-bar-item);
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: color 0.2s ease-out, opacity 0.1s ease-out;
+}
+
+/* Apple's glyph is SF Symbols at 18pt, which draws about 22px tall;
+   an icon font fills its em box, so it is set at 22px to match. */
+.p-tab-bar__tab > i,
+.p-tab-bar__tab > svg {
+  flex-shrink: 0;
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+}
+
+.p-tab-bar__tab > svg {
+  fill: currentcolor;
+}
+
+.p-tab-bar__tab > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 10px;
+  font-weight: 590;
+  line-height: 12px;
+  letter-spacing: 0;
+}
+
+/* Selected state. aria-current carries it, so the markup that tells a
+   screen reader which tab is active is the same markup that paints it.
+   .p-is-active is accepted too, matching the desktop tabs above. */
+.p-tab-bar__tab[aria-current],
+.p-tab-bar__tab.p-is-active {
+  color: var(--p-tab-bar-item-selected);
+}
+
+.p-tab-bar__tab[aria-current] > span,
+.p-tab-bar__tab.p-is-active > span {
+  letter-spacing: -0.1px;
+}
+
+/* The selected pill: 54px tall with 4px above and below, reaching 6px
+   past the cell on each side, so the first and last pills sit 4px in
+   from the bar's ends. */
+.p-tab-bar__tab[aria-current]::before,
+.p-tab-bar__tab.p-is-active::before {
+  content: "";
+  position: absolute;
+  inset: 4px -6px;
+  z-index: -1;
+  border-radius: calc(var(--p-tab-bar-height) / 2 - 4px);
+  background: var(--p-tab-bar-pill);
+  pointer-events: none;
+}
+
+.p-tab-bar__tab:active {
+  opacity: 0.5;
+}
+
+.p-tab-bar__tab:focus-visible {
+  outline: 3px solid var(--p-tab-bar-item-selected);
+  outline-offset: -2px;
+  border-radius: calc(var(--p-tab-bar-height) / 2 - 6px);
+}
+
+/* ─── Trailing circle: search or an accessory ──────────────────────── */
+/* .p-tab-bar-group holds a bar and one 62px glass circle, 8px apart and
+   360px across, with the circle pinned to the right end. The bar
+   widens its tabs to use the room: one tab makes a 128px bar, two
+   244px, and three or four fill the 290px left beside the circle. */
+
+.p-tab-bar-group {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: min(360px, calc(100vw - 32px));
+}
+
+.p-tab-bar-group > .p-tab-bar {
+  --p-tab-bar-tab: 112px;
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+}
+
+.p-tab-bar-group > .p-tab-bar:where(:not(:has(> .p-tab-bar__tab ~ .p-tab-bar__tab))) {
+  --p-tab-bar-tab: 108px;
+}
+
+.p-tab-bar-group > .p-tab-bar:where(:has(> .p-tab-bar__tab ~ .p-tab-bar__tab ~ .p-tab-bar__tab)) {
+  flex: 1 1 0;
+}
+
+.p-tab-bar-accessory {
+  --p-glass-surface: var(--p-tab-bar-surface);
+
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+
+  background: var(--p-tab-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+
+  color: var(--p-tab-bar-item);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s ease-out;
+}
+
+.p-tab-bar-accessory > i,
+.p-tab-bar-accessory > svg {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.p-tab-bar-accessory > svg {
+  fill: currentcolor;
+}
+
+.p-tab-bar-accessory:active {
+  opacity: 0.5;
+}
+
+.p-tab-bar-accessory:focus-visible {
+  outline: 3px solid var(--p-tab-bar-item-selected);
+  outline-offset: 2px;
+}
+
+.p-tab-bar-accessory[data-p-glass="pending"],
+.p-tab-bar-accessory[data-p-glass="live"] {
+  box-shadow: var(--p-shadow-glass-control, none);
+}
+
+/* ─── Minimized ────────────────────────────────────────────────────── */
+/* Scrolling content up collapses the bar to a 48px circle holding the
+   selected tab's icon, and the trailing circle to 48px. Put the class
+   on the bar or on its group; src/js/tab_bar.js toggles it on scroll
+   and expands the bar again when it is tapped or focused. */
+
+.p-tab-bar.p-tab-bar-minimized,
+.p-tab-bar-minimized > .p-tab-bar {
+  --p-tab-bar-height: 48px;
+  flex: none;
+  width: 48px;
+  padding: 0;
+}
+
+.p-tab-bar.p-tab-bar-minimized > .p-tab-bar__tab:not([aria-current], .p-is-active),
+.p-tab-bar-minimized > .p-tab-bar > .p-tab-bar__tab:not([aria-current], .p-is-active) {
+  display: none;
+}
+
+.p-tab-bar.p-tab-bar-minimized > .p-tab-bar__tab,
+.p-tab-bar-minimized > .p-tab-bar > .p-tab-bar__tab {
+  width: 48px;
+  padding: 0;
+}
+
+/* The label leaves the screen but stays the link's accessible name. */
+.p-tab-bar.p-tab-bar-minimized > .p-tab-bar__tab > span,
+.p-tab-bar-minimized > .p-tab-bar > .p-tab-bar__tab > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.p-tab-bar.p-tab-bar-minimized > .p-tab-bar__tab::before,
+.p-tab-bar-minimized > .p-tab-bar > .p-tab-bar__tab::before {
+  content: none;
+}
+
+.p-tab-bar-minimized > .p-tab-bar-accessory {
+  width: 48px;
+  height: 48px;
+}
+
+.p-tab-bar.p-tab-bar-minimized,
+.p-tab-bar-minimized > .p-tab-bar,
+.p-tab-bar-minimized > .p-tab-bar-accessory {
+  animation: p-tab-bar-settle 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@keyframes p-tab-bar-settle {
+  from {
+    scale: 0.92;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+/* ─── iPadOS top tab bar ───────────────────────────────────────────── */
+/* 44px tall, text tabs at 15px/510 on a 75px minimum cell, a 74 x 36
+   pill inset 4px, and optional 54px glyph buttons at either end, such
+   as the sidebar toggle and search (491px with five tabs). It sits centred in
+   the window's toolbar row rather than floating at the bottom. */
+
+.p-tab-bar.p-tab-bar-top {
+  --p-tab-bar-height: 44px;
+  width: fit-content;
+  max-width: calc(100vw - 32px);
+  padding: 0 4px;
+}
+
+.p-tab-bar-top > .p-tab-bar__tab {
+  flex: none;
+  flex-direction: row;
+  width: auto;
+  min-width: 75px;
+  padding: 0 16px;
+}
+
+.p-tab-bar-top > .p-tab-bar__tab > i,
+.p-tab-bar-top > .p-tab-bar__tab > svg {
+  display: none;
+}
+
+.p-tab-bar-top > .p-tab-bar__tab > span {
+  font-size: 15px;
+  font-weight: 510;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.p-tab-bar-top > .p-tab-bar__tab[aria-current] > span,
+.p-tab-bar-top > .p-tab-bar__tab.p-is-active > span {
+  letter-spacing: -0.23px;
+}
+
+.p-tab-bar-top > .p-tab-bar__tab[aria-current]::before,
+.p-tab-bar-top > .p-tab-bar__tab.p-is-active::before {
+  inset: 4px 0.5px;
+}
+
+/* A glyph button inside the bar: the sidebar toggle before the tabs,
+   search after them. */
+.p-tab-bar__button {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 54px;
+  padding: 0;
+  border: 0;
+  background: none;
+
+  color: var(--p-tab-bar-item);
+  font-size: 18px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.p-tab-bar__button > i,
+.p-tab-bar__button > svg {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.p-tab-bar__button > svg {
+  fill: currentcolor;
+}
+
+.p-tab-bar__button:active {
+  opacity: 0.5;
+}
+
+.p-tab-bar__button:focus-visible {
+  outline: 3px solid var(--p-tab-bar-item-selected);
+  outline-offset: -4px;
+  border-radius: 18px;
+}
+
+/* ─── Fallbacks ────────────────────────────────────────────────────── */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-tab-bar,
+  .p-tab-bar-accessory {
+    background: var(--p-tab-bar-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-tab-bar,
+  .p-tab-bar-accessory {
+    background: var(--p-tab-bar-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* A pill that is only 18 levels off the glass is too quiet once
+   contrast is raised: give it a real fill. */
+@media (prefers-contrast: more) {
+  .p-tab-bar__tab[aria-current]::before,
+  .p-tab-bar__tab.p-is-active::before {
+    background: rgba(0, 0, 0, 0.14);
+  }
+
+  .p-dark-mode .p-tab-bar__tab[aria-current]::before,
+  .p-dark-mode .p-tab-bar__tab.p-is-active::before,
+  [data-p-theme="darkmode"] .p-tab-bar__tab[aria-current]::before,
+  [data-p-theme="darkmode"] .p-tab-bar__tab.p-is-active::before {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  .p-auto-dark-mode .p-tab-bar__tab[aria-current]::before,
+  .p-auto-dark-mode .p-tab-bar__tab.p-is-active::before {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-tab-bar__tab,
+  .p-tab-bar-accessory {
+    transition: none;
+  }
+
+  .p-tab-bar.p-tab-bar-minimized,
+  .p-tab-bar-minimized > .p-tab-bar,
+  .p-tab-bar-minimized > .p-tab-bar-accessory {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-tab-bar,
+  .p-tab-bar-accessory {
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-tab-bar__tab,
+  .p-tab-bar__button,
+  .p-tab-bar-accessory {
+    color: ButtonText;
+  }
+
+  .p-tab-bar__tab[aria-current],
+  .p-tab-bar__tab.p-is-active {
+    color: Highlight;
+  }
+
+  .p-tab-bar__tab[aria-current]::before,
+  .p-tab-bar__tab.p-is-active::before {
+    background: none;
+    border: 1px solid Highlight;
+  }
+}

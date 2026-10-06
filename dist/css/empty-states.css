@@ -1,0 +1,179 @@
+/* Puppertino v2.0 — Empty states (iOS and iPadOS 27)
+   What a screen shows when it has nothing to show: a glyph, a short
+   message, a sentence explaining it, and one action that fixes it.
+
+   Markup:
+   <div class="p-empty-state">
+     <i class="p-empty-state__glyph ph-bold ph-tray"></i>
+     <h2 class="p-empty-state__title">No Messages</h2>
+     (or a small glyph in a tinted circle:
+      <span class="p-empty-state__badge"><i class="ph-bold ph-tray"></i></span>)
+     <p class="p-empty-state__message">Messages you receive will appear here.</p>
+     <a class="p-button p-button-touch-large p-button-glass-prominent p-empty-state__action"
+        href="/new/">Start a Conversation</a>
+   </div> */
+
+:root {
+  --p-empty-title: rgba(0, 0, 0, 0.85);
+  --p-empty-message: rgba(60, 60, 67, 0.6);
+  --p-empty-glyph: #0088ff;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-empty-title: rgba(255, 255, 255, 0.92);
+  --p-empty-message: rgba(235, 235, 245, 0.6);
+  --p-empty-glyph: #0091ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-empty-title: rgba(255, 255, 255, 0.92);
+    --p-empty-message: rgba(235, 235, 245, 0.6);
+    --p-empty-glyph: #0091ff;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-empty-title: rgba(0, 0, 0, 0.85);
+  --p-empty-message: rgba(60, 60, 67, 0.6);
+  --p-empty-glyph: #0088ff;
+}
+
+.p-empty-state {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  width: 100%;
+  padding: 32px 34px;
+  text-align: center;
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-empty-state * {
+  box-sizing: border-box;
+}
+
+/* Fills the space it is given, so an empty state inside a list or a
+   sheet centres in that region rather than at the top of it. */
+.p-empty-state-fill {
+  flex: 1;
+  min-height: 240px;
+}
+
+.p-empty-state__glyph {
+  margin-bottom: 4px;
+  color: var(--p-empty-glyph);
+  font-size: 41px;
+  line-height: 1;
+}
+
+/* A smaller glyph for an empty state inside a panel rather than a
+   whole screen. */
+.p-empty-state-compact .p-empty-state__glyph {
+  font-size: 22px;
+}
+
+/* Badge: a 22px glyph centred in a 50px circle washed with the glyph's
+   own tint at 15%. It is the small-glyph layout iOS uses; the compact
+   glyph takes the same circle. The tint is free: set --p-empty-glyph
+   on the empty state (any system color) and the circle follows. */
+.p-empty-state__badge,
+.p-empty-state-compact .p-empty-state__glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 9px;
+  border-radius: 50%;
+
+  background: color-mix(in srgb, var(--p-empty-glyph) 15%, transparent);
+  color: var(--p-empty-glyph);
+  font-size: 22px;
+  font-weight: 590;
+  line-height: 1;
+}
+
+.p-empty-state__badge > * {
+  font-size: 22px;
+  line-height: 1;
+}
+
+@media (forced-colors: active) {
+  .p-empty-state__badge,
+  .p-empty-state-compact .p-empty-state__glyph {
+    border: 1px solid CanvasText;
+  }
+}
+
+.p-empty-state__title {
+  margin: 0;
+  color: var(--p-empty-title);
+  font-size: 22px;
+  font-weight: 590;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.p-empty-state__message {
+  margin: 0;
+  /* Around 30 characters, which is where a centred sentence stops
+     being comfortable to read. Only binds on a wide screen; on a phone
+     the container is narrower than this. */
+  max-width: 30ch;
+  color: var(--p-empty-message);
+  font-size: 22px;
+  font-weight: 510;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+/* The action is an ordinary touch button, widened to 330px and set to
+   the 52px height iOS uses here. Compose it with a button style:
+   .p-button .p-button-touch-large .p-button-primary
+
+   iOS 27 draws it as prominent glass rather than a flat fill: no drop
+   shadow, a faint lighter line along the top, and a glow that rises
+   into the bottom edge (#0088FF brightening to about #128DFF). */
+.p-empty-state__action {
+  --p-button-height: 52px;
+
+  width: 100%;
+  max-width: 330px;
+  margin-top: 20px;
+}
+
+/* A plain filled button gets the glass lines by hand. The touch glass
+   button (.p-button-glass-prominent) already draws them. */
+.p-empty-state__action:not(.p-button-glass-prominent) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -40px 12px -40px rgba(255, 255, 255, 0.3),
+    inset 0 -40px 5px -40px rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-contrast: more) {
+  .p-empty-state__action {
+    box-shadow: none;
+  }
+}
+
+/* Bottom-anchored: iOS often floats the action at the foot of the
+   screen rather than under the text. */
+.p-empty-state-anchored {
+  justify-content: space-between;
+}
+
+.p-empty-state-anchored .p-empty-state__action {
+  margin-top: auto;
+}

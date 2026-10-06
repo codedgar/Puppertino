@@ -1,0 +1,21 @@
+{
+  "name": "puppertino-docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.14",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/inter": "^5.3.0",
+    "@phosphor-icons/core": "^2.1.1",
+    "@phosphor-icons/web": "^2.1.2",
+    "astro": "^5.7.0",
+    "ninja-keys": "^1.2.2",
+    "satori": "^0.35.0",
+    "sharp": "^0.35.5"
+  }
+}

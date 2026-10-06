@@ -1,0 +1,91 @@
+/* Puppertino v2.0 — Boxes (macOS 27)
+   A group box visually groups related content in a view: a radius-12
+   rectangle with an extremely faint fill (black @ 1.5% / white @ 1.5%),
+   no border, no shadow, no title of its own. On pure white it reads as
+   #FBFBFB; on #1E1E1E as #212121. Put a .p-box-title above it when the
+   group needs a label. */
+
+:root {
+  --p-box-fill: rgba(0, 0, 0, 0.015);
+  --p-box-title: rgba(0, 0, 0, 0.5);
+  --p-box-ring: transparent;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-box-fill: rgba(255, 255, 255, 0.015);
+  --p-box-title: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-box-fill: rgba(255, 255, 255, 0.015);
+    --p-box-title: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-box-fill: rgba(0, 0, 0, 0.015);
+  --p-box-title: rgba(0, 0, 0, 0.5);
+}
+
+.p-box {
+  background: var(--p-box-fill);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--p-box-ring);
+  box-sizing: border-box;
+  padding: 16px;
+}
+
+/* Optional label, set outside the box: 11px/590 @ 50% (the list
+   group-title style). */
+.p-box-title {
+  color: var(--p-box-title);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 590;
+  margin: 0 0 6px;
+  padding: 0 8px;
+}
+
+/* Squircle corners where corner-shape ships (Chromium 139+): radius 12
+   with the system's 60% smoothing → span 19.2. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-box {
+    border-radius: 19.2px;
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* The 1.5% fill all but disappears off pure white or #1E1E1E. With
+   increased contrast, strengthen it to 5% and add a 1px ring. */
+@media (prefers-contrast: more) {
+  :root,
+  .p-light-mode,
+  [data-p-theme="lightmode"] {
+    --p-box-fill: rgba(0, 0, 0, 0.05);
+    --p-box-ring: rgba(0, 0, 0, 0.2);
+  }
+
+  .p-dark-mode,
+  [data-p-theme="darkmode"] {
+    --p-box-fill: rgba(255, 255, 255, 0.05);
+    --p-box-ring: rgba(255, 255, 255, 0.25);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-box-fill: rgba(255, 255, 255, 0.05);
+    --p-box-ring: rgba(255, 255, 255, 0.25);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-box {
+    border: 1px solid CanvasText;
+  }
+}

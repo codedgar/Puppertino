@@ -1,0 +1,52 @@
+---
+import Doc from '../../../layouts/Doc.astro';
+import { nav } from '../../../data/nav.js';
+const base = import.meta.env.BASE_URL;
+
+const mobile = nav.find((s) => s.heading === 'Mobile components');
+---
+
+<Doc title="Mobile components" description="Components designed for touch interfaces, following iOS interaction patterns.">
+  <p>
+    Components designed for touch interfaces. Sized for 44px minimum tap targets, optimized for single-column layouts, and following iOS interaction patterns. For the visual language they build on, see <a href={`${base}docs/foundations/`}>Foundations</a>.
+  </p>
+
+  <h2>Get the mobile bundle</h2>
+
+  <p>
+    The mobile bundle brings only what a touch interface needs: the foundations (colors, typography, materials, layout, shadows, dark mode) plus every component on this page. It leaves out the parts that only make sense with a pointer, like the Dock, the menu bar, windows, tooltips, and scrollbars.
+  </p>
+
+  <pre><code>{`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino-mobile.min.css">`}</code></pre>
+
+  <p>Installing through npm? Import the same bundle by name.</p>
+
+  <pre><code>{`import '@codedgar/puppertino/mobile'`}</code></pre>
+
+  <p>
+    Building for both platforms, or unsure what you need? Use the full bundle, <code>puppertino.min.css</code>, which includes everything. See <a href={`${base}docs/getting-started/`}>Getting started</a> for all the install options, including per-component imports.
+  </p>
+
+  <p>
+    Most components are CSS only. The ones that open, close, or move need a small vanilla JavaScript helper: <code>modals.js</code> drives alerts, action sheets, and sheets, <code>popovers.js</code> places popovers, <code>datepickers.js</code> fills the calendar, and <code>steppers.js</code> wires the stepper. Each component page names the one it needs, and says plainly where behavior is left to you.
+  </p>
+
+  <h2>Components</h2>
+
+  {mobile.groups.map((group) => (
+    <section class="tile-section">
+      <h3>{group.heading}</h3>
+      <p class="tile-section-note">{group.note}</p>
+      <div class="tile-grid">
+        {group.items.map((item) => (
+          <a href={`${base}${item.slug}`} class={`tile ${mobile.tint}`}>
+            <div class="tile-art">
+              <i class={`ph-bold ${item.icon}`}></i>
+            </div>
+            <span class="tile-label">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+</Doc>

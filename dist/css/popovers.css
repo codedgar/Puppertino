@@ -1,0 +1,360 @@
+/* Puppertino v2.0 — Popovers (macOS 27, iOS / iPadOS 27)
+   A popover is a transient view that appears above other content when
+   people click or tap a control or interactive area. Free-form glass
+   container with an edge arrow; positioning via src/js/popovers.js.
+
+   macOS 27 puts popovers on the shared overlay material (the alert's):
+   a slightly grey translucent fill over blur, the overlay shadow, a
+   crisp 1px keyline outside the edge, and a bright 1px line on the
+   inside top and bottom. Dark is a near-black glass, not grey. */
+
+:root {
+  --p-popover-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-popover-radius: 20px;
+  --p-popover-bg: rgba(246, 246, 246, 0.73);
+  --p-popover-bg-opaque: #f6f6f6;
+  --p-popover-arrow-bg: rgba(248, 248, 248, 0.95);
+  --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-popover-keyline: rgba(0, 0, 0, 0.14);
+  --p-popover-rim-top: rgba(255, 255, 255, 0.95);
+  --p-popover-rim-bottom: rgba(255, 255, 255, 0.7);
+  --p-popover-rim-side: rgba(255, 255, 255, 0.4);
+  --p-popover-text: #1a1a1a;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-popover-bg: rgba(26, 26, 26, 0.73);
+  --p-popover-bg-opaque: #1e1e1e;
+  --p-popover-arrow-bg: rgba(30, 30, 30, 0.95);
+  --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+  --p-popover-keyline: rgba(0, 0, 0, 0.6);
+  --p-popover-rim-top: rgba(255, 255, 255, 0.23);
+  --p-popover-rim-bottom: rgba(255, 255, 255, 0.12);
+  --p-popover-rim-side: rgba(255, 255, 255, 0.05);
+  --p-popover-text: rgba(255, 255, 255, 0.92);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-popover-bg: rgba(26, 26, 26, 0.73);
+    --p-popover-bg-opaque: #1e1e1e;
+    --p-popover-arrow-bg: rgba(30, 30, 30, 0.95);
+    --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+    --p-popover-keyline: rgba(0, 0, 0, 0.6);
+    --p-popover-rim-top: rgba(255, 255, 255, 0.23);
+    --p-popover-rim-bottom: rgba(255, 255, 255, 0.12);
+    --p-popover-rim-side: rgba(255, 255, 255, 0.05);
+    --p-popover-text: rgba(255, 255, 255, 0.92);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-popover-bg: rgba(246, 246, 246, 0.73);
+  --p-popover-bg-opaque: #f6f6f6;
+  --p-popover-arrow-bg: rgba(248, 248, 248, 0.95);
+  --p-popover-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-popover-keyline: rgba(0, 0, 0, 0.14);
+  --p-popover-rim-top: rgba(255, 255, 255, 0.95);
+  --p-popover-rim-bottom: rgba(255, 255, 255, 0.7);
+  --p-popover-rim-side: rgba(255, 255, 255, 0.4);
+  --p-popover-text: #1a1a1a;
+}
+
+.p-popover {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-popover-bg);
+  border-radius: var(--p-popover-radius);
+  box-shadow:
+    var(--p-popover-shadow),
+    0 0 0 0.5px var(--p-popover-keyline),
+    inset 0 1px 0 var(--p-popover-rim-top),
+    inset 0 -1px 0 var(--p-popover-rim-bottom),
+    inset 0 0 0 1px var(--p-popover-rim-side);
+  box-sizing: border-box;
+  color: var(--p-popover-text);
+  display: inline-block;
+  font-family: var(--p-popover-font);
+  padding: 16px;
+  position: relative;
+}
+
+.p-popover * {
+  box-sizing: border-box;
+}
+
+.p-popover:focus {
+  outline: none;
+}
+
+/* Arrow silhouette: 35.44 × 10.5, 45° slopes, rounded tip.
+   No backdrop-filter here: Chromium ignores it on clipped/masked
+   elements, so the arrow uses a near-opaque fill that reads as the
+   blurred glass. The opacity also keeps the body's keyline from
+   showing through at the junction as a gap. */
+.p-popover::before {
+  background: var(--p-popover-arrow-bg);
+  clip-path: path("M0 10.5C2.5 10.5 3.62 10.44 4.75 10C5.87 9.56 6.89 8.58 7.83 7.65L10.48 5L13.79 1.69C15.12 0.3 16.37 0 17.72 0C19.07 0 20.32 0.31 21.65 1.69L24.96 5L27.61 7.65C28.55 8.58 29.56 9.56 30.69 10C31.82 10.44 32.94 10.5 35.44 10.5Z");
+  content: "";
+  height: 10.5px;
+  left: var(--p-popover-arrow-x, 50%);
+  margin-left: -17.72px;
+  position: absolute;
+  top: -10.5px;
+  width: 35.44px;
+}
+
+/* Placement = which side of the trigger the popover sits on; the arrow
+   goes on the opposite edge. Default is bottom (popover under trigger,
+   arrow on its top edge). */
+.p-popover[data-p-popover-place="top"]::before {
+  margin-top: 0;
+  top: 100%;
+  transform: rotate(180deg);
+}
+
+.p-popover[data-p-popover-place="left"]::before {
+  left: 100%;
+  margin-left: -12.47px;
+  margin-top: -5.25px;
+  top: var(--p-popover-arrow-y, 50%);
+  transform: rotate(90deg);
+}
+
+.p-popover[data-p-popover-place="right"]::before {
+  left: -22.97px;
+  margin-left: 0;
+  margin-top: -5.25px;
+  top: var(--p-popover-arrow-y, 50%);
+  transform: rotate(-90deg);
+}
+
+.p-popover--no-arrow::before {
+  display: none;
+}
+
+/* Floating state: popovers.js toggles .active on popovers marked
+   data-p-popover-float. Inline (docs previews) skip the attribute. */
+.p-popover[data-p-popover-float] {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transform: scale(0.98);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: 100;
+}
+
+.p-popover[data-p-popover-float].active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-popover,
+  .p-popover::before {
+    background: var(--p-popover-bg-opaque);
+  }
+}
+
+/* No path() support → no way to draw the arrow cleanly; drop it. */
+@supports not (clip-path: path("M0 0H1V1Z")) {
+  .p-popover::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-popover,
+  .p-popover::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-popover-bg-opaque);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-popover:not(.p-popover-touch) {
+    --p-popover-keyline: rgba(0, 0, 0, 0.6);
+    background: var(--p-popover-bg-opaque);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-popover {
+    border: 1px solid CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .p-popover[data-p-popover-float] {
+    transform: none;
+    transition: opacity 0.18s ease;
+  }
+}
+
+/* Squircle corners where corner-shape ships (Chromium 139+): radius 20
+   with the system's 60% smoothing → span 32. */
+@supports (corner-shape: superellipse(1.465)) {
+  :root {
+    --p-popover-radius: 32px;
+  }
+
+  .p-popover {
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* ─── Touch size (iOS and iPadOS) ──────────────────────────────────── */
+/* The touch popover is a bigger, softer object than the pointer one: a
+   38px radius against 12px, and a 56x13 arrow against 35.44x10.5. The
+   arrow path is the same silhouette scaled to the new box, so the tip
+   stays rounded and the shoulders keep their easing.
+
+   Placement, floating, and the .active toggle are shared with the
+   pointer popover; popovers.js reads .p-popover-touch to use the
+   bigger arrow and keep its centre at least 72px from a corner edge.
+
+   iOS 27 material: not the overlay glass the alert uses, but a near-
+   white slab. The reference lifts the backdrop additively (white 34%
+   plus-lighter), blurs it 65px, and color-dodges white 84% over it, so
+   it reads #EEEEEE over a #3D3D3D backdrop and pure white over white.
+   CSS reproduces that exactly: contrast(0.595) then brightness(1.682)
+   is v -> v + 0.341 (the plus-lighter lift), and a white 84% fill
+   over the lifted, blurred backdrop is the dodge layer's result. No
+   keyline, no rim; only a very soft 100px shadow separates it. Dark
+   is black 60% over the same blur. */
+
+:root {
+  --p-popover-touch-bg: rgba(255, 255, 255, 0.84);
+  --p-popover-touch-filter: blur(65px) contrast(0.595) brightness(1.682);
+  --p-popover-touch-arrow-bg: rgba(255, 255, 255, 0.91);
+  --p-popover-touch-fallback: #f7f7f7;
+  --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-popover-touch-bg: rgba(0, 0, 0, 0.6);
+  --p-popover-touch-filter: blur(65px);
+  --p-popover-touch-arrow-bg: rgba(0, 0, 0, 0.6);
+  --p-popover-touch-fallback: #141414;
+  --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-popover-touch-bg: rgba(0, 0, 0, 0.6);
+    --p-popover-touch-filter: blur(65px);
+    --p-popover-touch-arrow-bg: rgba(0, 0, 0, 0.6);
+    --p-popover-touch-fallback: #141414;
+    --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-popover-touch-bg: rgba(255, 255, 255, 0.84);
+  --p-popover-touch-filter: blur(65px) contrast(0.595) brightness(1.682);
+  --p-popover-touch-arrow-bg: rgba(255, 255, 255, 0.91);
+  --p-popover-touch-fallback: #f7f7f7;
+  --p-popover-touch-shadow: 0 10px 100px rgba(0, 0, 0, 0.3);
+}
+
+.p-popover-touch {
+  --p-popover-radius: 38px;
+  --p-popover-arrow-bg: var(--p-popover-touch-arrow-bg);
+
+  min-width: 240px;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 20px;
+
+  background: var(--p-popover-touch-bg);
+  -webkit-backdrop-filter: var(--p-popover-touch-filter);
+  backdrop-filter: var(--p-popover-touch-filter);
+  box-shadow: var(--p-popover-touch-shadow);
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+}
+
+/* The arrow is the body material. It can't carry its own backdrop
+   filter (Chromium drops it on clipped elements), so the fill is the
+   body's result flattened: white 91% lands on the same #EEEEEE over
+   #3D3D3D and white over white; dark is the same black 60%. */
+
+/* A popover holding a list runs the list to its own edges. */
+.p-popover-touch:has(> .p-list-touch) {
+  padding: 0;
+  overflow: hidden;
+}
+
+.p-popover-touch::before {
+  width: 56px;
+  height: 13px;
+  top: -13px;
+  margin-left: -28px;
+  clip-path: path("M0 13C3.95 13 5.72 12.93 7.51 12.38C9.28 11.84 10.89 10.62 12.37 9.47L16.56 6.19L21.79 2.09C23.89 0.37 25.87 0 28 0C30.13 0 32.11 0.38 34.21 2.09L39.44 6.19L43.63 9.47C45.11 10.62 46.71 11.84 48.49 12.38C50.28 12.93 52.05 13 56 13Z");
+}
+
+.p-popover-touch[data-p-popover-place="top"]::before {
+  top: 100%;
+}
+
+/* Rotating a 56x13 box a quarter turn leaves it offset by half the
+   difference between the two sides, hence 21.5px. */
+.p-popover-touch[data-p-popover-place="left"]::before {
+  margin-left: -21.5px;
+  margin-top: -6.5px;
+}
+
+.p-popover-touch[data-p-popover-place="right"]::before {
+  left: -34.5px;
+  margin-top: -6.5px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-popover-touch,
+  .p-popover-touch::before {
+    background: var(--p-popover-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-popover-touch,
+  .p-popover-touch::before {
+    background: var(--p-popover-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Same 1.6 ratio the other v2 surfaces use: 38px arc, 60.8px squircle.
+   The arrow keeps its own silhouette either way. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-popover-touch {
+    --p-popover-radius: 60.8px;
+
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* With no rim, increased contrast gets an opaque body and a keyline. */
+@media (prefers-contrast: more) {
+  .p-popover-touch {
+    background: var(--p-popover-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: var(--p-popover-touch-shadow), 0 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .p-popover-touch::before {
+    background: var(--p-popover-touch-fallback);
+  }
+}

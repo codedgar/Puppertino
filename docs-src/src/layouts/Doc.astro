@@ -1,0 +1,204 @@
+---
+import Base from './Base.astro';
+import { nav } from '../data/nav.js';
+
+interface Props {
+  title?: string;
+  description?: string;
+  frontmatter?: { title?: string; description?: string };
+}
+
+const props = Astro.props;
+const title = props.title ?? props.frontmatter?.title ?? '';
+const description = props.description ?? props.frontmatter?.description;
+const base = import.meta.env.BASE_URL;
+
+const navId = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+// Flat list for prev/next navigation and the eyebrow. Hub overview pages
+// are included; anchor children are shortcuts, not pages — keep them out.
+const flat = nav.flatMap((section) => [
+  { label: section.heading, href: `${base}${section.hub}`, section: section.heading },
+  ...section.groups.flatMap((group) =>
+    group.items.map((item) => ({ label: item.label, href: `${base}${item.slug}`, section: section.heading }))
+  ),
+]);
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') + '/';
+const currentIndex = flat.findIndex((item) => item.href === currentPath);
+const prev = currentIndex > 0 ? flat[currentIndex - 1] : null;
+const next = currentIndex >= 0 && currentIndex < flat.length - 1 ? flat[currentIndex + 1] : null;
+const currentSection = currentIndex >= 0 ? flat[currentIndex].section : null;
+---
+
+<Base title={title} description={description}>
+  <Fragment slot="sidebar">
+    {nav.map((section) => (
+      <details class="nav-section" data-nav={navId(section.heading)} open>
+        <summary class="nav-heading">{section.heading}</summary>
+        <ul>
+          <li>
+            <a href={`${base}${section.hub}`} class={`${base}${section.hub}` === currentPath ? 'active' : ''}>Overview</a>
+          </li>
+        </ul>
+        {section.groups.map((group) => {
+          const list = (
+            <ul>
+              {group.items.map((item) => (
+                <li>
+                  {item.children ? (
+                    <details class="nav-item" data-nav={`${navId(section.heading)}--${navId(item.label)}`} open>
+                      <summary>
+                        <a href={`${base}${item.slug}`} class={`${base}${item.slug}` === currentPath ? 'active' : ''}>{item.label}</a>
+                      </summary>
+                      <ul>
+                        {item.children.map((child) => (
+                          <li class="nav-sub">
+                            <a href={`${base}${item.slug}${child.anchor}`}>{child.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : (
+                    <a href={`${base}${item.slug}`} class={`${base}${item.slug}` === currentPath ? 'active' : ''}>{item.label}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          );
+          return group.heading ? (
+            <details class="nav-group" data-nav={`${navId(section.heading)}--${navId(group.heading)}`} open>
+              <summary>{group.heading}</summary>
+              {list}
+            </details>
+          ) : (
+            list
+          );
+        })}
+      </details>
+    ))}
+
+    <script is:inline>
+      // Remember which sidebar sections the person collapsed, per browser.
+      // The section containing the current page is always revealed.
+      (() => {
+        const KEY = 'puppertino-docs-nav';
+        let state = {};
+        try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+
+        document.querySelectorAll('.sidebar details[data-nav]').forEach((d) => {
+          const id = d.dataset.nav;
+          if (id in state) d.open = state[id];
+          d.addEventListener('toggle', () => {
+            // Programmatic reveals (active-page force-open) are context,
+            // not a preference — don't let them overwrite the stored state.
+            if (d.dataset.skipPersist) {
+              delete d.dataset.skipPersist;
+              return;
+            }
+            state[id] = d.open;
+            try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+          });
+        });
+
+        let el = document.querySelector('.sidebar a.active');
+        while (el) {
+          const details = el.closest('details');
+          if (!details) break;
+          if (!details.open) {
+            details.dataset.skipPersist = '1';
+            details.open = true;
+          }
+          el = details.parentElement;
+        }
+
+        // A link inside a summary (e.g. Forms) must navigate, not toggle.
+        // preventDefault stops the toggle, so navigate by hand. Modified
+        // clicks (new tab) keep their default behavior.
+        document.querySelectorAll('.sidebar summary a').forEach((a) => {
+          a.addEventListener('click', (e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+            e.preventDefault();
+            window.location.href = a.href;
+          });
+        });
+      })();
+    </script>
+  </Fragment>
+  <article>
+    {currentSection && <span class="article-eyebrow">{currentSection}</span>}
+    <h1>{title}</h1>
+    <slot />
+
+    {(prev || next) && (
+      <nav class="page-nav" aria-label="Page navigation">
+        {prev ? (
+          <a href={prev.href} class="page-nav-link page-nav-prev">
+            <span class="page-nav-direction">Previous</span>
+            <span class="page-nav-label">{prev.label}</span>
+          </a>
+        ) : <span class="page-nav-spacer"></span>}
+        {next ? (
+          <a href={next.href} class="page-nav-link page-nav-next">
+            <span class="page-nav-direction">Next</span>
+            <span class="page-nav-label">{next.label}</span>
+          </a>
+        ) : <span class="page-nav-spacer"></span>}
+      </nav>
+    )}
+  </article>
+
+  <aside class="toc" aria-label="On this page" hidden>
+    <span class="toc-title">On this page</span>
+    <ul class="toc-list"></ul>
+  </aside>
+
+  <script is:inline>
+    // Table of contents built from the rendered DOM, so headings from
+    // components (variant sections) are included alongside markdown ones.
+    (() => {
+      const toc = document.querySelector('.toc');
+      const list = toc?.querySelector('.toc-list');
+      if (!toc || !list) return;
+
+      const headings = [...document.querySelectorAll('article h2[id], article h3[id]')];
+      if (headings.length < 3) return;
+
+      for (const h of headings) {
+        const li = document.createElement('li');
+        if (h.tagName === 'H3') li.className = 'toc-sub';
+        const a = document.createElement('a');
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+      }
+      toc.hidden = false;
+
+      // Scroll-spy: the current section is the last heading above the
+      // upper third of the viewport.
+      const links = new Map(headings.map((h, i) => [h.id, list.children[i].firstChild]));
+      let activeLink = null;
+      const setActive = (id) => {
+        const link = links.get(id);
+        if (link === activeLink) return;
+        activeLink?.classList.remove('is-active');
+        link?.classList.add('is-active');
+        activeLink = link ?? null;
+      };
+
+      const update = () => {
+        const line = window.innerHeight / 3;
+        let current = headings[0].id;
+        for (const h of headings) {
+          if (h.getBoundingClientRect().top <= line) current = h.id;
+          else break;
+        }
+        setActive(current);
+      };
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+    })();
+  </script>
+</Base>

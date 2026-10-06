@@ -1,0 +1,680 @@
+/* Puppertino v2.0 — Notifications (macOS 27, iOS / iPadOS 27)
+   The notification banner: app icon, bold title, up-to-two body lines,
+   timestamp, optional attachment thumbnail. CSS-only; showing/dismissing
+   is left to the host app. Content-sized: 56 with one body line, 72 with
+   two, 77 with an attachment. .p-notification-group draws the card that
+   peeks below a grouped banner. .p-notification-center is a web
+   affordance for stacking banners.
+
+   macOS 27 glass edge: a dark hairline outside the shape and a bright
+   rim along the top and bottom only (no side rim), over the shared
+   overlay shadow. */
+
+:root {
+  --p-notification-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", sans-serif;
+  --p-notification-width: 344px;
+  --p-notification-radius: 20px;
+  --p-notification-bg: rgba(245, 245, 245, 0.67);
+  --p-notification-bg-opaque: #f0f0f0;
+  /* Overlay shadow shared with menus and popovers. */
+  --p-notification-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-notification-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    -1px 0 0 rgba(0, 0, 0, 0.25),
+    1px 0 0 rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 5px 4px -3px rgba(255, 255, 255, 0.12),
+    inset 0 -5px 4px -3px rgba(255, 255, 255, 0.08);
+  --p-notification-title: rgba(0, 0, 0, 0.85);
+  --p-notification-body: rgba(0, 0, 0, 0.85);
+  --p-notification-time: #bfbfbf;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-notification-bg: rgba(58, 58, 62, 0.82);
+  --p-notification-bg-opaque: #3a3a3e;
+  --p-notification-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+  --p-notification-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.6),
+    -1px 0 0 rgba(0, 0, 0, 0.3),
+    1px 0 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 5px 4px -3px rgba(255, 255, 255, 0.04),
+    inset 0 -5px 4px -3px rgba(255, 255, 255, 0.03);
+  --p-notification-title: #f5f5f5;
+  --p-notification-body: #f5f5f5;
+  --p-notification-time: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-notification-bg: rgba(58, 58, 62, 0.82);
+    --p-notification-bg-opaque: #3a3a3e;
+    --p-notification-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.45));
+    --p-notification-edge:
+      0 0 0 0.5px rgba(0, 0, 0, 0.6),
+      -1px 0 0 rgba(0, 0, 0, 0.3),
+      1px 0 0 rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 5px 4px -3px rgba(255, 255, 255, 0.04),
+      inset 0 -5px 4px -3px rgba(255, 255, 255, 0.03);
+    --p-notification-title: #f5f5f5;
+    --p-notification-body: #f5f5f5;
+    --p-notification-time: rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-notification-bg: rgba(245, 245, 245, 0.67);
+  --p-notification-bg-opaque: #f0f0f0;
+  --p-notification-shadow: var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25));
+  --p-notification-edge:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    -1px 0 0 rgba(0, 0, 0, 0.25),
+    1px 0 0 rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 5px 4px -3px rgba(255, 255, 255, 0.12),
+    inset 0 -5px 4px -3px rgba(255, 255, 255, 0.08);
+  --p-notification-title: rgba(0, 0, 0, 0.85);
+  --p-notification-body: rgba(0, 0, 0, 0.85);
+  --p-notification-time: #bfbfbf;
+}
+
+.p-notification {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-notification-bg);
+  border-radius: var(--p-notification-radius);
+  box-shadow: var(--p-notification-edge), var(--p-notification-shadow);
+  box-sizing: border-box;
+  column-gap: 12px;
+  display: grid;
+  font-family: var(--p-notification-font);
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  max-width: 100%;
+  padding: 12px 14px;
+  width: var(--p-notification-width);
+}
+
+.p-notification * {
+  box-sizing: border-box;
+}
+
+.p-notification__icon {
+  align-items: center;
+  align-self: center;
+  border-radius: 7px;
+  display: flex;
+  grid-row: 1 / 3;
+  height: 32px;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  width: 32px;
+}
+
+.p-notification__icon img {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.p-notification__title {
+  color: var(--p-notification-title);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.26px;
+  line-height: 16px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p-notification__body {
+  -webkit-box-orient: vertical;
+  color: var(--p-notification-body);
+  display: -webkit-box;
+  font-size: 13px;
+  grid-column: 2 / 4;
+  letter-spacing: -0.1px;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  line-height: 16px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.p-notification__time {
+  color: var(--p-notification-time);
+  font-size: 11px;
+  grid-column: 3;
+  grid-row: 1;
+  letter-spacing: 0;
+  line-height: 16px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Attachment thumbnail: 32×32 at the trailing edge, under the time. The
+   body gives up the trailing column and the banner grows to 77. */
+.p-notification__attachment {
+  border-radius: 6px;
+  display: block;
+  grid-column: 3;
+  grid-row: 2;
+  height: 32px;
+  justify-self: end;
+  margin-top: 5px;
+  object-fit: cover;
+  overflow: hidden;
+  width: 32px;
+}
+
+.p-notification:has(.p-notification__attachment) .p-notification__body {
+  grid-column: 2;
+}
+
+/* Grouped banners: the next card in the group peeks 8px below the front
+   one, 16px narrower on each side, with its own glass edge. Wrap the
+   front .p-notification; the card behind is drawn for you. */
+.p-notification-group {
+  box-sizing: border-box;
+  max-width: 100%;
+  padding-bottom: 8px;
+  position: relative;
+  width: var(--p-notification-width);
+}
+
+.p-notification-group::before {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-notification-bg);
+  border-radius: var(--p-notification-radius);
+  bottom: 0;
+  box-shadow: var(--p-notification-edge), var(--p-notification-shadow);
+  content: "";
+  left: 16px;
+  position: absolute;
+  right: 16px;
+  /* Starts inside the front card so no edge shows through its glass. */
+  top: 16px;
+}
+
+/* Positioned so it paints over the card behind (tree order). */
+.p-notification-group > .p-notification {
+  position: relative;
+  width: 100%;
+}
+
+/* Web affordance (no macOS equivalent): a fixed top-right stack for banners. */
+.p-notification-center {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  z-index: 120;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-notification,
+  .p-notification-group::before {
+    background: var(--p-notification-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-notification,
+  .p-notification-group::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-notification-bg-opaque);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-notification,
+  .p-notification-group::before {
+    --p-notification-edge:
+      0 0 0 1px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-notification,
+  .p-notification-group::before {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* macOS 27 draws the banner as a plain 20pt round rect (no continuous
+   smoothing), so a plain border-radius is exact and there is no
+   corner-shape here. The attachment is a smoothed r6 corner; fitted
+   against its outline, superellipse(1.465) at 7.75px matches within
+   0.05px RMS. */
+@supports (corner-shape: superellipse(1.465)) {
+  .p-notification__attachment {
+    border-radius: 7.75px;
+    corner-shape: superellipse(1.465);
+  }
+}
+
+/* ─── Touch size (iOS and iPadOS 27) ───────────────────────────────── */
+/* The iOS notification: a 66px banner, plain 23px corners, a 38px app
+   icon inset 14px, the title and message at 15px, and the time at 15px
+   in the top trailing corner. Same slots as the macOS notification
+   above.
+
+   iOS 27 material (the on-wallpaper, dark appearance): not a darkening
+   tint but an additive lift. The reference adds #101010 over the
+   blurred wallpaper, so the banner reads about 16 levels brighter than
+   what is behind it (#4E over #3D). A white 8.5% fill does the same
+   over mid-dark backdrops. The edge is the overlay glass rim the alert
+   uses: a dark hairline just outside, a bright 1px line inside the top
+   and bottom, and a soft glow rising into the bottom edge, over the
+   faint --p-shadow-glass-control drop shadow.
+
+   Notifications stack on iOS rather than listing. .p-notification-stack
+   fans the cards behind the top one; notifications.js expands it. */
+
+:root {
+  --p-notification-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-notification-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-notification-touch-title: #000000;
+  --p-notification-touch-body: #000000;
+  --p-notification-touch-time: rgba(60, 60, 67, 0.6);
+  --p-notification-touch-keyline: rgba(0, 0, 0, 0.2);
+  --p-notification-touch-rim-top: rgba(255, 255, 255, 0.9);
+  --p-notification-touch-rim-bottom: rgba(255, 255, 255, 0.8);
+  --p-notification-touch-glow: rgba(255, 255, 255, 0.5);
+  --p-notification-touch-shade: rgba(0, 0, 0, 0.05);
+  --p-notification-longlook-bg: #ffffff;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-notification-touch-bg: rgba(255, 255, 255, 0.085);
+  --p-notification-touch-fallback: #2a2a2a;
+  --p-notification-touch-title: #ffffff;
+  --p-notification-touch-body: #ffffff;
+  --p-notification-touch-time: rgba(255, 255, 255, 0.44);
+  --p-notification-touch-keyline: rgba(0, 0, 0, 0.85);
+  --p-notification-touch-rim-top: rgba(255, 255, 255, 0.34);
+  --p-notification-touch-rim-bottom: rgba(255, 255, 255, 0.32);
+  --p-notification-touch-glow: rgba(255, 255, 255, 0.22);
+  --p-notification-touch-shade: rgba(0, 0, 0, 0.14);
+  --p-notification-longlook-bg: #1c1c1e;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-notification-touch-bg: rgba(255, 255, 255, 0.085);
+    --p-notification-touch-fallback: #2a2a2a;
+    --p-notification-touch-title: #ffffff;
+    --p-notification-touch-body: #ffffff;
+    --p-notification-touch-time: rgba(255, 255, 255, 0.44);
+    --p-notification-touch-keyline: rgba(0, 0, 0, 0.85);
+    --p-notification-touch-rim-top: rgba(255, 255, 255, 0.34);
+    --p-notification-touch-rim-bottom: rgba(255, 255, 255, 0.32);
+    --p-notification-touch-glow: rgba(255, 255, 255, 0.22);
+    --p-notification-touch-shade: rgba(0, 0, 0, 0.14);
+    --p-notification-longlook-bg: #1c1c1e;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-notification-touch-bg: rgba(245, 245, 245, 0.72);
+  --p-notification-touch-fallback: rgba(245, 245, 245, 0.98);
+  --p-notification-touch-title: #000000;
+  --p-notification-touch-body: #000000;
+  --p-notification-touch-time: rgba(60, 60, 67, 0.6);
+  --p-notification-touch-keyline: rgba(0, 0, 0, 0.2);
+  --p-notification-touch-rim-top: rgba(255, 255, 255, 0.9);
+  --p-notification-touch-rim-bottom: rgba(255, 255, 255, 0.8);
+  --p-notification-touch-glow: rgba(255, 255, 255, 0.5);
+  --p-notification-touch-shade: rgba(0, 0, 0, 0.05);
+  --p-notification-longlook-bg: #ffffff;
+}
+
+.p-notification-touch,
+.p-notification-actions {
+  --p-notification-touch-edge:
+    0 0 0 0.5px var(--p-notification-touch-keyline),
+    inset 0 1px 0 var(--p-notification-touch-rim-top),
+    inset 0 -1px 0 var(--p-notification-touch-rim-bottom),
+    inset 0 40px 24px -40px var(--p-notification-touch-shade),
+    inset 0 -40px 28px -40px var(--p-notification-touch-glow);
+}
+
+.p-notification-touch {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0 10px;
+
+  width: 100%;
+  max-width: 377px;
+  min-height: 66px;
+  /* Title and message are 18px lines: 15 + 36 + 15 = 66. */
+  padding: 15px 16px 15px 14px;
+  grid-template-rows: 18px auto;
+  border-radius: 23px;
+
+  background: var(--p-notification-touch-bg);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  box-shadow:
+    var(--p-notification-touch-edge),
+    var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.02));
+  color: var(--p-notification-touch-title);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-notification-touch * {
+  box-sizing: border-box;
+}
+
+.p-notification-touch .p-notification__icon {
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 38.33px;
+  height: 38.33px;
+  /* 2.33px taller than the two text lines; the negative margin lets it
+     overhang both paddings equally so it sits 14px from the edge. */
+  margin: -1.165px 0;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.p-notification-touch .p-notification__icon img,
+.p-notification-touch .p-notification__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.p-notification-touch .p-notification__title {
+  grid-column: 2;
+  margin: 0;
+  color: var(--p-notification-touch-title);
+  font-size: 15px;
+  font-weight: 590;
+  line-height: 18px;
+  letter-spacing: -0.23px;
+}
+
+.p-notification-touch .p-notification__body {
+  grid-column: 2;
+  margin: 0;
+  color: var(--p-notification-touch-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.23px;
+}
+
+.p-notification-touch .p-notification__time {
+  grid-column: 3;
+  grid-row: 1;
+  color: var(--p-notification-touch-time);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* ─── Long look ────────────────────────────────────────────────────── */
+/* The expanded notification: a 370px opaque card with 26px corners. A
+   66px header repeats the banner's icon, title, description and time
+   in the plain text colors, and the app's content fills the rest.
+
+   <article class="p-notification p-notification-touch p-notification-touch-expanded">
+     <header class="p-notification__header">icon, title, time, body</header>
+     <div class="p-notification__content">…</div>
+   </article> */
+.p-notification-touch-expanded {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 370px;
+  padding: 0;
+  border-radius: 26px;
+  overflow: hidden;
+
+  background: var(--p-notification-longlook-bg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.02));
+}
+
+.p-notification-touch-expanded .p-notification__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0 10px;
+  flex: none;
+  min-height: 66px;
+  padding: 15px 16px 15px 14px;
+  grid-template-rows: 18px auto;
+}
+
+.p-notification-touch-expanded .p-notification__title,
+.p-notification-touch-expanded .p-notification__body {
+  color: var(--p-text-primary, #000000);
+}
+
+.p-notification-touch-expanded .p-notification__time {
+  color: var(--p-text-secondary, rgba(60, 60, 67, 0.6));
+}
+
+.p-notification-touch-expanded .p-notification__content {
+  flex: 1;
+  min-height: 0;
+}
+
+.p-notification-touch-expanded .p-notification__content > img,
+.p-notification-touch-expanded .p-notification__content > video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ─── Quick actions ────────────────────────────────────────────────── */
+/* The menu under a long look: 250px wide, 26px corners, on the banner's
+   own glass. Rows are 42px with a leading symbol, 17px labels. */
+.p-notification-actions {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  max-width: 100%;
+  margin: 0;
+  padding: 10px 0;
+  border-radius: 26px;
+  list-style: none;
+
+  background: var(--p-notification-touch-bg);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  box-shadow:
+    var(--p-notification-touch-edge),
+    var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.02));
+  color: var(--p-notification-touch-title);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-notification-actions__item {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 42px;
+  margin: 0;
+  padding: 0 20px 0 26px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* The symbol column is 24px, so every label starts 60px in. */
+.p-notification-actions__item > :first-child:not(:only-child) {
+  flex: none;
+  width: 24px;
+  text-align: center;
+}
+
+.p-notification-actions__item:hover,
+.p-notification-actions__item:active {
+  background: rgba(127, 127, 127, 0.16);
+}
+
+.p-notification-actions__item:focus-visible {
+  outline: 3px solid var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline-offset: -3px;
+}
+
+.p-notification-actions__item--destructive {
+  color: var(--p-sys-red, #ff383c);
+}
+
+/* ─── Stack ────────────────────────────────────────────────────────── */
+/* Cards behind the top one step in 10px per side and peek 8px below
+   it, each with its own rim, which is how iOS shows there is more than
+   one. */
+.p-notification-stack {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  max-width: 377px;
+}
+
+.p-notification-stack > .p-notification-touch {
+  grid-area: 1 / 1;
+}
+
+/* Paint order. The front card is raised and the cards behind keep
+   z-index: auto, so they stay above the background of whatever holds
+   the stack; a negative z-index would put them under it. Among the
+   cards behind, `order` paints the further one first. Every card is in
+   the same cell, so `order` moves nothing. */
+.p-notification-stack > .p-notification-touch:first-child {
+  z-index: 1;
+}
+
+/* A card behind is clipped to what shows below the one in front: its
+   8px peek plus the 4px the front card's 23px corner curve uncovers
+   10px in, at the narrower card's edge. Otherwise the front card's glass would pick up
+   the card behind it and read brighter than a single banner. */
+.p-notification-stack > .p-notification-touch:nth-child(n + 2) {
+  clip-path: inset(calc(100% - 12px) -4px -40px -4px);
+  /* Cards behind lift the backdrop about half as much (+8 against the
+     front card's +16), so the peeks read as further back. */
+  --p-notification-touch-glow: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--p-notification-touch-bg) 50%, transparent);
+}
+
+.p-notification-stack > .p-notification-touch:nth-child(2) {
+  width: calc(100% - 20px);
+  translate: 0 8px;
+  order: 2;
+}
+
+.p-notification-stack > .p-notification-touch:nth-child(3) {
+  width: calc(100% - 40px);
+  translate: 0 16px;
+  order: 1;
+}
+
+/* Two cards show behind the front one, however many there are. */
+.p-notification-stack > .p-notification-touch:nth-child(n + 4) {
+  visibility: hidden;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-notification-touch:not(.p-notification-touch-expanded),
+  .p-notification-actions {
+    background: var(--p-notification-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-notification-touch:not(.p-notification-touch-expanded),
+  .p-notification-actions {
+    background: var(--p-notification-touch-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-notification-touch,
+  .p-notification-actions {
+    --p-notification-touch-keyline: rgba(127, 127, 127, 0.9);
+    background: var(--p-notification-touch-fallback);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-notification-touch,
+  .p-notification-actions {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Expanded stack: notifications.js toggles this on tap. The cards
+   behind the top one stop overlapping and become a list. */
+.p-notification-stack-expanded {
+  display: grid;
+  gap: 8px;
+  justify-items: stretch;
+}
+
+/* :nth-child(n) lifts it over the collapsed per-card rules above. */
+.p-notification-stack.p-notification-stack-expanded > .p-notification-touch:nth-child(n) {
+  background: var(--p-notification-touch-bg);
+  clip-path: none;
+  grid-area: auto;
+  width: 100%;
+  translate: none;
+  order: 0;
+  visibility: visible;
+}
+
+.p-notification-stack {
+  cursor: pointer;
+  transition: gap 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-notification-stack {
+    transition: none;
+  }
+}

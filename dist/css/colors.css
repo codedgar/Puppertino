@@ -1,0 +1,953 @@
+/* ─────────────────────────────────────────────────────────────────────
+   --p-color-current
+   The shared tint signal every Puppertino color utility publishes.
+   Components like .p-button-colored read this to retint when a color
+   class is dropped on the element.
+
+   inherits: false is intentional — without it, putting .p-strawberry
+   on a card would silently retint every nested button. Locking the
+   property to the element it's set on preserves the v1 cascade
+   ergonomic: drop a color class directly on the target, nothing else
+   inherits it.
+   ───────────────────────────────────────────────────────────────────── */
+@property --p-color-current {
+  syntax: "<color>";
+  inherits: false;
+  /* The control tint blue. Registered properties always resolve, so the
+     var() fallbacks downstream never fire. macOS 27 uses one blue for
+     text, links, selection and control fills: #0088FF light, #0091FF
+     dark (macOS 26 filled controls with #0D6FFF; that value is retired).
+     The initial value only shows where the rule below cannot reach. */
+  initial-value: #0088FF;
+}
+
+/* Appearance-aware default for --p-color-current.
+   A non-inheriting registered property can't be flipped by setting it
+   on .p-dark-mode, so every element sets its own default from
+   --p-sys-blue, which does inherit and is redefined in each appearance
+   scope below. :where() keeps this at zero specificity: any color class,
+   component rule or inline style still wins, and a color class on a
+   wrapper still doesn't leak into its children.
+   It reads --p-sys-blue rather than --p-control-accent on purpose:
+   components set --p-control-accent from --p-color-current, and reading
+   it back here would be a cycle. */
+:where(*, *::before, *::after) {
+  --p-color-current: var(--p-sys-blue, #0088FF);
+}
+
+:root{
+--p-white: #fff;
+--p-strawberry: #c6262e;
+--p-strawberry-100: #ff8c82;
+--p-strawberry-300: #ed5353;
+--p-strawberry-500: #c6262e;
+--p-strawberry-700: #a10705;
+--p-strawberry-900: #7a0000;
+
+--p-orange: #f37329;
+--p-orange-100: #ffc27d;
+--p-orange-300: #ffa154;
+--p-orange-500: #f37329;
+--p-orange-700: #cc3b02;
+--p-orange-900: #a62100;
+
+
+--p-banana: #f9c440;
+--p-banana-100: #fff394;
+--p-banana-300: #ffe16b;
+--p-banana-500: #f9c440;
+--p-banana-700: #d48e15;
+--p-banana-900: #ad5f00;
+
+--p-lime: #68b723;
+--p-lime-100: #d1ff82;
+--p-lime-300: #9bdb4d;
+--p-lime-500: #68b723;
+--p-lime-700: #3a9104;
+--p-lime-900: #206b00;
+
+--p-mint: #28bca3;
+--p-mint-100: #89ffdd;
+--p-mint-300: #43d6b5;
+--p-mint-500: #28bca3;
+--p-mint-700: #0e9a83;
+--p-mint-900: #007367;
+
+
+--p-blueberry: #3689e6;
+--p-blueberry-100: #8cd5ff;
+--p-blueberry-300: #64baff;
+--p-blueberry-500: #3689e6;
+--p-blueberry-700: #0d52bf;
+--p-blueberry-900: #002e99;
+
+--p-grape: #a56de2;
+--p-grape-100: #e4c6fa;
+--p-grape-300: #cd9ef7;
+--p-grape-500: #a56de2;
+--p-grape-700: #7239b3;
+--p-grape-900: #452981;
+
+--p-bubblegum: #de3e80;
+--p-bubblegum-100: #fe9ab8;
+--p-bubblegum-300: #f4679d;
+--p-bubblegum-500: #de3e80;
+--p-bubblegum-700: #bc245d;
+--p-bubblegum-900: #910e38;
+
+
+--p-cocoa: #715344;
+--p-cocoa-100: #a3907c;
+--p-cocoa-300: #8a715e;
+--p-cocoa-500: #715344;
+--p-cocoa-700: #57392d;
+--p-cocoa-900: #3d211b;
+
+--p-silver: #abacae;
+--p-silver-100: #fafafa;
+--p-silver-300: #d4d4d4;
+--p-silver-500: #abacae;
+--p-silver-700: #7e8087;
+--p-silver-900: #555761;
+
+--p-slate: #485a6c;
+--p-slate-100: #95a3ab;
+--p-slate-300: #667885;
+--p-slate-500: #485a6c;
+--p-slate-700: #273445;
+--p-slate-900: #0e141f;
+
+
+--p-dark: #333;
+--p-dark-100: #666;
+--p-dark-300: #4d4d4d;
+--p-dark-500: #333;
+--p-dark-700: #1a1a1a;
+--p-dark-900: #000;
+
+
+--p-apple-red: rgb(255, 59 , 48);
+--p-apple-red-dark: rgb(255, 69 , 58);
+--p-apple-orange: rgb(255,149,0);
+--p-apple-orange-dark: rgb(255,159,10);
+--p-apple-yellow: rgb(255,204,0);
+--p-apple-yellow-dark: rgb(255,214,10);
+--p-apple-green: rgb(40,205,65);
+--p-apple-green-dark: rgb(40,215,75);
+--p-apple-mint: rgb(0,199,190);
+--p-apple-mint-dark: rgb(102,212,207);
+--p-apple-teal: rgb(89, 173, 196);
+--p-apple-teal-dark: rgb(106, 196, 220);
+--p-apple-cyan: rgb(85,190,240);
+--p-apple-cyan-dark: rgb(90,200,245);
+--p-apple-blue: rgb(0, 122, 255);
+--p-apple-blue-dark: rgb(10, 132, 255);
+--p-apple-indigo: rgb(88, 86, 214);
+--p-apple-indigo-dark: rgb(94, 92, 230);
+--p-apple-purple: rgb(175, 82, 222);
+--p-apple-purple-dark: rgb(191, 90, 242);
+--p-apple-pink: rgb(255, 45, 85);
+--p-apple-pink-dark: rgb(255, 55, 95);
+--p-apple-brown: rgb(162, 132, 94);
+--p-apple-brown-dark: rgb(172, 142, 104);
+--p-apple-gray: rgb(142, 142, 147);
+--p-apple-gray-dark: rgb(152, 152, 157);
+
+}
+
+
+/*
+APPLE OFFICIAL COLORS
+Each class publishes --p-color-current so components like .p-button
+can read it for tinting. Hex literals live exclusively in :root.
+*/
+
+.p-apple-red        { --p-color-current: var(--p-apple-red);        background: var(--p-color-current); }
+.p-apple-red-dark   { --p-color-current: var(--p-apple-red-dark);   background: var(--p-color-current); }
+.p-apple-orange     { --p-color-current: var(--p-apple-orange);     background: var(--p-color-current); }
+.p-apple-orange-dark{ --p-color-current: var(--p-apple-orange-dark);background: var(--p-color-current); }
+.p-apple-yellow     { --p-color-current: var(--p-apple-yellow);     background: var(--p-color-current); }
+.p-apple-yellow-dark{ --p-color-current: var(--p-apple-yellow-dark);background: var(--p-color-current); }
+.p-apple-green      { --p-color-current: var(--p-apple-green);      background: var(--p-color-current); }
+.p-apple-green-dark { --p-color-current: var(--p-apple-green-dark); background: var(--p-color-current); }
+.p-apple-mint       { --p-color-current: var(--p-apple-mint);       background: var(--p-color-current); }
+.p-apple-mint-dark  { --p-color-current: var(--p-apple-mint-dark);  background: var(--p-color-current); }
+.p-apple-teal       { --p-color-current: var(--p-apple-teal);       background: var(--p-color-current); }
+.p-apple-teal-dark  { --p-color-current: var(--p-apple-teal-dark);  background: var(--p-color-current); }
+.p-apple-cyan       { --p-color-current: var(--p-apple-cyan);       background: var(--p-color-current); }
+.p-apple-cyan-dark  { --p-color-current: var(--p-apple-cyan-dark);  background: var(--p-color-current); }
+.p-apple-blue       { --p-color-current: var(--p-apple-blue);       background: var(--p-color-current); }
+.p-apple-blue-dark  { --p-color-current: var(--p-apple-blue-dark);  background: var(--p-color-current); }
+.p-apple-indigo     { --p-color-current: var(--p-apple-indigo);     background: var(--p-color-current); }
+.p-apple-indigo-dark{ --p-color-current: var(--p-apple-indigo-dark);background: var(--p-color-current); }
+.p-apple-purple     { --p-color-current: var(--p-apple-purple);     background: var(--p-color-current); }
+.p-apple-purple-dark{ --p-color-current: var(--p-apple-purple-dark);background: var(--p-color-current); }
+.p-apple-pink       { --p-color-current: var(--p-apple-pink);       background: var(--p-color-current); }
+.p-apple-pink-dark  { --p-color-current: var(--p-apple-pink-dark);  background: var(--p-color-current); }
+.p-apple-brown      { --p-color-current: var(--p-apple-brown);      background: var(--p-color-current); }
+.p-apple-brown-dark { --p-color-current: var(--p-apple-brown-dark); background: var(--p-color-current); }
+.p-apple-gray       { --p-color-current: var(--p-apple-gray);       background: var(--p-color-current); }
+.p-apple-gray-dark  { --p-color-current: var(--p-apple-gray-dark);  background: var(--p-color-current); }
+
+.p-apple-red-color        { --p-color-current: var(--p-apple-red);        color: var(--p-color-current); }
+.p-apple-red-dark-color   { --p-color-current: var(--p-apple-red-dark);   color: var(--p-color-current); }
+.p-apple-orange-color     { --p-color-current: var(--p-apple-orange);     color: var(--p-color-current); }
+.p-apple-orange-dark-color{ --p-color-current: var(--p-apple-orange-dark);color: var(--p-color-current); }
+.p-apple-yellow-color     { --p-color-current: var(--p-apple-yellow);     color: var(--p-color-current); }
+.p-apple-yellow-dark-color{ --p-color-current: var(--p-apple-yellow-dark);color: var(--p-color-current); }
+.p-apple-green-color      { --p-color-current: var(--p-apple-green);      color: var(--p-color-current); }
+.p-apple-green-dark-color { --p-color-current: var(--p-apple-green-dark); color: var(--p-color-current); }
+.p-apple-mint-color       { --p-color-current: var(--p-apple-mint);       color: var(--p-color-current); }
+.p-apple-mint-dark-color  { --p-color-current: var(--p-apple-mint-dark);  color: var(--p-color-current); }
+.p-apple-teal-color       { --p-color-current: var(--p-apple-teal);       color: var(--p-color-current); }
+.p-apple-teal-dark-color  { --p-color-current: var(--p-apple-teal-dark);  color: var(--p-color-current); }
+.p-apple-cyan-color       { --p-color-current: var(--p-apple-cyan);       color: var(--p-color-current); }
+.p-apple-cyan-dark-color  { --p-color-current: var(--p-apple-cyan-dark);  color: var(--p-color-current); }
+.p-apple-blue-color       { --p-color-current: var(--p-apple-blue);       color: var(--p-color-current); }
+.p-apple-blue-dark-color  { --p-color-current: var(--p-apple-blue-dark);  color: var(--p-color-current); }
+.p-apple-indigo-color     { --p-color-current: var(--p-apple-indigo);     color: var(--p-color-current); }
+.p-apple-indigo-dark-color{ --p-color-current: var(--p-apple-indigo-dark);color: var(--p-color-current); }
+.p-apple-purple-color     { --p-color-current: var(--p-apple-purple);     color: var(--p-color-current); }
+.p-apple-purple-dark-color{ --p-color-current: var(--p-apple-purple-dark);color: var(--p-color-current); }
+.p-apple-pink-color       { --p-color-current: var(--p-apple-pink);       color: var(--p-color-current); }
+.p-apple-pink-dark-color  { --p-color-current: var(--p-apple-pink-dark);  color: var(--p-color-current); }
+.p-apple-brown-color      { --p-color-current: var(--p-apple-brown);      color: var(--p-color-current); }
+.p-apple-brown-dark-color { --p-color-current: var(--p-apple-brown-dark); color: var(--p-color-current); }
+.p-apple-gray-color       { --p-color-current: var(--p-apple-gray);       color: var(--p-color-current); }
+.p-apple-gray-dark-color  { --p-color-current: var(--p-apple-gray-dark);  color: var(--p-color-current); }
+
+/*
+BRAND PALETTE — BACKGROUND UTILITIES
+Each class publishes --p-color-current and reads from its :root token.
+Hex literals live exclusively in :root. Drop one of these directly on
+a component (button, badge, segmented control) to retint it.
+*/
+
+.p-strawberry     { --p-color-current: var(--p-strawberry);     background: var(--p-color-current); }
+.p-strawberry-100 { --p-color-current: var(--p-strawberry-100); background: var(--p-color-current); }
+.p-strawberry-300 { --p-color-current: var(--p-strawberry-300); background: var(--p-color-current); }
+.p-strawberry-500 { --p-color-current: var(--p-strawberry-500); background: var(--p-color-current); }
+.p-strawberry-700 { --p-color-current: var(--p-strawberry-700); background: var(--p-color-current); }
+.p-strawberry-900 { --p-color-current: var(--p-strawberry-900); background: var(--p-color-current); }
+
+.p-orange     { --p-color-current: var(--p-orange);     background: var(--p-color-current); }
+.p-orange-100 { --p-color-current: var(--p-orange-100); background: var(--p-color-current); }
+.p-orange-300 { --p-color-current: var(--p-orange-300); background: var(--p-color-current); }
+.p-orange-500 { --p-color-current: var(--p-orange-500); background: var(--p-color-current); }
+.p-orange-700 { --p-color-current: var(--p-orange-700); background: var(--p-color-current); }
+.p-orange-900 { --p-color-current: var(--p-orange-900); background: var(--p-color-current); }
+
+.p-banana     { --p-color-current: var(--p-banana);     background: var(--p-color-current); }
+.p-banana-100 { --p-color-current: var(--p-banana-100); background: var(--p-color-current); }
+.p-banana-300 { --p-color-current: var(--p-banana-300); background: var(--p-color-current); }
+.p-banana-500 { --p-color-current: var(--p-banana-500); background: var(--p-color-current); }
+.p-banana-700 { --p-color-current: var(--p-banana-700); background: var(--p-color-current); }
+.p-banana-900 { --p-color-current: var(--p-banana-900); background: var(--p-color-current); }
+
+.p-lime     { --p-color-current: var(--p-lime);     background: var(--p-color-current); }
+.p-lime-100 { --p-color-current: var(--p-lime-100); background: var(--p-color-current); }
+.p-lime-300 { --p-color-current: var(--p-lime-300); background: var(--p-color-current); }
+.p-lime-500 { --p-color-current: var(--p-lime-500); background: var(--p-color-current); }
+.p-lime-700 { --p-color-current: var(--p-lime-700); background: var(--p-color-current); }
+.p-lime-900 { --p-color-current: var(--p-lime-900); background: var(--p-color-current); }
+
+.p-mint     { --p-color-current: var(--p-mint);     background: var(--p-color-current); }
+.p-mint-100 { --p-color-current: var(--p-mint-100); background: var(--p-color-current); }
+.p-mint-300 { --p-color-current: var(--p-mint-300); background: var(--p-color-current); }
+.p-mint-500 { --p-color-current: var(--p-mint-500); background: var(--p-color-current); }
+.p-mint-700 { --p-color-current: var(--p-mint-700); background: var(--p-color-current); }
+.p-mint-900 { --p-color-current: var(--p-mint-900); background: var(--p-color-current); }
+
+.p-blueberry     { --p-color-current: var(--p-blueberry);     background: var(--p-color-current); }
+.p-blueberry-100 { --p-color-current: var(--p-blueberry-100); background: var(--p-color-current); }
+.p-blueberry-300 { --p-color-current: var(--p-blueberry-300); background: var(--p-color-current); }
+.p-blueberry-500 { --p-color-current: var(--p-blueberry-500); background: var(--p-color-current); }
+.p-blueberry-700 { --p-color-current: var(--p-blueberry-700); background: var(--p-color-current); }
+.p-blueberry-900 { --p-color-current: var(--p-blueberry-900); background: var(--p-color-current); }
+
+.p-grape     { --p-color-current: var(--p-grape);     background: var(--p-color-current); }
+.p-grape-100 { --p-color-current: var(--p-grape-100); background: var(--p-color-current); }
+.p-grape-300 { --p-color-current: var(--p-grape-300); background: var(--p-color-current); }
+.p-grape-500 { --p-color-current: var(--p-grape-500); background: var(--p-color-current); }
+.p-grape-700 { --p-color-current: var(--p-grape-700); background: var(--p-color-current); }
+.p-grape-900 { --p-color-current: var(--p-grape-900); background: var(--p-color-current); }
+
+.p-bubblegum     { --p-color-current: var(--p-bubblegum);     background: var(--p-color-current); }
+.p-bubblegum-100 { --p-color-current: var(--p-bubblegum-100); background: var(--p-color-current); }
+.p-bubblegum-300 { --p-color-current: var(--p-bubblegum-300); background: var(--p-color-current); }
+.p-bubblegum-500 { --p-color-current: var(--p-bubblegum-500); background: var(--p-color-current); }
+.p-bubblegum-700 { --p-color-current: var(--p-bubblegum-700); background: var(--p-color-current); }
+.p-bubblegum-900 { --p-color-current: var(--p-bubblegum-900); background: var(--p-color-current); }
+
+.p-cocoa     { --p-color-current: var(--p-cocoa);     background: var(--p-color-current); }
+.p-cocoa-100 { --p-color-current: var(--p-cocoa-100); background: var(--p-color-current); }
+.p-cocoa-300 { --p-color-current: var(--p-cocoa-300); background: var(--p-color-current); }
+.p-cocoa-500 { --p-color-current: var(--p-cocoa-500); background: var(--p-color-current); }
+.p-cocoa-700 { --p-color-current: var(--p-cocoa-700); background: var(--p-color-current); }
+.p-cocoa-900 { --p-color-current: var(--p-cocoa-900); background: var(--p-color-current); }
+
+.p-silver     { --p-color-current: var(--p-silver);     background: var(--p-color-current); }
+.p-silver-100 { --p-color-current: var(--p-silver-100); background: var(--p-color-current); }
+.p-silver-300 { --p-color-current: var(--p-silver-300); background: var(--p-color-current); }
+.p-silver-500 { --p-color-current: var(--p-silver-500); background: var(--p-color-current); }
+.p-silver-700 { --p-color-current: var(--p-silver-700); background: var(--p-color-current); }
+.p-silver-900 { --p-color-current: var(--p-silver-900); background: var(--p-color-current); }
+
+.p-slate     { --p-color-current: var(--p-slate);     background: var(--p-color-current); }
+.p-slate-100 { --p-color-current: var(--p-slate-100); background: var(--p-color-current); }
+.p-slate-300 { --p-color-current: var(--p-slate-300); background: var(--p-color-current); }
+.p-slate-500 { --p-color-current: var(--p-slate-500); background: var(--p-color-current); }
+.p-slate-700 { --p-color-current: var(--p-slate-700); background: var(--p-color-current); }
+.p-slate-900 { --p-color-current: var(--p-slate-900); background: var(--p-color-current); }
+
+.p-dark     { --p-color-current: var(--p-dark);     background: var(--p-color-current); }
+.p-dark-100 { --p-color-current: var(--p-dark-100); background: var(--p-color-current); }
+.p-dark-300 { --p-color-current: var(--p-dark-300); background: var(--p-color-current); }
+.p-dark-500 { --p-color-current: var(--p-dark-500); background: var(--p-color-current); }
+.p-dark-700 { --p-color-current: var(--p-dark-700); background: var(--p-color-current); }
+.p-dark-900 { --p-color-current: var(--p-dark-900); background: var(--p-color-current); }
+
+.p-white { --p-color-current: var(--p-white); background: var(--p-color-current); }
+
+/*
+BRAND PALETTE — TEXT COLOR UTILITIES
+Same publication pattern as the background utilities. Drop one of
+these on a text element (or a button that should retint via text)
+and --p-color-current is exposed for any nested component to read.
+*/
+
+.p-strawberry-color     { --p-color-current: var(--p-strawberry);     color: var(--p-color-current); }
+.p-strawberry-100-color { --p-color-current: var(--p-strawberry-100); color: var(--p-color-current); }
+.p-strawberry-300-color { --p-color-current: var(--p-strawberry-300); color: var(--p-color-current); }
+.p-strawberry-500-color { --p-color-current: var(--p-strawberry-500); color: var(--p-color-current); }
+.p-strawberry-700-color { --p-color-current: var(--p-strawberry-700); color: var(--p-color-current); }
+.p-strawberry-900-color { --p-color-current: var(--p-strawberry-900); color: var(--p-color-current); }
+
+.p-orange-color     { --p-color-current: var(--p-orange);     color: var(--p-color-current); }
+.p-orange-100-color { --p-color-current: var(--p-orange-100); color: var(--p-color-current); }
+.p-orange-300-color { --p-color-current: var(--p-orange-300); color: var(--p-color-current); }
+.p-orange-500-color { --p-color-current: var(--p-orange-500); color: var(--p-color-current); }
+.p-orange-700-color { --p-color-current: var(--p-orange-700); color: var(--p-color-current); }
+.p-orange-900-color { --p-color-current: var(--p-orange-900); color: var(--p-color-current); }
+
+.p-banana-color     { --p-color-current: var(--p-banana);     color: var(--p-color-current); }
+.p-banana-100-color { --p-color-current: var(--p-banana-100); color: var(--p-color-current); }
+.p-banana-300-color { --p-color-current: var(--p-banana-300); color: var(--p-color-current); }
+.p-banana-500-color { --p-color-current: var(--p-banana-500); color: var(--p-color-current); }
+.p-banana-700-color { --p-color-current: var(--p-banana-700); color: var(--p-color-current); }
+.p-banana-900-color { --p-color-current: var(--p-banana-900); color: var(--p-color-current); }
+
+.p-lime-color     { --p-color-current: var(--p-lime);     color: var(--p-color-current); }
+.p-lime-100-color { --p-color-current: var(--p-lime-100); color: var(--p-color-current); }
+.p-lime-300-color { --p-color-current: var(--p-lime-300); color: var(--p-color-current); }
+.p-lime-500-color { --p-color-current: var(--p-lime-500); color: var(--p-color-current); }
+.p-lime-700-color { --p-color-current: var(--p-lime-700); color: var(--p-color-current); }
+.p-lime-900-color { --p-color-current: var(--p-lime-900); color: var(--p-color-current); }
+
+.p-mint-color     { --p-color-current: var(--p-mint);     color: var(--p-color-current); }
+.p-mint-100-color { --p-color-current: var(--p-mint-100); color: var(--p-color-current); }
+.p-mint-300-color { --p-color-current: var(--p-mint-300); color: var(--p-color-current); }
+.p-mint-500-color { --p-color-current: var(--p-mint-500); color: var(--p-color-current); }
+.p-mint-700-color { --p-color-current: var(--p-mint-700); color: var(--p-color-current); }
+.p-mint-900-color { --p-color-current: var(--p-mint-900); color: var(--p-color-current); }
+
+.p-blueberry-color     { --p-color-current: var(--p-blueberry);     color: var(--p-color-current); }
+.p-blueberry-100-color { --p-color-current: var(--p-blueberry-100); color: var(--p-color-current); }
+.p-blueberry-300-color { --p-color-current: var(--p-blueberry-300); color: var(--p-color-current); }
+.p-blueberry-500-color { --p-color-current: var(--p-blueberry-500); color: var(--p-color-current); }
+.p-blueberry-700-color { --p-color-current: var(--p-blueberry-700); color: var(--p-color-current); }
+.p-blueberry-900-color { --p-color-current: var(--p-blueberry-900); color: var(--p-color-current); }
+
+.p-grape-color     { --p-color-current: var(--p-grape);     color: var(--p-color-current); }
+.p-grape-100-color { --p-color-current: var(--p-grape-100); color: var(--p-color-current); }
+.p-grape-300-color { --p-color-current: var(--p-grape-300); color: var(--p-color-current); }
+.p-grape-500-color { --p-color-current: var(--p-grape-500); color: var(--p-color-current); }
+.p-grape-700-color { --p-color-current: var(--p-grape-700); color: var(--p-color-current); }
+.p-grape-900-color { --p-color-current: var(--p-grape-900); color: var(--p-color-current); }
+
+.p-bubblegum-color     { --p-color-current: var(--p-bubblegum);     color: var(--p-color-current); }
+.p-bubblegum-100-color { --p-color-current: var(--p-bubblegum-100); color: var(--p-color-current); }
+.p-bubblegum-300-color { --p-color-current: var(--p-bubblegum-300); color: var(--p-color-current); }
+.p-bubblegum-500-color { --p-color-current: var(--p-bubblegum-500); color: var(--p-color-current); }
+.p-bubblegum-700-color { --p-color-current: var(--p-bubblegum-700); color: var(--p-color-current); }
+.p-bubblegum-900-color { --p-color-current: var(--p-bubblegum-900); color: var(--p-color-current); }
+
+.p-cocoa-color     { --p-color-current: var(--p-cocoa);     color: var(--p-color-current); }
+.p-cocoa-100-color { --p-color-current: var(--p-cocoa-100); color: var(--p-color-current); }
+.p-cocoa-300-color { --p-color-current: var(--p-cocoa-300); color: var(--p-color-current); }
+.p-cocoa-500-color { --p-color-current: var(--p-cocoa-500); color: var(--p-color-current); }
+.p-cocoa-700-color { --p-color-current: var(--p-cocoa-700); color: var(--p-color-current); }
+.p-cocoa-900-color { --p-color-current: var(--p-cocoa-900); color: var(--p-color-current); }
+
+.p-silver-color     { --p-color-current: var(--p-silver);     color: var(--p-color-current); }
+.p-silver-100-color { --p-color-current: var(--p-silver-100); color: var(--p-color-current); }
+.p-silver-300-color { --p-color-current: var(--p-silver-300); color: var(--p-color-current); }
+.p-silver-500-color { --p-color-current: var(--p-silver-500); color: var(--p-color-current); }
+.p-silver-700-color { --p-color-current: var(--p-silver-700); color: var(--p-color-current); }
+.p-silver-900-color { --p-color-current: var(--p-silver-900); color: var(--p-color-current); }
+
+.p-slate-color     { --p-color-current: var(--p-slate);     color: var(--p-color-current); }
+.p-slate-100-color { --p-color-current: var(--p-slate-100); color: var(--p-color-current); }
+.p-slate-300-color { --p-color-current: var(--p-slate-300); color: var(--p-color-current); }
+.p-slate-500-color { --p-color-current: var(--p-slate-500); color: var(--p-color-current); }
+.p-slate-700-color { --p-color-current: var(--p-slate-700); color: var(--p-color-current); }
+.p-slate-900-color { --p-color-current: var(--p-slate-900); color: var(--p-color-current); }
+
+.p-dark-color     { --p-color-current: var(--p-dark);     color: var(--p-color-current); }
+.p-dark-100-color { --p-color-current: var(--p-dark-100); color: var(--p-color-current); }
+.p-dark-300-color { --p-color-current: var(--p-dark-300); color: var(--p-color-current); }
+.p-dark-500-color { --p-color-current: var(--p-dark-500); color: var(--p-color-current); }
+.p-dark-700-color { --p-color-current: var(--p-dark-700); color: var(--p-color-current); }
+.p-dark-900-color { --p-color-current: var(--p-dark-900); color: var(--p-color-current); }
+
+.p-white-color { --p-color-current: var(--p-white); color: var(--p-color-current); }
+
+/* ─────────────────────────────────────────────────────────────────────
+   macOS 27 / iOS 27 Color System
+   Tokens following Apple's Liquid Glass color system. The macOS 27
+   accents, fills and text levels are unchanged from macOS 26. iOS 27
+   shares the twelve accents; the --p-ios-* tokens carry the iOS gray
+   scale, labels, fills and separator, which differ from macOS.
+   Legacy classes above remain for backwards compatibility.
+   ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* System accents (light) */
+  --p-sys-red: #FF383C;
+  --p-sys-orange: #FF8D28;
+  --p-sys-yellow: #FFCC00;
+  --p-sys-green: #34C759;
+  --p-sys-mint: #00C8B3;
+  --p-sys-teal: #00C3D0;
+  --p-sys-cyan: #00C0E8;
+  --p-sys-blue: #0088FF;
+  --p-sys-indigo: #6155F5;
+  --p-sys-purple: #CB30E0;
+  --p-sys-pink: #FF2D55;
+  --p-sys-brown: #AC7F5E;
+  --p-sys-gray: #8E8E93;
+
+  /* Semantic background tiers */
+  --p-bg-primary: #FFFFFF;
+  --p-bg-secondary: #F2F2F7;
+  --p-bg-tertiary: #FFFFFF;
+  --p-bg-grouped-primary: #F2F2F7;
+  --p-bg-grouped-secondary: #FFFFFF;
+  --p-bg-grouped-tertiary: #F2F2F7;
+
+  /* Text hierarchy (6 levels) */
+  --p-text-primary: rgba(0, 0, 0, 0.85);
+  --p-text-secondary: rgba(0, 0, 0, 0.50);
+  --p-text-tertiary: rgba(0, 0, 0, 0.25);
+  --p-text-quaternary: rgba(0, 0, 0, 0.10);
+  --p-text-quinary: rgba(0, 0, 0, 0.05);
+  --p-text-seximal: rgba(0, 0, 0, 0.03);
+
+  /* Fill levels (5 tiers) */
+  --p-fill-primary: rgba(0, 0, 0, 0.10);
+  --p-fill-secondary: rgba(0, 0, 0, 0.08);
+  --p-fill-tertiary: rgba(0, 0, 0, 0.05);
+  --p-fill-quaternary: rgba(0, 0, 0, 0.03);
+  --p-fill-quinary: rgba(0, 0, 0, 0.02);
+
+  /* Separators */
+  --p-separator: rgba(60, 60, 67, 0.29);
+  --p-separator-opaque: #C6C6C8;
+
+  /* Link */
+  --p-link: #0088FF;
+
+  /* Control accent: the fill blue for buttons, switches, sliders,
+     selected segments and every other tinted control. */
+  --p-control-accent: #0088FF;
+
+  /* Accent as text on a control with no fill of its own, sitting on a
+     material: the borderless button label inside a vibrant surface.
+     Darker than the fill in light mode (#0078F0, the vibrant blue) so
+     thin glyphs keep their contrast over glass; in dark mode it is the
+     control blue (#0091FF). */
+  --p-control-accent-text: #0078F0;
+
+  /* Keyboard focus band: 3.5px outside the control plus 1px inside it,
+     both accent at 50%. Use as a box-shadow; add the control's own
+     ring after it if it has one. */
+  --p-focus-ring-color: rgba(0, 136, 255, 0.5);
+  --p-focus-ring:
+    0 0 0 3.5px var(--p-focus-ring-color),
+    inset 0 0 0 1px var(--p-focus-ring-color);
+
+  /* ── iOS (touch) tokens ──
+     iOS 27 values that differ from macOS or that macOS has no use for.
+     Desktop components keep the macOS tokens above. */
+
+  /* iOS gray scale. Gray is #8E8E93 in both appearances on iOS (macOS
+     dark gray is #98989F). */
+  --p-ios-gray: #8E8E93;
+  --p-ios-gray-2: #AEAEB2;
+  --p-ios-gray-3: #C7C7CC;
+  --p-ios-gray-4: #D1D1D6;
+  --p-ios-gray-5: #E5E5EA;
+  --p-ios-gray-6: #F2F2F7;
+
+  /* iOS labels */
+  --p-ios-label: #000000;
+  --p-ios-label-secondary: rgba(60, 60, 67, 0.60);
+  --p-ios-label-tertiary: rgba(60, 60, 67, 0.30);
+  --p-ios-label-quaternary: rgba(60, 60, 67, 0.18);
+
+  /* iOS fills: thin tints for controls (secondary for search fields,
+     tertiary for gray buttons, quaternary for steppers) */
+  --p-ios-fill: rgba(120, 120, 128, 0.20);
+  --p-ios-fill-secondary: rgba(120, 120, 128, 0.16);
+  --p-ios-fill-tertiary: rgba(118, 118, 128, 0.12);
+  --p-ios-fill-quaternary: rgba(116, 116, 128, 0.08);
+
+  /* iOS non-opaque separator: lighter than the macOS one */
+  --p-ios-separator: rgba(0, 0, 0, 0.12);
+
+  /* Elevated backgrounds: what sheets, popovers and modal cards sit on.
+     Identical to the base tiers in light mode, one step lighter in dark
+     mode, so layers read without shadows. */
+  --p-bg-elevated-primary: #FFFFFF;
+  --p-bg-elevated-secondary: #F2F2F7;
+  --p-bg-elevated-tertiary: #FFFFFF;
+  --p-bg-grouped-elevated-primary: #F2F2F7;
+  --p-bg-grouped-elevated-secondary: #FFFFFF;
+  --p-bg-grouped-elevated-tertiary: #F2F2F7;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-sys-red: #FF4245;
+  --p-sys-orange: #FF9230;
+  --p-sys-yellow: #FFD600;
+  --p-sys-green: #30D158;
+  --p-sys-mint: #00DAC3;
+  --p-sys-teal: #00D2E0;
+  --p-sys-cyan: #3CD3FE;
+  --p-sys-blue: #0091FF;
+  --p-sys-indigo: #6D7CFF;
+  --p-sys-purple: #DB34F2;
+  --p-sys-pink: #FF375F;
+  --p-sys-brown: #B78A66;
+  --p-sys-gray: #98989F;
+
+  --p-bg-primary: #000000;
+  --p-bg-secondary: #1C1C1E;
+  --p-bg-tertiary: #2C2C2E;
+  --p-bg-grouped-primary: #000000;
+  --p-bg-grouped-secondary: #1C1C1E;
+  --p-bg-grouped-tertiary: #2C2C2E;
+
+  --p-text-primary: rgba(255, 255, 255, 0.85);
+  --p-text-secondary: rgba(255, 255, 255, 0.55);
+  --p-text-tertiary: rgba(255, 255, 255, 0.25);
+  --p-text-quaternary: rgba(255, 255, 255, 0.10);
+  --p-text-quinary: rgba(255, 255, 255, 0.05);
+  --p-text-seximal: rgba(255, 255, 255, 0.03);
+
+  --p-fill-primary: rgba(255, 255, 255, 0.10);
+  --p-fill-secondary: rgba(255, 255, 255, 0.08);
+  --p-fill-tertiary: rgba(255, 255, 255, 0.05);
+  --p-fill-quaternary: rgba(255, 255, 255, 0.03);
+  --p-fill-quinary: rgba(255, 255, 255, 0.02);
+
+  --p-separator: rgba(84, 84, 88, 0.60);
+  --p-separator-opaque: #38383A;
+
+  --p-link: #0091FF;
+
+  --p-control-accent: #0091FF;
+  --p-control-accent-text: #0091FF;
+  --p-focus-ring-color: rgba(0, 145, 255, 0.5);
+  --p-focus-ring:
+    0 0 0 3.5px var(--p-focus-ring-color),
+    inset 0 0 0 1px var(--p-focus-ring-color);
+
+  --p-ios-gray: #8E8E93;
+  --p-ios-gray-2: #636366;
+  --p-ios-gray-3: #48484A;
+  --p-ios-gray-4: #3A3A3C;
+  --p-ios-gray-5: #2C2C2E;
+  --p-ios-gray-6: #1C1C1E;
+  --p-ios-label: #FFFFFF;
+  --p-ios-label-secondary: rgba(235, 235, 245, 0.70);
+  --p-ios-label-tertiary: rgba(235, 235, 245, 0.30);
+  --p-ios-label-quaternary: rgba(235, 235, 245, 0.16);
+  --p-ios-fill: rgba(120, 120, 128, 0.36);
+  --p-ios-fill-secondary: rgba(120, 120, 128, 0.32);
+  --p-ios-fill-tertiary: rgba(118, 118, 128, 0.24);
+  --p-ios-fill-quaternary: rgba(118, 118, 128, 0.18);
+  --p-ios-separator: rgba(255, 255, 255, 0.17);
+  --p-bg-elevated-primary: #1C1C1E;
+  --p-bg-elevated-secondary: #2C2C2E;
+  --p-bg-elevated-tertiary: #3A3A3C;
+  --p-bg-grouped-elevated-primary: #1C1C1E;
+  --p-bg-grouped-elevated-secondary: #2C2C2E;
+  --p-bg-grouped-elevated-tertiary: #3A3A3C;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-sys-red: #FF4245;
+    --p-sys-orange: #FF9230;
+    --p-sys-yellow: #FFD600;
+    --p-sys-green: #30D158;
+    --p-sys-mint: #00DAC3;
+    --p-sys-teal: #00D2E0;
+    --p-sys-cyan: #3CD3FE;
+    --p-sys-blue: #0091FF;
+    --p-sys-indigo: #6D7CFF;
+    --p-sys-purple: #DB34F2;
+    --p-sys-pink: #FF375F;
+    --p-sys-brown: #B78A66;
+    --p-sys-gray: #98989F;
+
+    --p-bg-primary: #000000;
+    --p-bg-secondary: #1C1C1E;
+    --p-bg-tertiary: #2C2C2E;
+    --p-bg-grouped-primary: #000000;
+    --p-bg-grouped-secondary: #1C1C1E;
+    --p-bg-grouped-tertiary: #2C2C2E;
+
+    --p-text-primary: rgba(255, 255, 255, 0.85);
+    --p-text-secondary: rgba(255, 255, 255, 0.55);
+    --p-text-tertiary: rgba(255, 255, 255, 0.25);
+    --p-text-quaternary: rgba(255, 255, 255, 0.10);
+    --p-text-quinary: rgba(255, 255, 255, 0.05);
+    --p-text-seximal: rgba(255, 255, 255, 0.03);
+
+    --p-fill-primary: rgba(255, 255, 255, 0.10);
+    --p-fill-secondary: rgba(255, 255, 255, 0.08);
+    --p-fill-tertiary: rgba(255, 255, 255, 0.05);
+    --p-fill-quaternary: rgba(255, 255, 255, 0.03);
+    --p-fill-quinary: rgba(255, 255, 255, 0.02);
+
+    --p-separator: rgba(84, 84, 88, 0.60);
+    --p-separator-opaque: #38383A;
+
+    --p-link: #0091FF;
+
+    --p-control-accent: #0091FF;
+    --p-control-accent-text: #0091FF;
+    --p-focus-ring-color: rgba(0, 145, 255, 0.5);
+    --p-focus-ring:
+      0 0 0 3.5px var(--p-focus-ring-color),
+      inset 0 0 0 1px var(--p-focus-ring-color);
+
+    --p-ios-gray: #8E8E93;
+    --p-ios-gray-2: #636366;
+    --p-ios-gray-3: #48484A;
+    --p-ios-gray-4: #3A3A3C;
+    --p-ios-gray-5: #2C2C2E;
+    --p-ios-gray-6: #1C1C1E;
+    --p-ios-label: #FFFFFF;
+    --p-ios-label-secondary: rgba(235, 235, 245, 0.70);
+    --p-ios-label-tertiary: rgba(235, 235, 245, 0.30);
+    --p-ios-label-quaternary: rgba(235, 235, 245, 0.16);
+    --p-ios-fill: rgba(120, 120, 128, 0.36);
+    --p-ios-fill-secondary: rgba(120, 120, 128, 0.32);
+    --p-ios-fill-tertiary: rgba(118, 118, 128, 0.24);
+    --p-ios-fill-quaternary: rgba(118, 118, 128, 0.18);
+    --p-ios-separator: rgba(255, 255, 255, 0.17);
+    --p-bg-elevated-primary: #1C1C1E;
+    --p-bg-elevated-secondary: #2C2C2E;
+    --p-bg-elevated-tertiary: #3A3A3C;
+    --p-bg-grouped-elevated-primary: #1C1C1E;
+    --p-bg-grouped-elevated-secondary: #2C2C2E;
+    --p-bg-grouped-elevated-tertiary: #3A3A3C;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-sys-red: #FF383C;
+  --p-sys-orange: #FF8D28;
+  --p-sys-yellow: #FFCC00;
+  --p-sys-green: #34C759;
+  --p-sys-mint: #00C8B3;
+  --p-sys-teal: #00C3D0;
+  --p-sys-cyan: #00C0E8;
+  --p-sys-blue: #0088FF;
+  --p-sys-indigo: #6155F5;
+  --p-sys-purple: #CB30E0;
+  --p-sys-pink: #FF2D55;
+  --p-sys-brown: #AC7F5E;
+  --p-sys-gray: #8E8E93;
+  --p-bg-primary: #FFFFFF;
+  --p-bg-secondary: #F2F2F7;
+  --p-bg-tertiary: #FFFFFF;
+  --p-bg-grouped-primary: #F2F2F7;
+  --p-bg-grouped-secondary: #FFFFFF;
+  --p-bg-grouped-tertiary: #F2F2F7;
+  --p-text-primary: rgba(0, 0, 0, 0.85);
+  --p-text-secondary: rgba(0, 0, 0, 0.50);
+  --p-text-tertiary: rgba(0, 0, 0, 0.25);
+  --p-text-quaternary: rgba(0, 0, 0, 0.10);
+  --p-text-quinary: rgba(0, 0, 0, 0.05);
+  --p-text-seximal: rgba(0, 0, 0, 0.03);
+  --p-fill-primary: rgba(0, 0, 0, 0.10);
+  --p-fill-secondary: rgba(0, 0, 0, 0.08);
+  --p-fill-tertiary: rgba(0, 0, 0, 0.05);
+  --p-fill-quaternary: rgba(0, 0, 0, 0.03);
+  --p-fill-quinary: rgba(0, 0, 0, 0.02);
+  --p-separator: rgba(60, 60, 67, 0.29);
+  --p-separator-opaque: #C6C6C8;
+  --p-link: #0088FF;
+  --p-control-accent: #0088FF;
+  --p-control-accent-text: #0078F0;
+  --p-focus-ring-color: rgba(0, 136, 255, 0.5);
+  --p-focus-ring:
+    0 0 0 3.5px var(--p-focus-ring-color),
+    inset 0 0 0 1px var(--p-focus-ring-color);
+
+  --p-ios-gray: #8E8E93;
+  --p-ios-gray-2: #AEAEB2;
+  --p-ios-gray-3: #C7C7CC;
+  --p-ios-gray-4: #D1D1D6;
+  --p-ios-gray-5: #E5E5EA;
+  --p-ios-gray-6: #F2F2F7;
+  --p-ios-label: #000000;
+  --p-ios-label-secondary: rgba(60, 60, 67, 0.60);
+  --p-ios-label-tertiary: rgba(60, 60, 67, 0.30);
+  --p-ios-label-quaternary: rgba(60, 60, 67, 0.18);
+  --p-ios-fill: rgba(120, 120, 128, 0.20);
+  --p-ios-fill-secondary: rgba(120, 120, 128, 0.16);
+  --p-ios-fill-tertiary: rgba(118, 118, 128, 0.12);
+  --p-ios-fill-quaternary: rgba(116, 116, 128, 0.08);
+  --p-ios-separator: rgba(0, 0, 0, 0.12);
+  --p-bg-elevated-primary: #FFFFFF;
+  --p-bg-elevated-secondary: #F2F2F7;
+  --p-bg-elevated-tertiary: #FFFFFF;
+  --p-bg-grouped-elevated-primary: #F2F2F7;
+  --p-bg-grouped-elevated-secondary: #FFFFFF;
+  --p-bg-grouped-elevated-tertiary: #F2F2F7;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Vibrant accents (macOS 27)
+   Twelve accents for color that sits on a material (glass, menus,
+   popovers, alerts) instead of an opaque background. Gray has no
+   vibrant form.
+
+   --p-vibrant-<color> is the source fill. Apple does not paint it
+   flat: it composites it onto whatever is behind, in two steps:
+     1. #808080 with mix-blend-mode: saturation (strips the hue of
+        the backdrop, keeps its lightness),
+     2. the source with mix-blend-mode: plus-darker in light mode
+        (backdrop + source − 1: on white it is the source, on gray it
+        darkens by the gray) or plus-lighter in dark mode (backdrop +
+        source: on black it is the source, on gray it brightens).
+   Use it as a layer, with mix-blend-mode: var(--p-vibrant-blend).
+
+   --p-vibrant-<color>-resolved is the same recipe worked out over the
+   macOS 27 overlay glass (#EBEBEB light, #1A1A1A dark): the flat
+   color to use where a blend layer isn't possible, such as text.
+
+   plus-lighter works in every current engine. plus-darker is Safari
+   only; elsewhere --p-vibrant-blend falls back to multiply, which
+   matches plus-darker exactly over white and stays within a few
+   levels over light glass.
+   ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  --p-vibrant-blend-darker: plus-darker;
+}
+
+@supports not (mix-blend-mode: plus-darker) {
+  :root {
+    --p-vibrant-blend-darker: multiply;
+  }
+}
+
+:root {
+  --p-vibrant-red: #F52F32;
+  --p-vibrant-orange: #F58625;
+  --p-vibrant-yellow: #F5C200;
+  --p-vibrant-green: #26BF4D;
+  --p-vibrant-mint: #00BDA9;
+  --p-vibrant-teal: #00B3BF;
+  --p-vibrant-cyan: #00ABCF;
+  --p-vibrant-blue: #0078F0;
+  --p-vibrant-indigo: #5C50E6;
+  --p-vibrant-purple: #B72BC9;
+  --p-vibrant-pink: #F5234B;
+  --p-vibrant-brown: #9E7354;
+
+  --p-vibrant-red-resolved: #E11B1E;
+  --p-vibrant-orange-resolved: #E17211;
+  --p-vibrant-yellow-resolved: #E1AE00;
+  --p-vibrant-green-resolved: #12AB39;
+  --p-vibrant-mint-resolved: #00A995;
+  --p-vibrant-teal-resolved: #009FAB;
+  --p-vibrant-cyan-resolved: #0097BB;
+  --p-vibrant-blue-resolved: #0064DC;
+  --p-vibrant-indigo-resolved: #483CD2;
+  --p-vibrant-purple-resolved: #A317B5;
+  --p-vibrant-pink-resolved: #E10F37;
+  --p-vibrant-brown-resolved: #8A5F40;
+
+  --p-vibrant-blend: var(--p-vibrant-blend-darker);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-vibrant-red: #FF4747;
+  --p-vibrant-orange: #FF9E33;
+  --p-vibrant-yellow: #FFE014;
+  --p-vibrant-green: #3BDB63;
+  --p-vibrant-mint: #2DE0CD;
+  --p-vibrant-teal: #2DD7E0;
+  --p-vibrant-cyan: #47D8FC;
+  --p-vibrant-blue: #0A99FF;
+  --p-vibrant-indigo: #7163FF;
+  --p-vibrant-purple: #E647FC;
+  --p-vibrant-pink: #FF4169;
+  --p-vibrant-brown: #C29672;
+
+  --p-vibrant-red-resolved: #FF6161;
+  --p-vibrant-orange-resolved: #FFB84D;
+  --p-vibrant-yellow-resolved: #FFFA2E;
+  --p-vibrant-green-resolved: #55F57D;
+  --p-vibrant-mint-resolved: #47FAE7;
+  --p-vibrant-teal-resolved: #47F1FA;
+  --p-vibrant-cyan-resolved: #61F2FF;
+  --p-vibrant-blue-resolved: #24B3FF;
+  --p-vibrant-indigo-resolved: #8B7DFF;
+  --p-vibrant-purple-resolved: #FF61FF;
+  --p-vibrant-pink-resolved: #FF5B83;
+  --p-vibrant-brown-resolved: #DCB08C;
+
+  --p-vibrant-blend: plus-lighter;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-vibrant-red: #FF4747;
+    --p-vibrant-orange: #FF9E33;
+    --p-vibrant-yellow: #FFE014;
+    --p-vibrant-green: #3BDB63;
+    --p-vibrant-mint: #2DE0CD;
+    --p-vibrant-teal: #2DD7E0;
+    --p-vibrant-cyan: #47D8FC;
+    --p-vibrant-blue: #0A99FF;
+    --p-vibrant-indigo: #7163FF;
+    --p-vibrant-purple: #E647FC;
+    --p-vibrant-pink: #FF4169;
+    --p-vibrant-brown: #C29672;
+
+    --p-vibrant-red-resolved: #FF6161;
+    --p-vibrant-orange-resolved: #FFB84D;
+    --p-vibrant-yellow-resolved: #FFFA2E;
+    --p-vibrant-green-resolved: #55F57D;
+    --p-vibrant-mint-resolved: #47FAE7;
+    --p-vibrant-teal-resolved: #47F1FA;
+    --p-vibrant-cyan-resolved: #61F2FF;
+    --p-vibrant-blue-resolved: #24B3FF;
+    --p-vibrant-indigo-resolved: #8B7DFF;
+    --p-vibrant-purple-resolved: #FF61FF;
+    --p-vibrant-pink-resolved: #FF5B83;
+    --p-vibrant-brown-resolved: #DCB08C;
+
+    --p-vibrant-blend: plus-lighter;
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-vibrant-red: #F52F32;
+  --p-vibrant-orange: #F58625;
+  --p-vibrant-yellow: #F5C200;
+  --p-vibrant-green: #26BF4D;
+  --p-vibrant-mint: #00BDA9;
+  --p-vibrant-teal: #00B3BF;
+  --p-vibrant-cyan: #00ABCF;
+  --p-vibrant-blue: #0078F0;
+  --p-vibrant-indigo: #5C50E6;
+  --p-vibrant-purple: #B72BC9;
+  --p-vibrant-pink: #F5234B;
+  --p-vibrant-brown: #9E7354;
+
+  --p-vibrant-red-resolved: #E11B1E;
+  --p-vibrant-orange-resolved: #E17211;
+  --p-vibrant-yellow-resolved: #E1AE00;
+  --p-vibrant-green-resolved: #12AB39;
+  --p-vibrant-mint-resolved: #00A995;
+  --p-vibrant-teal-resolved: #009FAB;
+  --p-vibrant-cyan-resolved: #0097BB;
+  --p-vibrant-blue-resolved: #0064DC;
+  --p-vibrant-indigo-resolved: #483CD2;
+  --p-vibrant-purple-resolved: #A317B5;
+  --p-vibrant-pink-resolved: #E10F37;
+  --p-vibrant-brown-resolved: #8A5F40;
+
+  --p-vibrant-blend: var(--p-vibrant-blend-darker);
+}
+
+/* Background utility classes — also publish --p-color-current for components */
+.p-sys-red    { --p-color-current: var(--p-sys-red);    background: var(--p-color-current); }
+.p-sys-orange { --p-color-current: var(--p-sys-orange); background: var(--p-color-current); }
+.p-sys-yellow { --p-color-current: var(--p-sys-yellow); background: var(--p-color-current); }
+.p-sys-green  { --p-color-current: var(--p-sys-green);  background: var(--p-color-current); }
+.p-sys-mint   { --p-color-current: var(--p-sys-mint);   background: var(--p-color-current); }
+.p-sys-teal   { --p-color-current: var(--p-sys-teal);   background: var(--p-color-current); }
+.p-sys-cyan   { --p-color-current: var(--p-sys-cyan);   background: var(--p-color-current); }
+.p-sys-blue   { --p-color-current: var(--p-sys-blue);   background: var(--p-color-current); }
+.p-sys-indigo { --p-color-current: var(--p-sys-indigo); background: var(--p-color-current); }
+.p-sys-purple { --p-color-current: var(--p-sys-purple); background: var(--p-color-current); }
+.p-sys-pink   { --p-color-current: var(--p-sys-pink);   background: var(--p-color-current); }
+.p-sys-brown  { --p-color-current: var(--p-sys-brown);  background: var(--p-color-current); }
+.p-sys-gray   { --p-color-current: var(--p-sys-gray);   background: var(--p-color-current); }
+
+/* Text-color utility classes — also publish --p-color-current for components */
+.p-sys-red-color    { --p-color-current: var(--p-sys-red);    color: var(--p-color-current); }
+.p-sys-orange-color { --p-color-current: var(--p-sys-orange); color: var(--p-color-current); }
+.p-sys-yellow-color { --p-color-current: var(--p-sys-yellow); color: var(--p-color-current); }
+.p-sys-green-color  { --p-color-current: var(--p-sys-green);  color: var(--p-color-current); }
+.p-sys-mint-color   { --p-color-current: var(--p-sys-mint);   color: var(--p-color-current); }
+.p-sys-teal-color   { --p-color-current: var(--p-sys-teal);   color: var(--p-color-current); }
+.p-sys-cyan-color   { --p-color-current: var(--p-sys-cyan);   color: var(--p-color-current); }
+.p-sys-blue-color   { --p-color-current: var(--p-sys-blue);   color: var(--p-color-current); }
+.p-sys-indigo-color { --p-color-current: var(--p-sys-indigo); color: var(--p-color-current); }
+.p-sys-purple-color { --p-color-current: var(--p-sys-purple); color: var(--p-color-current); }
+.p-sys-pink-color   { --p-color-current: var(--p-sys-pink);   color: var(--p-color-current); }
+.p-sys-brown-color  { --p-color-current: var(--p-sys-brown);  color: var(--p-color-current); }
+.p-sys-gray-color   { --p-color-current: var(--p-sys-gray);   color: var(--p-color-current); }
+
+/* Text hierarchy utilities */
+.p-text-primary { color: var(--p-text-primary); }
+.p-text-secondary { color: var(--p-text-secondary); }
+.p-text-tertiary { color: var(--p-text-tertiary); }
+.p-text-quaternary { color: var(--p-text-quaternary); }
+.p-text-quinary { color: var(--p-text-quinary); }
+.p-text-seximal { color: var(--p-text-seximal); }
+
+/* Fill utilities */
+.p-fill-primary { background: var(--p-fill-primary); }
+.p-fill-secondary { background: var(--p-fill-secondary); }
+.p-fill-tertiary { background: var(--p-fill-tertiary); }
+.p-fill-quaternary { background: var(--p-fill-quaternary); }
+.p-fill-quinary { background: var(--p-fill-quinary); }
+
+/* Background tier utilities */
+.p-bg-primary { background: var(--p-bg-primary); }
+.p-bg-secondary { background: var(--p-bg-secondary); }
+.p-bg-tertiary { background: var(--p-bg-tertiary); }
+.p-bg-grouped-primary { background: var(--p-bg-grouped-primary); }
+.p-bg-grouped-secondary { background: var(--p-bg-grouped-secondary); }
+.p-bg-grouped-tertiary { background: var(--p-bg-grouped-tertiary); }
+/* Elevated background utilities (sheets, popovers, modal cards) */
+.p-bg-elevated-primary { background: var(--p-bg-elevated-primary); }
+.p-bg-elevated-secondary { background: var(--p-bg-elevated-secondary); }
+.p-bg-elevated-tertiary { background: var(--p-bg-elevated-tertiary); }
+.p-bg-grouped-elevated-primary { background: var(--p-bg-grouped-elevated-primary); }
+.p-bg-grouped-elevated-secondary { background: var(--p-bg-grouped-elevated-secondary); }
+.p-bg-grouped-elevated-tertiary { background: var(--p-bg-grouped-elevated-tertiary); }
+
+/* iOS label utilities */
+.p-ios-label { color: var(--p-ios-label); }
+.p-ios-label-secondary { color: var(--p-ios-label-secondary); }
+.p-ios-label-tertiary { color: var(--p-ios-label-tertiary); }
+.p-ios-label-quaternary { color: var(--p-ios-label-quaternary); }

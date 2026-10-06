@@ -1,0 +1,260 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Tabs
+description: The iOS tab bar. A floating glass capsule of two to five sections with a selected pill, an optional search circle, a minimized state, and the iPad top tab bar.
+---
+
+import '@puppertino/tabs.css';
+import Showcase from '../../../components/Showcase.astro';
+import tabBarScript from '../../../../../src/js/tab_bar.js?url';
+
+<script type="module" src={tabBarScript}></script>
+
+A tab bar moves between the top-level sections of an app. It is always visible, always in the same place, and every section is one tap away.
+
+## When to use it
+
+Use a tab bar for the two to five places a person switches between constantly. Home, Search, Library, Profile.
+
+Use it only for peer sections. A tab bar is not a toolbar and not a menu: nothing in it should perform an action, and nothing in it should be a destination people visit once.
+
+Avoid hiding a tab bar on scroll. It shows which section is open as well as offering the others, so hiding it removes the answer to "where am I" at the moment someone is furthest from the top of the screen. Minimize it instead, which keeps the selected section in view.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Bar | 62px tall, full capsule at 31px radius, 10px padding, 360px at most |
+| Tab | 84px cell. Two tabs make a 188px bar and three 272px; four or five fill 360px |
+| Selected pill | 54px tall, inset 4px, 6px wider than its cell on each side. 7.5% black light, 8.5% white dark |
+| Icon | 22px, the size an 18pt SF Symbol draws at |
+| Label | 10px, weight 590, line height 12px |
+| Icon to label gap | 3px |
+| Selected | The accent, 5% darker in light mode (`#0081F2`) and 10% lighter in dark (`#1A9CFF`), label tracking -0.1px |
+| Unselected | `#1A1A1A` light, `#F5F5F5` dark |
+| Surface | Small glass: `--p-glass-tint` with the shared glass edge and a `0 8px 15px` 2% shadow. Regular [Puppertino Glass](../../materials/#puppertino-glass) with `glass.js` loaded |
+
+<Showcase
+  name="tab-bar-basic"
+  align="start"
+  code={`<nav class="p-tab-bar" aria-label="Sections">
+  <a class="p-tab-bar__tab" href="#tb-home" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+  <a class="p-tab-bar__tab" href="#tb-search"><i class="ph-bold ph-magnifying-glass"></i><span>Search</span></a>
+  <a class="p-tab-bar__tab" href="#tb-library"><i class="ph-bold ph-books"></i><span>Library</span></a>
+  <a class="p-tab-bar__tab" href="#tb-profile"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+</nav>`}
+  snippet={`<nav class="p-tab-bar" aria-label="Sections">
+  <a class="p-tab-bar__tab" href="/" aria-current="page">
+    <i class="ph-bold ph-house"></i><span>Home</span>
+  </a>
+  <a class="p-tab-bar__tab" href="/search/">
+    <i class="ph-bold ph-magnifying-glass"></i><span>Search</span>
+  </a>
+  <a class="p-tab-bar__tab" href="/library/">
+    <i class="ph-bold ph-books"></i><span>Library</span>
+  </a>
+</nav>`}
+/>
+
+It is a `<nav>` of links. No JavaScript is needed. The page you are on is the selected tab, and `aria-current="page"` is what says so.
+
+The selected tab sits on a pill that darkens the glass under it, rather than on a fill of its own. iOS draws the pill and the selected tint with blend modes against the page behind the bar. Inside a translucent bar CSS can only blend against the bar itself, so Puppertino resolves both to the colors iOS produces over typical glass.
+
+With `src/js/glass.js` and Glassworks loaded, the bar is [Puppertino Glass](../../materials/#puppertino-glass): it refracts the page behind it in real time instead of only blurring it. The surface above is what it shows until the glass is ready, and wherever it cannot render. A fixed bar sits at `z-index: 70`, so other glass on the same page needs `--p-glass-z: 70` too.
+
+## How the width works
+
+Each tab is an 84px cell, and the bar hugs its cells plus 10px of padding at each end. Two tabs make a 188px bar and three make 272px.
+
+From four tabs the bar fills its 360px maximum instead, and the cells share it: four land at 85px, five shrink to 68px. The pill is always its cell plus 12px, so it is 96px at two tabs and 80px at five, and the first and last pills sit 4px in from the ends.
+
+<Showcase
+  name="tab-bar-counts"
+  align="start"
+  snippet={false}
+  code={`<div style="display: grid; gap: 16px; justify-items: center;">
+  <nav class="p-tab-bar" aria-label="Two sections">
+    <a class="p-tab-bar__tab" href="#tb2a" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tb2b"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+  </nav>
+  <nav class="p-tab-bar" aria-label="Three sections">
+    <a class="p-tab-bar__tab" href="#tb3a" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tb3b"><i class="ph-bold ph-magnifying-glass"></i><span>Search</span></a>
+    <a class="p-tab-bar__tab" href="#tb3c"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+  </nav>
+  <nav class="p-tab-bar" aria-label="Five sections">
+    <a class="p-tab-bar__tab" href="#tb5a" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tb5b"><i class="ph-bold ph-magnifying-glass"></i><span>Search</span></a>
+    <a class="p-tab-bar__tab" href="#tb5c"><i class="ph-bold ph-books"></i><span>Library</span></a>
+    <a class="p-tab-bar__tab" href="#tb5d"><i class="ph-bold ph-bell"></i><span>Alerts</span></a>
+    <a class="p-tab-bar__tab" href="#tb5e"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+  </nav>
+</div>`}
+/>
+
+Five is the ceiling. At six, tabs drop under 60px and the labels start truncating. If an app has more than five top-level sections, it has a navigation problem that a sixth tab will not solve.
+
+Keep labels to one word. Two words fit at three tabs and truncate at five.
+
+## Search and accessories
+
+Wrap the bar and a `.p-tab-bar-accessory` in `.p-tab-bar-group` to add a 62px glass circle at the trailing end. Use it for search, or for one action that belongs to every section, such as compose.
+
+<Showcase
+  name="tab-bar-accessory"
+  align="start"
+  code={`<div style="display: grid; gap: 16px; justify-items: center;">
+  <div class="p-tab-bar-group">
+    <nav class="p-tab-bar" aria-label="Sections">
+      <a class="p-tab-bar__tab" href="#ta1" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+      <a class="p-tab-bar__tab" href="#ta2"><i class="ph-bold ph-books"></i><span>Library</span></a>
+    </nav>
+    <button class="p-tab-bar-accessory" type="button" aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button>
+  </div>
+  <div class="p-tab-bar-group">
+    <nav class="p-tab-bar" aria-label="Sections">
+      <a class="p-tab-bar__tab" href="#tb1" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+      <a class="p-tab-bar__tab" href="#tb2"><i class="ph-bold ph-books"></i><span>Library</span></a>
+      <a class="p-tab-bar__tab" href="#tb3"><i class="ph-bold ph-bell"></i><span>Alerts</span></a>
+      <a class="p-tab-bar__tab" href="#tb4"><i class="ph-bold ph-user"></i><span>Profile</span></a>
+    </nav>
+    <button class="p-tab-bar-accessory" type="button" aria-label="Compose"><i class="ph-bold ph-note-pencil"></i></button>
+  </div>
+</div>`}
+  snippet={`<div class="p-tab-bar-group">
+  <nav class="p-tab-bar" aria-label="Sections">
+    <a class="p-tab-bar__tab" href="/" aria-current="page">
+      <i class="ph-bold ph-house"></i><span>Home</span>
+    </a>
+    <a class="p-tab-bar__tab" href="/library/">
+      <i class="ph-bold ph-books"></i><span>Library</span>
+    </a>
+  </nav>
+  <button class="p-tab-bar-accessory" type="button" aria-label="Search">
+    <i class="ph-bold ph-magnifying-glass"></i>
+  </button>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Group | 360px wide, circle pinned to the right end, 8px from the bar |
+| Circle | 62px, same glass as the bar, 22px glyph |
+| Bar beside it | 128px with one tab, 244px with two, 290px with three or four |
+
+The circle is not a tab. It performs an action or opens search over the current section, so it is a `<button>` and needs an `aria-label`.
+
+## Minimizing on scroll
+
+iOS shrinks the tab bar while people read. Scrolling down collapses it to a 48px circle holding the selected tab's icon, and the trailing circle to 48px. Scrolling back up, tapping the bar, or tabbing into it brings it back.
+
+Add `data-p-minimize="scroll"` to the bar, or to its group, and load `src/js/tab_bar.js`.
+
+```html
+<div class="p-tab-bar-group p-tab-bar-fixed" data-p-minimize="scroll">
+  <nav class="p-tab-bar" aria-label="Sections">…</nav>
+  <button class="p-tab-bar-accessory" type="button" aria-label="Search">…</button>
+</div>
+<script src="tab_bar.js"></script>
+```
+
+The script watches the page scroll. Set `data-p-minimize-target=".my-pane"` to watch a scrolling pane instead. Without the script, add or remove `.p-tab-bar-minimized` yourself.
+
+Minimizing is not hiding. The selected section stays on screen, so the bar still answers "where am I". Never hide a tab bar outright on scroll.
+
+<Showcase
+  name="tab-bar-minimized"
+  align="start"
+  snippet={false}
+  code={`<div class="p-tab-bar-group p-tab-bar-minimized" style="width: 240px;">
+  <nav class="p-tab-bar" aria-label="Sections">
+    <a class="p-tab-bar__tab" href="#tm1" aria-current="page"><i class="ph-bold ph-house"></i><span>Home</span></a>
+    <a class="p-tab-bar__tab" href="#tm2"><i class="ph-bold ph-books"></i><span>Library</span></a>
+  </nav>
+  <button class="p-tab-bar-accessory" type="button" aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button>
+</div>`}
+/>
+
+`tab_bar.js` also handles tabs that are `<button>`s instead of links. A click moves `aria-current` to the pressed tab, and a tab with `aria-controls` shows its panel and hides the others.
+
+## The iPad tab bar
+
+On iPad the tab bar moves to the top of the window. Add `.p-tab-bar-top`: the bar drops to 44px, tabs become text, and glyph buttons such as the sidebar toggle and search can sit at either end as `.p-tab-bar__button`.
+
+<Showcase
+  name="tab-bar-top"
+  code={`<nav class="p-tab-bar p-tab-bar-top" aria-label="Sections">
+  <button class="p-tab-bar__button" type="button" aria-label="Show sidebar"><i class="ph-bold ph-sidebar-simple"></i></button>
+  <a class="p-tab-bar__tab" href="#tt1" aria-current="page"><span>Home</span></a>
+  <a class="p-tab-bar__tab" href="#tt2"><span>Library</span></a>
+  <a class="p-tab-bar__tab" href="#tt3"><span>Radio</span></a>
+  <a class="p-tab-bar__tab" href="#tt4"><span>Search</span></a>
+  <button class="p-tab-bar__button" type="button" aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button>
+</nav>`}
+/>
+
+| Part | Value |
+|---|---|
+| Bar | 44px tall, 22px radius, 4px padding |
+| Tab | 75px minimum, 16px padding, label 15px weight 510, tracking -0.23px |
+| Pill | 74 x 36px, inset 4px |
+| Glyph button | 54px wide, 18px glyph |
+
+Any icon inside a tab is hidden in the top bar. Five tabs with both buttons make a 491px bar, which sits centered in the window's toolbar row.
+
+## Floating it
+
+The bar sits inline by default, so it can be dropped into a demo or a phone frame. Add `.p-tab-bar-fixed` to the bar, or to its group, to pin it to the bottom of the viewport.
+
+```html
+<nav class="p-tab-bar p-tab-bar-fixed" aria-label="Sections">
+  ...
+</nav>
+```
+
+It floats 12px above the bottom edge, or above the home indicator where `env(safe-area-inset-bottom)` reports one. Content scrolls visibly underneath it, so add bottom padding to the scrolling region so the last item is not permanently parked behind the bar.
+
+## States
+
+**Selected** puts the tab on the pill, tints the icon and label to the accent, and tightens the label to -0.1px. All three come from `aria-current`, so there is no separate class to keep in sync. `.p-is-active` works too, matching the desktop tabs in the same file.
+
+**Pressed** drops the tab to 50% opacity. There is no hover state, because a tab bar lives on a touch screen.
+
+**Focus** draws a 3px ring in the accent, inset so it stays inside the capsule.
+
+The pill and the tint together mean selection never rests on color alone.
+
+## Dark mode
+
+The glass follows the small-glass tint, which is nearly clear in dark mode and relies on the dark content behind it. Unselected items flip from `#1A1A1A` to `#F5F5F5`, the pill lightens the glass instead of darkening it, and the accent shifts from `#0088FF` to `#0091FF` before its 10% lift.
+
+## Accessibility
+
+Use `<nav>` with an `aria-label`, and real links inside it. A tab bar that navigates should be links, not buttons, so the sections can be opened in a new tab and read as destinations.
+
+`aria-current="page"` is what tells a screen reader which section is open. It is required, not decorative, which is why it also drives the visual state.
+
+Tabs are 62px tall and at least 68px wide at five tabs, so every one clears the 44px minimum in both directions. A minimized bar is a 48px circle, and it keeps the selected label as its accessible name.
+
+Reduced transparency and browsers without `backdrop-filter` get an opaque `#F7F7F7` surface, since a translucent bar over scrolling content cannot be guaranteed to meet 4.5:1. Increased contrast gives the pill a real 14% fill. Reduced motion removes the color transition and the settle animation when the bar minimizes. Forced colors hands the bar to the system palette, with `Highlight` marking the selected tab.
+
+## The other tab components
+
+`tabs.css` ships three things. Pick by platform and by what the tabs do.
+
+| Class | What it is |
+|---|---|
+| `.p-tab-bar` | This component. The iOS bottom tab bar. |
+| `.p-tabs-container` | Desktop segmented tabs with swappable panels, driven by `tabs.js`. |
+| `.p-mobile-tabs` | The v1 mobile tab bar. Full-width strip, `.active` class for state. |
+
+`.p-mobile-tabs` still works and is not going anywhere in 2.x.
+
+| v1 | v2 |
+|---|---|
+| `.p-mobile-tabs` | `.p-tab-bar` |
+| `.p-mobile-tabs a` | `.p-tab-bar__tab` |
+| `.p-mobile-tabs a.active` | `aria-current="page"` |
+| `.p-mobile-tabs--content` | no equivalent, v2 tabs navigate rather than swap panels |
+
+The v1 bar swapped content panels in place. The v2 bar navigates, which is what iOS tab bars do and what makes each section a real URL.

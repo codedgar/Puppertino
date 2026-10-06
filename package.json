@@ -1,9 +1,9 @@
 {
   "name": "@codedgar/puppertino",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A CSS framework based on Human Guidelines from Apple",
-  "main": "./dist/css/newfull.css",
-  "style": "./dist/css/newfull.css",
+  "main": "./dist/css/puppertino.css",
+  "style": "./dist/css/puppertino.css",
   "files": [
     "dist",
     "src",
@@ -12,22 +12,51 @@
   ],
   "exports": {
     ".": {
-      "style": "./dist/css/newfull.css",
-      "default": "./dist/css/newfull.css"
+      "style": "./dist/css/puppertino.css",
+      "default": "./dist/css/puppertino.css"
     },
+    "./min": "./dist/css/puppertino.min.css",
+    "./desktop": "./dist/css/puppertino-desktop.css",
+    "./desktop/min": "./dist/css/puppertino-desktop.min.css",
+    "./mobile": "./dist/css/puppertino-mobile.css",
+    "./mobile/min": "./dist/css/puppertino-mobile.min.css",
     "./css/*": "./dist/css/*",
     "./js/*": "./src/js/*",
-    "./buttons": "./dist/css/buttons.css",
-    "./modals": "./dist/css/modals.css",
-    "./forms": "./dist/css/forms.css",
-    "./tabs": "./dist/css/tabs.css",
     "./actions": "./dist/css/actions.css",
+    "./adaptive": "./dist/css/adaptive.css",
+    "./boxes": "./dist/css/boxes.css",
+    "./buttons": "./dist/css/buttons.css",
     "./cards": "./dist/css/cards.css",
-    "./layout": "./dist/css/layout.css",
-    "./colors": "./dist/css/color_palette.css",
+    "./color-palette": "./dist/css/color_palette.css",
+    "./colors": "./dist/css/colors.css",
+    "./colorwells": "./dist/css/colorwells.css",
     "./dark-mode": "./dist/css/dark_mode.css",
+    "./disclosure": "./dist/css/disclosure.css",
+    "./dock": "./dist/css/dock.css",
+    "./empty-states": "./dist/css/empty-states.css",
+    "./forms": "./dist/css/forms.css",
+    "./imagewells": "./dist/css/imagewells.css",
+    "./layout": "./dist/css/layout.css",
+    "./lists": "./dist/css/lists.css",
+    "./materials": "./dist/css/materials.css",
+    "./menubar": "./dist/css/menubar.css",
+    "./menus": "./dist/css/menus.css",
+    "./modals": "./dist/css/modals.css",
+    "./notifications": "./dist/css/notifications.css",
+    "./page-controls": "./dist/css/page-controls.css",
+    "./pickers": "./dist/css/pickers.css",
+    "./popovers": "./dist/css/popovers.css",
+    "./progress": "./dist/css/progress.css",
+    "./scrollbars": "./dist/css/scrollbars.css",
     "./segmented-controls": "./dist/css/segmented-controls.css",
     "./shadows": "./dist/css/shadows.css",
+    "./sidebars": "./dist/css/sidebars.css",
+    "./sliders": "./dist/css/sliders.css",
+    "./tabs": "./dist/css/tabs.css",
+    "./toolbars": "./dist/css/toolbars.css",
+    "./tooltips": "./dist/css/tooltips.css",
+    "./typography": "./dist/css/typography.css",
+    "./windows": "./dist/css/windows.css",
     "./package.json": "./package.json"
   },
   "sideEffects": [
@@ -38,8 +67,18 @@
     "doc": "docs"
   },
   "scripts": {
+    "build:css": "npm run build:css:full && npm run build:css:desktop && npm run build:css:mobile",
+    "build:css:full": "lightningcss --minify --bundle --browserslist dist/css/puppertino.css -o dist/css/puppertino.min.css",
+    "build:css:desktop": "lightningcss --minify --bundle --browserslist dist/css/puppertino-desktop.css -o dist/css/puppertino-desktop.min.css",
+    "build:css:mobile": "lightningcss --minify --bundle --browserslist dist/css/puppertino-mobile.css -o dist/css/puppertino-mobile.min.css",
+    "prepublishOnly": "npm run build:css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "browserslist": [
+    ">= 0.5%",
+    "last 2 versions",
+    "not dead"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codedgar/Puppertino.git"
@@ -59,5 +98,8 @@
   "bugs": {
     "url": "https://github.com/codedgar/Puppertino/issues"
   },
-  "homepage": "https://github.com/codedgar/Puppertino#readme"
+  "homepage": "https://github.com/codedgar/Puppertino#readme",
+  "devDependencies": {
+    "lightningcss-cli": "^1.33.0"
+  }
 }

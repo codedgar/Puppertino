@@ -1,0 +1,939 @@
+/* Puppertino v2.0 — Color Wells (macOS 27)
+   A color well lets people adjust the color of text, shapes, guides,
+   and other onscreen elements. Wraps a native <input type="color">, so
+   activating it opens the platform picker. The two appearances are
+   states: a well starts as the spectrum disc (nothing chosen yet)
+   and becomes the rainbow-ring + color-dot swatch once a color is
+   picked (.p-colorwell-set — colorwells.js adds it on selection).
+
+   macOS 27 adds the capsule well (.p-colorwell-capsule): a 2:1 gray
+   capsule holding the current color, in five sizes.
+
+   The iOS 27 parts live further down: the iOS color well
+   (.p-colorwell-touch, 28 and 36px) and the iOS color picker panel
+   (.p-color-picker). */
+
+:root {
+  --p-colorwell-rainbow: conic-gradient(
+    from 90deg,
+    #f00 0deg,
+    #fb00ff 72deg,
+    #00a1ff 144deg,
+    #44ff00 216deg,
+    #fff700 288deg,
+    #f00 360deg
+  );
+
+  /* Capsule well */
+  --p-colorwell-capsule-bg: rgba(0, 0, 0, 0.08);
+  --p-colorwell-swatch-edge: rgba(0, 0, 0, 0.10);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-colorwell-capsule-bg: rgba(255, 255, 255, 0.07);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-colorwell-capsule-bg: rgba(255, 255, 255, 0.07);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-colorwell-capsule-bg: rgba(0, 0, 0, 0.08);
+}
+
+/* 28×28 circular well; the native input is hidden but stays focusable
+   and clickable across the whole circle. */
+.p-colorwell {
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 28px;
+  position: relative;
+  width: 28px;
+}
+
+.p-colorwell input[type="color"] {
+  appearance: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+/* Rest state: full spectrum disc… */
+.p-colorwell::before {
+  background: var(--p-colorwell-rainbow);
+  border-radius: 50%;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* …under a white radial highlight (100% at center → 0 at 96%). */
+.p-colorwell::after {
+  background: radial-gradient(
+    circle,
+    #fff 4%,
+    rgba(255, 255, 255, 0.66) 41.3%,
+    rgba(255, 255, 255, 0.33) 73.6%,
+    rgba(255, 255, 255, 0) 96%
+  );
+  border-radius: 50%;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Selected state: the disc collapses to a 3px rainbow ring (outer r14 →
+   inner r11) and the chosen color fills an 18px dot, 2px inside it. */
+.p-colorwell-set::before {
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+}
+
+.p-colorwell-set::after {
+  background: var(--p-colorwell-color, #f00);
+  height: 18px;
+  inset: auto;
+  left: 5px;
+  top: 5px;
+  width: 18px;
+}
+
+/* States. Focus uses the macOS 27 focus band color. */
+.p-colorwell:focus-within {
+  outline: 3.5px solid var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline-offset: 1px;
+}
+
+.p-colorwell.p-dimmed,
+.p-colorwell:has(input:disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ─── Capsule well ─────────────────────────────────────────────────── */
+/* A 2:1 capsule at 8% gray (white 7% in dark) holding the current
+   color inset 3px all round, with a 1px 10% hairline inside the swatch
+   edge. Sizes 32×16, 40×20, 48×24 (default), 56×28, 72×36.
+   Markup:
+   <label class="p-colorwell p-colorwell-capsule" style="--p-colorwell-color: #34C759;">
+     <input type="color" value="#34C759" aria-label="Fill color" />
+   </label>
+   While the color panel is open the body turns solid accent
+   (.p-active; colorwells.js sets it while the picker is up). */
+
+.p-colorwell.p-colorwell-capsule {
+  --p-colorwell-h: 24px;
+
+  width: calc(var(--p-colorwell-h) * 2);
+  height: var(--p-colorwell-h);
+  border-radius: calc(var(--p-colorwell-h) / 2);
+  vertical-align: middle;
+
+  background: var(--p-colorwell-capsule-bg);
+  transition: background 0.12s ease-out;
+}
+
+.p-colorwell.p-colorwell-capsule input[type="color"] {
+  border-radius: inherit;
+}
+
+/* The swatch. */
+.p-colorwell.p-colorwell-capsule::before {
+  inset: 3px;
+  border-radius: calc(var(--p-colorwell-h) / 2 - 3px);
+  background: var(--p-colorwell-color, #34C759);
+  box-shadow: inset 0 0 0 1px var(--p-colorwell-swatch-edge);
+  -webkit-mask: none;
+  mask: none;
+}
+
+.p-colorwell.p-colorwell-capsule::after {
+  content: none;
+}
+
+.p-colorwell.p-colorwell-capsule.p-active {
+  background: var(--p-control-accent, var(--p-sys-blue, #0088FF));
+}
+
+/* Disabled dims the swatch only; the capsule body stays. */
+.p-colorwell.p-colorwell-capsule.p-dimmed,
+.p-colorwell.p-colorwell-capsule:has(input:disabled) {
+  opacity: 1;
+}
+
+.p-colorwell.p-colorwell-capsule.p-dimmed::before,
+.p-colorwell.p-colorwell-capsule:has(input:disabled)::before {
+  opacity: 0.5;
+}
+
+.p-colorwell.p-colorwell-capsule:focus-within {
+  outline: 0;
+  box-shadow: var(--p-focus-ring, 0 0 0 3.5px rgba(0, 136, 255, 0.5));
+}
+
+/* Sizes (capsule only). */
+.p-colorwell-capsule.p-colorwell-mini {
+  --p-colorwell-h: 16px;
+}
+
+.p-colorwell-capsule.p-colorwell-small {
+  --p-colorwell-h: 20px;
+}
+
+.p-colorwell-capsule.p-colorwell-large {
+  --p-colorwell-h: 28px;
+}
+
+.p-colorwell-capsule.p-colorwell-xlarge {
+  --p-colorwell-h: 36px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-colorwell.p-colorwell-capsule {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-colorwell.p-colorwell-capsule {
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-colorwell.p-colorwell-capsule::before {
+    forced-color-adjust: none;
+  }
+
+  .p-colorwell.p-colorwell-capsule:focus-within,
+  .p-colorwell.p-colorwell-capsule.p-active {
+    outline: 3px solid Highlight;
+    outline-offset: 1px;
+  }
+}
+
+/* ─── iOS color well ───────────────────────────────────────────────── */
+/* UIColorWell: the same disc and ring-plus-dot geometry as the circular
+   macOS well, with the softer iOS hue ramp (yellow at the top, red at
+   3 o'clock, violet at the bottom, green at 9) under the same white
+   radial highlight. Two sizes: 28px (default) and 36px
+   (.p-colorwell-large). Selected: a 3px ramp ring and the color as a
+   dot 2px inside it, r9 at 28px and r13 at 36px.
+   <label class="p-colorwell p-colorwell-touch">
+     <input type="color" aria-label="Fill color" />
+   </label> */
+
+:root {
+  --p-colorwell-rainbow-touch: conic-gradient(
+    #e7e040 0deg,
+    #eeaa3c 45deg,
+    #e8403b 90deg,
+    #b33ed5 132deg,
+    #694ae8 182deg,
+    #3ccae7 231deg,
+    #3ce885 270deg,
+    #89e743 313deg,
+    #e7e040 360deg
+  );
+}
+
+.p-colorwell.p-colorwell-touch::before {
+  background: var(--p-colorwell-rainbow-touch);
+}
+
+/* The iOS highlight is gentler than the macOS one: 75% white at the
+   center, clear by 85% of the radius, so the hues reach the rim. */
+.p-colorwell.p-colorwell-touch:not(.p-colorwell-set)::after {
+  background: radial-gradient(
+    circle closest-side,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0) 85%
+  );
+}
+
+.p-colorwell.p-colorwell-touch.p-colorwell-large {
+  width: 36px;
+  height: 36px;
+}
+
+.p-colorwell.p-colorwell-touch.p-colorwell-large.p-colorwell-set::after {
+  width: 26px;
+  height: 26px;
+}
+
+/* The disc itself is the 28 / 36px target; extend it to 44px without
+   changing the drawing. */
+.p-colorwell.p-colorwell-touch input[type="color"] {
+  inset: -8px;
+  width: auto;
+  height: auto;
+}
+
+.p-colorwell.p-colorwell-touch.p-colorwell-large input[type="color"] {
+  inset: -4px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-color-picker
+   The iOS 27 colour picker. A 402px panel: a header with the eyedropper
+   and close buttons, three modes behind a segmented control (Apple's
+   12 x 10 colour grid, a two-dimensional spectrum, and channel
+   sliders), an OPACITY row, then the current colour beside the saved
+   swatches.
+
+   Presentations:
+   - .p-color-picker          the iPad popover: bright glass, 36px radius
+   - .p-color-picker-sheet    the iPhone sheet: the shared overlay glass,
+                              32px radius, floating 8px in from the edges
+   - .p-color-picker-opaque   the opaque white / #1C1C1E panel of 2.0
+                              betas, for a picker placed on a page
+
+   The swatch is the reusable part: .p-color-swatch takes its colour
+   from --p-color-swatch and can be used anywhere a colour needs to be
+   picked, not only inside this panel.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-color-picker-bg: #ffffff;
+  --p-color-picker-label: #1a1a1a;
+  --p-color-picker-secondary: #727272;
+  --p-color-picker-field: rgba(120, 120, 120, 0.2);
+  --p-color-picker-ring: rgba(0, 0, 0, 0.85);
+  --p-color-picker-hairline: rgba(0, 0, 0, 0.12);
+  /* Two greys, offset, make the alpha checkerboard. */
+  --p-color-checker: #d9d9d9;
+  /* iOS 27 glass. The popover is white .34 plus-lighter + .84
+     color-dodge, which reads as a near-flat #EEE over anything; the
+     sheet is the shared overlay glass. Both use the overlay edge. */
+  --p-color-picker-popover: rgba(250, 250, 250, 0.93);
+  --p-color-picker-sheet: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
+  --p-color-picker-fallback: var(--p-desktop-modal-fallback, #ebebeb);
+  --p-color-picker-edge:
+    0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.34)),
+    inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.85)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6));
+  /* Header buttons: the plus-darker #E0E0E0 circle and #727272 glyph. */
+  --p-color-picker-action: rgba(0, 0, 0, 0.12);
+  --p-color-picker-glyph: rgba(0, 0, 0, 0.6);
+  --p-color-picker-value-bg: #ffffff;
+  --p-color-picker-divider: #c6c6c8;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-color-picker-bg: #1c1c1e;
+  --p-color-picker-label: #f5f5f5;
+  --p-color-picker-secondary: #8a8a8a;
+  --p-color-picker-field: rgba(120, 120, 128, 0.36);
+  --p-color-picker-ring: rgba(255, 255, 255, 0.92);
+  --p-color-picker-hairline: rgba(255, 255, 255, 0.16);
+  --p-color-checker: #48484a;
+  --p-color-picker-popover: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+  --p-color-picker-sheet: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+  --p-color-picker-fallback: var(--p-desktop-modal-fallback, #1a1a1a);
+  --p-color-picker-edge:
+    0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.7)),
+    inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+    inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.07)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.06));
+  --p-color-picker-action: rgba(255, 255, 255, 0.12);
+  --p-color-picker-glyph: rgba(255, 255, 255, 0.7);
+  --p-color-picker-value-bg: rgba(255, 255, 255, 0.12);
+  --p-color-picker-divider: #38383a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-color-picker-bg: #1c1c1e;
+    --p-color-picker-label: #f5f5f5;
+    --p-color-picker-secondary: #8a8a8a;
+    --p-color-picker-field: rgba(120, 120, 128, 0.36);
+    --p-color-picker-ring: rgba(255, 255, 255, 0.92);
+    --p-color-picker-hairline: rgba(255, 255, 255, 0.16);
+    --p-color-checker: #48484a;
+    --p-color-picker-popover: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+    --p-color-picker-sheet: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+    --p-color-picker-fallback: var(--p-desktop-modal-fallback, #1a1a1a);
+    --p-color-picker-edge:
+      0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.7)),
+      inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+      inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+      inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.07)),
+      inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.06));
+    --p-color-picker-action: rgba(255, 255, 255, 0.12);
+    --p-color-picker-glyph: rgba(255, 255, 255, 0.7);
+    --p-color-picker-value-bg: rgba(255, 255, 255, 0.12);
+    --p-color-picker-divider: #38383a;
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-color-picker-bg: #ffffff;
+  --p-color-picker-label: #1a1a1a;
+  --p-color-picker-secondary: #727272;
+  --p-color-picker-field: rgba(120, 120, 120, 0.2);
+  --p-color-picker-ring: rgba(0, 0, 0, 0.85);
+  --p-color-picker-hairline: rgba(0, 0, 0, 0.12);
+  --p-color-checker: #d9d9d9;
+  --p-color-picker-popover: rgba(250, 250, 250, 0.93);
+  --p-color-picker-sheet: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
+  --p-color-picker-fallback: var(--p-desktop-modal-fallback, #ebebeb);
+  --p-color-picker-edge:
+    0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.34)),
+    inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.85)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6));
+  --p-color-picker-action: rgba(0, 0, 0, 0.12);
+  --p-color-picker-glyph: rgba(0, 0, 0, 0.6);
+  --p-color-picker-value-bg: #ffffff;
+  --p-color-picker-divider: #c6c6c8;
+}
+
+/* Popover (default): 402px, 36px radius, 16px side padding so the
+   controls run 370px across. */
+.p-color-picker {
+  box-sizing: border-box;
+  width: 402px;
+  max-width: 100%;
+  padding: 0 16px 19px;
+  border-radius: 36px;
+
+  -webkit-backdrop-filter: blur(65px) saturate(180%);
+  backdrop-filter: blur(65px) saturate(180%);
+  background: var(--p-color-picker-popover);
+  box-shadow:
+    var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+    var(--p-color-picker-edge);
+  color: var(--p-color-picker-label);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+/* iPhone: a sheet floating 8px in from the screen edges, with the
+   shared overlay glass. Place it at the bottom of the screen yourself
+   (or in a .p-bottom-sheet); this class sets the look and the inset. */
+.p-color-picker.p-color-picker-sheet {
+  width: auto;
+  max-width: 386px;
+  margin: 8px;
+  border-radius: 32px;
+
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  background: var(--p-color-picker-sheet);
+}
+
+/* The sheet is tighter than the popover: its header sits 4px higher,
+   the saved swatches are 45px apart rather than 52, and the bottom
+   padding is 16px. */
+.p-color-picker.p-color-picker-sheet {
+  padding-bottom: 16px;
+}
+
+.p-color-picker.p-color-picker-sheet .p-color-picker__header {
+  padding-top: 4px;
+}
+
+.p-color-picker.p-color-picker-sheet .p-color-picker__saved {
+  row-gap: 15px;
+}
+
+/* Opaque: the plain panel, for a picker set on a page. */
+.p-color-picker.p-color-picker-opaque {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: var(--p-color-picker-bg);
+  box-shadow: none;
+}
+
+.p-color-picker * {
+  box-sizing: border-box;
+}
+
+/* Header: eyedropper, title, close. The buttons are 44px circles so
+   they stay real targets. Title is centered between them. */
+.p-color-picker__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding-top: 8px;
+  margin-bottom: 5px;
+}
+
+.p-color-picker__title {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 590;
+  letter-spacing: -0.43px;
+  text-align: center;
+}
+
+.p-color-picker__header > .p-color-picker__title:first-child {
+  text-align: left;
+}
+
+.p-color-picker__action {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  background: var(--p-color-picker-action);
+  color: var(--p-color-picker-glyph);
+  font-size: 17px;
+  line-height: 1;
+}
+
+.p-color-picker__action:focus-visible {
+  outline: 3px solid var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline-offset: 1px;
+}
+
+/* The mode control: the touch segmented control at 32 / 28 with a
+   softer pill shadow (0 2 20 at 6%), full width. */
+.p-color-picker .p-segmented-touch {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.p-color-picker .p-segmented-touch::before {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Swatch ───────────────────────────────────────────────────────── */
+/* 30px circle. Selected draws a 22px, 2px white ring inside the swatch,
+   the way iOS marks the chosen saved colour. */
+
+.p-color-swatch {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding: 0;
+
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  background:
+    linear-gradient(var(--p-color-swatch, transparent), var(--p-color-swatch, transparent)),
+    conic-gradient(var(--p-color-checker) 0 25%, transparent 0 50%, var(--p-color-checker) 0 75%, transparent 0)
+      0 0 / 10px 10px;
+  background-color: #ffffff;
+  cursor: pointer;
+
+  transition: box-shadow 0.15s ease-out;
+}
+
+.p-color-swatch::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease-out;
+}
+
+.p-color-swatch[aria-pressed="true"]::after,
+.p-color-swatch[aria-selected="true"]::after,
+.p-color-swatch.p-selected::after {
+  opacity: 1;
+}
+
+.p-color-swatch:focus-visible {
+  outline: 3px solid var(--p-sys-blue, #0088ff);
+  outline-offset: 3px;
+}
+
+/* A swatch showing no colour yet. */
+.p-color-swatch-empty {
+  background: var(--p-color-picker-field);
+}
+
+/* The "+" that saves the current colour: the field gray with a black
+   plus. */
+.p-color-swatch-add {
+  background: var(--p-color-picker-field);
+}
+
+.p-color-swatch-add::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 12px;
+  height: 12px;
+  background: var(--p-color-picker-label);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1v10M1 6h10' stroke='black' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1v10M1 6h10' stroke='black' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ─── Grid mode ────────────────────────────────────────────────────── */
+/* Apple's colour grid: 12 columns by 10 rows of square-ish cells, 370
+   x 296 at 10px radius (the rows stay 29.6px when the panel narrows,
+   as in the 354px-wide sheet). The top row is a white-to-black ramp; below it
+   each column is a hue from dark to light. color_pickers.js fills an
+   empty grid with the 120 colours. The selected cell takes a 3px white
+   ring inside its edge. */
+
+.p-color-picker__palette {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+  width: 100%;
+  height: 296px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.p-color-cell {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+
+  background: var(--p-color-swatch, transparent);
+}
+
+.p-color-cell[aria-selected="true"],
+.p-color-cell[aria-pressed="true"],
+.p-color-cell.p-selected {
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+
+/* Focus is drawn inside the cell, since the grid clips at its radius. */
+.p-color-cell:focus-visible {
+  outline: 0;
+  box-shadow:
+    inset 0 0 0 3px var(--p-control-accent, #0088ff),
+    inset 0 0 0 5px #ffffff;
+}
+
+/* The round-swatch grid of 2.0 betas: 30px swatches on a 54px column
+   pitch and a 52px row pitch. Still available for a small fixed set. */
+.p-color-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 30px);
+  gap: 22px 24px;
+}
+
+/* ─── Spectrum mode ────────────────────────────────────────────────── */
+/* Hue across, saturation and brightness down, which is the layout iOS
+   uses. The picker dot is positioned by script through two variables. */
+
+.p-color-picker__spectrum {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: 10px;
+  overflow: hidden;
+
+  /* White washes out the top half, black the bottom, and the hue ramp
+     shows through at full strength across the middle. Both overlays
+     have to reach zero alpha at 50%, or the midline paints over the
+     hue instead of revealing it. */
+  background:
+    linear-gradient(to bottom,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 1) 100%),
+    linear-gradient(to right,
+      #ff0000 0%, #ffff00 17%, #00ff00 33%,
+      #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+  cursor: crosshair;
+}
+
+.p-color-picker__dot {
+  position: absolute;
+  left: var(--p-color-x, 50%);
+  top: var(--p-color-y, 50%);
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border-radius: 50%;
+
+  background: var(--p-color-swatch, transparent);
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ─── Sliders mode ─────────────────────────────────────────────────── */
+/* Channel sliders. Each one paints its own track gradient, set through
+   --p-color-track, so red, green, blue, and opacity all use the same
+   rule with a different ramp. */
+
+.p-color-picker__sliders {
+  display: grid;
+  gap: 16px;
+}
+
+.p-color-picker__row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.p-color-picker__row > .p-color-slider {
+  flex: 1;
+  min-width: 0;
+}
+
+.p-color-picker__row > .p-color-picker__label,
+.p-color-picker__row > .p-color-picker__value {
+  flex: none;
+}
+
+.p-color-picker__label {
+  color: var(--p-color-picker-secondary);
+  font-size: 17px;
+  font-weight: 510;
+}
+
+/* 34px capsule track over a black-and-white checkerboard (11.6px
+   squares, so the transparent end reads as transparent, not white). */
+.p-color-slider {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 34px;
+  margin: 0;
+  background: none;
+}
+
+.p-color-slider::-webkit-slider-runnable-track {
+  height: 34px;
+  border-radius: 17px;
+  border: 0;
+  background:
+    linear-gradient(to right, var(--p-color-track, #000, #fff)),
+    conic-gradient(#000 0 25%, transparent 0 50%, #000 0 75%, transparent 0)
+      0 0 / 23.2px 23.2px;
+  background-color: #ffffff;
+}
+
+.p-color-slider::-moz-range-track {
+  height: 34px;
+  border-radius: 17px;
+  border: 0;
+  background:
+    linear-gradient(to right, var(--p-color-track, #000, #fff)),
+    conic-gradient(#000 0 25%, transparent 0 50%, #000 0 75%, transparent 0)
+      0 0 / 23.2px 23.2px;
+  background-color: #ffffff;
+}
+
+/* Thumb: a 31px ring, 3px white, open in the middle so the colour under
+   it shows, with a 3px 10% halo. */
+.p-color-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 31px;
+  height: 31px;
+  margin-top: 1.5px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.10), inset 0 0 3px rgba(0, 0, 0, 0.10);
+}
+
+.p-color-slider::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 31px;
+  height: 31px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.10), inset 0 0 3px rgba(0, 0, 0, 0.10);
+}
+
+.p-color-slider:focus-visible {
+  outline: 3px solid var(--p-sys-blue, #0088ff);
+  outline-offset: 2px;
+  border-radius: 17px;
+}
+
+/* The numeric readout beside a channel: 75 x 34, radius 8, white. */
+.p-color-picker__value {
+  width: 75px;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+
+  background: var(--p-color-picker-value-bg);
+  color: var(--p-color-picker-label);
+
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 590;
+  letter-spacing: -0.43px;
+  text-align: center;
+}
+
+.p-color-picker__value:focus-visible {
+  outline: 3px solid var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline-offset: 0;
+}
+
+/* ─── Opacity ──────────────────────────────────────────────────────── */
+/* "OPACITY" in 13px 590 caps over the track and its readout. */
+
+.p-color-picker__opacity {
+  display: grid;
+  gap: 6px;
+  margin-top: 17px;
+}
+
+.p-color-picker__opacity > .p-color-picker__label {
+  color: var(--p-color-picker-label);
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 16px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* Inside the 2.0-beta footer layout the opacity block fills the row. */
+.p-color-picker__footer > .p-color-picker__opacity {
+  flex: 1;
+  margin-top: 0;
+}
+
+/* ─── Current colour and saved colours ─────────────────────────────── */
+/* A 1px #C6C6C8 divider, then the 75px current-colour tile beside the
+   saved swatches: five columns spread across the rest of the row, 52px
+   apart vertically. Tile and swatches share a bottom edge. */
+
+.p-color-picker__footer {
+  display: flex;
+  align-items: flex-end;
+  gap: 30px;
+  margin-top: 21px;
+  padding-top: 20px;
+  border-top: 1px solid var(--p-color-picker-divider);
+}
+
+.p-color-picker__preview {
+  flex: none;
+  width: 75px;
+  height: 75px;
+  border-radius: 10px;
+
+  background:
+    linear-gradient(var(--p-color-swatch, transparent), var(--p-color-swatch, transparent)),
+    conic-gradient(var(--p-color-checker) 0 25%, transparent 0 50%, var(--p-color-checker) 0 75%, transparent 0)
+      0 0 / 16px 16px;
+  background-color: #ffffff;
+}
+
+.p-color-picker__saved {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 30px);
+  justify-content: space-between;
+  gap: 22px 0;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .p-color-picker:not(.p-color-picker-opaque) {
+    background: var(--p-color-picker-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-color-picker:not(.p-color-picker-opaque) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-color-picker-fallback);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-color-picker:not(.p-color-picker-opaque) {
+    background: var(--p-color-picker-fallback);
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+      0 0 0 1px var(--p-color-picker-ring);
+  }
+
+  .p-color-swatch::after {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-color-swatch,
+  .p-color-swatch::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-color-picker:not(.p-color-picker-opaque) {
+    border: 1px solid CanvasText;
+  }
+
+  .p-color-swatch,
+  .p-color-cell,
+  .p-color-picker__preview {
+    forced-color-adjust: none;
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-color-swatch[aria-pressed="true"],
+  .p-color-swatch.p-selected,
+  .p-color-cell[aria-selected="true"],
+  .p-color-cell.p-selected {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+/* Mode panels. color_pickers.js toggles the hidden attribute; these
+   panels set their own display, which would otherwise win over it. */
+.p-color-picker [data-p-color-panel][hidden] {
+  display: none;
+}

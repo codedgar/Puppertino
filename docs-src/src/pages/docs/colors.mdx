@@ -1,0 +1,355 @@
+---
+layout: ../../layouts/Doc.astro
+title: Colors
+description: Puppertino's color system follows Apple's macOS 27 and iOS 27 specifications. System accents, fill levels, text hierarchy, and semantic backgrounds.
+---
+
+import ColorSwatch from '../../components/ColorSwatch.astro';
+import SwatchGrid from '../../components/SwatchGrid.astro';
+import ShadeRow from '../../components/ShadeRow.astro';
+import TextHierarchyDemo from '../../components/TextHierarchyDemo.astro';
+import FillDemo from '../../components/FillDemo.astro';
+import BackgroundDemo from '../../components/BackgroundDemo.astro';
+
+Puppertino ships with the full macOS 27 color system. Every color has a light and dark mode variant, every fill level adapts to its surface, and the text hierarchy gives six tiers of emphasis instead of four.
+
+The colors live in `colors.css`. The legacy palettes from earlier versions of Puppertino remain available for backwards compatibility.
+
+## System accents
+
+Thirteen accent colors form the base palette. Each color has a light mode and dark mode variant, and the dark variant is slightly more saturated to maintain visual impact against dark backgrounds.
+
+<SwatchGrid>
+  <ColorSwatch name="Red" cssVar="--p-sys-red" lightHex="#FF383C" darkHex="#FF4245" />
+  <ColorSwatch name="Orange" cssVar="--p-sys-orange" lightHex="#FF8D28" darkHex="#FF9230" />
+  <ColorSwatch name="Yellow" cssVar="--p-sys-yellow" lightHex="#FFCC00" darkHex="#FFD600" />
+  <ColorSwatch name="Green" cssVar="--p-sys-green" lightHex="#34C759" darkHex="#30D158" />
+  <ColorSwatch name="Mint" cssVar="--p-sys-mint" lightHex="#00C8B3" darkHex="#00DAC3" />
+  <ColorSwatch name="Teal" cssVar="--p-sys-teal" lightHex="#00C3D0" darkHex="#00D2E0" />
+  <ColorSwatch name="Cyan" cssVar="--p-sys-cyan" lightHex="#00C0E8" darkHex="#3CD3FE" />
+  <ColorSwatch name="Blue" cssVar="--p-sys-blue" lightHex="#0088FF" darkHex="#0091FF" />
+  <ColorSwatch name="Indigo" cssVar="--p-sys-indigo" lightHex="#6155F5" darkHex="#6D7CFF" />
+  <ColorSwatch name="Purple" cssVar="--p-sys-purple" lightHex="#CB30E0" darkHex="#DB34F2" />
+  <ColorSwatch name="Pink" cssVar="--p-sys-pink" lightHex="#FF2D55" darkHex="#FF375F" />
+  <ColorSwatch name="Brown" cssVar="--p-sys-brown" lightHex="#AC7F5E" darkHex="#B78A66" />
+  <ColorSwatch name="Gray" cssVar="--p-sys-gray" lightHex="#8E8E93" darkHex="#98989F" />
+</SwatchGrid>
+
+### How to use them
+
+Apply system colors with the utility classes or the CSS variables directly.
+
+```html
+<div class="p-sys-blue">Background blue</div>
+<p class="p-sys-red-color">Red text</p>
+```
+
+```css
+.my-button {
+  background: var(--p-sys-blue);
+  color: white;
+}
+```
+
+## Control accent
+
+Blue is also the accent for every tinted control: filled buttons, switches, sliders, progress bars, and the selected segment. It is the same blue as text links and selection, `#0088FF` in light mode and `#0091FF` in dark mode.
+
+| Token | Light | Dark | What it is |
+|---|---|---|---|
+| `--p-control-accent` | `#0088FF` | `#0091FF` | The default control fill |
+| `--p-color-current` | Follows `--p-sys-blue` | Follows `--p-sys-blue` | The tint a control actually uses |
+| `--p-focus-ring` | 3.5px band outside plus 1px inside, `rgba(0,136,255,0.5)` | Same, `rgba(0,145,255,0.5)` | Keyboard focus on fields and controls |
+| `--p-control-accent-text` | `#0078F0` | `#0091FF` | Accent as text on a material, such as a borderless button label inside a vibrant surface |
+
+Every color class also sets `--p-color-current`, so a class on a control retints it. The tint stays on that element and does not spread to its children, so a colored card does not retint the buttons inside it.
+
+```html
+<button class="p-button p-button-colored">Blue in light, brighter blue in dark</button>
+<button class="p-button p-button-colored p-sys-green">Green</button>
+```
+
+Use the focus ring as a box shadow on your own controls.
+
+```css
+.my-field:focus-visible {
+  outline: none;
+  box-shadow: var(--p-focus-ring);
+}
+```
+
+## Vibrant accents
+
+Color that sits on a material (a menu, a popover, an alert, a sidebar) is vibrant: instead of painting a flat color, it blends with the glass behind it. There are twelve vibrant accents, one for each system accent except gray.
+
+<SwatchGrid>
+  <ColorSwatch name="Red" cssVar="--p-vibrant-red" lightHex="#F52F32" darkHex="#FF4747" />
+  <ColorSwatch name="Orange" cssVar="--p-vibrant-orange" lightHex="#F58625" darkHex="#FF9E33" />
+  <ColorSwatch name="Yellow" cssVar="--p-vibrant-yellow" lightHex="#F5C200" darkHex="#FFE014" />
+  <ColorSwatch name="Green" cssVar="--p-vibrant-green" lightHex="#26BF4D" darkHex="#3BDB63" />
+  <ColorSwatch name="Mint" cssVar="--p-vibrant-mint" lightHex="#00BDA9" darkHex="#2DE0CD" />
+  <ColorSwatch name="Teal" cssVar="--p-vibrant-teal" lightHex="#00B3BF" darkHex="#2DD7E0" />
+  <ColorSwatch name="Cyan" cssVar="--p-vibrant-cyan" lightHex="#00ABCF" darkHex="#47D8FC" />
+  <ColorSwatch name="Blue" cssVar="--p-vibrant-blue" lightHex="#0078F0" darkHex="#0A99FF" />
+  <ColorSwatch name="Indigo" cssVar="--p-vibrant-indigo" lightHex="#5C50E6" darkHex="#7163FF" />
+  <ColorSwatch name="Purple" cssVar="--p-vibrant-purple" lightHex="#B72BC9" darkHex="#E647FC" />
+  <ColorSwatch name="Pink" cssVar="--p-vibrant-pink" lightHex="#F5234B" darkHex="#FF4169" />
+  <ColorSwatch name="Brown" cssVar="--p-vibrant-brown" lightHex="#9E7354" darkHex="#C29672" />
+</SwatchGrid>
+
+Each vibrant color is a layer, not a finished color. In light mode it composites with `mix-blend-mode: plus-darker`, which adds the layer to the backdrop and subtracts white: over white you see the color exactly, over gray glass it darkens by the gray. In dark mode it uses `plus-lighter`, which adds the two: over black you see the color, over dark glass it brightens. `--p-vibrant-blend` holds the right mode for the current appearance.
+
+```css
+.my-badge::before {
+  background: var(--p-vibrant-red);
+  mix-blend-mode: var(--p-vibrant-blend);
+}
+```
+
+Where a blend isn't possible, such as a text color, use the resolved token. It is the same recipe worked out over the standard overlay glass (`#EBEBEB` in light mode, `#1A1A1A` in dark).
+
+| Color | Layer (light) | Layer (dark) | `-resolved` (light) | `-resolved` (dark) |
+|---|---|---|---|---|
+| Red | `#F52F32` | `#FF4747` | `#E11B1E` | `#FF6161` |
+| Orange | `#F58625` | `#FF9E33` | `#E17211` | `#FFB84D` |
+| Yellow | `#F5C200` | `#FFE014` | `#E1AE00` | `#FFFA2E` |
+| Green | `#26BF4D` | `#3BDB63` | `#12AB39` | `#55F57D` |
+| Mint | `#00BDA9` | `#2DE0CD` | `#00A995` | `#47FAE7` |
+| Teal | `#00B3BF` | `#2DD7E0` | `#009FAB` | `#47F1FA` |
+| Cyan | `#00ABCF` | `#47D8FC` | `#0097BB` | `#61F2FF` |
+| Blue | `#0078F0` | `#0A99FF` | `#0064DC` | `#24B3FF` |
+| Indigo | `#5C50E6` | `#7163FF` | `#483CD2` | `#8B7DFF` |
+| Purple | `#B72BC9` | `#E647FC` | `#A317B5` | `#FF61FF` |
+| Pink | `#F5234B` | `#FF4169` | `#E10F37` | `#FF5B83` |
+| Brown | `#9E7354` | `#C29672` | `#8A5F40` | `#DCB08C` |
+
+Safari supports `plus-darker`. Chrome and Firefox don't, so there `--p-vibrant-blend` resolves to `multiply` in light mode, which matches over white and lands a few levels lighter over light glass. `plus-lighter` works in every current browser.
+
+Buttons pick these up on their own inside vibrant surfaces. See [Buttons](../desktop/buttons/#vibrant).
+
+## Text hierarchy
+
+Six levels of text emphasis. Primary is for body content, secondary for supporting copy, and the lower tiers are for placeholders and decorative text. Apple expanded this from four levels to six with Liquid Glass to give designers more room for ultra-subtle text.
+
+Notice that primary text is not pure black. Apple uses 85% opacity so the surface behind shows through subtly. This is part of the Liquid Glass aesthetic.
+
+<TextHierarchyDemo />
+
+```html
+<p class="p-text-primary">Body content sits here.</p>
+<p class="p-text-secondary">Supporting text uses the secondary level.</p>
+<p class="p-text-tertiary">Placeholder text and timestamps use tertiary.</p>
+```
+
+## Fills
+
+Five fill tiers for subtle background tints. Use them for buttons, segmented control backgrounds, search bars, or any element that needs a quiet container without competing with the surface.
+
+The macOS fills use pure black (light mode) or pure white (dark mode) at low opacity. Apple replaced the older tinted-gray fills with this approach with Liquid Glass; it composites better over translucent surfaces.
+
+<FillDemo />
+
+## Backgrounds
+
+Three background tiers for layered surfaces, plus three more for grouped table-style content. Apple's pattern: when you elevate a surface in dark mode, it gets *lighter*, not darker. The depth comes from the contrast against the layer below.
+
+<BackgroundDemo />
+
+Use the grouped variants (`--p-bg-grouped-primary`, `--p-bg-grouped-secondary`, `--p-bg-grouped-tertiary`) when building list-style content like settings screens.
+
+### Elevated backgrounds
+
+Sheets, popovers, and modal cards sit on the elevated tiers. In light mode they equal the base tiers. In dark mode each one is a step lighter, so a sheet reads as a separate layer without a heavy shadow.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--p-bg-elevated-primary` | `#FFFFFF` | `#1C1C1E` |
+| `--p-bg-elevated-secondary` | `#F2F2F7` | `#2C2C2E` |
+| `--p-bg-elevated-tertiary` | `#FFFFFF` | `#3A3A3C` |
+| `--p-bg-grouped-elevated-primary` | `#F2F2F7` | `#1C1C1E` |
+| `--p-bg-grouped-elevated-secondary` | `#FFFFFF` | `#2C2C2E` |
+| `--p-bg-grouped-elevated-tertiary` | `#F2F2F7` | `#3A3A3C` |
+
+Each token has a matching utility class, such as `.p-bg-elevated-secondary`.
+
+## iOS colors
+
+iOS shares the twelve accents with macOS. Its grays, labels, fills, and separator differ, so touch components use the `--p-ios-*` tokens. Desktop components keep the macOS tokens above.
+
+### Gray scale
+
+On iOS, Gray stays `#8E8E93` in dark mode. The macOS dark gray (`--p-sys-gray`) is `#98989F`.
+
+<SwatchGrid>
+  <ColorSwatch name="Gray" cssVar="--p-ios-gray" lightHex="#8E8E93" darkHex="#8E8E93" />
+  <ColorSwatch name="Gray 2" cssVar="--p-ios-gray-2" lightHex="#AEAEB2" darkHex="#636366" />
+  <ColorSwatch name="Gray 3" cssVar="--p-ios-gray-3" lightHex="#C7C7CC" darkHex="#48484A" />
+  <ColorSwatch name="Gray 4" cssVar="--p-ios-gray-4" lightHex="#D1D1D6" darkHex="#3A3A3C" />
+  <ColorSwatch name="Gray 5" cssVar="--p-ios-gray-5" lightHex="#E5E5EA" darkHex="#2C2C2E" />
+  <ColorSwatch name="Gray 6" cssVar="--p-ios-gray-6" lightHex="#F2F2F7" darkHex="#1C1C1E" />
+</SwatchGrid>
+
+### Labels, fills, and separator
+
+| Token | Light | Dark | Use it for |
+|---|---|---|---|
+| `--p-ios-label` | `#000000` | `#FFFFFF` | Primary text |
+| `--p-ios-label-secondary` | `rgba(60,60,67,0.60)` | `rgba(235,235,245,0.70)` | Subtitles, detail text |
+| `--p-ios-label-tertiary` | `rgba(60,60,67,0.30)` | `rgba(235,235,245,0.30)` | Placeholders, disabled text |
+| `--p-ios-label-quaternary` | `rgba(60,60,67,0.18)` | `rgba(235,235,245,0.16)` | Watermarks |
+| `--p-ios-fill` | `rgba(120,120,128,0.20)` | `rgba(120,120,128,0.36)` | Thin, small shapes like slider tracks |
+| `--p-ios-fill-secondary` | `rgba(120,120,128,0.16)` | `rgba(120,120,128,0.32)` | Search fields, selected sidebar rows |
+| `--p-ios-fill-tertiary` | `rgba(118,118,128,0.12)` | `rgba(118,118,128,0.24)` | Gray buttons |
+| `--p-ios-fill-quaternary` | `rgba(116,116,128,0.08)` | `rgba(118,118,128,0.18)` | Steppers, large quiet areas |
+| `--p-ios-separator` | `rgba(0,0,0,0.12)` | `rgba(255,255,255,0.17)` | Hairlines in lists and bars |
+
+The iOS separator is lighter than the macOS one (`--p-separator`). Over white it lands at `#E0E0E0`, where the macOS value lands at `#C6C6C8`. The opaque separator, `--p-separator-opaque`, is the same on both platforms.
+
+The label tokens have utility classes: `.p-ios-label`, `.p-ios-label-secondary`, `.p-ios-label-tertiary`, `.p-ios-label-quaternary`.
+
+```css
+.my-list-row {
+  color: var(--p-ios-label);
+  box-shadow: inset 0 -0.5px 0 var(--p-ios-separator);
+}
+
+.my-list-row small {
+  color: var(--p-ios-label-secondary);
+}
+```
+
+## Dark mode
+
+All color tokens flip automatically when the page enters dark mode. Two ways to opt in:
+
+```html
+<!-- Manual: add the class -->
+<body class="p-dark-mode">
+
+<!-- Automatic: follow the system preference -->
+<body class="p-auto-dark-mode">
+```
+
+The auto variant uses `prefers-color-scheme` and switches without any JavaScript.
+
+## Unofficial colors
+
+A second palette ships alongside the system colors. These are not part of Apple's HIG, they don't flip in dark mode, and they don't carry semantic meaning. They're here because they look great, they have a full set of shades, and they make it easy to brand a Puppertino interface without leaving the framework.
+
+Each color comes in five shades: 100 (lightest), 300, 500 (the base), 700, and 900 (darkest). Click any tile to copy its CSS variable.
+
+<ShadeRow name="Strawberry" shades={[
+  { step: '100', hex: '#ff8c82', cssVar: '--p-strawberry-100' },
+  { step: '300', hex: '#ed5353', cssVar: '--p-strawberry-300' },
+  { step: '500', hex: '#c6262e', cssVar: '--p-strawberry-500' },
+  { step: '700', hex: '#a10705', cssVar: '--p-strawberry-700' },
+  { step: '900', hex: '#7a0000', cssVar: '--p-strawberry-900' },
+]} />
+
+<ShadeRow name="Orange" shades={[
+  { step: '100', hex: '#ffc27d', cssVar: '--p-orange-100' },
+  { step: '300', hex: '#ffa154', cssVar: '--p-orange-300' },
+  { step: '500', hex: '#f37329', cssVar: '--p-orange-500' },
+  { step: '700', hex: '#cc3b02', cssVar: '--p-orange-700' },
+  { step: '900', hex: '#a62100', cssVar: '--p-orange-900' },
+]} />
+
+<ShadeRow name="Banana" shades={[
+  { step: '100', hex: '#fff394', cssVar: '--p-banana-100' },
+  { step: '300', hex: '#ffe16b', cssVar: '--p-banana-300' },
+  { step: '500', hex: '#f9c440', cssVar: '--p-banana-500' },
+  { step: '700', hex: '#d48e15', cssVar: '--p-banana-700' },
+  { step: '900', hex: '#ad5f00', cssVar: '--p-banana-900' },
+]} />
+
+<ShadeRow name="Lime" shades={[
+  { step: '100', hex: '#d1ff82', cssVar: '--p-lime-100' },
+  { step: '300', hex: '#9bdb4d', cssVar: '--p-lime-300' },
+  { step: '500', hex: '#68b723', cssVar: '--p-lime-500' },
+  { step: '700', hex: '#3a9104', cssVar: '--p-lime-700' },
+  { step: '900', hex: '#206b00', cssVar: '--p-lime-900' },
+]} />
+
+<ShadeRow name="Mint" shades={[
+  { step: '100', hex: '#89ffdd', cssVar: '--p-mint-100' },
+  { step: '300', hex: '#43d6b5', cssVar: '--p-mint-300' },
+  { step: '500', hex: '#28bca3', cssVar: '--p-mint-500' },
+  { step: '700', hex: '#0e9a83', cssVar: '--p-mint-700' },
+  { step: '900', hex: '#007367', cssVar: '--p-mint-900' },
+]} />
+
+<ShadeRow name="Blueberry" shades={[
+  { step: '100', hex: '#8cd5ff', cssVar: '--p-blueberry-100' },
+  { step: '300', hex: '#64baff', cssVar: '--p-blueberry-300' },
+  { step: '500', hex: '#3689e6', cssVar: '--p-blueberry-500' },
+  { step: '700', hex: '#0d52bf', cssVar: '--p-blueberry-700' },
+  { step: '900', hex: '#002e99', cssVar: '--p-blueberry-900' },
+]} />
+
+<ShadeRow name="Grape" shades={[
+  { step: '100', hex: '#e4c6fa', cssVar: '--p-grape-100' },
+  { step: '300', hex: '#cd9ef7', cssVar: '--p-grape-300' },
+  { step: '500', hex: '#a56de2', cssVar: '--p-grape-500' },
+  { step: '700', hex: '#7239b3', cssVar: '--p-grape-700' },
+  { step: '900', hex: '#452981', cssVar: '--p-grape-900' },
+]} />
+
+<ShadeRow name="Bubblegum" shades={[
+  { step: '100', hex: '#fe9ab8', cssVar: '--p-bubblegum-100' },
+  { step: '300', hex: '#f4679d', cssVar: '--p-bubblegum-300' },
+  { step: '500', hex: '#de3e80', cssVar: '--p-bubblegum-500' },
+  { step: '700', hex: '#bc245d', cssVar: '--p-bubblegum-700' },
+  { step: '900', hex: '#910e38', cssVar: '--p-bubblegum-900' },
+]} />
+
+<ShadeRow name="Cocoa" shades={[
+  { step: '100', hex: '#a3907c', cssVar: '--p-cocoa-100' },
+  { step: '300', hex: '#8a715e', cssVar: '--p-cocoa-300' },
+  { step: '500', hex: '#715344', cssVar: '--p-cocoa-500' },
+  { step: '700', hex: '#57392d', cssVar: '--p-cocoa-700' },
+  { step: '900', hex: '#3d211b', cssVar: '--p-cocoa-900' },
+]} />
+
+<ShadeRow name="Silver" shades={[
+  { step: '100', hex: '#fafafa', cssVar: '--p-silver-100' },
+  { step: '300', hex: '#d4d4d4', cssVar: '--p-silver-300' },
+  { step: '500', hex: '#abacae', cssVar: '--p-silver-500' },
+  { step: '700', hex: '#7e8087', cssVar: '--p-silver-700' },
+  { step: '900', hex: '#555761', cssVar: '--p-silver-900' },
+]} />
+
+<ShadeRow name="Slate" shades={[
+  { step: '100', hex: '#95a3ab', cssVar: '--p-slate-100' },
+  { step: '300', hex: '#667885', cssVar: '--p-slate-300' },
+  { step: '500', hex: '#485a6c', cssVar: '--p-slate-500' },
+  { step: '700', hex: '#273445', cssVar: '--p-slate-700' },
+  { step: '900', hex: '#0e141f', cssVar: '--p-slate-900' },
+]} />
+
+<ShadeRow name="Dark" shades={[
+  { step: '100', hex: '#666666', cssVar: '--p-dark-100' },
+  { step: '300', hex: '#4d4d4d', cssVar: '--p-dark-300' },
+  { step: '500', hex: '#333333', cssVar: '--p-dark-500' },
+  { step: '700', hex: '#1a1a1a', cssVar: '--p-dark-700' },
+  { step: '900', hex: '#000000', cssVar: '--p-dark-900' },
+]} />
+
+Use them the same way as the system colors. The base name applies the 500 shade, or pick a specific step.
+
+```html
+<div class="p-grape">Grape background</div>
+<div class="p-grape-100">Lighter grape</div>
+<p class="p-strawberry-700-color">Dark strawberry text</p>
+```
+
+Drop one of these classes on a button to retint it. The button picks up the new tint through the same `--p-color-current` mechanism the system colors use.
+
+```html
+<button class="p-button p-button-colored p-grape">Save</button>
+```
+
+## Accessibility
+
+Apple's system colors are tested for color blindness and meet WCAG AA contrast at the 4.5:1 ratio for body text. When using system accents over fills or materials, verify the contrast in both light and dark mode.
+
+For people with `prefers-contrast: more`, consider adding stronger borders to elements that rely on fill colors alone for separation.

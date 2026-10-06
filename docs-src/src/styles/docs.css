@@ -1,0 +1,1276 @@
+:root {
+  color-scheme: light dark;
+
+  --sidebar-width: 260px;
+  --toc-width: 220px;
+  --content-max: 920px;
+
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "Menlo", monospace;
+
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-tertiary: #86868b;
+  --bg-page: #ffffff;
+  --bg-sidebar: #fbfbfd;
+  --bg-code: #f5f5f7;
+  --border-color: #d2d2d7;
+  --border-subtle: #e8e8ed;
+  --accent: #0066cc;
+  --accent-hover: #0077ed;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --text-tertiary: #86868b;
+    --bg-page: #000000;
+    --bg-sidebar: #0a0a0a;
+    --bg-code: #1c1c1e;
+    --border-color: #2c2c2e;
+    --border-subtle: #1c1c1e;
+    --accent: #2997ff;
+    --accent-hover: #5cb0ff;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.47;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* ─────────────────────────────────────────
+   Sidebar
+   ───────────────────────────────────────── */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 24px 0 40px;
+}
+
+.logo-mark {
+  flex: none;
+  height: 20px;
+  width: auto;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 24px 20px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  color: var(--text-primary);
+}
+
+.sidebar-logo:hover {
+  color: var(--text-primary);
+}
+
+.nav-section {
+  margin-top: 16px;
+}
+
+/* Floating navigation toggle — mobile only, revealed in the 768px query */
+.sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 250;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .sidebar-toggle {
+    background: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+.sidebar-toggle-close {
+  display: none;
+}
+
+body.sidebar-open .sidebar-toggle-open {
+  display: none;
+}
+
+body.sidebar-open .sidebar-toggle-close {
+  display: inline-flex;
+}
+
+.sidebar-scrim {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-scrim {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebar-scrim {
+    transition: none;
+  }
+}
+
+/* Hairline between categories so each set reads as its own block */
+.nav-section + .nav-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.nav-heading {
+  display: block;
+  padding: 0 24px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}
+
+/* Collapsible sections: native details/summary, custom chevron.
+   Every chevron sits at the same right offset (24px from the sidebar
+   edge), regardless of the summary's own padding. */
+.nav-section > summary.nav-heading {
+  padding-right: 0;
+}
+
+.nav-section > summary,
+.nav-group > summary,
+.nav-item > summary {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.nav-section > summary::-webkit-details-marker,
+.nav-group > summary::-webkit-details-marker,
+.nav-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav-section > summary::after,
+.nav-group > summary::after,
+.nav-item > summary::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-right: 24px;
+  border-right: 1.5px solid var(--text-tertiary);
+  border-bottom: 1.5px solid var(--text-tertiary);
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nav-section[open] > summary::after,
+.nav-group[open] > summary::after,
+.nav-item[open] > summary::after {
+  transform: rotate(45deg);
+}
+
+.nav-section > summary:hover,
+.nav-group > summary:hover {
+  color: var(--text-primary);
+}
+
+.nav-section > summary:hover::after,
+.nav-group > summary:hover::after,
+.nav-item > summary:hover::after {
+  border-color: var(--text-primary);
+}
+
+/* Collapsible page entry with anchor children (e.g. Forms):
+   the label navigates, the rest of the row (and the chevron) toggles. */
+.nav-item > summary a {
+  flex: 0 1 auto;
+}
+
+/* Group subheadings inside a category */
+.nav-group {
+  margin-top: 10px;
+}
+
+.nav-group > summary {
+  padding: 3px 0 3px 24px;
+  font-size: 12px;
+  font-weight: 590;
+  letter-spacing: -0.004em;
+  color: var(--text-secondary);
+}
+
+.nav-section ul {
+  list-style: none;
+}
+
+.nav-section li a {
+  display: block;
+  padding: 5px 24px 5px 24px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  border-left: 2px solid transparent;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.nav-section li a:hover {
+  color: var(--text-primary);
+}
+
+.nav-section li a.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  font-weight: 500;
+}
+
+/* Anchor sub-links: components documented as sections of a parent page. */
+.nav-section li.nav-sub a {
+  padding-left: 38px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+.nav-section li.nav-sub a:hover {
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────
+   Main content
+   ───────────────────────────────────────── */
+
+main {
+  padding: 64px 80px 120px;
+  max-width: var(--content-max);
+  width: 100%;
+  margin: 0 auto;
+}
+
+body.has-sidebar {
+  padding-left: var(--sidebar-width);
+}
+
+body.has-sidebar main {
+  margin: 0;
+}
+
+.article-eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+article h1 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.08;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+article h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.016em;
+  line-height: 1.14;
+  margin-top: 64px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+article h3 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.19;
+  margin-top: 36px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+article p {
+  font-size: 17px;
+  line-height: 1.52;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+article ul,
+article ol {
+  padding-left: 24px;
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+}
+
+article li {
+  font-size: 17px;
+  line-height: 1.52;
+  margin-bottom: 6px;
+}
+
+article li::marker {
+  color: var(--text-tertiary);
+}
+
+article p strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+article code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  background: var(--bg-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+article pre {
+  background: var(--bg-code);
+  padding: 20px 24px;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin: 24px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Puppertino scrollbar treatment for markdown-generated code blocks,
+   which can't carry the .p-scrollbar class. Colors come from the
+   --p-scrollbar-* tokens in scrollbars.css so the two stay in sync. */
+article pre {
+  scrollbar-color: var(--p-scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+article pre::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
+}
+
+article pre::-webkit-scrollbar-track,
+article pre::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+article pre::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+  background-color: var(--p-scrollbar-thumb);
+  border: 4px solid transparent;
+  border-radius: 7px;
+  min-width: 29px;
+}
+
+article pre::-webkit-scrollbar-thumb:hover,
+article pre::-webkit-scrollbar-thumb:active {
+  background-color: var(--p-scrollbar-thumb-hover);
+}
+
+article pre code {
+  background: none;
+  padding: 0;
+  font-size: 14px;
+}
+
+/* Copy button on code blocks. CopyToast wraps each pre in .code-block
+   so the button stays pinned while the pre scrolls horizontally. */
+article .code-block {
+  position: relative;
+  margin: 24px 0;
+}
+
+article .code-block pre {
+  margin: 0;
+}
+
+.code-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+
+.code-copy:hover {
+  color: var(--text-primary);
+  border-color: var(--text-tertiary);
+}
+
+/* No hover on touch screens; keep the button visible. */
+@media (hover: none) {
+  .code-copy {
+    opacity: 1;
+  }
+}
+
+/* Skip link for keyboard and screen reader use. Visually hidden
+   until focused, then floats above the sidebar. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 300;
+  padding: 10px 16px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 16px));
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+main:focus {
+  outline: none;
+}
+
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+article thead {
+  background: var(--bg-sidebar);
+}
+
+article th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: -0.004em;
+}
+
+article td {
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+article tbody tr:last-child td {
+  border-bottom: none;
+}
+
+article td code {
+  font-size: 13px;
+}
+
+/* ─── Prev / Next page navigation ──────────────────────────────────── */
+
+.page-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.page-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.page-nav-link:hover {
+  border-color: var(--border-color);
+  transform: translateY(-1px);
+}
+
+.page-nav-prev {
+  text-align: left;
+}
+
+.page-nav-next {
+  text-align: right;
+  grid-column: 2;
+}
+
+.page-nav-direction {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}
+
+.page-nav-prev .page-nav-direction::before {
+  content: '‹  ';
+}
+
+.page-nav-next .page-nav-direction::after {
+  content: '  ›';
+}
+
+.page-nav-label {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--text-primary);
+}
+
+.page-nav-link:hover .page-nav-label {
+  color: var(--accent);
+}
+
+.page-nav-spacer {
+  display: block;
+}
+
+/* ─────────────────────────────────────────
+   Tile grid (docs index)
+   ───────────────────────────────────────── */
+
+.doc-grid {
+  margin-top: 64px;
+}
+
+.doc-grid > h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.doc-grid > p {
+  font-size: 17px;
+  line-height: 1.52;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  max-width: 720px;
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px 20px;
+}
+
+/* Docs-index hub: three larger category tiles */
+.tile-grid-hub {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.tile-grid-hub .tile-art i {
+  font-size: 64px;
+}
+
+/* Grouped component sections on the platform hub pages */
+.tile-section {
+  margin-top: 40px;
+}
+
+.tile-section > h3 {
+  margin: 0 0 4px;
+}
+
+.tile-section-note {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+  max-width: 720px;
+}
+
+.tile {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tile-art {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 5 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tile-art i {
+  font-size: 56px;
+  color: rgba(255, 255, 255, 0.72);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06));
+  z-index: 1;
+}
+
+.tile:hover .tile-art {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.25);
+}
+
+.tile-label {
+  display: block;
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.008em;
+  color: var(--text-primary);
+}
+
+
+/* Foundations: yellow / orange (matches Apple HIG) */
+.tile-foundations .tile-art {
+  background: linear-gradient(155deg, #ffc93f 0%, #f5a524 60%, #e89211 100%);
+}
+
+/* Mobile: blue / indigo */
+.tile-mobile .tile-art {
+  background: linear-gradient(155deg, #5ac8fa 0%, #0a84ff 60%, #5856d6 100%);
+}
+
+/* Desktop: green / teal */
+.tile-desktop .tile-art {
+  background: linear-gradient(155deg, #5ee0a0 0%, #34c759 55%, #00a78e 100%);
+}
+
+/* Subtle highlight overlay on every tile */
+.tile-art::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 50%);
+  pointer-events: none;
+}
+
+/* Icon-grid keylines between the gradient and the glyph: the 256px
+   grid Phosphor icons are drawn on (squares, circles, diagonals),
+   as a faint blueprint layer. The glyph stays on top via z-index. */
+.tile-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: center / auto 82% no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' fill='none' stroke='white' stroke-width='2'%3E%3Crect x='16' y='16' width='224' height='224' rx='24'/%3E%3Crect x='48' y='16' width='160' height='224' rx='16'/%3E%3Crect x='16' y='48' width='224' height='160' rx='16'/%3E%3Ccircle cx='128' cy='128' r='112'/%3E%3Ccircle cx='128' cy='128' r='64'/%3E%3Cpath d='M16 16 240 240M240 16 16 240M128 8v240M8 128h240'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  pointer-events: none;
+  /* Fade the keylines out toward the tile edges — a gradual falloff
+     from the center, so the grid reads as a watermark, not a layer */
+  -webkit-mask-image: radial-gradient(ellipse 70% 90% at center, #000 0%, transparent 88%);
+  mask-image: radial-gradient(ellipse 70% 90% at center, #000 0%, transparent 88%);
+}
+
+/* ─────────────────────────────────────────
+   Landing page (no sidebar)
+   ───────────────────────────────────────── */
+
+.landing {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 140px 24px 80px;
+}
+
+.landing-hero {
+  margin-bottom: 96px;
+}
+
+.landing-hero h1 {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.landing-subtitle {
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.38;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+}
+
+.landing-cta {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.landing-btn-primary {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 980px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 400;
+  transition: background 0.15s;
+}
+
+.landing-btn-primary:hover {
+  background: var(--accent-hover);
+  color: #ffffff;
+}
+
+.landing-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.landing-btn-secondary::after {
+  content: '›';
+  font-size: 18px;
+  line-height: 1;
+}
+
+.landing-section {
+  margin-bottom: 72px;
+}
+
+.landing-section h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.13;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.landing-section p {
+  font-size: 19px;
+  line-height: 1.42;
+  color: var(--text-secondary);
+}
+
+.landing-footer {
+  margin-top: 96px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.landing-footer p {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.landing-footer a {
+  color: var(--accent);
+}
+
+/* ─────────────────────────────────────────
+   Responsive
+   ───────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  main {
+    padding: 48px 48px 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Sidebar becomes a slide-in drawer, opened by the floating toggle */
+  .sidebar {
+    width: min(300px, 84vw);
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  .sidebar-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  body.sidebar-open .sidebar-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar-toggle {
+    display: flex;
+  }
+
+  body.has-sidebar {
+    padding-left: 0;
+  }
+
+  main {
+    padding: 32px 24px 80px;
+  }
+
+  article h1 {
+    font-size: 36px;
+  }
+
+  article h2 {
+    font-size: 24px;
+  }
+
+  .landing {
+    padding: 80px 24px 60px;
+  }
+
+  .landing-hero h1 {
+    font-size: 44px;
+  }
+
+  .landing-subtitle {
+    font-size: 19px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Showcase ──────────────────────────────────────────────────────
+   The snippet live on one neutral field that follows the page's
+   appearance. The corner button flips the field to the opposite
+   scheme through the framework's appearance scopes; the field reads
+   --p-bg-secondary, so one class change recolors everything on it. */
+
+.showcase {
+  margin: 24px 0;
+}
+
+.showcase-field {
+  position: relative;
+  background: var(--p-bg-secondary);
+  color: var(--p-text-primary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.showcase-stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+
+.showcase-compact .showcase-stage {
+  padding: 24px;
+}
+
+.showcase-appearance {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--p-text-tertiary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.showcase-appearance:hover {
+  background: var(--p-fill-tertiary);
+  color: var(--p-text-secondary);
+}
+
+/* Icon states: moon when the field shows light, sun when it shows
+   dark. With no explicit scope the field follows the page, so the
+   media query decides; an explicit scope class overrides it. */
+
+.showcase-appearance .ph-sun {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .showcase-field:not(.p-light-mode) .showcase-appearance .ph-moon {
+    display: none;
+  }
+
+  .showcase-field:not(.p-light-mode) .showcase-appearance .ph-sun {
+    display: inline;
+  }
+}
+
+.showcase-field.p-dark-mode .showcase-appearance .ph-moon {
+  display: none;
+}
+
+.showcase-field.p-dark-mode .showcase-appearance .ph-sun {
+  display: inline;
+}
+
+.showcase-field.p-light-mode .showcase-appearance .ph-moon {
+  display: inline;
+}
+
+.showcase-field.p-light-mode .showcase-appearance .ph-sun {
+  display: none;
+}
+
+.showcase-data,
+.anatomy-data {
+  display: none;
+}
+
+/* ─── Table of contents ─────────────────────────────────────────────
+   A quiet fixed rail to the right of the content column. Built and
+   scroll-spied by the script in Doc.astro; shown only where the
+   viewport has room beyond sidebar + content. */
+
+.toc {
+  display: none;
+}
+
+@media (min-width: 1420px) {
+  .toc:not([hidden]) {
+    display: block;
+    position: fixed;
+    top: 96px;
+    left: calc(var(--sidebar-width) + var(--content-max) + 8px);
+    width: 200px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    padding-right: 16px;
+  }
+}
+
+.toc-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.toc-list li {
+  margin: 0;
+}
+
+.toc-list a {
+  display: block;
+  padding: 4px 0 4px 14px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-left: 1px solid transparent;
+  margin-left: -1px;
+}
+
+.toc-list .toc-sub a {
+  padding-left: 26px;
+}
+
+.toc-list a:hover {
+  color: var(--text-primary);
+}
+
+.toc-list a.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+/* ─── Anatomy diagram ───────────────────────────────────────────────
+   The live component at large scale on the neutral field, hairline
+   leader lines out to monospace labels. Tokens sit on the diagram. */
+
+.anatomy {
+  margin: 24px 0;
+}
+
+.anatomy-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--p-bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* The diagram reads Puppertino tokens throughout, so flipping the
+   stage's appearance scope recolors field, labels, and lines together. */
+
+.anatomy-appearance {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--p-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.anatomy-appearance:hover {
+  background: var(--p-fill-tertiary);
+}
+
+.anatomy-stage.p-dark-mode .anatomy-appearance .ph-moon,
+.anatomy-stage.p-light-mode .anatomy-appearance .ph-sun {
+  display: none;
+}
+
+.anatomy-frame {
+  position: relative;
+}
+
+.anatomy-lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.anatomy-lines line {
+  stroke: var(--p-text-tertiary);
+  stroke-width: 1px;
+}
+
+.anatomy-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--p-text-secondary);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.anatomy-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 3px 6px;
+  background: var(--p-bg-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--p-text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.anatomy-label[data-copy] {
+  cursor: pointer;
+}
+
+.anatomy-label[data-copy]:hover .anatomy-token {
+  color: var(--accent);
+}
+
+.anatomy-token {
+  color: var(--p-text-tertiary);
+}
+
+
+/* ─── Glass demo ────────────────────────────────────────────────────
+   A photo for Puppertino Glass to refract. The stage is the capture
+   region (data-p-glass-backdrop in the markup), so the snapshot stays
+   small and the glass is ready a beat after the page. */
+
+.glass-demo {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+}
+
+.glass-demo .p-tab-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  translate: -50% 0;
+}
+
+.glass-demo-drag {
+  position: absolute;
+  left: 32px;
+  top: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 22px;
+  color: var(--p-text-primary);
+  font: 600 15px/1 -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  cursor: grab;
+  touch-action: none;
+}
+
+.glass-demo-drag:active {
+  cursor: grabbing;
+}
+
+.glass-demo-drag:focus-visible,
+.glass-demo-clear:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 2px;
+}
+
+.glass-demo-clear {
+  position: absolute;
+  right: 32px;
+  top: 32px;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+}

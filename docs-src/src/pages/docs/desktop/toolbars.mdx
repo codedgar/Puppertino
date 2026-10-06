@@ -1,0 +1,101 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Toolbars
+description: Liquid Glass item clusters with icon buttons, dividers, two sizes and both orientations, plus round glass buttons and popup chips.
+---
+
+import '@puppertino/toolbars.css';
+import Showcase from '../../../components/Showcase.astro';
+
+A toolbar provides convenient access to frequently used commands, controls, navigation, and search. Items sit in glass capsules that float in a window's titlebar.
+
+## Preview
+
+<Showcase
+  name="toolbars-preview"
+  snippet={false}
+  code={`<div class="p-toolbar-group" role="toolbar" aria-label="Formatting">
+  <button class="p-toolbar-btn" aria-label="Bold"><i class="ph-bold ph-text-b"></i></button>
+  <button class="p-toolbar-btn p-active" aria-label="Italic"><i class="ph-bold ph-text-italic"></i></button>
+  <button class="p-toolbar-btn" aria-label="Underline"><i class="ph-bold ph-text-underline"></i></button>
+</div>
+<div class="p-toolbar-group" role="toolbar" aria-label="View options">
+  <button class="p-toolbar-btn" aria-label="Grid"><i class="ph-bold ph-squares-four"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="List"><i class="ph-bold ph-list"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="Columns"><i class="ph-bold ph-columns"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" disabled aria-label="Gallery"><i class="ph-bold ph-image"></i></button>
+</div>
+<div class="p-toolbar-group p-toolbar-group-small" role="toolbar" aria-label="Compact tools">
+  <button class="p-toolbar-btn" aria-label="Back"><i class="ph-bold ph-caret-left"></i></button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="Forward"><i class="ph-bold ph-caret-right"></i></button>
+</div>
+<div class="p-toolbar-group" role="toolbar" aria-label="Sort">
+  <button class="p-toolbar-btn p-toolbar-text-btn">Label <i class="ph-bold ph-caret-up-down" style="font-size: 10px;"></i></button>
+</div>
+<div class="p-toolbar-group p-toolbar-group-vertical" role="toolbar" aria-label="Vertical tools">
+  <button class="p-toolbar-btn" aria-label="Brush"><i class="ph-bold ph-paint-brush"></i></button>
+  <button class="p-toolbar-btn p-active" aria-label="Eraser"><i class="ph-bold ph-eraser"></i></button>
+  <button class="p-toolbar-btn" aria-label="Shapes"><i class="ph-bold ph-shapes"></i></button>
+</div>
+<button class="p-toolbar-circle" aria-label="Share"><i class="ph-bold ph-export"></i></button>
+<button class="p-toolbar-popup" aria-haspopup="menu" aria-label="View options"><i class="ph-bold ph-squares-four"></i><i class="ph-bold ph-caret-down p-toolbar-popup-chevron"></i></button>`}
+/>
+
+## Anatomy
+
+A group is a Liquid Glass capsule. Three layers make the glass:
+
+- **Keyline.** A 0.5px dark line outside the shape, heavier on the rounded ends.
+- **Speculars.** A 1px white highlight on the top and bottom inner edges.
+- **Fill.** A soft vertical gradient: darkest (about `#F1F1F1` on white) a third of the way down, clearing to white at the bottom.
+
+The glass is translucent, so over the `#E6E6E6` sidebar it reads a few steps darker than over a white titlebar. The shadow is almost nothing, `0 8px 15px` at 2 to 4% (`--p-shadow-glass-control`). Depth comes from the rim, not the shadow. The regular size is 36px tall with an 18px radius, and the small size is 24px with a 12px radius. Both are true capsules, so the corners need no squircle.
+
+Items are 32px cells with 2px of padding at each end of the group, so three icons make a 100px group. Glyphs are 13px (10px in small) in `#1A1A1A`. Hover and pressed states show a 32×28px pill with a 14px radius, inset 4px from the capsule (24×20px with a 10px radius in small). The pill is a blend rather than a flat fill: black at 10% (`#E6E6E6` on white), so it follows the gradient underneath. A group with dividers spaces its items 3px apart. Its dividers are 1×20px lines (1×16px in small) at black 15%.
+
+| Class | Role |
+|---|---|
+| `.p-toolbar-group` | Glass capsule, 36px, radius 18px. `role="toolbar"` belongs here. |
+| `.p-toolbar-group-small` | 24px capsule, radius 12px. |
+| `.p-toolbar-group-vertical` | Column orientation, same values rotated. |
+| `.p-toolbar-btn` | Icon button with the hover pill. |
+| `.p-toolbar-text-btn` | Label + chevrons variant. |
+| `.p-toolbar-divider` | 1px separator, `role="separator"`. |
+| `.p-toolbar-circle` | A single glass icon button, a 36px circle (`-small`: 24px). |
+| `.p-toolbar-popup` | Popup chip: icon + down chevron in a 50×36px capsule (`-small`: 39×24px). |
+
+## Placement and search
+
+In a window, groups sit in the titlebar 8px from the band edges and 8px apart. The first group sits 16px after the zoom light, and the title follows it 8px later. See [windows](../windows/) for the three titlebar layouts. The flat macOS 26 slots (`.p-window-toolbar-btn` in a `.p-window-toolbar-flat` row) remain for existing layouts, but glass groups are the default look.
+
+Toolbar search is the standard [search field](../forms/#search-field): the 24px capsule matches the small toolbar scale and the 36px `-xlarge` step matches the regular one.
+
+## States
+
+Hover and `[aria-pressed="true"]` (or `.p-active`) show the pill. Disabled buttons drop their ink to `#BFBFBF` and ignore the pointer. Focus uses the standard ring, 3px at 50% blue, inset to follow the pill shape.
+
+When the window loses focus (`.p-window-inactive` on the window, or `.p-inactive` on the glass itself), the glass flattens. The gradient and speculars drop away and only the keyline remains.
+
+## Dark mode
+
+Dark glass is additive light: white at about 6% at the top rising to 15% at the bottom (about `#2C2C2C` to `#3F3F3F` on `#1E1E1E`). It sits inside a near-black keyline, with bright 1px rims top and bottom. The hover pill and dividers turn lighter than the glass: white at 9% and 18%. Ink is `#F5F5F5`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+
+## Code
+
+```html
+<div class="p-toolbar-group" role="toolbar" aria-label="View options">
+  <button class="p-toolbar-btn" aria-pressed="true" aria-label="Grid view">
+    <i class="ph-bold ph-squares-four"></i>
+  </button>
+  <div class="p-toolbar-divider" role="separator"></div>
+  <button class="p-toolbar-btn" aria-label="List view">
+    <i class="ph-bold ph-list"></i>
+  </button>
+</div>
+```
+
+Icon-only buttons need `aria-label`s, and toggles should carry `aria-pressed` so state is announced. With `prefers-reduced-transparency` the glass becomes an opaque gradient with the same ramp, and with `prefers-contrast: more` the keyline becomes a solid 1px line in the ink color.

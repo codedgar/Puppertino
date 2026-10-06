@@ -1,0 +1,389 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Lists
+description: The iOS list. 52px rows on a plate, hairline separators, inset grouped sections, swipe actions, and a section index.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/forms.css';
+import '@puppertino/lists.css';
+import Showcase from '../../../components/Showcase.astro';
+import swipeScript from '../../../../../src/js/swipe_actions.js?url';
+
+<script type="module" src={swipeScript}></script>
+
+A list presents rows of related content in a single scrolling column. Most iOS screens are a list, which makes it the component the rest of an app is arranged around.
+
+## When to use it
+
+Use a list for anything that repeats: settings, messages, search results, a library. Use it for navigation into detail screens, which is what the chevron means.
+
+Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when the rows are one-off choices rather than content. Use a grid when the items are pictures and the picture is the point.
+
+## Two shapes
+
+<Showcase
+  name="list-shapes"
+  align="start"
+  snippet={false}
+  code={`<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; align-items: start;">
+  <div>
+    <ul class="p-list p-list-touch p-list-inset">
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Airplane Mode</span></span><label class="p-switch p-switch-touch" style="margin-left:auto"><input type="checkbox"><span></span></label></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Wi-Fi</span></span><span class="p-list-detail">Home</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Bluetooth</span></span><span class="p-list-detail">On</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    </ul>
+  </div>
+  <div>
+    <ul class="p-list p-list-touch">
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Airplane Mode</span></span><label class="p-switch p-switch-touch" style="margin-left:auto"><input type="checkbox"><span></span></label></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Wi-Fi</span></span><span class="p-list-detail">Home</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+      <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Bluetooth</span></span><span class="p-list-detail">On</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    </ul>
+  </div>
+</div>`}
+/>
+
+`.p-list-touch` puts the rows on a plate. Add `.p-list-inset` to round that plate into a card at 26px, the same radius the other v2 grouped surfaces use.
+
+Consider inset for settings and forms, where the grouping carries meaning. Consider plain for long uniform content like a message list, where a card around a hundred rows is just a card.
+
+## Anatomy
+
+| Part | Value |
+|---|---|
+| Row | 52px minimum, 68px with a subtitle |
+| Padding | 0 16px |
+| Gap | 12px between slots |
+| Title | 17px, weight 400, line height 22px, tracking -0.43px |
+| Subtitle | 15px, weight 400, line height 20px, tracking -0.23px, secondary |
+| Detail | 17px, tracking -0.43px, secondary |
+| Separator | 0.5px, `rgba(60,60,67,0.29)` light, `rgba(84,84,88,0.60)` dark |
+| Icon | 30px at 7px radius, 42px circle for `.p-list-icon-round`, 52px square for `.p-list-icon-square` |
+| Large icon | `.p-list-icon-large`: 44px at 11px radius, 60px circle, 68px square |
+| Inset radius | 26px |
+| Section header | 17px, weight 590, secondary |
+| Section footer | 13px, tracking -0.08px, line height 18px, secondary |
+
+The 52px row is above the 44px minimum on its own, and the two-line row is 68px. Nothing here needs an extra hit area.
+
+## Rows
+
+<Showcase
+  name="list-rows"
+  align="start"
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 320px;">
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">Title only</span></span>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">With a detail</span></span>
+    <span class="p-list-detail">Value</span>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">Title</span><span class="p-list-subtitle">Subtitle on a second line</span></span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-icon"><svg viewBox="0 0 30 30"><rect width="30" height="30" rx="7" fill="#0088FF"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">With an icon</span></span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-icon p-list-icon-round"><svg viewBox="0 0 42 42"><circle cx="21" cy="21" r="21" fill="#FF8D28"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">Ada Lovelace</span><span class="p-list-subtitle">Sent a message</span></span>
+    <span class="p-list-detail">9:41 AM</span>
+  </li>
+</ul>`}
+  snippet={`<ul class="p-list p-list-touch p-list-inset">
+  <li class="p-list-row">
+    <span class="p-list-icon"><img src="/icon.png" alt=""></span>
+    <span class="p-list-label">
+      <span class="p-list-title">Title</span>
+      <span class="p-list-subtitle">Subtitle</span>
+    </span>
+    <span class="p-list-detail">Value</span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+</ul>`}
+/>
+
+The slots are the same ones the desktop list uses, so `.p-list-icon`, `.p-list-detail`, and `.p-list-chevron` mean the same thing on both platforms. `.p-list-label` and its title and subtitle are new, because a pointer-sized row has no space for two lines.
+
+`.p-list-trailing-icon` is the other new one: a 22px glyph on the right that is not a chevron. Use it where a row shows what it does rather than where it goes, like the Copy and Print rows in a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/#share-sheets`}>share sheet</a>. A chevron means "opens another screen", so using it for anything else sets the wrong expectation.
+
+A subtitle grows the row to 68px automatically through `:has(.p-list-subtitle)`. There is no separate class for a two-line row.
+
+### Image sizes
+
+<Showcase
+  name="list-images"
+  align="start"
+  snippet={false}
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 320px;">
+  <li class="p-list-row">
+    <span class="p-list-icon p-list-icon-large"><svg viewBox="0 0 44 44"><rect width="44" height="44" rx="11" fill="#34C759"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">Large icon</span><span class="p-list-subtitle">44px, 11px radius</span></span>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-icon p-list-icon-round p-list-icon-large"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="30" fill="#FF8D28"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">Large avatar</span><span class="p-list-subtitle">60px circle</span></span>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-icon p-list-icon-square"><svg viewBox="0 0 52 52"><rect width="52" height="52" fill="#6155F5"/></svg></span>
+    <span class="p-list-label"><span class="p-list-title">Thumbnail</span></span>
+  </li>
+</ul>`}
+/>
+
+Two sets of three. The small set (30px icon, 42px avatar, 52px thumbnail) suits rows where the words matter most. Add `.p-list-icon-large` for rows that lead with the picture: a 44px icon at 11px radius, a 60px avatar, or a 68px thumbnail. Large icons and avatars get 8px of padding above and below. Square thumbnails fill the row's height with no radius, so the picture meets the separator.
+
+## Separators
+
+The hairline starts where the text starts, not at the plate edge. With a leading icon it moves in by the icon width plus the gap, so the rules line up under the titles and the eye reads one column instead of a grid.
+
+That indent is derived, not hardcoded: `calc(16px + 30px + 12px)` from the padding, icon, and gap tokens. Changing `--p-list-touch-icon` moves the separator with it.
+
+The last row never gets one. A trailing rule inside a card reads as a missing row.
+
+Under `prefers-contrast: more` the hairline thickens to 1px and takes the text color, since a 29% separator is the first thing to disappear when contrast is the problem.
+
+## Interactive rows
+
+<Showcase
+  name="list-interactive"
+  align="start"
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 320px;">
+  <li class="p-list-row" tabindex="0">
+    <span class="p-list-label"><span class="p-list-title">Press me</span></span>
+    <i class="p-list-chevron ph-bold ph-caret-right"></i>
+  </li>
+  <li class="p-list-row">
+    <span class="p-list-label"><span class="p-list-title">Not interactive</span></span>
+    <span class="p-list-detail">Read only</span>
+  </li>
+</ul>`}
+  snippet={`<li class="p-list-row">
+  <a href="/wi-fi/" class="p-list-title">Wi-Fi</a>
+  <i class="p-list-chevron ph-bold ph-caret-right"></i>
+</li>`}
+/>
+
+Only rows that do something get a pressed state. A row is treated as interactive when it is a link or a button, contains one, or carries a `tabindex`. A row that only displays a value stays flat, so pressing it does not promise something that will not happen.
+
+There is no hover state. The macOS list highlights on hover; this one does not, because a finger has no hover and a stuck highlight after a tap reads as a selection.
+
+Put the link on the row's content rather than wrapping the `<li>`, and give the chevron `aria-hidden="true"`. The chevron is decoration; the link text is what a screen reader should announce.
+
+## Sections
+
+<Showcase
+  name="list-sections"
+  align="start"
+  snippet={`<h3 class="p-list-touch-header">Network</h3>
+<ul class="p-list p-list-touch p-list-inset">
+  ...
+</ul>
+<p class="p-list-touch-footer">Joining a network shares it with your other devices.</p>`}
+  code={`<div style="width: 340px;">
+  <h3 class="p-list-touch-header">Network</h3>
+  <ul class="p-list p-list-touch p-list-inset">
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Wi-Fi</span></span><span class="p-list-detail">Home</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Bluetooth</span></span><span class="p-list-detail">On</span><i class="p-list-chevron ph-bold ph-caret-right"></i></li>
+  </ul>
+  <p class="p-list-touch-footer">Joining a network shares it with your other devices.</p>
+</div>`}
+/>
+
+`.p-list-touch-header` and `.p-list-touch-footer` sit outside the plate, aligned to the same 16px padding as the rows. The header names the group. The footer explains it, and is the right place for the sentence that would otherwise become a tooltip nobody on a phone can reach.
+
+Use a real heading element for the header so the page outline is navigable.
+
+### Prominent headers
+
+<Showcase
+  name="list-headers"
+  align="start"
+  snippet={`<h2 class="p-list-touch-header p-list-touch-header--prominent">
+  Recently Added <a class="p-list-touch-header__action" href="/recent/">See All</a>
+</h2>`}
+  code={`<div style="width: 340px;">
+  <h2 class="p-list-touch-header p-list-touch-header--large">Library <a class="p-list-touch-header__action" href="#">Edit</a></h2>
+  <h3 class="p-list-touch-header p-list-touch-header--prominent">Recently Added <a class="p-list-touch-header__action" href="#">See All</a></h3>
+  <ul class="p-list p-list-touch p-list-inset">
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Field Notes</span></span><i class="p-list-chevron ph-bold ph-caret-right" aria-hidden="true"></i></li>
+    <li class="p-list-row"><span class="p-list-label"><span class="p-list-title">Recipes</span></span><i class="p-list-chevron ph-bold ph-caret-right" aria-hidden="true"></i></li>
+  </ul>
+</div>`}
+/>
+
+| Header | Size | Weight | Tracking | Colour |
+|---|---|---|---|---|
+| `.p-list-touch-header` | 17px | 590 | -0.43px | secondary |
+| `--prominent` | 20px, line 25px | 590 | -0.45px | label |
+| `--large` | 22px, line 28px | 700 | -0.45px | label |
+| `__action` | 15px | 400 | -0.23px | `--p-control-accent` |
+
+A prominent header treats the section as a destination rather than a label, the way Music titles Recently Added. Consider one when a section has its own screen, and put the way there in `.p-list-touch-header__action` on the trailing edge. Keep the plain header for settings-style groups, where a loud title would compete with the rows.
+
+## Editing controls
+
+<Showcase
+  name="list-editing"
+  align="start"
+  snippet={`<li class="p-list-row">
+  <input class="p-list-select" type="checkbox" aria-label="Select Field Notes">
+  <span class="p-list-label"><span class="p-list-title">Field Notes</span></span>
+</li>
+
+<li class="p-list-row">
+  <button class="p-list-edit p-list-edit--delete" type="button" aria-label="Delete Field Notes"></button>
+  …
+</li>`}
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 320px;">
+  <li class="p-list-row"><input class="p-list-select" type="checkbox" checked aria-label="Select Field Notes"><span class="p-list-label"><span class="p-list-title">Field Notes</span></span></li>
+  <li class="p-list-row"><input class="p-list-select" type="checkbox" aria-label="Select Recipes"><span class="p-list-label"><span class="p-list-title">Recipes</span></span></li>
+  <li class="p-list-row"><button class="p-list-edit p-list-edit--delete" type="button" aria-label="Delete Travel"></button><span class="p-list-label"><span class="p-list-title">Travel</span></span></li>
+  <li class="p-list-row"><button class="p-list-edit p-list-edit--insert" type="button" aria-label="Add a folder"></button><span class="p-list-label"><span class="p-list-title">Add Folder</span></span></li>
+</ul>`}
+/>
+
+The leading controls of a list in edit mode, all 22px circles on the row's 16px padding and 12px gap:
+
+| Control | Class | Look |
+|---|---|---|
+| Select, off | `input.p-list-select` | 1.5px `--p-ios-gray-3` ring (`#C7C7CC`) |
+| Select, on | `input.p-list-select:checked` | `--p-control-accent` fill, white check |
+| Delete | `button.p-list-edit--delete` | `--p-sys-red` fill, white minus |
+| Insert | `button.p-list-edit--insert` | `--p-sys-green` fill, white plus |
+
+Each draws at 22px and takes a 44px hit area around itself. The selection circle is a real checkbox, so it toggles with Space and announces its state. The glyphs are drawn in CSS, so these need no icon font.
+
+Give every control an `aria-label` naming its row, like "Delete Travel". A screen reader moving down a list of "Delete" buttons cannot tell which row each one removes.
+
+## Section index
+
+<Showcase
+  name="list-index"
+  align="start"
+  snippet={`<nav aria-label="Section index">
+  <ol class="p-list-index">
+    <li><a href="#contacts-a">A</a></li>
+    <li><a href="#contacts-b">B</a></li>
+    …
+  </ol>
+</nav>`}
+  code={`<div style="display: flex; gap: 24px; align-items: start;">
+  <nav aria-label="Section index"><ol class="p-list-index">
+    ${'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map((l) => `<li><a href="#">${l}</a></li>`).join('')}
+  </ol></nav>
+  <nav aria-label="Section index, large"><ol class="p-list-index p-list-index--large">
+    ${'ABCDEFGHIJKL'.split('').map((l) => `<li><a href="#">${l}</a></li>`).join('')}
+  </ol></nav>
+</div>`}
+/>
+
+The letter strip down the trailing edge of a long alphabetical list. Letters are 12px, weight 510, on the accent, in a 16px column on a 14px pitch. `.p-list-index--large` widens the column to 30px on a 25px pitch, for iPad and for lists short enough to afford it.
+
+Each letter is a link to its section's header, so the index works with a keyboard and a screen reader with no script at all. Position it yourself, usually `position: sticky` against the list's trailing edge. A 14px pitch is well under the 44px minimum, so treat the index as a shortcut and keep the list itself scrollable.
+
+## Swipe actions
+
+<Showcase
+  name="list-swipe"
+  align="start"
+  snippet={`<li class="p-list-row p-list-swipe">
+  <div class="p-list-swipe__content">
+    <span class="p-list-label"><span class="p-list-title">Inbox</span></span>
+  </div>
+  <div class="p-list-swipe__actions" data-p-swipe-side="leading" aria-label="Actions for Inbox">
+    <button class="p-swipe-action" type="button" aria-label="Mark as Read"
+            style="--p-swipe-action-color: var(--p-sys-blue)">
+      <i class="ph-bold ph-envelope-open" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="p-list-swipe__actions" data-p-swipe-side="trailing" aria-label="Actions for Inbox">
+    <button class="p-swipe-action" type="button">
+      <i class="ph-bold ph-flag" aria-hidden="true"></i><span>Flag</span>
+    </button>
+    <button class="p-swipe-action p-swipe-action--destructive" type="button" aria-label="Delete">
+      <i class="ph-bold ph-trash" aria-hidden="true"></i>
+    </button>
+  </div>
+</li>`}
+  code={`<ul class="p-list p-list-touch p-list-inset" style="width: 360px;">
+  <li class="p-list-row p-list-swipe">
+    <div class="p-list-swipe__content"><span class="p-list-label"><span class="p-list-title">Inbox</span></span><span class="p-list-detail">12</span><i class="p-list-chevron ph-bold ph-caret-right" aria-hidden="true"></i></div>
+    <div class="p-list-swipe__actions" data-p-swipe-side="leading" aria-label="Actions for Inbox"><button class="p-swipe-action" type="button" aria-label="Mark as Read" style="--p-swipe-action-color: var(--p-sys-blue)"><i class="ph-bold ph-envelope-open"></i></button></div>
+    <div class="p-list-swipe__actions" data-p-swipe-side="trailing" aria-label="Actions for Inbox"><button class="p-swipe-action" type="button" aria-label="More"><i class="ph-bold ph-dots-three"></i></button><button class="p-swipe-action p-swipe-action--destructive" type="button" aria-label="Delete"><i class="ph-bold ph-trash"></i></button></div>
+  </li>
+  <li class="p-list-row p-list-swipe">
+    <div class="p-list-swipe__content"><span class="p-list-label"><span class="p-list-title">Drafts</span></span><span class="p-list-detail">3</span><i class="p-list-chevron ph-bold ph-caret-right" aria-hidden="true"></i></div>
+    <div class="p-list-swipe__actions" data-p-swipe-side="trailing" aria-label="Actions for Drafts"><button class="p-swipe-action" type="button" style="--p-swipe-action-color: var(--p-sys-orange)"><i class="ph-bold ph-flag"></i><span>Flag</span></button><button class="p-swipe-action p-swipe-action--destructive" type="button"><i class="ph-bold ph-trash"></i><span>Delete</span></button></div>
+  </li>
+  <li class="p-list-row p-list-swipe">
+    <div class="p-list-swipe__content"><span class="p-list-label"><span class="p-list-title">Archive</span><span class="p-list-subtitle">1,204 messages</span></span></div>
+    <div class="p-list-swipe__actions" data-p-swipe-side="trailing" aria-label="Actions for Archive"><button class="p-swipe-action p-swipe-action--captioned" type="button"><span class="p-swipe-action__icon"><i class="ph-bold ph-push-pin"></i></span><span class="p-swipe-action__caption">Pin</span></button><button class="p-swipe-action p-swipe-action--captioned p-swipe-action--destructive" type="button"><span class="p-swipe-action__icon"><i class="ph-bold ph-trash"></i></span><span class="p-swipe-action__caption">Delete</span></button></div>
+  </li>
+</ul>`}
+/>
+
+Drag a row toward the leading edge to show its trailing actions, and toward the trailing edge for its leading ones. Try it on the rows above, or tab to them with a keyboard.
+
+| Part | Value |
+|---|---|
+| Icon action | 60 × 44px capsule, 22px radius, 17px glyph |
+| Icon and label | 84px minimum × 44px, 16px glyph, 13px label, 7px apart |
+| Captioned | 60 × 38px capsule, 19px radius, 6px from the row top, 13px weight 510 caption under it. The row becomes 68px |
+| Spacing | 10px between actions, 16px from the row edge, 10px to the slid row |
+| Tray | `--p-ios-gray-6` (`#F2F2F7`) light, `#000000` dark |
+| Slid row | A capsule, radius half its height |
+| Colour | `--p-swipe-action-color`, grey `--p-ios-gray-2` (`#AEAEB2`) by default. `.p-swipe-action--destructive` is `--p-sys-red` |
+| Motion | 0.35s `cubic-bezier(0.25, 0.1, 0.25, 1)` to settle, none under reduced motion |
+
+Past halfway, or on a quick flick, the row stays open; otherwise it springs back. Only one row is open at a time. A tap on the open row, a tap anywhere else, or choosing an action closes it. Choosing an action fires a bubbling `p-swipe-action` event on the row, with the button in `event.detail.action`, after the button's own click handlers.
+
+Actions appear in source order, left to right, on either side. Consider putting the destructive action at the outer edge, farthest from the content, where it takes a deliberate reach. Tint the others with any colour token, like `style="--p-swipe-action-color: var(--p-sys-blue)"`. Colour alone never names an action, so every button needs a label: visible text, a caption, or `aria-label`.
+
+`swipe_actions.js` drives the gesture and the keyboard path:
+
+```html
+<script type="module" src="/js/swipe_actions.js"></script>
+```
+
+A swipe is invisible until someone tries it, so the actions never depend on the gesture. They stay in the tab order and the reading order, and focusing one, by Tab or by a screen reader moving onto it, slides its side open. With focus in the row, ArrowLeft and ArrowRight open the side the matching swipe would and move focus to its first action. Escape closes the row and returns focus. The script names each action group "Actions" unless it already has an `aria-label`, and a label naming the row is better.
+
+Offer the same commands somewhere visible as well, like an Edit mode or the detail screen. Swiping is a shortcut for people who know it, not the only way in.
+
+## Dark mode
+
+The plate moves from `#FFFFFF` to `#1C1C1E`, separators from `rgba(60,60,67,0.29)` to `rgba(84,84,88,0.60)`, and secondary text from `rgba(60,60,67,0.60)` to `rgba(235,235,245,0.60)`.
+
+The separator is the one that matters. In dark mode it gets lighter and more opaque rather than darker, because a dark line on a dark plate disappears.
+
+The swipe tray turns black, so the slid row still reads as a lighter capsule floating over it. Action colours use the system tokens, which brighten slightly in dark mode.
+
+## Accessibility
+
+Use `<ul>` and `<li>`. A list of `<div>`s is announced as a run of text, and the row count is lost.
+
+Rows are 52px and 68px, both past the 44px minimum, so nothing needs an invisible target the way small buttons do.
+
+Chevrons are decoration. Mark them `aria-hidden="true"` and let the row's link text carry the meaning. Without it a screen reader announces "Wi-Fi, Home, right chevron"; with it, "Wi-Fi, Home".
+
+Controls inside rows keep their own semantics. A `.p-switch-touch` in a row is still a checkbox, still reachable by keyboard, and still announces its state.
+
+## The macOS list
+
+`lists.css` ships both. `.p-list` alone is the macOS sidebar list: 20px capsule rows on a 30px pitch, with hover and a selection fill. Adding `.p-list-touch` swaps it to iOS metrics.
+
+| Slot | macOS | Touch |
+|---|---|---|
+| `.p-list-row` | 20px capsule, 13px text | 52px row, 17px text |
+| `.p-list-icon` | 18px, 3px radius | 30px, 7px radius |
+| `.p-list-detail` | 13px, dimmed | 17px, secondary |
+| `.p-list-chevron` | 9px, bold | 14px, secondary |
+| Row separation | None, rows float | 0.5px hairline |
+| Hover | Highlight | None |
+
+`.p-table` is unaffected and stays desktop-only. Columns that fit a desktop window need horizontal scrolling at phone width, which hides data behind a gesture. Consider a two-line list row instead, with the second column as the subtitle and the third as the detail.

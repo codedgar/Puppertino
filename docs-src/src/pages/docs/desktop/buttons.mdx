@@ -1,0 +1,309 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Buttons
+description: Push buttons for macOS interfaces. Six styles, four sizes, full state coverage, retinted by dropping any color class on the element.
+---
+
+import Showcase from '../../../components/Showcase.astro';
+import VariantSection from '../../../components/VariantSection.astro';
+import buttons from '../../../data/components/buttons.js';
+
+A push button starts an instantaneous action. People press it, something happens, the interface responds.
+
+Puppertino ships six push button styles in four sizes. Pick the style that matches the role of the action, the size that matches the density of the layout, and add a color class if you want to retint.
+
+## When to use a button
+
+Use a button for direct actions. Save, Delete, Continue, Cancel. Anything where pressing the control causes a discrete change.
+
+Use a link for navigation. If pressing the control takes the person to a different page or section, that is a link, not a button.
+
+Avoid stacking more than one filled `.p-button-primary` in the same view. Apple's rule: one prominent action per screen. Multiple primary buttons compete for attention and weaken both.
+
+## Anatomy
+
+| Token | Default value | Notes |
+|---|---|---|
+| `--p-button-height` | 24px | Regular size. Mini is 16px, small is 19px, large is 32px. |
+| `--p-button-padding-x` | 16px | Horizontal padding on each side. |
+| `--p-button-radius` | 6px | macOS regular button radius. Large jumps to 8px. |
+| `--p-button-font-size` | 13px | Matches macOS body. SF Pro fallback to system fonts. |
+| `--p-button-font-weight` | 510 | Apple's "system medium." Large bumps to 590 (semibold). |
+| `--p-button-icon-size` | 13px | Matches the label. SVG and `<i>` children both scale to this token. |
+| `--p-button-default-tint` | `var(--p-control-accent)` | The control accent: `#0088FF` in light mode, `#0091FF` in dark. Used when no color class is set. |
+| `--p-button-fill` | `rgba(0,0,0,0.08)` | Gray fill for Default and Tinted. `rgba(255,255,255,0.07)` in dark mode. |
+| `--p-button-tint-mix` | 20% | How much accent the Secondary and Destructive washes carry. 22% in dark mode. |
+
+Override any token on a specific button with an inline style or a new class. The button picks up the change without you writing new selectors.
+
+## Variants
+
+Combine `.p-button` with one style class to pick a role.
+
+{buttons.variants.map((variant) => <VariantSection name={buttons.name} variant={variant} />)}
+
+## Changing the color
+
+Add a color class to any button to change its tint. The button picks up the color, the hover and active states darken from it, and the focus ring matches.
+
+<Showcase
+  name="buttons-colors"
+  compact
+  code={`<button class="p-button p-button-colored">Save</button>
+<button class="p-button p-button-colored p-grape">Save</button>
+<button class="p-button p-button-colored p-strawberry">Save</button>
+<button class="p-button p-button-colored p-sys-purple">Save</button>
+<button class="p-button p-button-secondary p-sys-green">Save</button>`}
+/>
+
+Reach for the `.p-sys-*` classes first. They follow the macOS system colors and flip automatically in dark mode. The brand palette (`.p-strawberry`, `.p-grape`, `.p-lime`) is available for backwards compatibility, but its colors stay fixed across appearances.
+
+A color class only retints the element you put it on. Dropping `.p-strawberry` on a card does not bleed into the buttons inside it. If you want a button to be strawberry, put the class on the button.
+
+## Sizes
+
+Four sizes derived from macOS HIG. Mini and small target dense pointer interfaces (toolbars, sidebars, inspector panels). Regular is the default. Large is for prominent dialog actions.
+
+<Showcase
+  name="buttons-sizes"
+  compact
+  code={`<button class="p-button p-button-mini p-button-primary">Mini</button>
+<button class="p-button p-button-small p-button-primary">Small</button>
+<button class="p-button p-button-primary">Regular</button>
+<button class="p-button p-button-large p-button-primary">Large</button>`}
+/>
+
+| Size | Class | Height | Padding | Font | Radius |
+|---|---|---|---|---|---|
+| Mini | `.p-button-mini` | 16px | 7px | 10px | 4px |
+| Small | `.p-button-small` | 19px | 9px | 11px | 5px |
+| Regular | (default) | 24px | 16px | 13px | 6px |
+| Large | `.p-button-large` | 32px | 16px | 13px semibold | 8px |
+
+Mini and small are pointer-only by design. They sit below the 44px touch-target guideline because macOS expects a mouse. For anything that needs to work on touch, use Regular or Large.
+
+## Icons
+
+Drop an `<svg>` or an `<i>` icon font tag inside the button. Put it before the label for a leading icon, after the label for a trailing icon.
+
+<Showcase
+  name="buttons-icons"
+  compact
+  code={`<button class="p-button p-button-colored">
+  <i class="ph-bold ph-floppy-disk" aria-hidden="true"></i>
+  <span>Save</span>
+</button>
+<button class="p-button p-button-secondary">
+  <span>Continue</span>
+  <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+</button>
+<button class="p-button p-button-destructive">
+  <i class="ph-bold ph-trash" aria-hidden="true"></i>
+  <span>Delete</span>
+</button>`}
+  snippet={`<!-- Icon font (Phosphor, Font Awesome, etc.) -->
+<button class="p-button p-button-colored">
+  <i class="ph-bold ph-floppy-disk" aria-hidden="true"></i>
+  <span>Save</span>
+</button>
+
+<!-- Inline SVG -->
+<button class="p-button p-button-secondary">
+  <span>Continue</span>
+  <svg aria-hidden="true">...</svg>
+</button>`}
+/>
+
+The icon picks up the button's text color and resizes with the button's size. You do not need a separate class for leading or trailing icons. The DOM order is the order.
+
+## Icon-only buttons
+
+Add `.p-button-icon-only` for a round button that holds a single glyph. It is a true circle, as wide as it is tall, with a slightly heavier gray fill than a labeled button so the small shape still reads as pressable.
+
+<Showcase
+  name="buttons-icon-only"
+  compact
+  code={`<button class="p-button p-button-icon-only p-button-mini" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only p-button-small" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only p-button-large" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>
+<button class="p-button p-button-icon-only p-button-xlarge" aria-label="More"><i class="ph-bold ph-caret-up-down" aria-hidden="true"></i></button>`}
+/>
+
+| Size | Class | Diameter | Glyph |
+|---|---|---|---|
+| Mini | `.p-button-mini` | 16px | 11px |
+| Small | `.p-button-small` | 20px | 13px |
+| Regular | (default) | 24px | 13px |
+| Large | `.p-button-large` | 28px | 13px |
+| Extra large | `.p-button-xlarge` | 36px | 13px |
+
+Icon-only buttons follow the same size ladder as segmented controls and pop-up buttons, so small is 20px here rather than 19px and large is 28px rather than 32px. The fill sits at 10% black at rest, 19% pressed, and 5% disabled. In dark mode the same percentages apply in white.
+
+Always give an icon-only button an `aria-label`. Without one, screen readers have nothing to announce.
+
+```html
+<button class="p-button p-button-icon-only" aria-label="Close">
+  <svg aria-hidden="true">...</svg>
+</button>
+```
+
+## States
+
+Every state derives from the button's current color, so a retinted button retints its states too. Each style presses in its own way.
+
+<Showcase
+  name="buttons-states"
+  compact
+  code={`<button class="p-button p-button-primary">Default</button>
+<button class="p-button p-button-primary" disabled>Disabled</button>`}
+/>
+
+| State | Default and Tinted | Secondary and Destructive | Colored and Primary |
+|---|---|---|---|
+| Rest | 8% gray fill | 20% wash of the tint | Solid tint |
+| Hover | 11% gray fill | 24% wash | 5% darker |
+| Pressed | 16% gray fill | 28% wash | 10% darker |
+| Disabled | 4% gray fill, faded label | 12% wash, label at 40% | Tint at 40%, label at 50% white |
+
+Borderless has no fill in any state; see [Borderless](#borderless).
+
+In dark mode the gray fills use white instead of black (7% at rest, 16% pressed), and a pressed filled button gets slightly lighter rather than darker. That matches how macOS lights controls on a dark background.
+
+A disabled filled button keeps its color, faded. It no longer drops to gray, so a disabled Save still reads as the primary action waiting for input.
+
+Keyboard focus draws the macOS focus band: a 3.5px ring outside the button plus a 1px ring just inside its edge, both in the button's color at 50%. Mouse clicks do not trigger it.
+
+
+## Borderless
+
+A borderless button is only its label. It has no fill at rest, on hover or while pressed. Pressing darkens the label by 46 levels on every channel (it brightens in dark mode), and a disabled label drops to 50%.
+
+<Showcase
+  name="buttons-borderless"
+  compact
+  code={`<button class="p-button p-button-borderless">Show More</button>
+<button class="p-button p-button-borderless" disabled>Show More</button>`}
+/>
+
+On an opaque background the label is the control accent, `#0088FF` (`#0091FF` in dark mode). Inside a vibrant surface it switches to `--p-control-accent-text`, a darker `#0078F0` that keeps thin glyphs readable over glass. In dark mode both are `#0091FF`.
+
+## Vibrant
+
+Buttons that sit on a material (a menu, a popover, an alert) blend with the glass behind them instead of painting flat color on top. Add `.p-vibrant` to the element that paints the material and every button inside switches to the vibrant recipe. The desktop alert (`.p-desktop-modal`), `.p-popover` and `.p-menu` are vibrant already, with no extra class.
+
+<Showcase
+  name="buttons-vibrant"
+  code={`<div class="p-vibrant" style="background: rgba(236, 236, 236, 0.88); padding: 16px; border-radius: 16px; display: flex; gap: 8px;">
+  <button class="p-button">Cancel</button>
+  <button class="p-button p-button-secondary">Options</button>
+  <button class="p-button p-button-destructive">Delete</button>
+  <button class="p-button p-button-primary">Save</button>
+</div>`}
+/>
+
+| Style | On a vibrant surface |
+|---|---|
+| Default and Tinted | Black 7% plus black 12% in overlay blend, so the fill darkens with the glass. White 6% plus white 12% overlay in dark mode. |
+| Colored and Primary | The tint in `plus-darker` (light) or `plus-lighter` (dark). Pressed mixes in black 10% (white in dark mode) first. Disabled runs the same layer at 40%. |
+| Secondary and Destructive | The vibrant accent (`--p-vibrant-blue`, `--p-vibrant-red`) at 23% (20% in dark mode) with a vibrant-accent label. |
+| Borderless | The label moves to `--p-control-accent-text`. |
+
+The blend layer composites onto whatever paints the material. Put `.p-vibrant` on the element with the background, not on a transparent wrapper around it: the class makes that element its own stacking context, so a wrapper would leave the buttons nothing to blend with.
+
+Safari supports `plus-darker`. Chrome and Firefox don't, so light-mode filled buttons fall back to `multiply`. That is identical over white and a few levels lighter over light glass. Dark mode's `plus-lighter` works everywhere.
+
+## Inactive window
+
+When a macOS window loses focus, its push buttons lose their color. Filled, secondary, destructive and tinted buttons all become the plain gray button with a primary label, in every state: 8% gray at rest, 16% pressed, 4% with a faded label when disabled. Borderless buttons keep their accent label. Inside a vibrant surface they turn into the vibrant gray button instead.
+
+Wrap the window in `.p-window-inactive`, the same class that grays the window's traffic lights and sidebar icons.
+
+<Showcase
+  name="buttons-inactive"
+  compact
+  code={`<div class="p-window-inactive" style="display: flex; gap: 8px;">
+  <button class="p-button">Cancel</button>
+  <button class="p-button p-button-secondary">Options</button>
+  <button class="p-button p-button-destructive">Delete</button>
+  <button class="p-button p-button-primary">Save</button>
+  <button class="p-button p-button-borderless">Show More</button>
+</div>`}
+/>
+
+The `data-window-state="inactive"` attribute does the same thing if your app prefers attributes over classes. Toggle the class or attribute when your app's window loses focus. Checkboxes and radios in the same window go gray too (see [Forms](../forms/#inactive-window)).
+
+## Dark mode
+
+Buttons flip with the rest of the page in dark mode. No extra setup, no button-specific class to toggle.
+
+If you retint a button, use a `.p-sys-*` color so the new tint flips too. The brand palette stays at its light-mode hex on both appearances.
+
+## Accessibility
+
+- **Keyboard focus** shows the macOS focus band (3.5px outside, 1px inside) at 50% of the button's color. Mouse clicks do not show it.
+- **Reduced motion** removes the hover and press transitions.
+- **Reduced transparency** swaps the tinted variants to a flat opaque fill so the label stays legible.
+- **Increased contrast** adds a 2px border around every button.
+- **Windows High Contrast** hands the button over to the operating system's color scheme.
+- **Touch targets**: Regular and Large meet the 44px minimum. Mini and Small are pointer-only.
+
+## Code
+
+```html
+<!-- Default neutral -->
+<button class="p-button p-button-default">Cancel</button>
+
+<!-- Primary action (default Return key) -->
+<button class="p-button p-button-primary">Save</button>
+
+<!-- Tinted secondary -->
+<button class="p-button p-button-secondary">Options</button>
+
+<!-- Destructive (always red) -->
+<button class="p-button p-button-destructive">Delete</button>
+
+<!-- Retinted with a system color -->
+<button class="p-button p-button-colored p-sys-purple">Customize</button>
+
+<!-- Large with leading icon -->
+<button class="p-button p-button-large p-button-primary">
+  <svg aria-hidden="true">...</svg>
+  <span>Continue</span>
+</button>
+
+<!-- Icon only with accessible name -->
+<button class="p-button p-button-icon-only" aria-label="Close">
+  <svg aria-hidden="true">...</svg>
+</button>
+
+<!-- On a material: blends with the glass -->
+<div class="p-vibrant">
+  <button class="p-button p-button-primary">Save</button>
+</div>
+
+<!-- Inside an inactive window -->
+<div class="p-window-inactive">
+  <button class="p-button p-button-primary">Save</button>
+</div>
+```
+
+The class works on `<button>`, `<a>`, and `<input type="submit">`. Pick the element that matches the action. A link styled as a button is still a link, and a button styled as a link is still a button.
+
+## Migration from v1
+
+The v1 classes (`.p-btn`, `.p-prim-col`, `.p-btn-icon`, `.p-btn-round`, `.p-btn-scope*`, `.p-btn-outline*`) remain available for backwards compatibility. They will be removed in a future major version. Use `.p-button` for new work.
+
+| v1 | v2 |
+|---|---|
+| `.p-btn` | `.p-button .p-button-default` |
+| `.p-btn .p-prim-col` | `.p-button .p-button-primary` |
+| `.p-btn .p-btn-destructive` | `.p-button .p-button-destructive` |
+| `.p-btn .p-btn-outline` | `.p-button .p-button-secondary` (closest) |
+| `.p-btn .p-btn-icon` | `.p-button .p-button-borderless` with an SVG child |
+| `.p-btn-sm` | `.p-button-small` |
+| `.p-btn-md` | (default size) |
+| `.p-btn-lg` | `.p-button-large` |
+| `.p-btn .p-prim-col .p-grape` | `.p-button .p-button-colored .p-grape` |
+
+Color classes work the same way on v2. If a v1 button used `.p-grape` to go grape, the v2 button uses `.p-grape` to go grape. Only the base class name changes.

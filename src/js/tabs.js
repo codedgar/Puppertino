@@ -76,5 +76,4 @@ class PuppertinoTabsMan {
   }
 }
 
-// Initialize the PuppertinoTabsMan instance
 const tabsManager = new PuppertinoTabsMan();

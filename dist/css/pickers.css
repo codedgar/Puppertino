@@ -1,0 +1,571 @@
+/* Puppertino v2.0 — Date Pickers (macOS 26)
+   Graphical calendar, measured from NSDatePicker on macOS 26
+   (values in specs/date-pickers.md).
+   The grid is driven by src/js/datepickers.js.
+   Field-style date input = compose .p-field + .p-stepper. */
+
+:root {
+  --p-picker-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  --p-picker-bg: #fff;
+  --p-picker-border: rgba(0, 0, 0, 0.098);
+  --p-picker-label: rgba(0, 0, 0, 0.847);
+  --p-picker-secondary: rgba(0, 0, 0, 0.498);
+  --p-picker-tertiary: rgba(0, 0, 0, 0.259);
+  --p-picker-today-bg: #dcdcdc;
+  --p-picker-selection: rgb(0, 100, 225);
+  --p-picker-accent: #007aff;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-picker-bg: #1e1e1e;
+  --p-picker-border: rgba(255, 255, 255, 0.098);
+  --p-picker-label: rgba(255, 255, 255, 0.847);
+  --p-picker-secondary: rgba(255, 255, 255, 0.549);
+  --p-picker-tertiary: rgba(255, 255, 255, 0.247);
+  --p-picker-today-bg: rgba(255, 255, 255, 0.14);
+  --p-picker-selection: rgb(0, 89, 209);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-picker-bg: #1e1e1e;
+    --p-picker-border: rgba(255, 255, 255, 0.098);
+    --p-picker-label: rgba(255, 255, 255, 0.847);
+    --p-picker-secondary: rgba(255, 255, 255, 0.549);
+    --p-picker-tertiary: rgba(255, 255, 255, 0.247);
+    --p-picker-today-bg: rgba(255, 255, 255, 0.14);
+    --p-picker-selection: rgb(0, 89, 209);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-picker-bg: #fff;
+  --p-picker-border: rgba(0, 0, 0, 0.098);
+  --p-picker-label: rgba(0, 0, 0, 0.847);
+  --p-picker-secondary: rgba(0, 0, 0, 0.498);
+  --p-picker-tertiary: rgba(0, 0, 0, 0.259);
+  --p-picker-today-bg: #dcdcdc;
+  --p-picker-selection: rgb(0, 100, 225);
+}
+
+/* ------------------------------------------------------------ Calendar */
+
+.p-calendar {
+  background: var(--p-picker-bg);
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px var(--p-picker-border);
+  box-sizing: border-box;
+  color: var(--p-picker-label);
+  display: inline-block;
+  font-family: var(--p-picker-font);
+  padding: 5px 4.5px 1.25px;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 138.5px;
+}
+
+.p-calendar * {
+  box-sizing: border-box;
+}
+
+.p-calendar-header {
+  align-items: flex-start;
+  display: flex;
+  height: 20px;
+  margin-left: -2px;
+  padding: 0 1px 0 0;
+}
+
+.p-calendar-title {
+  color: var(--p-picker-label);
+  flex: 1;
+  /* Native: digit cap 10.0 logical (≈14.2px) but painted width matches
+     15px SF bold, so 15px is used. */
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 13px;
+}
+
+.p-calendar-nav {
+  background: none;
+  border: 0;
+  color: var(--p-picker-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  line-height: 12px;
+  padding: 0 4px;
+}
+
+.p-calendar-nav:hover {
+  color: var(--p-picker-label);
+}
+
+.p-calendar-nav:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+.p-calendar-weekdays {
+  border-bottom: 1px solid var(--p-picker-border);
+  color: var(--p-picker-secondary);
+  display: grid;
+  font-size: 11px;
+  font-weight: 590;
+  grid-template-columns: repeat(7, 1fr);
+  line-height: 9px;
+  padding-bottom: 2.75px;
+  text-align: center;
+}
+
+.p-calendar-grid {
+  display: grid;
+  grid-auto-rows: 18px;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 1px;
+}
+
+/* Day cell: 18px row pitch, 16px pill (matched to native: 11px
+   numbers, pill inset 1px vertically). */
+.p-calendar-day {
+  align-items: center;
+  align-self: center;
+  background: none;
+  border: 0;
+  border-radius: 5px;
+  color: var(--p-picker-label);
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 11px;
+  height: 16px;
+  justify-content: center;
+  padding: 0;
+}
+
+.p-calendar-day.p-outside {
+  color: var(--p-picker-tertiary);
+}
+
+.p-calendar-day:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Today, unselected: neutral cell, accent number (the native
+   unfocused-control look). */
+.p-calendar-day.p-today {
+  background: var(--p-picker-today-bg);
+  color: var(--p-picker-accent);
+  font-weight: 590;
+}
+
+/* Selected: accent fill, white number. */
+.p-calendar-day.p-selected {
+  background: var(--p-picker-selection);
+  color: #fff;
+  font-weight: 510;
+}
+
+.p-calendar-day:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+/* ─── Touch size (iOS and iPadOS 27) ───────────────────────────────── */
+/* The iOS calendar: a 370px glass panel, 13px radius, with 38px day
+   circles on a 51px pitch, day numbers at 20px, and weekday headers at
+   13px. iOS 27 marks the selected day with a neutral circle (black in
+   light, white in dark) and today with a 12% accent circle; the prev /
+   next chevrons are label-colored. .p-calendar-touch-tinted brings back
+   the accent-filled selection.
+
+   The panel is the shared overlay glass (the same fill, keyline, rims
+   and glow as the macOS 27 alert surface, over the overlay shadow),
+   because iOS presents the calendar as a popover over its value
+   buttons. .p-calendar-touch-plain drops the surface for a calendar
+   that sits inline on a card of its own.
+
+   Same slots as the macOS calendar above, restyled. datepickers.js
+   builds a Sunday-first month with full names for touch calendars. The
+   value capsules that open it are ordinary touch buttons:
+   .p-button .p-button-touch .p-button-default. An optional time row
+   goes after the grid:
+
+   <div class="p-calendar-time">
+     <span>Time</span>
+     <button class="p-button p-button-touch p-button-default">9:41 AM</button>
+   </div> */
+
+:root {
+  --p-calendar-touch-weekday: rgba(60, 60, 67, 0.3);
+  --p-calendar-touch-day: #000000;
+  --p-calendar-touch-accent: #0088ff;
+  --p-calendar-touch-outside: rgba(60, 60, 67, 0.3);
+  --p-calendar-touch-selected: #000000;
+  --p-calendar-touch-selected-text: #ffffff;
+  --p-calendar-touch-today-bg: rgba(0, 136, 255, 0.12);
+  --p-calendar-touch-separator: rgba(0, 0, 0, 0.06);
+  /* Overlay glass, borrowed from the macOS 27 alert surface when
+     modals.css is loaded; the fallbacks are the same values. */
+  --p-calendar-touch-surface: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
+  --p-calendar-touch-fallback: var(--p-desktop-modal-fallback, #ebebeb);
+  --p-calendar-touch-edge:
+    0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.34)),
+    inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.85)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6));
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-calendar-touch-weekday: rgba(235, 235, 245, 0.3);
+  --p-calendar-touch-day: #ffffff;
+  --p-calendar-touch-accent: #0091ff;
+  --p-calendar-touch-outside: rgba(235, 235, 245, 0.3);
+  --p-calendar-touch-selected: #ffffff;
+  --p-calendar-touch-selected-text: #000000;
+  --p-calendar-touch-today-bg: rgba(0, 145, 255, 0.12);
+  --p-calendar-touch-separator: rgba(255, 255, 255, 0.1);
+  --p-calendar-touch-surface: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+  --p-calendar-touch-fallback: var(--p-desktop-modal-fallback, #1a1a1a);
+  --p-calendar-touch-edge:
+    0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.7)),
+    inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+    inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.07)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.06));
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-calendar-touch-weekday: rgba(235, 235, 245, 0.3);
+    --p-calendar-touch-day: #ffffff;
+    --p-calendar-touch-accent: #0091ff;
+    --p-calendar-touch-outside: rgba(235, 235, 245, 0.3);
+    --p-calendar-touch-selected: #ffffff;
+    --p-calendar-touch-selected-text: #000000;
+    --p-calendar-touch-today-bg: rgba(0, 145, 255, 0.12);
+    --p-calendar-touch-separator: rgba(255, 255, 255, 0.1);
+    --p-calendar-touch-surface: var(--p-desktop-modal-surface, rgba(26, 26, 26, 0.9));
+    --p-calendar-touch-fallback: var(--p-desktop-modal-fallback, #1a1a1a);
+    --p-calendar-touch-edge:
+      0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.7)),
+      inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+      inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.2)),
+      inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.07)),
+      inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.06));
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-calendar-touch-weekday: rgba(60, 60, 67, 0.3);
+  --p-calendar-touch-day: #000000;
+  --p-calendar-touch-accent: #0088ff;
+  --p-calendar-touch-outside: rgba(60, 60, 67, 0.3);
+  --p-calendar-touch-selected: #000000;
+  --p-calendar-touch-selected-text: #ffffff;
+  --p-calendar-touch-today-bg: rgba(0, 136, 255, 0.12);
+  --p-calendar-touch-separator: rgba(0, 0, 0, 0.06);
+  --p-calendar-touch-surface: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
+  --p-calendar-touch-fallback: var(--p-desktop-modal-fallback, #ebebeb);
+  --p-calendar-touch-edge:
+    0 0 0 0.5px var(--p-desktop-modal-keyline, rgba(0, 0, 0, 0.34)),
+    inset 0 1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 -1px 0 var(--p-desktop-modal-rim, rgba(255, 255, 255, 0.95)),
+    inset 0 40px 10px -40px var(--p-desktop-modal-glow, rgba(255, 255, 255, 0.85)),
+    inset 0 -40px 12px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6));
+}
+
+/* Panel: 370 x 377 at five rows (header 51, weekdays 14, a 48px first
+   row then rows of 51, time row 52). 12px side padding lands the first and last day circle
+   12px in from the edge, on the reference's 51.3px column pitch. */
+.p-calendar-touch {
+  box-sizing: border-box;
+  width: 370px;
+  max-width: 100%;
+  padding: 0 12px;
+  border-radius: 13px;
+
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  background: var(--p-calendar-touch-surface);
+  box-shadow:
+    var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+    var(--p-calendar-touch-edge);
+  color: var(--p-calendar-touch-day);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+/* Inline on a card of its own: no surface, no shadow. */
+.p-calendar-touch.p-calendar-touch-plain {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: none;
+  box-shadow: none;
+}
+
+.p-calendar-touch * {
+  box-sizing: border-box;
+}
+
+/* Month title with the 13px bold chevron that opens the month/year
+   wheels. The chevron is drawn, so the title text stays the date. */
+.p-calendar-touch .p-calendar-title {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  gap: 5px;
+  padding-left: 9px;
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+  color: var(--p-calendar-touch-day);
+}
+
+.p-calendar-touch .p-calendar-title::after {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 13px;
+  background: var(--p-calendar-touch-accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 13' fill='none'%3E%3Cpath d='M1.5 1.5 6.5 6.5 1.5 11.5' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 13' fill='none'%3E%3Cpath d='M1.5 1.5 6.5 6.5 1.5 11.5' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* The macOS header is a fixed 20px tall, which 44px nav buttons
+   overflow into the weekday row. Touch gives it a 51px band instead,
+   and lets the last chevron's target run into the side padding so the
+   glyph lands 25px from the edge. */
+.p-calendar-touch .p-calendar-header {
+  height: 51px;
+  align-items: center;
+  gap: 2px;
+  margin: 0 -10px 0 0;
+  padding: 0;
+}
+
+.p-calendar-touch .p-calendar-nav {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+
+  /* The glyph is drawn below; any text in the button is hidden. */
+  color: transparent;
+  font-size: 0;
+  line-height: 1;
+}
+
+/* chevron.left / chevron.right at 20pt, weight 510, in the label
+   color (iOS 26 drew them in the accent). */
+.p-calendar-touch .p-calendar-nav::before {
+  content: "";
+  width: 11px;
+  height: 19px;
+  background: var(--p-calendar-touch-day);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 19' fill='none'%3E%3Cpath d='M9 1.5 1.8 9.5 9 17.5' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 19' fill='none'%3E%3Cpath d='M9 1.5 1.8 9.5 9 17.5' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.p-calendar-touch .p-calendar-nav[data-p-cal="next"]::before,
+.p-calendar-touch .p-calendar-nav[data-p-cal-next]::before {
+  transform: scaleX(-1);
+}
+
+/* iOS has no go-to-today button in the calendar header. */
+.p-calendar-touch .p-calendar-nav[data-p-cal="today"] {
+  display: none;
+}
+
+.p-calendar-touch .p-calendar-nav:hover {
+  color: transparent;
+}
+
+.p-calendar-touch .p-calendar-nav:focus-visible {
+  outline: 3px solid var(--p-focus-ring-color, rgba(0, 136, 255, 0.5));
+  outline-offset: -3px;
+}
+
+/* Columns are 38px circles spread with space-between, not seven equal
+   fractions: across the 346px of content that lands the row on a
+   51.3px pitch with the first and last circle flush against the
+   padding. The weekday row runs the same tracks so a label sits over
+   the center of its column. Below 266px of content the tracks shrink
+   together rather than overflowing. */
+
+.p-calendar-touch .p-calendar-weekdays {
+  grid-template-columns: repeat(7, minmax(0, 38px));
+  justify-content: space-between;
+  height: 14px;
+  padding-bottom: 0;
+  border-bottom: 0;
+  line-height: 14px;
+  white-space: nowrap;
+
+  color: var(--p-calendar-touch-weekday);
+  font-size: 13px;
+  font-weight: 590;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* Weekday names are <abbr> so the full name is announced; no underline. */
+.p-calendar-touch .p-calendar-weekdays > abbr {
+  text-align: center;
+  text-decoration: none;
+}
+
+/* 51px rows against 38px circles; the first row sits 3px tighter to
+   the weekday headers (48px). */
+.p-calendar-touch .p-calendar-grid {
+  grid-template-columns: repeat(7, minmax(0, 38px));
+  grid-template-rows: 48px;
+  grid-auto-rows: 51px;
+  justify-content: space-between;
+  gap: 0;
+  margin: 3px 0 4px;
+}
+
+.p-calendar-touch .p-calendar-day {
+  width: 100%;
+  max-width: 38px;
+  height: auto;
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 50%;
+
+  color: var(--p-calendar-touch-day);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.45px;
+}
+
+/* Days from the neighbouring month stay visible but recede.
+   datepickers.js leaves them out of touch calendars, the way iOS does;
+   hand-written markup can still use the class. */
+.p-calendar-touch .p-calendar-day[data-p-outside],
+.p-calendar-touch .p-calendar-day.p-outside {
+  color: var(--p-calendar-touch-outside);
+}
+
+/* A blank leading or trailing cell. */
+.p-calendar-touch .p-calendar-day.p-calendar-blank {
+  visibility: hidden;
+}
+
+/* Touch has no hover, and the macOS today-pill background has to be
+   cleared explicitly. */
+.p-calendar-touch .p-calendar-day:hover {
+  background: none;
+}
+
+/* Today: accent number, Regular weight, on a 12% accent circle. */
+.p-calendar-touch .p-calendar-day.p-today {
+  background: var(--p-calendar-touch-today-bg);
+  color: var(--p-calendar-touch-accent);
+  font-weight: 400;
+}
+
+/* Selected: the neutral circle with a 590 number. A day can be both
+   today and selected, and then the selection wins. */
+.p-calendar-touch .p-calendar-day.p-selected,
+.p-calendar-touch .p-calendar-day[aria-selected="true"] {
+  background: var(--p-calendar-touch-selected);
+  color: var(--p-calendar-touch-selected-text);
+  font-weight: 590;
+}
+
+/* Tinted: the accent-filled selection, for a calendar that should carry
+   the app's tint. */
+.p-calendar-touch-tinted .p-calendar-day.p-selected,
+.p-calendar-touch-tinted .p-calendar-day[aria-selected="true"] {
+  background: var(--p-calendar-touch-accent);
+  color: #ffffff;
+}
+
+.p-calendar-touch .p-calendar-day:focus-visible {
+  outline: 3px solid var(--p-calendar-touch-accent);
+  outline-offset: -3px;
+}
+
+.p-calendar-touch .p-calendar-day:disabled,
+.p-calendar-touch .p-calendar-day[aria-disabled="true"] {
+  color: var(--p-calendar-touch-outside);
+  pointer-events: none;
+}
+
+/* Time row: a hairline inset to the content, then "Time" and its value
+   capsule on a 52px row. */
+.p-calendar-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding-left: 1px;
+  border-top: 1px solid var(--p-calendar-touch-separator);
+
+  color: var(--p-calendar-touch-day);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .p-calendar-touch:not(.p-calendar-touch-plain) {
+    background: var(--p-calendar-touch-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-calendar-touch:not(.p-calendar-touch-plain) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-calendar-touch-fallback);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-calendar-touch:not(.p-calendar-touch-plain) {
+    background: var(--p-calendar-touch-fallback);
+    box-shadow:
+      var(--p-shadow-overlay, 0 8px 48px rgba(0, 0, 0, 0.25)),
+      0 0 0 1px var(--p-calendar-touch-outside);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-calendar-touch:not(.p-calendar-touch-plain) {
+    border: 1px solid CanvasText;
+  }
+
+  .p-calendar-touch .p-calendar-nav::before,
+  .p-calendar-touch .p-calendar-title::after {
+    background: ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .p-calendar-touch .p-calendar-day.p-selected,
+  .p-calendar-touch .p-calendar-day[aria-selected="true"] {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}

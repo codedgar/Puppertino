@@ -1,0 +1,1011 @@
+/* Puppertino v2.0 — Toolbars (macOS 27)
+   Floating Liquid Glass item clusters for toolbars: a glass capsule
+   with a crisp keyline, a 1px specular rim and a soft vertical
+   gradient, holding icon buttons, optionally divider-separated, in two
+   sizes and both orientations. Also single round glass buttons and
+   popup chips. Placement inside a window titlebar lives in
+   windows.css; toolbar search is the standard .p-search.
+   The iOS 27 bars (.p-nav-bar, .p-toolbar-touch, .p-bar-search) are
+   the second section of this file. */
+
+:root {
+  --p-toolbar-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
+  /* Glass fill: a translucent ramp (≈55–70% opaque) — a bright line
+     under the top rim, darkest (≈241 on white, ≈229 on the #E6E6E6
+     sidebar) a third of the way down, clearing toward the bottom. */
+  --p-toolbar-bg: linear-gradient(rgba(246, 246, 246, 0.6) 1px, rgba(232, 232, 232, 0.55) 5px, rgba(229, 229, 229, 0.55) 30%, rgba(242, 242, 242, 0.62) 65%, rgba(255, 255, 255, 0.7));
+  --p-toolbar-bg-opaque: linear-gradient(#f8f8f8 1px, #f2f2f2 5px, #f1f1f1 30%, #f7f7f7 65%, #fff);
+  /* Rim: a dark keyline outside the shape, heavier on the side ends
+     (two 1px x-offset copies), and 1px white speculars on the top and
+     bottom inner edges. */
+  --p-toolbar-rim:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    -1px 0 0 rgba(0, 0, 0, 0.1),
+    1px 0 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6);
+  /* Inactive window: the glass flattens to a keyline only. */
+  --p-toolbar-glass-inactive: rgba(250, 250, 250, 0.9);
+  --p-toolbar-rim-inactive: 0 0 0 0.5px rgba(0, 0, 0, 0.1);
+  --p-toolbar-shadow: var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.04));
+  --p-toolbar-ink: #1a1a1a;
+  --p-toolbar-ink-dim: #bfbfbf;
+  --p-toolbar-hover: rgba(0, 0, 0, 0.1);
+  --p-toolbar-divider: rgba(0, 0, 0, 0.15);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  /* Dark glass is additive light: white @ ≈6% at the top rising to
+     ≈15% at the bottom (≈44 → 63 on #1E1E1E), inside a near-black
+     keyline with bright rims top and bottom. */
+  --p-toolbar-bg: linear-gradient(rgba(255, 255, 255, 0.07) 1px, rgba(255, 255, 255, 0.062) 15%, rgba(255, 255, 255, 0.09) 55%, rgba(255, 255, 255, 0.146));
+  --p-toolbar-bg-opaque: linear-gradient(#2c2c2c, #424242);
+  --p-toolbar-rim:
+    0 0 0 0.5px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.13);
+  --p-toolbar-glass-inactive: rgba(38, 38, 38, 0.92);
+  --p-toolbar-rim-inactive: 0 0 0 0.5px rgba(0, 0, 0, 0.9);
+  --p-toolbar-shadow: var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.04));
+  --p-toolbar-ink: #f5f5f5;
+  --p-toolbar-ink-dim: rgba(255, 255, 255, 0.3);
+  --p-toolbar-hover: rgba(255, 255, 255, 0.09);
+  --p-toolbar-divider: rgba(255, 255, 255, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-toolbar-bg: linear-gradient(rgba(255, 255, 255, 0.07) 1px, rgba(255, 255, 255, 0.062) 15%, rgba(255, 255, 255, 0.09) 55%, rgba(255, 255, 255, 0.146));
+    --p-toolbar-bg-opaque: linear-gradient(#2c2c2c, #424242);
+    --p-toolbar-rim:
+      0 0 0 0.5px rgba(0, 0, 0, 0.95),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.13);
+    --p-toolbar-glass-inactive: rgba(38, 38, 38, 0.92);
+    --p-toolbar-rim-inactive: 0 0 0 0.5px rgba(0, 0, 0, 0.9);
+    --p-toolbar-shadow: var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.04));
+    --p-toolbar-ink: #f5f5f5;
+    --p-toolbar-ink-dim: rgba(255, 255, 255, 0.3);
+    --p-toolbar-hover: rgba(255, 255, 255, 0.09);
+    --p-toolbar-divider: rgba(255, 255, 255, 0.18);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-toolbar-bg: linear-gradient(rgba(246, 246, 246, 0.6) 1px, rgba(232, 232, 232, 0.55) 5px, rgba(229, 229, 229, 0.55) 30%, rgba(242, 242, 242, 0.62) 65%, rgba(255, 255, 255, 0.7));
+  --p-toolbar-bg-opaque: linear-gradient(#f8f8f8 1px, #f2f2f2 5px, #f1f1f1 30%, #f7f7f7 65%, #fff);
+  --p-toolbar-rim:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    -1px 0 0 rgba(0, 0, 0, 0.1),
+    1px 0 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6);
+  --p-toolbar-glass-inactive: rgba(250, 250, 250, 0.9);
+  --p-toolbar-rim-inactive: 0 0 0 0.5px rgba(0, 0, 0, 0.1);
+  --p-toolbar-shadow: var(--p-shadow-glass-control, 0 8px 15px rgba(0, 0, 0, 0.04));
+  --p-toolbar-ink: #1a1a1a;
+  --p-toolbar-ink-dim: #bfbfbf;
+  --p-toolbar-hover: rgba(0, 0, 0, 0.1);
+  --p-toolbar-divider: rgba(0, 0, 0, 0.15);
+}
+
+/* --------------------------------------------------------------- Group */
+
+/* Regular: 36px capsule, 2px end padding, items on a 32px pitch. True
+   capsule (radius = h/2), so no corner-shape needed. The glass recipe
+   is shared by groups, round buttons and popup chips. */
+.p-toolbar-group,
+.p-toolbar-circle,
+.p-toolbar-popup {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--p-toolbar-bg);
+  box-shadow: var(--p-toolbar-rim), var(--p-toolbar-shadow);
+  box-sizing: border-box;
+  color: var(--p-toolbar-ink);
+  font-family: var(--p-toolbar-font);
+}
+
+.p-toolbar-group {
+  align-items: center;
+  border-radius: 18px;
+  display: inline-flex;
+  height: 36px;
+  padding: 0 2px;
+}
+
+.p-toolbar-group * {
+  box-sizing: border-box;
+}
+
+.p-toolbar-group-small {
+  border-radius: 12px;
+  height: 24px;
+}
+
+.p-toolbar-group-vertical {
+  flex-direction: column;
+  height: auto;
+  padding: 2px 0;
+  width: 36px;
+}
+
+.p-toolbar-group-small.p-toolbar-group-vertical {
+  width: 24px;
+}
+
+/* --------------------------------------------------------------- Items */
+
+/* Icon button: a 32px cell. The hover/pressed pill is a capsule inset
+   4 from the group height (36 → 32×28 r14; 24 → 24×20 r10). It is a
+   blend, not a flat fill: #E6E6E6 plus-darker (black @ 10%, ≈#E6E6E6
+   on white) in light, #141414 plus-lighter (white @ 9%) in dark, so it
+   follows the glass gradient underneath. */
+.p-toolbar-btn {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 14px;
+  color: var(--p-toolbar-ink);
+  cursor: pointer;
+  display: flex;
+  flex: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 510;
+  height: 28px;
+  justify-content: center;
+  min-width: 32px;
+  padding: 0 8px;
+}
+
+.p-toolbar-group-small .p-toolbar-btn {
+  border-radius: 10px;
+  font-size: 10px;
+  height: 20px;
+  min-width: 24px;
+  padding: 0 6px;
+}
+
+/* Vertical groups: the same 32 cell, stacked. */
+.p-toolbar-group-vertical .p-toolbar-btn {
+  min-width: 28px;
+  padding: 0;
+  width: 32px;
+}
+
+.p-toolbar-group-small.p-toolbar-group-vertical .p-toolbar-btn {
+  min-width: 20px;
+  width: 20px;
+}
+
+.p-toolbar-btn:hover,
+.p-toolbar-btn.p-active,
+.p-toolbar-btn[aria-pressed="true"] {
+  background: var(--p-toolbar-hover);
+}
+
+.p-toolbar-btn:focus-visible,
+.p-toolbar-circle:focus-visible,
+.p-toolbar-popup:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: -1px;
+}
+
+.p-toolbar-btn:disabled,
+.p-toolbar-btn.p-dimmed {
+  color: var(--p-toolbar-ink-dim);
+  pointer-events: none;
+}
+
+/* Label + up-down chevrons variant (63×36 / 57×24 with "Label"). */
+.p-toolbar-text-btn {
+  gap: 2px;
+  min-width: 0;
+  padding: 0 10px;
+}
+
+/* ------------------------------------------------ Round button & popup */
+
+/* A single glass icon button: a 36px circle (24 small). */
+.p-toolbar-circle {
+  align-items: center;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font-size: 13px;
+  font-weight: 510;
+  height: 36px;
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+}
+
+.p-toolbar-circle-small {
+  font-size: 10px;
+  height: 24px;
+  width: 24px;
+}
+
+/* Popup chip: icon + a small down chevron in a 50×36 glass capsule
+   (39×24 small). */
+.p-toolbar-popup {
+  align-items: center;
+  border: 0;
+  border-radius: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font-size: 13px;
+  font-weight: 510;
+  gap: 3px;
+  height: 36px;
+  justify-content: center;
+  min-width: 50px;
+  padding: 0 10px;
+}
+
+.p-toolbar-popup-small {
+  border-radius: 12px;
+  font-size: 10px;
+  gap: 2px;
+  height: 24px;
+  min-width: 39px;
+  padding: 0 7px;
+}
+
+.p-toolbar-popup-chevron {
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.p-toolbar-circle:hover,
+.p-toolbar-popup:hover,
+.p-toolbar-circle[aria-pressed="true"],
+.p-toolbar-popup[aria-expanded="true"] {
+  background: linear-gradient(var(--p-toolbar-hover), var(--p-toolbar-hover)), var(--p-toolbar-bg);
+}
+
+/* ------------------------------------------------------------ Dividers */
+
+/* 1×20 (16 small). Like the pill, a blend: #D9D9D9 plus-darker
+   (black @ 15%) / #262626 plus-lighter (white @ 18%), so the dark
+   line reads lighter than the glass. A group with dividers spaces its items 3px apart
+   (35px pitch); the line sits 3px after the item before it. */
+.p-toolbar-group:has(> .p-toolbar-divider) {
+  gap: 3px;
+}
+
+.p-toolbar-divider {
+  align-self: center;
+  background: var(--p-toolbar-divider);
+  flex: none;
+  height: 20px;
+  margin: 0 -2px 0 0;
+  width: 1px;
+}
+
+.p-toolbar-group-small .p-toolbar-divider {
+  height: 16px;
+}
+
+.p-toolbar-group-vertical .p-toolbar-divider {
+  height: 1px;
+  margin: 0 0 -2px;
+  width: 20px;
+}
+
+.p-toolbar-group-small.p-toolbar-group-vertical .p-toolbar-divider {
+  width: 16px;
+}
+
+/* ------------------------------------------------------------ Inactive */
+
+/* Unfocused window (or .p-inactive on the glass itself): the glass
+   drops its gradient and speculars and keeps a hairline ring. */
+.p-window-inactive :is(.p-toolbar-group, .p-toolbar-circle, .p-toolbar-popup),
+:is(.p-toolbar-group, .p-toolbar-circle, .p-toolbar-popup).p-inactive {
+  background: var(--p-toolbar-glass-inactive);
+  box-shadow: var(--p-toolbar-rim-inactive);
+}
+
+/* ----------------------------------------------------------- Fallbacks */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-toolbar-group,
+  .p-toolbar-circle,
+  .p-toolbar-popup {
+    background: var(--p-toolbar-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-toolbar-group,
+  .p-toolbar-circle,
+  .p-toolbar-popup {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-toolbar-bg-opaque);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-toolbar-group,
+  .p-toolbar-circle,
+  .p-toolbar-popup {
+    box-shadow: 0 0 0 1px var(--p-toolbar-ink), var(--p-toolbar-shadow);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-toolbar-group,
+  .p-toolbar-circle,
+  .p-toolbar-popup {
+    border: 1px solid ButtonBorder;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-nav-bar and .p-toolbar-touch (iOS 27)
+   The iOS bars. A navigation bar across the top carrying the screen's
+   title and its actions, and a toolbar floating at the bottom holding
+   the actions that operate on what is on screen.
+
+   In iOS 27 neither bar has a background. The title floats over the
+   content, and every control is its own piece of glass: 44px circles
+   in the navigation bar, 48px circles and capsules in the toolbar. The
+   glass is the shared macOS/iOS 27 recipe from materials.css
+   (--p-glass-tint, --p-glass-edge, --p-shadow-glass-control), the same
+   one the tab bar uses, so an app's bars read as one material.
+
+   The iOS 26 navigation bar, a full-width translucent strip, is still
+   available as .p-nav-bar-filled.
+
+   The macOS toolbar above is a different component: it lives in a
+   window's title bar and is sized for a pointer.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-bar-surface: var(--p-glass-tint, rgba(242, 242, 242, 0.55));
+  --p-bar-fallback: #f7f7f7;
+  --p-bar-filled: rgba(255, 255, 255, 0.65);
+  --p-bar-title: #1a1a1a;
+  --p-bar-subtitle: #727272;
+  --p-bar-ink: #1a1a1a;
+  --p-bar-item: var(--p-control-accent, #0088ff);
+  --p-bar-prominent: var(--p-control-accent, #0088ff);
+  --p-bar-prominent-ink: #f5f5f5;
+  --p-bar-placeholder: rgba(60, 60, 67, 0.3);
+  --p-bar-separator: rgba(60, 60, 67, 0.29);
+  --p-bar-button: rgba(0, 0, 0, 0.07);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-bar-surface: var(--p-glass-tint, rgba(153, 153, 153, 0.17));
+  --p-bar-fallback: #1c1c1e;
+  --p-bar-filled: rgba(40, 40, 42, 0.65);
+  --p-bar-title: #f5f5f5;
+  --p-bar-subtitle: #8a8a8a;
+  --p-bar-ink: #f5f5f5;
+  --p-bar-item: var(--p-control-accent, #0091ff);
+  --p-bar-prominent: var(--p-control-accent, #0091ff);
+  --p-bar-prominent-ink: #f5f5f5;
+  --p-bar-placeholder: rgba(235, 235, 245, 0.3);
+  --p-bar-separator: rgba(84, 84, 88, 0.6);
+  --p-bar-button: rgba(255, 255, 255, 0.07);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-bar-surface: var(--p-glass-tint, rgba(153, 153, 153, 0.17));
+    --p-bar-fallback: #1c1c1e;
+    --p-bar-filled: rgba(40, 40, 42, 0.65);
+    --p-bar-title: #f5f5f5;
+    --p-bar-subtitle: #8a8a8a;
+    --p-bar-ink: #f5f5f5;
+    --p-bar-item: var(--p-control-accent, #0091ff);
+    --p-bar-prominent: var(--p-control-accent, #0091ff);
+    --p-bar-prominent-ink: #f5f5f5;
+    --p-bar-placeholder: rgba(235, 235, 245, 0.3);
+    --p-bar-separator: rgba(84, 84, 88, 0.6);
+    --p-bar-button: rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a dark
+   page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-bar-surface: var(--p-glass-tint, rgba(242, 242, 242, 0.55));
+  --p-bar-fallback: #f7f7f7;
+  --p-bar-filled: rgba(255, 255, 255, 0.65);
+  --p-bar-title: #1a1a1a;
+  --p-bar-subtitle: #727272;
+  --p-bar-ink: #1a1a1a;
+  --p-bar-item: var(--p-control-accent, #0088ff);
+  --p-bar-prominent: var(--p-control-accent, #0088ff);
+  --p-bar-prominent-ink: #f5f5f5;
+  --p-bar-placeholder: rgba(60, 60, 67, 0.3);
+  --p-bar-separator: rgba(60, 60, 67, 0.29);
+  --p-bar-button: rgba(0, 0, 0, 0.07);
+}
+
+/* ─── Navigation bar ───────────────────────────────────────────────── */
+
+.p-nav-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top);
+
+  color: var(--p-bar-title);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-nav-bar * {
+  box-sizing: border-box;
+}
+
+/* The iOS 26 bar: a full-width translucent strip behind the row. */
+.p-nav-bar-filled {
+  background: var(--p-bar-filled);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+}
+
+/* The row holding the controls and, in compact mode, the title. A
+   three-column grid keeps the title centred on the bar rather than on
+   whatever space the controls leave over. Controls sit 12px apart, a
+   56px pitch for 44px buttons. */
+.p-nav-bar__row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.p-nav-bar__row > :first-child:not(.p-nav-bar__title, .p-nav-bar__titles) {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.p-nav-bar__row > :last-child:not(.p-nav-bar__title, .p-nav-bar__titles) {
+  grid-column: 3;
+  justify-self: end;
+}
+
+/* Several controls on one side: wrap them so they share a column. */
+.p-nav-bar__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Leading titles: the title follows the back button, 12px after it,
+   left aligned, and the trailing controls are pushed to the far end. */
+.p-nav-bar-leading .p-nav-bar__row {
+  display: flex;
+}
+
+.p-nav-bar-leading .p-nav-bar__row > :last-child:not(:first-child, .p-nav-bar__title, .p-nav-bar__titles, .p-nav-bar__medium) {
+  margin-left: auto;
+}
+
+.p-nav-bar-leading .p-nav-bar__title,
+.p-nav-bar-leading .p-nav-bar__subtitle {
+  text-align: left;
+}
+
+.p-nav-bar-leading .p-nav-bar__titles {
+  align-items: flex-start;
+  min-width: 0;
+}
+
+/* Compact title: the one that sits in the row, centred. */
+.p-nav-bar__title {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+
+  color: var(--p-bar-title);
+  font-size: 17px;
+  font-weight: 590;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+}
+
+/* Compact title with a subtitle under it: both shrink a step. */
+.p-nav-bar__title:has(+ .p-nav-bar__subtitle),
+.p-nav-bar__titles > .p-nav-bar__title {
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.p-nav-bar__titles {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.p-nav-bar__subtitle {
+  margin: 0;
+  color: var(--p-bar-subtitle);
+  font-size: 12px;
+  font-weight: 510;
+  line-height: 15px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+/* Large title: its own row under the controls, left aligned. */
+.p-nav-bar__large {
+  margin: 0;
+  padding: 10px 0 8px;
+
+  color: var(--p-bar-title);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: 0.4px;
+}
+
+/* Medium title (iOS 27): Title 1 in bold. Either its own row under the
+   controls, like the large title, or inline after the back button in a
+   .p-nav-bar-leading row. */
+.p-nav-bar__medium {
+  margin: 0;
+  padding: 4px 0 6px;
+
+  color: var(--p-bar-title);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0.38px;
+}
+
+.p-nav-bar__titles > .p-nav-bar__medium,
+.p-nav-bar__titles > .p-nav-bar__large,
+.p-nav-bar__row > .p-nav-bar__medium,
+.p-nav-bar__row > .p-nav-bar__large {
+  padding: 0;
+}
+
+.p-nav-bar__large + .p-nav-bar__subtitle,
+.p-nav-bar__medium + .p-nav-bar__subtitle {
+  margin: -6px 0 10px;
+  font-size: 15px;
+  font-weight: 510;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+  text-align: left;
+}
+
+.p-nav-bar__titles > .p-nav-bar__medium + .p-nav-bar__subtitle,
+.p-nav-bar__titles > .p-nav-bar__large + .p-nav-bar__subtitle {
+  margin: 0;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0;
+}
+
+/* Glass buttons: every control in the bar is a 44px glass circle with a
+   dark glyph, not accent text. A text label grows it into a capsule. */
+.p-nav-bar__button {
+  --p-glass-surface: var(--p-bar-surface);
+
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+
+  background: var(--p-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+
+  color: var(--p-bar-ink);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s ease-out;
+}
+
+.p-nav-bar__button > i,
+.p-nav-bar__button > svg {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.p-nav-bar__button > svg {
+  fill: currentcolor;
+}
+
+.p-nav-bar__button:not(:has(> i, > svg)) {
+  width: auto;
+  min-width: 44px;
+  padding: 0 14px;
+}
+
+/* The back chevron is one weight heavier than the other glyphs. */
+.p-nav-bar__back {
+  font-weight: 590;
+}
+
+/* Prominent: the screen's primary action, a solid accent circle with a
+   light glyph instead of glass. One per bar. */
+.p-nav-bar__button.p-nav-bar__button-prominent {
+  background: var(--p-bar-prominent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  color: var(--p-bar-prominent-ink);
+}
+
+.p-nav-bar__button:active {
+  opacity: 0.5;
+}
+
+.p-nav-bar__button:focus-visible {
+  outline: 3px solid var(--p-bar-item);
+  outline-offset: 2px;
+}
+
+/* Text actions: the v2.0 pre-27 style, plain accent text. Still works,
+   and still right for a bar that keeps .p-nav-bar-filled. */
+.p-nav-bar__action {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: none;
+  padding: 0 4px;
+
+  min-height: 44px;
+  color: var(--p-bar-item);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  letter-spacing: -0.43px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.p-nav-bar__action:active {
+  opacity: 0.5;
+}
+
+.p-nav-bar__action:focus-visible {
+  outline: 3px solid var(--p-bar-item);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Hairline under the bar, for a bar over scrolling content. */
+.p-nav-bar-bordered {
+  box-shadow: inset 0 -0.5px 0 var(--p-bar-separator);
+}
+
+/* ─── Toolbar (touch) ──────────────────────────────────────────────── */
+/* A floating glass capsule, 48px tall, holding 48px buttons on a 54px
+   pitch: 4px of padding at the ends and 6px between. A single button
+   is a 48px circle; a text button is a 48px capsule with 12px padding.
+   Glyphs are dark ink; only a prominent capsule takes the accent. */
+
+.p-toolbar-touch {
+  --p-glass-surface: var(--p-bar-surface);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  height: 48px;
+  padding: 0 4px;
+  border-radius: 24px;
+
+  background: var(--p-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+
+  color: var(--p-bar-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+}
+
+.p-toolbar-touch * {
+  box-sizing: border-box;
+}
+
+.p-toolbar-touch:has(> :only-child) {
+  padding: 0;
+}
+
+.p-toolbar-touch-fixed {
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  z-index: 70;
+}
+
+/* Vertical group: the same capsule stood on end, 48px wide. */
+.p-toolbar-touch-vertical {
+  flex-direction: column;
+  width: 48px;
+  height: auto;
+  padding: 4px 0;
+}
+
+.p-toolbar-touch__item {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+
+  color: inherit;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 510;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: background 0.12s ease-out;
+}
+
+/* An item with a label rather than a glyph grows into a capsule. */
+.p-toolbar-touch__item:not(:has(> i, > svg)) {
+  width: auto;
+  min-width: 48px;
+  padding: 0 12px;
+  letter-spacing: 0;
+}
+
+.p-toolbar-touch__item > i,
+.p-toolbar-touch__item > svg {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.p-toolbar-touch__item > svg {
+  fill: currentcolor;
+}
+
+.p-toolbar-touch__item:active {
+  opacity: 0.5;
+}
+
+.p-toolbar-touch__item[aria-current],
+.p-toolbar-touch__item.p-is-active {
+  background: var(--p-bar-button);
+}
+
+.p-toolbar-touch__item:focus-visible {
+  outline: 3px solid var(--p-bar-item);
+  outline-offset: -3px;
+}
+
+/* A divider between groups of items inside one capsule. */
+.p-toolbar-touch__divider {
+  flex: none;
+  width: 1px;
+  height: 24px;
+  margin: 0 3px;
+  background: var(--p-bar-separator);
+}
+
+.p-toolbar-touch-vertical > .p-toolbar-touch__divider {
+  width: 24px;
+  height: 1px;
+  margin: 3px 0;
+}
+
+/* Prominent: the capsule becomes a solid accent button. */
+.p-toolbar-touch.p-toolbar-touch-prominent {
+  background: var(--p-bar-prominent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  color: var(--p-bar-prominent-ink);
+}
+
+/* Inside a navigation bar a group matches the bar's 44px circles:
+   44px tall, items on a 56px pitch (a 160px group of three). */
+.p-nav-bar .p-toolbar-touch {
+  gap: 12px;
+  height: 44px;
+  padding: 0 2px;
+  border-radius: 22px;
+}
+
+.p-nav-bar .p-toolbar-touch:has(> :only-child) {
+  padding: 0;
+}
+
+.p-nav-bar .p-toolbar-touch__item {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+}
+
+/* ─── Bar search field ─────────────────────────────────────────────── */
+/* A glass search capsule for a toolbar or navigation bar: 180 x 44 in
+   an iPad toolbar. Set --p-bar-search-width and --p-bar-search-height
+   for other sizes (190 x 48 at the bottom of an iPhone screen). */
+
+.p-bar-search {
+  --p-bar-search-width: 180px;
+  --p-bar-search-height: 44px;
+  --p-glass-surface: var(--p-bar-surface);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+
+  width: var(--p-bar-search-width);
+  height: var(--p-bar-search-height);
+  padding: 0 12px;
+  border-radius: calc(var(--p-bar-search-height) / 2);
+
+  background: var(--p-bar-surface);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+
+  color: var(--p-bar-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  cursor: text;
+}
+
+.p-bar-search > i,
+.p-bar-search > svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.p-bar-search > svg {
+  fill: currentcolor;
+}
+
+/* A trailing glyph (dictation, clear) is secondary. */
+.p-bar-search > input ~ i,
+.p-bar-search > input ~ svg,
+.p-bar-search > input ~ button {
+  color: var(--p-bar-subtitle);
+}
+
+.p-bar-search > input ~ button {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.p-bar-search > input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+
+  color: var(--p-bar-title);
+  caret-color: var(--p-bar-item);
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: -0.43px;
+}
+
+.p-bar-search > input::placeholder {
+  color: var(--p-bar-placeholder);
+}
+
+.p-bar-search > input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.p-bar-search:focus-within {
+  box-shadow: var(--p-glass-edge), var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
+}
+
+/* ─── Live glass ───────────────────────────────────────────────────── */
+/* With .p-glass added (or once glass.js enhances these), the edge moves
+   to the ::before layer with the tint; only the drop shadow stays. */
+
+:is(.p-nav-bar__button, .p-toolbar-touch, .p-bar-search):is([data-p-glass="pending"], [data-p-glass="live"]) {
+  box-shadow: var(--p-shadow-glass-control, none);
+}
+
+/* ─── Shared fallbacks ─────────────────────────────────────────────── */
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  .p-nav-bar-filled,
+  .p-nav-bar__button:not(.p-nav-bar__button-prominent),
+  .p-toolbar-touch:not(.p-toolbar-touch-prominent),
+  .p-bar-search {
+    background: var(--p-bar-fallback);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-nav-bar-filled,
+  .p-nav-bar__button:not(.p-nav-bar__button-prominent),
+  .p-toolbar-touch:not(.p-toolbar-touch-prominent),
+  .p-bar-search {
+    background: var(--p-bar-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-nav-bar__button,
+  .p-toolbar-touch__item {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-nav-bar-filled,
+  .p-nav-bar__button,
+  .p-toolbar-touch,
+  .p-bar-search {
+    border: 1px solid ButtonBorder;
+  }
+
+  .p-nav-bar__action,
+  .p-nav-bar__button,
+  .p-toolbar-touch__item {
+    color: LinkText;
+  }
+}

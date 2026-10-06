@@ -1,0 +1,114 @@
+---
+layout: ../../../layouts/Doc.astro
+title: Date pickers
+description: The iOS calendar. A glass panel with 38px day circles, 20px numbers, a neutral circle for the selected day, opened from a capsule value button.
+---
+
+import '@puppertino/buttons.css';
+import '@puppertino/pickers.css';
+import Showcase from '../../../components/Showcase.astro';
+import datepickersScript from '../../../../../src/js/datepickers.js?url';
+
+<script type="module" src={datepickersScript}></script>
+
+A date picker collects a date, a time, or both. On touch it is a month grid with cells big enough to hit, opened from a button showing the current value.
+
+## When to use it
+
+Use a date picker when the answer is a real date and the surrounding dates matter: choosing a day to travel, booking a slot, setting a deadline.
+
+Use a plain <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/`}>text field</a> with `type="date"` when you only need the value and the platform's own picker is good enough, which is often. A native picker is one line of markup and works everywhere.
+
+## The value button
+
+iOS does not show a calendar inline. It shows the current value as a quiet capsule, and opens the calendar when that is tapped.
+
+<Showcase
+  name="picker-value"
+  compact
+  code={`<button class="p-button p-button-touch p-button-default" type="button">Apr 1, 2025</button>
+<button class="p-button p-button-touch p-button-default" type="button">9:41 AM</button>`}
+  snippet={`<button class="p-button p-button-touch p-button-default" type="button">Apr 1, 2025</button>`}
+/>
+
+That capsule is an ordinary touch button in the gray style, at the same 34px height and `rgba(118,118,128,0.12)` fill as everywhere else. There is no separate component for it.
+
+## The calendar
+
+<Showcase
+  name="picker-calendar"
+  align="start"
+  snippet={`<div class="p-calendar p-calendar-touch" data-p-date="2026-04-20">
+  <div class="p-calendar-time">
+    <span>Time</span>
+    <button class="p-button p-button-touch p-button-default" type="button">9:41 AM</button>
+  </div>
+</div>`}
+  code={`<div class="p-calendar p-calendar-touch" data-p-date="2026-04-20">
+  <div class="p-calendar-time">
+    <span>Time</span>
+    <button class="p-button p-button-touch p-button-default" type="button">9:41 AM</button>
+  </div>
+</div>`}
+/>
+
+| Part | Value |
+|---|---|
+| Panel | 370px wide, 13px radius, 12px side padding |
+| Material | Overlay glass: the fill, keyline, and rims of the alert surface, over `--p-shadow-overlay` (`0 8px 48px`, 25% light, 45% dark) |
+| Month title | 17px, weight 590, tracking -0.43px, with a 13px bold accent chevron |
+| Previous / next | 20pt chevrons in the label color, 44px targets |
+| Weekday header | 13px, weight 590, uppercase, at 30% |
+| Day circle | 38 x 38px |
+| Grid | 51px column pitch, 51px row pitch (48px for the first row) |
+| Day number | 20px, weight 400, tracking -0.45px |
+| Today | Accent number on a 12% accent circle |
+| Selected | Black circle, white 590 number (white circle, black number in dark) |
+| Time row | 52px, a hairline above, "Time" at 17px and a value capsule |
+
+The panel is glass because iOS presents the calendar as a popover over its value buttons, so it borrows the same overlay material as the alerts and menus. Add `.p-calendar-touch-plain` to drop the surface when the calendar sits inline on a card of its own. Reduced transparency and increased contrast swap the glass for an opaque panel.
+
+The circles are spread with `space-between` rather than dropped into seven equal columns, so the first and last circle in a row sit flush against the panel's padding. The 38px circle is smaller than a 44px target; the cells sit on a 51px grid, so a tap anywhere near a number still lands on it.
+
+Today and selected are two different marks. Today is the accent: a blue number on a faint blue circle. Selected is neutral: a black circle, or white in dark mode, so the choice reads the same whatever the app's tint is. A day can be both, and the selection wins.
+
+### Tinted selection
+
+`.p-calendar-touch-tinted` fills the selected day with the accent instead, for a calendar that should carry the app's tint.
+
+<Showcase
+  name="picker-calendar-tinted"
+  align="start"
+  snippet={`<div class="p-calendar p-calendar-touch p-calendar-touch-tinted" data-p-date="2026-04-20"></div>`}
+  code={`<div class="p-calendar p-calendar-touch p-calendar-touch-tinted" data-p-date="2026-04-20"></div>`}
+/>
+
+### The script
+
+The grid is driven by `datepickers.js`, the same script the pointer calendar uses. For a `.p-calendar-touch` it builds the month the iOS way: Sunday first, the full month name, SUN to SAT headers, no days from the neighbouring months, and only as many rows as the month needs. Set the selected day with `data-p-date="YYYY-MM-DD"`; it fires a bubbling `p-change` event with `{ date }` when a day is chosen.
+
+```html
+<script type="module" src="/js/datepickers.js"></script>
+```
+
+An optional `.p-calendar-time` row goes inside the calendar; the script keeps it below the grid.
+
+## Dark mode
+
+Numbers flip from black to white, the accent from `#0088FF` to `#0091FF`, and the selected circle inverts: white with a black number. The panel's glass turns to `rgba(26,26,26,0.9)` and its shadow deepens to 45%. Weekday headers stay at 30% against the light values.
+
+## Accessibility
+
+Day cells are buttons. The script names each one in full, "Monday, April 20, 2026", and marks the chosen day with `aria-pressed`; hand-written markup can use `aria-selected="true"`, which drives the same visual state.
+
+Weekday headers are `<abbr>` elements with the full day name as the title, so "SUN" is not left to be guessed at. The month title is a polite live region, so moving between months is announced.
+
+Focus draws a 3px accent ring inset into the circle.
+
+A calendar is a lot of controls. Always offer a text alternative for the same value, so people who do not want to navigate 30 buttons can type a date instead.
+
+## The macOS calendar
+
+`pickers.css` ships both. `.p-calendar` alone is the macOS graphical picker: 11px numbers on an 18px pitch with a 16px pill, sized for a pointer. Adding `.p-calendar-touch` swaps it to iOS metrics.
+
+Touch clears the macOS hover fill on day cells, since touch has no hover, and replaces the macOS gray today pill with the blue circle.

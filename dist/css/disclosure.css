@@ -1,0 +1,217 @@
+@charset "UTF-8";
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — Disclosure Controls
+   macOS 27 chevron button. See specs/disclosure-controls.md.
+
+   On a button (script toggles aria-expanded):
+     <button class="p-disclosure" aria-expanded="false"
+             aria-label="Show details"></button>
+
+   Zero-JS with native details/summary — the browser reveals, hides,
+   and announces; the chevron rotates on [open]:
+     <details class="p-disclosure-group">
+       <summary>More options <span class="p-disclosure"></span></summary>
+       …content…
+     </details>
+
+   Plates: rounded squares at 16/20/24 (radius a quarter of the side),
+   circles at 28/36. The chevron is a fixed glyph, not a share of the
+   plate: 8×5 ink at 16 and 20, 12×7 from 24 up.
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --p-disclosure-plate: rgba(0, 0, 0, 0.08);
+  --p-disclosure-plate-hover: rgba(0, 0, 0, 0.11);
+  --p-disclosure-plate-pressed: rgba(0, 0, 0, 0.16);
+  --p-disclosure-plate-disabled: rgba(0, 0, 0, 0.04);
+  --p-disclosure-chevron: rgba(0, 0, 0, 0.85);
+  --p-disclosure-chevron-disabled: rgba(0, 0, 0, 0.25);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-disclosure-plate: rgba(255, 255, 255, 0.07);
+  --p-disclosure-plate-hover: rgba(255, 255, 255, 0.1);
+  --p-disclosure-plate-pressed: rgba(255, 255, 255, 0.16);
+  --p-disclosure-plate-disabled: rgba(255, 255, 255, 0.04);
+  --p-disclosure-chevron: rgba(255, 255, 255, 0.85);
+  --p-disclosure-chevron-disabled: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-disclosure-plate: rgba(255, 255, 255, 0.07);
+    --p-disclosure-plate-hover: rgba(255, 255, 255, 0.1);
+    --p-disclosure-plate-pressed: rgba(255, 255, 255, 0.16);
+    --p-disclosure-plate-disabled: rgba(255, 255, 255, 0.04);
+    --p-disclosure-chevron: rgba(255, 255, 255, 0.85);
+    --p-disclosure-chevron-disabled: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-disclosure-plate: rgba(0, 0, 0, 0.08);
+  --p-disclosure-plate-hover: rgba(0, 0, 0, 0.11);
+  --p-disclosure-plate-pressed: rgba(0, 0, 0, 0.16);
+  --p-disclosure-plate-disabled: rgba(0, 0, 0, 0.04);
+  --p-disclosure-chevron: rgba(0, 0, 0, 0.85);
+  --p-disclosure-chevron-disabled: rgba(0, 0, 0, 0.25);
+}
+
+.p-disclosure {
+  --p-disclosure-size: 24px;
+  --p-disclosure-radius: calc(var(--p-disclosure-size) / 4);
+  /* 13pt bold chevron.down: 12×7 ink. */
+  --p-disclosure-chevron-w: 12px;
+  --p-disclosure-chevron-h: 7px;
+  --p-disclosure-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  position: relative;
+  display: inline-flex;
+  width: var(--p-disclosure-size);
+  height: var(--p-disclosure-size);
+  border-radius: var(--p-disclosure-radius);
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  background: var(--p-disclosure-plate);
+  cursor: pointer;
+  transition: background 0.12s ease-out;
+}
+
+/* The chevron: down at rest (collapsed), masked to the label color. */
+.p-disclosure::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--p-disclosure-chevron-w);
+  height: var(--p-disclosure-chevron-h);
+
+  background: var(--p-disclosure-chevron);
+  -webkit-mask: var(--p-disclosure-glyph) center / 100% 100% no-repeat;
+  mask: var(--p-disclosure-glyph) center / 100% 100% no-repeat;
+
+  transition: transform 0.2s ease-out;
+}
+
+.p-disclosure:hover:not(:disabled) {
+  background: var(--p-disclosure-plate-hover);
+}
+
+.p-disclosure:active:not(:disabled) {
+  background: var(--p-disclosure-plate-pressed);
+}
+
+/* Expanded: chevron points up. Driven by aria-expanded on the button
+   itself, or by the open state of a wrapping details element. */
+.p-disclosure[aria-expanded="true"]::before,
+details[open] > summary .p-disclosure::before {
+  transform: rotate(180deg);
+}
+
+.p-disclosure:focus-visible {
+  outline: 2px solid transparent; /* forced-colors ring */
+  box-shadow: var(--p-focus-ring, 0 0 0 3.5px rgba(0, 136, 255, 0.5));
+}
+
+/* Disabled: a fainter plate and a 25% chevron, no group opacity. */
+.p-disclosure:disabled {
+  background: var(--p-disclosure-plate-disabled);
+  cursor: not-allowed;
+}
+
+.p-disclosure:disabled::before {
+  background: var(--p-disclosure-chevron-disabled);
+}
+
+/* Sizes: the shared ladder. 16 and 20 take the 10pt chevron (8×5 ink);
+   28 and 36 are circles. */
+.p-disclosure-mini,
+.p-disclosure-small {
+  --p-disclosure-chevron-w: 8px;
+  --p-disclosure-chevron-h: 5px;
+  --p-disclosure-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5' fill='none'%3E%3Cpath d='M.8.8 4 4.2 7.2.8' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.p-disclosure-mini { --p-disclosure-size: 16px; }
+.p-disclosure-small { --p-disclosure-size: 20px; }
+
+.p-disclosure-large {
+  --p-disclosure-size: 28px;
+  --p-disclosure-radius: 50%;
+}
+
+.p-disclosure-xlarge {
+  --p-disclosure-size: 36px;
+  --p-disclosure-radius: 50%;
+}
+
+/* ─── details/summary integration ──────────────────────────────────── */
+
+.p-disclosure-group > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
+
+  color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 510;
+}
+
+.p-disclosure-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Inside a summary the control is decorative; the summary is the button. */
+.p-disclosure-group > summary .p-disclosure {
+  pointer-events: none;
+}
+
+.p-disclosure-group > summary:focus-visible {
+  outline: 2px solid transparent;
+}
+
+.p-disclosure-group > summary:focus-visible .p-disclosure {
+  box-shadow: var(--p-focus-ring, 0 0 0 3.5px rgba(0, 136, 255, 0.5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-disclosure,
+  .p-disclosure::before {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-disclosure {
+    box-shadow: inset 0 0 0 1px var(--p-disclosure-chevron-disabled);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-disclosure {
+    border: 1px solid ButtonText;
+  }
+
+  .p-disclosure::before {
+    background: ButtonText;
+  }
+
+  .p-disclosure:disabled::before {
+    background: GrayText;
+  }
+}

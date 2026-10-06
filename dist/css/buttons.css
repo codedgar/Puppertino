@@ -1,4 +1,12 @@
 @charset "UTF-8";
+
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY BUTTONS (Puppertino v1)
+   .p-btn and friends remain for backwards compatibility. The v2
+   system below (.p-button) replaces them. New work should use
+   .p-button — these classes will be removed in a future major.
+   ───────────────────────────────────────────────────────────────────── */
+
 :root{
   --p-btn-border: #cacaca;
   --p-btn-def-bg: #FFFFFF;
@@ -68,7 +76,7 @@
   border: none;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.41), 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
   color: var(--p-prim-text-col);
-  overflow: hidden; /* Ensure the ::before element doesn't overflow */
+  overflow: hidden;
 }
 
 .p-prim-col:before {
@@ -155,4 +163,1035 @@
   border-color: currentColor;
   border-style: dashed;
   box-shadow: none;
-} 
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PUPPERTINO v2 — .p-button
+   Push button system, macOS 27 and iOS 27. Seven styles, four pointer
+   sizes and three touch sizes, full state coverage, plus the iOS 27
+   Liquid Glass buttons (.p-button-glass, .p-button-glass-prominent).
+   Retint by dropping any color utility class directly on the element
+   (.p-button + .p-button-colored + .p-grape, etc.).
+   The retint mechanism reads --p-color-current published by every
+   color class in colors.css. Default tint is the control accent,
+   --p-control-accent (#0088FF light, #0091FF dark), which in macOS 27
+   is the same blue as links and selection.
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* Button fills, declared across all four appearance scopes.
+
+   macOS 27 quiet fills are heavier than the shared --p-fill-* scale:
+   the gray push button rests at black 8% (white 7% dark), presses to
+   16%, and fades to 4% when disabled. Icon-only circles sit one step
+   darker again (10 / 19 / 5). In dark mode the pressed fill gets
+   LIGHTER, which is why these are fills and not a darkening overlay.
+
+   --p-button-tint-mix is the accent share of the tinted styles
+   (.p-button-secondary, .p-button-destructive): 20% light, 22% dark,
+   +8% while pressed, 12% disabled. The accent is first shaded by
+   --p-button-tint-shade (10% black light, 12% white dark), which is
+   how the reference composites its wash.
+
+   Filled styles press with a --p-button-press-overlay layer: black 10%
+   plus-darker in light, white ~4% plus-lighter in dark.
+
+   A pressed borderless label takes black 18% in plus-darker (white 18%
+   plus-lighter in dark): that subtracts (adds) 46 levels on every
+   channel, #0078F0 → #004AC2. --p-button-borderless-shift is that step
+   for relative color syntax; --p-button-borderless-press is the
+   color-mix fallback for engines without it (a little lighter).
+
+   --p-button-vibrant-* are the gray fills inside a vibrant context
+   (see "Vibrant" below): black 7% plus an overlay-blended black 12% in
+   light. In dark the reference adds white 5% with plus-lighter over a
+   white 12% overlay; the plain alpha values here (6 / 10 / 15 / 3.5%)
+   land on the same levels over the dark materials.
+
+   --p-button-touch-gray is the iOS quiet fill, used by the touch sizes.
+   iOS keeps its own fill scale, built on #767680 rather than pure black. */
+:root {
+  --p-button-fill: rgba(0, 0, 0, 0.08);
+  --p-button-fill-hover: rgba(0, 0, 0, 0.11);
+  --p-button-fill-pressed: rgba(0, 0, 0, 0.16);
+  --p-button-fill-disabled: rgba(0, 0, 0, 0.04);
+  --p-button-circle-fill: rgba(0, 0, 0, 0.10);
+  --p-button-circle-fill-hover: rgba(0, 0, 0, 0.14);
+  --p-button-circle-fill-pressed: rgba(0, 0, 0, 0.19);
+  --p-button-circle-fill-disabled: rgba(0, 0, 0, 0.05);
+  --p-button-tint-mix: 20%;
+  --p-button-tint-shade: black 10%;
+  --p-button-press-overlay: black;
+  --p-button-press-blend: plus-darker;
+  --p-button-filled-hover: 0.05;
+  --p-button-filled-pressed: 0.10;
+  --p-button-touch-gray: rgba(118, 118, 128, 0.12);
+  --p-button-borderless-press: black 18%;
+  --p-button-borderless-shift: -46;
+  --p-button-vibrant-wash-blend: multiply;
+  --p-button-vibrant-tint: 23%;
+  --p-button-vibrant-tint-step: 1;
+  --p-button-vibrant-fill: rgba(0, 0, 0, 0.07);
+  --p-button-vibrant-fill-hover: rgba(0, 0, 0, 0.10);
+  --p-button-vibrant-fill-pressed: rgba(0, 0, 0, 0.13);
+  --p-button-vibrant-fill-disabled: rgba(0, 0, 0, 0.03);
+  --p-button-vibrant-overlay: rgba(0, 0, 0, 0.12);
+  --p-button-vibrant-overlay-disabled: rgba(0, 0, 0, 0.06);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-button-fill: rgba(255, 255, 255, 0.07);
+  --p-button-fill-hover: rgba(255, 255, 255, 0.11);
+  --p-button-fill-pressed: rgba(255, 255, 255, 0.16);
+  --p-button-fill-disabled: rgba(255, 255, 255, 0.04);
+  --p-button-circle-fill: rgba(255, 255, 255, 0.10);
+  --p-button-circle-fill-hover: rgba(255, 255, 255, 0.14);
+  --p-button-circle-fill-pressed: rgba(255, 255, 255, 0.19);
+  --p-button-circle-fill-disabled: rgba(255, 255, 255, 0.05);
+  --p-button-tint-mix: 22%;
+  --p-button-tint-shade: white 12%;
+  --p-button-press-overlay: white;
+  --p-button-press-blend: plus-lighter;
+  --p-button-filled-hover: 0.02;
+  --p-button-filled-pressed: 0.04;
+  --p-button-touch-gray: rgba(118, 118, 128, 0.24);
+  --p-button-borderless-press: white 18%;
+  --p-button-borderless-shift: 46;
+  --p-button-vibrant-wash-blend: plus-lighter;
+  --p-button-vibrant-tint: 20%;
+  --p-button-vibrant-tint-step: 0.6;
+  --p-button-vibrant-fill: rgba(255, 255, 255, 0.06);
+  --p-button-vibrant-fill-hover: rgba(255, 255, 255, 0.10);
+  --p-button-vibrant-fill-pressed: rgba(255, 255, 255, 0.15);
+  --p-button-vibrant-fill-disabled: rgba(255, 255, 255, 0.035);
+  --p-button-vibrant-overlay: rgba(255, 255, 255, 0.12);
+  --p-button-vibrant-overlay-disabled: rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-button-fill: rgba(255, 255, 255, 0.07);
+    --p-button-fill-hover: rgba(255, 255, 255, 0.11);
+    --p-button-fill-pressed: rgba(255, 255, 255, 0.16);
+    --p-button-fill-disabled: rgba(255, 255, 255, 0.04);
+    --p-button-circle-fill: rgba(255, 255, 255, 0.10);
+    --p-button-circle-fill-hover: rgba(255, 255, 255, 0.14);
+    --p-button-circle-fill-pressed: rgba(255, 255, 255, 0.19);
+    --p-button-circle-fill-disabled: rgba(255, 255, 255, 0.05);
+    --p-button-tint-mix: 22%;
+    --p-button-tint-shade: white 12%;
+    --p-button-press-overlay: white;
+    --p-button-press-blend: plus-lighter;
+    --p-button-filled-hover: 0.02;
+    --p-button-filled-pressed: 0.04;
+    --p-button-touch-gray: rgba(118, 118, 128, 0.24);
+    --p-button-borderless-press: white 18%;
+    --p-button-borderless-shift: 46;
+    --p-button-vibrant-wash-blend: plus-lighter;
+    --p-button-vibrant-tint: 20%;
+    --p-button-vibrant-tint-step: 0.6;
+    --p-button-vibrant-fill: rgba(255, 255, 255, 0.06);
+    --p-button-vibrant-fill-hover: rgba(255, 255, 255, 0.10);
+    --p-button-vibrant-fill-pressed: rgba(255, 255, 255, 0.15);
+    --p-button-vibrant-fill-disabled: rgba(255, 255, 255, 0.035);
+    --p-button-vibrant-overlay: rgba(255, 255, 255, 0.12);
+    --p-button-vibrant-overlay-disabled: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-button-fill: rgba(0, 0, 0, 0.08);
+  --p-button-fill-hover: rgba(0, 0, 0, 0.11);
+  --p-button-fill-pressed: rgba(0, 0, 0, 0.16);
+  --p-button-fill-disabled: rgba(0, 0, 0, 0.04);
+  --p-button-circle-fill: rgba(0, 0, 0, 0.10);
+  --p-button-circle-fill-hover: rgba(0, 0, 0, 0.14);
+  --p-button-circle-fill-pressed: rgba(0, 0, 0, 0.19);
+  --p-button-circle-fill-disabled: rgba(0, 0, 0, 0.05);
+  --p-button-tint-mix: 20%;
+  --p-button-tint-shade: black 10%;
+  --p-button-press-overlay: black;
+  --p-button-press-blend: plus-darker;
+  --p-button-filled-hover: 0.05;
+  --p-button-filled-pressed: 0.10;
+  --p-button-touch-gray: rgba(118, 118, 128, 0.12);
+  --p-button-borderless-press: black 18%;
+  --p-button-borderless-shift: -46;
+  --p-button-vibrant-wash-blend: multiply;
+  --p-button-vibrant-tint: 23%;
+  --p-button-vibrant-tint-step: 1;
+  --p-button-vibrant-fill: rgba(0, 0, 0, 0.07);
+  --p-button-vibrant-fill-hover: rgba(0, 0, 0, 0.10);
+  --p-button-vibrant-fill-pressed: rgba(0, 0, 0, 0.13);
+  --p-button-vibrant-fill-disabled: rgba(0, 0, 0, 0.03);
+  --p-button-vibrant-overlay: rgba(0, 0, 0, 0.12);
+  --p-button-vibrant-overlay-disabled: rgba(0, 0, 0, 0.06);
+}
+
+.p-button {
+  /* Reset — works on <button>, <a>, <input type="submit"> */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  /* Layout */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  /* Component-scoped tokens (macOS 27 reference values) —
+     size modifiers override these. */
+  --p-button-radius: 6px;
+  --p-button-height: 24px;
+  --p-button-padding-x: 16px;
+  --p-button-font-size: 13px;
+  --p-button-font-weight: 510;
+  --p-button-icon-size: 13px;
+  --p-button-tracking: 0;
+  --p-button-default-tint: var(--p-control-accent, #0088FF);
+  /* Quiet fill shared by the gray styles, one token per state. Resolved
+     here, not in :root, so the appearance scopes above this element
+     feed it. Icon-only and the touch sizes override the set.
+     --p-button-gray-bg is the live value; the state rules swap it. */
+  --p-button-gray-fill: var(--p-button-fill);
+  --p-button-gray-fill-hover: var(--p-button-fill-hover);
+  --p-button-gray-fill-pressed: var(--p-button-fill-pressed);
+  --p-button-gray-fill-disabled: var(--p-button-fill-disabled);
+  --p-button-gray-bg: var(--p-button-gray-fill);
+  /* Accent share of the tinted styles; the state rules add to it. */
+  --p-button-tint-state: 0%;
+  /* Opacity of the ::before overlay. Gray and tinted styles change
+     their fill instead, so the overlay is off unless a style opts in. */
+  --p-button-overlay-hover: 0;
+  --p-button-overlay-pressed: 0;
+
+  /* Sizing */
+  height: var(--p-button-height);
+  padding: 0 var(--p-button-padding-x);
+  border-radius: var(--p-button-radius);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", sans-serif;
+  font-size: var(--p-button-font-size);
+  font-weight: var(--p-button-font-weight);
+  letter-spacing: var(--p-button-tracking);
+  line-height: 1;
+
+  /* Default appearance before any style modifier */
+  color: var(--p-text-primary);
+  background: var(--p-button-gray-bg);
+
+  transition: color 0.12s ease-out;
+}
+
+/* Press overlay layer for the filled styles.
+   macOS 27 presses a filled button with black 10% in light mode
+   (plus-darker) and white ~4% in dark mode (plus-lighter), so the
+   layer color and blend follow the appearance tokens. Browsers without
+   plus-darker drop to a normal blend, which lands within a few levels. Approximated with a
+   ::before whose opacity scales in and out on interaction. */
+.p-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit; /* stays rounded when overflow is unclipped (tooltips) */
+  background: var(--p-button-press-overlay, black);
+  mix-blend-mode: plus-darker;
+  mix-blend-mode: var(--p-button-press-blend, plus-darker);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease-out;
+}
+
+/* Icons live in the markup, not in modifier classes.
+   Place an <svg> or an <i> (icon font) as the first or last child
+   for leading/trailing. Reading order matches DOM order. */
+.p-button > svg,
+.p-button > i {
+  flex-shrink: 0;
+  position: relative; /* keeps icons above the ::before overlay */
+}
+.p-button > svg {
+  width: var(--p-button-icon-size);
+  height: var(--p-button-icon-size);
+  fill: currentColor;
+}
+.p-button > i {
+  font-size: var(--p-button-icon-size);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-button > span {
+  position: relative; /* labels render above the ::before overlay */
+}
+
+/* ─── Style modifiers ──────────────────────────────────────────────── */
+
+.p-button-default {
+  background: var(--p-button-gray-bg);
+  color: var(--p-text-primary);
+}
+
+/* Gray fill, accent label. A quiet action that still reads as tappable. */
+.p-button-tinted {
+  background: var(--p-button-gray-bg);
+  color: var(--p-color-current, var(--p-button-default-tint));
+}
+
+/* Colored and Primary share visual treatment.
+   Primary is semantically the default action (Return key). */
+.p-button-colored,
+.p-button-primary {
+  --p-button-overlay-hover: var(--p-button-filled-hover, 0.05);
+  --p-button-overlay-pressed: var(--p-button-filled-pressed, 0.10);
+  background: var(--p-color-current, var(--p-button-default-tint));
+  color: #ffffff;
+}
+
+/* Accent-tinted: a wash of the accent behind an accent label. macOS 27
+   runs it at about 20% (22% dark), twice the macOS 26 strength, and
+   presses by adding more accent rather than darkening. */
+.p-button-secondary {
+  background: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--p-color-current, var(--p-button-default-tint)), var(--p-button-tint-shade, black 10%))
+      calc(var(--p-button-tint-mix, 20%) + var(--p-button-tint-state)),
+    transparent
+  );
+  color: var(--p-color-current, var(--p-button-default-tint));
+}
+
+/* Destructive ignores --p-color-current and is always sys-red, per HIG.
+   Same tint ladder as .p-button-secondary. */
+.p-button-destructive {
+  background: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--p-sys-red), var(--p-button-tint-shade, black 10%))
+      calc(var(--p-button-tint-mix, 20%) + var(--p-button-tint-state)),
+    transparent
+  );
+  color: var(--p-sys-red);
+}
+
+/* Borderless: text only, in the control accent. On a material (see
+   "Vibrant") the label switches to --p-control-accent-text. */
+.p-button-borderless {
+  background: transparent;
+  color: var(--p-color-current, var(--p-button-default-tint));
+}
+
+/* ─── Sizes (macOS-derived) ────────────────────────────────────────── */
+/* NOTE: macOS sizes intentionally sit below iOS's 44px minimum tap
+   target. They target pointer input. For touch contexts use the
+   regular default or .p-button-large. */
+
+.p-button-mini {
+  --p-button-height: 16px;
+  --p-button-padding-x: 7px;
+  --p-button-font-size: 10px;
+  --p-button-icon-size: 10px;
+  --p-button-radius: 4px;
+}
+.p-button-small {
+  --p-button-height: 19px;
+  --p-button-padding-x: 9px;
+  --p-button-font-size: 11px;
+  --p-button-icon-size: 12px;
+  --p-button-radius: 5px;
+}
+/* Regular = the default on .p-button */
+.p-button-large {
+  --p-button-height: 32px;
+  --p-button-padding-x: 16px;
+  --p-button-font-size: 13px;
+  --p-button-font-weight: 590;
+  --p-button-icon-size: 16px;
+  --p-button-radius: 8px;
+}
+
+/* ─── Touch sizes (iOS-derived) ────────────────────────────────────── */
+/* iOS buttons are capsules and are measured for fingers. Three sizes:
+   .p-button-touch is the 34px regular, with -small (28px) and -large
+   (50px) on either side. Labels are Regular weight, not Semibold, and
+   carry SF Pro's negative tracking at these sizes.
+
+   Only the large size clears Apple's 44px minimum on its own, so every
+   touch button also lays down an invisible 44px-tall hit area. That
+   needs the clip off; ::before keeps its shape through border-radius,
+   so nothing depends on the clip. */
+
+.p-button-touch,
+.p-button-touch-small,
+.p-button-touch-large {
+  /* iOS keeps its own fill (unchanged in iOS 27) and the plus-darker
+     press overlay on every style. */
+  --p-button-gray-fill-hover: var(--p-button-gray-fill);
+  --p-button-gray-fill-pressed: var(--p-button-gray-fill);
+  --p-button-gray-fill-disabled: var(--p-button-gray-fill);
+  --p-button-overlay-hover: 0.13;
+  --p-button-overlay-pressed: 0.20;
+  --p-button-press-overlay: black;
+  --p-button-press-blend: plus-darker;
+  --p-button-height: 34px;
+  --p-button-radius: 999px;
+  --p-button-padding-x: 14px;
+  --p-button-font-size: 15px;
+  --p-button-font-weight: 400;
+  --p-button-tracking: -0.23px;
+  --p-button-icon-size: 17px;
+  --p-button-gray-fill: var(--p-button-touch-gray);
+  overflow: visible;
+  gap: 6px;
+}
+
+.p-button-touch-small {
+  --p-button-height: 28px;
+  --p-button-padding-x: 10px;
+  --p-button-icon-size: 15px;
+}
+
+.p-button-touch-large {
+  --p-button-height: 50px;
+  --p-button-padding-x: 20px;
+  --p-button-font-size: 17px;
+  --p-button-tracking: -0.43px;
+  --p-button-icon-size: 20px;
+}
+
+.p-button-touch::after,
+.p-button-touch-small::after,
+.p-button-touch-large::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: max(100%, 44px);
+  transform: translateY(-50%);
+}
+
+/* Icon-only: a true circle. macOS 27 draws these on the shared
+   16 / 20 / 24 / 28 / 36 ladder with a slightly heavier gray fill
+   (10% rest, 19% pressed, 5% disabled) and a 13px bold glyph (11px at
+   16). Small and large snap to the ladder here (20 and 28), and
+   .p-button-xlarge adds the 36px circle. */
+.p-button-icon-only {
+  --p-button-padding-x: 0;
+  --p-button-radius: 50%;
+
+  width: var(--p-button-height);
+}
+
+/* The macOS circle fills and glyph size. Touch sizes keep the iOS set. */
+.p-button-icon-only:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large) {
+  --p-button-icon-size: 13px;
+  --p-button-gray-fill: var(--p-button-circle-fill);
+  --p-button-gray-fill-hover: var(--p-button-circle-fill-hover);
+  --p-button-gray-fill-pressed: var(--p-button-circle-fill-pressed);
+  --p-button-gray-fill-disabled: var(--p-button-circle-fill-disabled);
+
+  font-weight: 700;
+}
+
+.p-button-icon-only.p-button-mini {
+  --p-button-icon-size: 11px;
+}
+.p-button-icon-only.p-button-small {
+  --p-button-height: 20px;
+}
+.p-button-icon-only.p-button-large {
+  --p-button-height: 28px;
+}
+.p-button-icon-only.p-button-xlarge {
+  --p-button-height: 36px;
+}
+
+/* iOS has no accent wash: its bordered ("tinted") button is the gray
+   fill (#767680 at 12%, 24% dark) with an accent label. Destructive is
+   the exception and keeps a red wash at 14%. */
+.p-button-touch.p-button-secondary,
+.p-button-touch-small.p-button-secondary,
+.p-button-touch-large.p-button-secondary {
+  background: var(--p-button-gray-bg);
+}
+
+.p-button-touch.p-button-destructive,
+.p-button-touch-small.p-button-destructive,
+.p-button-touch-large.p-button-destructive {
+  background: color-mix(in oklch, var(--p-sys-red) 14%, transparent);
+}
+
+/* Touch has no hover. Pressed is the only feedback, and iOS dims the
+   whole control rather than compositing a darkening layer. */
+@media (hover: none) {
+  .p-button-touch:hover::before,
+  .p-button-touch-small:hover::before,
+  .p-button-touch-large:hover::before {
+    opacity: 0;
+  }
+
+  .p-button-touch:active,
+  .p-button-touch-small:active,
+  .p-button-touch-large:active {
+    opacity: 0.6;
+  }
+
+  .p-button-touch:active::before,
+  .p-button-touch-small:active::before,
+  .p-button-touch-large:active::before {
+    opacity: 0;
+  }
+}
+
+/* ─── States ───────────────────────────────────────────────────────── */
+/* macOS 27 presses each style differently:
+   - gray styles swap to a heavier fill (16%, lighter in dark mode),
+   - tinted styles add 8% more accent,
+   - filled styles take the ::before overlay (black 10% light, white
+     dark), and keep their accent at 40% when disabled.
+   Borderless has no fill at all: only its label changes. */
+
+.p-button:hover {
+  --p-button-gray-bg: var(--p-button-gray-fill-hover);
+  --p-button-tint-state: 4%;
+}
+.p-button:active {
+  --p-button-gray-bg: var(--p-button-gray-fill-pressed);
+  --p-button-tint-state: 8%;
+}
+
+.p-button:hover::before {
+  opacity: var(--p-button-overlay-hover);
+}
+.p-button:active::before {
+  opacity: var(--p-button-overlay-pressed);
+}
+
+/* Borderless never gets a background. Pressed, the label darkens
+   (lightens in dark mode); hover leaves it alone. */
+.p-button-borderless:active {
+  color: color-mix(in srgb, var(--p-color-current, var(--p-button-default-tint)), var(--p-button-borderless-press, black 18%));
+  color: rgb(from var(--p-color-current, var(--p-button-default-tint)) calc(r + var(--p-button-borderless-shift, -46)) calc(g + var(--p-button-borderless-shift, -46)) calc(b + var(--p-button-borderless-shift, -46)));
+}
+
+/* macOS 27 focus band: 3.5px outside plus 1px inside, accent at 50%.
+   Built from the button's own accent so retinted buttons ring in their
+   color. The transparent outline keeps a ring in forced-colors mode. */
+.p-button:focus-visible {
+  --p-button-focus: color-mix(in srgb, var(--p-color-current, var(--p-button-default-tint)) 50%, transparent);
+  box-shadow:
+    0 0 0 3.5px var(--p-button-focus),
+    inset 0 0 0 1px var(--p-button-focus);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.p-button[disabled],
+.p-button:disabled {
+  --p-button-gray-bg: var(--p-button-gray-fill-disabled);
+  --p-button-tint-state: 0%;
+  --p-button-tint-mix: 12%;
+  color: var(--p-text-tertiary);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.p-button[disabled]::before,
+.p-button:disabled::before {
+  opacity: 0;
+}
+
+/* Tinted styles keep their hue, faded: 12% wash, label at 40%. */
+.p-button-tinted[disabled],
+.p-button-tinted:disabled,
+.p-button-secondary[disabled],
+.p-button-secondary:disabled {
+  color: color-mix(in srgb, var(--p-color-current, var(--p-button-default-tint)) 40%, transparent);
+}
+/* Borderless fades its label to half. */
+.p-button-borderless[disabled],
+.p-button-borderless:disabled {
+  color: color-mix(in srgb, var(--p-color-current, var(--p-button-default-tint)) 50%, transparent);
+}
+.p-button-destructive[disabled],
+.p-button-destructive:disabled {
+  color: color-mix(in srgb, var(--p-sys-red) 40%, transparent);
+}
+
+/* Filled keeps its accent at 40% with a half-white label, rather than
+   collapsing to a gray button. */
+.p-button-colored[disabled],
+.p-button-colored:disabled,
+.p-button-primary[disabled],
+.p-button-primary:disabled {
+  background: color-mix(in srgb, var(--p-color-current, var(--p-button-default-tint)) 40%, transparent);
+  color: rgb(255 255 255 / 0.5);
+}
+
+/* Touch disabled, as iOS 27 draws it: every style collapses to the
+   quiet fill with a tertiary label. */
+:is(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is([disabled], :disabled) {
+  --p-color-current: var(--p-fill-tertiary);
+  color: var(--p-text-tertiary);
+}
+:is(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary):is([disabled], :disabled) {
+  background: var(--p-color-current);
+}
+
+/* ─── Liquid Glass buttons (iOS 27) ────────────────────────────────── */
+/* The iOS 27 .glass and .glassProminent button styles. Capsules at 50,
+   34 and 28px (pair with .p-button-touch-large, the default 34 or
+   .p-button-touch-small) plus a 50px circle (.p-button-icon-only).
+   Labels are Medium (510) and untracked: 17px at 50 and 34, 15px at 28.
+   Padding 20 / 12 / 10.
+
+   .p-button-glass            regular glass: a light translucent small-
+                              glass tint, darker at the top, over a
+                              blurred backdrop; primary label.
+   .p-button-glass.p-button-destructive
+                              the same glass with a red label.
+   .p-button-glass-prominent  accent glass: the accent (or any .p-sys-*
+                              tint, or red with .p-button-destructive)
+                              with a white specular line inside the top
+                              and bottom edges and a darker top band.
+
+   The edge is the shared glass edge (--p-glass-edge: a hairline keyline,
+   side slivers, bright top and bottom rims) and the soft small-glass
+   shadow (--p-shadow-glass-control), so a retune of the glass tokens
+   carries over. Disabled collapses both to regular glass with a gray
+   label. These are CSS glass: they blur what is behind them but do not
+   refract it. */
+
+:root {
+  --p-button-glass-shade: rgba(0, 0, 0, 0.04);
+  --p-button-glass-label: #101010;
+  --p-button-glass-red-label: #F52E32;
+  --p-button-glass-label-disabled: rgba(0, 0, 0, 0.28);
+  --p-button-glass-opaque: #F2F2F2;
+  --p-button-glass-prominent-darken: 0%;
+  --p-button-glass-prominent-shift: 0;
+  --p-button-glass-prominent-shade: rgba(0, 0, 0, 0.05);
+  --p-button-glass-prominent-rim:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 2px 1px rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -3px 2px -1px rgba(255, 255, 255, 0.1);
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-button-glass-shade: rgba(0, 0, 0, 0.35);
+  --p-button-glass-label: #FFFFFF;
+  --p-button-glass-red-label: #FF5C5F;
+  --p-button-glass-label-disabled: rgba(255, 255, 255, 0.3);
+  --p-button-glass-opaque: #262626;
+  --p-button-glass-prominent-darken: 7%;
+  --p-button-glass-prominent-shift: -15;
+  --p-button-glass-prominent-shade: rgba(0, 0, 0, 0.05);
+  --p-button-glass-prominent-rim:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 2px 1px rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -3px 2px -1px rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-button-glass-shade: rgba(0, 0, 0, 0.35);
+    --p-button-glass-label: #FFFFFF;
+    --p-button-glass-red-label: #FF5C5F;
+    --p-button-glass-label-disabled: rgba(255, 255, 255, 0.3);
+    --p-button-glass-opaque: #262626;
+    --p-button-glass-prominent-darken: 7%;
+    --p-button-glass-prominent-shift: -15;
+    --p-button-glass-prominent-shade: rgba(0, 0, 0, 0.05);
+    --p-button-glass-prominent-rim:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 2px 1px rgba(255, 255, 255, 0.04),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -3px 2px -1px rgba(255, 255, 255, 0.06);
+  }
+}
+
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-button-glass-shade: rgba(0, 0, 0, 0.04);
+  --p-button-glass-label: #101010;
+  --p-button-glass-red-label: #F52E32;
+  --p-button-glass-label-disabled: rgba(0, 0, 0, 0.28);
+  --p-button-glass-opaque: #F2F2F2;
+  --p-button-glass-prominent-darken: 0%;
+  --p-button-glass-prominent-shift: 0;
+  --p-button-glass-prominent-shade: rgba(0, 0, 0, 0.05);
+  --p-button-glass-prominent-rim:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 2px 1px rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -3px 2px -1px rgba(255, 255, 255, 0.1);
+}
+
+.p-button-glass,
+.p-button-glass-prominent {
+  --p-button-height: 34px;
+  --p-button-radius: 999px;
+  --p-button-padding-x: 12px;
+  --p-button-font-size: 17px;
+  --p-button-font-weight: 510;
+  --p-button-tracking: 0;
+  --p-button-icon-size: 17px;
+  --p-button-overlay-hover: 0.04;
+  --p-button-overlay-pressed: 0.1;
+  --p-button-glass-accent: var(--p-color-current, var(--p-button-default-tint));
+
+  overflow: visible; /* the 44px hit area below */
+  gap: 6px;
+}
+
+/* 50px: .p-button-touch-large. 28px: .p-button-touch-small. */
+:is(.p-button-glass, .p-button-glass-prominent).p-button-touch-large {
+  --p-button-height: 50px;
+  --p-button-padding-x: 20px;
+  --p-button-font-size: 17px;
+  --p-button-tracking: 0;
+  --p-button-icon-size: 17px;
+}
+
+:is(.p-button-glass, .p-button-glass-prominent).p-button-touch-small {
+  --p-button-height: 28px;
+  --p-button-padding-x: 10px;
+  --p-button-font-size: 15px;
+  --p-button-tracking: 0;
+  --p-button-icon-size: 15px;
+}
+
+:is(.p-button-glass, .p-button-glass-prominent).p-button-icon-only {
+  --p-button-padding-x: 0;
+  --p-button-radius: 50%;
+}
+
+/* The circle's glyph is 19px on the 50px size. */
+:is(.p-button-glass, .p-button-glass-prominent).p-button-icon-only.p-button-touch-large {
+  --p-button-icon-size: 19px;
+}
+
+/* Every size lays down a 44px-tall hit area, like the touch sizes. */
+.p-button-glass::after,
+.p-button-glass-prominent::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: max(100%, 44px);
+  transform: translateY(-50%);
+}
+
+/* .p-button in the selectors outranks the touch style rules
+   (.p-button-touch.p-button-destructive and friends). */
+.p-button.p-button-glass,
+.p-button-glass.p-button-destructive,
+.p-button:is(.p-button-glass, .p-button-glass-prominent):is([disabled], :disabled) {
+  background:
+    linear-gradient(var(--p-button-glass-shade), transparent 85%),
+    var(--p-glass-tint);
+  color: var(--p-button-glass-label);
+  box-shadow: var(--p-glass-edge), var(--p-shadow-glass-control);
+  -webkit-backdrop-filter: saturate(var(--p-glass-saturate, 160%)) blur(4px);
+  backdrop-filter: saturate(var(--p-glass-saturate, 160%)) blur(4px);
+}
+
+.p-button-glass.p-button-destructive {
+  color: var(--p-button-glass-red-label);
+}
+
+.p-button.p-button-glass-prominent {
+  /* Dark mode takes 15 levels off every channel (Apple composites the
+     accent plus-darker over 94% white); color-mix is the fallback. */
+  background:
+    linear-gradient(var(--p-button-glass-prominent-shade), transparent 70%),
+    color-mix(in srgb, var(--p-button-glass-accent), black var(--p-button-glass-prominent-darken));
+  background:
+    linear-gradient(var(--p-button-glass-prominent-shade), transparent 70%),
+    rgb(from var(--p-button-glass-accent) calc(r + var(--p-button-glass-prominent-shift)) calc(g + var(--p-button-glass-prominent-shift)) calc(b + var(--p-button-glass-prominent-shift)));
+  color: #ffffff;
+  box-shadow: var(--p-button-glass-prominent-rim), var(--p-shadow-glass-control);
+}
+
+.p-button-glass-prominent.p-button-destructive {
+  --p-button-glass-accent: var(--p-sys-red);
+}
+
+/* Disabled: regular glass, gray label, no press. */
+.p-button:is(.p-button-glass, .p-button-glass-prominent):is([disabled], :disabled) {
+  color: var(--p-button-glass-label-disabled);
+}
+
+:is(.p-button-glass, .p-button-glass-prominent):focus-visible {
+  box-shadow:
+    0 0 0 3.5px var(--p-button-focus),
+    inset 0 0 0 1px var(--p-button-focus),
+    var(--p-shadow-glass-control);
+}
+
+/* Reduced transparency, or no backdrop-filter: the regular glass turns
+   into an opaque plate of the same lightness. */
+@media (prefers-reduced-transparency: reduce) {
+  .p-button.p-button-glass,
+  .p-button-glass.p-button-destructive,
+  .p-button:is(.p-button-glass, .p-button-glass-prominent):is([disabled], :disabled) {
+    background: var(--p-button-glass-opaque);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .p-button.p-button-glass,
+  .p-button-glass.p-button-destructive,
+  .p-button:is(.p-button-glass, .p-button-glass-prominent):is([disabled], :disabled) {
+    background: var(--p-button-glass-opaque);
+  }
+}
+
+/* ─── Vibrant ──────────────────────────────────────────────────────── */
+/* On a material (glass, menus, popovers, alerts) macOS 27 composites
+   button fills onto what is behind them instead of laying flat color on
+   top. Buttons inside .p-vibrant switch to that recipe, and so do
+   buttons inside the surfaces that are always vibrant: the desktop alert
+   (.p-desktop-modal), .p-popover and .p-menu. No extra markup needed.
+
+   - Gray: black 7% plus black 12% in overlay blend (white 5% + white
+     12% overlay in dark). Over white the overlay adds nothing; over a
+     gray material it darkens with the material.
+   - Filled: the accent in plus-darker (light) / plus-lighter (dark),
+     via --p-vibrant-blend. Pressed mixes in black (white) 10% first.
+     Disabled runs the same layer at 40%.
+   - Accent-tinted and destructive: the vibrant accent
+     (--p-vibrant-blue, --p-vibrant-red) at 23%, with a vibrant-accent
+     label (20% in dark, where plus-lighter adds it). +4% hover, +8%
+     pressed (+2.4 / +4.8% in dark), 12% disabled. Light mode uses multiply in every engine: over
+     translucent glass Safari's plus-darker at 23% comes out lighter
+     than a plain wash, and multiply lands on the reference.
+   - Borderless: no fill to blend; the label moves to the darker
+     --p-control-accent-text in light mode.
+
+   The blend layer is the ::before, sent behind the label with
+   z-index: -1. So that it lands on the surface and not behind it, every
+   vibrant root is its own stacking context (isolation: isolate). Put
+   .p-vibrant on the element that paints the material, not on a
+   transparent wrapper around it.
+
+   Engines without plus-darker (Chromium, Firefox) get multiply from
+   --p-vibrant-blend: identical over white, a few levels lighter over
+   light glass. Dark mode's plus-lighter works everywhere. */
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) {
+  isolation: isolate;
+}
+
+/* Default tint of the accent-tinted style is the vibrant blue. Zero
+   specificity, so a color class on the button still wins. */
+:where(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :where(.p-button-secondary) {
+  --p-color-current: var(--p-vibrant-blue, #0078F0);
+}
+
+/* Borderless labels on a material use --p-control-accent-text: #0078F0
+   in light (darker than the #0088FF used on opaque backgrounds, so
+   thin glyphs hold their contrast over glass), #0091FF in dark. */
+:where(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :where(.p-button-borderless) {
+  --p-color-current: var(--p-control-accent-text, #0078F0);
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large) {
+  --p-button-vibrant-press: 0%;
+  --p-button-vibrant-press-color: color-mix(in srgb, var(--p-button-press-overlay, black) var(--p-button-vibrant-press), transparent);
+  /* --p-color-current doesn't inherit, so hand the accent to ::before
+     through a plain property resolved on the button. */
+  --p-button-vibrant-accent: var(--p-color-current, var(--p-button-default-tint));
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):not(.p-button-icon-only) {
+  --p-button-gray-fill: var(--p-button-vibrant-fill);
+  --p-button-gray-fill-hover: var(--p-button-vibrant-fill-hover);
+  --p-button-gray-fill-pressed: var(--p-button-vibrant-fill-pressed);
+  --p-button-gray-fill-disabled: var(--p-button-vibrant-fill-disabled);
+}
+
+/* The gray overlay layer, under the button's own fill. */
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large)::before {
+  background: var(--p-button-vibrant-overlay);
+  mix-blend-mode: overlay;
+  opacity: 1;
+  z-index: -1;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is([disabled], :disabled)::before {
+  background: var(--p-button-vibrant-overlay-disabled);
+  opacity: 1;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large).p-button-borderless::before {
+  opacity: 0;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):hover {
+  --p-button-vibrant-press: 5%;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):active {
+  --p-button-vibrant-press: 10%;
+}
+
+/* Filled: the accent itself is the blend layer. */
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary) {
+  background: transparent;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary)::before {
+  background:
+    linear-gradient(var(--p-button-vibrant-press-color), var(--p-button-vibrant-press-color)),
+    var(--p-button-vibrant-accent);
+  mix-blend-mode: var(--p-vibrant-blend, normal);
+  opacity: 1;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary):is([disabled], :disabled) {
+  background: transparent;
+  color: rgb(255 255 255 / 0.5);
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary):is([disabled], :disabled)::before {
+  opacity: 0.4;
+}
+
+/* Accent-tinted and destructive: a vibrant accent wash. */
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-secondary, .p-button-destructive) {
+  background: transparent;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-secondary, .p-button-destructive)::before {
+  background: var(--p-button-vibrant-accent);
+  mix-blend-mode: var(--p-button-vibrant-wash-blend, normal);
+  opacity: calc(var(--p-button-vibrant-tint, 23%) + var(--p-button-tint-state) * var(--p-button-vibrant-tint-step, 1));
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large).p-button-destructive {
+  color: var(--p-vibrant-red, #F52F32);
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large).p-button-destructive::before {
+  background: var(--p-vibrant-red, #F52F32);
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-secondary, .p-button-destructive):is([disabled], :disabled)::before {
+  opacity: 0.12;
+}
+
+:is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large).p-button-destructive:is([disabled], :disabled) {
+  color: color-mix(in srgb, var(--p-vibrant-red, #F52F32) 40%, transparent);
+}
+
+/* ─── Inactive window ──────────────────────────────────────────────── */
+/* When its window loses focus, macOS 27 takes the accent out of push
+   buttons: filled, accent-tinted, destructive and gray-with-accent
+   buttons all become the plain gray button with a primary label (black
+   85%, white 85% in dark), in every state. Borderless keeps its accent
+   label. Wrap the window in .p-window-inactive (the class windows.css
+   uses) or set data-window-state="inactive" on any ancestor. Opt-in by
+   class rather than focus-within detection, which false-positives on
+   the web. */
+
+:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted):not(.p-button-touch, .p-button-touch-small, .p-button-touch-large) {
+  --p-button-overlay-hover: 0;
+  --p-button-overlay-pressed: 0;
+  background: var(--p-button-gray-bg);
+  color: var(--p-text-primary);
+}
+
+:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted):not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is([disabled], :disabled) {
+  color: var(--p-text-tertiary);
+}
+
+/* Inside a vibrant surface (either side of the inactive wrapper) they
+   become the vibrant gray button. */
+:is(:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu), :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :is(.p-window-inactive, [data-window-state="inactive"])) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted) {
+  background: var(--p-button-gray-bg);
+  color: var(--p-text-primary);
+}
+
+:is(:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu), :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :is(.p-window-inactive, [data-window-state="inactive"])) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted):is([disabled], :disabled) {
+  color: var(--p-text-tertiary);
+}
+
+:is(:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu), :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :is(.p-window-inactive, [data-window-state="inactive"])) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted)::before {
+  background: var(--p-button-vibrant-overlay);
+  mix-blend-mode: overlay;
+  opacity: 1;
+}
+
+:is(:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu), :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :is(.p-window-inactive, [data-window-state="inactive"])) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted):is([disabled], :disabled)::before {
+  background: var(--p-button-vibrant-overlay-disabled);
+}
+
+/* Touch buttons keep the v2.0 behavior: the accent swaps to graphite. */
+:is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-button-touch, .p-button-touch-small, .p-button-touch-large):is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-borderless) {
+  --p-color-current: var(--p-sys-gray);
+}
+
+/* ─── Accessibility ────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .p-button,
+  .p-button::before { transition: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .p-button-secondary,
+  .p-button-destructive {
+    background: var(--p-fill-secondary);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .p-button {
+    border: 2px solid currentColor;
+  }
+  .p-button-colored,
+  .p-button-primary {
+    border-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+@media (forced-colors: active) {
+  .p-button {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonBorder;
+    forced-color-adjust: none;
+  }
+  .p-button::before { display: none; }
+  :is(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) .p-button:not(.p-button-touch, .p-button-touch-small, .p-button-touch-large) {
+    background: ButtonFace;
+  }
+  .p-button:is(.p-button-glass, .p-button-glass-prominent) {
+    background: ButtonFace;
+    color: ButtonText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .p-button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .p-button[disabled],
+  .p-button:disabled {
+    color: GrayText;
+  }
+}

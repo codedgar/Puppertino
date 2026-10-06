@@ -1,0 +1,138 @@
+/* Puppertino v2.0 — Tooltips (macOS 27)
+   Pure CSS, attribute-driven: data-p-tooltip="text" on any element.
+   Appears centered under the element after a short delay, like the
+   native tooltip. data-p-tooltip-pos="top" flips it above.
+
+   macOS 27: a square-cornered box. Light is a near-opaque grey with no
+   blur and dark #1A1A1A text; dark is black at 50% over a 10px blur
+   with a 0.6px white inner rim. Both share one two-layer shadow. */
+
+:root {
+  --p-tooltip-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", sans-serif;
+  --p-tooltip-bg: rgba(236, 236, 236, 0.88);
+  --p-tooltip-bg-opaque: #ececec;
+  --p-tooltip-blur: none;
+  --p-tooltip-text: #1a1a1a;
+  --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+  --p-tooltip-rim: 0 0 transparent;
+}
+
+.p-dark-mode,
+[data-p-theme="darkmode"] {
+  --p-tooltip-bg: rgba(0, 0, 0, 0.5);
+  --p-tooltip-bg-opaque: #0f0f0f;
+  --p-tooltip-blur: blur(10px);
+  --p-tooltip-text: #f5f5f5;
+  --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+  --p-tooltip-rim: inset 0 0 0 0.6px rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode {
+    --p-tooltip-bg: rgba(0, 0, 0, 0.5);
+    --p-tooltip-bg-opaque: #0f0f0f;
+    --p-tooltip-blur: blur(10px);
+    --p-tooltip-text: #f5f5f5;
+    --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+    --p-tooltip-rim: inset 0 0 0 0.6px rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Light appearance scope: pins a region to light values inside a
+   dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
+.p-light-mode,
+[data-p-theme="lightmode"] {
+  --p-tooltip-bg: rgba(236, 236, 236, 0.88);
+  --p-tooltip-bg-opaque: #ececec;
+  --p-tooltip-blur: none;
+  --p-tooltip-text: #1a1a1a;
+  --p-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.4);
+  --p-tooltip-rim: 0 0 transparent;
+}
+
+/* The host anchors the tooltip. The tooltip renders outside the
+   host's box, so hosts that clip (e.g. .p-button's overflow: hidden)
+   must let it escape. */
+[data-p-tooltip] {
+  overflow: visible;
+  position: relative;
+}
+
+[data-p-tooltip]::after {
+  -webkit-backdrop-filter: var(--p-tooltip-blur);
+  backdrop-filter: var(--p-tooltip-blur);
+  background: var(--p-tooltip-bg);
+  border-radius: 0;
+  bottom: auto;
+  box-shadow: var(--p-tooltip-shadow), var(--p-tooltip-rim);
+  box-sizing: border-box;
+  color: var(--p-tooltip-text);
+  content: attr(data-p-tooltip);
+  font-family: var(--p-tooltip-font);
+  font-size: 11px;
+  font-weight: 510;
+  height: 18px;
+  left: 50%;
+  letter-spacing: 0;
+  line-height: 18px;
+  opacity: 0;
+  padding: 0 6px;
+  pointer-events: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  transition: opacity 0.12s ease 0s;
+  white-space: nowrap;
+  z-index: 110;
+}
+
+/* Native tooltips wait before showing; the delay only applies on the way
+   in — leaving hides immediately. */
+[data-p-tooltip]:hover::after,
+[data-p-tooltip]:focus-visible::after {
+  opacity: 1;
+  transition-delay: 0.5s;
+}
+
+[data-p-tooltip-pos="top"]::after {
+  bottom: calc(100% + 4px);
+  top: auto;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+  [data-p-tooltip]::after {
+    background: var(--p-tooltip-bg-opaque);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-p-tooltip]::after {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--p-tooltip-bg-opaque);
+  }
+}
+
+@media (prefers-contrast: more) {
+  [data-p-tooltip]::after {
+    background: var(--p-tooltip-bg-opaque);
+    box-shadow: var(--p-tooltip-shadow), 0 0 0 1px rgba(128, 128, 128, 0.8);
+  }
+}
+
+@media (forced-colors: active) {
+  [data-p-tooltip]::after {
+    border: 1px solid CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  [data-p-tooltip]::after {
+    transition: opacity 0s linear 0s;
+  }
+
+  [data-p-tooltip]:hover::after,
+  [data-p-tooltip]:focus-visible::after {
+    transition-delay: 0.5s;
+  }
+}
