@@ -110,7 +110,7 @@ Headers use the same font size as the items, in bold, and start on the same 7px 
 
 Wrap the trigger item and a nested menu in `.p-menu__subwrap`. The submenu opens on hover and on keyboard focus, overlapping the parent by 5px so its first item lines up with the trigger. While the pointer or focus is inside the submenu, the parent row keeps a gray pill (13% black, 10% white in dark mode) with its normal label color, and the blue selection moves into the submenu. Adding `.active` to the nested menu holds it open with the same gray parent, which is useful for static previews.
 
-<div style="margin: 16px 0 20px; padding: 24px 24px 90px; background: var(--p-bg-secondary); border-radius: 10px;">
+<div style="margin: 16px 0 20px; padding: 24px 24px 90px; background: var(--p-bg-secondary); border-radius: 10px; overflow-x: auto;">
   <div class="p-menu" role="menu" aria-label="Submenu demo">
     <button class="p-menu__item" type="button"><span class="p-menu__icon ph-bold ph-clipboard"></span>Paste<span class="p-menu__shortcut">⌘V</span></button>
     <div class="p-menu__subwrap">

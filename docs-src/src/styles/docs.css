@@ -515,6 +515,18 @@ main:focus {
   outline: none;
 }
 
+.table-scroll {
+  margin: 24px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 2px;
+}
+
 article table {
   width: 100%;
   border-collapse: collapse;
@@ -523,6 +535,12 @@ article table {
   border: 1px solid var(--border-color);
   border-radius: 10px;
   overflow: hidden;
+}
+
+.table-scroll > table {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
 }
 
 article thead {
