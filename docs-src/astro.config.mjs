@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
+import { unified } from '@astrojs/markdown-remark'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
@@ -33,7 +34,7 @@ export default defineConfig({
   base: '/',
   trailingSlash: 'always',
   markdown: {
-    rehypePlugins: [rehypeTableScroll],
+    processor: unified({ rehypePlugins: [rehypeTableScroll] }),
   },
   integrations: [
     mdx(),
