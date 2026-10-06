@@ -6,6 +6,8 @@ import { join } from 'node:path';
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 export const FONT = 'Inter';
+export const LOGO_WIDTH = 55;
+export const LOGO_HEIGHT = 36;
 
 const WEIGHTS = [400, 600, 700];
 
@@ -28,11 +30,15 @@ async function loadFonts() {
   return fonts;
 }
 
-/* The site logo as a data URI, downsized to the largest size a
-   template draws it at. */
+/* The dachshund head mark in white, for the dark card, as a data URI
+   at twice the size the template draws it. */
 export async function loadLogo() {
   if (logo) return logo;
-  const png = await sharp(join(process.cwd(), 'public', 'doggo.png')).resize(128, 128).png().toBuffer();
+  const svg = await readFile(join(process.cwd(), 'src', 'assets', 'dachshund-head.svg'), 'utf8');
+  const png = await sharp(Buffer.from(svg.replace('#141414', '#FFFFFF')), { density: 300 })
+    .resize({ height: LOGO_HEIGHT * 2 })
+    .png()
+    .toBuffer();
   logo = `data:image/png;base64,${png.toString('base64')}`;
   return logo;
 }

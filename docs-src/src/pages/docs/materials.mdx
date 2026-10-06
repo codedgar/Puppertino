@@ -22,7 +22,7 @@ export const backdrop = `${import.meta.env.BASE_URL}images/material-backdrop.jpg
 <script type="module" src={liquidGlassScript}></script>
 <script type="module" src={slidersScript}></script>
 <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.2/dist/glassworks.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js" defer></script>
 <script type="module" src={glassScript}></script>
 <script type="module" src={glassDemoScript}></script>
 
@@ -257,7 +257,7 @@ Puppertino Glass refracts the real page behind a surface. Content bends at the r
 <button class="p-glass-clear" type="button" aria-label="Play">…</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.2/dist/glassworks.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js"></script>
 <script src="src/js/glass.js"></script>`}
   code={`<div class="glass-demo" data-p-glass-backdrop style="background-image: url('${backdrop}');">
   <button class="p-glass glass-demo-drag" type="button" aria-label="Glass pill. Drag it, or use the arrow keys."><i class="ph-bold ph-hand-grabbing" aria-hidden="true"></i>Drag the glass</button>
@@ -350,14 +350,14 @@ Load a capture engine, [Glassworks](https://github.com/codedgar/glassworks), and
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.2/dist/glassworks.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js"></script>
 <script src="src/js/glass.js"></script>
 ```
 
-With a bundler, install Glassworks 2 and a capture engine, then hand the library over instead of relying on globals. Glassworks 2 is on the `next` tag until it is final.
+With a bundler, install Glassworks 2 and a capture engine, then hand the library over instead of relying on globals.
 
 ```bash
-npm i @codedgar/glassworks@next @zumer/snapdom
+npm i @codedgar/glassworks @zumer/snapdom
 ```
 
 ```js

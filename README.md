@@ -1,6 +1,12 @@
 
 ![Puppertino Stars](https://img.shields.io/github/stars/codedgar/puppertino?style=for-the-badge) ![Puppertino's contributors](https://img.shields.io/github/contributors/codedgar/puppertino?style=for-the-badge) [![npm version](https://img.shields.io/npm/v/@codedgar/puppertino?style=for-the-badge)](https://www.npmjs.com/package/@codedgar/puppertino) [![Follow Puppertino_css](https://img.shields.io/twitter/follow/Puppertino_css?style=for-the-badge)](https://twitter.com/Puppertino_css) [![Follow Codedgar_dev](https://img.shields.io/twitter/follow/codedgar_dev?style=for-the-badge)](https://twitter.com/codedgar_dev) [![Visit the creator's Website](https://img.shields.io/badge/Visit%20the%20Creator's%20Website-blue?style=for-the-badge&logo=undertale&logoColor=white)](https://codedgar.com/)
-![Puppertino Logo](https://i.imgur.com/r81X3Yj.png)
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.svg">
+    <img src=".github/assets/logo-light.svg" alt="Puppertino logo: a dachshund in profile" width="320">
+  </picture>
+</p>
 
 # Puppertino Dachshund
 

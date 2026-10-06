@@ -83,8 +83,16 @@ a:hover {
   padding: 24px 0 40px;
 }
 
+.logo-mark {
+  flex: none;
+  height: 20px;
+  width: auto;
+}
+
 .sidebar-logo {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 4px 24px 20px;
   font-family: var(--font-display);
   font-size: 19px;

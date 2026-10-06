@@ -306,7 +306,7 @@
    them once per surface, so a variant is only a set of overrides.
    Values follow native macOS 26 glass (NSGlassEffectView) measured
    over test patterns; see specs/liquid-glass.md.
-   The lens (Glassworks 2, rc.2 on) leaves the middle of the pane flat and
+   The lens (Glassworks 2) leaves the middle of the pane flat and
    bends only a band around the rim. There it shifts content along the
    edge's normal, toward the centre, so the rim shows a compressed
    sliver of what is behind the glass, as Apple's does. Refraction (the

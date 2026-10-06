@@ -14,7 +14,7 @@
  * Load a capture engine and Glassworks before this script:
  *
  *   <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom/dist/snapdom.js"></script>
- *   <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0-rc.2/dist/glassworks.umd.min.js"></script>
+ *   <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js"></script>
  *   <script src="src/js/glass.js"></script>
  *
  * With a bundler, hand Glassworks over instead:
@@ -171,7 +171,7 @@
       frost: number(style, '--p-glass-frost', 0),
       frostGrow: number(style, '--p-glass-frost-grow', 1) > 0,
       magnify: number(style, '--p-glass-magnify', 1),
-      // Glassworks 2 (rc.2 on) draws two fixed rim highlights (+45° and -135°);
+      // Glassworks 2 draws two fixed rim highlights (+45° and -135°);
       // they don't move, so reduced motion leaves them alone.
       specular: number(style, '--p-glass-specular', 0) > 0,
       adaptive: number(style, '--p-glass-adaptive', 1) > 0

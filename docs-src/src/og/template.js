@@ -1,5 +1,5 @@
 import { h } from './h.js';
-import { FONT } from './generate.js';
+import { FONT, LOGO_WIDTH, LOGO_HEIGHT } from './generate.js';
 
 const COLORS = {
   text: '#FFFFFF',
@@ -108,7 +108,7 @@ export function pageTemplate({ eyebrow, title, description, address, version, lo
       h(
         'div',
         { style: { display: 'flex', alignItems: 'center', gap: 14 } },
-        h('img', { src: logo, width: 48, height: 48 }),
+        h('img', { src: logo, width: LOGO_WIDTH, height: LOGO_HEIGHT }),
         h('span', { style: { fontSize: 28, fontWeight: 600, letterSpacing: -0.6, color: COLORS.text } }, 'Puppertino')
       ),
       h('span', { style: { fontSize: 20, color: COLORS.tertiary } }, `Version ${version}`)

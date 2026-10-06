@@ -1,117 +1,672 @@
 ---
 import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import '@puppertino/puppertino.css';
+import '../styles/home.css';
+import liquidGlassScript from '../../../src/js/liquid_glass.js?url';
+import slidersScript from '../../../src/js/sliders.js?url';
+import steppersScript from '../../../src/js/steppers.js?url';
+import tabBarScript from '../../../src/js/tab_bar.js?url';
+import glassScript from '../../../src/js/glass.js?url';
+
 const base = import.meta.env.BASE_URL;
+
+const VERSION = '2.0.0';
+const COMPONENTS = { mac: 38, iphone: 27 };
+const TOTAL = COMPONENTS.mac + COMPONENTS.iphone;
+
+const cdn = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@${VERSION}/dist/css/puppertino.min.css">`;
+const npm = `npm install @codedgar/puppertino@${VERSION}`;
+
+const accents = ['blue', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'mint', 'teal', 'cyan', 'indigo', 'brown', 'gray'];
+
+const folders = [
+  { label: 'All Notes', icon: 'ph-note', count: 9 },
+  { label: 'Walks', icon: 'ph-paw-print', count: 4, selected: true },
+  { label: 'Vet', icon: 'ph-first-aid', count: 2 },
+  { label: 'Recipes', icon: 'ph-bowl-food', count: 3 },
+];
+
+const notes = [
+  { title: 'Saturday at the park', when: '9:41 AM', selected: true },
+  { title: 'Things that are not food', when: 'Yesterday' },
+  { title: 'New route by the river', when: 'Monday' },
+  { title: 'Rain plan', when: 'Sunday' },
+];
+
+const checklist = [
+  { label: 'Knitted jumper', done: true },
+  { label: 'Water bowl', done: true },
+  { label: 'The good treats', done: false },
+  { label: 'Towel for the car', done: false },
+];
+
+const tabs = [
+  { icon: 'ph-paw-print', label: 'Walks' },
+  { icon: 'ph-map-trifold', label: 'Routes' },
+  { icon: 'ph-chart-bar', label: 'Stats' },
+];
+
+const walks = [
+  { date: 'Today', rows: [
+    { title: 'The park', sub: '2.4 km · 41 min', detail: '9:41 AM', photo: 'dog-day.jpg' },
+    { title: 'Around the block', sub: '0.6 km · 12 min', detail: '7:15 AM', icon: 'ph-house', color: 'orange' },
+  ] },
+  { date: 'Yesterday', chart: [
+    { h: 40, color: 'blue' }, { h: 72, color: 'purple' }, { h: 55, color: 'pink' }, { h: 90, color: 'orange' }, { h: 30, color: 'yellow' }, { h: 64, color: 'green' }, { h: 48, color: 'cyan' },
+  ], rows: [
+    { title: 'The river', sub: '3.1 km · 52 min', detail: '6:30 PM', icon: 'ph-waves', color: 'cyan' },
+    { title: 'Late one', sub: '0.4 km · 8 min', detail: '11:02 PM', photo: 'dog-night.jpg' },
+    { title: 'Around the block', sub: '0.7 km · 13 min', detail: '7:20 AM', icon: 'ph-house', color: 'orange' },
+  ] },
+  { date: 'Monday', card: { label: 'Longest walk', value: '5.4 km', color: 'indigo' }, rows: [
+    { title: 'New route', sub: '2.9 km · 48 min', detail: '5:50 PM', icon: 'ph-map-trifold', color: 'green' },
+    { title: 'The vet, on foot', sub: '1.2 km · 25 min', detail: '10:30 AM', icon: 'ph-first-aid', color: 'red' },
+    { title: 'Around the block', sub: '0.6 km · 11 min', detail: '7:10 AM', icon: 'ph-house', color: 'orange' },
+  ] },
+  { date: 'Sunday', rows: [
+    { title: 'Hallway fetch', sub: 'Rain · 20 min', detail: '4:00 PM', icon: 'ph-cloud-rain', color: 'indigo' },
+    { title: 'The park', sub: '2.2 km · 39 min', detail: '9:30 AM', icon: 'ph-tree', color: 'mint' },
+  ] },
+  { date: 'Saturday', card: { label: 'Streak', value: '12 days', color: 'orange' }, rows: [
+    { title: 'The long one', sub: '5.4 km · 1 h 30 min', detail: '8:00 AM', icon: 'ph-mountains', color: 'purple' },
+    { title: 'Around the block', sub: '0.5 km · 10 min', detail: '10:45 PM', icon: 'ph-moon', color: 'yellow' },
+  ] },
+];
+
+const preferences = [
+  { label: 'Reduce motion', query: '(prefers-reduced-motion: reduce)' },
+  { label: 'Reduce transparency', query: '(prefers-reduced-transparency: reduce)' },
+  { label: 'Increase contrast', query: '(prefers-contrast: more)' },
+  { label: 'Dark appearance', query: '(prefers-color-scheme: dark)' },
+];
+
+const choices = [
+  { want: 'A web app that should feel like a Mac or an iPhone, or a plain site with no build step', use: 'Puppertino', ours: true },
+  { want: 'A mobile app with routing and gestures', use: 'Framework7 or Konsta' },
+  { want: 'A neutral look you can brand', use: 'Tailwind, daisyUI or shadcn/ui' },
+  { want: 'Real refraction over content, photos and video', use: 'Glassworks, alongside Puppertino' },
+];
+
+const history = [
+  { year: '2019', event: 'First commit: a file of buttons.' },
+  { year: '2021', event: 'Version 1.0.' },
+  { year: '2024', event: 'Siberian.' },
+  { year: '2026', event: 'Dachshund, rebuilt on macOS 27.' },
+];
 ---
 
-<Base title="Home" description="Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web.">
-  <div class="landing">
+<Base
+  title="Home"
+  description={`Puppertino ${VERSION.slice(0, 3)} brings the macOS 27 and iOS 27 design to any web page. ${COMPONENTS.mac} components for the Mac and ${COMPONENTS.iphone} for iPhone in plain CSS, with no dependencies and no build step.`}
+>
+  <div class="home" id="home">
+    <script is:inline>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('home-motion');
+      }
+    </script>
 
-    <!-- ─── Hero ───────────────────────────────────────── -->
-    <section class="landing-hero">
-      <span class="landing-eyebrow">Version 2.0</span>
-      <h1>Puppertino</h1>
-      <p class="landing-subtitle">
-        A CSS framework that brings macOS and iOS aesthetics to the web. Built on Apple's macOS 27 specification.
+    <header class="home-nav p-material-chrome">
+      <a class="home-wordmark" href={base}><Logo />Puppertino</a>
+      <nav aria-label="Site">
+        <a href={`${base}docs/`}>Docs</a>
+        <a href={`${base}docs/desktop/`}>Mac</a>
+        <a href={`${base}docs/mobile/`}>iPhone</a>
+        <a href="https://github.com/codedgar/Puppertino">GitHub</a>
+      </nav>
+    </header>
+
+    <!-- ─── Hero ────────────────────────────────────────── -->
+    <section class="home-hero">
+      <p class="home-eyebrow" data-rise>Puppertino {VERSION.slice(0, 3)} Dachshund</p>
+      <h1 data-rise>Make the web feel at home on Mac and&nbsp;iPhone.</h1>
+      <p class="home-lede" data-rise style="--i: 1">
+        The macOS&nbsp;27 and iOS&nbsp;27 design for any web page. {COMPONENTS.mac} components for the Mac and {COMPONENTS.iphone} for iPhone, written in plain CSS, with no dependencies and no build step.
       </p>
-      <div class="landing-cta">
-        <a href={`${base}docs/getting-started/`} class="landing-btn-primary">Get started</a>
-        <a href="https://github.com/codedgar/Puppertino" class="landing-btn-secondary">View on GitHub</a>
+      <div class="home-actions" data-rise style="--i: 2">
+        <a class="home-pill" href={`${base}docs/getting-started/`}>Get started</a>
+        <a class="home-more" href={`${base}docs/`}>Browse the components</a>
+      </div>
+
+      <div class="home-stage" data-rise style="--i: 3">
+        <div class="home-devices">
+        <div class="p-window p-window-split home-notes">
+          <nav class="p-sidebar" aria-label="Folders">
+            <div class="p-sidebar-titlebar">
+              <div class="p-traffic-lights" aria-hidden="true">
+                <span class="p-traffic-light p-traffic-light-close"></span>
+                <span class="p-traffic-light p-traffic-light-min"></span>
+                <span class="p-traffic-light p-traffic-light-zoom"></span>
+              </div>
+            </div>
+            <div class="p-sidebar-header">On My Mac</div>
+            {folders.map((folder) => (
+              <div class:list={['p-sidebar-row', { 'p-selected': folder.selected }]}>
+                <span class="p-sidebar-icon"><i class={`ph ${folder.icon}`} aria-hidden="true"></i></span>
+                {folder.label}
+                <span class="p-sidebar-detail">{folder.count}</span>
+              </div>
+            ))}
+          </nav>
+          <div class="p-window-main">
+            <div class="p-window-titlebar p-window-titlebar-unified">
+              <div class="p-window-titlebar-row">
+                <div class="p-window-titles">
+                  <span class="p-window-title">Walks</span>
+                  <span class="p-window-subtitle">4 notes</span>
+                </div>
+                <div class="p-window-spacer"></div>
+                <div class="p-toolbar-group" role="toolbar" aria-label="Note">
+                  <button class="p-toolbar-btn" type="button" aria-label="New note"><i class="ph-bold ph-note-pencil" aria-hidden="true"></i></button>
+                  <button class="p-toolbar-btn" type="button" aria-label="Share"><i class="ph-bold ph-export" aria-hidden="true"></i></button>
+                </div>
+                <div class="p-search p-search-small home-notes-search"><input type="search" placeholder="Search" aria-label="Search notes" /></div>
+              </div>
+            </div>
+            <div class="p-window-content home-notes-body">
+              <ul class="p-list home-notes-list" aria-label="Notes">
+                {notes.map((note) => (
+                  <li class:list={['p-list-row', { 'p-selected': note.selected }]}>
+                    {note.title}
+                    <span class="p-list-detail">{note.when}</span>
+                  </li>
+                ))}
+              </ul>
+              <article class="home-note">
+                <p class="p-footnote home-note-date">Today at 9:41 AM</p>
+                <h2 class="p-title-1">Saturday at the park</h2>
+                <p class="p-body">Leave by ten, before the big dogs arrive. It rained on Friday, so the ramp will be slippery.</p>
+                <div class="home-note-checks">
+                  {checklist.map((item) => (
+                    <label class="p-checkbox"><input type="checkbox" checked={item.done} /><span></span> {item.label}</label>
+                  ))}
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="home-phone">
+          <header class="p-nav-bar">
+            <div class="p-nav-bar__row">
+              <button class="p-nav-bar__button p-nav-bar__back" type="button" aria-label="Back" data-p-glass="off"><i class="ph-bold ph-caret-left" aria-hidden="true"></i></button>
+              <button class="p-nav-bar__button" type="button" data-p-glass="off">Edit</button>
+            </div>
+            <h2 class="p-nav-bar__large">Walks</h2>
+          </header>
+          <ul class="p-list p-list-touch p-list-inset" aria-label="Notes">
+            {notes.map((note) => (
+              <li class="p-list-row">
+                <span class="p-list-label">
+                  <span class="p-list-title">{note.title}</span>
+                  <span class="p-list-subtitle">{note.when}</span>
+                </span>
+                <i class="p-list-chevron ph-bold ph-caret-right" aria-hidden="true"></i>
+              </li>
+            ))}
+          </ul>
+          <ul class="p-list p-list-touch p-list-inset">
+            <li class="p-list-row">
+              <span class="p-list-label"><span class="p-list-title">Remind me</span></span>
+              <label class="p-switch p-switch-touch" aria-label="Remind me"><input type="checkbox" checked /><span></span></label>
+            </li>
+          </ul>
+        </div>
+        </div>
+        <p class="home-caption">All UIs on this page are built with Puppertino.</p>
       </div>
     </section>
 
-    <!-- ─── What it is ─────────────────────────────────── -->
-    <section class="landing-section">
-      <h2>What Puppertino is</h2>
-      <p>
-        The colors, the typography, and the materials all follow Apple's macOS 27 specification. Every component is documented with exact values, rendered previews, and copy-pasteable markup.
+    <!-- ─── Mac and iPhone ──────────────────────────────── -->
+    <section class="home-section home-alt" id="components">
+      <h2 data-rise>Built for Mac and iPhone.</h2>
+      <p class="home-copy" data-rise style="--i: 1">
+        {COMPONENTS.mac} components for the Mac and {COMPONENTS.iphone} for iPhone, sharing one set of colors, type and materials. Every value is measured against the real controls.
       </p>
-      <p>
-        Everything that worked in version 1 still works. Existing classes remain in place. Projects upgrading from v1 do not need to rewrite anything.
+
+      <div class="p-segmented home-platform" role="group" aria-label="Platform" data-rise style="--i: 2">
+        <label class="p-segment"><input type="radio" name="home-platform" value="mac" checked /><span>Mac</span></label>
+        <label class="p-segment"><input type="radio" name="home-platform" value="iphone" /><span>iPhone</span></label>
+      </div>
+
+      <div class="home-kit" data-platform="mac">
+        <figure>
+          <div class="home-kit-stage">
+            <button class="p-button p-button-primary" type="button">Save</button>
+            <button class="p-button p-button-secondary" type="button">Cancel</button>
+          </div>
+          <figcaption>Buttons</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <label class="p-switch p-switch-large" aria-label="Switch"><input type="checkbox" checked /><span></span></label>
+          </div>
+          <figcaption>Switch</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <input type="range" class="p-slider" min="0" max="100" value="60" aria-label="Slider" />
+          </div>
+          <figcaption>Slider</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <div class="p-segmented" role="group" aria-label="Range">
+              {['Day', 'Week', 'Month'].map((label, i) => (
+                <label class="p-segment"><input type="radio" name="home-kit-mac-range" checked={i === 1} /><span>{label}</span></label>
+              ))}
+            </div>
+          </div>
+          <figcaption>Segmented control</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <div class="p-stepper-field">
+              <input class="p-field" type="number" value="3" min="0" max="10" style="width: 64px;" aria-label="Quantity" />
+              <span class="p-stepper">
+                <button type="button" data-p-step="up" aria-label="Increment"></button>
+                <button type="button" data-p-step="down" aria-label="Decrement"></button>
+              </span>
+            </div>
+          </div>
+          <figcaption>Stepper</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <input class="p-field" type="text" value="Rex" aria-label="Name" />
+          </div>
+          <figcaption>Text field</figcaption>
+        </figure>
+      </div>
+
+      <div class="home-kit" data-platform="iphone" hidden>
+        <figure>
+          <div class="home-kit-stage">
+            <button class="p-button p-button-touch p-button-primary" type="button">Save</button>
+            <button class="p-button p-button-touch p-button-secondary" type="button">Share</button>
+          </div>
+          <figcaption>Buttons</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <label class="p-switch p-switch-touch" aria-label="Switch"><input type="checkbox" checked /><span></span></label>
+          </div>
+          <figcaption>Switch</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <input type="range" class="p-slider p-slider-touch" min="0" max="100" value="60" aria-label="Slider" />
+          </div>
+          <figcaption>Slider</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <div class="p-segmented p-segmented-touch" role="group" aria-label="Range">
+              {['Day', 'Week', 'Month'].map((label, i) => (
+                <label class="p-segment"><input type="radio" name="home-kit-iphone-range" checked={i === 1} /><span>{label}</span></label>
+              ))}
+            </div>
+          </div>
+          <figcaption>Segmented control</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <div class="p-stepper-field p-stepper-field-touch">
+              <input class="p-field p-field-touch" type="number" value="2" aria-label="Guests" />
+              <span class="p-stepper p-stepper-touch">
+                <button type="button" data-p-step="down" aria-label="Decrease"></button>
+                <button type="button" data-p-step="up" aria-label="Increase"></button>
+              </span>
+            </div>
+          </div>
+          <figcaption>Stepper</figcaption>
+        </figure>
+        <figure>
+          <div class="home-kit-stage">
+            <input class="p-field p-field-touch" type="text" value="Rex" aria-label="Name" />
+          </div>
+          <figcaption>Text field</figcaption>
+        </figure>
+      </div>
+
+      <p class="home-links">
+        <a class="home-more" href={`${base}docs/desktop/`}>All {COMPONENTS.mac} for the Mac</a>
+        <a class="home-more" href={`${base}docs/mobile/`}>All {COMPONENTS.iphone} for iPhone</a>
       </p>
     </section>
 
-    <!-- ─── The three foundations ──────────────────────── -->
-    <section class="landing-section">
-      <h2>Three foundations</h2>
-      <p>
-        The system rests on three pieces. Each one is documented in full and ships with light and dark mode support.
+    <!-- ─── Appearance and accent ───────────────────────── -->
+    <section class="home-section">
+      <h2 data-rise>Light, dark, and 13&nbsp;accents.</h2>
+      <p class="home-copy" data-rise style="--i: 1">
+        Puppertino follows the system’s appearance, or the one you choose. Try it here: the whole page changes.
       </p>
-      <ul class="landing-list">
-        <li>
-          <strong>Colors.</strong> Thirteen system accents, six text hierarchy levels, five fill tiers, and semantic background tokens.
-        </li>
-        <li>
-          <strong>Typography.</strong> The full Apple text style scale with nine font weights and optical letter spacing.
-        </li>
-        <li>
-          <strong>Materials.</strong> Five thickness levels for blur and translucency. Built with reduced-transparency and reduced-motion support.
-        </li>
-      </ul>
-    </section>
 
-    <!-- ─── Backwards compatibility ────────────────────── -->
-    <section class="landing-section">
-      <h2>Nothing breaks</h2>
-      <p>
-        The color palettes, layout classes, and shadow utilities from version 1 are still part of the package. Deprecations happen gradually across the 2.x release line, and each one is announced with a documented migration path.
-      </p>
-      <p>
-        If your project is on Puppertino 1, upgrading to 2.0 is a single dependency bump.
-      </p>
-    </section>
-
-    <!-- ─── Final CTA ──────────────────────────────────── -->
-    <section class="landing-section">
-      <h2>Start building</h2>
-      <p>
-        Read the docs, install via npm or CDN, and ship something that feels like it belongs on a Mac.
-      </p>
-      <div class="landing-cta">
-        <a href={`${base}docs/getting-started/`} class="landing-btn-primary">Get started</a>
-        <a href={`${base}docs/`} class="landing-btn-secondary">Browse the docs</a>
+      <div class="p-box home-settings" data-rise style="--i: 2">
+        <div class="home-row">
+          <span>Appearance</span>
+          <div class="p-segmented" role="group" aria-label="Appearance" id="home-appearance">
+            {['Auto', 'Light', 'Dark'].map((label, i) => (
+              <label class="p-segment"><input type="radio" name="home-appearance" value={label.toLowerCase()} checked={i === 0} /><span>{label}</span></label>
+            ))}
+          </div>
+        </div>
+        <div class="home-row">
+          <span>Accent color</span>
+          <div class="home-accents" role="group" aria-label="Accent color" id="home-accents">
+            {accents.map((name, i) => (
+              <button
+                type="button"
+                class="home-accent"
+                data-accent={name}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+                aria-label={name[0].toUpperCase() + name.slice(1)}
+                style={`--dot: var(--p-sys-${name})`}
+              />
+            ))}
+          </div>
+        </div>
+        <div class="home-row">
+          <span>Download progress</span>
+          <progress class="p-progress" max="100" value="65" aria-label="Download progress"></progress>
+        </div>
+        <div class="home-row">
+          <span>Volume</span>
+          <input type="range" class="p-slider" min="0" max="100" value="45" aria-label="Volume" />
+        </div>
+        <div class="home-row">
+          <span>Send receipt</span>
+          <label class="p-switch" aria-label="Send receipt"><input type="checkbox" checked /><span></span></label>
+        </div>
+        <div class="home-row home-row-end">
+          <button class="p-button p-button-secondary" type="button">Cancel</button>
+          <button class="p-button p-button-primary" type="button">Save</button>
+        </div>
       </div>
     </section>
 
-    <!-- ─── Footer ─────────────────────────────────────── -->
-    <footer class="landing-footer">
-      <p>Puppertino is not associated with Apple Inc.</p>
-      <p>Created by <a href="https://codedgar.com">Codedgar</a>. Open source under the MIT license.</p>
+    <!-- ─── Glass ───────────────────────────────────────── -->
+    <section class="home-section home-alt">
+      <h2 data-rise>Glass that bends the page.</h2>
+      <p class="home-copy" data-rise style="--i: 1">
+        Bars and buttons refract the page behind them, with <a href="https://github.com/codedgar/glassworks">Glassworks</a>. Switches and sliders lift into a lens when you press them. With Reduce Transparency on, all of it turns solid.
+      </p>
+
+      <div class="home-glass" id="glass-app" data-p-glass-backdrop>
+        <div class="home-glass-feed">
+          <div class="home-glass-refresh" aria-hidden="true"><span class="p-spinner p-spinner-touch-small"></span></div>
+          <header class="p-nav-bar">
+            <div class="p-nav-bar__row">
+              <h3 class="p-nav-bar__title">Walks</h3>
+            </div>
+          </header>
+          {walks.map((day) => (
+            <>
+              {day.card && (
+                <div class="home-glass-card" style={`background: var(--p-sys-${day.card.color})`}>
+                  <span class="p-footnote">{day.card.label}</span>
+                  <span class="p-title-1">{day.card.value}</span>
+                </div>
+              )}
+              {day.chart && (
+                <div class="home-glass-chart" aria-hidden="true">
+                  {day.chart.map((bar) => (
+                    <span style={`height: ${bar.h}%; background: var(--p-sys-${bar.color})`}></span>
+                  ))}
+                </div>
+              )}
+              <p class="p-list-touch-header">{day.date}</p>
+              <ul class="p-list p-list-touch p-list-inset">
+                {day.rows.map((row) => (
+                  <li class="p-list-row">
+                    {row.photo ? (
+                      <span class="p-list-icon p-list-icon-square"><img src={`${base}images/${row.photo}`} alt="" /></span>
+                    ) : (
+                      <span class="p-list-icon home-glass-icon" style={`background: var(--p-sys-${row.color})`}><i class={`ph-bold ${row.icon}`} aria-hidden="true"></i></span>
+                    )}
+                    <span class="p-list-label">
+                      <span class="p-list-title">{row.title}</span>
+                      <span class="p-list-subtitle">{row.sub}</span>
+                    </span>
+                    <span class="p-list-detail">{row.detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ))}
+        </div>
+        <span class="p-toolbar-touch home-glass-toolbar">
+          <button class="p-toolbar-touch__item" type="button" aria-label="Filter"><i class="ph-bold ph-funnel" aria-hidden="true"></i></button>
+          <button class="p-toolbar-touch__item" type="button" aria-label="Add"><i class="ph-bold ph-plus" aria-hidden="true"></i></button>
+        </span>
+        <nav class="p-tab-bar" aria-label="Walks sections">
+          {tabs.map((tab, i) => (
+            <button class="p-tab-bar__tab" type="button" aria-current={i === 0 ? 'page' : undefined}>
+              <i class={`ph-bold ${tab.icon}`} aria-hidden="true"></i><span>{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+      </div>
+      <p class="home-caption">Glassworks warms up in async, and starts displaying the effect when it’s ready.</p>
+    </section>
+
+    <!-- ─── Accessibility ───────────────────────────────── -->
+    <section class="home-section">
+      <h2 data-rise>Accessible by default.</h2>
+      <p class="home-copy" data-rise style="--i: 1">
+        Puppertino reads accessibility settings from the browser and answers in CSS. Motion becomes a fade, glass turns solid, and borders get heavier. There is nothing to switch on.
+      </p>
+
+      <div class="home-pair" data-rise style="--i: 2">
+        <div>
+          <p class="p-box-title">Your settings, right now</p>
+          <div class="p-box">
+            {preferences.map((pref) => (
+              <div class="home-row">
+                <span>{pref.label}</span>
+                <span class="home-row-value" data-pref={pref.query}>Off</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p class="p-box-title">Press Tab</p>
+          <div class="p-box">
+            <div class="home-row">
+              <span>Button</span>
+              <button type="button" class="p-button p-button-primary">Continue</button>
+            </div>
+            <div class="home-row">
+              <span>Switch</span>
+              <label class="p-switch" aria-label="Switch"><input type="checkbox" checked /><span></span></label>
+            </div>
+            <div class="home-row">
+              <span>Segmented control</span>
+              <div class="p-segmented" role="group" aria-label="Segmented control">
+                {['Day', 'Week', 'Month'].map((label, i) => (
+                  <label class="p-segment"><input type="radio" name="home-access-range" checked={i === 0} /><span>{label}</span></label>
+                ))}
+              </div>
+            </div>
+            <div class="home-row">
+              <span>Slider</span>
+              <input type="range" class="p-slider" min="0" max="100" value="40" aria-label="Slider" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="home-caption">
+        Every control keeps a visible focus ring. Menus, popovers and dialogs take the arrow keys and Escape, and a dialog holds focus until it closes.
+      </p>
+    </section>
+
+    <!-- ─── Install ─────────────────────────────────────── -->
+    <section class="home-section home-alt" id="install">
+      <h2 data-rise>One link. No build step.</h2>
+      <p class="home-copy" data-rise style="--i: 1">
+        Puppertino is plain CSS with no dependencies. The scripts are optional and written in plain JavaScript, and every class from version&nbsp;1 still works.
+      </p>
+
+      <div class="home-lines" data-rise style="--i: 2">
+        <button type="button" class="home-line" data-copy={cdn} aria-label="Copy the stylesheet link">
+          <code>{cdn}</code>
+          <i class="ph-bold ph-copy" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="home-line" data-copy={npm} aria-label="Copy the npm command">
+          <code>{npm}</code>
+          <i class="ph-bold ph-copy" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <table class="home-choices">
+        <caption>It isn’t the right tool for everything.</caption>
+        <thead>
+          <tr><th scope="col">If you’re building</th><th scope="col">Use</th></tr>
+        </thead>
+        <tbody>
+          {choices.map((row) => (
+            <tr class:list={[{ 'is-ours': row.ours }]}>
+              <td>{row.want}</td>
+              <td>{row.use}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ─── Since 2019 ──────────────────────────────────── -->
+    <section class="home-section home-close">
+      <h2 data-rise>Since 2019.</h2>
+      <ol class="home-history" data-rise style="--i: 1">
+        {history.map((item) => (
+          <li><span>{item.year}</span>{item.event}</li>
+        ))}
+      </ol>
+      <div class="home-actions" data-rise style="--i: 2">
+        <a class="home-pill" href={`${base}docs/getting-started/`}>Get started</a>
+        <a class="home-more" href="https://github.com/codedgar/Puppertino">View on GitHub</a>
+      </div>
+    </section>
+
+    <footer class="home-footer">
+      <p>Puppy + Cupertino. Open source under the MIT license, made by <a href="https://codedgar.com">Codedgar</a>.</p>
+      <p>Not affiliated with Apple Inc. (But could be, hmu Apple.)</p>
     </footer>
-
   </div>
+
+  <script type="module" src={liquidGlassScript}></script>
+  <script type="module" src={slidersScript}></script>
+  <script type="module" src={steppersScript}></script>
+  <script type="module" src={tabBarScript}></script>
+  <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js" defer></script>
+  <script type="module" src={glassScript}></script>
 </Base>
 
-<style>
-  .landing-eyebrow {
-    display: inline-block;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    margin-bottom: 12px;
+<script>
+  const root = document.documentElement;
+  const home = document.getElementById('home')!;
+
+  if (root.classList.contains('home-motion') && 'IntersectionObserver' in window) {
+    const seen = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add('is-in');
+          seen.unobserve(entry.target);
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px' }
+    );
+    document.querySelectorAll('[data-rise]').forEach((el) => seen.observe(el));
+  } else {
+    root.classList.remove('home-motion');
   }
 
-  .landing-list {
-    list-style: none;
-    padding: 0;
-    margin: 16px 0 0;
+  document.querySelector('.home-platform')?.addEventListener('change', (event) => {
+    const platform = (event.target as HTMLInputElement).value;
+    document.querySelectorAll<HTMLElement>('.home-kit').forEach((kit) => {
+      kit.hidden = kit.dataset.platform !== platform;
+    });
+  });
+
+  document.getElementById('home-appearance')?.addEventListener('change', (event) => {
+    const mode = (event.target as HTMLInputElement).value;
+    home.classList.toggle('p-light-mode', mode === 'light');
+    home.classList.toggle('p-dark-mode', mode === 'dark');
+  });
+
+  const accents = document.getElementById('home-accents');
+  accents?.addEventListener('click', (event) => {
+    const dot = (event.target as HTMLElement).closest<HTMLElement>('.home-accent');
+    if (!dot) return;
+    const name = dot.dataset.accent;
+    accents.querySelectorAll('.home-accent').forEach((el) => el.setAttribute('aria-pressed', String(el === dot)));
+    home.classList.toggle('home-tinted', name !== 'blue');
+    if (name === 'blue') home.style.removeProperty('--home-accent');
+    else home.style.setProperty('--home-accent', `var(--p-sys-${name})`);
+  });
+
+  const feed = document.querySelector<HTMLElement>('.home-glass-feed');
+  const frame = feed?.parentElement;
+  if (feed && frame && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const settle = 'cubic-bezier(0.6, 0.4, 0.1, 1)';
+    const sleep = (ms: number) => new Promise((done) => setTimeout(done, ms));
+    const move = (from: number, to: number, duration: number, easing = settle) =>
+      feed.animate([{ translate: `0 ${from}px` }, { translate: `0 ${to}px` }], { duration, easing, fill: 'forwards' }).finished;
+    const glass = () => (window as any).glassworks || (window as any).liquidGL;
+    const refract = () => {
+      if (!frame.querySelector('[data-p-glass="live"]')) return false;
+      glass()?.registerDynamic?.(feed);
+      return true;
+    };
+    const walked = ['Around the block', 'The park', 'Down to the corner', 'The river'];
+    const stamp = () => new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    let visible = false;
+    let count = 0;
+
+    const addWalk = () => {
+      const list = feed.querySelector('.p-list');
+      if (!list) return;
+      const row = document.createElement('li');
+      row.className = 'p-list-row home-glass-new';
+      row.innerHTML = `<span class="p-list-icon home-glass-icon" style="background: var(--p-sys-orange)"><i class="ph-bold ph-house" aria-hidden="true"></i></span><span class="p-list-label"><span class="p-list-title">${walked[count++ % walked.length]}</span><span class="p-list-subtitle">0.5 km · 9 min</span></span><span class="p-list-detail">${stamp()}</span>`;
+      list.prepend(row);
+      if (list.children.length > 4) list.lastElementChild?.remove();
+    };
+
+    const loop = async () => {
+      for (let tries = 0; tries < 40 && !refract(); tries++) await sleep(250);
+      while (true) {
+        if (!visible) { await sleep(500); continue; }
+        const end = Math.min(0, frame.clientHeight - feed.scrollHeight);
+        await sleep(2400);
+        await move(0, end, Math.abs(end) * 14, 'linear');
+        await sleep(1800);
+        await move(end, 0, 900);
+        await sleep(600);
+        await move(0, 72, 500, 'cubic-bezier(0.3, 0, 0.25, 1)');
+        frame.classList.add('is-refreshing');
+        await sleep(1400);
+        addWalk();
+        frame.classList.remove('is-refreshing');
+        await move(72, 0, 450);
+      }
+    };
+
+    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0.3 }).observe(frame);
+    loop();
   }
 
-  .landing-list li {
-    font-size: 17px;
-    line-height: 1.52;
-    color: var(--text-secondary);
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .landing-list li:last-child {
-    border-bottom: none;
-  }
-
-  .landing-list strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-</style>
+  document.querySelectorAll<HTMLElement>('[data-pref]').forEach((el) => {
+    const mq = window.matchMedia(el.dataset.pref!);
+    // A browser that does not know a query reports it as "not all".
+    const known = mq.media !== 'not all';
+    const show = () => {
+      el.textContent = known ? (mq.matches ? 'On' : 'Off') : 'Not reported by this browser';
+      el.classList.toggle('is-on', known && mq.matches);
+    };
+    show();
+    mq.addEventListener('change', show);
+  });
+</script>

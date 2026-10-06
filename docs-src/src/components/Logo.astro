@@ -1,0 +1,10 @@
+---
+import head from '../assets/dachshund-head.svg?raw';
+
+/* The dachshund head mark, inlined so it takes the text color. */
+const svg = head
+  .replace('fill="#141414"', 'fill="currentColor"')
+  .replace('<svg ', '<svg class="logo-mark" aria-hidden="true" focusable="false" ');
+---
+
+<Fragment set:html={svg} />
