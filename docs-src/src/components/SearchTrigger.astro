@@ -1,0 +1,66 @@
+---
+/* Opens the search palette rendered by Search.astro. */
+---
+
+<button class="search-trigger" type="button" id="search-trigger" aria-label="Open search">
+  <i class="ph-bold ph-magnifying-glass"></i>
+  <span class="search-trigger-label">Search</span>
+  <span class="search-trigger-kbd">
+    <kbd>⌘</kbd><kbd>K</kbd>
+  </span>
+</button>
+
+<style>
+  .search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: calc(100% - 16px);
+    margin: 8px;
+    padding: 8px 12px;
+    background: var(--bg-page);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+
+  .search-trigger:hover {
+    border-color: var(--text-tertiary);
+  }
+
+  .search-trigger i {
+    font-size: 14px;
+    color: var(--text-tertiary);
+  }
+
+  .search-trigger-label {
+    flex: 1;
+  }
+
+  .search-trigger-kbd {
+    display: flex;
+    gap: 2px;
+  }
+
+  .search-trigger-kbd kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    line-height: 1;
+  }
+</style>

@@ -9,6 +9,7 @@ import '@phosphor-icons/web/regular';
 import '@phosphor-icons/web/bold';
 import CopyToast from '../components/CopyToast.astro';
 import Search from '../components/Search.astro';
+import SearchTrigger from '../components/SearchTrigger.astro';
 import Logo from '../components/Logo.astro';
 import { cardSlug } from '../og/pages.js';
 
@@ -81,7 +82,7 @@ const analytics = import.meta.env.PROD;
         <div class="sidebar-scrim"></div>
         <aside class="sidebar p-scrollbar" id="docs-sidebar">
           <a href={`${base}docs/`} class="sidebar-logo"><Logo />Puppertino</a>
-          <Search />
+          <SearchTrigger />
           <nav>
             <slot name="sidebar" />
           </nav>
@@ -146,6 +147,7 @@ const analytics = import.meta.env.PROD;
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
+    {hasSidebar && <Search />}
     <CopyToast />
   </body>
 </html>

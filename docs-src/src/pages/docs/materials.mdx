@@ -17,7 +17,7 @@ import slidersScript from '../../../../src/js/sliders.js?url';
 import glassScript from '../../../../src/js/glass.js?url';
 import glassDemoScript from '../../scripts/glass-demo.js?url';
 
-export const backdrop = `${import.meta.env.BASE_URL}images/material-backdrop.jpg`;
+export const glassBackdrop = `${import.meta.env.BASE_URL}images/dog-day.jpg`;
 
 <script type="module" src={liquidGlassScript}></script>
 <script type="module" src={slidersScript}></script>
@@ -195,7 +195,7 @@ One number drives all of it. `--p-lens-lift` runs from 0, a plain knob, to 1, fu
 
 Because nothing samples the backdrop, faux Liquid Glass works in Safari, Chrome, and Firefox alike. Consider it for small controls whose surroundings you control.
 
-The original implementation of this effect is by [Jhey Tompkins](https://jhey.dev). Puppertino adapts it to real form controls: the switch stays a native checkbox, so forms, labels, and keyboard toggling keep working. The goo and aberration filters are unchanged. The knockout is now a CSS mask instead of a black-keyed SVG filter, because Puppertino's off tracks are translucent and a black key would erase them. Every size is derived from the track tokens, so one implementation covers the 36x16px desktop switch, the 64x28px touch switch, and both slider thumbs. Drag handling no longer needs GSAP; a registered custom property and a CSS transition replace the tween.
+The original implementation of this effect is by [Jhey Tompkins](https://jhey.dev). Puppertino adapts it to real form controls: the switch stays a native checkbox, so forms, labels, and keyboard toggling keep working.
 
 ### How to use it
 
@@ -259,7 +259,7 @@ Puppertino Glass refracts the real page behind a surface. Content bends at the r
 <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js"></script>
 <script src="src/js/glass.js"></script>`}
-  code={`<div class="glass-demo" data-p-glass-backdrop style="background-image: url('${backdrop}');">
+  code={`<div class="glass-demo" data-p-glass-backdrop style="background-image: url('${glassBackdrop}');">
   <button class="p-glass glass-demo-drag" type="button" aria-label="Glass pill. Drag it, or use the arrow keys."><i class="ph-bold ph-hand-grabbing" aria-hidden="true"></i>Drag the glass</button>
   <button class="p-glass-clear glass-demo-clear" type="button" aria-label="Play"><i class="ph-bold ph-play" aria-hidden="true"></i></button>
   <nav class="p-tab-bar" aria-label="Demo sections">
@@ -271,7 +271,7 @@ Puppertino Glass refracts the real page behind a surface. Content bends at the r
 </div>`}
 />
 
-Drag the pill across the photo. The dog's outline bends at the pill's rim, and the middle of the pill frosts it without bending it. The corner toggle flips the page between light and dark while the photo stays the same. The pill and the Clear button stay small enough to adapt on their own, so over the bright sky the pill may keep a light tint in dark mode, the way Apple's buttons do.
+Drag the pill across the photo. The dog's outline bends at the pill's rim, and the middle of the pill frosts it without bending it. The corner toggle flips the page between light and dark while the photo stays the same. The pill and the Clear button stay small enough to adapt on their own, so over the pale ground the pill may keep a light tint in dark mode, the way Apple's buttons do.
 
 ### When to use it
 
