@@ -31,7 +31,7 @@ export function GET({ props, site }) {
   const html = `<!doctype html>
 <meta charset="utf-8">
 <title>Redirecting to ${path}</title>
-<meta http-equiv="refresh" content="0;url=${path}">
+<meta http-equiv="refresh" content="0;url=${canonical}">
 <meta name="robots" content="noindex">
 <link rel="canonical" href="${canonical}">
 <a href="${path}">This page has moved to ${path}</a>
