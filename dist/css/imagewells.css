@@ -1,7 +1,7 @@
 /* Puppertino v2.0 — Image Wells (macOS 27)
-   An image well is an editable version of an image view. 30×30 well
-   with a 3px radius: a 24×24 image at a 3px inset, framed by a white
-   ring just inside the edge between two soft dark hairlines. Wrap a
+   An image well is an editable version of an image view. It is a 30×30
+   well with a 3px radius. A 24×24 image sits at a 3px inset, framed by
+   a white ring inside the edge between two soft dark hairlines. Wrap a
    hidden <input type="file"> to make it editable; swapping the image
    is app logic. */
 

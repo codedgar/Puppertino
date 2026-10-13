@@ -28,6 +28,7 @@ export const nav = [
           { label: 'Layout', slug: 'docs/layout/', icon: 'ph-columns' },
           { label: 'Dark mode', slug: 'docs/dark-mode/', icon: 'ph-moon' },
           { label: 'Icons', slug: 'docs/icons/', icon: 'ph-smiley' },
+          { label: 'Accessibility', slug: 'docs/accessibility/', icon: 'ph-person-arms-spread' },
         ],
       },
     ],

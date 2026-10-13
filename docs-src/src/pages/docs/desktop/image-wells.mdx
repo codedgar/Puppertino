@@ -39,7 +39,18 @@ The first two are filled wells (30px and a scaled 64px). The third is empty. The
 
 ## Anatomy
 
-The well is a 30px box with a 3px radius holding a 24px image at a 3px inset; the image keeps square corners. The margin around the image fills with `rgba(0, 0, 0, 0.02)`. The frame runs outside to in: a 0.5px soft edge at `rgba(0, 0, 0, 0.05)` just outside the box, a 1px white ring at the box edge, and a thin soft inner edge at 5% black under it. The white ring between dark hairlines is what makes it read as an inset well rather than a card.
+The well is a 30px box with a thin layered frame.
+
+| Part | Value |
+|---|---|
+| Box | 30px, 3px radius |
+| Image | 24px at a 3px inset, square corners |
+| Margin around the image | `rgba(0, 0, 0, 0.02)` |
+| Outer edge | 0.5px at `rgba(0, 0, 0, 0.05)`, just outside the box |
+| Ring | 1px white at the box edge |
+| Inner edge | Thin, soft, 5% black under the ring |
+
+The white ring between dark hairlines makes it read as an inset well.
 
 Only the 30px size is canonical, but the frame is size independent: set any width and height and the inset and rings hold.
 

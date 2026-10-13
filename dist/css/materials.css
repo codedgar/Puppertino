@@ -73,8 +73,8 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────
-   macOS 27 Material System
-   Five thickness levels with proper light and dark mode handling, the
+   macOS 27 Material System.
+   Five thickness levels with light and dark mode handling, the
    glass surface tints, the glass edge, and the shared shadow tokens.
    ───────────────────────────────────────────────────────────────────── */
 
@@ -102,7 +102,7 @@
   --p-material-chrome-touch-separator: rgba(0, 0, 0, 0.05);
 
   /* Glass surface backgrounds by component size. macOS 27 and iOS 27
-     draw medium and large glass with one recipe; small glass (64px or
+     draw medium and large glass with one recipe. Small glass (64px or
      less across) lifts a mid-gray backdrop and dims white slightly, so
      it reads on both. */
   --p-glass-sm: rgba(242, 242, 242, 0.55);
@@ -308,38 +308,38 @@
    over test patterns; see specs/liquid-glass.md.
    The lens (Glassworks 2) leaves the middle of the pane flat and
    bends only a band around the rim. There it shifts content along the
-   edge's normal, toward the centre, so the rim shows a compressed
+   edge's normal, toward the centre. The rim shows a compressed
    sliver of what is behind the glass, as Apple's does. Refraction (the
    broad bend across the band) and bevel depth (the steep bend right at
-   the edge) are fractions of the surface's shorter side, counted up to
-   48px. Bevel width, the band, is a fraction of the shorter side up to
-   24px. Specular (1 or 0) adds two fixed rim highlights at +45 and
+   the edge) are fractions of the surface's shorter side. They are
+   counted up to 48px. Bevel width, the band, is a fraction of the shorter
+   side up to 24px. Specular (1 or 0) adds two fixed rim highlights at +45 and
    -135 degrees; native macOS 26 shows none, so it is off.
 
    Frost is a blur in CSS px that the shader applies before the lens, as
    Apple does, so the rim band stays sharp. Regular frost grows with the
    surface (the script multiplies it by --p-glass-scale: about 4px on a
-   50px button, 8px on a 160px panel); Clear frosts about 10px at every
+   50px button, 8px on a 160px panel). Clear frosts about 10px at every
    size (--p-glass-frost-grow: 0). --p-glass-blur is only a light
    smoothing pass on the tint layer after the lens.
 
    Small Regular surfaces (64px or less across, like buttons and tab
-   bars) flip to dark glass over dark content and to light glass over
+   bars) flip to dark glass over dark content. They flip to light glass over
    light content, as Apple's do. The script sets data-p-theme on the
    surface for that. Set --p-glass-adaptive: 0 to pin a surface to the
    page's appearance. Clear glass never adapts.
 
-   Until the first frame renders, and wherever the glass cannot render
-   (no script, no WebGL, reduced transparency, increased contrast), the
-   surface is a plain material: --p-glass-surface with the standard
-   blur. The script keeps that material on a ::before layer while
-   Glassworks loads, then swaps it for --p-glass-tint. So a surface's
+   Until the first frame renders, the surface is a plain material. So it
+   is wherever the glass cannot render (no script, no WebGL, reduced
+   transparency, increased contrast). That material is --p-glass-surface
+   with the standard blur. The script keeps that material on a ::before layer
+   while Glassworks loads, then swaps it for --p-glass-tint. So a surface's
    own ::before is taken while it is glass.
 
    States, set by the script on the surface:
-   data-p-glass="pending"  enhanced, waiting for the first frame
-   data-p-glass="live"     refracting
-   data-p-glass="off"      author opt-out; the script leaves it alone
+   data-p-glass="pending"  enhanced, waiting for the first frame.
+   data-p-glass="live"     refracting.
+   data-p-glass="off"      author opt-out; the script leaves it alone.
    data-p-glass-size="small|large"  64px or less across, or bigger;
                            picks --p-glass-tint or --p-glass-tint-large */
 
@@ -359,11 +359,11 @@
   --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
 
   /* The macOS 27 glass edge, as a box-shadow list:
-     - a dark 0.5px keyline just outside the shape, which is what keeps
-       glass visible on white;
-     - a slightly heavier keyline sliver on the left and right sides;
+     - a dark 0.5px keyline outside the shape, which is what keeps
+       glass visible on white.
+     - a slightly heavier keyline sliver on the left and right sides.
      - a bright 1px rim inside the top edge and an equally bright one
-       inside the bottom edge, each with a soft glow (stronger along the
+       inside the bottom edge. Both have a soft glow (stronger along the
        bottom). The sides get the keyline only.
      Plus-darker keylines can't be done in CSS, so black alpha stands in.
      --p-glass-rim is the same value, kept under its v2.0 name. */
@@ -724,7 +724,7 @@
       in it where the lens sits (the knockout) so the page shows through
       the glass instead of the flat track.
    2. Liquid. Inside the lens a copy of the track is redrawn, magnified
-      by the lens scale and run through an SVG goo filter (blur, then an
+      by the lens scale. It runs through an SVG goo filter (blur, then an
       alpha threshold) so it melts into a colored rim at the glass edge.
       That is the refraction.
    3. Glass. A stack of inset and outer shadows with a sub-pixel
@@ -735,7 +735,7 @@
    engine. The markup and the SVG filters are injected by
    src/js/liquid_glass.js. The filters' blur and offset are absolute SVG
    values, so the script builds a set per lens height and scales them
-   with it; #p-lens-goo and #p-lens-aberration are the 50px originals the
+   with it. #p-lens-goo and #p-lens-aberration are the 50px originals the
    CSS falls back to. Without the script none of this CSS matches
    anything.
 
@@ -773,9 +773,9 @@
 }
 
 .p-lens {
-  /* The reference lens was 50px tall; every magic number below is
-     expressed in tenths of the lens height (u) or fiftieths (px) so the
-     same glass reads right on a 12px knob and a 28px thumb. */
+  /* Every magic number below is written for a 50px lens, in tenths of
+     the lens height (u) or fiftieths (px). The same glass then reads
+     right on a 12px knob and a 28px thumb. */
   --p-lens-u: calc(var(--p-lens-h, 50px) / 10);
   --p-lens-px: calc(var(--p-lens-h, 50px) / 50);
   --p-lens-scale: 1.65;

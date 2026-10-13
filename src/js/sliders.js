@@ -8,10 +8,10 @@
  *
  * Dials: turns every .p-dial[role="slider"]. Drag around the center,
  * or focus it and use the arrow keys, Page Up/Down and Home/End. The
- * value lives in aria-valuenow (min/max from aria-valuemin/-max,
- * default 0–360, step from data-step, default 1); the angle is
- * published as --p-dial-angle, and input/change events fire on the
- * dial. No dependencies.
+ * value lives in aria-valuenow. Min and max come from
+ * aria-valuemin/-max (default 0–360), and step from data-step (default
+ * 1). The angle is published as --p-dial-angle, and input/change
+ * events fire on the dial. No dependencies.
  */
 (function () {
   'use strict';

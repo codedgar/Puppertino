@@ -5,9 +5,9 @@
  * graphical NSDatePicker), wires prev/today/next navigation and day
  * selection, and dispatches a bubbling "p-change" CustomEvent with
  * {date} on selection. A .p-calendar-touch calendar is built the iOS
- * way instead: Sunday-first, full month name, SUN–SAT headers, no
- * days from the neighbouring months and only as many rows as the
- * month needs. No dependencies.
+ * way instead. It is Sunday-first with a full month name and SUN–SAT
+ * headers. It shows no days from the neighbouring months and has only
+ * as many rows as the month needs. No dependencies.
  */
 (function () {
   'use strict';

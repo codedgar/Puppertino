@@ -3,9 +3,9 @@
    and context menu surface. Pop-up and pull-down buttons keep the native
    select; this component is for custom command menus.
 
-   macOS 27 glass edge: a dark hairline just outside the shape, a bright
-   inner ring that is stronger along the top and bottom, and the shared
-   overlay shadow (0 8 48). The material stays a neutral tint; the system's
+   macOS 27 glass edge: a dark hairline outside the shape and a bright
+   inner ring, stronger along the top and bottom. The overlay shadow is
+   the shared one (0 8 48). The material stays a neutral tint; the system's
    wallpaper-tinted (luminosity) fill is not reproduced. */
 
 :root {
@@ -24,9 +24,9 @@
     inset 0 -6px 5px -4px rgba(255, 255, 255, 0.1);
   --p-menu-text: #1a1a1a;
   /* Secondary ink (shortcuts, disabled items) and headers are the system's
-     plus-darker #BFBFBF / #727272 (plus-lighter #404040 / #8A8A8A in dark):
-     they darken (lighten) whatever glass is behind them by a fixed amount,
-     so they are translucent black (white) here, not flat grays that
+     plus-darker #BFBFBF / #727272 (plus-lighter #404040 / #8A8A8A in dark).
+     They darken (lighten) whatever glass is behind them by a fixed amount,
+     so they are translucent black (white) here. Flat grays would
      vanish against the gray material. */
   --p-menu-text-disabled: rgba(0, 0, 0, 0.33);
   /* The menu selection is its own deeper blue, the same in both modes. */
@@ -265,7 +265,7 @@
 }
 
 /* Section header: the item size in bold, on the same 7px inset as the
-   labels (not the icon column), in a band one point taller than a row. */
+   labels (not the icon column). The band is one point taller than a row. */
 .p-menu__header {
   color: var(--p-menu-header);
   display: block;
@@ -445,21 +445,20 @@
 
 /* ─── Touch size (iOS and iPadOS 27) ──────────────────────────────── */
 /* The iOS menu: the surface a long press or a pop-up button raises. A
-   238px panel at 34px radius, 17pt rows on a 40pt pitch, each with a
-   full-height 190px capsule for the pressed state rather than the
-   full-bleed band the pointer menu uses. Same slots as the pointer
-   menu, restyled. Glyphs lead the label, as on macOS; shortcuts and
+   238px panel at 34px radius, 17pt rows on a 40pt pitch. Each row has a
+   full-height 190px capsule for the pressed state. The pointer menu
+   uses a full-bleed band. Same slots as the pointer menu, restyled. Glyphs lead the label, as on macOS; shortcuts and
    chevrons trail.
 
    iOS 27 draws the menu with the same glass edge as the macOS 27 menu
-   (--p-menu-edge above) minus its 0.5px inner ring: a dark hairline
-   outside the shape, a bright rim and glow band along the top and the
-   bottom, nothing bright on the sides. Shadow is the shared overlay
+   (--p-menu-edge above) minus its 0.5px inner ring. It has a dark hairline
+   outside the shape and a bright rim and glow band along the top and the
+   bottom. Nothing is bright on the sides. Shadow is the shared overlay
    shadow. Row ink that the system draws with plus-darker (light) or
-   plus-lighter (dark) blending, the pressed pill, separators, disabled
-   labels, section titles, is translucent black or white here, so it
-   darkens or lightens whatever glass is behind it. That is why the dark
-   pill and separators read lighter than the glass, not darker.
+   plus-lighter (dark) blending is translucent black or white here. That
+   covers the pressed pill, separators, disabled labels, and section
+   titles. It darkens or lightens whatever glass is behind it. That is why the
+   dark pill and separators read lighter than the glass.
 
    A context menu is this surface plus a preview of the thing the menu
    belongs to; .p-menu-touch-context lays the two out. */
@@ -574,7 +573,7 @@
   --p-menu-touch-row-pad: 8px;    /* a wrapped two-line row is 60pt */
   --p-menu-touch-lead: 6px;       /* label start: 22pt from the edge */
   --p-menu-touch-trail: 10px;
-  --p-menu-touch-pill-x: 8px;     /* 190pt pill on a 238pt menu */
+  --p-menu-touch-pill-x: 8px;     /* 190pt capsule on a 238pt panel */
   --p-menu-touch-pill-y: 0px;     /* the pill fills the 40pt row */
   --p-menu-touch-sep-gap: 10px;   /* above and below each separator */
   --p-menu-touch-icon: 28px;      /* glyph column: glyph at +26, label at +58 */
@@ -602,9 +601,10 @@
   box-sizing: border-box;
 }
 
-/* Rows. Colours go through --p-menu-touch-ink so the destructive and
-   disabled states survive the pointer menu's hover and selection rules
-   (which recolour the row blue and white) without a specificity race. */
+/* Rows. Colours go through --p-menu-touch-ink. The destructive and
+   disabled states then survive the pointer menu's hover and selection
+   rules (which recolour the row blue and white) without a specificity
+   race. */
 .p-menu-touch .p-menu__item {
   --p-menu-touch-ink: var(--p-menu-touch-label);
   --p-menu-touch-sub: var(--p-menu-touch-secondary);
@@ -683,7 +683,7 @@
   box-shadow: var(--p-focus-ring, 0 0 0 3px rgba(0, 136, 255, 0.5));
 }
 
-/* A long label wraps rather than truncating, and the row grows. */
+/* A long label wraps, and the row grows. */
 .p-menu-touch .p-menu__item > span:not([class]),
 .p-menu-touch__label {
   flex: 1 1 auto;
@@ -857,7 +857,7 @@
 }
 
 /* Palette: a row of up to three tiles above the items (a glyph over a
-   12pt label), for actions that belong together, like Copy, Share and
+   12pt label). It holds actions that belong together, like Copy, Share and
    Delete. The selected or pressed tile takes the row pill's tint. */
 .p-menu-touch__palette {
   display: grid;

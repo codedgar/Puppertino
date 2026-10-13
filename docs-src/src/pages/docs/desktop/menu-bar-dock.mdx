@@ -15,7 +15,7 @@ import dockScript from '../../../../../src/js/dock.js?url';
 <script type="module" src={menubarScript}></script>
 <script type="module" src={dockScript}></script>
 
-The menu bar displays the top-level menus of your app. The dock holds app icons for launching and switching. Together they frame an app-like layout; both are chrome, not content.
+The menu bar displays the top-level menus of your app. The dock holds app icons for launching and switching. Together they frame an app-like layout; both are chrome around the content.
 
 ## Preview
 
@@ -57,7 +57,14 @@ Move the pointer along the dock to magnify. Click an icon for the launch bounce.
 
 ## Anatomy: menu bar
 
-The bar is 37px tall and fully transparent; the text sits on whatever is behind it. Items are 13px at weight 590 (the app name is heavy, weight 860, and the Apple slot is 16.3px) inside 25px capsule slots with a 12.5px radius and 13px side padding. Status items align right at a 38px minimum width, ending with the clock.
+The menu bar is a transparent strip of capsule slots.
+
+| Part | Value |
+|---|---|
+| Bar | 37px tall and fully transparent, so the text sits on whatever is behind it |
+| Items | 13px at weight 590. The app name is weight 860 and the Apple slot is 16.3px. |
+| Slots | 25px capsules with a 12.5px radius and 13px side padding |
+| Status items | Align right at a 38px minimum width, ending with the clock |
 
 Because pages rarely have a wallpaper, two helpers set the ink explicitly: `.p-menubar-on-dark` for white text over dark imagery and `.p-menubar-on-light` for black text over light imagery. Without them the bar follows the page theme. Add `.p-menubar-material` for a translucent glass backing when the backdrop is busy; over variable imagery the material is the accessible choice, since bare text can drop below 4.5:1 contrast.
 
@@ -77,7 +84,17 @@ Menus are ordinary [menu](../menus/) surfaces: point each item at one with `data
 
 ## Anatomy: dock
 
-The platter is 55px tall with a 15px radius: 8px above the icons, 11px below, and 8px at each end. Its glass fill darkens the wallpaper slightly in light mode (`rgba(0, 0, 0, 0.17)` over a 20px blur) and lifts it slightly in dark (`rgba(255, 255, 255, 0.07)`), without a saturation boost so the wallpaper keeps its own color. The edge is a 0.5px dark outline, a strong 1px bright rim along the top and bottom with a soft glow that fades over about 12px, and no rim on the sides. There is no drop shadow. Icons are 36px in 9px gaps. The separator is a 1×36px light line (35% white) with 14px of clear space on each side. Running apps show a 4px dot 3px above the platter's bottom edge. Pinned with `.p-dock-fixed`, the platter sits 4px above the bottom of the viewport.
+The dock is a glass platter that holds a row of icons. Its size, icon and separator values are in the class table below.
+
+| Part | Value |
+|---|---|
+| Platter padding | 8px above the icons, 11px below, 8px at each end |
+| Fill | `rgba(0, 0, 0, 0.17)` over a 20px blur in light mode, `rgba(255, 255, 255, 0.07)` in dark mode |
+| Edge | 0.5px dark outline, a strong 1px bright rim along the top and bottom with a soft glow that fades over about 12px, no rim on the sides |
+| Shadow | None |
+| Icons | 36px in 9px gaps |
+| Separator | 35% white |
+| Running dot | 4px, 3px above the platter's bottom edge |
 
 | Class | Role |
 |---|---|

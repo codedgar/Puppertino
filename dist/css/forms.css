@@ -532,7 +532,7 @@ textarea.p-form-text {
    ═════════════════════════════════════════════════════════════════════ */
 
 /* The switch's gel-morph progress. Registered so it can transition;
-   browsers without @property simply skip it and the switch falls back
+   browsers without @property skip it and the switch falls back
    to the plain slide. */
 @property --p-gel {
   syntax: "<number>";
@@ -548,8 +548,8 @@ textarea.p-form-text {
   --p-field-placeholder: #BFBFBF;
   --p-field-ring: rgba(0, 0, 0, 0.08);
   --p-field-ring-disabled: rgba(0, 0, 0, 0.04);
-  /* Legacy macOS 26 focus pair. v2 controls now use --p-focus-ring; these
-     stay for the iOS touch fields and anything reading them directly. */
+  /* Legacy macOS 26 focus pair. v2 controls use --p-focus-ring; these
+     remain for the iOS touch fields and anything reading them directly. */
   --p-field-ring-focus: rgba(0, 122, 255, 0.15);
   --p-field-ring-focus-outer: rgba(0, 122, 255, 0.25);
 
@@ -576,7 +576,7 @@ textarea.p-form-text {
   --p-form-group-separator: rgba(0, 0, 0, 0.05);
 
   /* Toggles, checkboxes, radios.
-     NOTE: --p-control-accent is deliberately NOT defined here. A var()
+     NOTE: --p-control-accent is NOT defined here. A var()
      inside a custom property resolves where the property is defined, so
      a :root definition would freeze the accent to blue before any
      .p-sys-* class on the control could publish --p-color-current. Each
@@ -598,7 +598,7 @@ textarea.p-form-text {
   --p-check-inactive-ink-disabled: rgba(0, 0, 0, 0.22);
   /* iOS off-track: the tertiary label color, not a fill token. */
   --p-switch-touch-off: rgba(60, 60, 67, 0.30);
-  /* iOS field fill, built on #767680 rather than pure black. */
+  /* iOS field fill, built on #767680. */
   --p-field-touch-fill: rgba(118, 118, 128, 0.12);
   /* iOS 27 field rows: the tertiary label placeholder, the grouped card
      and its row separator (plus-darker #E6E6E6 on white). */
@@ -725,7 +725,7 @@ textarea.p-form-text {
   --p-check-inactive-ink: rgba(0, 0, 0, 0.7);
   --p-check-inactive-ink-disabled: rgba(0, 0, 0, 0.22);
   --p-switch-touch-off: rgba(60, 60, 67, 0.30);
-  /* iOS field fill, built on #767680 rather than pure black. */
+  /* iOS field fill, built on #767680. */
   --p-field-touch-fill: rgba(118, 118, 128, 0.12);
   --p-field-touch-placeholder: rgba(60, 60, 67, 0.30);
   --p-field-touch-text: #000000;
@@ -1039,8 +1039,7 @@ textarea.p-field {
 /* ─── Select (popup button) ────────────────────────────────────────── */
 /* The 24px pop-up button. macOS 27 draws every pop-up as a flat gray
    body (8% black, 16% pressed, 4% disabled), including the ones in
-   dialogs and forms, so .p-select now matches .p-popup instead of the
-   white, ringed text-field box it used under macOS 26. The chevrons
+   dialogs and forms, so .p-select now matches .p-popup. The chevrons
    render in text color at the right edge, no accent capsule.
    Markup: <div class="p-select"><select>…</select></div> */
 
@@ -1159,7 +1158,7 @@ textarea.p-field {
    macOS 27 draws the stepper as two flat gray halves (8% black, 16%
    pressed, 4% disabled) with no ring of its own. Add
    .p-stepper-field-inset to sink the stepper into the field's right
-   end instead of sitting 4px beside it. */
+   end. Without it the stepper sits 4px beside the field. */
 
 .p-stepper-field {
   display: inline-flex;
@@ -1193,7 +1192,7 @@ textarea.p-field {
   border-radius: 0 var(--p-field-radius, 6px) var(--p-field-radius, 6px) 0;
 }
 
-/* Focus on either half rings the whole field, not the inset stepper. */
+/* Focus on either half rings the whole field. */
 .p-stepper-field-inset > .p-stepper:has(> button:focus-visible) {
   box-shadow: none;
 }
@@ -1334,9 +1333,9 @@ textarea.p-field {
 /* ─── Search field ─────────────────────────────────────────────────── */
 /* Capsule search input in five sizes. macOS 27 draws the same 0.08
    ring whether the field is empty or filled (macOS 26 used a quieter
-   0.04 ring when empty; --p-search-ring-empty now matches the field
+   0.04 ring when empty; --p-search-ring-empty matches the field
    ring). The placeholder is darker than a text field's because it
-   doubles as the label, and the clear button only exists while there
+   doubles as the label. The clear button only exists while there
    is something to clear. Focus keeps the focus band. Markup:
    <div class="p-search"><input type="search" placeholder="Search"></div> */
 
@@ -1409,7 +1408,7 @@ textarea.p-field {
 }
 
 /* Clear button: restyled WebKit cancel button (xmark.circle.fill).
-   Engines without it simply show no clear affordance. */
+   Engines without it show no clear affordance. */
 .p-search > input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   width: var(--p-search-icon);
@@ -1590,7 +1589,7 @@ textarea.p-field {
   --p-popup-pad: 18px;
 }
 
-/* Circular, chevron only: a 24px circle holding just the up-down
+/* Circular, chevron only: a 24px circle holding only the up-down
    chevron, for a pop-up whose value shows elsewhere. The select keeps
    its options and value; only the label is hidden. Give it an
    aria-label. <div class="p-popup p-popup-circular"><select aria-label="…"> */
@@ -1820,9 +1819,9 @@ textarea.p-field {
 }
 
 /* ─── Grouped form ─────────────────────────────────────────────────── */
-/* The macOS 27 settings form: a rounded 12px box at 3% fill holding
-   42px rows, each inset 10px from the box edge and split by a 1px
-   separator at 5%. The label sits left; everything after it is pushed
+/* The macOS 27 settings form is a rounded 12px box at 3% fill holding
+   42px rows. Each row is inset 10px from the box edge and split by a
+   1px separator at 5%. The label sits left. Everything after it is pushed
    to the trailing edge. Markup:
 
    <div class="p-form-group">
@@ -1969,11 +1968,11 @@ button.p-form-row-more:focus-visible {
   -webkit-user-select: none;
 
   /* Color utility classes (.p-sys-*) paint a swatch background. On a
-     control wrapper we only want the published --p-color-current, so
+     control wrapper only the published --p-color-current is wanted, so
      cancel the paint. Works because forms.css loads after colors.css. */
   background: transparent;
 
-  /* Resolved here, where .p-sys-* classes land, so tints actually work. */
+  /* Resolved here, where .p-sys-* classes land, so tints work. */
   --p-control-accent: var(--p-color-current, #0088FF);
 }
 
@@ -2112,8 +2111,8 @@ button.p-form-row-more:focus-visible {
 
 /* ─── Inactive window ──────────────────────────────────────────────── */
 /* When the window loses focus, a checked checkbox or radio drops the
-   accent: light mode fills the box with black 14% and draws the glyph in
-   black 70%; dark mode uses a white 10% box with a white glyph. Unchecked
+   accent. Light mode fills the box with black 14% and draws the glyph in
+   black 70%. Dark mode uses a white 10% box with a white glyph. Unchecked
    boxes look the same as in an active window. Wrap the window in
    .p-window-inactive or set data-window-state="inactive" on an ancestor. */
 :is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-checkbox, .p-radio) > input:checked + span {
@@ -2165,7 +2164,7 @@ button.p-form-row-more:focus-visible {
      54×24 → 32×20 → 52×33, 7px     64×28 → 38×24 → 61×39, 7.5px
      80×36 → 47×30 → 75×48, 10px
    About 1.65× the knob, but not uniformly, so each size carries the
-   lens box as tokens rather than a scale factor. */
+   lens box as tokens. */
 
 :root {
   /* Off track: black 85% at 10% group opacity. */
@@ -2255,8 +2254,8 @@ button.p-form-row-more:focus-visible {
   --p-switch-lens-x1: calc(
     var(--p-switch-track-w) + var(--p-switch-lens-overhang) - var(--p-switch-lens-w)
   );
-  /* Lens top edge to track top edge. The refraction band (darker, just
-     inside the glass where the track begins) sits here. */
+  /* Lens top edge to track top edge. The refraction band (darker, at the
+     inside edge of the glass where the track begins) sits here. */
   --p-switch-lens-rise: calc((var(--p-switch-lens-h) - var(--p-switch-track-h)) / 2);
 }
 
@@ -2334,7 +2333,7 @@ button.p-form-row-more:focus-visible {
   content: "";
   position: absolute;
   /* Top and bottom anchored, so the knob stays centered at any inset.
-     The shadow is the macOS 27 knob shadow: one very soft drop. */
+     The shadow is the macOS 27 knob shadow: one soft drop. */
   top: var(--p-switch-knob-inset);
   bottom: var(--p-switch-knob-inset);
   left: var(--p-switch-knob-inset);
@@ -2404,12 +2403,12 @@ button.p-form-row-more:focus-visible {
 /* ─── The lens morph on click ──────────────────────────────────────── */
 /* The animation contract: grow, travel while grown, shrink into place —
    on a plain click, no holding required. One registered custom property
-   --p-gel transitions 0↔1 on toggle. Position is linear in it; the lens
-   amount is a plateau, max(0, min(1, gel×5, (1−gel)×3)): fully grown by
-   20% of the timeline, held grown through the travel, shrunk over the
-   last third. Releasing a held switch joins the same curve, so a hold
-   keeps the lens up, travels, then sets it down. Transitions never run
-   at initial style, so pre-checked switches do not flash on page load.
+   --p-gel transitions 0↔1 on toggle. Position is linear in it. The lens
+   amount is a plateau, max(0, min(1, gel×5, (1−gel)×3)). It is fully
+   grown by 20% of the timeline, held grown through the travel, and
+   shrunk over the last third. Releasing a held switch joins the same curve,
+   so a hold keeps the lens up, travels, then sets it down. Transitions never
+   run at initial style, so pre-checked switches do not flash on page load.
    Browsers without modern CSS math keep the plain slide above. */
 
 @supports (width: calc(21px + sin(90deg) * 9px)) {
@@ -2484,16 +2483,16 @@ button.p-form-row-more:focus-visible {
 /* ─── Switch, touch size ───────────────────────────────────────────── */
 /* iOS 27 runs a larger switch than macOS: a 64x28 track with a 38x24
    knob inset 2px, so the knob travels 22px. Pressed, the knob becomes
-   the same clear lens as macOS 27 at iOS proportions: 60x40, centered
-   on the knob, so it overhangs the track end by 9px. Only the tokens
-   change; the morph, the states, and the focus ring are shared with
-   the default size. Unlike macOS the track does not darken while held,
-   and disabled fades the whole control to 50%. The whole control
-   clears 44px through the hit area below. */
+   the same clear lens as macOS 27 at iOS proportions. The lens is
+   60x40 and centered on the knob, so it overhangs the track end by 9px. Only
+   the tokens change; the morph, the states, and the focus ring are shared
+   with the default size. The macOS track darkens while held. This one does not,
+   and disabled fades the whole control to 50%. The whole control clears 44px
+   through the hit area below. */
 
-/* The lens rim lines pick up the track color: a pale tint of it in
-   light mode, a stronger one in dark (--p-switch-touch-glint-tint is
-   the track's share). */
+/* The lens rim lines pick up the track color. Light mode uses a
+   pale tint of it and dark mode a stronger one (--p-switch-touch-glint-tint
+   is the track's share). */
 :root {
   --p-switch-touch-lens-rim: rgba(0, 0, 0, 0.2);
   --p-switch-touch-lens-glint: rgba(255, 255, 255, 0.95);
@@ -2550,8 +2549,7 @@ button.p-form-row-more:focus-visible {
   --p-control-accent: var(--p-sys-green);
 }
 
-/* Off state fill. iOS uses the tertiary label color rather than a fill
-   token, which reads slightly darker than the macOS switch track. */
+/* Off state fill. iOS uses the tertiary label color, which reads slightly darker than the macOS switch track. */
 .p-switch-touch > input + span {
   background: var(--p-switch-touch-off);
 }
@@ -2577,16 +2575,15 @@ button.p-form-row-more:focus-visible {
 /* A bar when on, a ring when off, so the state does not rest on color
    alone. Opt in with .p-switch-labels.
 
-   Deliberately not tied to prefers-contrast: on iOS that flag is
-   Increase Contrast, while the glyphs are a separate setting (On/Off
-   Labels). Drawing them for everyone who raised contrast changes a
-   control they did not ask to change, and the knob position already
-   carries the state without color.
+   Not tied to prefers-contrast: on iOS that flag is Increase Contrast,
+   while the glyphs are a separate setting (On/Off Labels). Drawing
+   them for everyone who raised contrast changes a control they did not
+   ask to change. The knob position already carries the state without
+   color.
 
    The glyph sits in the strip the knob is not covering, which is
    exactly inset + travel wide, and is centered in it. Deriving the
-   position keeps the glyph centered at any track size rather than
-   only at the one it was measured on. Geometry is declared once and
+   position keeps the glyph centered at any track size. Geometry is declared once and
    switched on with content, which is inert until then. */
 
 .p-switch > input + span::before {
@@ -2633,7 +2630,7 @@ button.p-form-row-more:focus-visible {
    finger; release and it settles. Without the script the CSS morph
    above still runs, so nothing here is required.
 
-   The default is the liquid lens: the knockout cuts the track out
+   The default is the liquid lens. The knockout cuts the track out
    under the glass and the lens redraws the track, magnified, through
    an SVG alpha threshold. That would erase a translucent fill, so the
    liquid copy uses an opaque equivalent of the off track. The real
@@ -2687,7 +2684,7 @@ button.p-form-row-more:focus-visible {
 
 .p-switch.p-switch-liquid > input + span {
   --p-gel: 0;
-  /* The color follows the knob, not the checkbox: it stays off until the
+  /* The color follows the knob position, so it stays off until the
      knob is 85% of the way across, then snaps and fades over 175ms.
      Clamped so the spring's undershoot and overshoot cannot step it. */
   --p-switch-lit: clamp(0, round(down, var(--p-gel), 0.85) / 0.85, 1);
@@ -2799,9 +2796,9 @@ button.p-form-row-more:focus-visible {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
-/* The clear lens is sized, not scaled, so its hairline stays 0.5px:
-   it blends from the knob box to the lens box (see the size tokens) by
-   the lift, and from the off to the on position by --p-gel. */
+/* The clear lens is sized, not scaled, so its hairline stays 0.5px.
+   It blends from the knob box to the lens box (see the size tokens) by
+   the lift. It blends from the off to the on position by --p-gel. */
 .p-switch-liquid .p-lens-clear {
   --p-switch-knob-x: calc(var(--p-switch-knob-inset) + var(--p-switch-travel) * var(--p-gel));
   --p-switch-lens-x: calc(
@@ -2841,7 +2838,7 @@ button.p-form-row-more:focus-visible {
 }
 
 /* The cast shadow: a 1px ring 1.5px inside the glass, blurred and
-   dropped 7px, as the reference draws it. (The CSS-only morph above
+   dropped 7px, as the native macOS 27 switch draws it. (The CSS-only morph above
    approximates it with a box-shadow.) */
 .p-switch-liquid .p-lens-clear .p-lens-rim::before {
   content: "";
@@ -2863,8 +2860,8 @@ button.p-form-row-more:focus-visible {
   transition: box-shadow 0.175s ease-out;
 }
 
-/* The track as seen through the glass: a band that thins while lifted,
-   magnified by the lens scale, and shifted so its rounded end sits in
+/* The track as seen through the glass: a band that thins while lifted. It is
+   magnified by the lens scale and shifted so its rounded end sits in
    the glass on either side. */
 .p-switch-liquid .p-lens-track {
   --p-u: calc(var(--p-switch-track-h) / 12);
@@ -3022,13 +3019,13 @@ button.p-form-row-more:focus-visible {
 }
 
 /* ─── Stepper, touch size (iOS) ────────────────────────────────────── */
-/* iOS lays the stepper out horizontally rather than stacking it: a
-   92x32 capsule split into two 46px halves by a 1x24 divider, with
-   minus and plus rather than chevrons. It carries no value of its own,
+/* iOS lays the stepper out horizontally. It is
+   a 92x32 capsule split into two 46px halves by a 1x24 divider, with
+   minus and plus glyphs. It carries no value of its own,
    so pair it with a narrow .p-field-touch the way .p-stepper-field
    already does for the pointer size. iOS 27 rests it on the standard
-   iOS gray fill (#767680 at 12%, 24% dark), the same value as
-   --p-field-touch-fill and --p-button-touch-gray; a held half takes
+   iOS gray fill (#767680 at 12%, 24% dark). That is the same value as
+   --p-field-touch-fill and --p-button-touch-gray. A held half takes
    black 8% on top. */
 
 :root {
@@ -3114,8 +3111,7 @@ button.p-form-row-more:focus-visible {
   box-shadow: 0 0 0 4px var(--p-field-ring-focus-outer);
 }
 
-/* Paired value field. iOS shows the number beside the control, not
-   inside it, and the field only has to hold a few digits. */
+/* Paired value field. iOS shows the number beside the control, and the field only has to hold a few digits. */
 .p-stepper-field-touch {
   gap: 12px;
 }
@@ -3126,9 +3122,9 @@ button.p-form-row-more:focus-visible {
 }
 
 /* ─── Pop-up button, touch size (iOS) ──────────────────────────────── */
-/* The iOS pop-up button: no fill and no border, just the current value
-   in the accent color at 17px Semibold, followed ~5px later by an
-   up-and-down chevron in the same color. Disabled, both turn the
+/* The iOS pop-up button has no fill and no border. It shows only the
+   current value in the accent color at 17px Semibold, followed ~5px
+   later by an up-and-down chevron in the same color. Disabled, both turn the
    tertiary label color. It wraps a real <select>, so a tap opens the
    platform picker. Use it inline, in a toolbar or a list row's trailing
    edge; .p-select-touch stays the filled form field.

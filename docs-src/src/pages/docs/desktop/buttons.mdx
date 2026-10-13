@@ -16,7 +16,7 @@ Puppertino ships six push button styles in four sizes. Pick the style that match
 
 Use a button for direct actions. Save, Delete, Continue, Cancel. Anything where pressing the control causes a discrete change.
 
-Use a link for navigation. If pressing the control takes the person to a different page or section, that is a link, not a button.
+Use a link for navigation. If pressing the control takes the person to a different page or section, that is a link.
 
 Avoid stacking more than one filled `.p-button-primary` in the same view. Apple's rule: one prominent action per screen. Multiple primary buttons compete for attention and weaken both.
 
@@ -138,7 +138,7 @@ Add `.p-button-icon-only` for a round button that holds a single glyph. It is a 
 | Large | `.p-button-large` | 28px | 13px |
 | Extra large | `.p-button-xlarge` | 36px | 13px |
 
-Icon-only buttons follow the same size ladder as segmented controls and pop-up buttons, so small is 20px here rather than 19px and large is 28px rather than 32px. The fill sits at 10% black at rest, 19% pressed, and 5% disabled. In dark mode the same percentages apply in white.
+Icon-only buttons follow the same size ladder as segmented controls and pop-up buttons, so small is 20px here and large is 28px. The fill sits at 10% black at rest, 19% pressed, and 5% disabled. In dark mode the same percentages apply in white.
 
 Always give an icon-only button an `aria-label`. Without one, screen readers have nothing to announce.
 
@@ -168,7 +168,7 @@ Every state derives from the button's current color, so a retinted button retint
 
 Borderless has no fill in any state; see [Borderless](#borderless).
 
-In dark mode the gray fills use white instead of black (7% at rest, 16% pressed), and a pressed filled button gets slightly lighter rather than darker. That matches how macOS lights controls on a dark background.
+In dark mode the gray fills use white (7% at rest, 16% pressed), and a pressed filled button gets slightly lighter. That matches how macOS lights controls on a dark background.
 
 A disabled filled button keeps its color, faded. It no longer drops to gray, so a disabled Save still reads as the primary action waiting for input.
 
@@ -190,7 +190,7 @@ On an opaque background the label is the control accent, `#0088FF` (`#0091FF` in
 
 ## Vibrant
 
-Buttons that sit on a material (a menu, a popover, an alert) blend with the glass behind them instead of painting flat color on top. Add `.p-vibrant` to the element that paints the material and every button inside switches to the vibrant recipe. The desktop alert (`.p-desktop-modal`), `.p-popover` and `.p-menu` are vibrant already, with no extra class.
+Buttons that sit on a material (a menu, a popover, an alert) blend with the glass behind them. Add `.p-vibrant` to the element that paints the material and every button inside switches to the vibrant recipe. The desktop alert (`.p-desktop-modal`), `.p-popover` and `.p-menu` are vibrant already, with no extra class.
 
 <Showcase
   name="buttons-vibrant"

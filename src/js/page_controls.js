@@ -1,9 +1,9 @@
 /**
  * Puppertino v2 — page controls.
  *
- * Two jobs. It keeps the current dot in step with a scrolling pager,
- * and it shrinks the dots nearest the ends of a long set the way iOS
- * does, which is the one part of the control that cannot be CSS.
+ * Two jobs. It keeps the current dot in step with a scrolling pager.
+ * It also shrinks the dots nearest the ends of a long set the way iOS
+ * does. That is the one part of the control that cannot be CSS.
  *
  * Link a control to its pager with data-p-pages:
  *

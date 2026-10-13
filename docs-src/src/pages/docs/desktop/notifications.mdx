@@ -36,9 +36,21 @@ Use a notification for events that happen while attention is elsewhere, like a f
 
 ## Anatomy
 
-The banner is 344px wide with a 20px radius, and its height follows the content: 56px with one body line, 72px with two, and 77px with an attachment. The surface is `rgba(245, 245, 245, 0.67)` over a 20px blur with 180% saturation. The edge is glass: a dark 0.5px hairline outside the shape (slightly heavier on the sides) and a bright rim along the top and bottom only, with no rim on the sides. The shadow is the shared overlay shadow, `0 8px 48px` at 25%.
+The banner is a glass surface whose height follows its content.
 
-Padding is 12px vertical and 14px on each side. The 32px icon is vertically centered, with a 12px gap to the text column. The title is 13px bold at `rgba(0, 0, 0, 0.85)` with a 16px line height. Body copy is 13px regular at the same color, clamped to two lines. The timestamp is 11px in `#BFBFBF`, aligned with the title at the trailing edge.
+| Part | Value |
+|---|---|
+| Width | 344px |
+| Radius | 20px |
+| Height | 56px with one body line, 72px with two, 77px with an attachment |
+| Surface | `rgba(245, 245, 245, 0.67)` over a 20px blur with 180% saturation |
+| Edge | A dark 0.5px hairline outside the shape, slightly heavier on the sides, and a bright rim along the top and bottom only |
+| Shadow | The shared overlay shadow, `0 8px 48px` at 25% |
+| Padding | 12px vertical, 14px on each side |
+| Icon | 32px, vertically centered, 12px gap to the text column |
+| Title | 13px bold at `rgba(0, 0, 0, 0.85)`, 16px line height |
+| Body | 13px regular at the same color, clamped to two lines |
+| Timestamp | 11px in `#BFBFBF`, aligned with the title at the trailing edge |
 
 | Class | Role |
 |---|---|

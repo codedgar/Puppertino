@@ -5,14 +5,16 @@
  * grabber between detents, and swiping down to dismiss. Opening and
  * closing still belong to modals.js; this only handles the drag.
  *
- * Detents come from data-p-detents on the sheet, as a comma-separated
- * list of viewport percentages, largest last:
+ * Detents come from data-p-detents on the bottom sheet. The value is a
+ * comma-separated list of viewport percentages, largest last.
+ * Example:
  *
  *   <div class="p-modal p-bottom-sheet" data-p-detents="50,92">
  *
- * Without the attribute the sheet uses whatever height the CSS gives
- * it and only swipe-to-dismiss applies. Dragging below the smallest
- * detent by more than a third closes the sheet. No dependencies.
+ * Without the attribute the bottom sheet uses whatever height the CSS
+ * gives it and only swipe-to-dismiss applies. Dragging below the
+ * smallest detent by more than a third closes the bottom sheet. No
+ * dependencies.
  */
 (function () {
   'use strict';
@@ -104,7 +106,7 @@
     var next = drag.startHeight - delta;
     var max = drag.list ? heightFor(drag.list[drag.list.length - 1]) : drag.startHeight;
     if (next > max) {
-      /* Past the tallest detent, resist rather than stretch. */
+      /* Past the tallest detent, move at 15% of the drag. */
       next = max + (next - max) * 0.15;
     }
     drag.sheet.style.height = Math.max(next, 0) + 'px';
@@ -138,7 +140,7 @@
   });
 
   /* Detents are a percentage of the viewport, so a rotation or a
-     resize has to re-settle the sheet onto the nearest one. */
+     resize has to re-settle the bottom sheet onto the nearest one. */
   window.addEventListener('resize', function () {
     var sheets = document.querySelectorAll('.p-bottom-sheet.active[style*="height"]');
     for (var i = 0; i < sheets.length; i++) {

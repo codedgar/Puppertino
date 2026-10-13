@@ -192,7 +192,7 @@
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-tab-bar (iOS 27)
    The iOS tab bar. A floating glass capsule that sits above the bottom
-   edge rather than filling it, holding two to five top-level sections.
+   edge, holding two to five top-level sections.
 
    Sizing follows one rule that reproduces every reference width: each
    tab is an 84px cell inside 10px of padding, and the bar hugs them.
@@ -200,16 +200,17 @@
    360px maximum instead, so four land at 85px each and five shrink to
    68px.
 
-   The selected tab sits on a pill: 54px tall, inset 4px, 6px wider than
-   its cell on each side (96px at two tabs, 80px at five). Apple draws
-   the pill as a darkening of whatever glass is under it (#EDEDED
-   plus-darker, 18 levels down in light mode; #121212 plus-lighter, 18
-   up in dark) and the selected icon and label as the accent over a
-   half-white (half-black in dark) wash, blended the same way.
+   The selected tab sits on a pill: 54px tall, inset 4px. It is 6px
+   wider than its cell on each side (96px at two tabs, 80px at five). Apple
+   draws the pill as a darkening of whatever glass is under it. In light
+   mode that is #EDEDED plus-darker, 18 levels down. In dark mode it is
+   #121212 plus-lighter, 18 up. The selected icon and label are the
+   accent over a half-white (half-black in dark) wash, blended the same
+   way.
 
-   CSS can't do either blend here: the bar's backdrop-filter makes it
+   CSS can't do either blend here. The bar's backdrop-filter makes it
    an isolated group, so anything inside it blends with the bar's own
-   translucent tint rather than with the page behind. So both are
+   translucent tint only. So both are
    resolved to plain colours that give Apple's result over typical
    glass: a 7.5% black (or 8.5% white) pill, and the accent 5% darker
    (10% lighter in dark), #0081F2 / #1A9CFF for the default accent.
@@ -357,8 +358,8 @@
   transition: color 0.2s ease-out, opacity 0.1s ease-out;
 }
 
-/* Apple's glyph is SF Symbols at 18pt, which draws about 22px tall;
-   an icon font fills its em box, so it is set at 22px to match. */
+/* Apple's glyph is SF Symbols at 18pt, which draws about 22px tall.
+   An icon font fills its em box, so it is set at 22px to match. */
 .p-tab-bar__tab > i,
 .p-tab-bar__tab > svg {
   flex-shrink: 0;
@@ -397,7 +398,7 @@
   letter-spacing: -0.1px;
 }
 
-/* The selected pill: 54px tall with 4px above and below, reaching 6px
+/* The selected pill: 54px tall with 4px above and below. It reaches 6px
    past the cell on each side, so the first and last pills sit 4px in
    from the bar's ends. */
 .p-tab-bar__tab[aria-current]::before,
@@ -424,8 +425,8 @@
 /* ─── Trailing circle: search or an accessory ──────────────────────── */
 /* .p-tab-bar-group holds a bar and one 62px glass circle, 8px apart and
    360px across, with the circle pinned to the right end. The bar
-   widens its tabs to use the room: one tab makes a 128px bar, two
-   244px, and three or four fill the 290px left beside the circle. */
+   widens its tabs to use the room. One tab makes a 128px bar and two
+   make 244px. Three or four fill the 290px left beside the circle. */
 
 .p-tab-bar-group {
   box-sizing: border-box;
@@ -571,10 +572,10 @@
 }
 
 /* ─── iPadOS top tab bar ───────────────────────────────────────────── */
-/* 44px tall, text tabs at 15px/510 on a 75px minimum cell, a 74 x 36
-   pill inset 4px, and optional 54px glyph buttons at either end, such
-   as the sidebar toggle and search (491px with five tabs). It sits centred in
-   the window's toolbar row rather than floating at the bottom. */
+/* 44px tall, text tabs at 15px/510 on a 75px minimum cell, and a
+   74 x 36 pill inset 4px. Optional 54px glyph buttons sit at either
+   end, such as the sidebar toggle and search (491px with five tabs).
+   It sits centred in the window's toolbar row. */
 
 .p-tab-bar.p-tab-bar-top {
   --p-tab-bar-height: 44px;

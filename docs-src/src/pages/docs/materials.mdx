@@ -76,7 +76,7 @@ The `p-material` class on its own applies the blur and saturation without settin
 
 ## Chrome
 
-Chrome is the material for bars that sit on a window edge: title bars, toolbars, and the band at the top of a scroll view. It is nearly opaque and barely blurred, so content that scrolls under it fades rather than smears. A single hairline separates it from the content.
+Chrome is the material for bars that sit on a window edge: title bars, toolbars, and the band at the top of a scroll view. It is nearly opaque and barely blurred, so content that scrolls under it fades. A single hairline separates it from the content.
 
 | Token | Light | Dark |
 |---|---|---|
@@ -96,7 +96,7 @@ The `.p-material-chrome` class sets the fill and blur. Draw the separator yourse
 
 ### Touch chrome
 
-iOS bars use a different dark chrome. It darkens the content with black instead of laying a dark gray over it, and its hairline is black, not white. Light mode is the same as macOS. Use `.p-material-chrome-touch` for touch nav bars, toolbars, and scroll edges.
+iOS bars use a different dark chrome. It darkens the content with black, and its hairline is black. Light mode is the same as macOS. Use `.p-material-chrome-touch` for touch nav bars, toolbars, and scroll edges.
 
 | Token | Light | Dark |
 |---|---|---|
@@ -119,7 +119,7 @@ Three preset glass surfaces sized for common UI elements.
 | `.p-glass-md` | `rgba(245,245,245,0.72)` | `rgba(26,26,26,0.96)` | `--p-shadow-alert` |
 | `.p-glass-lg` | `rgba(245,245,245,0.72)` | `rgba(26,26,26,0.96)` | `--p-shadow-alert` |
 
-Small glass lifts a mid-gray backdrop and dims white a little, so a pill reads on both: over `#666` it lands at `#B3`, over white at `#F8`. Medium and large glass share one recipe, lighter than small glass (`#CD` over `#666`). In dark mode the two sizes split further. Small glass is nearly clear: it pulls whatever sits behind it 17% toward `#999`. Medium and large glass is close to opaque `#1A`, so a card reads as a solid dark layer over any content.
+Small glass stays readable over light and dark content. In dark mode it is nearly clear, while medium and large glass are close to opaque.
 
 On iOS, glass cards (sheets, alerts, popovers) cast `--p-shadow-overlay`, which sits 8px below the card. macOS cards use `--p-shadow-alert`, 18px below.
 
@@ -149,7 +149,7 @@ With increased contrast on, the keyline becomes a solid 1px line at 45%.
 
 ## Liquid Glass
 
-Liquid Glass is the material Apple introduced across its platforms in 2025. It bends the content behind it the way a real lens does, instead of only blurring it. The web has no native version, so there are two ways to approximate it: faux Liquid Glass and real-time Liquid Glass. Puppertino ships both. Switch knobs and slider thumbs get the faux lens below, and bars, buttons, and panels get [Puppertino Glass](#puppertino-glass), which refracts the real page.
+Liquid Glass is the material Apple introduced across its platforms in 2025. It bends the content behind it the way a real lens does. The web has no native version, so there are two ways to approximate it: faux Liquid Glass and real-time Liquid Glass. Puppertino ships both. Switch knobs and slider thumbs get the faux lens below, and bars, buttons, and panels get [Puppertino Glass](#puppertino-glass), which refracts the real page.
 
 <Showcase
   name="materials-liquid-glass"
@@ -215,9 +215,9 @@ Without the script, switches keep their CSS lens morph and sliders keep a solid 
 
 ### Real-time Liquid Glass
 
-Real-time Liquid Glass refracts whatever is actually behind the element: text, photos, video, other controls. It is what Apple renders on toolbars, tab bars, and sheets. Every version of it on the web runs on a displacement map, an image whose red and green channels say how far to shift each pixel horizontally and vertically. Built from a rounded-rectangle distance field and Snell's law, it bends content inward at the edges like a convex lens. The derivation is in `specs/liquid-glass.md`.
+Real-time Liquid Glass refracts whatever is actually behind the element: text, photos, video, other controls. It is what Apple renders on toolbars, tab bars, and sheets.
 
-What differs is where that map gets applied, and that decides which browsers keep the effect.
+Every web version bends the page with a displacement map. What differs is where the map gets applied, and that decides which browsers keep the effect.
 
 | Approach | How it works | Support |
 |---|---|---|
@@ -240,7 +240,7 @@ The faux lens Puppertino ships steps aside whenever it would get in the way.
 
 ## Puppertino Glass
 
-Puppertino Glass refracts the real page behind a surface. Content bends at the rim like it would through a lens, frosts under the middle, and keeps moving as the page scrolls. It is Apple's Liquid Glass for bars, buttons, and panels, in Safari, Chrome, Firefox, and Edge.
+Puppertino Glass refracts the real page behind a surface and keeps up as the page scrolls. It is Apple's Liquid Glass for bars, buttons, and panels, in Safari, Chrome, Firefox, and Edge.
 
 <Showcase
   name="materials-puppertino-glass"
@@ -277,7 +277,7 @@ Drag the pill across the photo. The dog's outline bends at the pill's rim, and t
 
 Use Puppertino Glass for the chrome that floats over content: tab bars, toolbars, floating buttons, and media controls. Apple reserves Liquid Glass for this navigation layer. Content itself stays on solid backgrounds, so the glass reads as a separate plane.
 
-Avoid stacking glass on glass. Each surface refracts a snapshot of the page taken without any glass in it, so glass inside glass shows the page, not the outer pane. Apple forbids it for the same reason.
+Avoid stacking glass on glass. Each surface refracts a snapshot of the page taken without any glass in it, so glass inside glass shows only the page. Apple forbids it for the same reason.
 
 For surfaces that should blur without bending, like sheets and sidebars, consider a [thickness level](#thickness-levels) instead. It costs no script and no snapshot.
 
@@ -301,15 +301,14 @@ Two variants, after Apple's.
 
 Regular is the default. Its frost and tint keep labels readable over busy content. Clear is barely tinted and looks the same in light and dark, so it lets the color of the backdrop through. It's frosted, not crisp: Apple's Clear blurs more than Regular. White icons on it still need a dim photo or video behind them, which Apple calls a dimming layer. Avoid Clear over text or light backgrounds. Nothing guarantees contrast there.
 
-The values come from measuring Apple's own glass (`NSGlassEffectView` on macOS 26) over black, white, text, stripes, and a photo, and matching Puppertino to it. Two things behave as Apple's do:
+Two things to know about the variants:
 
-- **Frost comes before the bend.** The blur is applied to the page first and the lens bends the blurred result, so the rim stays a crisp, compressed sliver of what's behind the glass instead of being smeared flat. Regular frost grows with size: a 50px button blurs about 4px, and a 160px panel about 8px. Clear frosts about 10px at any size.
-- **Small and large glass tint differently.** Apple's small glass (buttons, tab bars, nav circles) is lighter than its cards in light mode and nearly clear in dark mode, where cards are close to opaque. The script marks each surface `data-p-glass-size="small"` or `"large"` by the same 64px rule, and the CSS picks `--p-glass-tint` or `--p-glass-tint-large`.
+- **Small and large glass tint differently.** Small glass (buttons, tab bars, nav circles) is lighter than cards in light mode and nearly clear in dark mode. The script marks each surface `data-p-glass-size="small"` or `"large"` by the 64px rule, and the CSS picks `--p-glass-tint` or `--p-glass-tint-large`.
 - **Small glass adapts.** A Regular surface 64px or less across, like a button or a tab bar, turns into dark glass over dark content and light glass over light content, whatever the page's appearance. The script sets `data-p-theme` on the surface, so its labels flip with it. Larger surfaces keep the page's appearance. Apple does the same, because a whole panel flipping would be distracting. Set `--p-glass-adaptive: 0` on a surface to keep it fixed, or give it your own `data-p-theme`.
 
-The bend follows the edge. Near the rim, content shifts straight toward the centre, at right angles to the nearest edge, so straight lines behind the glass stay straight until they reach the rim. It stops growing past 48px because Apple's does: a 50pt button and a 74pt bar both shift content by a similar amount at the rim. The middle of the pane isn't bent or magnified at all.
+Content bends only near the rim. The middle of the pane is flat.
 
-The tab bar is Regular glass. It starts from its own surface, `--p-tab-bar-surface`, rather than `--p-glass-md`.
+The tab bar is Regular glass. It starts from its own surface, `--p-tab-bar-surface`.
 
 ### Anatomy
 
@@ -317,7 +316,7 @@ Glass is four layers, bottom to top.
 
 | Layer | What draws it |
 |---|---|
-| Frost and refraction | A WebGL canvas under the surface. It blurs a snapshot of the page, then bends it inside a band around the rim, toward the centre, so the edge shows a compressed sliver of what's behind the glass. The middle is left flat. |
+| Frost and refraction | A WebGL canvas under the surface. It blurs the page behind the glass and bends it near the rim. The middle is flat. |
 | Smoothing | The surface's `::before` layer, a light `backdrop-filter` blur over the canvas. |
 | Tint | The same layer's background: `--p-glass-tint` on small surfaces, `--p-glass-tint-large` on larger ones. |
 | Edge | The same layer's shadows, `--p-glass-rim`: a dark 0.5px keyline outside, and an equally bright 1px rim inside the top and the bottom. |
@@ -342,7 +341,7 @@ Your content sits above all four. Every value is a custom property, so a surface
 | `--p-glass-surface` | `--p-glass-md` | The plain material shown before and instead of glass |
 | `--p-glass-z` | `1` | The layer every surface shares. See Limits. |
 
-Bends are relative to the surface up to 48px, so a 44px button bends a little less than a 62px tab bar, and anything bigger bends like the tab bar. The glass inherits the surface's `border-radius`, so set one. A capsule is `border-radius: 999px`.
+The glass inherits the surface's `border-radius`, so set one. A capsule is `border-radius: 999px`.
 
 ### How to use it
 
@@ -354,7 +353,7 @@ Load a capture engine, [Glassworks](https://github.com/codedgar/glassworks), and
 <script src="src/js/glass.js"></script>
 ```
 
-With a bundler, install Glassworks 2 and a capture engine, then hand the library over instead of relying on globals.
+With a bundler, install Glassworks 2 and a capture engine, then hand the library over explicitly, with no globals.
 
 ```bash
 npm i @codedgar/glassworks @zumer/snapdom
@@ -374,7 +373,7 @@ Surfaces added after the page loads need one call. Opt a surface out with `data-
 PuppertinoGlass.enhance(container);
 ```
 
-Glass is a snapshot of the page, not a live view. Scrolling and moving the glass update in real time, and video is picked up automatically. When the content behind the glass changes, like a new list or a swapped image, take a new snapshot.
+Glass is a snapshot of the page. Scrolling and moving the glass update in real time, and video is picked up automatically. When the content behind the glass changes, like a new list or a swapped image, take a new snapshot.
 
 ```js
 PuppertinoGlass.refresh();

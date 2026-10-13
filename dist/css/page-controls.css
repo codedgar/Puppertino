@@ -3,21 +3,22 @@
    one is showing. 8px dots on a 16px pitch, the current one opaque and
    the rest at the tertiary label color.
 
-   iOS 27 sets the dots on a glass platter: a 24px capsule with 12px of
-   padding either side, a heavy backdrop blur and an almost clear tint
-   (white 10% in light, black 2% in dark), with no rim and no shadow.
+   iOS 27 sets the dots on a glass platter. It is a 24px capsule with
+   12px of padding either side. It has a heavy backdrop blur and an
+   almost clear tint (white 10% in light, black 2% in dark), with no rim
+   and no shadow.
    .p-page-control-plain drops it for the bare iOS 26 dots.
 
-   Markup is a nav of links, one per page, so the control is navigable
-   and announced rather than decorative:
+   Markup is a nav of links, one per page. The control is navigable and
+   announced.
 
    <nav class="p-page-control" aria-label="Page">
      <a class="p-page-dot" href="#p1" aria-current="true"><span>1</span></a>
      <a class="p-page-dot" href="#p2"><span>2</span></a>
    </nav>
 
-   The label inside each dot is for screen readers; it is clipped
-   visually, not hidden from the accessibility tree. */
+   The label inside each dot is for screen readers. It is clipped
+   visually but stays in the accessibility tree. */
 
 :root {
   --p-page-dot: #000000;
@@ -53,8 +54,7 @@
   --p-page-platter-fallback: rgba(242, 242, 247, 0.92);
 }
 
-/* Over a photo, where the page content sets the contrast rather than
-   the page background. */
+/* Over a photo, where the page content sets the contrast. */
 .p-page-control-light {
   --p-page-dot: rgba(255, 255, 255, 0.92);
   --p-page-dot-dim: rgba(255, 255, 255, 0.40);

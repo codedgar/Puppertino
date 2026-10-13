@@ -126,7 +126,7 @@
 }
 
 /* ─── Capsule well ─────────────────────────────────────────────────── */
-/* A 2:1 capsule at 8% gray (white 7% in dark) holding the current
+/* A 2:1 capsule at 8% gray (white 7% in dark). It holds the current
    color inset 3px all round, with a 1px 10% hairline inside the swatch
    edge. Sizes 32×16, 40×20, 48×24 (default), 56×28, 72×36.
    Markup:
@@ -227,9 +227,9 @@
 
 /* ─── iOS color well ───────────────────────────────────────────────── */
 /* UIColorWell: the same disc and ring-plus-dot geometry as the circular
-   macOS well, with the softer iOS hue ramp (yellow at the top, red at
-   3 o'clock, violet at the bottom, green at 9) under the same white
-   radial highlight. Two sizes: 28px (default) and 36px
+   macOS well. It uses the softer iOS hue ramp under the same white
+   radial highlight. The ramp is yellow at the top, red at 3 o'clock,
+   violet at the bottom, green at 9. Two sizes: 28px (default) and 36px
    (.p-colorwell-large). Selected: a 3px ramp ring and the color as a
    dot 2px inside it, r9 at 28px and r13 at 36px.
    <label class="p-colorwell p-colorwell-touch">
@@ -254,8 +254,8 @@
   background: var(--p-colorwell-rainbow-touch);
 }
 
-/* The iOS highlight is gentler than the macOS one: 75% white at the
-   center, clear by 85% of the radius, so the hues reach the rim. */
+/* The iOS highlight is gentler than the macOS one. It is 75% white at the
+   center and clear by 85% of the radius, so the hues reach the rim. */
 .p-colorwell.p-colorwell-touch:not(.p-colorwell-set)::after {
   background: radial-gradient(
     circle closest-side,
@@ -288,11 +288,11 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-color-picker
-   The iOS 27 colour picker. A 402px panel: a header with the eyedropper
-   and close buttons, three modes behind a segmented control (Apple's
-   12 x 10 colour grid, a two-dimensional spectrum, and channel
-   sliders), an OPACITY row, then the current colour beside the saved
-   swatches.
+   The iOS 27 colour picker. A 402px panel with a header holding the
+   eyedropper and close buttons. Three modes sit behind a segmented
+   control (Apple's 12 x 10 colour grid, a two-dimensional spectrum,
+   and channel sliders). Below them are an OPACITY row, then the
+   current colour beside the saved swatches.
 
    Presentations:
    - .p-color-picker          the iPad popover: bright glass, 36px radius
@@ -303,7 +303,7 @@
 
    The swatch is the reusable part: .p-color-swatch takes its colour
    from --p-color-swatch and can be used anywhere a colour needs to be
-   picked, not only inside this panel.
+   picked, including outside this panel.
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -316,8 +316,8 @@
   /* Two greys, offset, make the alpha checkerboard. */
   --p-color-checker: #d9d9d9;
   /* iOS 27 glass. The popover is white .34 plus-lighter + .84
-     color-dodge, which reads as a near-flat #EEE over anything; the
-     sheet is the shared overlay glass. Both use the overlay edge. */
+     color-dodge, which reads as a near-flat #EEE over anything. The
+     color sheet is the shared overlay glass. Both use the overlay edge. */
   --p-color-picker-popover: rgba(250, 250, 250, 0.93);
   --p-color-picker-sheet: var(--p-desktop-modal-surface, rgba(247, 247, 247, 0.73));
   --p-color-picker-fallback: var(--p-desktop-modal-fallback, #ebebeb);
@@ -442,9 +442,9 @@
   background: var(--p-color-picker-sheet);
 }
 
-/* The sheet is tighter than the popover: its header sits 4px higher,
-   the saved swatches are 45px apart rather than 52, and the bottom
-   padding is 16px. */
+/* The color sheet is tighter than the popover. Its header sits 4px
+   higher, the saved swatches are 45px apart against 52 in the popover, and the
+   bottom padding is 16px. */
 .p-color-picker.p-color-picker-sheet {
   padding-bottom: 16px;
 }
@@ -670,7 +670,7 @@
   /* White washes out the top half, black the bottom, and the hue ramp
      shows through at full strength across the middle. Both overlays
      have to reach zero alpha at 50%, or the midline paints over the
-     hue instead of revealing it. */
+     hue and hides it. */
   background:
     linear-gradient(to bottom,
       rgba(255, 255, 255, 1) 0%,

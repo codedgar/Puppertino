@@ -53,9 +53,27 @@ A group is a Liquid Glass capsule. Three layers make the glass:
 - **Speculars.** A 1px white highlight on the top and bottom inner edges.
 - **Fill.** A soft vertical gradient: darkest (about `#F1F1F1` on white) a third of the way down, clearing to white at the bottom.
 
-The glass is translucent, so over the `#E6E6E6` sidebar it reads a few steps darker than over a white titlebar. The shadow is almost nothing, `0 8px 15px` at 2 to 4% (`--p-shadow-glass-control`). Depth comes from the rim, not the shadow. The regular size is 36px tall with an 18px radius, and the small size is 24px with a 12px radius. Both are true capsules, so the corners need no squircle.
+The shadow is almost nothing, so depth comes from the rim.
 
-Items are 32px cells with 2px of padding at each end of the group, so three icons make a 100px group. Glyphs are 13px (10px in small) in `#1A1A1A`. Hover and pressed states show a 32×28px pill with a 14px radius, inset 4px from the capsule (24×20px with a 10px radius in small). The pill is a blend rather than a flat fill: black at 10% (`#E6E6E6` on white), so it follows the gradient underneath. A group with dividers spaces its items 3px apart. Its dividers are 1×20px lines (1×16px in small) at black 15%.
+| Part | Value |
+|---|---|
+| Height, regular | 36px |
+| Radius, regular | 18px |
+| Height, small | 24px |
+| Radius, small | 12px |
+| Shadow | `0 8px 15px` at 2 to 4% (`--p-shadow-glass-control`) |
+| Item cell | 32px |
+| Group padding | 2px at each end, so three icons make a 100px group |
+
+Both sizes are true capsules, so the corners need no squircle.
+
+| Part | Value |
+|---|---|
+| Glyph | 13px (10px in small) in `#1A1A1A` |
+| Hover and pressed pill | 32×28px, 14px radius, inset 4px from the capsule (24×20px, 10px radius in small) |
+| Pill fill | Black at 10% (`#E6E6E6` on white), so it follows the gradient underneath |
+| Item spacing with dividers | 3px |
+| Divider | 1×20px line (1×16px in small) at black 15% |
 
 | Class | Role |
 |---|---|

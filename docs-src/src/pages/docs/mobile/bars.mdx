@@ -16,7 +16,7 @@ A navigation bar sits across the top of a screen and carries its title and its a
 
 Use a navigation bar on every screen that has a title, which is nearly all of them. It is where people look to find out where they are and how to get back.
 
-Use a toolbar for actions that apply to the current screen: share, delete, add, filter. Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/tabs/`}>tab bar</a> instead when the buttons move between sections rather than doing something. An app can carry both, and they sit on the same glass so they read as one material.
+Use a toolbar for actions that apply to the current screen: share, delete, add, filter. Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/tabs/`}>tab bar</a> instead when the buttons move between sections. An app can carry both, and they sit on the same glass so they read as one material.
 
 ## Navigation bars
 
@@ -217,9 +217,9 @@ Add `.p-nav-bar-leading` to put the title right after the back button, 12px from
 | Vertical | `.p-toolbar-touch-vertical`: 48px wide, three items make 164px |
 | Surface | The same small glass as the tab bar |
 
-The toolbar hugs its content rather than spanning the screen. Glyphs are dark, not the accent: in iOS 27 only the prominent action carries color, so it is the one people find first.
+The toolbar hugs its content. Glyphs are dark, not the accent: in iOS 27 only the prominent action carries color, so it is the one people find first.
 
-An item with a label instead of a glyph grows into a capsule automatically, through `:not(:has(> i, > svg))`. The markup is the same either way.
+An item that holds a label, with no glyph, grows into a capsule automatically, through `:not(:has(> i, > svg))`. The markup is the same either way.
 
 Use `.p-toolbar-touch__divider` to separate groups inside one capsule, and a second `.p-toolbar-touch` when the groups should read as separate objects.
 
@@ -258,7 +258,13 @@ Do not put a toolbar and a tab bar at the bottom at the same time. iOS picks one
 
 ## Dark mode
 
-The glass follows the small-glass tint, which is nearly clear in dark mode. Titles and glyphs move from `#1A1A1A` to `#F5F5F5`, subtitles to `#8A8A8A`, and the accent from `#0088FF` to `#0091FF`.
+The glass is nearly clear in dark mode.
+
+| Part | Light | Dark |
+|---|---|---|
+| Titles and glyphs | `#1A1A1A` | `#F5F5F5` |
+| Subtitles | `#727272` | `#8A8A8A` |
+| Accent | `#0088FF` | `#0091FF` |
 
 ## Accessibility
 

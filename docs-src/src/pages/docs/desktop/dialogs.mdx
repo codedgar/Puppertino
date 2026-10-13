@@ -60,7 +60,22 @@ Use a dialog when the task stands alone, and a sheet when the task belongs to on
 
 ## Anatomy
 
-The window is 390px wide by default, padded 20px. Form rows use a two-column grid: a 99px column of right-aligned 13px labels in the secondary text color, an 8px gutter, then 223px controls. Rows sit on a 36px rhythm (24px controls with 12px gaps). When the dialog has a form, the 13px bold title and the 11px message (14px line height) line up with the control column, 6px apart. The form starts 20px below the message, and the footer 22px below the last row.
+The window is 390px wide by default. Form rows use a two-column grid of labels and controls.
+
+| Part | Value |
+|---|---|
+| Padding | 20px |
+| Label column | 99px, right-aligned 13px labels in the secondary text color |
+| Gutter | 8px |
+| Control column | 223px |
+| Row rhythm | 36px (24px controls with 12px gaps) |
+| Title | 13px bold |
+| Message | 11px, 14px line height |
+| Title to message | 6px apart |
+| Message to form | 20px |
+| Last row to footer | 22px |
+
+With a form, the title and message line up with the control column.
 
 Tune the columns with `--p-dialog-label-width`, `--p-dialog-field-width` and `--p-dialog-row-gap` on the dialog.
 
@@ -81,7 +96,18 @@ Fields, selects, and buttons inside a dialog are the standard [form controls](..
 
 ## Expanded dialog
 
-The expanded form is the full save panel: 1000 by 448. A 210px sidebar runs flush down the leading edge, with the traffic lights at the top, a 36px round sidebar toggle in the corner, and 24px source rows with 8px corners. The main pane stacks a centered form (37px row pitch), a toolbar row, the file browser, and the footer. The browser runs flush to the pane edges between two 1px keylines; its rows are 20px tall, zebra-striped with 8px rounded ends, and inset 10px.
+The expanded form is the full save panel. A sidebar runs down the leading edge, and the main pane stacks a form, a toolbar row, the file browser, and the footer.
+
+| Part | Value |
+|---|---|
+| Size | 1000 by 448 |
+| Sidebar | 210px, flush down the leading edge, traffic lights at the top |
+| Sidebar toggle | 36px round button in the corner |
+| Source rows | 24px tall, 8px corners |
+| Form row pitch | 37px |
+| Browser | Flush to the pane edges between two 1px keylines |
+| Browser rows | 20px tall, zebra-striped, 8px rounded ends, inset 10px |
+
 
 <div style="overflow-x: auto; margin: 16px 0 20px;">
   <div class="p-dialog p-dialog--expanded" style="position: relative; left: auto; top: auto; z-index: 0; opacity: 1; pointer-events: auto; transform: none;" aria-hidden="true">

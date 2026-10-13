@@ -118,9 +118,9 @@
    color classes retint it. .p-segmented-gray swaps the accent pill for
    the neutral fill style.
 
-   Fills are flat alpha with no rims: track black 10% (white 9% dark),
-   separators black 25% (white 25% dark), accent pill #0088FF with a
-   3% shade (#0091FF with a 4% lift in dark).
+   Fills are flat alpha with no rims. Track is black 10% (white 9%
+   dark) and separators are black 25% (white 25% dark). The accent pill
+   is #0088FF with a 3% shade (#0091FF with a 4% lift in dark).
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -357,10 +357,10 @@
 /* ─── Sliding pill (progressive enhancement) ───────────────────────── */
 /* macOS slides the selection between segments. With :has() the track
    itself can know which segment is checked (--p-seg-index) and how many
-   segments it holds (--p-seg-count), so a single ::before pill slides to
+   segments it holds (--p-seg-count). A single ::before pill then slides to
    left: index/count of the track width. Segments are equal 1fr columns,
    so the math is exact. Browsers without :has() keep the per-segment
-   pill above and simply crossfade. */
+   pill above and crossfade. */
 
 @supports selector(:has(*)) {
   .p-segmented {
@@ -430,14 +430,13 @@
 
 /* ─── Touch size (iOS) ─────────────────────────────────────────────── */
 /* iOS 27 runs a taller track than macOS and separates the pill from the
-   track on every side: a 32px capsule holding a 28px pill, inset 2px,
-   with 4px between segments. Those three numbers reproduce the
-   reference pill widths exactly at every segment count (211 at two,
-   139.33 at three, 103.5 at four, 82 at five on a 430px track).
+   track on every side. The track is a 32px capsule holding a 28px pill, inset
+   2px, with 4px between segments. Those three numbers reproduce the iOS 27
+   pill widths exactly at every segment count (211 at two, 139.33 at three,
+   103.5 at four, 82 at five on a 430px track).
 
-   The pill is white (white 27% in dark) with a soft 0 2px 20px shadow,
-   so the label keeps its own color instead of flipping to white the
-   way macOS does. There are no separators. Labels are 13px, Semibold
+   The pill is white (white 27% in dark) with a soft 0 2px 20px shadow.
+   The label keeps its own color. macOS flips it to white. There are no separators. Labels are 13px, Semibold
    (590) when selected and Medium (510) otherwise. A disabled control
    fades as a whole to 50%.
 

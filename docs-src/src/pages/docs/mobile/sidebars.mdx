@@ -79,25 +79,32 @@ Rows are 44px on a 44px pitch, so a selected capsule fills its row with no gap a
 
 The selected row is a darker capsule and nothing else. The label stays black at regular weight, and the icon keeps the accent every row already has. The capsule and `aria-current` carry the state.
 
-Section headings are 17px at 60% rather than the small bold label macOS uses. iPadOS keeps headings the same size as the rows.
+Section headings are 17px at 60%. The macOS sidebar uses a small bold label. iPadOS keeps headings the same size as the rows.
 
 `.p-sidebar-touch-compact` narrows the panel to 232px for split views that want more room for content.
 
 ### The floating panel
 
-`.p-sidebar-touch-floating` keeps the iPadOS 26 panel: floating, 20px radius, 16px inset, `rgba(245,245,245,0.72)` light and `rgba(38,38,38,0.72)` dark at blur 30px, with a soft shadow. Use it where a sidebar sits over content rather than beside it.
+`.p-sidebar-touch-floating` keeps the iPadOS 26 panel. Use it where a sidebar sits over content.
+
+| Part | Value |
+|---|---|
+| Shape | Floating, 20px radius, 16px inset, soft shadow |
+| Background | `rgba(245,245,245,0.72)` light, `rgba(38,38,38,0.72)` dark |
+| Blur | 30px |
+
 
 ## Search
 
 The search field is a 44px capsule rather than the 10px box a <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/`}>form field</a> uses, because it sits in chrome rather than in a form.
 
-Use `type="search"`, which gives the on-screen keyboard a Search key instead of Return, and give it an `aria-label` since it has no visible label.
+Use `type="search"`, which gives the on-screen keyboard a Search key, and give it an `aria-label` since it has no visible label.
 
 ## In a window
 
-On iPad an app can run in a window. `.p-window-touch` (in `windows.css`) is that window: a 34px radius, a deep soft shadow, and a resize grip in the bottom-right corner. An attached sidebar runs its full height.
+On iPad an app can run in a window. `.p-window-touch` (in `windows.css`) is that window. An attached sidebar runs its full height.
 
-The window's controls lead the sidebar header: `.p-traffic-lights-touch`, three 6px dots in a 41 x 22px glass capsule. These are the iPadOS colors, `#FF5F57`, `#FEBC2F` and `#27C840`, not the macOS window's traffic lights.
+The window's controls lead the sidebar header: `.p-traffic-lights-touch`, a glass capsule of three dots in the iPadOS colors `#FF5F57`, `#FEBC2F` and `#27C840`.
 
 <Showcase
   name="sidebar-window"
@@ -152,7 +159,14 @@ Show one or the other, never both. With both visible, the selected section is ma
 
 ## Dark mode
 
-The panel moves to `#161616`, labels from `#1A1A1A` to `#F5F5F5`, the selected capsule lightens the material instead of darkening it, and the accent shifts from `#0088FF` to `#0091FF`. The header glass follows the small-glass tint.
+The selected capsule lightens the material, and the header glass follows the small-glass tint.
+
+| Part | Light | Dark |
+|---|---|---|
+| Panel | `#D6D6D6` | `#161616` |
+| Label | `#1A1A1A` | `#F5F5F5` |
+| Accent | `#0088FF` | `#0091FF` |
+
 
 ## Accessibility
 

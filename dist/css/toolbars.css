@@ -1,7 +1,7 @@
 /* Puppertino v2.0 — Toolbars (macOS 27)
-   Floating Liquid Glass item clusters for toolbars: a glass capsule
-   with a crisp keyline, a 1px specular rim and a soft vertical
-   gradient, holding icon buttons, optionally divider-separated, in two
+   Floating Liquid Glass item clusters for toolbars. Each is a glass
+   capsule with a crisp keyline, a 1px specular rim and a soft vertical
+   gradient. It holds icon buttons, optionally divider-separated, in two
    sizes and both orientations. Also single round glass buttons and
    popup chips. Placement inside a window titlebar lives in
    windows.css; toolbar search is the standard .p-search.
@@ -10,14 +10,15 @@
 
 :root {
   --p-toolbar-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
-  /* Glass fill: a translucent ramp (≈55–70% opaque) — a bright line
-     under the top rim, darkest (≈241 on white, ≈229 on the #E6E6E6
-     sidebar) a third of the way down, clearing toward the bottom. */
+  /* Glass fill: a translucent ramp (≈55–70% opaque). It has a bright
+     line under the top rim. It is darkest (≈241 on white, ≈229 on the
+     #E6E6E6 sidebar) a third of the way down. It clears toward the
+     bottom. */
   --p-toolbar-bg: linear-gradient(rgba(246, 246, 246, 0.6) 1px, rgba(232, 232, 232, 0.55) 5px, rgba(229, 229, 229, 0.55) 30%, rgba(242, 242, 242, 0.62) 65%, rgba(255, 255, 255, 0.7));
   --p-toolbar-bg-opaque: linear-gradient(#f8f8f8 1px, #f2f2f2 5px, #f1f1f1 30%, #f7f7f7 65%, #fff);
   /* Rim: a dark keyline outside the shape, heavier on the side ends
-     (two 1px x-offset copies), and 1px white speculars on the top and
-     bottom inner edges. */
+     (two 1px x-offset copies). It has 1px white speculars on the top
+     and bottom inner edges. */
   --p-toolbar-rim:
     0 0 0 0.5px rgba(0, 0, 0, 0.1),
     -1px 0 0 rgba(0, 0, 0, 0.1),
@@ -37,8 +38,8 @@
 .p-dark-mode,
 [data-p-theme="darkmode"] {
   /* Dark glass is additive light: white @ ≈6% at the top rising to
-     ≈15% at the bottom (≈44 → 63 on #1E1E1E), inside a near-black
-     keyline with bright rims top and bottom. */
+     ≈15% at the bottom (≈44 → 63 on #1E1E1E). It sits inside a
+     near-black keyline with bright rims top and bottom. */
   --p-toolbar-bg: linear-gradient(rgba(255, 255, 255, 0.07) 1px, rgba(255, 255, 255, 0.062) 15%, rgba(255, 255, 255, 0.09) 55%, rgba(255, 255, 255, 0.146));
   --p-toolbar-bg-opaque: linear-gradient(#2c2c2c, #424242);
   --p-toolbar-rim:
@@ -142,9 +143,9 @@
 
 /* Icon button: a 32px cell. The hover/pressed pill is a capsule inset
    4 from the group height (36 → 32×28 r14; 24 → 24×20 r10). It is a
-   blend, not a flat fill: #E6E6E6 plus-darker (black @ 10%, ≈#E6E6E6
-   on white) in light, #141414 plus-lighter (white @ 9%) in dark, so it
-   follows the glass gradient underneath. */
+   blend. Light uses #E6E6E6 plus-darker
+   (black @ 10%, ≈#E6E6E6 on white). Dark uses #141414 plus-lighter
+   (white @ 9%). Either way it follows the glass gradient underneath. */
 .p-toolbar-btn {
   align-items: center;
   background: none;
@@ -353,13 +354,14 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-nav-bar and .p-toolbar-touch (iOS 27)
-   The iOS bars. A navigation bar across the top carrying the screen's
-   title and its actions, and a toolbar floating at the bottom holding
+   The iOS bars. A navigation bar across the top carries the screen's
+   title and its actions. A toolbar floats at the bottom and holds
    the actions that operate on what is on screen.
 
    In iOS 27 neither bar has a background. The title floats over the
-   content, and every control is its own piece of glass: 44px circles
-   in the navigation bar, 48px circles and capsules in the toolbar. The
+   content, and every control is its own piece of glass. The
+   navigation bar has 44px circles, and the toolbar has 48px circles and
+   capsules. The
    glass is the shared macOS/iOS 27 recipe from materials.css
    (--p-glass-tint, --p-glass-edge, --p-shadow-glass-control), the same
    one the tab bar uses, so an app's bars read as one material.
@@ -464,8 +466,7 @@
 }
 
 /* The row holding the controls and, in compact mode, the title. A
-   three-column grid keeps the title centred on the bar rather than on
-   whatever space the controls leave over. Controls sit 12px apart, a
+   three-column grid keeps the title centred on the bar. Controls sit 12px apart, a
    56px pitch for 44px buttons. */
 .p-nav-bar__row {
   display: grid;
@@ -789,7 +790,7 @@
   transition: background 0.12s ease-out;
 }
 
-/* An item with a label rather than a glyph grows into a capsule. */
+/* An item with a label grows into a capsule. */
 .p-toolbar-touch__item:not(:has(> i, > svg)) {
   width: auto;
   min-width: 48px;

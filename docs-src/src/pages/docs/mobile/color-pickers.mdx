@@ -22,7 +22,7 @@ A color picker lets people choose a color for text, a shape, or anything else on
 
 Use the full picker when any color is valid: drawing, theming, annotation.
 
-Use a plain grid of `.p-color-swatch` buttons when only a handful of colors are valid, which is most of the time. A label color, a calendar category, a highlighter. Offering a spectrum for a choice of eight is a worse experience, not a richer one.
+Use a plain grid of `.p-color-swatch` buttons when only a handful of colors are valid, which is most of the time. A label color, a calendar category, a highlighter. Offering a spectrum for a choice of eight is a worse experience.
 
 Use a native `<input type="color">` when you want the platform's own picker and do not need it to match.
 
@@ -269,7 +269,13 @@ It wraps a native `<input type="color">`, the same as the macOS well, so it work
 
 ## Dark mode
 
-The glass turns to `rgba(26,26,26,0.9)` with its shadow at 45%, the opaque panel moves from `#FFFFFF` to `#1C1C1E`, the value field becomes white at 12%, and the divider `#38383A`. The swatch checkerboard darkens from `#D9D9D9` to `#48484A`, so transparency still reads without glaring.
+| Part | Dark |
+|---|---|
+| Glass | `rgba(26,26,26,0.9)`, shadow at 45% |
+| Opaque panel | `#FFFFFF` to `#1C1C1E` |
+| Value field | White at 12% |
+| Divider | `#38383A` |
+| Swatch checkerboard | `#D9D9D9` to `#48484A` |
 
 ## Accessibility
 
@@ -281,7 +287,7 @@ Sliders need labels and a visible numeric value. The value field beside each cha
 
 Focus rings are drawn outside the swatch at a 3px offset. Grid cells draw focus inside the cell, an accent ring within a white one, since the grid clips at its corners.
 
-Forced colors mode turns off color adjustment on the swatches and preview, since the whole point is the color, and marks selection with `Highlight` instead of the ring.
+Forced colors mode turns off color adjustment on the swatches and preview, since the whole point is the color, and marks selection with `Highlight`, replacing the ring.
 
 ## The macOS color well
 

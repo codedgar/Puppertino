@@ -40,9 +40,23 @@ Use a sidebar for top-level navigation with up to two levels of nesting. For dat
 
 ## Anatomy
 
-By default the sidebar is a full-bleed strip on the window's leading edge. It is 240px wide and runs the full height of the window, with no radius, shadow, inset or divider; the window clips it at its corner. The material is a flat, neutral `#E6E6E6`. Rows are inset 10px, so a selection capsule is 220px wide. In a window, the sidebar also holds the traffic lights (see [windows](../windows/#sidebar-windows)).
+By default the sidebar is a full-bleed strip on the window's leading edge, with no radius, shadow, inset or divider. In a window, it also holds the traffic lights (see [windows](../windows/#sidebar-windows)).
 
-The macOS 26 floating panel is still available as `.p-sidebar-floating`: radius 18px, gray glass at `rgba(228, 228, 228, 0.72)` over a 20px blur, and a `0 8px 40px` shadow at 12%. `.p-sidebar-attached` still works: it fills the host's height.
+| Part | Value |
+|---|---|
+| Width | 240px, full window height |
+| Material | Flat, neutral `#E6E6E6` |
+| Row inset | 10px, so a selection capsule is 220px wide |
+
+The macOS 26 floating panel is still available as `.p-sidebar-floating`.
+
+| Part | Value |
+|---|---|
+| Radius | 18px |
+| Material | Gray glass at `rgba(228, 228, 228, 0.72)` over a 20px blur |
+| Shadow | `0 8px 40px` at 12% |
+
+`.p-sidebar-attached` still works: it fills the host's height.
 
 | Class | Role |
 |---|---|
@@ -68,7 +82,10 @@ Three sizes step the row height, font, and icon together. The label starts 32px 
 | Medium | `.p-sidebar-medium` | 32px | 13px / 510 | 18px |
 | Small | `.p-sidebar-small` | 24px | 11px / 510 | 16px |
 
-Section headers are 13px bold in large and medium and 11px bold in small. They sit in a 43px gap between rows (39px in small).
+| Part | Large and medium | Small |
+|---|---|---|
+| Section header | 13px bold | 11px bold |
+| Gap between rows | 43px | 39px |
 
 ## States
 
@@ -86,7 +103,18 @@ To retint the icons, override the token on the sidebar: `style="--p-sidebar-icon
 
 ## Dark mode
 
-The strip becomes `#161616`. Selection lightens it by 13 levels (`#232323`) and hover by 7. Icons turn `#0A99FF`, labels `#F5F5F5` and headers `#8A8A8A`. In an inactive window the strip goes to `#141414` and the icons to `#666666`. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+| Part | Dark |
+|---|---|
+| Strip | `#161616` |
+| Selection | Lightens the strip by 13 levels (`#232323`) |
+| Hover | Lightens the strip by 7 levels |
+| Icons | `#0A99FF` |
+| Labels | `#F5F5F5` |
+| Headers | `#8A8A8A` |
+| Inactive window strip | `#141414` |
+| Inactive window icons | `#666666` |
+
+Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Code
 

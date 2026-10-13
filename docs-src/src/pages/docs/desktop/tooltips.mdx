@@ -40,7 +40,16 @@ The tooltip appears 0.5 seconds after hover begins, like the native delay, and h
 
 ## Anatomy
 
-The box is 18px tall with square corners, the only unrounded surface in the framework. The fill is a near-opaque `rgba(236, 236, 236, 0.88)` with no blur. Text is 11px at weight 510 in `#1A1A1A` with 6px side padding. Two shadows give it an edge: `0 2px 8px` at 20% and `0 0 2px` at 40%.
+The tooltip is a small near-opaque box with no blur.
+
+| Part | Value |
+|---|---|
+| Height | 18px |
+| Corners | Square, the only unrounded surface in the framework |
+| Fill | `rgba(236, 236, 236, 0.88)` |
+| Text | 11px at weight 510 in `#1A1A1A` |
+| Side padding | 6px |
+| Shadows | `0 2px 8px` at 20% and `0 0 2px` at 40% |
 
 The tooltip ignores pointer events, so it never blocks the control underneath it.
 

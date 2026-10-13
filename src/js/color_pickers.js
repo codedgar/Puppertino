@@ -1,11 +1,11 @@
 /**
  * Puppertino v2 — colour picker.
  *
- * Wires .p-color-picker: switches between the Grid, Spectrum, and
- * Sliders panels, fills Apple's 12 x 10 colour grid, reads a colour out
- * of the spectrum field, keeps the channel sliders and their value
- * fields in step, saves the current colour from the "+" swatch, and
- * publishes the result on the preview and every swatch.
+ * Wires .p-color-picker. It switches between the Grid, Spectrum, and
+ * Sliders panels and fills Apple's 12 x 10 colour grid. It reads a
+ * colour out of the spectrum field and keeps the channel sliders and
+ * their value fields in step. It saves the current colour from the "+"
+ * swatch and publishes the result on the preview and every swatch.
  *
  * Markup contract:
  *   .p-color-picker                     the panel
@@ -157,8 +157,8 @@
     );
   }
 
-  /* Swatches are toggle buttons, so aria-pressed is set on all of them
-     rather than only on the ones that already carried the attribute.
+  /* Swatches are toggle buttons, so aria-pressed is set on all of them,
+     including the ones that did not already carry the attribute.
      Otherwise selecting a swatch that had no attribute leaves the whole
      group with nothing pressed. */
   function markSelected(panel, swatch) {
@@ -255,9 +255,9 @@
   });
 
   /* ─── Spectrum ───────────────────────────────────────────────────── */
-  /* Hue runs across, and the vertical axis is white at the top through
-     the pure hue at the middle to black at the bottom, matching how the
-     field is painted in CSS. */
+  /* Hue runs across. The vertical axis is white at the top, the pure hue
+     at the middle, and black at the bottom. This matches how the field
+     is painted in CSS. */
 
   function pickFromSpectrum(field, clientX, clientY) {
     var rect = field.getBoundingClientRect();

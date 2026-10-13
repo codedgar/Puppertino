@@ -18,7 +18,7 @@ A list presents rows of related content in a single scrolling column. Most iOS s
 
 Use a list for anything that repeats: settings, messages, search results, a library. Use it for navigation into detail screens, which is what the chevron means.
 
-Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when the rows are one-off choices rather than content. Use a grid when the items are pictures and the picture is the point.
+Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when the rows are one-off choices. Use a grid when the items are pictures and the picture is the point.
 
 ## Two shapes
 
@@ -110,7 +110,7 @@ The 52px row is above the 44px minimum on its own, and the two-line row is 68px.
 
 The slots are the same ones the desktop list uses, so `.p-list-icon`, `.p-list-detail`, and `.p-list-chevron` mean the same thing on both platforms. `.p-list-label` and its title and subtitle are new, because a pointer-sized row has no space for two lines.
 
-`.p-list-trailing-icon` is the other new one: a 22px glyph on the right that is not a chevron. Use it where a row shows what it does rather than where it goes, like the Copy and Print rows in a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/#share-sheets`}>share sheet</a>. A chevron means "opens another screen", so using it for anything else sets the wrong expectation.
+`.p-list-trailing-icon` is the other new one: a 22px glyph on the right that is not a chevron. Use it where a row shows what it does, like the Copy and Print rows in a <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/#share-sheets`}>share sheet</a>. A chevron means "opens another screen", so using it for anything else sets the wrong expectation.
 
 A subtitle grows the row to 68px automatically through `:has(.p-list-subtitle)`. There is no separate class for a two-line row.
 
@@ -136,11 +136,19 @@ A subtitle grows the row to 68px automatically through `:has(.p-list-subtitle)`.
 </ul>`}
 />
 
-Two sets of three. The small set (30px icon, 42px avatar, 52px thumbnail) suits rows where the words matter most. Add `.p-list-icon-large` for rows that lead with the picture: a 44px icon at 11px radius, a 60px avatar, or a 68px thumbnail. Large icons and avatars get 8px of padding above and below. Square thumbnails fill the row's height with no radius, so the picture meets the separator.
+Two sets of three. The small set suits rows where the words matter most. Add `.p-list-icon-large` for rows that lead with the picture.
+
+| Leading element | Small | Large |
+|---|---|---|
+| Icon | 30px | 44px, 11px radius |
+| Avatar | 42px | 60px |
+| Thumbnail | 52px | 68px |
+
+Large icons and avatars get 8px of padding above and below. Square thumbnails fill the row's height with no radius, so the picture meets the separator.
 
 ## Separators
 
-The hairline starts where the text starts, not at the plate edge. With a leading icon it moves in by the icon width plus the gap, so the rules line up under the titles and the eye reads one column instead of a grid.
+The hairline starts where the text starts. With a leading icon it moves in by the icon width plus the gap, so the rules line up under the titles and the eye reads one column instead of a grid.
 
 That indent is derived, not hardcoded: `calc(16px + 30px + 12px)` from the padding, icon, and gap tokens. Changing `--p-list-touch-icon` moves the separator with it.
 
@@ -173,7 +181,7 @@ Only rows that do something get a pressed state. A row is treated as interactive
 
 There is no hover state. The macOS list highlights on hover; this one does not, because a finger has no hover and a stuck highlight after a tap reads as a selection.
 
-Put the link on the row's content rather than wrapping the `<li>`, and give the chevron `aria-hidden="true"`. The chevron is decoration; the link text is what a screen reader should announce.
+Put the link on the row's content, and give the chevron `aria-hidden="true"`. The chevron is decoration; the link text is what a screen reader should announce.
 
 ## Sections
 
@@ -224,7 +232,7 @@ Use a real heading element for the header so the page outline is navigable.
 | `--large` | 22px, line 28px | 700 | -0.45px | label |
 | `__action` | 15px | 400 | -0.23px | `--p-control-accent` |
 
-A prominent header treats the section as a destination rather than a label, the way Music titles Recently Added. Consider one when a section has its own screen, and put the way there in `.p-list-touch-header__action` on the trailing edge. Keep the plain header for settings-style groups, where a loud title would compete with the rows.
+A prominent header treats the section as a destination, the way Music titles Recently Added. Consider one when a section has its own screen, and put the way there in `.p-list-touch-header__action` on the trailing edge. Keep the plain header for settings-style groups, where a loud title would compete with the rows.
 
 ## Editing controls
 
@@ -283,7 +291,14 @@ Give every control an `aria-label` naming its row, like "Delete Travel". A scree
 </div>`}
 />
 
-The letter strip down the trailing edge of a long alphabetical list. Letters are 12px, weight 510, on the accent, in a 16px column on a 14px pitch. `.p-list-index--large` widens the column to 30px on a 25px pitch, for iPad and for lists short enough to afford it.
+The letter strip down the trailing edge of a long alphabetical list. Letters are on the accent. `.p-list-index--large` is for iPad and for lists short enough to afford it.
+
+| Part | Default | `.p-list-index--large` |
+|---|---|---|
+| Letter | 12px, weight 510 | 12px, weight 510 |
+| Column | 16px | 30px |
+| Pitch | 14px | 25px |
+
 
 Each letter is a link to its section's header, so the index works with a keyboard and a screen reader with no script at all. Position it yourself, usually `position: sticky` against the list's trailing edge. A 14px pitch is well under the 44px minimum, so treat the index as a shortcut and keep the list itself scrollable.
 
@@ -353,7 +368,7 @@ Actions appear in source order, left to right, on either side. Consider putting 
 
 A swipe is invisible until someone tries it, so the actions never depend on the gesture. They stay in the tab order and the reading order, and focusing one, by Tab or by a screen reader moving onto it, slides its side open. With focus in the row, ArrowLeft and ArrowRight open the side the matching swipe would and move focus to its first action. Escape closes the row and returns focus. The script names each action group "Actions" unless it already has an `aria-label`, and a label naming the row is better.
 
-Offer the same commands somewhere visible as well, like an Edit mode or the detail screen. Swiping is a shortcut for people who know it, not the only way in.
+Offer the same commands somewhere visible as well, like an Edit mode or the detail screen. Swiping is a shortcut for people who know it.
 
 ## Dark mode
 

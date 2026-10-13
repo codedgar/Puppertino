@@ -8,15 +8,15 @@
      <button class="p-disclosure" aria-expanded="false"
              aria-label="Show details"></button>
 
-   Zero-JS with native details/summary — the browser reveals, hides,
-   and announces; the chevron rotates on [open]:
+   Zero-JS with native details/summary. The browser reveals, hides,
+   and announces. The chevron rotates on [open]:
      <details class="p-disclosure-group">
        <summary>More options <span class="p-disclosure"></span></summary>
        …content…
      </details>
 
-   Plates: rounded squares at 16/20/24 (radius a quarter of the side),
-   circles at 28/36. The chevron is a fixed glyph, not a share of the
+   Plates are rounded squares at 16/20/24 (radius a quarter of the side).
+   Circles are at 28/36. The chevron is a fixed glyph, not a share of the
    plate: 8×5 ink at 16 and 20, 12×7 from 24 up.
    ═════════════════════════════════════════════════════════════════════ */
 

@@ -113,7 +113,7 @@ Outside a grouped card, a field is the filled form: a 44px pill with its own bac
 | Fill | `rgba(118,118,128,0.12)` light, `rgba(118,118,128,0.24)` dark |
 | Focus | 4px ring in `--p-field-ring-focus-outer` |
 
-The fill is built on `#767680`, not on pure black. iOS runs a separate fill scale from macOS, so the touch controls read from `--p-field-touch-fill` rather than the `--p-fill-*` tokens.
+The fill is built on `#767680`. iOS runs a separate fill scale from macOS, so the touch controls read from `--p-field-touch-fill` rather than the `--p-fill-*` tokens.
 
 There is no border. A ring plus a fill reads as two boxes. The focus state supplies the outline when it is needed.
 
@@ -130,7 +130,7 @@ Always pair a standalone field with a `.p-label`. A placeholder is not a label: 
 </div>`}
 />
 
-Set the right `type` and `inputmode`. `type="email"` brings up a keyboard with an @ key, `inputmode="numeric"` brings up digits, and `type="search"` gives the keyboard a Search key instead of Return. This is the cheapest usability win on any mobile form.
+Set the right `type` and `inputmode`. `type="email"` brings up a keyboard with an @ key, `inputmode="numeric"` brings up digits, and `type="search"` gives the keyboard a Search key. This is the cheapest usability win on any mobile form.
 
 ```html
 <input class="p-field p-field-touch" type="email" inputmode="email"
@@ -160,7 +160,14 @@ Add `autocomplete`. It lets the browser fill a name, an address, or a one-time c
 </div>`}
 />
 
-`.p-select-touch` gives the select the same 44px box, 10px radius, and filled background as a text field, with 36px of right padding so the label never runs under the chevron. The chevron sits 14px from the right edge at 12 x 14px.
+`.p-select-touch` gives the select the same box and filled background as a text field, with room on the right so the label never runs under the chevron.
+
+| Part | Value |
+|---|---|
+| Box height | 44px |
+| Radius | 10px |
+| Right padding | 36px |
+| Chevron | 12 x 14px, 14px from the right edge |
 
 It is a real `<select>`, so the tap opens the platform's own picker: the scroll wheel on iOS, the native list elsewhere. That picker already handles momentum scrolling, keyboard input, VoiceOver, and Dynamic Type. Building a custom dropdown means reimplementing all of it.
 
@@ -187,7 +194,7 @@ It is a real `<select>`, so the tap opens the platform's own picker: the scroll 
 | Off | `rgba(60,60,67,0.30)` light, `rgba(235,235,245,0.30)` dark |
 | Target | 44px, the label carries the extra height |
 
-The knob is a wide lozenge, not a circle. It is 38px across on a 64px track, so it fills most of the control and leaves 22px of travel.
+The knob is a wide lozenge. It is 38px across on a 64px track, so it fills most of the control and leaves 22px of travel.
 
 Switches default to green. Add any `.p-sys-*` class to retint one, and the green steps aside. Consider keeping green unless the switch controls something the accent color already stands for.
 
@@ -195,7 +202,7 @@ A switch takes effect immediately. If the change needs a Save button, it is not 
 
 ### The morph
 
-Touching a switch lifts the knob into a [Liquid Glass](../../materials/#liquid-glass) lens. The 38 x 24 knob grows to 60 x 40, centered where it sat, so it reaches 9px past the end of the track. The track is cut out under the glass and redrawn inside it, magnified, so its color bends at the rim. Drag across the middle and the knob follows your finger to that side; lift your finger and it settles. A press that moves less than 6px counts as a tap. This needs `liquid_glass.js`:
+Touching a switch lifts the knob into a [Liquid Glass](../../materials/#liquid-glass) lens, and dragging moves it to that side. This needs `liquid_glass.js`:
 
 ```html
 <script type="module" src="/js/liquid_glass.js"></script>
@@ -207,7 +214,7 @@ For the flatter iOS 27 look, add `data-p-lens="clear"` to the label: the track s
 
 A disabled switch fades as a whole to 50%, knob included.
 
-This is the same animation the desktop switch uses, scaled by tokens rather than rewritten. The geometry is `--p-switch-track-w`, `--p-switch-track-h`, `--p-switch-knob-w`, and `--p-switch-knob-inset`; travel is derived from them, so a size variant cannot drift out of alignment. Browsers without `@property` fall back to a plain slide and the markup is identical.
+This is the same animation the desktop switch uses, scaled by tokens. The geometry is `--p-switch-track-w`, `--p-switch-track-h`, `--p-switch-knob-w`, and `--p-switch-knob-inset`; travel is derived from them, so a size variant cannot drift out of alignment. Browsers without `@property` fall back to a plain slide and the markup is identical.
 
 ### State without color
 
@@ -260,7 +267,7 @@ The glyphs are opt-in only. iOS draws them for its own On/Off Labels setting, wh
 
 The pill is white, so the selected label keeps its own color instead of flipping to white the way the macOS control does. There are no separators between segments; the pill and its soft shadow carry the selection on their own.
 
-Those three numbers, a 2px inset and a 4px gap on a 32px track, reproduce iOS pill widths at every segment count. On a 430px track it gives 211px at two segments, 139.33px at three, 103.5px at four, and 82px at five. The pill width is computed from the segment count rather than tabulated, so it stays exact at any track width.
+The pill width is computed from the segment count, so it stays exact at any track width.
 
 It is still a radio group. Arrow keys move the selection, form submission works, and no JavaScript is involved. The pill slides between segments where `:has()` is available and crossfades where it is not.
 
@@ -319,7 +326,17 @@ Always give a slider an `aria-label` or a visible label. A bare track announces 
 </div>`}
 />
 
-The activity indicator is `.p-spinner-touch`, added to `.p-spinner`: eight spokes in the secondary label color, `rgba(60,60,67,0.6)` in light and `rgba(235,235,245,0.7)` in dark, fading around the circle. The default is 20px; `.p-spinner-touch-small` is 14px and `.p-spinner-touch-large` is 35px. Each size has its own spoke proportions, so scale by class rather than by width.
+The activity indicator is `.p-spinner-touch`, added to `.p-spinner`. It has eight spokes in the secondary label color, fading around the circle.
+
+| Part | Value |
+|---|---|
+| Spoke color, light | `rgba(60,60,67,0.6)` |
+| Spoke color, dark | `rgba(235,235,245,0.7)` |
+| Default size | 20px |
+| `.p-spinner-touch-small` | 14px |
+| `.p-spinner-touch-large` | 35px |
+
+Each size has its own spoke proportions, so scale by class.
 
 <Showcase
   name="mobile-spinner"
@@ -351,7 +368,12 @@ Reduced motion replaces the rotation with a slow pulse.
 </nav>`}
 />
 
-Dots are 8px on a 16px pitch. The current one is pure `#000000`, the rest the tertiary label `rgba(60,60,67,0.30)`; in dark mode `#FFFFFF` and `rgba(235,235,245,0.30)`. `aria-current` carries the state, the same as the tab bar.
+Dots are 8px on a 16px pitch. `aria-current` carries the state, the same as the tab bar.
+
+| Part | Light | Dark |
+|---|---|---|
+| Current dot | `#000000` | `#FFFFFF` |
+| Other dots | `rgba(60,60,67,0.30)`, the tertiary label | `rgba(235,235,245,0.30)` |
 
 The dots sit on a glass platter: a 24px capsule, 12px of padding past the first and last dot, a 20px backdrop blur and an almost clear tint (white 10% in light, black 2% in dark). No rim, no shadow. It is the thinnest glass in the system, there so the dots stay legible wherever a paged set lands on a photo or a colored page. `.p-page-control-plain` removes it for the bare dots. Reduced transparency swaps the blur for an opaque capsule.
 
@@ -359,11 +381,11 @@ An 8px dot is nowhere near a tap target. The row is 44px tall, and each dot exte
 
 That still leaves a 16px-wide target, under the 44px guidance. Dots indicate position first and accept taps second, which is what iOS does; swiping the content is the primary way through a paged set. Consider not making the dots the only way to move between pages.
 
-Use `.p-page-control-light` over a photo, where the page content sets the contrast rather than the page background.
+Use `.p-page-control-light` over a photo, where the page content sets the contrast.
 
 Each dot holds a visually clipped label. It stays in the accessibility tree, so the control announces as a list of pages rather than a row of unlabelled links.
 
-For long sets iOS shrinks the dots nearest the ends instead of wrapping. `page_controls.js` applies `.p-page-dot-sm` (6px) and `.p-page-dot-xs` (4px) to the right dots as the current page moves, and keeps a set of seven or fewer at full size.
+For long sets iOS shrinks the dots nearest the ends. `page_controls.js` applies `.p-page-dot-sm` (6px) and `.p-page-dot-xs` (4px) to the right dots as the current page moves, and keeps a set of seven or fewer at full size.
 
 Point the control at a scrolling pager and the two stay in step, in both directions:
 
@@ -407,7 +429,7 @@ Without `data-p-pages` the dots still shrink and still respond to taps; only the
 | Divider | 1 x 24px, `rgba(60,60,67,0.30)`, 4px inset |
 | Glyphs | Minus and plus at 14px, not chevrons |
 
-iOS lays the stepper out horizontally, where the pointer version stacks two chevrons in a 20 x 24 box. It is minus and plus rather than down and up, which is the same operation described the way a phone describes it.
+iOS lays the stepper out horizontally, where the pointer version stacks two chevrons in a 20 x 24 box. It is minus and plus, the way a phone describes the same operation.
 
 The stepper holds no value of its own. Pair it with a narrow field, which is what `.p-stepper-field` already does for the pointer size. `.p-stepper-field-touch` widens the gap to 12px and sizes the field at 72px, enough for a few digits, with the value centered.
 
@@ -469,25 +491,33 @@ Use `.p-select-touch` instead when the choice is one field among many in a form,
 </div>`}
 />
 
-`.p-label` is 13px at weight 510 in `--p-text-primary`. `.p-sublabel` is the same size in `--p-text-secondary` and carries the explanation. Put the why in the sublabel, not in a tooltip. There is no hover on a phone, so a tooltip is unreachable.
+`.p-label` is 13px at weight 510 in `--p-text-primary`. `.p-sublabel` is the same size in `--p-text-secondary` and carries the explanation. Put the why in the sublabel, not in a tooltip: there is no hover on a phone, so a tooltip is unreachable.
 
 ## States
 
 **Focus** on a row in a grouped card draws a 3px accent bar at its leading edge. On a standalone field it draws a 4px ring in `--p-field-ring-focus-outer`, wider than the 3.5px pointer ring so it stays visible next to a filled background. It appears for keyboard and switch control navigation. Never remove it.
 
-**Disabled** turns a row's text to the placeholder color, drops standalone fields to `--p-field-bg-disabled` with placeholder-colored text, and fades switches to 50%. The cursor becomes `not-allowed`. Consider hiding a control people cannot use rather than disabling it, unless the disabled state itself is the information.
+**Disabled** turns a row's text to the placeholder color, drops standalone fields to `--p-field-bg-disabled` with placeholder-colored text, and fades switches to 50%. The cursor becomes `not-allowed`. Consider hiding a control people cannot use. Keep it disabled when the disabled state itself is the information.
 
 **Invalid** is not styled automatically. The v1 `.p-form-text` classes tied red borders to `:invalid`, which fires while someone is still typing. Add your own class on blur instead.
 
 ## Dark mode
 
-The grouped card moves from `#FFFFFF` to `#1C1C1E` and its separators to white at 10%. Field and select fills move from 12% to 24%. The switch off-track flips from `rgba(60,60,67,0.30)` to `rgba(235,235,245,0.30)`, and green shifts from `#34C759` to `#30D158`. Text and placeholder colors follow their tokens.
+| Part | Light | Dark |
+|---|---|---|
+| Grouped card | `#FFFFFF` | `#1C1C1E` |
+| Card separators | Black at 10% | White at 10% |
+| Field and select fills | 12% | 24% |
+| Switch off-track | `rgba(60,60,67,0.30)` | `rgba(235,235,245,0.30)` |
+| Switch green | `#34C759` | `#30D158` |
+
+Text and placeholder colors follow their tokens.
 
 Put `.p-auto-dark-mode` on the body to follow the system, or `.p-dark-mode` to pin it.
 
 ## Accessibility
 
-Every field needs a label associated by `for` and `id`, or wrapped around the input. A `.p-label` that only sits nearby is a visual label, not an accessible one.
+Every field needs a label associated by `for` and `id`, or wrapped around the input. A `.p-label` that only sits nearby is only a visual label.
 
 A switch is a real `<input type="checkbox">` inside a `<label>`, so it is reachable by keyboard, toggles with Space, and announces its checked state without any ARIA. Do not replace it with a `<div role="switch">`.
 

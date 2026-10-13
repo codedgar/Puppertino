@@ -1,5 +1,5 @@
 /* Puppertino v2.0 — Empty states (iOS and iPadOS 27)
-   What a screen shows when it has nothing to show: a glyph, a short
+   What a screen shows when it has nothing to show. It has a glyph, a short
    message, a sentence explaining it, and one action that fixes it.
 
    Markup:
@@ -62,8 +62,8 @@
   box-sizing: border-box;
 }
 
-/* Fills the space it is given, so an empty state inside a list or a
-   sheet centres in that region rather than at the top of it. */
+/* Fills the space it is given. An empty state inside a list or a
+   sheet centres in that region. */
 .p-empty-state-fill {
   flex: 1;
   min-height: 240px;
@@ -76,8 +76,7 @@
   line-height: 1;
 }
 
-/* A smaller glyph for an empty state inside a panel rather than a
-   whole screen. */
+/* A smaller glyph for an empty state inside a panel. */
 .p-empty-state-compact .p-empty-state__glyph {
   font-size: 22px;
 }
@@ -142,9 +141,9 @@
    the 52px height iOS uses here. Compose it with a button style:
    .p-button .p-button-touch-large .p-button-primary
 
-   iOS 27 draws it as prominent glass rather than a flat fill: no drop
-   shadow, a faint lighter line along the top, and a glow that rises
-   into the bottom edge (#0088FF brightening to about #128DFF). */
+   iOS 27 draws it as prominent glass rather than a flat fill. It has no
+   drop shadow and a faint lighter line along the top. A glow rises into
+   the bottom edge (#0088FF brightening to about #128DFF). */
 .p-empty-state__action {
   --p-button-height: 52px;
 

@@ -180,8 +180,8 @@
 
 /* Button fills, declared across all four appearance scopes.
 
-   macOS 27 quiet fills are heavier than the shared --p-fill-* scale:
-   the gray push button rests at black 8% (white 7% dark), presses to
+   macOS 27 quiet fills are heavier than the shared --p-fill-* scale.
+   The gray push button rests at black 8% (white 7% dark), presses to
    16%, and fades to 4% when disabled. Icon-only circles sit one step
    darker again (10 / 19 / 5). In dark mode the pressed fill gets
    LIGHTER, which is why these are fills and not a darkening overlay.
@@ -190,7 +190,7 @@
    (.p-button-secondary, .p-button-destructive): 20% light, 22% dark,
    +8% while pressed, 12% disabled. The accent is first shaded by
    --p-button-tint-shade (10% black light, 12% white dark), which is
-   how the reference composites its wash.
+   how macOS 27 composites its wash.
 
    Filled styles press with a --p-button-press-overlay layer: black 10%
    plus-darker in light, white ~4% plus-lighter in dark.
@@ -208,7 +208,7 @@
    land on the same levels over the dark materials.
 
    --p-button-touch-gray is the iOS quiet fill, used by the touch sizes.
-   iOS keeps its own fill scale, built on #767680 rather than pure black. */
+   iOS keeps its own fill scale, built on #767680. */
 :root {
   --p-button-fill: rgba(0, 0, 0, 0.08);
   --p-button-fill-hover: rgba(0, 0, 0, 0.11);
@@ -393,10 +393,11 @@
 
 /* Press overlay layer for the filled styles.
    macOS 27 presses a filled button with black 10% in light mode
-   (plus-darker) and white ~4% in dark mode (plus-lighter), so the
-   layer color and blend follow the appearance tokens. Browsers without
-   plus-darker drop to a normal blend, which lands within a few levels. Approximated with a
-   ::before whose opacity scales in and out on interaction. */
+   (plus-darker) and white ~4% in dark mode (plus-lighter). The layer
+   color and blend follow the appearance tokens. Browsers without
+   plus-darker drop to a normal blend, which lands within a few levels.
+   Approximated with a ::before whose opacity scales in and out on
+   interaction. */
 .p-button::before {
   content: "";
   position: absolute;
@@ -410,7 +411,7 @@
   transition: opacity 0.12s ease-out;
 }
 
-/* Icons live in the markup, not in modifier classes.
+/* Icons live in the markup.
    Place an <svg> or an <i> (icon font) as the first or last child
    for leading/trailing. Reading order matches DOM order. */
 .p-button > svg,
@@ -460,7 +461,7 @@
 
 /* Accent-tinted: a wash of the accent behind an accent label. macOS 27
    runs it at about 20% (22% dark), twice the macOS 26 strength, and
-   presses by adding more accent rather than darkening. */
+   presses by adding more accent. */
 .p-button-secondary {
   background: color-mix(
     in srgb,
@@ -491,7 +492,7 @@
 }
 
 /* ─── Sizes (macOS-derived) ────────────────────────────────────────── */
-/* NOTE: macOS sizes intentionally sit below iOS's 44px minimum tap
+/* NOTE: macOS sizes sit below iOS's 44px minimum tap
    target. They target pointer input. For touch contexts use the
    regular default or .p-button-large. */
 
@@ -522,7 +523,7 @@
 /* ─── Touch sizes (iOS-derived) ────────────────────────────────────── */
 /* iOS buttons are capsules and are measured for fingers. Three sizes:
    .p-button-touch is the 34px regular, with -small (28px) and -large
-   (50px) on either side. Labels are Regular weight, not Semibold, and
+   (50px) on either side. Labels are Regular weight and
    carry SF Pro's negative tracking at these sizes.
 
    Only the large size clears Apple's 44px minimum on its own, so every
@@ -580,7 +581,7 @@
 }
 
 /* Icon-only: a true circle. macOS 27 draws these on the shared
-   16 / 20 / 24 / 28 / 36 ladder with a slightly heavier gray fill
+   16 / 20 / 24 / 28 / 36 ladder. They have a slightly heavier gray fill
    (10% rest, 19% pressed, 5% disabled) and a 13px bold glyph (11px at
    16). Small and large snap to the ladder here (20 and 28), and
    .p-button-xlarge adds the 36px circle. */
@@ -631,7 +632,7 @@
 }
 
 /* Touch has no hover. Pressed is the only feedback, and iOS dims the
-   whole control rather than compositing a darkening layer. */
+   whole control. */
 @media (hover: none) {
   .p-button-touch:hover::before,
   .p-button-touch-small:hover::before,
@@ -653,12 +654,12 @@
 }
 
 /* ─── States ───────────────────────────────────────────────────────── */
-/* macOS 27 presses each style differently:
-   - gray styles swap to a heavier fill (16%, lighter in dark mode),
-   - tinted styles add 8% more accent,
-   - filled styles take the ::before overlay (black 10% light, white
-     dark), and keep their accent at 40% when disabled.
-   Borderless has no fill at all: only its label changes. */
+/* macOS 27 presses each style differently.
+   - Gray styles swap to a heavier fill (16%, lighter in dark mode).
+   - Tinted styles add 8% more accent.
+   - Filled styles take the ::before overlay (black 10% light, white
+     dark). They keep their accent at 40% when disabled.
+   Borderless has no fill at all. Only its label changes. */
 
 .p-button:hover {
   --p-button-gray-bg: var(--p-button-gray-fill-hover);
@@ -726,8 +727,7 @@
   color: color-mix(in srgb, var(--p-sys-red) 40%, transparent);
 }
 
-/* Filled keeps its accent at 40% with a half-white label, rather than
-   collapsing to a gray button. */
+/* Filled keeps its accent at 40% with a half-white label. */
 .p-button-colored[disabled],
 .p-button-colored:disabled,
 .p-button-primary[disabled],
@@ -764,9 +764,9 @@
                               and bottom edges and a darker top band.
 
    The edge is the shared glass edge (--p-glass-edge: a hairline keyline,
-   side slivers, bright top and bottom rims) and the soft small-glass
-   shadow (--p-shadow-glass-control), so a retune of the glass tokens
-   carries over. Disabled collapses both to regular glass with a gray
+   side slivers, bright top and bottom rims). The shadow is the soft
+   small-glass shadow (--p-shadow-glass-control). A retune of the glass
+   tokens carries over. Disabled collapses both to regular glass with a gray
    label. These are CSS glass: they blur what is behind them but do not
    refract it. */
 
@@ -962,8 +962,7 @@
 
 /* ─── Vibrant ──────────────────────────────────────────────────────── */
 /* On a material (glass, menus, popovers, alerts) macOS 27 composites
-   button fills onto what is behind them instead of laying flat color on
-   top. Buttons inside .p-vibrant switch to that recipe, and so do
+   button fills onto what is behind them. Buttons inside .p-vibrant switch to that recipe, and so do
    buttons inside the surfaces that are always vibrant: the desktop alert
    (.p-desktop-modal), .p-popover and .p-menu. No extra markup needed.
 
@@ -976,9 +975,9 @@
    - Accent-tinted and destructive: the vibrant accent
      (--p-vibrant-blue, --p-vibrant-red) at 23%, with a vibrant-accent
      label (20% in dark, where plus-lighter adds it). +4% hover, +8%
-     pressed (+2.4 / +4.8% in dark), 12% disabled. Light mode uses multiply in every engine: over
-     translucent glass Safari's plus-darker at 23% comes out lighter
-     than a plain wash, and multiply lands on the reference.
+     pressed (+2.4 / +4.8% in dark), 12% disabled. Light mode uses multiply in
+     every engine. Over translucent glass Safari's plus-darker at 23% comes
+     out lighter than a plain wash, and multiply lands on native macOS 27.
    - Borderless: no fill to blend; the label moves to the darker
      --p-control-accent-text in light mode.
 
@@ -1002,9 +1001,9 @@
   --p-color-current: var(--p-vibrant-blue, #0078F0);
 }
 
-/* Borderless labels on a material use --p-control-accent-text: #0078F0
-   in light (darker than the #0088FF used on opaque backgrounds, so
-   thin glyphs hold their contrast over glass), #0091FF in dark. */
+/* Borderless labels on a material use --p-control-accent-text. It is
+   #0078F0 in light (darker than the #0088FF used on opaque backgrounds,
+   so thin glyphs hold their contrast over glass) and #0091FF in dark. */
 :where(.p-vibrant, .p-desktop-modal, .p-popover, .p-menu) :where(.p-button-borderless) {
   --p-color-current: var(--p-control-accent-text, #0078F0);
 }
@@ -1100,13 +1099,13 @@
 
 /* ─── Inactive window ──────────────────────────────────────────────── */
 /* When its window loses focus, macOS 27 takes the accent out of push
-   buttons: filled, accent-tinted, destructive and gray-with-accent
+   buttons. Filled, accent-tinted, destructive and gray-with-accent
    buttons all become the plain gray button with a primary label (black
    85%, white 85% in dark), in every state. Borderless keeps its accent
    label. Wrap the window in .p-window-inactive (the class windows.css
    uses) or set data-window-state="inactive" on any ancestor. Opt-in by
-   class rather than focus-within detection, which false-positives on
-   the web. */
+   class, because focus-within detection false-positives on the
+   web. */
 
 :is(.p-window-inactive, [data-window-state="inactive"]) :is(.p-button-colored, .p-button-primary, .p-button-secondary, .p-button-destructive, .p-button-tinted):not(.p-button-touch, .p-button-touch-small, .p-button-touch-large) {
   --p-button-overlay-hover: 0;

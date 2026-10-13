@@ -1,6 +1,6 @@
 /* Puppertino v2.0 — Windows (macOS 27)
-   A presentational window shell: a translucent titlebar band with
-   traffic lights, a leading title (and optional subtitle), glass
+   A presentational window shell. It has a translucent titlebar band
+   with traffic lights, a leading title (and optional subtitle), glass
    toolbar groups, and a content area. No dragging/resizing behavior.
 
    The toolbar groups themselves (.p-toolbar-group, .p-toolbar-circle)
@@ -32,7 +32,7 @@
   --p-traffic-inactive: rgba(0, 0, 0, 0.15);
   /* Active ring: 0.5px black @ 45% in overlay blend. CSS can't blend
      a box-shadow, so each ring is the precomputed result of
-     overlay(black) mixed 45% over that light's fill — it darkens each
+     overlay(black) mixed 45% over that light's fill. It darkens each
      light in its own hue without touching the backdrop. */
   --p-traffic-close-ring: #ff3335;
   --p-traffic-min-ring: #f8af00;
@@ -118,9 +118,10 @@
   font-family: var(--p-window-font);
   overflow: hidden;
   position: relative;
-  /* Makes the window a Backdrop Root, so the titlebar band and glass
-     groups blur only what is inside the window, never the page behind
-     it (otherwise the dark desktop bleeds in along the top edge). */
+  /* Makes the window a Backdrop Root. The titlebar band and glass
+     groups then blur only what is inside the window, never the page
+     behind it. Without it the dark desktop bleeds in along the top
+     edge. */
   will-change: filter;
 }
 
@@ -165,12 +166,12 @@
   min-width: 0;
 }
 
-/* Native corners are smoothed squircles, not circular arcs. Where
+/* Native corners are smoothed squircles. Where
    corner-shape ships (Chromium 139+), draw the real curve with
    superellipse(1.465). The span was fitted to the rendered macOS 27
    window edge: 21px matches the r16 corner within 0.15px RMS (the
    older r × 1.6 = 25.6 rule misses by 1.8px). The utility panel is a
-   plain r15 arc in the reference, so it stays round. */
+   plain r15 arc in native macOS 27, so it stays round. */
 @supports (corner-shape: superellipse(1.465)) {
   .p-window {
     border-radius: 21px;

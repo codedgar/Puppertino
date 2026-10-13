@@ -80,7 +80,15 @@ A window presents UI views and components in your app or game. On the web this i
 
 ## Anatomy
 
-Two window styles share one structure, and both are geometry variants, not states. The document window uses a 16px radius with a continuous corner and the system window shadow, `0 18px 54px` at 30% plus a blurred 1px hairline at 80% that keeps the edge defined on any background. In browsers with `corner-shape` support (Chromium 139 and later) the corner draws as a true squircle, `superellipse(1.465)` over a 21px span, which matches the native 16px curve. Other browsers fall back to the plain 16px arc. The utility panel (`.p-window-compact`, for inspectors and panels) keeps a plain 15px radius and a lighter `0 5px 20px` shadow at 30%.
+Two window styles share one structure: the document window and the utility panel (`.p-window-compact`, for inspectors and panels).
+
+| Part | Document window | Utility panel |
+|---|---|---|
+| Radius | 16px, continuous corner | 15px, plain arc |
+| Shadow | `0 18px 54px` at 30% plus a blurred 1px hairline at 80% | `0 5px 20px` at 30% |
+| Corner with `corner-shape` (Chromium 139 and later) | `superellipse(1.465)` over a 21px span | Not used |
+
+Browsers without `corner-shape` fall back to the plain 16px arc.
 
 Focus is a separate axis. `.p-window-inactive` applies to either style: the shadow shortens to `0 7px 21px` at 20%, the lights and title gray out, toolbar glass flattens, and the sidebar lightens and grays its icons.
 
@@ -101,7 +109,14 @@ Focus is a separate axis. `.p-window-inactive` applies to either style: the shad
 
 ## Titlebar
 
-The title leads. With no toolbar it sits 24px after the zoom light in a 32px band, lights 8px in. It is 13px bold at 85% ink, and an optional proxy icon (`.p-window-title-icon`) sits 4px before it at the same ink. Wrap the title in `.p-window-titles` to add a subtitle line: 11px at weight 510 in `#999999`, for state such as "Edited".
+The title leads the titlebar.
+
+| Part | Value |
+|---|---|
+| Title position | 24px after the zoom light in a 32px band, with lights 8px in |
+| Title text | 13px bold at 85% ink |
+| Proxy icon | `.p-window-title-icon`, 4px before the title at the same ink |
+| Subtitle | 11px at weight 510 in `#999999`, for state such as "Edited". Wrap the title in `.p-window-titles` to add it. |
 
 The band is a scroll-edge material rather than an opaque strip: white at 85% over a light blur (`#1F1F1F` at 55% in dark mode), closed by a 0.67px hairline at `rgba(0, 0, 0, 0.05)`.
 
@@ -113,11 +128,26 @@ A toolbar is a set of glass groups from [toolbars](../toolbars/), placed 8px fro
 
 To hide the title, leave it out; the groups keep their places.
 
-The utility panel centers its title and keeps an icon strip: 44×30px slots on a 44px pitch, with the selected slot drawn as a radius-9 glass pill. The band is 65px, closed by a 1px rule at `rgba(60, 60, 67, 0.12)`. The macOS 26 flat strip (44×29px, radius 6px, selected slot filled at 3%) is still available: add `.p-window-toolbar-flat` to the toolbar row.
+The utility panel centers its title and keeps an icon strip.
+
+| Part | Value |
+|---|---|
+| Icon slots | 44×30px on a 44px pitch |
+| Selected slot | Radius-9 glass pill |
+| Band | 65px, closed by a 1px rule at `rgba(60, 60, 67, 0.12)` |
+| Flat strip (`.p-window-toolbar-flat`) | 44×29px slots, radius 6px, selected slot filled at 3% |
+
+The macOS 26 flat strip is still available: add `.p-window-toolbar-flat` to the toolbar row.
 
 ## Traffic lights
 
-Three 14px lights on a 23px pitch: close `#FF5C60`, minimize `#FAC800`, zoom `#35C759`. The utility panel uses 10px lights on a 17px pitch, 12px from the left and 11px from the top. Each light carries a 0.5px ring that is black at 45% in overlay blend. It darkens each light in its own hue (the close edge reads about `#FF484B`). CSS can't blend a box shadow, so the ring colors are precomputed: `--p-traffic-close-ring`, `--p-traffic-min-ring` and `--p-traffic-zoom-ring`. The lights are real buttons, so label them (`aria-label="Close"`) even in demos so screen readers get a name.
+The lights are real buttons, so label them (`aria-label="Close"`) even in demos so screen readers get a name.
+
+| Part | Value |
+|---|---|
+| Document lights | 14px on a 23px pitch: close `#FF5C60`, minimize `#FAC800`, zoom `#35C759` |
+| Utility lights | 10px on a 17px pitch, 12px from the left and 11px from the top |
+| Ring | 0.5px, black at 45% in overlay blend, set by `--p-traffic-close-ring`, `--p-traffic-min-ring` and `--p-traffic-zoom-ring` |
 
 When the window is inactive, all three lights turn `rgba(0, 0, 0, 0.15)`, or `rgba(255, 255, 255, 0.17)` in dark mode, and the title drops to 50%.
 

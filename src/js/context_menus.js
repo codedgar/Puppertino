@@ -11,13 +11,14 @@
  *   <div class="p-menu p-menu-touch" id="file-menu" hidden> … </div>
  *
  * The menu floats beside the element that raised it, the way iOS places
- * a context menu against its preview: 16px below it, lined up with its
- * leading edge (or its trailing edge when the leading one would run off
- * screen). When there is no room below, it sits beside the element,
- * top edges aligned, then above it. Add data-p-context-menu-at="pointer"
- * to the element to open the menu at the press point instead, for large
- * surfaces like a canvas where the whole element is not a useful anchor.
- * Everything is clamped to the viewport.
+ * a context menu against its preview. It sits 16px below the element,
+ * lined up with its leading edge (or its trailing edge when the leading
+ * one would run off screen). When there is no room below, it sits beside the
+ * element, top edges aligned, then above it. Add
+ * data-p-context-menu-at="pointer" to the element to open the menu at the
+ * press point instead. Use it for large surfaces like a canvas, where the
+ * whole element is not a useful anchor. Everything is clamped to the
+ * viewport.
  *
  * Escape, an outside tap, or choosing an item closes it. A held mouse
  * button opens it the same way a finger does, and right-click opens it
@@ -87,7 +88,7 @@
     };
   }
 
-  /* At a point: just below it, flipping above when it would run off. */
+  /* At a point: below it, flipping above when it would run off. */
   function placeAtPoint(menu, x, y) {
     var rect = menu.getBoundingClientRect();
     var left = Math.min(Math.max(MARGIN, x), window.innerWidth - rect.width - MARGIN);
@@ -149,8 +150,8 @@
     timer = setTimeout(function () {
       if (!pending) return;
       show(pending.host, pending.x, pending.y);
-      /* A mouse press still emits click on release; that click would land
-         outside the menu and close what the press just opened. */
+      /* A mouse press still emits click on release. That click would land
+         outside the menu and close what the press opened. */
       swallowClick = true;
       pending = null;
       timer = null;

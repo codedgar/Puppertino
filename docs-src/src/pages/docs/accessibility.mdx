@@ -1,0 +1,124 @@
+---
+layout: ../../layouts/Doc.astro
+title: Accessibility
+description: What Puppertino does for accessibility on its own, and what you still have to do in your markup and content.
+---
+
+Puppertino handles the accessibility that lives in the components: focus rings, target sizes, keyboard behavior and the system preferences. You handle what lives in your page: labels, roles, content contrast and anything you build on top.
+
+## What Puppertino does
+
+### Focus is always visible
+
+Every control shows a focus ring when it receives keyboard focus. The ring only appears for keyboard focus (`:focus-visible`), so a mouse click does not draw it.
+
+| Part | Value |
+|---|---|
+| Ring | `--p-focus-ring`: 3.5px outside the control plus a 1px inset line |
+| Color | `--p-focus-ring-color`: `rgba(0, 136, 255, 0.5)` light, `rgba(0, 145, 255, 0.5)` dark |
+| Shape | Follows the control's own radius |
+
+To match your brand, override the color token. Avoid removing the ring.
+
+```css
+:root {
+  --p-focus-ring-color: rgba(175, 82, 222, 0.5);
+}
+```
+
+### Targets are big enough to hit
+
+Every touch component is at least 44px tall. That is Apple's minimum for a finger. Desktop components follow macOS sizes, which are smaller, because a pointer can aim. For a desktop page that people will touch, use the touch variants.
+
+### The keyboard works everywhere
+
+The JavaScript modules add the keys people expect from native controls.
+
+| Component | Keys |
+|---|---|
+| Modals, alerts, sheets | Tab stays inside the dialog. Escape closes it. Focus returns to the element that opened it. |
+| Menus and pop-up buttons | Arrow keys move, Home and End jump, Escape closes, Tab leaves. |
+| Menu bar | Left and Right arrows move between menus. |
+| Sliders and dials | Arrow keys step, Page Up and Page Down step by more, Home and End go to the ends. |
+| Swipe actions | With focus in the row, Left and Right arrows open the actions. Escape closes them. |
+| Color pickers | Arrow keys move around the grid, Home goes to the row start. |
+
+The modules also keep ARIA state current: `aria-expanded` on triggers, `aria-current` on the selected tab, `aria-pressed` on toggles, `aria-valuenow` on sliders.
+
+### System preferences are respected
+
+Every component responds to the four preferences people set in their operating system. Nothing to enable.
+
+| Preference | Media query | What changes |
+|---|---|---|
+| Reduce Motion | `prefers-reduced-motion` | Sheets, modals and menus fade instead of sliding. The dock stops magnifying. The Liquid Glass morph on switches and sliders is replaced by a plain slide. |
+| Reduce Transparency | `prefers-reduced-transparency` | Every material and glass surface becomes opaque. |
+| Increase Contrast | `prefers-contrast: more` | Buttons gain a 2px border. Glass keylines and separators become solid lines. Sidebar, popover and notification edges darken. |
+| Contrast themes on Windows | `forced-colors: active` | Components draw with the system colors (`ButtonFace`, `ButtonText`, `CanvasText`). Shadows are dropped and surfaces get a 1px outline. |
+
+### State does not rest on color alone
+
+Selected tabs, rows and menu items carry a checkmark, a fill, or a weight change as well as a color. Switches can show an on/off glyph in the knob with `.p-switch-labels`, which matches the iOS On/Off Labels setting. See [Switches](../mobile/forms/#switches).
+
+### Dark mode is a token flip
+
+Every color is a custom property that flips in dark mode, so both appearances keep their contrast. See [Dark mode](../dark-mode/).
+
+## What you still have to do
+
+Puppertino styles elements. It cannot know what they mean. These are the parts only you can supply.
+
+### Label every control
+
+An icon-only button has no accessible name until you give it one. The same goes for a field with only a placeholder.
+
+```html
+<button class="p-button" aria-label="Delete file">
+  <i class="ph-bold ph-trash" aria-hidden="true"></i>
+</button>
+
+<input class="p-field" type="search" placeholder="Search" aria-label="Search files" />
+```
+
+Wrap switches, checkboxes and radios in a `<label>`, or point a `<label for>` at them. The docs examples do this. Copy the pattern.
+
+### Give dialogs and notifications a role
+
+The modal module manages focus, but the dialog semantics come from your markup.
+
+```html
+<div class="p-modal p-alert" role="alertdialog" aria-modal="true" aria-labelledby="delete-title">
+  <h2 id="delete-title">Delete "Q3 Report"?</h2>
+  ...
+</div>
+```
+
+Use `role="dialog"` for sheets and forms, `role="alertdialog"` for alerts that interrupt. Give notifications `role="status"`, or `role="alert"` when they report an error, so screen readers announce them.
+
+### Use real interactive elements
+
+A `<div>` with a click handler has no keyboard behavior and no role. Put `.p-button` on a `<button>` and menu items on `<button>` or `<a>`. Put data-p-* triggers on elements that can receive focus. The modules assume this.
+
+### Check the contrast of your content
+
+The component colors meet 4.5:1 against the component surfaces. What sits behind a material is yours. Over a photo or a busy page, a thin material may not leave enough contrast for the text on it. Use a thicker material, or an opaque surface, when you cannot control the backdrop. See [Materials](../materials/#accessibility).
+
+### Give gestures a visible alternative
+
+Swipe actions, long-press menus and drag-to-dismiss are invisible until someone tries them. Puppertino adds keyboard equivalents, but a person who does not know the gesture never finds it. Put the same actions somewhere visible: a menu, an overflow button, or a toolbar.
+
+### Let text scale
+
+The type scale is in pixels, so browser zoom scales it with everything else. Do not block zoom in the viewport meta tag. Leave `user-scalable` and `maximum-scale` out.
+
+### Structure the page
+
+Headings in order, one `<main>`, a `<nav>` for navigation, and `lang` on `<html>`. Puppertino does not add these and screen readers depend on them.
+
+## Before you ship
+
+- Unplug the mouse. Reach and operate every control with Tab, arrows, Enter and Escape.
+- Turn on a screen reader (VoiceOver on macOS and iOS, NVDA on Windows). Every control should announce a name, a role and a state.
+- Turn on Reduce Motion, Reduce Transparency and Increase Contrast in the operating system, one at a time. On Windows, pick a contrast theme.
+- Check text over materials at 4.5:1 with the real backdrop behind it.
+- Zoom the page to 200%. Nothing should overlap or disappear.

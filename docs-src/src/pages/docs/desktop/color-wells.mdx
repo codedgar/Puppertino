@@ -58,7 +58,14 @@ The first well has no color yet: it shows the spectrum disc. Click it, pick a co
 </label>`}
 />
 
-The capsule well always shows a color, so it has no empty state. It is a 2:1 capsule filled at `rgba(0,0,0,0.08)` (`rgba(255,255,255,0.07)` in dark mode) with the color inset 3px all round, and a 1px hairline at `rgba(0,0,0,0.10)` just inside the swatch edge so light colors still hold their shape.
+The capsule well always shows a color, so it has no empty state. It is a 2:1 capsule.
+
+| Part | Value |
+|---|---|
+| Fill, light | `rgba(0,0,0,0.08)` |
+| Fill, dark | `rgba(255,255,255,0.07)` |
+| Color inset | 3px all round |
+| Hairline | 1px at `rgba(0,0,0,0.10)`, just inside the swatch edge so light colors still hold their shape |
 
 Five sizes: 32×16, 40×20, 48×24 (the default), 56×28, and 72×36, via `.p-colorwell-mini`, `.p-colorwell-small`, the default, `.p-colorwell-large`, and `.p-colorwell-xlarge`. While the color picker is open the capsule body turns solid accent around the swatch (`.p-active`, which `colorwells.js` sets while the picker is up). Disabled dims the swatch to 50% and leaves the body alone.
 

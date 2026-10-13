@@ -29,7 +29,14 @@ A scrollbar shows position in scrollable content without claiming layout space o
 
 ## Anatomy
 
-The visible thumb is 6px thick with a full 3px capsule radius, filled `rgba(0, 0, 0, 0.5)`, the same weight as the native overlay scroller. There is no track. The thumb sits in a 14px gutter (a 4px transparent border on each side keeps the 6px core), which also acts as the hover target. Minimum thumb length is 29px.
+The scrollbar is a capsule thumb with no track, the same weight as the native overlay scroller.
+
+| Part | Value |
+|---|---|
+| Thumb thickness | 6px |
+| Thumb radius | 3px, a full capsule |
+| Gutter (also the hover target) | 14px, with a 4px transparent border on each side |
+| Minimum thumb length | 29px |
 
 | State | Value |
 |---|---|

@@ -91,7 +91,7 @@ An alert interrupts. It stops what a person was doing to tell them something the
 
 Use an alert when the app cannot proceed without a decision, and the decision has consequences. Deleting something permanently. Discarding unsaved work. Confirming a purchase.
 
-Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when you are offering a choice between several things rather than confirming one. Use a notification or an inline message when nothing needs deciding.
+Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when you are offering a choice between several things. Use a notification or an inline message when nothing needs deciding.
 
 Alerts are expensive. They take the screen, break concentration, and train people to dismiss without reading. An app that alerts on every save has an app where nobody reads alerts.
 
@@ -143,15 +143,21 @@ Alerts are expensive. They take the screen, break concentration, and train peopl
 </div>`}
 />
 
-The actions are capsules on the surface, not divided rows across the bottom. This is the current iOS treatment and it is the biggest visual difference from the alert most people picture.
+The actions are capsules on the surface. This is the current iOS treatment and it is the biggest visual difference from the alert most people picture.
 
-The text is left-aligned, not centered. It reads as a sentence rather than a caption.
+The text is left-aligned. It reads as a sentence.
 
 Two actions sit side by side. Three or more stack. The component decides this itself through `:has(> :nth-child(3))`, so the markup is identical either way. Add `.p-alert__actions--stacked` to force a column when two labels are too long to sit next to each other. Browsers without `:has()` keep the row.
 
 ## Text fields
 
-An alert can ask for a short answer, like a name for a new folder or a password. Put the fields in `.p-alert__fields` between the body and the actions. Each `.p-alert__field` is a 52px row; the block is inset 14px, rounded 26px, on the same quiet fill as the actions, with a 1px separator inset 16px between rows.
+An alert can ask for a short answer, like a name for a new folder or a password. Put the fields in `.p-alert__fields` between the body and the actions.
+
+| Part | Value |
+|---|---|
+| `.p-alert__field` | 52px row |
+| Block | Inset 14px, rounded 26px, on the same quiet fill as the actions |
+| Separator | 1px, inset 16px between rows |
 
 <Showcase
   name="alert-fields"
@@ -214,7 +220,7 @@ Label the buttons with verbs that say what happens. Delete, Discard, Save draft.
 
 The title is a short question or statement, in sentence case, ending without a period unless it is a question. The message is one or two complete sentences explaining the consequence.
 
-Put the consequence in the message, not in the title. "Delete Q3 Report?" is the question. "This file will be deleted immediately. You cannot undo this action." is why it matters.
+Put the consequence in the message, because the title is the question. "Delete Q3 Report?" is the question. "This file will be deleted immediately. You cannot undo this action." is why it matters.
 
 ## Markup
 
@@ -250,7 +256,7 @@ One `.p-modal-background` per page, holding every alert. Open with `data-p-open-
 <script type="module" src="/js/modals.js"></script>
 ```
 
-`role="alertdialog"` rather than `role="dialog"`. It tells a screen reader this is an interruption that needs a response, and it makes the message part of the announcement.
+Use `role="alertdialog"`. It tells a screen reader this is an interruption that needs a response, and it makes the message part of the announcement.
 
 ## Dark mode
 
@@ -333,7 +339,7 @@ Without `data-p-detents` the sheet keeps the height its class gives it and only 
 
 ### The header
 
-The header is a three-column grid: leading action, title, trailing action. The title is centered on the sheet rather than on the leftover space, so adding an action to one side does not shift it.
+The header is a three-column grid: leading action, title, trailing action. The title is centered on the sheet, so adding an action to one side does not shift it.
 
 Both actions are optional. A first or last child that is not the title takes the outer column automatically, so a header with only a Done button still puts it on the right.
 
@@ -343,13 +349,13 @@ Use `.p-button-touch-small` for header actions. They sit in a 46px band, and the
 
 `.p-bottom-sheet__body` scrolls, and the header and grabber stay put. It clears the home indicator through `env(safe-area-inset-bottom)` with a 16px floor.
 
-The sheet is opaque rather than a material. Sheets hold content, often a list of text, and a translucent panel takes its contrast from whatever is scrolling behind it, which cannot be guaranteed to meet 4.5:1.
+The sheet is opaque. Sheets hold content, often a list of text, and a translucent panel takes its contrast from whatever is scrolling behind it, which cannot be guaranteed to meet 4.5:1.
 
 Reduced motion replaces the slide with a fade. The sheet still arrives, it just does not travel.
 
 ### Not to be confused with
 
-`modals.css` ships three things called some kind of sheet, which is Apple's naming rather than ours.
+`modals.css` ships three things called some kind of sheet, which follows Apple's naming.
 
 | Class | What it is |
 |---|---|

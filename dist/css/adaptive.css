@@ -8,27 +8,27 @@
    ─── The size class model ───────────────────────────────────────────
    Apple describes every screen by a pair of size classes, horizontal
    and vertical, each either compact or regular. What matters here is
-   the horizontal one:
+   the horizontal one.
 
      compact    iPhone portrait, and an iPad app in Slide Over or a
-                one-third Split View
+                one-third Split View.
      regular    iPad full screen, and an iPad app in a half or
-                two-thirds Split View
+                two-thirds Split View.
 
    The second half of that compact row is the reason this file exists.
    An iPad app can be 320pt wide at runtime because someone dragged
-   another app alongside it, so "iPad" is a range of widths rather than
-   a device. Design what happens at each size class, not per device.
+   another app alongside it. "iPad" is a range of widths. Design what happens at each size
+   class.
 
    The boundary is 768px, the web equivalent of Apple's ~507pt split.
-   Only the horizontal size class is implemented; the vertical one has
+   Only the horizontal size class is implemented. The vertical one has
    no useful web equivalent, since a browser has no home indicator to
    lay out around. */
 
 :root {
   /* The compact/regular boundary. Custom properties cannot be used in
-     a media query, so this is documentation; the value is repeated in
-     the queries below and they have to be changed together. */
+     a media query, so this is documentation. The value is repeated in
+     the queries below, and they have to be changed together. */
   --p-size-regular: 768px;
 
   /* Content margins, per size class. */
@@ -55,7 +55,7 @@
   padding-inline: var(--p-margin-compact);
 }
 
-/* Caps the container itself, rather than the text inside it. */
+/* Caps the container itself. */
 .p-container-readable {
   max-width: calc(var(--p-readable-width) + 2 * var(--p-margin-compact));
 }

@@ -45,8 +45,8 @@
   --p-slider-lens-shadow: rgba(0, 0, 0, 0.6);
   /* Liquid glass (the default lens). A faint shade for the body and a
      soft shadow cast below, measured from NSSlider on macOS 26. The
-     scheme is a keyword: the rim's gradients are built from the fill
-     color, and a var() inside a custom property resolves where it is
+     scheme is a keyword. The rim's gradients are built from the fill
+     color. A var() inside a custom property resolves where it is
      defined, so they cannot be tokens here. liquid_glass.js reads the
      keyword and puts a class on the lens. */
   --p-slider-glass-scheme: light;
@@ -121,8 +121,8 @@
   --p-slider-lens-shadow: rgba(0, 0, 0, 0.6);
   /* Liquid glass (the default lens). A faint shade for the body and a
      soft shadow cast below, measured from NSSlider on macOS 26. The
-     scheme is a keyword: the rim's gradients are built from the fill
-     color, and a var() inside a custom property resolves where it is
+     scheme is a keyword. The rim's gradients are built from the fill
+     color. A var() inside a custom property resolves where it is
      defined, so they cannot be tokens here. liquid_glass.js reads the
      keyword and puts a class on the lens. */
   --p-slider-glass-scheme: light;
@@ -364,11 +364,11 @@
 
 /* ─── Touch size (iOS) ─────────────────────────────────────────────── */
 /* iOS 27 runs a thicker track than macOS, 6px against the pointer
-   size, and a white 38×24 capsule thumb with a two-layer shadow (a soft
-   drop 6px down and a tight contact shadow). The thumb sits inside the
+   size. The thumb is a white 38×24 capsule with a two-layer shadow (a
+   soft drop 6px down and a tight contact shadow). The thumb sits inside the
    track ends and the fill ends under its center. Ticks are 4px dots,
    centered 9px below the track (a 4px gap), in the tertiary label
-   color rather than the macOS tick gray. Disabled fades the whole
+   color (macOS uses its own tick gray). Disabled fades the whole
    control to 50%; the fill stays blue and the thumb white. */
 
 :root {
@@ -406,7 +406,7 @@
   --p-slider-touch-h: 6px;
   --p-slider-touch-thumb-w: 38px;
   --p-slider-touch-thumb-h: 24px;
-  /* v2.0 name for the old 28px circle; now the capsule's height. */
+  /* Legacy alias of --p-slider-touch-thumb-h. */
   --p-slider-touch-thumb-size: var(--p-slider-touch-thumb-h);
   --p-slider-thumb-w: var(--p-slider-touch-thumb-w);
   --p-slider-thumb-h: var(--p-slider-touch-thumb-h);
@@ -533,7 +533,7 @@
    back to the native one.
 
    The default is the liquid lens: clear glass, a little larger than
-   the thumb, that cuts the real track out underneath and redraws it
+   the thumb. It cuts the real track out underneath and redraws it
    inside itself at its real thickness and in focus. The copy sits over
    the page, so it needs an opaque stand-in for the translucent track
    token.
@@ -541,8 +541,8 @@
    data-p-lens="clear" on the input opts into the flat macOS 27 / iOS 27
    lens (.p-lens-clear): the track shows
    through unmagnified and a soft ring shadow falls about 7px below.
-   On the pointer sizes the thumb grows 1.25× plus a 1px rim; the touch
-   capsule grows from 38×24 to 60×40, with a 0.5px hairline (dark in
+   On the pointer sizes the thumb grows 1.25× plus a 1px rim. The touch
+   capsule grows from 38×24 to 60×40. It has a 0.5px hairline (dark in
    light mode, bright in dark), a faint shade in its upper third and
    thin bright lines inside its top and bottom edges. The lens lives on
    <body> so no overflow or transform on an ancestor can clip it; the
@@ -681,8 +681,8 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
   box-shadow: var(--p-slider-thumb-shadow, 0 0.5px 6px rgba(0, 0, 0, 0.12));
 }
 
-/* Clear glass: sized so the rim stays 1px. Rounded to whole pixels like
-   the reference (a 20×16 thumb → 27×22 glass). */
+/* Clear glass: sized so the rim stays 1px. Rounded to whole pixels, as
+   native macOS 26 does (a 20×16 thumb → 27×22 glass). */
 .p-slider-lens.p-lens-clear {
   width: calc(
     var(--p-slider-lens-thumb-w) +
@@ -707,7 +707,7 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
 }
 
 /* The cast shadow: a 1px ring 1.5px inside the glass, blurred and
-   dropped 7px, as the reference draws it. A ring rather than a filled
+   dropped 7px, as native macOS 26 draws it. A ring rather than a filled
    shadow, so the glass does not darken over its own shadow. */
 .p-slider-lens.p-lens-clear .p-lens-rim::before {
   content: "";
@@ -724,9 +724,10 @@ input.p-slider[data-p-lens-open]::-moz-range-thumb {
    at their real size.
 
    Knockout. The real track is cut out under the glass, so everything
-   seen through the lens is the lens's own drawing. The hole lifts with the glass (the script sets [data-p-lens-lift] on
-   the input as it lifts the lens) and stays a pixel inside the rim, so
-   the rim always covers the cut ends of the real track. */
+   seen through the lens is the lens's own drawing. The hole lifts with
+   the glass (the script sets [data-p-lens-lift] on the input as it
+   lifts the lens). It stays a pixel inside the rim, so the rim always
+   covers the cut ends of the real track. */
 input.p-slider[data-p-lens-open]:not([data-p-lens="clear"]) {
   --p-slider-knockout-w: calc(var(--p-slider-thumb-w) + var(--p-slider-lens-grow-w) * var(--p-lens-lift) - 2px);
 
@@ -771,18 +772,19 @@ input.p-slider[data-p-lens-lift] {
 }
 
 /* ── Pointer rim ──
-   Rings, each a conic gradient shown only along the edge of the glass
-   (a padding-wide band, cut out with an excluding mask), so the color
-   can change around the perimeter the way light does on the native
-   lens:
+   Three rings, each a conic gradient shown only along the edge of the
+   glass (a padding-wide band, cut out with an excluding mask). The
+   color can change around the perimeter the way light does on the
+   native lens:
 
    1. The glass's own hairline: dark along the top and the left, bright
       along the bottom and the right.
    2. The fill's color, wrapped around the rim wherever the fill sits
-      under the glass: nothing at the minimum, the leading half
-      mid-track, the whole rim at the maximum. Deep on the leading edge,
-      faint over the top, a pale shifted tint around the lower rim.
-   3. A fainter fringe just inside ring 2.
+      under the glass. It is absent at the minimum, covers the leading
+      half mid-track, and covers the whole rim at the maximum. Deep on
+      the leading edge, faint over the top, a pale shifted tint around
+      the lower rim.
+   3. A fainter fringe inside ring 2.
 
    The stops are measured from NSSlider on macOS 26, in light and dark.
 
@@ -888,9 +890,9 @@ input.p-slider[data-p-lens-lift] {
 
 .p-slider-lens .p-lens-edge {
   z-index: 2;
-  /* The fill's colors as they read on the rim: deep (leading edge),
-     mid (over the top and the far edge), pale and hue-shifted (the
-     lower rim), and the cooler fringe inside it. Plain fill where
+  /* The fill's colors as they read on the rim. Deep is the leading
+     edge. Mid is over the top and the far edge. Pale and hue-shifted
+     is the lower rim, and the cooler fringe is inside it. Plain fill where
      relative colors are unsupported. */
   --p-ring-deep: var(--p-slider-lens-fill);
   --p-ring-mid: var(--p-slider-lens-fill);
@@ -902,7 +904,7 @@ input.p-slider[data-p-lens-lift] {
   --p-ring-pale: oklch(from var(--p-slider-lens-fill) 0.84 calc(c * 0.3) calc(h + 25));
   --p-ring-warm: oklch(from var(--p-slider-lens-fill) 0.68 calc(c * 0.7) calc(h + 30));
   --p-ring-cool: oklch(from var(--p-slider-lens-fill) 0.8 calc(c * 0.5) calc(h - 20));
-  /* Fades out just before the fill end. The end is pushed 60% further
+  /* Fades out before the fill end. The end is pushed 60% further
      from the lens center so the ring is gone at the minimum and closed
      at the maximum. */
   --p-ring-end: calc(50% + (var(--p-slider-lens-fill-to) - var(--p-slider-lens-offset)) * 1.6);
@@ -958,8 +960,8 @@ input.p-slider[data-p-lens-lift] {
   ) border-box;
 }
 
-/* Dark: the leading edge and the far edge glow in the fill color, the
-   lower rim picks up a pale tint, and the top stays dark. */
+/* Dark: the leading edge and the far edge glow in the fill color.
+   The lower rim picks up a pale tint, and the top stays dark. */
 .p-slider-lens-dark .p-lens-edge {
   --p-ring-deep: oklch(from var(--p-slider-lens-fill) l calc(c * 1.25) h);
   --p-ring-mid: color-mix(in srgb, var(--p-slider-lens-fill) 35%, rgb(0, 27, 49));
@@ -1063,7 +1065,7 @@ input.p-slider[data-p-lens-lift] {
   width: calc(var(--p-slider-lens-fill-to) - var(--p-slider-lens-fill-from));
   border-radius: 999px;
   /* The fill thins the same way, but only at an end that is also an
-     end of the track: the soft length is 0 anywhere else, so the fill
+     end of the track. The soft length is 0 anywhere else, so the fill
      keeps its rounded end where it stops under the glass. */
   --p-fill-soft-l: min(var(--p-track-soft), max(0px, 0.01px - var(--p-slider-lens-fill-from)) * 1000);
   --p-fill-soft-r: min(var(--p-track-soft), max(0px, var(--p-slider-lens-fill-to) - var(--p-slider-lens-track-w) + 0.01px) * 1000);
@@ -1081,10 +1083,10 @@ input.p-slider[data-p-lens-lift] {
 }
 
 /* The flare in the track itself. Where the track meets the rim the edge
-   of the glass bends it: it reads thicker there (a concave fillet in
-   each corner between the track and the rim), and at either end of the
-   thumb's travel, where the track's own rounded end sits just inside
-   the rim, its color carries on across the gap to the rim. A taller
+   of the glass bends it, so it reads thicker there. Each corner between
+   the track and the rim gets a concave fillet. At either end of the
+   thumb's travel the track's own rounded end sits inside the rim. Its
+   color carries on across the gap to the rim. A taller
    copy of the track's colors, masked down to the four fillets, a band
    along each rim, and a strip beside each band. */
 .p-slider-lens .p-lens-track::after {
@@ -1109,11 +1111,10 @@ input.p-slider[data-p-lens-lift] {
     var(--p-slider-lens-fill-to) + min(4px, var(--p-slider-lens-fill-to) * 1000) +
     min(8px, max(0px, var(--p-slider-lens-fill-to) - var(--p-slider-lens-track-w) + 0.01px) * 1000)
   );
-  /* The fillets only exist where the track really runs under the rim.
-     At the very ends of the thumb's travel the glass overhangs the end
-     of the track; once the rim is past the end (give or take a pixel
-     of its rounded cap), the fillet on that side is moved out of
-     sight. */
+  /* The fillets only exist where the track runs under the rim.
+     At the ends of the thumb's travel the glass overhangs the end
+     of the track. Once the rim is past the end (give or take a pixel
+     of its rounded cap), the fillet on that side moves out of sight. */
   --p-slider-fillet-l: calc(
     var(--p-slider-flare-l) -
     min(999px, max(0px, 4px + 1px - var(--p-slider-flare-l)) * 1000)
@@ -1169,8 +1170,8 @@ input.p-slider[data-p-lens-lift] {
 
 /* ── Touch glass ──
    Measured from UISlider on iOS 26. The rim is a dark hairline with a bright
-   line inside its top and bottom edges (box shadows on the rim layer),
-   so the pointer rings are off. The track reads in focus through the
+   line inside its top and bottom edges (box shadows on the rim layer).
+   The pointer rings are off. The track reads in focus through the
    glass and dims toward the far rim. The fill ends at the middle of
    the lens, dims where it enters the glass, and flares along the rim
    at that point. */

@@ -72,7 +72,8 @@
     "build:css:desktop": "lightningcss --minify --bundle --browserslist dist/css/puppertino-desktop.css -o dist/css/puppertino-desktop.min.css",
     "build:css:mobile": "lightningcss --minify --bundle --browserslist dist/css/puppertino-mobile.css -o dist/css/puppertino-mobile.min.css",
     "prepublishOnly": "npm run build:css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:docs": "node tools/prose-lint/lint.mjs"
   },
   "browserslist": [
     ">= 0.5%",

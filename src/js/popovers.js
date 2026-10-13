@@ -4,8 +4,8 @@
  * Opens .p-popover[data-p-popover-float] surfaces from trigger elements
  * marked data-p-popover="#popover-id". Placement comes from
  * data-p-popover-place on the popover (top | bottom | left | right,
- * default bottom = under the trigger), flips when it would overflow and
- * clamps to the viewport; the arrow tracks the trigger center. One
+ * default bottom = under the trigger). It flips when it would overflow
+ * and clamps to the viewport. The arrow tracks the trigger center. One
  * popover open at a time. Escape or an outside click closes it.
  * No dependencies.
  */

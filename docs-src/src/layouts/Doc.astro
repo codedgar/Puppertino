@@ -112,6 +112,47 @@ const currentSection = currentIndex >= 0 ? flat[currentIndex].section : null;
           el = details.parentElement;
         }
 
+        // Keep the sidebar's scroll offset across page loads, per tab, so
+        // moving between neighbouring pages does not jump the list back to
+        // the top. The restore runs before first paint because this script
+        // sits right after the sidebar markup. In drawer mode (narrow
+        // screens) the drawer opens closed on every load, so the current
+        // page is centred instead.
+        const sidebar = document.getElementById('docs-sidebar');
+        const SCROLL_KEY = 'puppertino-docs-nav-scroll';
+        const drawer = window.matchMedia('(max-width: 768px)').matches;
+        const active = document.querySelector('.sidebar a.active');
+        const offsetOf = (node) =>
+          node.getBoundingClientRect().top - sidebar.getBoundingClientRect().top + sidebar.scrollTop;
+
+        if (sidebar) {
+          let saved = NaN;
+          try { saved = parseInt(sessionStorage.getItem(SCROLL_KEY), 10); } catch {}
+          if (!drawer && !Number.isNaN(saved)) sidebar.scrollTop = saved;
+
+          if (active) {
+            const top = offsetOf(active);
+            const bottom = top + active.offsetHeight;
+            const viewTop = sidebar.scrollTop;
+            const viewBottom = viewTop + sidebar.clientHeight;
+            if (drawer) {
+              sidebar.scrollTop = top - sidebar.clientHeight / 2;
+            } else if (top < viewTop || bottom > viewBottom) {
+              sidebar.scrollTop = top - sidebar.clientHeight / 2;
+            }
+          }
+
+          let ticking = false;
+          sidebar.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+              ticking = false;
+              try { sessionStorage.setItem(SCROLL_KEY, String(Math.round(sidebar.scrollTop))); } catch {}
+            });
+          }, { passive: true });
+        }
+
         // A link inside a summary (e.g. Forms) must navigate, not toggle.
         // preventDefault stops the toggle, so navigate by hand. Modified
         // clicks (new tab) keep their default behavior.

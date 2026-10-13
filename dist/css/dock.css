@@ -1,14 +1,13 @@
 /* Puppertino v2.0 — Dock (macOS 27)
    Glass platter with app icons. Metrics: platter 55px tall (8 above the
-   icons, 11 below), radius 15, 36px icons at 9px gaps, a 1×36 light
-   separator with 14px clear on each side. Magnification + bounce live in
-   src/js/dock.js (opt-in via data-p-dock-magnify).
+   icons, 11 below), radius 15. Icons are 36px at 9px gaps. The
+   separator is 1×36, light, with 14px clear on each side. Magnification +
+   bounce live in src/js/dock.js (opt-in via data-p-dock-magnify).
 
    macOS 27 glass edge: a 0.5px dark outline, a strong bright rim along the
    top and bottom with ~12px glow bands, no side rim and no soft drop
-   shadow. The light platter now darkens the wallpaper slightly instead of
-   lightening it. The fill stays a neutral tint (the system's
-   luminosity blend is not reproduced). */
+   shadow. The light platter darkens the wallpaper slightly. The fill stays
+   a neutral tint (the system's luminosity blend is not reproduced). */
 
 :root {
   --p-dock-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
@@ -98,8 +97,8 @@
 
 /* Magnification writes --p-dock-icon per item (dock.js): real box
    growth rather than transform scale, so content repaints crisp at
-   the new size (Chromium stretches the cached rest-size raster and
-   scaled icons pixelate). Icons grow upward from the platter
+   the new size. Chromium stretches the cached rest-size raster, so
+   scaled icons pixelate. Icons grow upward from the platter
    baseline because the flex container aligns to flex-end. Give icon
    images sources of at least 144px so 2× magnification stays sharp. */
 .p-dock-item {

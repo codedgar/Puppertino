@@ -5,8 +5,8 @@
  * one fan into a list, and swipes a .p-notification-touch sideways to
  * dismiss it.
  *
- * Dismissing removes the card from the DOM after its transition and
- * fires a `p-notification-dismiss` CustomEvent on the parent first, so
+ * Dismissing removes the card from the DOM after its transition. A
+ * `p-notification-dismiss` CustomEvent fires on the parent first, so
  * an app can cancel with preventDefault() or record the dismissal.
  * No dependencies.
  */

@@ -68,7 +68,15 @@ In dark mode the banner does not darken what is behind it. It lifts it, about 16
 
 ## The long look
 
-Pressing a notification expands it into the long look: a 370px opaque card with 26px corners. A 66px header repeats the icon, title, description and time, and the app's own content fills the rest. Under it, `.p-notification-actions` is the quick-actions menu: 250px wide, 26px corners, on the banner's glass, with 42px rows and 17px labels.
+Pressing a notification expands it into the long look, an opaque card. The header repeats the icon, title, description and time, and the app's own content fills the rest. Under it, `.p-notification-actions` is the quick-actions menu, on the banner's glass.
+
+| Part | Card | Quick actions |
+|---|---|---|
+| Width | 370px | 250px |
+| Corners | 26px | 26px |
+| Header | 66px | |
+| Rows | | 42px, 17px labels |
+
 
 <Showcase
   name="notification-long-look"
@@ -129,7 +137,7 @@ Keep quick actions to two or three verbs. Add `.p-notification-actions__item--de
 </div>`}
 />
 
-iOS stacks notifications rather than listing them. `.p-notification-stack` puts every card in the same grid cell; each card behind steps in 10px per side and peeks 8px below the one in front, with its own rim, so the stack reads as depth rather than as a list. Expanded, the cards list with 8px between them.
+iOS stacks notifications. `.p-notification-stack` puts every card in the same grid cell; each card behind steps in 10px per side and peeks 8px below the one in front, with its own rim, so the stack reads as depth. Expanded, the cards list with 8px between them.
 
 `notifications.js` makes both gestures work: tap the stack to fan the cards into a list, and swipe a card sideways to dismiss it.
 
@@ -145,7 +153,7 @@ The stack still renders without the script; it just does not expand.
 
 The card becomes an additive lift, `rgba(255,255,255,0.085)` over the blurred wallpaper, the title and body turn full white, and the time becomes `rgba(255,255,255,0.44)`. The long look moves to `#1C1C1E`.
 
-Notifications on a lock screen sit over a photograph rather than a page, which is the case the material is for. Reduced transparency swaps it for an opaque card, since white text over an arbitrary photo through a translucent panel cannot be guaranteed to meet 4.5:1.
+Notifications on a lock screen sit over a photograph, which is the case the material is for. Reduced transparency swaps it for an opaque card, since white text over an arbitrary photo through a translucent panel cannot be guaranteed to meet 4.5:1.
 
 ## Accessibility
 

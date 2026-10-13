@@ -13,7 +13,7 @@ A button initiates an immediate action. On touch it is a capsule, sized so a fin
 
 Use a button when a tap does something right away. Save, Share, Delete, Buy.
 
-Use a link when the tap navigates somewhere and the destination is a place, not an action. Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/#switches`}>switch</a> when the tap changes a setting that takes effect immediately and has no verb. Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when one tap needs to offer several choices.
+Use a link when the tap navigates somewhere and the destination is a place. Use a <a href={`${import.meta.env.BASE_URL}docs/mobile/forms/#switches`}>switch</a> when the tap changes a setting that takes effect immediately and has no verb. Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/actions/`}>action sheet</a> when one tap needs to offer several choices.
 
 Put one filled button on a screen. It marks the action people came to perform, and a second one splits the decision.
 
@@ -49,7 +49,7 @@ Add `.p-button-touch` and the button becomes a 34px capsule at 15px Regular. Not
   snippet={`<button class="p-button p-button-touch-large p-button-primary" type="button">Continue</button>`}
 />
 
-The radius is always half the height, so every size is a full capsule. Labels are Regular weight. Semibold labels are a common mistake on the web; iOS reserves the heavier weight for alert buttons, not for buttons in a view.
+The radius is always half the height, so every size is a full capsule. Labels are Regular weight. Semibold labels are a common mistake on the web; iOS reserves the heavier weight for alert buttons.
 
 Consider the large size for the single action that completes a task, like Continue at the bottom of a form. It is the only size that clears a 44px tap target on its own.
 
@@ -84,7 +84,7 @@ Consider the small size only inside dense rows, next to a list item or a search 
 
 On touch, `.p-button-secondary` is the iOS bordered button: the gray fill with an accent label, the same look as `.p-button-tinted`. iOS has no accent-tinted fill; only destructive keeps a colored wash.
 
-The gray fill is built on `#767680`, not on pure black. iOS runs its own fill scale, so touch buttons read from `--p-button-touch-gray` rather than the `--p-fill-*` tokens the desktop controls use. It lands at 12% in light and 24% in dark.
+The gray fill is built on `#767680`. iOS runs its own fill scale, so touch buttons read from `--p-button-touch-gray`. The desktop controls use the `--p-fill-*` tokens. It lands at 12% in light and 24% in dark.
 
 Destructive ignores the accent entirely and stays `--p-sys-red`, `#FF383C` in light and `#FF4245` in dark. Red means the same thing on every screen, so it never retints.
 
@@ -159,7 +159,7 @@ Drop any `.p-sys-*` class on the button to retint it. Every style reads the same
 </button>`}
 />
 
-Icons are markup, not modifier classes. Put an `<i>` or an `<svg>` before the `<span>` for a leading icon and after it for a trailing one. Reading order follows the DOM, so a screen reader announces the parts in the order they appear.
+Icons are markup. Put an `<i>` or an `<svg>` before the `<span>` for a leading icon and after it for a trailing one. Reading order follows the DOM, so a screen reader announces the parts in the order they appear.
 
 Add `.p-button-icon-only` for a button with no label. It drops the horizontal padding and squares the width against the height, which the capsule radius turns into a circle: 28px, 34px, or 50px across. An icon-only button carries no text, so it needs an `aria-label`.
 
@@ -186,7 +186,13 @@ The gap between icon and label is 6px on touch, up from 4px on pointer sizes.
 
 ## Tap targets
 
-Apple draws the small and regular sizes at 28px and 34px, both under the 44px minimum. Native iOS closes the gap with an invisible hit area, and so does Puppertino: every touch size lays down a transparent `::after` that is `max(100%, 44px)` tall and spans the button's width.
+Small and regular touch buttons are shorter than the 44px minimum, so every touch size adds a transparent `::after` to cover the gap.
+
+| Part | Value |
+|---|---|
+| Small | 28px tall |
+| Regular | 34px tall |
+| Hit area (`::after`) | `max(100%, 44px)` tall, spanning the button's width |
 
 This means the visible capsule can stay 28px while the target a finger has to hit is 44px. Nothing about the layout changes, because the pseudo-element is absolutely positioned and takes no space.
 

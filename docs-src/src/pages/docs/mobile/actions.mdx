@@ -45,7 +45,7 @@ An action sheet offers a short list of things a person can do next, anchored to 
 
 Use an action sheet when a single tap needs to branch into several choices. Share, which opens Copy link, Send a copy, Save to Files. A row's overflow button, which opens Rename, Duplicate, Delete.
 
-Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/modals/`}>alert</a> when there is one decision with consequences, not a menu of options. Use a plain button when there is only one thing to do.
+Use an <a href={`${import.meta.env.BASE_URL}docs/mobile/modals/`}>alert</a> when there is one decision with consequences. Use a plain button when there is only one thing to do.
 
 Keep the list short. Seven rows is the practical ceiling before it stops reading as a list of choices and starts reading as a screen.
 
@@ -87,7 +87,7 @@ Keep the list short. Seven rows is the practical ceiling before it stops reading
 </div>`}
 />
 
-The rows are capsules stacked with a 10px gap, not a divided list with hairlines between the items. That is the current iOS treatment, and it is the same 48px capsule the alert uses for its actions.
+The rows are capsules stacked with a 10px gap and no hairlines between the items. That is the current iOS treatment, and it is the same 48px capsule the alert uses for its actions.
 
 The header is left aligned while the rows are centered. The alert centers both, because an alert asks a question. An action sheet labels a list, so the header reads as a caption over it.
 
@@ -100,7 +100,7 @@ The header is left aligned while the rows are centered. The alert centers both, 
   code={`<button class="p-button p-button-touch p-button-primary" data-p-open-modal="#sheet-share">Share</button>`}
 />
 
-Escape closes it, Tab is trapped inside it, focus returns to the button that opened it, and a tap outside dismisses it. The action sheet is a `.p-modal`, so all of that comes from the shared manager rather than from anything sheet-specific.
+Escape closes it, Tab is trapped inside it, focus returns to the button that opened it, and a tap outside dismisses it. The action sheet is a `.p-modal`, so all of that comes from the shared manager.
 
 ## Rows
 
@@ -112,7 +112,7 @@ Escape closes it, Tab is trapped inside it, focus returns to the button that ope
 
 Cancel goes last and gets the extra gap. The separation matters more than it looks: it stops a thumb aiming for Cancel from landing on the destructive row directly above it.
 
-Destructive rows keep the quiet fill and only turn the label red, the same rule the alert follows. Put a destructive row near the bottom of the list, above Cancel, not at the top where a reflex tap lands.
+Destructive rows keep the quiet fill and only turn the label red, the same rule the alert follows. Put a destructive row near the bottom of the list, above Cancel. A reflex tap lands at the top.
 
 Label rows with verbs. Copy link, Send a copy, Remove sharing. A row labelled with a noun makes people guess what tapping it does.
 
@@ -148,15 +148,21 @@ Label rows with verbs. Copy link, Send a copy, Remove sharing. A row labelled wi
 
 The header is optional. Drop `.p-action-sheet__header` when the rows explain themselves, which is most of the time.
 
-`role="dialog"` here, not `role="alertdialog"`. An action sheet offers choices; it does not interrupt with something that must be acknowledged.
+`role="dialog"` here, not `role="alertdialog"`: an action sheet offers choices; it does not interrupt with something that must be acknowledged.
 
 ## Dark mode
 
-The surface moves to the dark overlay glass, `rgba(26,26,26,0.9)`, rows become a faint lift of `rgba(255,255,255,0.065)`, and the destructive red lightens from `#FF383C` to `#FF5257`. The blur is unchanged.
+The blur is unchanged.
+
+| Part | Dark |
+|---|---|
+| Surface | The dark overlay glass, `rgba(26,26,26,0.9)` |
+| Rows | A faint lift of `rgba(255,255,255,0.065)` |
+| Destructive red | `#FF5257`, lightened from `#FF383C` |
 
 ## Accessibility
 
-Every row is a real `<button>`, so the list is navigable by keyboard and announced as a set of buttons. Rows that navigate rather than act should be `<a href>` instead.
+Every row is a real `<button>`, so the list is navigable by keyboard and announced as a set of buttons. Rows that navigate should be `<a href>` instead.
 
 The panel clears the home indicator through `env(safe-area-inset-bottom)`, falling back to 16px where the environment variable resolves to zero.
 

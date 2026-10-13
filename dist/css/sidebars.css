@@ -28,7 +28,7 @@
      fallback when colors.css isn't loaded. */
   --p-sidebar-icon: var(--p-vibrant-blue, #0078f0);
   --p-sidebar-icon-inactive: #878787;
-  /* Legacy name: the selected-row icon tint. Now every icon is tinted. */
+  /* Legacy alias of --p-sidebar-icon. Every icon is tinted. */
   --p-sidebar-icon-selected: var(--p-sidebar-icon);
 }
 
@@ -142,7 +142,7 @@
 
 /* ------------------------------------------------------- Header zone */
 
-/* The top of a full-height sidebar: 52px tall, traffic lights at 19,19
+/* The top of a full-height sidebar is 52px tall. It has traffic lights at 19,19
    and an optional round glass sidebar toggle 8px from the top and
    trailing edges. The first row starts 52px down. */
 .p-sidebar-titlebar {
@@ -326,7 +326,7 @@
 /* ─── Touch size (iPadOS 27) ───────────────────────────────────────── */
 /* The iPad sidebar: a 320px column with 44px capsule rows inset 10px
    (300px wide). Like the macOS 27 sidebar it is attached: full height,
-   square, no shadow, on an opaque luminosity material that reads #D6D6D6
+   square, no shadow. It sits on an opaque luminosity material that reads #D6D6D6
    over any backdrop (#EDEDED when its window is inactive). The window
    clips it at its corner. The iPadOS 26 floating panel, 20px radius and
    translucent, is still available as .p-sidebar-touch-floating.

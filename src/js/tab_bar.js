@@ -11,8 +11,8 @@
  *    By default the page scroll is watched; point data-p-minimize-target
  *    at a selector to watch a scrolling pane instead.
  *
- * 2. In-page selection. When the tabs are <button>s rather than links,
- *    a click moves aria-current to the pressed tab, and a tab with
+ * 2. In-page selection. When the tabs are <button>s,
+ *    a click moves aria-current to the pressed tab. A tab with
  *    aria-controls="panel-id" shows that panel and hides its siblings.
  *
  * The collapse is a layout change, not decoration, so it still happens
@@ -63,7 +63,7 @@
       requestAnimationFrame(update);
     }, { passive: true });
 
-    // A tap on the collapsed bar expands it instead of following the
+    // A tap on the collapsed bar expands it and does not follow the
     // selected tab's link, which is the page already open.
     host.addEventListener('click', function (event) {
       if (!host.classList.contains(MINIMIZED)) return;

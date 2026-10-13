@@ -202,11 +202,34 @@ PuppertinoModalManager.isModalOpen("#example-modal");
 
 ## Surface
 
-The surface is `rgba(247, 247, 247, 0.73)` over a 30px blur, so the backdrop shows through at roughly a quarter strength. A 0.5px dark keyline sits just outside the edge. A bright 1px line runs along the inside of the top and bottom edges, fading into a soft glow about 8px deep; the sides get the keyline only. The shadow is `0 18px 48px` at 25%. The radius is a plain 34px arc.
+The alert is one glass surface with a keyline, an inner highlight and a soft shadow.
 
-The body sits 20px from the top and 16px from the sides and bottom. The message ends 16px above the first action. Stacked actions are 28px tall with 6px between them; side-by-side actions are 32px tall with 8px between them.
+| Part | Value |
+|---|---|
+| Fill | `rgba(247, 247, 247, 0.73)` over a 30px blur |
+| Keyline | 0.5px dark, just outside the edge |
+| Highlight | Bright 1px line inside the top and bottom edges, fading into a soft glow about 8px deep. The sides get the keyline only. |
+| Shadow | `0 18px 48px` at 25% |
+| Radius | 34px, a plain arc |
 
-Actions: the primary is the control accent (`#0088FF`, dark `#0091FF`). Cancel is a quiet fill, black at 10% (dark: white at 8.5%), so it darkens with the surface instead of sitting on it as a flat gray. Destructive uses the vibrant red because it sits on glass: `#F52F32` at 23% behind a `#E11B1E` label in light mode, `#FF4747` at 23% behind a `#FF4747` label in dark mode. Any `.p-button` you place inside the alert is vibrant too (see [Buttons](../buttons/#vibrant)).
+Spacing inside the alert is fixed.
+
+| Part | Value |
+|---|---|
+| Body inset | 20px from the top, 16px from the sides and bottom |
+| Message to first action | 16px |
+| Stacked actions | 28px tall, 6px apart |
+| Side-by-side actions | 32px tall, 8px apart |
+
+The primary action is the control accent, Cancel is a quiet fill, and destructive uses the vibrant red because it sits on glass.
+
+| Part | Light | Dark |
+|---|---|---|
+| Primary | `#0088FF` | `#0091FF` |
+| Cancel | Black at 10% | White at 8.5% |
+| Destructive | `#F52F32` at 23% behind a `#E11B1E` label | `#FF4747` at 23% behind a `#FF4747` label |
+
+Any `.p-button` you place inside the alert is vibrant too (see [Buttons](../buttons/#vibrant)).
 
 ## Dark mode
 

@@ -68,8 +68,8 @@
     }
     openMenu = menu;
     openTrigger = trigger || null;
-    // Focus the surface, not the first item — macOS opens menus with
-    // nothing preselected. Arrow keys highlight from there.
+    // Focus the surface. macOS opens menus with nothing preselected.
+    // Arrow keys highlight from there.
     if (!menu.hasAttribute('tabindex')) {
       menu.setAttribute('tabindex', '-1');
     }

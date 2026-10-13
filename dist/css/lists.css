@@ -2,7 +2,7 @@
    Lists and tables present data in one or more columns of rows.
    List: a row stack with r8 capsule selection. Table: styles a real
    <table> on a dense 20px pitch with alternating r8 stripes (no row
-   hairlines), a quiet header, and dividers in the header only. */
+   hairlines). It has a quiet header and dividers in the header only. */
 
 :root {
   --p-list-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", sans-serif;
@@ -18,9 +18,6 @@
   --p-table-divider: rgba(0, 0, 0, 0.1);
 }
 
-/* Dark values are derived (the reference is light only): selection
-   one step brighter in the same blue family, stripes/hover/dividers
-   as the white-alpha mirror of the light ones. */
 .p-dark-mode,
 [data-p-theme="darkmode"] {
   --p-list-selection: #0a6cf0;
@@ -98,7 +95,7 @@
   background: var(--p-list-hover);
 }
 
-/* Selected, window focused: #0165E2 (deliberately darker than
+/* Selected, window focused: #0165E2 (darker than
    the control accent), white content in every slot. */
 /* Retint by overriding --p-list-selection on the list or row.
    (--p-color-current can't serve here: it's registered with
@@ -342,8 +339,8 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-list-touch
-   The iOS list. Rows sit on a plate divided by hairlines rather than
-   floating as capsules the way the macOS list above does, and they are
+   The iOS list. Rows sit on a plate divided by hairlines.
+   The macOS list above floats its rows as capsules. They are
    tall enough to hit: 52px for one line, 68px with a subtitle.
 
    Same slots as the macOS list (.p-list-row, .p-list-icon,
@@ -439,7 +436,7 @@
 }
 
 /* Touch has no hover. Pressed is the feedback, and only on rows that
-   actually do something. */
+   do something. */
 .p-list-touch .p-list-row:hover {
   background: none;
 }
@@ -481,8 +478,7 @@
 }
 
 /* Trailing slots hug the right edge. Whichever comes first takes the
-   auto margin; a chevron following a detail sits beside it rather than
-   pushing away from it. */
+   auto margin; a chevron following a detail sits beside it. */
 .p-list-touch .p-list-chevron {
   color: var(--p-list-touch-secondary);
   font-size: 14px;
@@ -821,7 +817,7 @@
 
 /* ─── Swipe actions ─── */
 /* A row that slides sideways to show buttons behind it. Actions sit on
-   a grey tray, 16pt from the row's edge and 10pt apart; the row that
+   a grey tray, 16pt from the row's edge and 10pt apart. The row that
    slid becomes a capsule 10pt clear of the first action. Trailing
    actions show when the row slides toward the leading edge, leading
    actions when it slides the other way. swipe_actions.js drives the

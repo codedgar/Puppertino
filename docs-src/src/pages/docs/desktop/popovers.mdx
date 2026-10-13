@@ -45,7 +45,15 @@ Use a popover for lightweight tools and details that relate to one control. For 
 
 ## Anatomy
 
-The surface uses the same overlay glass as alerts: `rgba(246, 246, 246, 0.73)` over a 20px blur with 180% saturation, so it picks up a little of what sits behind it. The radius is 20px. The shadow is a wide, soft drop (`0 8px 48px` at 25%). The edge is a crisp 0.5px keyline just outside the surface, plus a bright 1px line on the inside of the top and bottom edges. Content padding is 16px.
+The surface uses the same overlay glass as alerts.
+
+| Part | Value |
+|---|---|
+| Fill | `rgba(246, 246, 246, 0.73)` over a 20px blur with 180% saturation |
+| Radius | 20px |
+| Shadow | `0 8px 48px` at 25% |
+| Edge | 0.5px keyline just outside the surface, plus a bright 1px line inside the top and bottom edges |
+| Content padding | 16px |
 
 The arrow protrudes 10.5px beyond the body edge. Its base spans 35.44px with 45 degree slopes and a rounded tip. It uses a near-opaque fill (`rgba(248, 248, 248, 0.95)`) that matches the blurred body, so it reads as one surface.
 
@@ -77,7 +85,7 @@ Include `popovers.js` and point a trigger at its popover:
 
 Clicking the trigger toggles the popover. The script positions it on the placement side, flips it when it would leave the viewport, and keeps an 8px viewport inset. The arrow tracks the center of the trigger. Clicking outside, pressing Escape, scrolling, or resizing closes it. One popover is open at a time.
 
-Opening moves focus to the surface, not into the content. Escape restores focus to the trigger. Give the popover `role="dialog"` and a label, and keep `aria-expanded` on the trigger so the state is announced.
+Opening moves focus to the surface. Escape restores focus to the trigger. Give the popover `role="dialog"` and a label, and keep `aria-expanded` on the trigger so the state is announced.
 
 ## States
 

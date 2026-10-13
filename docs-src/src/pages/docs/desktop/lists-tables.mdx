@@ -48,7 +48,18 @@ Use a list for navigation and single-column content. Use a table when people com
 
 ## Anatomy: list
 
-A row is a 20px capsule with an 8px radius, on a 30px rhythm (5px block margin above and below). The label is 13px at weight 510. The disclosure chevron is 9px bold at 85% ink, in a 12px slot 9px from the capsule edge. Icons are 14px with a 2px radius. With a chevron and an icon, the icon starts 21px into the row and the label 41px. Each indent level adds 15px of leading padding.
+A row is a capsule with a fixed rhythm.
+
+| Part | Value |
+|---|---|
+| Row | 20px capsule, 8px radius, 30px rhythm (5px block margin above and below) |
+| Label | 13px at weight 510 |
+| Disclosure chevron | 9px bold at 85% ink, in a 12px slot 9px from the capsule edge |
+| Icons | 14px with a 2px radius |
+| Icon and label offset | With a chevron and an icon, the icon starts 21px into the row and the label 41px |
+| Indent | 15px of leading padding per level |
+
+Two classes build the list.
 
 | Class | Role |
 |---|---|
@@ -80,7 +91,14 @@ Apply `.p-table` to a real `<table>`. Rows butt together on a dense 20px pitch, 
 
 Cells are 13px at weight 510 with 8px horizontal padding. The first column reads at 85% ink and the others at 50%, so the name leads. Right-align numeric columns with `.p-table-num`.
 
-The header is quiet: 19px cells in a 31px band, with no line under it. The sorted column is 11px bold at 85%, and the others are 11px at weight 510 at 50%. Column dividers are 1×19px at `rgba(0, 0, 0, 0.1)` on the leading edge of each column after the first, in the header only.
+The header is quiet.
+
+| Part | Value |
+|---|---|
+| Header cells | 19px cells in a 31px band, with no line under it |
+| Sorted column | 11px bold at 85% |
+| Other columns | 11px at weight 510 at 50% |
+| Column dividers | 1×19px at `rgba(0, 0, 0, 0.1)` on the leading edge of each column after the first, in the header only |
 
 Sorting is declared, not styled by hand: set `aria-sort="ascending"` or `descending` on the sorted `<th>`. The column turns bold and its 9px chevron renders and flips. Screen readers announce the same attribute, so the visual and the announcement never drift apart.
 
@@ -88,7 +106,7 @@ A selected row (`.p-selected` on the `<tr>`) fills every cell in `#0165E2` and r
 
 ## Dark mode
 
-These values are derived rather than measured. Selection lifts to `#0A6CF0`, one step brighter in the same blue family, to hold against dark backgrounds. Stripes, hover and dividers become their white-alpha mirrors: stripes and hover `rgba(255, 255, 255, 0.05)`, dividers `rgba(255, 255, 255, 0.1)`, inactive selection `rgba(255, 255, 255, 0.14)`. Text moves to `rgba(255, 255, 255, 0.85)`, with secondary columns at 50%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
+Selection lifts to `#0A6CF0`, one step brighter in the same blue family, to hold against dark backgrounds. Stripes, hover and dividers become their white-alpha mirrors: stripes and hover `rgba(255, 255, 255, 0.05)`, dividers `rgba(255, 255, 255, 0.1)`, inactive selection `rgba(255, 255, 255, 0.14)`. Text moves to `rgba(255, 255, 255, 0.85)`, with secondary columns at 50%. Both `.p-dark-mode` and `.p-auto-dark-mode` are supported.
 
 ## Code
 

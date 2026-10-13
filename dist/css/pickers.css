@@ -130,8 +130,8 @@
   margin-top: 1px;
 }
 
-/* Day cell: 18px row pitch, 16px pill (matched to native: 11px
-   numbers, pill inset 1px vertically). */
+/* Day cell: 18px row pitch, 16px pill (measured from the native
+   control: 11px numbers, pill inset 1px vertically). */
 .p-calendar-day {
   align-items: center;
   align-self: center;
@@ -177,16 +177,16 @@
 }
 
 /* ─── Touch size (iOS and iPadOS 27) ───────────────────────────────── */
-/* The iOS calendar: a 370px glass panel, 13px radius, with 38px day
-   circles on a 51px pitch, day numbers at 20px, and weekday headers at
-   13px. iOS 27 marks the selected day with a neutral circle (black in
-   light, white in dark) and today with a 12% accent circle; the prev /
-   next chevrons are label-colored. .p-calendar-touch-tinted brings back
+/* The iOS calendar is a 370px glass panel with a 13px radius. It has 38px
+   day circles on a 51px pitch, day numbers at 20px, and weekday
+   headers at 13px. iOS 27 marks the selected day with a neutral circle (black in
+   light, white in dark). It marks today with a 12% accent circle. The
+   prev / next chevrons are label-colored. .p-calendar-touch-tinted brings back
    the accent-filled selection.
 
-   The panel is the shared overlay glass (the same fill, keyline, rims
-   and glow as the macOS 27 alert surface, over the overlay shadow),
-   because iOS presents the calendar as a popover over its value
+   The panel is the shared overlay glass. It has the same fill, keyline,
+   rims and glow as the macOS 27 alert surface, over the overlay shadow.
+   iOS presents the calendar as a popover over its value
    buttons. .p-calendar-touch-plain drops the surface for a calendar
    that sits inline on a card of its own.
 
@@ -344,9 +344,9 @@
 }
 
 /* The macOS header is a fixed 20px tall, which 44px nav buttons
-   overflow into the weekday row. Touch gives it a 51px band instead,
-   and lets the last chevron's target run into the side padding so the
-   glyph lands 25px from the edge. */
+   overflow into the weekday row. Touch gives it a 51px band instead.
+   The last chevron's target runs into the side padding so the glyph
+   lands 25px from the edge. */
 .p-calendar-touch .p-calendar-header {
   height: 51px;
   align-items: center;
@@ -408,7 +408,7 @@
    51.3px pitch with the first and last circle flush against the
    padding. The weekday row runs the same tracks so a label sits over
    the center of its column. Below 266px of content the tracks shrink
-   together rather than overflowing. */
+   together. */
 
 .p-calendar-touch .p-calendar-weekdays {
   grid-template-columns: repeat(7, minmax(0, 38px));

@@ -58,15 +58,25 @@ Avoid hiding a tab bar on scroll. It shows which section is open as well as offe
 
 It is a `<nav>` of links. No JavaScript is needed. The page you are on is the selected tab, and `aria-current="page"` is what says so.
 
-The selected tab sits on a pill that darkens the glass under it, rather than on a fill of its own. iOS draws the pill and the selected tint with blend modes against the page behind the bar. Inside a translucent bar CSS can only blend against the bar itself, so Puppertino resolves both to the colors iOS produces over typical glass.
+The selected tab sits on a pill that darkens the glass under it. iOS draws the pill and the selected tint with blend modes against the page behind the bar. Inside a translucent bar CSS can only blend against the bar itself, so Puppertino resolves both to the colors iOS produces over typical glass.
 
 With `src/js/glass.js` and Glassworks loaded, the bar is [Puppertino Glass](../../materials/#puppertino-glass): it refracts the page behind it in real time instead of only blurring it. The surface above is what it shows until the glass is ready, and wherever it cannot render. A fixed bar sits at `z-index: 70`, so other glass on the same page needs `--p-glass-z: 70` too.
 
 ## How the width works
 
-Each tab is an 84px cell, and the bar hugs its cells plus 10px of padding at each end. Two tabs make a 188px bar and three make 272px.
+The bar hugs its tabs up to three, then fills its maximum width and the cells share it.
 
-From four tabs the bar fills its 360px maximum instead, and the cells share it: four land at 85px, five shrink to 68px. The pill is always its cell plus 12px, so it is 96px at two tabs and 80px at five, and the first and last pills sit 4px in from the ends.
+| Part | Value |
+|---|---|
+| Cell, two or three tabs | 84px |
+| Bar padding | 10px at each end |
+| Bar, two tabs | 188px |
+| Bar, three tabs | 272px |
+| Bar, four or more tabs | 360px maximum |
+| Cell, four tabs | 85px |
+| Cell, five tabs | 68px |
+| Pill | Its cell plus 12px: 96px at two tabs, 80px at five |
+| First and last pill | 4px in from the ends |
 
 <Showcase
   name="tab-bar-counts"
@@ -175,7 +185,7 @@ Minimizing is not hiding. The selected section stays on screen, so the bar still
 </div>`}
 />
 
-`tab_bar.js` also handles tabs that are `<button>`s instead of links. A click moves `aria-current` to the pressed tab, and a tab with `aria-controls` shows its panel and hides the others.
+`tab_bar.js` also handles tabs that are `<button>`s. A click moves `aria-current` to the pressed tab, and a tab with `aria-controls` shows its panel and hides the others.
 
 ## The iPad tab bar
 
@@ -226,15 +236,31 @@ The pill and the tint together mean selection never rests on color alone.
 
 ## Dark mode
 
-The glass follows the small-glass tint, which is nearly clear in dark mode and relies on the dark content behind it. Unselected items flip from `#1A1A1A` to `#F5F5F5`, the pill lightens the glass instead of darkening it, and the accent shifts from `#0088FF` to `#0091FF` before its 10% lift.
+The glass follows the small-glass tint, which is nearly clear in dark mode.
+
+| Part | Light | Dark |
+|---|---|---|
+| Unselected items | `#1A1A1A` | `#F5F5F5` |
+| Pill | Darkens the glass | Lightens the glass |
+| Accent | `#0088FF` | `#0091FF` |
+
+The accent then gets its 10% lift.
 
 ## Accessibility
 
 Use `<nav>` with an `aria-label`, and real links inside it. A tab bar that navigates should be links, not buttons, so the sections can be opened in a new tab and read as destinations.
 
-`aria-current="page"` is what tells a screen reader which section is open. It is required, not decorative, which is why it also drives the visual state.
+`aria-current="page"` is what tells a screen reader which section is open. It is required, which is why it also drives the visual state.
 
-Tabs are 62px tall and at least 68px wide at five tabs, so every one clears the 44px minimum in both directions. A minimized bar is a 48px circle, and it keeps the selected label as its accessible name.
+Every tab clears the 44px minimum in both directions.
+
+| Part | Value |
+|---|---|
+| Tab height | 62px |
+| Tab width | At least 68px at five tabs |
+| Minimized bar | 48px circle |
+
+A minimized bar keeps the selected label as its accessible name.
 
 Reduced transparency and browsers without `backdrop-filter` get an opaque `#F7F7F7` surface, since a translucent bar over scrolling content cannot be guaranteed to meet 4.5:1. Increased contrast gives the pill a real 14% fill. Reduced motion removes the color transition and the settle animation when the bar minimizes. Forced colors hands the bar to the system palette, with `Highlight` marking the selected tab.
 

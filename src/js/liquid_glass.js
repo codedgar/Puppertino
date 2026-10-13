@@ -13,7 +13,7 @@
  *
  * The flat macOS 27 / iOS 27 look is an opt-in: put data-p-lens="clear"
  * on the switch's label or on the slider input for a .p-lens-clear (a
- * rim and the resting knob, sized rather than scaled; no magnified
+ * rim and the resting knob; no magnified
  * copy, no filters).
  *
  * Optional: without this script switches keep their CSS morph and
@@ -30,9 +30,9 @@
   var SETTLE = 60; // ms, hold the lift a beat after the slide lands
   var TAP_SLOP = 6; // px, below this a press is a tap
 
-  // The reference lens is 50px tall. Its goo blur (2px) and aberration
-  // offset (0.8px) are absolute SVG values, so on a smaller lens they
-  // must shrink with it or the thin colored rim at the glass edge blurs
+  // The macOS 27 lens is 50px tall. Its goo blur (2px) and aberration
+  // offset (0.8px) are absolute SVG values. On a smaller lens they
+  // must shrink with it, or the thin colored rim at the glass edge blurs
   // below the alpha threshold and vanishes. Each lens gets filters scaled
   // to its own height, built once per size.
   var REFERENCE_H = 50;
@@ -76,7 +76,7 @@
   }
 
   // Reduced motion or transparency: the controls still work, the knob
-  // simply never turns into glass.
+  // never turns into glass.
   function calm() {
     return (
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
@@ -140,7 +140,7 @@
     return el.getAttribute('data-p-lens') !== 'clear';
   }
 
-  // clear: the flat macOS 27 / iOS 27 lens, just the glass rim over the
+  // clear: the flat macOS 27 / iOS 27 lens, the glass rim over the
   // real track plus the resting knob. Otherwise the liquid lens.
   function buildLens(clear) {
     var lens = part('p-lens');
@@ -157,8 +157,8 @@
     return lens;
   }
 
-  // Switch liquid lenses only: the clear lens has no filters to size,
-  // and a slider's glass does not magnify, so it skips the goo and the
+  // Switch liquid lenses only. The clear lens has no filters to size.
+  // A slider's glass does not magnify, so it skips the goo and the
   // color split.
   function sizeFilters(lens) {
     if (lens.classList.contains('p-lens-clear') || lens.classList.contains('p-slider-lens')) return;
@@ -319,13 +319,13 @@
 
     // Where the fill ends under the glass, which is not where the real
     // track's fill ends (under the thumb's center). A pointer slider's
-    // follows the value across the whole track, as NSSlider's does, so
-    // it is empty at the minimum and runs through the lens at the
+    // follows the value across the whole track, as NSSlider's does. It
+    // is empty at the minimum and runs through the lens at the
     // maximum. A touch slider's, as UISlider's does, stops
-    // at the middle of the glass, except at the two ends of its travel:
-    // empty at the minimum, and filling the whole bar at the maximum,
+    // at the middle of the glass, except at the two ends of its travel.
+    // It is empty at the minimum and fills the whole bar at the maximum,
     // so no unfilled stub shows through the glass. It runs out to the
-    // end of the bar over the last 3px of travel rather than jumping.
+    // end of the bar over the last 3px of travel.
     // A centered slider fills between the middle and the value.
     var end;
     if (!touch) {
@@ -368,9 +368,9 @@
       });
       // The pointer rim is a set of conic gradients built from the fill
       // color, different in light and dark. Gradients like that cannot
-      // travel as resolved tokens, so the stylesheet publishes a keyword
-      // and the lens, which sits on <body> outside any appearance scope,
-      // gets a class.
+      // travel as resolved tokens. The stylesheet publishes a keyword,
+      // and the lens gets a class because it sits on <body> outside any
+      // appearance scope.
       if (resolved(style, '--p-slider-glass-scheme', 'light') === 'dark') {
         lens.classList.add('p-slider-lens-dark');
       }

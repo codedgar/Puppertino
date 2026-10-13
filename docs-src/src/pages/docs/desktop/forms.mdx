@@ -42,7 +42,15 @@ Use a **switch** for a state that applies immediately. "Wi-Fi on." If the change
 | `--p-control-accent` | `#0088FF` | Checked fill (`#0091FF` in dark mode). Reads `--p-color-current`, so color classes retint it. |
 | `--p-focus-ring` | 3.5px + 1px band | The keyboard focus band, `rgba(0,136,255,0.5)`. Defined in `colors.css`. |
 
-Fields and selects are 24px tall with a 6px radius. Text fields inset their text 8px, pop-ups 12px. Checkboxes and radios are 16px with a 6px gap to their label. The switch track is 36 by 16px by default, up to 80 by 36px.
+Fields, selects, checkboxes, radios and switches share one set of sizes.
+
+| Part | Value |
+|---|---|
+| Fields and selects | 24px tall, 6px radius |
+| Text inset, text fields | 8px |
+| Text inset, pop-ups | 12px |
+| Checkboxes and radios | 16px, with a 6px gap to their label |
+| Switch track | 36 by 16px by default, up to 80 by 36px |
 
 ## Text field
 
@@ -62,7 +70,12 @@ Five sizes: 16, 20, 24, 28, and 36px tall via `.p-field-mini`, `.p-field-small`,
 
 The class works on any text-like input and on `textarea`, which unlocks its height and gains vertical resize. Text renders at 13px weight 510, the caret is system blue, and the placeholder sits at `#BFBFBF`.
 
-Focus replaces the outline with the macOS focus band: `rgba(0,136,255,0.5)` running 3.5px outside the field and 1px inside it, over the field's own ring. Disabled fields drop to a 50% background and a `rgba(0,0,0,0.04)` ring, and the cursor changes to not-allowed.
+Focus replaces the outline with the macOS focus band. Disabled fields change the cursor to not-allowed.
+
+| State | Value |
+|---|---|
+| Focus band | `rgba(0,136,255,0.5)`, 3.5px outside the field and 1px inside it, over the field's own ring |
+| Disabled | 50% background and a `rgba(0,0,0,0.04)` ring |
 
 ## Select
 
@@ -302,7 +315,7 @@ Wrap the window in `.p-window-inactive`, or set `data-window-state="inactive"` o
 </label>`}
 />
 
-The switch is a 36 by 16px capsule with a wide lozenge knob, 21 by 13px, not a circle. Off, the track is black at 8.5%; on, it fills with the accent. The knob casts one very soft shadow, `0 3px 36px rgba(0,0,0,0.05)`. Give every switch an accessible name, either visible text next to it or an `aria-label`.
+The switch is a 36 by 16px capsule with a wide lozenge knob, 21 by 13px. Off, the track is black at 8.5%; on, it fills with the accent. The knob casts one very soft shadow, `0 3px 36px rgba(0,0,0,0.05)`. Give every switch an accessible name, either visible text next to it or an `aria-label`.
 
 Five sizes follow the shared control ladder. The default is the 16px track.
 
@@ -401,7 +414,13 @@ Without the script, a CSS-only morph runs instead: the knob grows into a clear l
 </div>`}
 />
 
-The grouped form is the macOS settings layout. A `.p-form-group` is a box with a 12px radius filled at `rgba(0,0,0,0.03)`. It holds `.p-form-row`s: each row is 42px tall, inset 10px from the box edge, and split from the next by a 1px separator at `rgba(0,0,0,0.05)`. The last row has no separator.
+The grouped form is the macOS settings layout. A `.p-form-group` is a box that holds `.p-form-row`s. The last row has no separator.
+
+| Part | Value |
+|---|---|
+| `.p-form-group` | 12px radius, filled at `rgba(0,0,0,0.03)` |
+| `.p-form-row` | 42px tall, inset 10px from the box edge |
+| Row separator | 1px at `rgba(0,0,0,0.05)` |
 
 Put the row's name in `.p-form-row-label`, 13px weight 510 at 85%. It takes the free space, so everything after it lines up at the trailing edge, 8px apart:
 

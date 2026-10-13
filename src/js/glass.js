@@ -7,8 +7,8 @@
  * (github.com/codedgar/glassworks): it snapshots the page and refracts
  * that snapshot through a WebGL shader drawn under each surface. This
  * script is the Puppertino side. It reads each surface's recipe from
- * CSS custom properties, keeps the CSS material showing until the
- * first frame is ready, recaptures when the appearance changes, and
+ * CSS custom properties and keeps the CSS material showing until the
+ * first frame is ready. It recaptures when the appearance changes and
  * steps aside wherever the glass cannot or should not render.
  *
  * Load a capture engine and Glassworks before this script:
@@ -21,9 +21,10 @@
  *
  *   PuppertinoGlass.use(glassworks, { engine: createSnapdomEngine(snapdom) });
  *
- * Optional: without Glassworks, WebGL, or a capture engine, and with
- * reduced transparency, increased contrast, or forced colors on, every
- * surface keeps its CSS material. The styles live in materials.css.
+ * Optional. Without Glassworks, WebGL, or a capture engine, every
+ * surface keeps its CSS material. So it does with reduced transparency,
+ * increased contrast, or forced colors on. The styles live in
+ * materials.css.
  *
  * Surfaces present when the script runs are enhanced automatically.
  * Call PuppertinoGlass.enhance(root) for ones added later, and
@@ -32,8 +33,9 @@
  * whole <body> is used otherwise, and a smaller region captures faster.
  *
  * Like Apple's, small Regular surfaces (64px or less across) flip to
- * dark glass over dark content and light glass over light content, by
- * setting data-p-theme on the surface. --p-glass-adaptive: 0 opts out.
+ * dark glass over dark content and light glass over light content.
+ * The script sets data-p-theme on the surface to do this. --p-glass-adaptive:
+ * 0 opts out.
  *
  * Small and bigger glass are tinted differently (Apple's small glass is
  * lighter in light mode and nearly clear in dark mode; cards are close
@@ -66,7 +68,7 @@
   var TO_LIGHT = 0.85; // and above which dark glass turns light
 
   var library = null; // set by use()
-  var engine; // set by use()
+  var engine;
   var count = 0;
   var surfaces = []; // { el, style, lens }
   var warned = {};
@@ -127,8 +129,8 @@
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   // Glassworks draws every surface on one canvas appended to <body>,
-  // stacked just under the highest surface. An ancestor that forms its
-  // own stacking context paints as a unit, so it lands either wholly
+  // stacked under the highest surface. An ancestor that forms its
+  // own stacking context paints as a unit. It lands either wholly
   // over that canvas (hiding the glass) or wholly under it (hiding the
   // surface's content). Either way the surface is better off as a
   // material.
@@ -183,10 +185,10 @@
   // of its height down. The same value bends content further on a
   // bigger page, and further down than across on a long one.
   // Puppertino's recipe is a fraction of the surface's shorter side
-  // instead (up to REACH px), so a button and a tab bar bend alike on
-  // any page. It is converted against the snapshot's longer side, which
+  // instead (up to REACH px). A button and a tab bar then bend alike on
+  // any page. The value is converted against the snapshot's longer side. That
   // makes that axis exact and leaves the other bending less, never
-  // more: an under-bent edge reads as subtle, an over-bent one as a
+  // more. An under-bent edge reads as subtle, an over-bent one as a
   // smear. Bevel width is already relative to the surface in
   // Glassworks; it is only capped at BAND px.
   function scaled(el, values) {
@@ -203,7 +205,7 @@
     };
   }
 
-  // Apple's Regular frost scales with the surface: measured on macOS 26
+  // Apple's Regular frost scales with the surface. Measured on macOS 26,
   // it is about a 4pt blur on a 50pt button and 8pt on a 160pt panel.
   // Clear frosts about 10pt at every size (--p-glass-frost-grow: 0).
   // Frost (a blur in CSS px, done in the shader before the lens) and the
@@ -244,10 +246,11 @@
   }
 
   // ── Adaptive appearance ──────────────────────────────────────────────
-  // Reads the snapshot under each small Regular surface and flips it to
-  // dark glass over dark content, or light glass over light content,
-  // with hysteresis so it doesn't flicker at the boundary. The flip is
-  // data-p-theme on the surface, so its labels follow the glass.
+  // Reads the snapshot under each small Regular surface. It flips the
+  // surface to dark glass over dark content, or light glass over light
+  // content, with hysteresis so it doesn't flicker at the boundary.
+  // The flip is data-p-theme on the surface, so its labels follow the
+  // glass.
 
   var probe = null;
   function luminance(r, el) {
@@ -362,7 +365,7 @@
     var surface = surfaces[find(el)];
     if (!surface) return;
     var r = renderer();
-    // Glassworks reveals a lens even when the capture failed. Without a
+    // Glassworks reveals a lens even when the snapshot failed. Without a
     // texture there is nothing under the surface but the tint.
     if (!r || !r.textureWidth) {
       release(el);

@@ -4,19 +4,18 @@
    Components like .p-button-colored read this to retint when a color
    class is dropped on the element.
 
-   inherits: false is intentional — without it, putting .p-strawberry
-   on a card would silently retint every nested button. Locking the
-   property to the element it's set on preserves the v1 cascade
-   ergonomic: drop a color class directly on the target, nothing else
-   inherits it.
+   inherits: false is required. Without it, putting .p-strawberry on a
+   card would silently retint every nested button. Locking the property
+   to the element it's set on preserves the v1 cascade ergonomic. Drop
+   a color class directly on the target and nothing else inherits it.
    ───────────────────────────────────────────────────────────────────── */
 @property --p-color-current {
   syntax: "<color>";
   inherits: false;
   /* The control tint blue. Registered properties always resolve, so the
      var() fallbacks downstream never fire. macOS 27 uses one blue for
-     text, links, selection and control fills: #0088FF light, #0091FF
-     dark (macOS 26 filled controls with #0D6FFF; that value is retired).
+     text, links, selection and control fills. It is #0088FF light and
+     #0091FF dark (macOS 26 filled controls with #0D6FFF).
      The initial value only shows where the rule below cannot reach. */
   initial-value: #0088FF;
 }
@@ -25,10 +24,10 @@
    A non-inheriting registered property can't be flipped by setting it
    on .p-dark-mode, so every element sets its own default from
    --p-sys-blue, which does inherit and is redefined in each appearance
-   scope below. :where() keeps this at zero specificity: any color class,
+   scope below. :where() keeps this at zero specificity. Any color class,
    component rule or inline style still wins, and a color class on a
    wrapper still doesn't leak into its children.
-   It reads --p-sys-blue rather than --p-control-accent on purpose:
+   It reads --p-sys-blue rather than --p-control-accent because
    components set --p-control-accent from --p-color-current, and reading
    it back here would be a cycle. */
 :where(*, *::before, *::after) {
@@ -312,8 +311,8 @@ a component (button, badge, segmented control) to retint it.
 /*
 BRAND PALETTE — TEXT COLOR UTILITIES
 Same publication pattern as the background utilities. Drop one of
-these on a text element (or a button that should retint via text)
-and --p-color-current is exposed for any nested component to read.
+these on a text element (or a button that should retint via text).
+Then --p-color-current is exposed for any nested component to read.
 */
 
 .p-strawberry-color     { --p-color-current: var(--p-strawberry);     color: var(--p-color-current); }
@@ -464,7 +463,7 @@ and --p-color-current is exposed for any nested component to read.
   /* Accent as text on a control with no fill of its own, sitting on a
      material: the borderless button label inside a vibrant surface.
      Darker than the fill in light mode (#0078F0, the vibrant blue) so
-     thin glyphs keep their contrast over glass; in dark mode it is the
+     thin glyphs keep their contrast over glass. In dark mode it is the
      control blue (#0091FF). */
   --p-control-accent-text: #0078F0;
 
@@ -729,22 +728,24 @@ and --p-color-current is exposed for any nested component to read.
 /* ─────────────────────────────────────────────────────────────────────
    Vibrant accents (macOS 27)
    Twelve accents for color that sits on a material (glass, menus,
-   popovers, alerts) instead of an opaque background. Gray has no
+   popovers, alerts). Gray has no
    vibrant form.
 
    --p-vibrant-<color> is the source fill. Apple does not paint it
    flat: it composites it onto whatever is behind, in two steps:
      1. #808080 with mix-blend-mode: saturation (strips the hue of
         the backdrop, keeps its lightness),
-     2. the source with mix-blend-mode: plus-darker in light mode
-        (backdrop + source − 1: on white it is the source, on gray it
-        darkens by the gray) or plus-lighter in dark mode (backdrop +
-        source: on black it is the source, on gray it brightens).
+     2. the source with mix-blend-mode: plus-darker in light mode, or
+        plus-lighter in dark mode.
+        Plus-darker is backdrop + source − 1: on white it is the
+        source, on gray it darkens by the gray.
+        Plus-lighter is backdrop + source: on black it is the source,
+        on gray it brightens.
    Use it as a layer, with mix-blend-mode: var(--p-vibrant-blend).
 
    --p-vibrant-<color>-resolved is the same recipe worked out over the
-   macOS 27 overlay glass (#EBEBEB light, #1A1A1A dark): the flat
-   color to use where a blend layer isn't possible, such as text.
+   macOS 27 overlay glass (#EBEBEB light, #1A1A1A dark). It is the
+   flat color to use where a blend layer isn't possible, such as text.
 
    plus-lighter works in every current engine. plus-darker is Safari
    only; elsewhere --p-vibrant-blend falls back to multiply, which

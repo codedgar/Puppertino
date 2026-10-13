@@ -7,8 +7,8 @@
    affordance for stacking banners.
 
    macOS 27 glass edge: a dark hairline outside the shape and a bright
-   rim along the top and bottom only (no side rim), over the shared
-   overlay shadow. */
+   rim along the top and bottom only (no side rim). The shared overlay
+   shadow sits under it. */
 
 :root {
   --p-notification-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", sans-serif;
@@ -260,8 +260,8 @@
 }
 
 /* macOS 27 draws the banner as a plain 20pt round rect (no continuous
-   smoothing), so a plain border-radius is exact and there is no
-   corner-shape here. The attachment is a smoothed r6 corner; fitted
+   smoothing). A plain border-radius is exact, so there is no
+   corner-shape here. The attachment is a smoothed r6 corner. Fitted
    against its outline, superellipse(1.465) at 7.75px matches within
    0.05px RMS. */
 @supports (corner-shape: superellipse(1.465)) {
@@ -272,21 +272,21 @@
 }
 
 /* ─── Touch size (iOS and iPadOS 27) ───────────────────────────────── */
-/* The iOS notification: a 66px banner, plain 23px corners, a 38px app
-   icon inset 14px, the title and message at 15px, and the time at 15px
-   in the top trailing corner. Same slots as the macOS notification
+/* The iOS notification: a 66px banner with plain 23px corners and a
+   38px app icon inset 14px. The title and message are 15px, and the
+   time is 15px in the top trailing corner. Same slots as the macOS notification
    above.
 
    iOS 27 material (the on-wallpaper, dark appearance): not a darkening
-   tint but an additive lift. The reference adds #101010 over the
+   tint but an additive lift. Native iOS 27 adds #101010 over the
    blurred wallpaper, so the banner reads about 16 levels brighter than
    what is behind it (#4E over #3D). A white 8.5% fill does the same
    over mid-dark backdrops. The edge is the overlay glass rim the alert
-   uses: a dark hairline just outside, a bright 1px line inside the top
-   and bottom, and a soft glow rising into the bottom edge, over the
-   faint --p-shadow-glass-control drop shadow.
+   uses. It has a dark hairline outside, a bright 1px line inside the
+   top and bottom, and a soft glow rising into the bottom edge. The
+   faint --p-shadow-glass-control drop shadow sits under it.
 
-   Notifications stack on iOS rather than listing. .p-notification-stack
+   Notifications stack on iOS. .p-notification-stack
    fans the cards behind the top one; notifications.js expands it. */
 
 :root {
@@ -567,7 +567,7 @@
 
 /* ─── Stack ────────────────────────────────────────────────────────── */
 /* Cards behind the top one step in 10px per side and peek 8px below
-   it, each with its own rim, which is how iOS shows there is more than
+   it. Each has its own rim, which is how iOS shows there is more than
    one. */
 .p-notification-stack {
   display: grid;
@@ -581,16 +581,16 @@
 }
 
 /* Paint order. The front card is raised and the cards behind keep
-   z-index: auto, so they stay above the background of whatever holds
-   the stack; a negative z-index would put them under it. Among the
+   z-index: auto. They stay above the background of whatever holds the
+   stack. A negative z-index would put them under it. Among the
    cards behind, `order` paints the further one first. Every card is in
    the same cell, so `order` moves nothing. */
 .p-notification-stack > .p-notification-touch:first-child {
   z-index: 1;
 }
 
-/* A card behind is clipped to what shows below the one in front: its
-   8px peek plus the 4px the front card's 23px corner curve uncovers
+/* A card behind is clipped to what shows below the one in front. That is
+   its 8px peek plus the 4px the front card's 23px corner curve uncovers
    10px in, at the narrower card's edge. Otherwise the front card's glass would pick up
    the card behind it and read brighter than a single banner. */
 .p-notification-stack > .p-notification-touch:nth-child(n + 2) {

@@ -25,7 +25,7 @@ Apple describes every screen by a pair of size classes, horizontal and vertical,
 | iPad, half or two-thirds Split View | Regular |
 | iPad, Slide Over or one-third Split View | **Compact** |
 
-That last row is the reason this exists. An iPad app can be 320pt wide while running, because someone dragged another app alongside it. **"iPad" is a range of widths, not a device.**
+That last row is the reason this exists. An iPad app can be 320pt wide while running, because someone dragged another app alongside it. **"iPad" is a range of widths.**
 
 So there is no iPad layout to design. There is what happens at regular width, what happens at compact, and the app moving between them without reloading.
 
@@ -76,7 +76,7 @@ A split view is the structure iPad apps are built on: a sidebar for sections, op
 | `.p-split-view__supplementary` | 320px middle column |
 | `.p-split-view__content` | Fills the rest |
 
-At compact width the sidebar and supplementary panes are removed rather than squeezed, and the content pane fills. **A collapsed split view has no navigation in it**, so pair it with a tab bar or a back button.
+At compact width the sidebar and supplementary panes are removed, and the content pane fills. **A collapsed split view has no navigation in it**, so pair it with a tab bar or a back button.
 
 Resize this page below 768px and the preview above drops to one column.
 
@@ -151,7 +151,7 @@ Body text stops being comfortable somewhere around 672px. On a 1024px iPad, a pa
 | `--p-split-supplementary` | `320px` |
 | `--p-split-gap` | `0px` |
 
-`--p-size-regular` is documentation rather than a working value. A custom property cannot be used inside a media query, so the breakpoint is written literally in the queries. Changing one means changing the other.
+`--p-size-regular` is documentation only. A custom property cannot be used inside a media query, so the breakpoint is written literally in the queries. Changing one means changing the other.
 
 ## Accessibility
 
@@ -159,7 +159,7 @@ An element hidden with `.p-regular-only` or `.p-compact-only` is `display: none`
 
 Give the visible pair the same `aria-label`, so the section a person is in reads the same at either width.
 
-A content pane with nothing selected is an <a href={`${import.meta.env.BASE_URL}docs/mobile/empty-states/`}>empty state</a>, not a blank column. On iPad the detail pane is visible before anything is chosen, and an empty column reads as a loading failure.
+A content pane with nothing selected is an <a href={`${import.meta.env.BASE_URL}docs/mobile/empty-states/`}>empty state</a>. On iPad the detail pane is visible before anything is chosen, and an empty column reads as a loading failure.
 
 ## Not layout.css
 

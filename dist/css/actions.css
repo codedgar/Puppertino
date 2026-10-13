@@ -151,8 +151,8 @@
    PUPPERTINO v2 — .p-action-sheet
    The iOS 27 action sheet. Same 300px overlay glass as .p-alert (the
    shared --p-desktop-modal surface, keyline, rims and glows with
-   --p-shadow-overlay), but anchored to the bottom of the screen and
-   built from a stack of capsule rows rather than a pair of buttons.
+   --p-shadow-overlay). It is anchored to the bottom of the screen and
+   built from a stack of capsule rows.
 
    Composes with .p-modal, so it reuses the modal manager: the same
    open/close attributes, focus trap, and Escape handling. Radius is a
@@ -224,7 +224,7 @@
 
   opacity: 0;
   pointer-events: none;
-  /* Slides up from below rather than scaling in place. */
+  /* Slides up from below. */
   transform: translate(-50%, 16px);
   transition:
     opacity 0.24s ease,
@@ -262,9 +262,9 @@
     inset 0 -40px 6px -40px var(--p-desktop-modal-glow-bottom, rgba(255, 255, 255, 0.6));
 }
 
-/* The header is left-aligned, like the alert: the title's first line
-   22px in from the top and left edges, the message 10px under it, and
-   24px down to the first row. */
+/* The header is left-aligned, like the alert. The title's first line
+   is 22px in from the top and left edges. The message is 10px under
+   it, and the first row is 24px down. */
 .p-action-sheet__header {
   padding: 8px 8px 24px;
 }

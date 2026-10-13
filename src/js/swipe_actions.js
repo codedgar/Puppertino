@@ -8,7 +8,7 @@
  * One row is open at a time. A tap on the open row, a tap anywhere else,
  * or choosing an action closes it.
  *
- * A swipe is invisible until someone tries it, so the actions never
+ * A swipe is invisible until someone tries it. The actions never
  * depend on the gesture:
  *   - They stay in the tab order and the reading order. Focusing one
  *     (Tab, or a screen reader moving onto it) opens its side.
@@ -111,7 +111,7 @@
         content.querySelector('a[href], button, [tabindex]:not([tabindex="-1"])'));
       if (!target && content) {
         /* Nothing focusable in the row: focus the content itself so
-           focus does not stay on an action that just slid out of view. */
+           focus does not stay on an action that slid out of view. */
         if (!content.hasAttribute('tabindex')) content.setAttribute('tabindex', '-1');
         target = content;
       }
@@ -184,7 +184,7 @@
     drag = null;
 
     if (!d.active) {
-      /* A tap on an open row closes it instead of activating it. */
+      /* A tap on an open row closes it without activating it. */
       if (d.row === openRow && event.type === 'pointerup') {
         close(d.row);
         swallowClick = true;

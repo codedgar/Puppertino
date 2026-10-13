@@ -384,7 +384,7 @@
 
 /* ─── Touch size (iOS) ─────────────────────────────────────────────── */
 /* iOS 27 draws its progress bar 4px tall with a 2px radius, thinner
-   than the 6px slider track it used to share (iOS 26). Track and fill
+   than the 6px slider track. Track and fill
    are the slider's colors. */
 
 :root {

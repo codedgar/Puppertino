@@ -340,12 +340,12 @@
 }
 
 /* macOS 27 alert surface: the shared overlay glass. A translucent
-   neutral over blur, a dark 0.5px keyline just outside the edge, a
-   bright 1px line on the inside top and bottom (sides keyline only),
-   and a soft ~8px glow that follows the top and bottom curves. The
-   glow is the reference's paired ±40px inner shadows, which CSS can
-   express directly: an inset shadow whose hole is grown 40px and
-   shifted 40px leaves only the one edge lit. */
+   neutral over blur, a dark 0.5px keyline outside the edge, a bright
+   1px line on the inside top and bottom (sides keyline only). A
+   soft ~8px glow follows the top and bottom curves. The glow is
+   the native macOS 27 pair of ±40px inner shadows. CSS expresses it
+   directly: an inset shadow whose hole is grown 40px and shifted 40px
+   leaves only the one edge lit. */
 .p-desktop-modal__surface {
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   backdrop-filter: blur(30px) saturate(180%);
@@ -509,10 +509,11 @@
 /* Destructive is vibrant: the vibrant red (#F52F32 light, #FF4747
    dark) composited onto the alert glass at 23% (31% hovered or
    pressed). The alert surface is a known color, so the composite is
-   written flat with the resolved red (--p-vibrant-red-resolved), which
-   lands on the reference in every engine; a live blend against the
-   translucent glass does not. In light mode the label goes through the
-   same blend (resolved red, #E11B1E); in dark mode it is plain #FF4747. */
+   written flat with the resolved red (--p-vibrant-red-resolved). That
+   lands on the native macOS 27 value in every engine. A live blend
+   against the translucent glass does not. In light mode the label goes
+   through the same blend (resolved red, #E11B1E); in dark mode it is plain
+   #FF4747. */
 .p-desktop-modal__action--destructive {
   background: color-mix(in srgb, var(--p-vibrant-red-resolved, #e11b1e) 23%, transparent);
   color: var(--p-desktop-modal-destructive-label);
@@ -639,11 +640,11 @@
 
 /* ─── Expanded dialog (the full Save panel) ─────────────────────────
    1000×448. A flush sidebar runs the full height of the window's
-   leading edge and carries the traffic lights and a round sidebar
-   toggle; the main pane stacks the centered form, a toolbar row, the
-   file browser (flush to the pane edges, 1px keylines above and below)
-   and the footer. Rows in the browser are 20px zebra stripes with 8px
-   rounded ends, inset 10px. */
+   leading edge. It carries the traffic lights and a round sidebar
+   toggle. The main pane stacks the centered form, a toolbar row, the
+   file browser and the footer. The file browser is flush to the pane
+   edges with 1px keylines above and below. Rows in the browser are 20px zebra
+   stripes with 8px rounded ends, inset 10px. */
 .p-dialog--expanded {
   --p-dialog-field-width: 229px;
   --p-dialog-row-gap: 13px;
@@ -933,14 +934,13 @@
 
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-alert
-   The iOS 27 alert. 300px wide, with capsule actions rather than the
-   divided full-width rows of earlier iOS. Reuses the .p-modal manager:
+   The iOS 27 alert. 300px wide, with capsule actions. Reuses the .p-modal manager:
    the same open/close attributes, focus trap, and Escape handling as
    every other modal.
 
    iOS 27 puts the alert on the same overlay glass as the macOS 27
-   alert: the --p-desktop-modal surface, keyline, rims and glows, with
-   the softer --p-shadow-overlay drop shadow. Radius is a plain 34px
+   alert. It uses the --p-desktop-modal surface, keyline, rims and
+   glows, with the softer --p-shadow-overlay drop shadow. Radius is a plain 34px
    arc (iOS 26 drew a smoothed squircle; 27 does not).
    ═════════════════════════════════════════════════════════════════════ */
 
@@ -1030,7 +1030,7 @@
   letter-spacing: -0.43px;
 }
 
-/* Text-field block: one or two inset rows on a quiet fill, 272px wide
+/* Text-field block: one or two inset rows on a quiet fill. 272px wide
    (the surface's 14px inset), 52px per row, 26px corners, and a 1px
    separator inset 16px between rows. It sits 24px under the message
    and 19px above the actions. */
@@ -1153,8 +1153,8 @@
 
 /* Destructive keeps the quiet fill and turns the label red, so the
    dangerous action never becomes the most prominent thing on screen.
-   iOS keeps the system red (#FF383C, lifted to #FF5257 in dark), not
-   the macOS 27 vibrant red the desktop alert uses. */
+   iOS uses the system red (#FF383C, lifted to #FF5257 in dark). The
+   macOS 27 alert uses the vibrant red. */
 .p-alert__action--destructive {
   color: var(--p-alert-destructive);
 }
@@ -1162,12 +1162,12 @@
 /* ═════════════════════════════════════════════════════════════════════
    PUPPERTINO v2 — .p-bottom-sheet
    The iOS sheet. Slides up from the bottom edge, keeps the screen
-   behind it partly visible, and stops at a detent rather than filling
-   the display. Use it when the task is secondary to what is behind it.
+   behind it partly visible, and stops at a detent short of the full
+   display. Use it when the task is secondary to what is behind it.
 
    Not to be confused with .p-sheet, which is the macOS window sheet
    that drops from a title bar, or .p-action-sheet, which is a short
-   list of choices rather than a surface with content in it.
+   list of choices.
 
    Composes with .p-modal, so the open/close attributes, focus trap,
    and Escape handling are the shared ones.
@@ -1227,9 +1227,9 @@
   --p-bottom-sheet-height: calc(100vh - 24px);
 }
 
-/* Grabber: 36x5 at the top, the standard iOS affordance. It says the
-   sheet can be dragged even where the drag itself is not implemented,
-   so only include it when dragging or dismissal is actually wired up. */
+/* Grabber: 36x5 at the top, the standard iOS affordance. It signals
+   that the bottom sheet can be dragged even where dragging is not
+   implemented. Include it only when dragging or dismissal is wired up. */
 .p-bottom-sheet__grabber {
   flex: none;
   align-self: center;
@@ -1241,8 +1241,8 @@
 }
 
 /* Header: leading action, centered title, trailing action. The grid
-   keeps the title centered on the sheet rather than on the space left
-   over, so an action on one side does not shift it. */
+   keeps the title centered on the bottom sheet. An action on one side
+   does not shift it. */
 .p-bottom-sheet__header {
   flex: none;
   display: grid;
@@ -1315,8 +1315,8 @@
   }
 }
 
-/* Reduced transparency: an opaque surface, and quiet fills that no
-   longer rely on what is behind them. */
+/* Reduced transparency: an opaque surface, and quiet fills that do
+   not rely on what is behind them. */
 @media (prefers-reduced-transparency: reduce) {
   .p-desktop-modal__surface {
     -webkit-backdrop-filter: none;
@@ -1380,7 +1380,7 @@
     transform: translate(-50%, -50%);
   }
 
-  /* The alert still fades, it just stops arriving oversized. */
+  /* The alert still fades but stops arriving oversized. */
   .p-alert,
   .p-alert.active {
     transform: translate(-50%, -50%);
