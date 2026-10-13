@@ -24,25 +24,28 @@
     #f00 360deg
   );
 
-  /* Capsule well */
-  --p-colorwell-capsule-bg: rgba(0, 0, 0, 0.08);
-  --p-colorwell-swatch-edge: rgba(0, 0, 0, 0.10);
+  /* Capsule well: the frame is black 10% (white 10% in dark); the rim
+     inside the swatch is a black 20% line in both appearances, so it
+     always reads as a darker edge of the swatch color. Measured from
+     AppKit on macOS 27. */
+  --p-colorwell-capsule-bg: rgba(0, 0, 0, 0.10);
+  --p-colorwell-swatch-edge: rgba(0, 0, 0, 0.20);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-colorwell-capsule-bg: rgba(255, 255, 255, 0.07);
+  --p-colorwell-capsule-bg: rgba(255, 255, 255, 0.10);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-colorwell-capsule-bg: rgba(255, 255, 255, 0.07);
+    --p-colorwell-capsule-bg: rgba(255, 255, 255, 0.10);
   }
 }
 
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-colorwell-capsule-bg: rgba(0, 0, 0, 0.08);
+  --p-colorwell-capsule-bg: rgba(0, 0, 0, 0.10);
 }
 
 /* 28×28 circular well; the native input is hidden but stays focusable
@@ -126,9 +129,10 @@
 }
 
 /* ─── Capsule well ─────────────────────────────────────────────────── */
-/* A 2:1 capsule at 8% gray (white 7% in dark) holding the current
-   color inset 3px all round, with a 1px 10% hairline inside the swatch
-   edge. Sizes 32×16, 40×20, 48×24 (default), 56×28, 72×36.
+/* A 2:1 capsule at 10% gray (white 10% in dark): a 3px frame around
+   the swatch at every size, with a 1px black 20% rim inside the swatch
+   edge. The swatch is itself a capsule (42×18 at the default size).
+   Sizes 32×16, 40×20, 48×24 (default), 56×28, 72×36.
    Markup:
    <label class="p-colorwell p-colorwell-capsule" style="--p-colorwell-color: #34C759;">
      <input type="color" value="#34C759" aria-label="Fill color" />
@@ -170,15 +174,10 @@
   background: var(--p-control-accent, var(--p-sys-blue, #0088FF));
 }
 
-/* Disabled dims the swatch only; the capsule body stays. */
+/* Disabled: the whole well, frame and swatch, at 53%. */
 .p-colorwell.p-colorwell-capsule.p-dimmed,
 .p-colorwell.p-colorwell-capsule:has(input:disabled) {
-  opacity: 1;
-}
-
-.p-colorwell.p-colorwell-capsule.p-dimmed::before,
-.p-colorwell.p-colorwell-capsule:has(input:disabled)::before {
-  opacity: 0.5;
+  opacity: 0.53;
 }
 
 .p-colorwell.p-colorwell-capsule:focus-within {

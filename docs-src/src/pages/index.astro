@@ -556,8 +556,33 @@ const history = [
   <script type="module" src={steppersScript}></script>
   <script type="module" src={tabBarScript}></script>
   <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js" defer></script>
+  <script src="/vendor/glassworks.umd.js" defer></script>
   <script type="module" src={glassScript}></script>
+  <script is:inline>
+    // ?glassdebug prints the glass state into the page, for phones without an inspector.
+    if (location.search.indexOf('glassdebug') !== -1) {
+      var pre = document.createElement('pre');
+      pre.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;margin:0;padding:8px;background:#fff;color:#000;font:11px/1.3 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-all;border-radius:8px;box-shadow:0 0 0 1px #0003';
+      document.body.appendChild(pre);
+      var errors = [];
+      window.addEventListener('error', function (e) { errors.push(e.message); });
+      var warn = console.warn; console.warn = function () { errors.push([].join.call(arguments, ' ')); warn.apply(console, arguments); };
+      var err = console.error; console.error = function () { errors.push('E ' + [].map.call(arguments, function (a) { return a && a.message || a; }).join(' ')); err.apply(console, arguments); };
+      var t0 = performance.now();
+      setInterval(function () {
+        var els = document.querySelectorAll('#glass-app .p-tab-bar, #glass-app .p-toolbar-touch');
+        var r = window.__liquidGLRenderer__;
+        var lines = ['t=' + Math.round(performance.now() - t0) + 'ms glassworks=' + typeof window.glassworks + ' snapdom=' + typeof window.snapdom + ' PuppertinoGlass=' + typeof window.PuppertinoGlass];
+        for (var i = 0; i < els.length; i++) { var cs = getComputedStyle(els[i], '::before'); lines.push(els[i].className.split(' ')[0] + ' ' + els[i].getAttribute('data-p-glass') + '/' + els[i].getAttribute('data-p-glass-size') + ' before-bg=' + cs.backgroundColor + ' bf=' + (cs.backdropFilter || cs.webkitBackdropFilter)); }
+        if (r) lines.push('renderer tex=' + r.textureWidth + 'x' + r.textureHeight + ' capturing=' + r._capturing + ' canvasOpacity=' + r.canvas.style.opacity + ' lenses=' + r.lenses.length + ' engine=' + (r._engine && (r._engine.name || r._engine)) + ' worker=' + r._workerEnabled);
+        var stats = function (cv) { try { var c = document.createElement('canvas'); c.width = 16; c.height = 16; var x = c.getContext('2d'); x.drawImage(cv, 0, 0, 16, 16); var d = x.getImageData(0, 0, 16, 16).data; var a = 0, l = 0; for (var i = 0; i < d.length; i += 4) { a += d[i + 3]; l += (d[i] + d[i + 1] + d[i + 2]) / 3; } return 'alpha=' + Math.round(a / 256) + ' lum=' + Math.round(l / 256); } catch (e) { return 'stats failed ' + e.message; } };
+        if (r && r._dynamicNodes) r._dynamicNodes.forEach(function (n) { var m = r._dynMeta.get(n.el); if (!m) { lines.push('dyn: no meta'); return; } lines.push('dyn ' + n.el.className + ' cap=' + (m.lastCapture ? m.lastCapture.width + 'x' + m.lastCapture.height + ' ' + stats(m.lastCapture) : 'none') + ' need=' + m.needsRecapture + ' busy=' + m._capturing + ' heavy=' + m._heavyAnim + ' prev=' + JSON.stringify(m.prevDrawRect) + ' translate=' + getComputedStyle(n.el).translate + ' transform=' + getComputedStyle(n.el).transform); });
+        if (r && r.staticSnapshotCanvas) lines.push('static ' + r.staticSnapshotCanvas.width + 'x' + r.staticSnapshotCanvas.height + ' ' + stats(r.staticSnapshotCanvas));
+        if (errors.length) lines.push('!! ' + errors.slice(-3).join(' | '));
+        pre.textContent = lines.join('\n');
+      }, 500);
+    }
+  </script>
 </Base>
 
 <script>

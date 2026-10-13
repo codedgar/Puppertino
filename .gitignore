@@ -9,3 +9,4 @@ status_code_comments.md
 docs-src/node_modules/
 docs-src/dist/
 docs-src/.astro/
+/tools

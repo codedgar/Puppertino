@@ -304,30 +304,34 @@
 
    The recipe lives in the custom properties below and the script reads
    them once per surface, so a variant is only a set of overrides.
-   Values follow native macOS 26 glass (NSGlassEffectView) measured
-   over test patterns; see specs/liquid-glass.md.
+   Values were measured against native macOS 27 glass (NSGlassEffectView)
+   over gray ramps, bar patterns, solid colors and a photo, then tuned;
+   see specs/liquid-glass.md and tools/glass-harness.
    The lens (Glassworks 2) leaves the middle of the pane flat and
    bends only a band around the rim. There it shifts content along the
    edge's normal, toward the centre, so the rim shows a compressed
-   sliver of what is behind the glass, as Apple's does. Refraction (the
-   broad bend across the band) and bevel depth (the steep bend right at
-   the edge) are fractions of the surface's shorter side, counted up to
-   48px. Bevel width, the band, is a fraction of the shorter side up to
-   24px. Specular (1 or 0) adds two fixed rim highlights at +45 and
-   -135 degrees; native macOS 26 shows none, so it is off.
+   sliver of what is behind the glass. The shift at the rim is half the
+   surface's shorter side (Clear: two thirds) up to 60px, and fades
+   over a quarter of it (Clear: a third) up to 20px, as a sharp term
+   plus a broad one. --p-glass-bend scales the shift and
+   --p-glass-bend-reach the band; 1 is the measured size.
+   --p-glass-light: 1 folds the sides facing the top left harder than
+   the rest, as macOS lights its glass; off, every side folds alike.
+   Specular (1 or 0) adds two fixed rim highlights; off by default.
 
-   Frost is a blur in CSS px that the shader applies before the lens, as
-   Apple does, so the rim band stays sharp. Regular frost grows with the
-   surface (the script multiplies it by --p-glass-scale: about 4px on a
-   50px button, 8px on a 160px panel); Clear frosts about 10px at every
-   size (--p-glass-frost-grow: 0). --p-glass-blur is only a light
-   smoothing pass on the tint layer after the lens.
+   Frost is a Gaussian blur the shader applies before the lens, so the
+   rim band stays sharp. Regular frost grows with the surface, from
+   about 6.5px on a button to 10px on a panel; Clear frosts twice as
+   much and keeps growing with size. --p-glass-frost scales it.
+   --p-glass-blur is only a light smoothing pass on the tint layer
+   after the lens.
 
    Small Regular surfaces (64px or less across, like buttons and tab
-   bars) flip to dark glass over dark content and to light glass over
-   light content, as Apple's do. The script sets data-p-theme on the
-   surface for that. Set --p-glass-adaptive: 0 to pin a surface to the
-   page's appearance. Clear glass never adapts.
+   bars) can flip to dark glass over dark content and to light glass
+   over light content with --p-glass-adaptive: 1; the script sets
+   data-p-theme on the surface for that. Off by default: macOS 27 glass
+   keeps the page's appearance over any backdrop. Clear glass never
+   adapts.
 
    Until the first frame renders, and wherever the glass cannot render
    (no script, no WebGL, reduced transparency, increased contrast), the
@@ -346,48 +350,53 @@
 :root {
   --p-glass-surface: var(--p-glass-md);
 
-  /* Live tint by size (the script sets data-p-glass-size). Small glass,
-     64px or less across (buttons, tab bars, nav circles), and medium or
-     large glass (cards, panels, sheets, menus) use different recipes in
-     macOS 27 and iOS 27:
-       small light  rgba(242,242,242,.55)  over #666 -> #B3, white -> #F8
-       large light  rgba(245,245,245,.72)  over #666 -> #CD
-       small dark   rgba(153,153,153,.17)  nearly clear
-       large dark   rgba(26,26,26,.96)     close to opaque */
-  --p-glass-tint: rgba(242, 242, 242, 0.55);
-  --p-glass-tint-large: rgba(245, 245, 245, 0.72);
-  --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+  /* The face: how the frosted, bent backdrop is mapped before it shows
+     through, as CoreAnimation's glassBackground filter does it under
+     NSGlassEffectView on macOS 27: y = black + (white - black) * c per
+     channel, saturation about luma, a luma ceiling on dark glass, then
+     a fill colour at its alpha. --p-glass-slider (0 to 1) stands in for
+     the Liquid Glass slider in System Settings: it adds the fill at
+     --p-glass-face-fill-slider times its value. --p-glass-tint is an
+     extra overlay over the face, off by default. */
+  --p-glass-face-white: 0.96;
+  --p-glass-face-black: 0.4;
+  --p-glass-face-saturation: 1.2;
+  --p-glass-face-fill: rgb(255, 255, 255);
+  --p-glass-face-fill-alpha: 0;
+  --p-glass-face-fill-slider: 0.5;
+  --p-glass-face-max-luma: 1;
+  --p-glass-face-max-luma-large: 1;
+  --p-glass-slider: 0;
+  --p-glass-light: 0;
+  --p-glass-tint: transparent;
+  --p-glass-tint-large: transparent;
+  --p-glass-clear-tint: transparent;
+  --p-glass-cap: 1;
+  --p-glass-cap-large: 1;
 
-  /* The macOS 27 glass edge, as a box-shadow list:
-     - a dark 0.5px keyline just outside the shape, which is what keeps
-       glass visible on white;
-     - a slightly heavier keyline sliver on the left and right sides;
-     - a bright 1px rim inside the top edge and an equally bright one
-       inside the bottom edge, each with a soft glow (stronger along the
-       bottom). The sides get the keyline only.
-     Plus-darker keylines can't be done in CSS, so black alpha stands in.
-     --p-glass-rim is the same value, kept under its v2.0 name. */
+  /* The macOS 27 glass edge: a dark keyline one device pixel wide just
+     outside the shape, a little heavier down the sides, and nothing
+     inside. Measured on white, gray and black. --p-glass-rim is the same
+     value, kept under its v2.0 name. */
   --p-glass-edge:
-    0 0 0 0.5px rgba(0, 0, 0, 0.12),
-    -1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
-    1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 6px 6px -6px rgba(255, 255, 255, 0.3),
-    inset 0 -12px 10px -6px rgba(255, 255, 255, 0.4);
+    0 0 0 0.5px rgba(0, 0, 0, 0.15),
+    -1px 0 0 -0.25px rgba(0, 0, 0, 0.07),
+    1px 0 0 -0.25px rgba(0, 0, 0, 0.07);
   --p-glass-rim: var(--p-glass-edge);
 
-  /* Regular recipe */
-  --p-glass-refraction: 0.2;
-  --p-glass-bevel-depth: 0.7;
-  --p-glass-bevel-width: 0.2;
-  --p-glass-blur: 1px;
-  --p-glass-saturate: 160%;
-  --p-glass-frost: 3.8;
-  --p-glass-frost-grow: 1;
+  /* Regular recipe. Bend and frost are multipliers of the sizes the
+     script measured from macOS 27 (1 is native); --p-glass-bend-reach
+     stretches the band the bend fades over. --p-glass-blur is a
+     smoothing pass on the tint layer after the lens. */
+  --p-glass-platform: macos;
+  --p-glass-bend: 1;
+  --p-glass-bend-reach: 1;
+  --p-glass-frost: 1;
+  --p-glass-blur: 0px;
+  --p-glass-saturate: 100%;
   --p-glass-magnify: 1;
   --p-glass-specular: 0;
-  --p-glass-adaptive: 1;
+  --p-glass-adaptive: 0;
 
   /* Every surface on a page shares one WebGL canvas, which Glassworks
      stacks directly under the highest one. Keep them on one layer. */
@@ -397,34 +406,46 @@
 .p-dark-mode,
 [data-p-theme="darkmode"] {
   --p-glass-surface: var(--p-glass-md);
-  --p-glass-tint: rgba(153, 153, 153, 0.17);
-  --p-glass-tint-large: rgba(26, 26, 26, 0.96);
-  --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+  --p-glass-face-white: 1.125;
+  --p-glass-face-black: 0.08;
+  --p-glass-face-saturation: 1.3;
+  --p-glass-face-fill: rgb(32, 32, 32);
+  --p-glass-face-fill-alpha: 0;
+  --p-glass-face-fill-slider: 0.5;
+  --p-glass-face-max-luma: 0.6;
+  --p-glass-face-max-luma-large: 0.45;
+  --p-glass-tint: transparent;
+  --p-glass-tint-large: transparent;
+  --p-glass-clear-tint: transparent;
+  --p-glass-cap: 1;
+  --p-glass-cap-large: 1;
   --p-glass-edge:
-    0 0 0 0.5px rgba(0, 0, 0, 0.8),
-    -1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
-    1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 6px 6px -6px rgba(255, 255, 255, 0.05),
-    inset 0 -12px 10px -6px rgba(255, 255, 255, 0.06);
+    0 0 0 0.5px rgba(0, 0, 0, 0.36),
+    -1px 0 0 -0.25px rgba(0, 0, 0, 0.2),
+    1px 0 0 -0.25px rgba(0, 0, 0, 0.2);
   --p-glass-rim: var(--p-glass-edge);
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
     --p-glass-surface: var(--p-glass-md);
-    --p-glass-tint: rgba(153, 153, 153, 0.17);
-    --p-glass-tint-large: rgba(26, 26, 26, 0.96);
-    --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+    --p-glass-face-white: 1.125;
+    --p-glass-face-black: 0.08;
+    --p-glass-face-saturation: 1.3;
+    --p-glass-face-fill: rgb(32, 32, 32);
+    --p-glass-face-fill-alpha: 0;
+    --p-glass-face-fill-slider: 0.5;
+    --p-glass-face-max-luma: 0.6;
+    --p-glass-face-max-luma-large: 0.45;
+    --p-glass-tint: transparent;
+    --p-glass-tint-large: transparent;
+    --p-glass-clear-tint: transparent;
+    --p-glass-cap: 1;
+    --p-glass-cap-large: 1;
     --p-glass-edge:
-      0 0 0 0.5px rgba(0, 0, 0, 0.8),
-      -1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
-      1px 0 0 -0.25px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.2),
-      inset 0 6px 6px -6px rgba(255, 255, 255, 0.05),
-      inset 0 -12px 10px -6px rgba(255, 255, 255, 0.06);
+      0 0 0 0.5px rgba(0, 0, 0, 0.36),
+      -1px 0 0 -0.25px rgba(0, 0, 0, 0.2),
+      1px 0 0 -0.25px rgba(0, 0, 0, 0.2);
     --p-glass-rim: var(--p-glass-edge);
   }
 }
@@ -432,17 +453,23 @@
 .p-light-mode,
 [data-p-theme="lightmode"] {
   --p-glass-surface: var(--p-glass-md);
-  --p-glass-tint: rgba(242, 242, 242, 0.55);
-  --p-glass-tint-large: rgba(245, 245, 245, 0.72);
-  --p-glass-clear-tint: rgba(178, 178, 178, 0.14);
+  --p-glass-face-white: 0.96;
+  --p-glass-face-black: 0.4;
+  --p-glass-face-saturation: 1.2;
+  --p-glass-face-fill: rgb(255, 255, 255);
+  --p-glass-face-fill-alpha: 0;
+  --p-glass-face-fill-slider: 0.5;
+  --p-glass-face-max-luma: 1;
+  --p-glass-face-max-luma-large: 1;
+  --p-glass-tint: transparent;
+  --p-glass-tint-large: transparent;
+  --p-glass-clear-tint: transparent;
+  --p-glass-cap: 1;
+  --p-glass-cap-large: 1;
   --p-glass-edge:
-    0 0 0 0.5px rgba(0, 0, 0, 0.12),
-    -1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
-    1px 0 0 -0.25px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 6px 6px -6px rgba(255, 255, 255, 0.3),
-    inset 0 -12px 10px -6px rgba(255, 255, 255, 0.4);
+    0 0 0 0.5px rgba(0, 0, 0, 0.15),
+    -1px 0 0 -0.25px rgba(0, 0, 0, 0.07),
+    1px 0 0 -0.25px rgba(0, 0, 0, 0.07);
   --p-glass-rim: var(--p-glass-edge);
 }
 
@@ -463,20 +490,91 @@
   box-shadow: none;
 }
 
-/* Clear is barely tinted and the same in light and dark. Measured on
-   macOS 26 it bends over a wider band than Regular and frosts more, not
-   less: about a 10pt blur at every size. */
+/* Clear: a fully frosted backdrop, a wider and stronger bend, and a
+   face that lets most of the colour through with a thin white fill.
+   The script holds its sizes; Clear only swaps the face. */
 .p-glass-clear {
   --p-glass-surface: var(--p-glass-sm);
-  --p-glass-tint: var(--p-glass-clear-tint);
-  --p-glass-tint-large: var(--p-glass-clear-tint);
-  --p-glass-refraction: 0.55;
-  --p-glass-bevel-depth: 0.45;
-  --p-glass-bevel-width: 0.275;
-  --p-glass-frost: 10.5;
-  --p-glass-frost-grow: 0;
-  --p-glass-blur: 2px;
-  --p-glass-saturate: 120%;
+  --p-glass-face-white: 0.95;
+  --p-glass-face-black: 0.2;
+  --p-glass-face-saturation: 1;
+  --p-glass-face-fill: rgb(255, 255, 255);
+  --p-glass-face-fill-alpha: 0.1;
+  --p-glass-face-fill-slider: 0;
+  --p-glass-face-max-luma: 1;
+  --p-glass-face-max-luma-large: 1;
+  --p-glass-cap: 1;
+  --p-glass-cap-large: 1;
+  --p-glass-saturate: 100%;
+}
+
+.p-dark-mode .p-glass-clear,
+[data-p-theme="darkmode"] .p-glass-clear {
+  --p-glass-face-white: 0.8;
+  --p-glass-face-black: 0.05;
+  --p-glass-face-fill-alpha: 0.05;
+}
+
+@media (prefers-color-scheme: dark) {
+  .p-auto-dark-mode .p-glass-clear {
+    --p-glass-face-white: 0.8;
+    --p-glass-face-black: 0.05;
+    --p-glass-face-fill-alpha: 0.05;
+  }
+}
+
+/* iOS 27 glass, measured from SwiftUI glassEffect in the iPhone 17
+   simulator over gray ramps, solid colors and a photo. Touch devices
+   get it through the platform token, which also picks the iOS bend and
+   frost tables in glass.js. Lighter tint than macOS, a bright additive
+   rim inside the edge, nearly clear Clear glass with no frost, and a
+   stronger, tighter bend. */
+@media (pointer: coarse) {
+  :root {
+    --p-glass-platform: ios;
+    --p-glass-tint: rgba(250, 250, 250, 0.55);
+    --p-glass-tint-large: rgba(250, 250, 250, 0.55);
+    --p-glass-clear-tint: rgba(246, 246, 246, 0.13);
+    --p-glass-edge:
+      0 0 0 0.5px rgba(0, 0, 0, 0.08),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+      inset 0 0 2px rgba(255, 255, 255, 0.2);
+    --p-glass-rim: var(--p-glass-edge);
+  }
+
+  .p-dark-mode,
+  [data-p-theme="darkmode"] {
+    --p-glass-tint: rgba(152, 152, 152, 0.21);
+    --p-glass-tint-large: rgba(94, 94, 94, 0.34);
+    --p-glass-clear-tint: rgba(246, 246, 246, 0.13);
+    --p-glass-cap: 0.755;
+    --p-glass-cap-large: 0.535;
+    --p-glass-edge:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+      inset 0 0 2px rgba(255, 255, 255, 0.2);
+    --p-glass-rim: var(--p-glass-edge);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .p-auto-dark-mode {
+      --p-glass-tint: rgba(152, 152, 152, 0.21);
+      --p-glass-tint-large: rgba(94, 94, 94, 0.34);
+      --p-glass-clear-tint: rgba(246, 246, 246, 0.13);
+      --p-glass-cap: 0.755;
+      --p-glass-cap-large: 0.535;
+      --p-glass-edge:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+        inset 0 0 2px rgba(255, 255, 255, 0.2);
+      --p-glass-rim: var(--p-glass-edge);
+    }
+  }
+
+  .p-glass-clear {
+    --p-glass-edge:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+      inset 0 0 3px rgba(255, 255, 255, 0.35);
+    --p-glass-rim: var(--p-glass-edge);
+  }
 }
 
 /* Glassworks sets pointer-events: none on the surface inline. A tab bar
@@ -507,8 +605,8 @@
 [data-p-glass="live"]::before {
   background-color: var(--p-glass-tint);
   box-shadow: var(--p-glass-rim);
-  -webkit-backdrop-filter: saturate(var(--p-glass-saturate)) blur(calc(var(--p-glass-blur) * var(--p-glass-scale, 1)));
-  backdrop-filter: saturate(var(--p-glass-saturate)) blur(calc(var(--p-glass-blur) * var(--p-glass-scale, 1)));
+  -webkit-backdrop-filter: saturate(var(--p-glass-saturate)) blur(var(--p-glass-blur));
+  backdrop-filter: saturate(var(--p-glass-saturate)) blur(var(--p-glass-blur));
 }
 
 /* Small Regular glass waits on the small material, so the hand-off to

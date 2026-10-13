@@ -18,25 +18,25 @@
   /* Titlebar band: a scroll-edge material, not an opaque strip. */
   --p-window-band: var(--p-material-chrome, rgba(255, 255, 255, 0.85));
   --p-window-band-opaque: #fff;
-  --p-window-separator: var(--p-material-chrome-separator, rgba(0, 0, 0, 0.05));
+  /* Titlebar hairline: a full 1px at black 10% (white 10% dark). */
+  --p-window-separator: rgba(0, 0, 0, 0.1);
   --p-window-separator-compact: rgba(60, 60, 67, 0.12);
   --p-window-title: rgba(0, 0, 0, 0.85);
   --p-window-title-icon: rgba(0, 0, 0, 0.85);
   --p-window-title-dim: rgba(0, 0, 0, 0.5);
+  --p-window-title-compact: rgba(0, 0, 0, 0.65);
   --p-window-subtitle: #999;
   --p-window-toolbar-icon: #4d4d4d;
   --p-window-toolbar-hover: rgba(0, 0, 0, 0.03);
-  --p-traffic-close: #ff5c60;
-  --p-traffic-min: #fac800;
-  --p-traffic-zoom: #35c759;
-  --p-traffic-inactive: rgba(0, 0, 0, 0.15);
-  /* Active ring: 0.5px black @ 45% in overlay blend. CSS can't blend
-     a box-shadow, so each ring is the precomputed result of
-     overlay(black) mixed 45% over that light's fill — it darkens each
-     light in its own hue without touching the backdrop. */
-  --p-traffic-close-ring: #ff3335;
-  --p-traffic-min-ring: #f8af00;
-  --p-traffic-zoom-ring: #1dae31;
+  /* Lights as they paint on screen (measured from NSWindow on macOS
+     27): each fill with a slightly darker 0.5px rim in its own hue. */
+  --p-traffic-close: #ea887e;
+  --p-traffic-min: #f6ce5b;
+  --p-traffic-zoom: #9bd775;
+  --p-traffic-close-ring: #eb7669;
+  --p-traffic-min-ring: #f3be50;
+  --p-traffic-zoom-ring: #7dcc49;
+  --p-traffic-inactive: rgba(0, 0, 0, 0.04);
   --p-traffic-ring-inactive: rgba(0, 0, 0, 0.06);
 }
 
@@ -49,13 +49,20 @@
   --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.45);
   --p-window-band: var(--p-material-chrome, rgba(31, 31, 31, 0.55));
   --p-window-band-opaque: #1f1f1f;
-  --p-window-separator: var(--p-material-chrome-separator, rgba(255, 255, 255, 0.1));
+  --p-window-separator: rgba(255, 255, 255, 0.1);
   --p-window-separator-compact: rgba(255, 255, 255, 0.02);
   --p-window-title: rgba(255, 255, 255, 0.85);
   --p-window-title-icon: rgba(255, 255, 255, 0.85);
   --p-window-title-dim: rgba(255, 255, 255, 0.5);
+  --p-window-title-compact: rgba(255, 255, 255, 0.65);
   --p-window-toolbar-icon: #b8b8b8;
   --p-window-toolbar-hover: rgba(255, 255, 255, 0.06);
+  --p-traffic-close: #e16a5d;
+  --p-traffic-min: #f4c638;
+  --p-traffic-zoom: #64bf38;
+  --p-traffic-close-ring: #d85a4c;
+  --p-traffic-min-ring: #e0b22e;
+  --p-traffic-zoom-ring: #55ad2e;
   --p-traffic-inactive: rgba(255, 255, 255, 0.17);
   --p-traffic-ring-inactive: rgba(255, 255, 255, 0.03);
 }
@@ -69,13 +76,20 @@
     --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.45);
     --p-window-band: var(--p-material-chrome, rgba(31, 31, 31, 0.55));
     --p-window-band-opaque: #1f1f1f;
-    --p-window-separator: var(--p-material-chrome-separator, rgba(255, 255, 255, 0.1));
+    --p-window-separator: rgba(255, 255, 255, 0.1);
     --p-window-separator-compact: rgba(255, 255, 255, 0.02);
     --p-window-title: rgba(255, 255, 255, 0.85);
     --p-window-title-icon: rgba(255, 255, 255, 0.85);
     --p-window-title-dim: rgba(255, 255, 255, 0.5);
+    --p-window-title-compact: rgba(255, 255, 255, 0.65);
     --p-window-toolbar-icon: #b8b8b8;
     --p-window-toolbar-hover: rgba(255, 255, 255, 0.06);
+    --p-traffic-close: #e16a5d;
+    --p-traffic-min: #f4c638;
+    --p-traffic-zoom: #64bf38;
+    --p-traffic-close-ring: #d85a4c;
+    --p-traffic-min-ring: #e0b22e;
+    --p-traffic-zoom-ring: #55ad2e;
     --p-traffic-inactive: rgba(255, 255, 255, 0.17);
     --p-traffic-ring-inactive: rgba(255, 255, 255, 0.03);
   }
@@ -92,14 +106,21 @@
   --p-window-shadow-compact: 0 5px 20px rgba(0, 0, 0, 0.3);
   --p-window-band: var(--p-material-chrome, rgba(255, 255, 255, 0.85));
   --p-window-band-opaque: #fff;
-  --p-window-separator: var(--p-material-chrome-separator, rgba(0, 0, 0, 0.05));
+  --p-window-separator: rgba(0, 0, 0, 0.1);
   --p-window-separator-compact: rgba(60, 60, 67, 0.12);
   --p-window-title: rgba(0, 0, 0, 0.85);
   --p-window-title-icon: rgba(0, 0, 0, 0.85);
   --p-window-title-dim: rgba(0, 0, 0, 0.5);
+  --p-window-title-compact: rgba(0, 0, 0, 0.65);
   --p-window-toolbar-icon: #4d4d4d;
   --p-window-toolbar-hover: rgba(0, 0, 0, 0.03);
-  --p-traffic-inactive: rgba(0, 0, 0, 0.15);
+  --p-traffic-close: #ea887e;
+  --p-traffic-min: #f6ce5b;
+  --p-traffic-zoom: #9bd775;
+  --p-traffic-close-ring: #eb7669;
+  --p-traffic-min-ring: #f3be50;
+  --p-traffic-zoom-ring: #7dcc49;
+  --p-traffic-inactive: rgba(0, 0, 0, 0.04);
   --p-traffic-ring-inactive: rgba(0, 0, 0, 0.06);
 }
 
@@ -185,15 +206,15 @@
 
 /* ------------------------------------------------------------ Titlebar */
 
-/* The band. Title row only by default: 32px, lights 8px in, title
-   leading. A 0.67px hairline closes it. The band is the chrome
-   material (--p-material-chrome*, literals as fallbacks) and is translucent
+/* The band. Title row only by default: 32px, lights 9px in, title
+   leading. A 1px hairline closes it. The band is the chrome material
+   (--p-material-chrome*, literals as fallbacks) and is translucent
    (white @ 85% / #1F1F1F @ 55%) so scrolled content ghosts through. */
 .p-window-titlebar {
   -webkit-backdrop-filter: blur(var(--p-material-chrome-blur, 3px));
   backdrop-filter: blur(var(--p-material-chrome-blur, 3px));
   background: var(--p-window-band);
-  box-shadow: inset 0 calc(var(--p-material-chrome-separator-width, 0.67px) * -1) 0 var(--p-window-separator);
+  box-shadow: inset 0 -1px 0 var(--p-window-separator);
   flex: none;
   padding: 0;
   position: relative;
@@ -349,17 +370,25 @@
   box-shadow: none;
 }
 
-/* Utility panel: centered title, 10px lights 12,11 from the corner,
-   the icon strip tucked 3px into the title row → a 65px band. */
+/* Utility panel: a 24px title row with a centered 13px regular title
+   at 65% ink and 10px lights 8,8 from the corner (centres at 13,13);
+   the icon strip tucks 3px into the title row. Measured from NSPanel
+   on macOS 27. */
 .p-window-compact .p-window-titlebar-row {
+  height: 24px;
   justify-content: center;
 }
 
+.p-window-compact .p-window-title {
+  color: var(--p-window-title-compact);
+  font-weight: 400;
+}
+
 .p-window-compact .p-window-titlebar-row .p-traffic-lights {
-  left: 12px;
+  left: 8px;
   margin: 0;
   position: absolute;
-  top: 11px;
+  top: 8px;
 }
 
 .p-window-compact .p-traffic-lights + .p-window-title,
@@ -386,6 +415,13 @@
   flex: none;
   gap: 9px;
   margin-right: 8px;
+}
+
+/* In the plain title row the lights start 9px from the window edge
+   (centres at 15 / 38 / 61); the title keeps its place. */
+:where(.p-window-titlebar:not(.p-window-titlebar-unified)) .p-traffic-lights {
+  margin-left: 1px;
+  margin-right: 7px;
 }
 
 .p-traffic-light {

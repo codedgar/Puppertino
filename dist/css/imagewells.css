@@ -1,28 +1,32 @@
 /* Puppertino v2.0 — Image Wells (macOS 27)
    An image well is an editable version of an image view. 30×30 well
-   with a 3px radius: a 24×24 image at a 3px inset, framed by a white
-   ring just inside the edge between two soft dark hairlines. Wrap a
-   hidden <input type="file"> to make it editable; swapping the image
-   is app logic. */
+   with a 6px radius: the image fits proportionally inside a 7.5px
+   inset, framed by a 2px light band just inside the edge with a
+   hairline on either side (measured from NSImageView on macOS 27).
+   Wrap a hidden <input type="file"> to make it editable; swapping the
+   image is app logic. */
 
 :root {
-  --p-imagewell-bg: rgba(0, 0, 0, 0.02);
+  --p-imagewell-bg: rgba(0, 0, 0, 0.06);
   --p-imagewell-ring: #fff;
-  --p-imagewell-edge: rgba(0, 0, 0, 0.05);
+  --p-imagewell-line: #dddddd;
+  --p-imagewell-edge: rgba(0, 0, 0, 0.06);
 }
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-imagewell-bg: rgba(255, 255, 255, 0.04);
-  --p-imagewell-ring: rgba(255, 255, 255, 0.15);
-  --p-imagewell-edge: rgba(0, 0, 0, 0.3);
+  --p-imagewell-bg: #262626;
+  --p-imagewell-ring: #666666;
+  --p-imagewell-line: #1f1f1f;
+  --p-imagewell-edge: transparent;
 }
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-imagewell-bg: rgba(255, 255, 255, 0.04);
-    --p-imagewell-ring: rgba(255, 255, 255, 0.15);
-    --p-imagewell-edge: rgba(0, 0, 0, 0.3);
+    --p-imagewell-bg: #262626;
+    --p-imagewell-ring: #666666;
+    --p-imagewell-line: #1f1f1f;
+    --p-imagewell-edge: transparent;
   }
 }
 
@@ -30,27 +34,28 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-imagewell-bg: rgba(0, 0, 0, 0.02);
+  --p-imagewell-bg: rgba(0, 0, 0, 0.06);
   --p-imagewell-ring: #fff;
-  --p-imagewell-edge: rgba(0, 0, 0, 0.05);
+  --p-imagewell-line: #dddddd;
+  --p-imagewell-edge: rgba(0, 0, 0, 0.06);
 }
 
-/* Frame, outside → in: 0.5px soft dark edge outside the box, a 1px
-   white ring at the box edge, and a 1.5px soft dark inner edge under
-   the white (so 0.5px of it shows). The 3px padding is the visible
-   well margin around the image. */
+/* Frame, outside → in: 0.5px soft edge outside the box, a 2px band at
+   the box edge, a 0.5px line under the band (the 2.5px inset shadow
+   shows past it), then the interior fill. The 7.5px padding is the
+   well margin around the image: a 30px well shows a 15px image. */
 .p-imagewell {
   background: var(--p-imagewell-bg);
-  border-radius: 3px;
+  border-radius: 6px;
   box-shadow:
     0 0 0 0.5px var(--p-imagewell-edge),
-    inset 0 0 0 1px var(--p-imagewell-ring),
-    inset 0 0 0 1.5px var(--p-imagewell-edge);
+    inset 0 0 0 2px var(--p-imagewell-ring),
+    inset 0 0 0 2.5px var(--p-imagewell-line);
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
   height: 30px;
-  padding: 3px;
+  padding: 7.5px;
   position: relative;
   vertical-align: middle;
   width: 30px;
@@ -60,7 +65,8 @@
 .p-imagewell svg {
   display: block;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   width: 100%;
 }
 

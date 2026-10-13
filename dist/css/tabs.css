@@ -289,7 +289,9 @@
   isolation: isolate;
 
   width: fit-content;
-  max-width: min(var(--p-tab-bar-max), calc(100vw - 32px));
+  /* 100% is the containing block: the viewport for a fixed bar, the
+     frame or demo it sits in otherwise. */
+  max-width: min(var(--p-tab-bar-max), calc(100% - 32px));
   height: var(--p-tab-bar-height);
   padding: 0 10px;
   border-radius: calc(var(--p-tab-bar-height) / 2);
@@ -308,7 +310,7 @@
 
 /* Four or five tabs fill the full width; fewer hug their cells. */
 .p-tab-bar:where(:has(> .p-tab-bar__tab ~ .p-tab-bar__tab ~ .p-tab-bar__tab ~ .p-tab-bar__tab)) {
-  width: min(var(--p-tab-bar-max), calc(100vw - 32px));
+  width: min(var(--p-tab-bar-max), calc(100% - 32px));
 }
 
 /* Once glass.js has taken over, the edge is drawn on the ::before layer
@@ -433,7 +435,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  width: min(360px, calc(100vw - 32px));
+  width: min(360px, calc(100% - 32px));
 }
 
 .p-tab-bar-group > .p-tab-bar {
@@ -579,7 +581,7 @@
 .p-tab-bar.p-tab-bar-top {
   --p-tab-bar-height: 44px;
   width: fit-content;
-  max-width: calc(100vw - 32px);
+  max-width: calc(100% - 32px);
   padding: 0 4px;
 }
 

@@ -22,7 +22,7 @@ export const glassBackdrop = `${import.meta.env.BASE_URL}images/dog-day.jpg`;
 <script type="module" src={liquidGlassScript}></script>
 <script type="module" src={slidersScript}></script>
 <script src="https://cdn.jsdelivr.net/npm/@zumer/snapdom@3.1.0/dist/snapdom.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@codedgar/glassworks@2.0.0/dist/glassworks.umd.min.js" defer></script>
+<script src="/vendor/glassworks.umd.js" defer></script>
 <script type="module" src={glassScript}></script>
 <script type="module" src={glassDemoScript}></script>
 
@@ -127,15 +127,14 @@ Every preset carries the glass edge, `--p-glass-edge`, and a sensible border rad
 
 ### The glass edge
 
-The edge is what makes glass read as a separate pane, even on a white page. It is a list of box shadows.
+The edge is what makes glass read as a separate pane, even on a white page. It is a list of box shadows: one dark keyline, half a CSS pixel wide, just outside the shape, a little heavier down the sides, and nothing inside. That is all macOS 27 draws; the bright rim people associate with Liquid Glass is the bend folding content into the edge, not a painted line.
 
 | Part | Light | Dark |
 |---|---|---|
-| Keyline, 0.5px outside the shape | Black at 12%, thicker at the sides | Black at 80%, thicker at the sides |
-| Rim, 1px inside the top and bottom | White at 70% | White at 20% |
-| Glow inside the top and bottom | A soft white band, stronger along the bottom | The same, fainter |
+| Keyline, 0.5px outside the shape | Black at 15% | Black at 36% |
+| Extra weight on the left and right | Black at 7% | Black at 20% |
 
-The sides get the keyline only. Use the token on your own glass surfaces.
+Use the token on your own glass surfaces.
 
 ```css
 .my-panel {
@@ -288,26 +287,23 @@ Two variants, after Apple's.
 | | Regular `.p-glass` | Clear `.p-glass-clear` |
 |---|---|---|
 | Use it for | Bars, buttons, panels, anything with text | Media controls over photos and video |
-| Tint, light, 64px or less across | `rgba(242,242,242,0.55)` | `rgba(178,178,178,0.14)` |
-| Tint, light, larger | `rgba(245,245,245,0.72)` | `rgba(178,178,178,0.14)` |
-| Tint, dark, 64px or less across | `rgba(153,153,153,0.17)` | `rgba(178,178,178,0.14)` |
-| Tint, dark, larger | `rgba(26,26,26,0.96)` | `rgba(178,178,178,0.14)` |
-| Frost | About 4px on a 50px surface, growing with size; 160% saturation | About 10px at every size; 120% saturation |
-| Bend ramping up across the rim | 20% of the shorter side, counted up to 48px | 55% |
-| Extra bend right at the edge | 70% of the shorter side, counted up to 48px | 45% |
-| Rim width | 20% of the shorter side, up to 24px | 27.5% |
-| Adapts to what's behind it | Yes, when 64px or less across | No |
+| Face, light | `0.4 + 0.56 × backdrop`, saturation 1.2 | `0.2 + 0.75 × backdrop`, then 10% white |
+| Face, dark | `0.08 + 1.05 × backdrop`, saturation 1.3, luma ceiling 0.6 (0.45 on surfaces over 100px) | `0.05 + 0.75 × backdrop`, then 5% white |
+| Frost | 6.5px on a button, 10px from 160px up | 10px on a button, 20px from 130px up |
+| Bend at the rim | Half the shorter side, up to 60px | Two thirds of the shorter side, up to 60px |
+| Bend band | A quarter of the shorter side, up to 20px | A third of the shorter side, up to 20px |
+| Adapts to what's behind it | Off (`--p-glass-adaptive: 1` turns it on) | No |
 | Before the first frame | `--p-glass-md` material (`--p-glass-sm` when 64px or less across) | `--p-glass-sm` material |
 
-Regular is the default. Its frost and tint keep labels readable over busy content. Clear is barely tinted and looks the same in light and dark, so it lets the color of the backdrop through. It's frosted, not crisp: Apple's Clear blurs more than Regular. White icons on it still need a dim photo or video behind them, which Apple calls a dimming layer. Avoid Clear over text or light backgrounds. Nothing guarantees contrast there.
+Regular is the default. Its frost and face keep labels readable over busy content. Clear lets most of the backdrop's colour through, so it needs a dim photo or video behind white icons, which Apple calls a dimming layer. Avoid Clear over text or light backgrounds. Nothing guarantees contrast there.
 
-The values come from measuring Apple's own glass (`NSGlassEffectView` on macOS 26) over black, white, text, stripes, and a photo, and matching Puppertino to it. Two things behave as Apple's do:
+The values come from measuring Apple's own glass (`NSGlassEffectView` on macOS 27, with the Liquid Glass slider in System Settings at its Clear end) over gray ramps, bar patterns, solid colors, and a photo, reading how its parameters change with size and appearance, and matching Puppertino to it until the two renders differ by a few levels. Puppertino's recipe is its own: the same ingredients, tuned by eye, with every one a custom property. Three things behave as Apple's do:
 
-- **Frost comes before the bend.** The blur is applied to the page first and the lens bends the blurred result, so the rim stays a crisp, compressed sliver of what's behind the glass instead of being smeared flat. Regular frost grows with size: a 50px button blurs about 4px, and a 160px panel about 8px. Clear frosts about 10px at any size.
-- **Small and large glass tint differently.** Apple's small glass (buttons, tab bars, nav circles) is lighter than its cards in light mode and nearly clear in dark mode, where cards are close to opaque. The script marks each surface `data-p-glass-size="small"` or `"large"` by the same 64px rule, and the CSS picks `--p-glass-tint` or `--p-glass-tint-large`.
-- **Small glass adapts.** A Regular surface 64px or less across, like a button or a tab bar, turns into dark glass over dark content and light glass over light content, whatever the page's appearance. The script sets `data-p-theme` on the surface, so its labels flip with it. Larger surfaces keep the page's appearance. Apple does the same, because a whole panel flipping would be distracting. Set `--p-glass-adaptive: 0` on a surface to keep it fixed, or give it your own `data-p-theme`.
+- **Frost comes before the bend.** The blur is applied to the page first and the lens bends the blurred result, so the rim stays a compressed sliver of what's behind the glass instead of being smeared flat. Frost grows with size: a 44px button blurs about 6.5px, a 200px card 10px. Clear frosts twice as much.
+- **The face is a mapping, not a tint.** What shows through is the blurred backdrop mapped per channel between a black and a white level, with a saturation boost. In light mode that is all; in dark mode a soft luma ceiling keeps a card dim over white content, and keeps it lower on cards than on buttons. `--p-glass-slider` stands in for the system's Liquid Glass slider: it adds a fill (white in light mode, near-black in dark) on top, so `1` gives the Tinted end.
+- **The bend follows the edge and the size.** Near the rim, content shifts straight toward the centre, at right angles to the nearest edge, by half the shorter side at the rim, fading over a quarter of it; both stop growing on big surfaces. The middle of the pane isn't bent or magnified at all. macOS folds the sides facing the top left harder than the rest; Puppertino folds every side alike unless `--p-glass-light: 1` asks for the lit look.
 
-The bend follows the edge. Near the rim, content shifts straight toward the centre, at right angles to the nearest edge, so straight lines behind the glass stay straight until they reach the rim. It stops growing past 48px because Apple's does: a 50pt button and a 74pt bar both shift content by a similar amount at the rim. The middle of the pane isn't bent or magnified at all.
+Apple's glass keeps the page's appearance over any backdrop, so Puppertino's does too. Set `--p-glass-adaptive: 1` on a small Regular surface to make it flip to dark glass over dark content and light glass over light content; the script then sets `data-p-theme` on the surface, so its labels flip with it.
 
 The tab bar is Regular glass. It starts from its own surface, `--p-tab-bar-surface`, rather than `--p-glass-md`.
 
@@ -317,32 +313,41 @@ Glass is four layers, bottom to top.
 
 | Layer | What draws it |
 |---|---|
-| Frost and refraction | A WebGL canvas under the surface. It blurs a snapshot of the page, then bends it inside a band around the rim, toward the centre, so the edge shows a compressed sliver of what's behind the glass. The middle is left flat. |
-| Smoothing | The surface's `::before` layer, a light `backdrop-filter` blur over the canvas. |
-| Tint | The same layer's background: `--p-glass-tint` on small surfaces, `--p-glass-tint-large` on larger ones. |
-| Edge | The same layer's shadows, `--p-glass-rim`: a dark 0.5px keyline outside, and an equally bright 1px rim inside the top and the bottom. |
+| Frost and refraction | A WebGL canvas under the surface. It blurs a snapshot of the page, caps it in dark mode, then bends it inside a band around the rim, toward the centre, so the edge shows a compressed sliver of what's behind the glass. The middle is left flat. |
+| Smoothing | The surface's `::before` layer, an optional light `backdrop-filter` blur over the canvas. Off by default. |
+| Face | In the shader: the blurred, bent backdrop mapped between a black and a white level, saturated, capped in dark mode, and filled by the slider. `--p-glass-tint` can lay an extra colour over it. |
+| Edge | The same layer's shadows, `--p-glass-rim`: a dark keyline one device pixel wide outside the shape, a little heavier down the sides. |
 
 Your content sits above all four. Every value is a custom property, so a surface can be tuned in CSS.
 
 | Property | Default | What it does |
 |---|---|---|
-| `--p-glass-tint` | See Variants | Color laid over the refraction on surfaces 64px or less across |
-| `--p-glass-tint-large` | See Variants | Color laid over the refraction on larger surfaces |
-| `--p-glass-frost` | `3.8` (Clear `10.5`) | Blur in CSS px, applied before the bend. Regular multiplies it by `--p-glass-scale`, which the script sets from the surface's size |
-| `--p-glass-frost-grow` | `1` (Clear `0`) | Whether the frost grows with the surface's size |
-| `--p-glass-blur` | `1px` (Clear `2px`) | Light smoothing on top of the canvas, also scaled by `--p-glass-scale` |
-| `--p-glass-saturate` | `160%` | Color boost under the frost |
-| `--p-glass-rim` | `--p-glass-edge` | The keyline and rim. See [The glass edge](#the-glass-edge). |
-| `--p-glass-refraction` | `0.2` (Clear `0.55`) | Bend that ramps up across the rim, as a fraction of the shorter side (counted up to 48px) |
-| `--p-glass-bevel-depth` | `0.7` (Clear `0.45`) | Extra bend right at the edge, same unit |
-| `--p-glass-bevel-width` | `0.2` (Clear `0.275`) | How far in from the edge the rim bends, up to 24px |
+| `--p-glass-face-white` | `0.96` (dark `1.125`, Clear `0.95` / `0.8`) | What white behind the glass maps to |
+| `--p-glass-face-black` | `0.4` (dark `0.08`, Clear `0.2` / `0.05`) | What black behind the glass maps to |
+| `--p-glass-face-saturation` | `1.2` (dark `1.3`, Clear `1`) | Colour boost about luma |
+| `--p-glass-face-fill` | `rgb(255,255,255)` (dark `rgb(32,32,32)`) | The fill colour |
+| `--p-glass-face-fill-alpha` | `0` (Clear `0.1` / `0.05`) | How much fill is always on |
+| `--p-glass-face-fill-slider` | `0.5` (Clear `0`) | How much fill `--p-glass-slider` adds at `1` |
+| `--p-glass-slider` | `0` | The system Liquid Glass slider, `0` Clear to `1` Tinted |
+| `--p-glass-face-max-luma` | `1` (dark `0.6`) | Soft luma ceiling on surfaces 64px or less across; `1` is off |
+| `--p-glass-face-max-luma-large` | `1` (dark `0.45`) | The same from 104px up, interpolated between |
+| `--p-glass-frost` | `1` | Multiplies the frost for the surface's size; `0` is no blur |
+| `--p-glass-bend` | `1` | Multiplies the shift at the rim; `0` turns the bend off |
+| `--p-glass-bend-reach` | `1` | Multiplies how far in from the rim the shift fades |
+| `--p-glass-light` | `0` | `1` folds the sides facing the top left harder, as macOS does |
+| `--p-glass-blur` | `0px` | Light smoothing on top of the canvas |
+| `--p-glass-saturate` | `100%` | Extra colour boost on the smoothing layer |
+| `--p-glass-tint` | `transparent` | An overlay colour on top of the face, on surfaces 64px or less across |
+| `--p-glass-tint-large` | `transparent` | The same on larger surfaces |
+| `--p-glass-rim` | `--p-glass-edge` | The keyline. See [The glass edge](#the-glass-edge). |
 | `--p-glass-specular` | `0` | Two fixed rim highlights, at the top left and bottom right, on (`1`) or off (`0`) |
-| `--p-glass-adaptive` | `1` | Small Regular surfaces flip light or dark to suit the backdrop (`1`), or keep the page's appearance (`0`) |
+| `--p-glass-adaptive` | `0` | Small Regular surfaces flip light or dark to suit the backdrop (`1`), or keep the page's appearance (`0`) |
+| `--p-glass-platform` | `macos` (`ios` on touch devices) | Which recipe the script uses: the pointer one above, or the measured iOS tables |
 | `--p-glass-magnify` | `1` | Zoom of the content under the glass |
 | `--p-glass-surface` | `--p-glass-md` | The plain material shown before and instead of glass |
 | `--p-glass-z` | `1` | The layer every surface shares. See Limits. |
 
-Bends are relative to the surface up to 48px, so a 44px button bends a little less than a 62px tab bar, and anything bigger bends like the tab bar. The glass inherits the surface's `border-radius`, so set one. A capsule is `border-radius: 999px`.
+The script picks the bend and frost from the surface's shorter side, so a 44px button bends less, and over a longer band, than a 200px card. The glass inherits the surface's `border-radius`, so set one. A capsule is `border-radius: 999px`.
 
 ### How to use it
 

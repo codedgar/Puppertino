@@ -118,15 +118,18 @@
    color classes retint it. .p-segmented-gray swaps the accent pill for
    the neutral fill style.
 
-   Fills are flat alpha with no rims: track black 10% (white 9% dark),
-   separators black 25% (white 25% dark), accent pill #0088FF with a
-   3% shade (#0091FF with a 4% lift in dark).
+   Fills are flat alpha with no rims, measured from AppKit on macOS 27:
+   track black 8% (white 8% dark), separators black 15% (white 15%
+   dark) over the middle half of the height, selected pill #3478F6 in
+   both appearances (the accent fill as the window server paints it,
+   with its glass tint applied) under a white label.
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --p-segment-separator: rgba(0, 0, 0, 0.25);
-  --p-segmented-track: rgba(0, 0, 0, 0.10);
-  --p-segment-pill-shade: rgba(0, 0, 0, 0.03);
+  --p-segmented-accent: #3478F6;
+  --p-segment-separator: rgba(0, 0, 0, 0.15);
+  --p-segmented-track: rgba(0, 0, 0, 0.08);
+  --p-segment-label-disabled: rgba(0, 0, 0, 0.31);
   --p-segment-pill-pressed: rgba(0, 0, 0, 0.15);
   --p-segment-gray-pill: rgba(0, 0, 0, 0.10);
   --p-segment-gray-pill-pressed: rgba(0, 0, 0, 0.19);
@@ -137,9 +140,9 @@
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-segment-separator: rgba(255, 255, 255, 0.25);
-  --p-segmented-track: rgba(255, 255, 255, 0.09);
-  --p-segment-pill-shade: rgba(255, 255, 255, 0.04);
+  --p-segment-separator: rgba(255, 255, 255, 0.15);
+  --p-segmented-track: rgba(255, 255, 255, 0.08);
+  --p-segment-label-disabled: rgba(255, 255, 255, 0.31);
   --p-segment-pill-pressed: rgba(255, 255, 255, 0.10);
   --p-segment-gray-pill: rgba(255, 255, 255, 0.10);
   --p-segment-gray-pill-pressed: rgba(255, 255, 255, 0.19);
@@ -150,9 +153,9 @@
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-segment-separator: rgba(255, 255, 255, 0.25);
-    --p-segmented-track: rgba(255, 255, 255, 0.09);
-    --p-segment-pill-shade: rgba(255, 255, 255, 0.04);
+    --p-segment-separator: rgba(255, 255, 255, 0.15);
+    --p-segmented-track: rgba(255, 255, 255, 0.08);
+    --p-segment-label-disabled: rgba(255, 255, 255, 0.31);
     --p-segment-pill-pressed: rgba(255, 255, 255, 0.10);
     --p-segment-gray-pill: rgba(255, 255, 255, 0.10);
     --p-segment-gray-pill-pressed: rgba(255, 255, 255, 0.19);
@@ -166,9 +169,10 @@
    dark page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-segment-separator: rgba(0, 0, 0, 0.25);
-  --p-segmented-track: rgba(0, 0, 0, 0.10);
-  --p-segment-pill-shade: rgba(0, 0, 0, 0.03);
+  --p-segmented-accent: #3478F6;
+  --p-segment-separator: rgba(0, 0, 0, 0.15);
+  --p-segmented-track: rgba(0, 0, 0, 0.08);
+  --p-segment-label-disabled: rgba(0, 0, 0, 0.31);
   --p-segment-pill-pressed: rgba(0, 0, 0, 0.15);
   --p-segment-gray-pill: rgba(0, 0, 0, 0.10);
   --p-segment-gray-pill-pressed: rgba(0, 0, 0, 0.19);
@@ -177,23 +181,30 @@
   --p-segmented-touch-separator: #D9D9D9;
 }
 
+/* The untinted pill is --p-segmented-accent rather than the text blue
+   that --p-color-current defaults to. Zero specificity, so any .p-sys-*
+   or color class on the control still wins. */
+:where(.p-segmented) {
+  --p-color-current: var(--p-segmented-accent, #3478F6);
+}
+
 .p-segmented {
   /* Accent resolved here (not :root) so .p-sys-* tint classes work —
      var() in a custom property resolves where the property is defined. */
-  --p-control-accent: var(--p-color-current, #0088FF);
+  --p-control-accent: var(--p-color-current, #3478F6);
 
   /* Size tokens (regular, 24px). The size modifiers below override
-     them; the pill and separators read them. */
+     them; the pill and separators read them. The separators span the
+     middle half of the height, so the inset is a quarter of it. */
   --p-seg-height: 24px;
-  --p-seg-radius: 6px;
+  --p-seg-radius: 5.6px;
   --p-seg-font-size: 13px;
-  --p-seg-padding-x: 10px;
+  --p-seg-padding-x: 8.75px;
   --p-seg-min-width: 54px;
-  --p-seg-separator-inset: 5px;
+  --p-seg-separator-inset: calc(var(--p-seg-height) / 4);
 
-  /* The selected pill: accent with a faint shade layer over it. */
-  --p-seg-pill: linear-gradient(var(--p-segment-pill-shade), var(--p-segment-pill-shade)),
-    var(--p-control-accent);
+  /* The selected pill: flat accent, no shade layer. */
+  --p-seg-pill: var(--p-control-accent);
   --p-seg-pill-pressed: linear-gradient(var(--p-segment-pill-pressed), var(--p-segment-pill-pressed)),
     var(--p-control-accent);
 
@@ -210,39 +221,37 @@
 }
 
 /* ─── Sizes ────────────────────────────────────────────────────────── */
-/* Heights 16 / 20 / 24 / 28 / 36. Label 10 / 11 / 13 / 13 / 13 at
-   weight 510, text inset 6 / 8 / 10 / 12 / 14, separators 10 / 12 /
-   14 / 18 / 20 tall. 28 and 36 are capsules. */
+/* Heights 16 / 20 / 24 / 28 / 36, radii 2.8 / 4.5 / 5.6 / capsule /
+   capsule, label 9 / 11 / 13 / 13 / 13 at regular weight, measured from
+   AppKit on macOS 27. The text insets put a three-segment
+   "Day / Week / Month" control at the native widths: 144.5 / 156.5 /
+   168.5 / 180.5. */
 
 .p-segmented-mini {
   --p-seg-height: 16px;
-  --p-seg-radius: 4px;
-  --p-seg-font-size: 10px;
-  --p-seg-padding-x: 6px;
+  --p-seg-radius: 2.8px;
+  --p-seg-font-size: 9px;
+  --p-seg-padding-x: 10.15px;
   --p-seg-min-width: 38px;
-  --p-seg-separator-inset: 3px;
 }
 .p-segmented-small {
   --p-seg-height: 20px;
-  --p-seg-radius: 5px;
+  --p-seg-radius: 4.5px;
   --p-seg-font-size: 11px;
-  --p-seg-padding-x: 8px;
+  --p-seg-padding-x: 9.4px;
   --p-seg-min-width: 44px;
-  --p-seg-separator-inset: 4px;
 }
 .p-segmented-large {
   --p-seg-height: 28px;
-  --p-seg-radius: 14px;
-  --p-seg-padding-x: 12px;
+  --p-seg-radius: 13.75px;
+  --p-seg-padding-x: 10.75px;
   --p-seg-min-width: 58px;
-  --p-seg-separator-inset: 5px;
 }
 .p-segmented-xlarge {
   --p-seg-height: 36px;
   --p-seg-radius: 18px;
   --p-seg-padding-x: 14px;
   --p-seg-min-width: 62px;
-  --p-seg-separator-inset: 8px;
 }
 
 .p-segment {
@@ -272,7 +281,7 @@
 
   color: var(--p-text-primary, rgba(0, 0, 0, 0.85));
   font-size: var(--p-seg-font-size);
-  font-weight: 510;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1;
   white-space: nowrap;
@@ -281,13 +290,13 @@
 }
 
 /* Separators: on every segment after the first, hidden next to the
-   selection. 1px wide, inset per size (14px tall on the 24px track). */
+   selection. 1px wide, half the track height, vertically centered. */
 .p-segment:not(:first-child)::before {
   content: "";
   position: absolute;
   left: -0.5px;
-  top: var(--p-seg-separator-inset, 5px);
-  bottom: var(--p-seg-separator-inset, 5px);
+  top: var(--p-seg-separator-inset, 25%);
+  bottom: var(--p-seg-separator-inset, 25%);
   width: 1px;
   background: var(--p-segment-separator);
   transition: opacity 0.15s ease-out;
@@ -335,9 +344,10 @@
   outline-offset: 2px;
 }
 
-/* Disabled: fade the control; selected label drops to 50% white. */
+/* Disabled: the track keeps its plate, the selected pill drops to 72%
+   and the unselected labels to 31% of the label color; the selected
+   label stays white on the faded pill. */
 .p-segmented:has(input:disabled) {
-  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -347,11 +357,12 @@
 }
 
 .p-segmented input:disabled:not(:checked) + span {
-  color: #BFBFBF;
+  color: var(--p-segment-label-disabled, rgba(0, 0, 0, 0.31));
 }
 
 .p-segmented input:disabled:checked + span {
-  color: rgb(255 255 255 / 0.5);
+  background: color-mix(in srgb, var(--p-control-accent) 72%, transparent);
+  color: #ffffff;
 }
 
 /* ─── Sliding pill (progressive enhancement) ───────────────────────── */
@@ -418,6 +429,10 @@
   .p-segmented-gray:has(.p-segment:active > input:checked:not(:disabled))::before {
     background: var(--p-segment-gray-pill-pressed, rgba(0, 0, 0, 0.19));
   }
+
+  .p-segmented:has(input:disabled)::before {
+    opacity: 0.72;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -439,7 +454,7 @@
    so the label keeps its own color instead of flipping to white the
    way macOS does. There are no separators. Labels are 13px, Semibold
    (590) when selected and Medium (510) otherwise. A disabled control
-   fades as a whole to 50%.
+   fades as a whole to 50%, pill included.
 
    Sizes: the default 32px, .p-segmented-touch-large (36px) and
    .p-segmented-touch-xlarge (50px, a 46px pill). */
@@ -490,8 +505,12 @@
   background: var(--p-segmented-touch-pill);
 }
 
-/* Disabled: the whole control is at 50% (above); labels keep their
-   colors rather than taking the macOS disabled grays. */
+/* Disabled: the whole control is at 50%; labels keep their colors
+   rather than taking the macOS disabled values. */
+.p-segmented-touch:has(input:disabled) {
+  opacity: 0.5;
+}
+
 .p-segmented-touch input:disabled:not(:checked) + span,
 .p-segmented-touch input:disabled:checked + span {
   color: var(--p-ios-label, var(--p-text-primary));
@@ -522,6 +541,10 @@
 
   .p-segmented-touch:has(.p-segment:active > input:checked:not(:disabled))::before {
     background: var(--p-segmented-touch-pill);
+  }
+
+  .p-segmented-touch:has(input:disabled)::before {
+    opacity: 1;
   }
 
   /* Touch has no hover and no plus-darker press on the pill; the label

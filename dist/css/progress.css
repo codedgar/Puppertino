@@ -21,15 +21,24 @@
      <span class="p-spinner" role="progressbar" aria-label="Loading"></span>
 
    Tint with a .p-sys-* class on the element, like every v2 control.
-   Sizes: default 6px, .p-progress-large / .p-progress-indeterminate-large
-   for the 10px bar; circle and spinner 32px, -small for 16px.
+   Bar sizes, measured from AppKit on macOS 27: default 8px,
+   .p-progress-small / .p-progress-indeterminate-small for the 6px bar,
+   .p-progress-large / .p-progress-indeterminate-large for the 10px bar.
+   Circle and spinner 32px, -small for 16px.
 
    iOS 27 (touch): .p-progress-touch is a 4px bar, and .p-spinner-touch
    is the iOS activity indicator at 14 / 20 (default) / 35px.
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Track: black 85% at 10% group opacity, with a 0.5px inner hairline. */
+  /* The bar fill as the window server paints it, the same in both
+     appearances. */
+  --p-progress-accent-default: #3478F6;
+  /* Bar track: black 6% with a 0.5px black 13% line along the top. */
+  --p-progress-bar-track: rgba(0, 0, 0, 0.06);
+  --p-progress-bar-line: rgba(0, 0, 0, 0.13);
+  /* Circle ring: black 85% at 10% group opacity, with a 0.5px inner
+     hairline. */
   --p-progress-track: rgba(0, 0, 0, 0.085);
   --p-progress-hairline: rgba(0, 0, 0, 0.07);
   --p-spinner-color: rgba(0, 0, 0, 0.85);
@@ -37,6 +46,8 @@
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
+  --p-progress-bar-track: rgba(255, 255, 255, 0.08);
+  --p-progress-bar-line: rgba(255, 255, 255, 0.11);
   --p-progress-track: rgba(255, 255, 255, 0.085);
   --p-progress-hairline: rgba(255, 255, 255, 0.04);
   --p-spinner-color: rgba(255, 255, 255, 0.85);
@@ -44,6 +55,8 @@
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
+    --p-progress-bar-track: rgba(255, 255, 255, 0.08);
+    --p-progress-bar-line: rgba(255, 255, 255, 0.11);
     --p-progress-track: rgba(255, 255, 255, 0.085);
     --p-progress-hairline: rgba(255, 255, 255, 0.04);
     --p-spinner-color: rgba(255, 255, 255, 0.85);
@@ -52,15 +65,24 @@
 
 .p-light-mode,
 [data-p-theme="lightmode"] {
+  --p-progress-bar-track: rgba(0, 0, 0, 0.06);
+  --p-progress-bar-line: rgba(0, 0, 0, 0.13);
   --p-progress-track: rgba(0, 0, 0, 0.085);
   --p-progress-hairline: rgba(0, 0, 0, 0.07);
   --p-spinner-color: rgba(0, 0, 0, 0.85);
 }
 
+/* The untinted bar is --p-progress-accent-default rather than the text
+   blue that --p-color-current defaults to. Zero specificity, so any
+   .p-sys-* or color class on the element still wins. */
+:where(.p-progress, .p-progress-indeterminate) {
+  --p-color-current: var(--p-progress-accent-default, #3478F6);
+}
+
 .p-progress {
   /* Resolved here, not :root, so tint classes can override. */
-  --p-progress-accent: var(--p-color-current, #0088FF);
-  --p-progress-height: 6px;
+  --p-progress-accent: var(--p-color-current, #3478F6);
+  --p-progress-height: 8px;
 
   appearance: none;
   -webkit-appearance: none;
@@ -72,8 +94,8 @@
   overflow: hidden;
 
   /* Firefox paints the track from the element background. */
-  background: var(--p-progress-track);
-  box-shadow: inset 0 0 0 0.5px var(--p-progress-hairline);
+  background: var(--p-progress-bar-track);
+  box-shadow: inset 0 0.5px 0 var(--p-progress-bar-line);
 }
 
 /* The element paints the track once; the WebKit bar stays clear so the
@@ -93,6 +115,10 @@
   border-radius: calc(var(--p-progress-height) / 2);
 }
 
+.p-progress-small {
+  --p-progress-height: 6px;
+}
+
 .p-progress-large {
   --p-progress-height: 10px;
 }
@@ -107,8 +133,8 @@
    2.6s; the keyframe stops encode the measured easing. */
 
 .p-progress-indeterminate {
-  --p-progress-accent: var(--p-color-current, #0088FF);
-  --p-progress-height: 6px;
+  --p-progress-accent: var(--p-color-current, #3478F6);
+  --p-progress-height: 8px;
 
   position: relative;
   display: inline-block;
@@ -117,8 +143,8 @@
   border-radius: calc(var(--p-progress-height) / 2);
   overflow: hidden;
 
-  background: var(--p-progress-track);
-  box-shadow: inset 0 0 0 0.5px var(--p-progress-hairline);
+  background: var(--p-progress-bar-track);
+  box-shadow: inset 0 0.5px 0 var(--p-progress-bar-line);
 }
 
 .p-progress-indeterminate::before {
@@ -132,6 +158,10 @@
 
   background: var(--p-progress-accent);
   animation: p-progress-worm 2.6s linear infinite;
+}
+
+.p-progress-indeterminate-small {
+  --p-progress-height: 6px;
 }
 
 .p-progress-indeterminate-large {
@@ -414,7 +444,7 @@
 }
 
 .p-progress-touch {
-  box-shadow: none; /* the macOS hairline is not part of the iOS bar */
+  box-shadow: none; /* the macOS top line is not part of the iOS bar */
   width: 100%;
   height: 4px;
   border-radius: 2px;

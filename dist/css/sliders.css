@@ -13,7 +13,9 @@
    Without JS on WebKit the track is all gray and everything still works.
 
    Sizes: .p-slider-mini (16×12 thumb), .p-slider-small (18×14), the
-   default (20×16), .p-slider-large (24×20 on a 6px track).
+   default (19.5×16), .p-slider-large (24×20). The track is 6px tall
+   (4px on mini and small). Geometry and colors are measured from
+   AppKit on macOS 27.
    Variants: .p-slider-narrow (8×16 pointer thumb), .p-slider-centered
    (fill grows from the middle), .p-slider-origin (a mark under the
    middle), .p-slider-ticks (dots under the track).
@@ -23,16 +25,21 @@
    ═════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Unfilled track: black 85% at 10% group opacity. */
-  --p-slider-track: rgba(0, 0, 0, 0.085);
+  /* The accent as the window server paints it, the same in both
+     appearances. */
+  --p-slider-accent-default: #3478F6;
+  /* Unfilled track: black 10%. */
+  --p-slider-track: rgba(0, 0, 0, 0.10);
+  --p-slider-fill-disabled: rgba(0, 0, 0, 0.14);
   /* Laid over the whole track while the thumb is held: the unfilled part
      reaches ~16%, the fill darkens by 8%. */
   --p-slider-press: rgba(0, 0, 0, 0.08);
-  --p-slider-tick: rgba(0, 0, 0, 0.21);
+  --p-slider-tick: rgba(0, 0, 0, 0.26);
   --p-slider-origin-mark: rgba(0, 0, 0, 0.85);
   /* The in-track origin line (a plus-darker gray over the fill). */
   --p-slider-origin-line: rgba(0, 0, 0, 0.25);
-  --p-slider-thumb-shadow: 0 0.5px 6px rgba(0, 0, 0, 0.12);
+  /* A soft drop plus a half-point contact ring. */
+  --p-slider-thumb-shadow: 0 1px 2px rgba(0, 0, 0, 0.20), 0 0 0 0.5px rgba(0, 0, 0, 0.08);
 
   /* Pressed glass (src/js/liquid_glass.js). Light: a clear lens a few
      percent darker than the page, gray hairline rim, no specular. */
@@ -56,9 +63,10 @@
 
 .p-dark-mode,
 [data-p-theme="darkmode"] {
-  --p-slider-track: rgba(255, 255, 255, 0.085);
+  --p-slider-track: rgba(255, 255, 255, 0.10);
+  --p-slider-fill-disabled: rgba(255, 255, 255, 0.14);
   --p-slider-press: rgba(255, 255, 255, 0.08);
-  --p-slider-tick: rgba(255, 255, 255, 0.21);
+  --p-slider-tick: rgba(255, 255, 255, 0.26);
   --p-slider-origin-mark: rgba(255, 255, 255, 0.85);
   --p-slider-origin-line: rgba(0, 0, 0, 0.35);
   /* Dark: lifted interior, a dark outer hairline, then a bright inner
@@ -81,9 +89,10 @@
 
 @media (prefers-color-scheme: dark) {
   .p-auto-dark-mode {
-    --p-slider-track: rgba(255, 255, 255, 0.085);
+    --p-slider-track: rgba(255, 255, 255, 0.10);
+    --p-slider-fill-disabled: rgba(255, 255, 255, 0.14);
     --p-slider-press: rgba(255, 255, 255, 0.08);
-    --p-slider-tick: rgba(255, 255, 255, 0.21);
+    --p-slider-tick: rgba(255, 255, 255, 0.26);
     --p-slider-origin-mark: rgba(255, 255, 255, 0.85);
     --p-slider-origin-line: rgba(0, 0, 0, 0.35);
     --p-slider-lens-body: linear-gradient(
@@ -107,9 +116,10 @@
    page, the inverse of .p-dark-mode. Mirrors the defaults above. */
 .p-light-mode,
 [data-p-theme="lightmode"] {
-  --p-slider-track: rgba(0, 0, 0, 0.085);
+  --p-slider-track: rgba(0, 0, 0, 0.10);
+  --p-slider-fill-disabled: rgba(0, 0, 0, 0.14);
   --p-slider-press: rgba(0, 0, 0, 0.08);
-  --p-slider-tick: rgba(0, 0, 0, 0.21);
+  --p-slider-tick: rgba(0, 0, 0, 0.26);
   --p-slider-origin-mark: rgba(0, 0, 0, 0.85);
   --p-slider-origin-line: rgba(0, 0, 0, 0.25);
   --p-slider-lens-body: linear-gradient(
@@ -130,15 +140,22 @@
   --p-slider-glass-cast: 0 6px 10px 2px rgba(0, 29, 69, 0.125);
 }
 
+/* The untinted fill is --p-slider-accent-default rather than the text
+   blue that --p-color-current defaults to. Zero specificity, so any
+   .p-sys-* or color class on the input still wins. */
+:where(.p-slider) {
+  --p-color-current: var(--p-slider-accent-default, #3478F6);
+}
+
 .p-slider {
   /* Resolved here, not :root, so tint classes can override. */
-  --p-slider-accent: var(--p-color-current, #0088FF);
+  --p-slider-accent: var(--p-color-current, #3478F6);
   --p-slider-fill: 0%;
   /* Geometry. sliders.js reads the thumb width to inset the fill by half
      a thumb, keeping the accent edge under the thumb at both ends. */
-  --p-slider-thumb-w: 20px;
+  --p-slider-thumb-w: 19.5px;
   --p-slider-thumb-h: 16px;
-  --p-slider-track-h: 4px;
+  --p-slider-track-h: 6px;
   /* Where the fill starts and stops along the track. */
   --p-slider-from: 0%;
   --p-slider-to: var(--p-slider-fill);
@@ -146,7 +163,7 @@
   --p-slider-press-now: transparent;
   /* How much the pressed glass outgrows the thumb (liquid_glass.js):
      25×20 for the default thumb, measured from NSSlider on macOS 26. */
-  --p-slider-lens-grow-w: 5px;
+  --p-slider-lens-grow-w: 5.5px;
   --p-slider-lens-grow-h: 4px;
   /* Optional in-track marks (the centered origin line, inset ticks). */
   --p-slider-marks: linear-gradient(transparent, transparent);
@@ -161,21 +178,22 @@
   cursor: pointer;
 }
 
-/* Sizes (thumb on the shared ladder; the large track is 6px). */
+/* Sizes (thumb on the shared ladder; mini and small run a 4px track). */
 .p-slider-mini {
   --p-slider-thumb-w: 16px;
   --p-slider-thumb-h: 12px;
+  --p-slider-track-h: 4px;
 }
 
 .p-slider-small {
   --p-slider-thumb-w: 18px;
   --p-slider-thumb-h: 14px;
+  --p-slider-track-h: 4px;
 }
 
 .p-slider-large {
   --p-slider-thumb-w: 24px;
   --p-slider-thumb-h: 20px;
-  --p-slider-track-h: 6px;
 }
 
 /* Narrow pointer thumb: 8×16, or 10×18 on the small and large sizes. */
@@ -354,11 +372,11 @@
 }
 
 /* ─── Disabled ─────────────────────────────────────────────────────── */
-/* Fill turns #BFBFBF, thumb ghosts. */
+/* The fill turns gray (black 14%, white 14% in dark); the track and
+   the thumb keep their colors. */
 
 .p-slider:disabled {
-  --p-slider-accent: #BFBFBF;
-  opacity: 0.5;
+  --p-slider-accent: var(--p-slider-fill-disabled, rgba(0, 0, 0, 0.14));
   cursor: not-allowed;
 }
 
