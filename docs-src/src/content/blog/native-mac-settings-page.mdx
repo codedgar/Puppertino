@@ -1,0 +1,196 @@
+---
+title: "Build a settings page that feels native on a Mac, in HTML and CSS"
+description: "A sidebar, a grouped form, a switch, a segmented control and one Save button, in about sixty lines of plain HTML with Puppertino. The result reads as a Mac preferences pane without pretending to be one, and it works in dark mode and with a keyboard."
+date: 2026-10-23
+tags: ["Guide", "macOS 27", "Forms", "Sidebars"]
+cover: ../../assets/blog/native-mac-settings-page.jpg
+coverAlt: "A Mac settings pane built with Puppertino: a sidebar of sections beside a form with a field, a select, a switch, a segmented control and a Save button."
+icon: ph-gear
+related:
+  - docs/desktop/sidebars/
+  - docs/desktop/forms/
+  - docs/desktop/segmented-controls/
+  - docs/desktop/buttons/
+  - docs/dark-mode/
+  - docs/accessibility/
+faq:
+  - q: "How do I make a settings page look like macOS in HTML and CSS?"
+    a: "Load Puppertino's stylesheet, put a p-sidebar beside a p-form, and use p-field, p-select, p-switch and p-segmented for the controls. Every value in this guide is real markup you can copy, and dark mode and keyboard focus come with the classes."
+  - q: "Does this need JavaScript?"
+    a: "No. The sidebar, the form, the switch and the segmented control are CSS over native elements. The switch is a checkbox and the segmented control is a radio group, so they submit with the form."
+  - q: "Can I use it in an Electron or Tauri app?"
+    a: "Yes. It is a normal web page. Electron and Tauri render it in a system web view, and the sidebar plus form shape is what a Mac companion app's settings window usually is."
+  - q: "Does it work in dark mode?"
+    a: "Yes. Put p-auto-dark-mode on the body and every token flips with the system appearance. Nothing in this guide hard-codes a color."
+  - q: "Is this a copy of System Settings?"
+    a: "No. It uses the same components Apple uses for a settings window, so your product's settings feel at home on a Mac. It is your page, not a replica of Apple's app."
+---
+
+import Showcase from '../../components/Showcase.astro';
+import '@puppertino/forms.css';
+import '@puppertino/sidebars.css';
+import '@puppertino/segmented-controls.css';
+
+Most "macOS style" settings pages on the web are a card with rounded corners and a blue button. A Mac preferences pane is a specific shape: a sidebar of sections on the left, one pane on the right, labels on the left of each row, controls on the right, and one button that commits. This guide builds that shape with real Puppertino markup, in plain HTML.
+
+Here is the finished pane. Tab through it, flip the switch, change the view.
+
+<Showcase
+  name="settings-guide-pane"
+  align="start"
+  code={`<div style="display: flex; width: 100%; max-width: 560px; border-radius: 12px; overflow: hidden; background: var(--p-bg-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+  <nav class="p-sidebar" aria-label="Settings sections" style="width: 168px; flex: none;">
+    <div class="p-sidebar-header">Account</div>
+    <div class="p-sidebar-row p-selected"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-gear"></i></span> General</div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-bell"></i></span> Notifications</div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-lock"></i></span> Privacy</div>
+    <div class="p-sidebar-header">Workspace</div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-users"></i></span> Members</div>
+    <div class="p-sidebar-row"><span class="p-sidebar-icon" style="display:flex;align-items:center;justify-content:center;"><i class="ph-bold ph-credit-card"></i></span> Billing</div>
+  </nav>
+  <form class="p-form" style="flex: 1; padding: 18px 22px 20px; display: grid; gap: 12px;" onsubmit="return false">
+    <label class="p-form-row"><span class="p-form-label">Name</span><input class="p-field" type="text" value="Rex"></label>
+    <label class="p-form-row"><span class="p-form-label">Email</span><input class="p-field" type="email" value="rex@example.com"></label>
+    <label class="p-form-row"><span class="p-form-label">Breed</span><div class="p-select"><select aria-label="Breed"><option>Dachshund</option><option>Saluki</option><option>Siberian</option></select></div></label>
+    <div class="p-form-row"><span class="p-form-label">Sync</span><label class="p-switch" aria-label="Sync"><input type="checkbox" checked><span></span></label></div>
+    <div class="p-form-row"><span class="p-form-label">View</span><div class="p-segmented" role="group" aria-label="View"><label class="p-segment"><input type="radio" name="guide-view" checked><span>List</span></label><label class="p-segment"><input type="radio" name="guide-view"><span>Grid</span></label></div></div>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px;"><button class="p-button" type="button">Cancel</button><button class="p-button p-button-primary" type="submit">Save</button></div>
+  </form>
+</div>`}
+  snippet={false}
+/>
+
+## Start with one stylesheet
+
+No build step. One link in the head and a class on the body.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codedgar/puppertino@2.0.0/dist/css/puppertino.min.css">
+</head>
+<body class="p-type p-auto-dark-mode">
+  …
+</body>
+</html>
+```
+
+`p-type` sets the macOS text styles on everything inside, 13px body and all. `p-auto-dark-mode` follows the system appearance, so the page is dark when the Mac is dark without any script.
+
+## The sidebar
+
+A Mac sidebar is a list of rows with an optional icon, grouped under small uppercase headers. One row is selected.
+
+```html
+<nav class="p-sidebar" aria-label="Settings sections">
+  <div class="p-sidebar-header">Account</div>
+  <div class="p-sidebar-row p-selected"><span class="p-sidebar-icon"><i class="ph-bold ph-gear"></i></span> General</div>
+  <div class="p-sidebar-row"><span class="p-sidebar-icon"><i class="ph-bold ph-bell"></i></span> Notifications</div>
+  <div class="p-sidebar-row"><span class="p-sidebar-icon"><i class="ph-bold ph-lock"></i></span> Privacy</div>
+</nav>
+```
+
+`p-selected` marks the current section. The icon slot takes any icon font or an inline SVG; the demo uses Phosphor. Use `p-sidebar-row` as links when each section is its own page, or as buttons when you swap panes in place.
+
+## The form
+
+The pane is a `p-form`. Each `p-form-row` puts a label on the left and a control on the right, aligned to the same column, which is what makes it read as a preferences pane rather than a web form.
+
+```html
+<form class="p-form">
+  <label class="p-form-row">
+    <span class="p-form-label">Name</span>
+    <input class="p-field" type="text" value="Rex">
+  </label>
+
+  <label class="p-form-row">
+    <span class="p-form-label">Breed</span>
+    <div class="p-select">
+      <select aria-label="Breed">
+        <option>Dachshund</option>
+        <option>Saluki</option>
+      </select>
+    </div>
+  </label>
+
+  <div class="p-form-row">
+    <span class="p-form-label">Sync</span>
+    <label class="p-switch" aria-label="Sync"><input type="checkbox" checked><span></span></label>
+  </div>
+
+  <div class="p-form-row">
+    <span class="p-form-label">View</span>
+    <div class="p-segmented" role="group" aria-label="View">
+      <label class="p-segment"><input type="radio" name="view" checked><span>List</span></label>
+      <label class="p-segment"><input type="radio" name="view"><span>Grid</span></label>
+    </div>
+  </div>
+
+  <button class="p-button" type="button">Cancel</button>
+  <button class="p-button p-button-primary" type="submit">Save</button>
+</form>
+```
+
+Three things that matter here.
+
+- **The switch is a checkbox.** `p-switch` wraps a real `<input type="checkbox">`, so it submits with the form, toggles with Space, and reads as a switch to a screen reader. Nothing to wire.
+- **The segmented control is a radio group.** `p-segmented` holds `p-segment` labels around real radios, so arrow keys move the selection and the form gets one value.
+- **One primary button.** `p-button-primary` is the filled action that also answers the Return key. Everything else is a plain `p-button`. If you need a delete, it is `p-button-destructive`, and it never sits next to Save.
+
+## Put them side by side
+
+```html
+<div class="pane">
+  <nav class="p-sidebar">…</nav>
+  <form class="p-form">…</form>
+</div>
+```
+
+```css
+.pane {
+  display: flex;
+  background: var(--p-bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pane .p-sidebar { width: 200px; flex: none; }
+.pane .p-form { flex: 1; padding: 20px 24px; display: grid; gap: 12px; }
+```
+
+That is the whole layout. The sidebar keeps its own material and selected-row tint. The pane is the primary background token, so it is white on a light Mac and near black on a dark one.
+
+## When it is the whole window
+
+A companion app that opens its settings in its own window gets the window chrome too: a title bar with traffic lights, then the pane below it.
+
+```html
+<div class="p-window">
+  <div class="p-window-titlebar p-window-titlebar-unified">
+    <div class="p-window-titlebar-row">
+      <div class="p-traffic-lights">
+        <button class="p-traffic-light p-traffic-light-close" aria-label="Close"></button>
+        <button class="p-traffic-light p-traffic-light-min" aria-label="Minimize"></button>
+        <button class="p-traffic-light p-traffic-light-zoom" aria-label="Zoom"></button>
+      </div>
+      <div class="p-window-titles"><span class="p-window-title">Settings</span></div>
+    </div>
+  </div>
+  <div class="pane">…</div>
+</div>
+```
+
+Only do this when the page is the window. Inside an Electron or Tauri app the OS already draws the title bar, so start at the pane.
+
+## Check before you ship
+
+- Press Tab from the first field to the Save button. Every stop shows a focus ring. Puppertino never removes one.
+- Switch the Mac to dark mode. Nothing should need a second look, because every color came from a token.
+- Turn on Increase Contrast in System Settings. Borders and fills get stronger on their own.
+- Leave the sidebar rows at their default height. Mac rows are compact on purpose; the 44px rule is for touch.
+
+The agent version of this guide is the [Puppertino skill](/docs/agent-skill/), which carries this exact markup and the checklist.

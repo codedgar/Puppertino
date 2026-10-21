@@ -14,6 +14,12 @@ const sources = import.meta.glob('../pages/docs/**/*.mdx', {
   eager: true,
 });
 
+const postSources = import.meta.glob('../content/blog/*.mdx', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
 const dataModules = import.meta.glob('./components/*.js', {
   import: 'default',
   eager: true,
@@ -26,6 +32,8 @@ const stylesheets = import.meta.glob(['@puppertino/*.css', '!@puppertino/*.min.c
 });
 
 export const { name, version } = pkg;
+/* The day the current version was tagged. Update with each release. */
+export const released = '2026-10-06';
 
 /* Entry stylesheets and v1 files superseded by the v2 foundations stay
    out of the class index; their classes are listed under the files that
@@ -72,6 +80,20 @@ export function pages(root) {
       })
     )
   );
+}
+
+/* Every published blog post, newest first. */
+export function posts(root) {
+  return Object.entries(postSources)
+    .map(([path, source]) => {
+      const slug = path.split('/').pop().replace(/\.mdx$/, '');
+      const { title, description, body } = frontmatter(source);
+      const date = /^date:\s*(\S+)/m.exec(source)?.[1] ?? '';
+      const draft = /^draft:\s*true/m.test(source);
+      return { section: 'Blog', title, description, date, draft, url: new URL(`blog/${slug}/`, root).href, body };
+    })
+    .filter((post) => !post.draft)
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 /* Reads one JSX tag starting at `start` and returns its name, props and

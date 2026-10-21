@@ -1,0 +1,187 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import PostCard from '../../components/PostCard.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import '../../styles/blog.css';
+import { posts as loadPosts, postHref, formatDate, readingTime, relatedDocs } from '../../data/blog.js';
+
+export async function getStaticPaths() {
+  const posts = await loadPosts();
+  /* Posts that share a tag, most shared first, then newest. */
+  const related = (post) =>
+    posts
+      .filter((other) => other !== post)
+      .map((other) => ({ other, shared: other.data.tags.filter((tag) => post.data.tags.includes(tag)).length }))
+      .filter(({ shared }) => shared > 0)
+      .sort((a, b) => b.shared - a.shared || b.other.data.date - a.other.data.date)
+      .slice(0, 3)
+      .map(({ other }) => other);
+
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null, morePosts: related(post) },
+  }));
+}
+
+const { post, newer, older, morePosts } = Astro.props;
+const { Content } = await render(post);
+const base = import.meta.env.BASE_URL;
+const site = Astro.site;
+
+const url = new URL(postHref(base, post), site).href;
+const ogImage = `${base}og/blog/${post.id}.png`;
+const minutes = readingTime(post.body);
+const related = relatedDocs(base, post.data.related);
+const source = `https://github.com/codedgar/Puppertino/blob/master/docs-src/src/content/blog/${post.id}.mdx`;
+
+const person = { '@type': 'Person', name: post.data.author, url: 'https://codedgar.com' };
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.date.toISOString(),
+    dateModified: (post.data.updated ?? post.data.date).toISOString(),
+    author: person,
+    publisher: { '@type': 'Organization', name: 'Puppertino', url: site?.href },
+    image: new URL(ogImage, site).href,
+    keywords: post.data.tags.join(', '),
+    mainEntityOfPage: url,
+    isPartOf: { '@type': 'Blog', name: 'Puppertino blog', url: new URL(`${base}blog/`, site).href },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Puppertino', item: site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: new URL(`${base}blog/`, site).href },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: url },
+    ],
+  },
+  post.data.faq.length && {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: post.data.faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+].filter(Boolean);
+---
+
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={ogImage}
+  ogType="article"
+  published={post.data.date}
+  modified={post.data.updated}
+  bodyClass="blog"
+>
+  <SiteNav current="blog" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="blog-page">
+    <article class="post">
+      <header class="post-head">
+        <a class="post-back" href={`${base}blog/`}><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Blog</a>
+        <h1>{post.data.title}</h1>
+        <p class="post-lede">{post.data.description}</p>
+        <div class="post-byline">
+          <span class="post-author">{post.data.author}</span>
+          <span class="post-meta">
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span>{minutes} min read</span>
+            {post.data.updated && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>Updated <time datetime={post.data.updated.toISOString()}>{formatDate(post.data.updated)}</time></span>
+              </>
+            )}
+          </span>
+        </div>
+        {post.data.tags.length > 0 && (
+          <ul class="post-tags" aria-label="Topics">
+            {post.data.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        )}
+      </header>
+
+      {post.data.cover && (
+        <figure class="post-cover">
+          <Image src={post.data.cover} alt={post.data.coverAlt ?? ''} widths={[720, 1080, 1440]} sizes="(max-width: 760px) 100vw, 720px" loading="eager" fetchpriority="high" />
+          {post.data.coverAlt && <figcaption>{post.data.coverAlt}</figcaption>}
+        </figure>
+      )}
+
+      <div class="post-body">
+        <Content />
+      </div>
+
+      {post.data.faq.length > 0 && (
+        <section class="post-faq" aria-labelledby="post-faq-title">
+          <h2 id="post-faq-title">Questions</h2>
+          {post.data.faq.map(({ q, a }) => (
+            <div class="post-faq-item">
+              <h3>{q}</h3>
+              <p>{a}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {related.length > 0 && (
+        <aside class="post-related" aria-labelledby="post-related-title">
+          <h2 id="post-related-title">In the docs</h2>
+          <ul>
+            {related.map((doc) => (
+              <li>
+                <a href={doc.href}>
+                  <i class={`ph-bold ${doc.icon}`} aria-hidden="true"></i>
+                  <span class="post-related-label">{doc.label}</span>
+                  <span class="post-related-section">{doc.section}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
+      {morePosts.length > 0 && (
+        <section class="post-more" aria-labelledby="post-more-title">
+          <h2 id="post-more-title">Related posts</h2>
+          {morePosts.map((other) => <PostCard post={other} />)}
+        </section>
+      )}
+
+      <footer class="post-foot">
+        <a href={source}><i class="ph-bold ph-pencil-simple" aria-hidden="true"></i> Edit this post on GitHub</a>
+      </footer>
+    </article>
+
+    {(newer || older) && (
+      <nav class="page-nav" aria-label="More posts">
+        {older ? (
+          <a href={postHref(base, older)} class="page-nav-link page-nav-prev">
+            <span class="page-nav-direction">Older</span>
+            <span class="page-nav-label">{older.data.title}</span>
+          </a>
+        ) : <span class="page-nav-spacer"></span>}
+        {newer ? (
+          <a href={postHref(base, newer)} class="page-nav-link page-nav-next">
+            <span class="page-nav-direction">Newer</span>
+            <span class="page-nav-label">{newer.data.title}</span>
+          </a>
+        ) : <span class="page-nav-spacer"></span>}
+      </nav>
+    )}
+  </div>
+  <SiteFooter />
+</Base>

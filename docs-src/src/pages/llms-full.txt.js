@@ -1,4 +1,4 @@
-import { pages, toMarkdown, classIndex, version } from '../data/llms.js';
+import { pages, posts, toMarkdown, classIndex, version } from '../data/llms.js';
 
 /* Every docs page as Markdown in one file, then the class index. */
 export function GET({ site }) {
@@ -16,6 +16,12 @@ export function GET({ site }) {
       .join('\n\n');
   });
 
+  const blog = posts(root).map((post) =>
+    [`# Blog: ${post.title}`, `Source: ${post.url}`, `Published: ${post.date}`, post.description, toMarkdown(post.body, post.url)]
+      .filter(Boolean)
+      .join('\n\n')
+  );
+
   const index = classIndex()
     .map(({ file, classes }) => `## ${file}\n\n${classes.join(' ')}`)
     .join('\n\n');
@@ -24,7 +30,7 @@ export function GET({ site }) {
 
 > The complete Puppertino documentation in one file. Each page starts with a top-level heading and its source URL. An index of every class in each stylesheet closes the file.
 
-${docs.join('\n\n---\n\n')}
+${[...docs, ...blog].join('\n\n---\n\n')}
 
 ---
 

@@ -1,0 +1,53 @@
+---
+layout: ../../layouts/Doc.astro
+title: Agent skill
+description: Install the Puppertino skill so Claude Code, Codex, Cursor and other AI agents design macOS and iOS interfaces on the web that follow Apple's Human Interface Guidelines.
+---
+
+The Puppertino skill teaches an AI agent to design for the web the way Apple's Human Interface Guidelines ask, and to write Puppertino markup instead of inventing class names. It ships in the Puppertino repository, in the `skills/puppertino` folder, as a standard `SKILL.md` with two reference files.
+
+It works with Claude Code, Codex, Cursor and any tool that reads the Agent Skills format.
+
+## Install
+
+With the `skills` installer:
+
+```bash
+npx skills add codedgar/Puppertino
+```
+
+In Claude Code, as a plugin:
+
+```bash
+claude plugin marketplace add codedgar/Puppertino
+claude plugin install puppertino@puppertino
+```
+
+By hand, copy the folder into your skills directory:
+
+```bash
+git clone --depth 1 https://github.com/codedgar/Puppertino
+cp -r Puppertino/skills/puppertino ~/.claude/skills/puppertino
+```
+
+## What it knows
+
+- **The rules.** Apple's type scale, system colors, the 4px spacing grid, corner radii, material thicknesses, shadow levels, motion timings and the accessibility requirements, condensed in `references/hig.md`.
+- **The markup.** A macOS window with sidebar and toolbar, a settings form, lists and tables, a dialog, an iOS screen with navigation bar, inset list and tab bar, touch buttons and fields, Liquid Glass switches and sliders, materials and scoped dark mode, in `references/recipes.md`.
+- **The live class index.** For anything else the skill fetches [llms-full.txt](/llms-full.txt), which matches the stylesheet you have installed.
+
+## What it keeps out of your interface
+
+The Apple logo, Apple trademarks as your product's name, SF Pro font files, Apple's own icons, artwork and screenshots, and any claim that the result is made or endorsed by Apple. The skill describes what it builds as following Apple's Human Interface Guidelines.
+
+Puppertino is tuned for products that use Apple's components. Ask for a full desktop or a Finder in a browser tab and the agent builds it, with one note that the framework is not tuned for that shape.
+
+## Example prompt
+
+> Build the account settings page for a Mac companion app. Sidebar on the left with General, Notifications and Privacy. The General pane has name, email, a sync switch and a List or Grid segmented control. One Save button.
+
+The agent picks the desktop set, loads one stylesheet, writes the sidebar, the form and the buttons from the recipes, uses `--p-` tokens for every color, and checks dark mode and focus before it answers.
+
+## How it is kept current
+
+The skill lives next to the framework, so a component change and its recipe change in the same commit. The version in `SKILL.md` matches the npm release.

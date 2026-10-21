@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import PostCard from '../../components/PostCard.astro';
+import '../../styles/blog.css';
+import { posts as loadPosts, postHref, formatDate, readingTime } from '../../data/blog.js';
+
+const base = import.meta.env.BASE_URL;
+const posts = await loadPosts();
+const lead = posts.find((post) => post.data.featured) ?? posts[0];
+const rest = posts.filter((post) => post !== lead);
+
+---
+
+<Base title="Blog" description="Guides and release notes from Puppertino: Liquid Glass in CSS, Apple's colors and type on the web, dark mode, and what changed in each version." bodyClass="blog">
+  <SiteNav current="blog" />
+
+  <div class="blog-page">
+    <header class="blog-head">
+      <h1>Blog</h1>
+      <p>Guides and release notes: Liquid Glass in CSS, Apple's colors and type on the web, dark mode, and what changed in each version.</p>
+      <a class="blog-feed" href={`${base}blog/rss.xml`}><i class="ph-bold ph-rss" aria-hidden="true"></i> RSS feed</a>
+    </header>
+
+    {lead && (
+      <a href={postHref(base, lead)} class="post-lead">
+        <div class="post-lead-art">
+          {lead.data.cover ? (
+            <Image src={lead.data.cover} alt={lead.data.coverAlt ?? ''} widths={[640, 960, 1280]} sizes="(max-width: 760px) 100vw, 720px" loading="eager" />
+          ) : (
+            <div class="post-art-placeholder"><i class={`ph-bold ${lead.data.icon}`} aria-hidden="true"></i></div>
+          )}
+        </div>
+        <div class="post-lead-body">
+          <span class="post-meta">
+            <time datetime={lead.data.date.toISOString()}>{formatDate(lead.data.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span>{readingTime(lead.body)} min read</span>
+          </span>
+          <h2>{lead.data.title}</h2>
+          <p>{lead.data.description}</p>
+          {lead.data.tags.length > 0 && (
+            <ul class="post-tags" aria-label="Topics">
+              {lead.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          )}
+        </div>
+      </a>
+    )}
+
+    {rest.length > 0 && (
+      <section class="post-list" aria-labelledby="all-posts">
+        <h2 id="all-posts">All posts</h2>
+        {rest.map((post) => <PostCard post={post} />)}
+      </section>
+    )}
+
+    {posts.length === 0 && <p class="blog-empty">Nothing published yet.</p>}
+  </div>
+  <SiteFooter />
+</Base>

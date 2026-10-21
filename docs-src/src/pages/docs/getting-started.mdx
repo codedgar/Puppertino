@@ -8,6 +8,20 @@ Puppertino is a CSS framework that brings macOS and iOS aesthetics to the web. I
 
 Puppertino provides the macOS 27 color system, the materials specification, and a complete typography scale. The v1 classes remain available so projects can upgrade without rewrites.
 
+## When to use Puppertino
+
+- Web apps that live next to native Mac and iPhone apps: companion dashboards, admin panels, Electron and Tauri apps, PWAs, and Safari web apps.
+- Products that want Apple's visual quality on the web without being an Apple app: the glass, the type, the colors, and the controls.
+- Pages that need to look at home on a Mac or an iPhone with one stylesheet and no build step.
+
+## When to use anything else
+
+- You want to recreate macOS in a browser tab. Puppertino gives your product Apple's components so it can use them. It is not a Finder to put in an iframe.
+- Your product has its own design language. Puppertino's tokens can be themed, but every component is shaped like Apple's.
+- You need a utility-first workflow. Puppertino is a component framework. It sits beside a utility library without conflict, but it does not replace one.
+
+The only official package is `@codedgar/puppertino`. The unscoped `puppertino` package on npm is not maintained by this project.
+
 ## Install via CDN
 
 The fastest way to use Puppertino is through jsDelivr. Add the full CSS to the `<head>` of your HTML.
@@ -94,7 +108,7 @@ Here is the smallest possible Puppertino setup. It pulls in the full framework, 
   <body class="p-type p-auto-dark-mode">
     <h1>Hello from Puppertino</h1>
     <p>A CSS framework for Apple-style interfaces.</p>
-    <button class="p-btn p-prim-col">Get started</button>
+    <button class="p-button p-button-primary">Get started</button>
   </body>
 </html>
 ```

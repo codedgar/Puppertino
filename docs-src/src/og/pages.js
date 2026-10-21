@@ -26,6 +26,7 @@ function meta(path, source) {
 }
 
 function sectionFor(slug) {
+  if (slug.startsWith('blog/')) return 'Blog';
   const section = nav.find((s) => s.groups.some((g) => g.items.some((item) => item.slug === slug)));
   return section?.heading ?? 'Documentation';
 }
@@ -36,7 +37,10 @@ export function cardSlug(pathname) {
   return pathname.replace(/^\/|\/$/g, '') || 'index';
 }
 
-export const cards = Object.entries(sources).map(([path, source]) => {
+/* Dynamic routes ("blog/[slug]") draw their own cards. */
+export const cards = Object.entries(sources)
+  .filter(([path]) => !path.includes('['))
+  .map(([path, source]) => {
   const route = path
     .replace('../pages/', '')
     .replace(/\.(astro|mdx)$/, '')

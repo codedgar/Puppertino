@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import { postHref, formatDate, readingTime } from '../data/blog.js';
+
+/* One row on the blog index: thumbnail, title, summary and date. */
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<a href={postHref(base, post)} class="post-row">
+  <div class="post-row-art">
+    {post.data.cover ? (
+      <Image src={post.data.cover} alt="" width={480} loading="lazy" />
+    ) : (
+      <div class="post-art-placeholder"><i class={`ph-bold ${post.data.icon}`} aria-hidden="true"></i></div>
+    )}
+  </div>
+  <div class="post-row-body">
+    <h3>{post.data.title}</h3>
+    <p>{post.data.description}</p>
+    <span class="post-meta">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, 'short')}</time>
+      <span aria-hidden="true">·</span>
+      <span>{readingTime(post.body)} min read</span>
+    </span>
+  </div>
+</a>

@@ -1,0 +1,30 @@
+---
+import Logo from './Logo.astro';
+
+/* The site bar for pages without the docs sidebar: wordmark on the
+   left, the sections on the right. The current section is underlined. */
+
+interface Props {
+  current?: 'docs' | 'blog';
+}
+
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const links = [
+  { label: 'Docs', href: `${base}docs/`, key: 'docs' },
+  { label: 'Mac', href: `${base}docs/desktop/` },
+  { label: 'iPhone', href: `${base}docs/mobile/` },
+  { label: 'Blog', href: `${base}blog/`, key: 'blog' },
+  { label: 'GitHub', href: 'https://github.com/codedgar/Puppertino' },
+];
+---
+
+<header class="site-nav p-material-chrome">
+  <a class="site-wordmark" href={base}><Logo />Puppertino</a>
+  <nav aria-label="Site">
+    {links.map((link) => (
+      <a href={link.href} aria-current={link.key && link.key === current ? 'page' : undefined}>{link.label}</a>
+    ))}
+  </nav>
+</header>

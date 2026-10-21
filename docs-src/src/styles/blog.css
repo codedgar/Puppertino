@@ -1,0 +1,489 @@
+/* ─────────────────────────────────────────
+   Blog: the site bar, the index and one post.
+   Reads the docs tokens from docs.css; the
+   prose styles come from the `article` rules
+   there, since a post is an <article>.
+   ───────────────────────────────────────── */
+
+body.blog main {
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+.blog-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 20px 96px;
+}
+
+/* ─── Site bar ─────────────────────────── */
+
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding-inline: clamp(20px, 4vw, 48px);
+  border-bottom: 0.5px solid var(--border-color);
+}
+
+.site-nav nav {
+  display: flex;
+  gap: clamp(16px, 3vw, 32px);
+}
+
+.site-nav a {
+  color: var(--text-primary);
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current] {
+  opacity: 1;
+}
+
+.site-nav nav a[aria-current] {
+  color: var(--accent);
+}
+
+.site-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.site-nav .site-wordmark {
+  opacity: 1;
+}
+
+.site-nav a:focus-visible {
+  outline: 3px solid rgb(0 122 255 / 50%);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Site footer ──────────────────────── */
+
+.site-footer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ─── Index ─────────────────────────────── */
+
+.blog-head {
+  margin-bottom: 40px;
+}
+
+.blog-head h1 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.08;
+  color: var(--text-primary);
+}
+
+.blog-head p {
+  margin-top: 12px;
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  max-width: 40em;
+}
+
+.blog-feed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.post-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-tags li {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 980px;
+  background: var(--bg-code);
+  color: var(--text-secondary);
+}
+
+/* Shared art frame: a cover photo or a tinted tile with an icon. */
+/* A hairline keeps a dark cover from melting into a dark page. */
+.post-lead-art,
+.post-row-art,
+.post-cover img {
+  outline: 3px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
+  outline-offset: -3px;
+}
+
+.post-lead-art,
+.post-row-art {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--bg-code);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.post-lead-art img,
+.post-row-art img,
+.post-art-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-art-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(155deg, #5ac8fa 0%, #0a84ff 60%, #5856d6 100%);
+}
+
+.post-art-placeholder i {
+  font-size: 56px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.post-lead {
+  display: block;
+  color: inherit;
+  margin-bottom: 56px;
+}
+
+.post-lead-art {
+  aspect-ratio: 16 / 9;
+}
+
+.post-lead:hover .post-lead-art,
+.post-row:hover .post-row-art {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.25);
+}
+
+.post-lead-body {
+  padding-top: 20px;
+}
+
+.post-lead-body h2 {
+  margin: 8px 0 8px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.12;
+  color: var(--text-primary);
+}
+
+.post-lead-body p {
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.post-list > h2 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding-bottom: 4px;
+}
+
+.post-row {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 20px;
+  align-items: start;
+  padding: 20px 0;
+  color: inherit;
+}
+
+.post-row-art {
+  aspect-ratio: 3 / 2;
+  border-radius: 12px;
+}
+
+.post-row-art .post-art-placeholder i {
+  font-size: 36px;
+}
+
+/* Inside a post the row sits in the article, whose h3 rule adds a top margin. */
+.post-row-body h3 {
+  margin-top: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.post-row-body p {
+  margin: 6px 0 10px;
+  font-size: 15px;
+  line-height: 1.47;
+  color: var(--text-secondary);
+}
+
+.blog-empty {
+  color: var(--text-secondary);
+}
+
+/* ─── Post ──────────────────────────────── */
+
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.post-head h1 {
+  margin-bottom: 16px;
+}
+
+.post-lede {
+  font-size: 21px !important;
+  line-height: 1.4 !important;
+  color: var(--text-secondary);
+  margin-bottom: 20px !important;
+}
+
+.post-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 14px;
+}
+
+.post-author {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.post-cover {
+  margin: 36px 0 40px;
+}
+
+.post-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+}
+
+.post-cover figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.post-body {
+  margin-top: 36px;
+}
+
+.post-body > h2:first-child {
+  margin-top: 0;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.post-body blockquote {
+  margin: 24px 0;
+  padding: 4px 0 4px 20px;
+  border-left: 3px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.post-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.post-body hr {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+/* Questions */
+
+.post-faq {
+  margin-top: 64px;
+}
+
+.post-faq-item h3 {
+  margin-top: 28px;
+}
+
+.post-faq-item p {
+  margin-bottom: 0;
+}
+
+/* Docs the post builds on */
+
+.post-related {
+  margin-top: 64px;
+}
+
+.post-related ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.post-related li {
+  margin: 0;
+}
+
+.post-related a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  color: var(--text-primary);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.post-related a:hover {
+  border-color: var(--border-color);
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
+}
+
+.post-related i {
+  grid-row: 1 / 3;
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.post-related-label {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.post-related-section {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.post-foot {
+  margin-top: 56px;
+  font-size: 14px;
+}
+
+.post-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Posts that share a tag */
+
+.post-more {
+  margin-top: 64px;
+}
+
+.post-more .post-row:last-child {
+  padding-bottom: 0;
+}
+
+.blog-page .page-nav {
+  margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+  .blog-page {
+    padding-top: 40px;
+  }
+
+  .blog-head h1,
+  .post-head h1 {
+    font-size: 36px;
+  }
+
+  .post-lead-body h2 {
+    font-size: 26px;
+  }
+
+  .post-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .post-row-art {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-lead-art,
+  .post-row-art,
+  .post-related a {
+    transition: none;
+  }
+
+  .post-lead:hover .post-lead-art,
+  .post-row:hover .post-row-art {
+    transform: none;
+  }
+}

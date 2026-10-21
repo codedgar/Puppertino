@@ -409,7 +409,7 @@ Glassworks draws every surface on one canvas, placed just under the highest surf
 - **One layer per page.** Every surface has to share one `z-index`, `--p-glass-z` (default `1`). A fixed tab bar sits at `70`, so on a page that also has inline glass, set `--p-glass-z: 70` on them. Otherwise the canvas covers their content, and the script warns in the console.
 - **No stacking contexts above it.** A surface inside an ancestor with a `transform`, `filter`, `opacity`, a `z-index`, or similar stays a plain material. The script checks, marks it `off`, and warns.
 - **Fixed elements are not captured.** A fixed header does not show up in the glass beneath it.
-- **Size.** Safari can turn unstable once a single surface covers about half the viewport. Keep glass to chrome.
+- **Size.** Safari can turn unstable once a single surface covers about half the viewport. Keep each glass surface small: bars, buttons, panels, never a whole page.
 - **Bend on long pages.** Glassworks bends in snapshot coordinates. Puppertino converts against the snapshot's longer side, so on a tall page the side edges bend a little less than the top and bottom. `data-p-glass-backdrop` evens it out.
 
 ### Dark mode

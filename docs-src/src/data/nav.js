@@ -29,6 +29,7 @@ export const nav = [
           { label: 'Dark mode', slug: 'docs/dark-mode/', icon: 'ph-moon' },
           { label: 'Icons', slug: 'docs/icons/', icon: 'ph-smiley' },
           { label: 'Accessibility', slug: 'docs/accessibility/', icon: 'ph-person-arms-spread' },
+          { label: 'Agent skill', slug: 'docs/agent-skill/', icon: 'ph-robot' },
         ],
       },
     ],

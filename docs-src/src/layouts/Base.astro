@@ -12,19 +12,69 @@ import Search from '../components/Search.astro';
 import SearchTrigger from '../components/SearchTrigger.astro';
 import Logo from '../components/Logo.astro';
 import { cardSlug } from '../og/pages.js';
+import { version as VERSION } from '../data/llms.js';
 
 interface Props {
   title: string;
   description?: string;
+  /* A page with its own social card (blog posts) names it here;
+     everything else gets the card drawn for its path. */
+  ogImage?: string;
+  /* "article" for dated writing, with its dates; "website" otherwise. */
+  ogType?: 'website' | 'article';
+  published?: Date;
+  modified?: Date;
+  bodyClass?: string;
 }
 
-const { title, description = 'A CSS framework for building web interfaces with Apple\'s macOS design language.' } = Astro.props;
+const {
+  title,
+  description = 'A CSS framework for building web interfaces with Apple\'s macOS design language.',
+  ogType = 'website',
+  published,
+  modified,
+  bodyClass = '',
+} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const hasSidebar = Astro.slots.has('sidebar');
 const path = Astro.url.pathname.slice(base.length - 1);
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogTitle = path === '/' ? 'Puppertino' : `${title} - Puppertino`;
-const ogImage = new URL(`${base}og/${cardSlug(path)}.png`, Astro.site).href;
+const pageTitle = path === '/' ? 'Puppertino: macOS and iOS design for the web' : `${title} - Puppertino`;
+const ogImage = new URL(Astro.props.ogImage ?? `${base}og/${cardSlug(path)}.png`, Astro.site).href;
+
+/* Structured data. The home page describes the project; a docs page is
+   a technical article inside it. Blog posts write their own. */
+const author = { '@type': 'Person', name: 'Edgar Pérez', url: 'https://codedgar.com' };
+const jsonLd =
+  path === '/'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareSourceCode',
+        name: 'Puppertino',
+        description,
+        url: canonical,
+        codeRepository: 'https://github.com/codedgar/Puppertino',
+        programmingLanguage: ['CSS', 'JavaScript'],
+        runtimePlatform: 'Web browser',
+        license: 'https://opensource.org/licenses/MIT',
+        version: VERSION,
+        author,
+        sameAs: ['https://www.npmjs.com/package/@codedgar/puppertino', 'https://github.com/codedgar/Puppertino'],
+      }
+    : path.startsWith('/docs/')
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'TechArticle',
+          headline: title,
+          description,
+          url: canonical,
+          author,
+          publisher: { '@type': 'Organization', name: 'Puppertino', url: Astro.site?.href },
+          isPartOf: { '@type': 'WebSite', name: 'Puppertino', url: Astro.site?.href },
+          about: { '@type': 'SoftwareSourceCode', name: 'Puppertino', version: VERSION },
+        }
+      : null;
 
 /* Google Analytics. Only production builds load it, so local work is
    not counted. */
@@ -45,7 +95,10 @@ const analytics = import.meta.env.PROD;
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
     <link rel="sitemap" href={`${base}sitemap-index.xml`} />
     <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
+    <link rel="alternate" type="application/rss+xml" title="Puppertino blog" href={`${base}blog/rss.xml`} />
+    <meta property="og:type" content={ogType} />
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    {modified && <meta property="article:modified_time" content={modified.toISOString()} />}
     <meta property="og:site_name" content="Puppertino" />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={description} />
@@ -58,7 +111,8 @@ const analytics = import.meta.env.PROD;
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <title>{title} - Puppertino</title>
+    <title>{pageTitle}</title>
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     {analytics && (
       <>
         <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}`}></script>
@@ -71,7 +125,7 @@ const analytics = import.meta.env.PROD;
       </>
     )}
   </head>
-  <body class={`p-auto-dark-mode ${hasSidebar ? 'has-sidebar' : ''}`}>
+  <body class:list={['p-auto-dark-mode', { 'has-sidebar': hasSidebar }, bodyClass]}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     {hasSidebar && (
       <>
